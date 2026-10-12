@@ -113,6 +113,30 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 356000,
         "padd": "PADD 2",
         "primary_locales": ["Midwest_Region"]
+    },
+    "BP_Whiting": {
+        "name": "BP Whiting Refinery (Whiting, IN)",
+        "lat": 41.6784,
+        "lon": -87.4981,
+        "capacity_bpd": 435000,
+        "padd": "PADD 2",
+        "primary_locales": ["Chicago_IL"]
+    },
+    "Citgo_Lemont": {
+        "name": "CITGO Lemont Refinery (Lemont, IL)",
+        "lat": 41.6702,
+        "lon": -88.0553,
+        "capacity_bpd": 177000,
+        "padd": "PADD 2",
+        "primary_locales": ["Chicago_IL"]
+    },
+    "ExxonMobil_Joliet": {
+        "name": "ExxonMobil Joliet Refinery (Channahon, IL)",
+        "lat": 41.4392,
+        "lon": -88.1633,
+        "capacity_bpd": 251000,
+        "padd": "PADD 2",
+        "primary_locales": ["Chicago_IL"]
     }
 }
 
@@ -171,6 +195,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 27.2730,
         "lon": -80.3582,
         "zip": "34952"
+    },
+    "Chicago_IL": {
+        "name": "Greater Chicago Metro, IL/IN",
+        "lat": 41.8781,
+        "lon": -87.6298,
+        "zip": "60601"
     }
 }
 

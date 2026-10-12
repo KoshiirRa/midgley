@@ -17,7 +17,7 @@ def verify_data_directory_unpolluted():
     """
     dirs_to_guard = [Path("data")]
     initial_hashes = {}
-    ignored_suffixes = {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock"}
+    ignored_suffixes = {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock", ".db", ".db-wal", ".db-journal"}
 
     for d in dirs_to_guard:
         if d.exists():
@@ -85,9 +85,19 @@ def isolate_test_environment(tmp_path, monkeypatch):
     except (ImportError, AttributeError):
         pass
 
+
+
     try:
-        import src.key_manager as km
-        monkeypatch.setattr(km, "DEFAULT_DB_PATH", test_sec_db)
+        import src.connector_telemetry as ct
+        monkeypatch.setattr(ct, "TELEMETRY_FILE_PATH", str(tmp_path / "connector_telemetry.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.ipasis_security as isec
+        monkeypatch.setattr(isec, "TELEMETRY_FILE", str(tmp_path / "ipasis_telemetry.json"))
+        if hasattr(isec, "ipasis_service") and hasattr(isec.ipasis_service, "telemetry_file"):
+            monkeypatch.setattr(isec.ipasis_service, "telemetry_file", str(tmp_path / "ipasis_telemetry.json"))
     except (ImportError, AttributeError):
         pass
 
@@ -155,12 +165,23 @@ def isolate_test_environment(tmp_path, monkeypatch):
     try:
         import src.carb_compliance as carb_comp
         monkeypatch.setattr(carb_comp, "CARB_VINTAGE_FILE", str(tmp_path / "carb_compliance_vintages.json"))
+        if hasattr(carb_comp, "carb_connector"):
+            monkeypatch.setattr(carb_comp.carb_connector, "vintage_file", str(tmp_path / "carb_compliance_vintages.json"))
+            monkeypatch.setattr(carb_comp.carb_connector, "history_csv", str(tmp_path / "carb_history.csv"))
     except (ImportError, AttributeError):
         pass
 
     try:
         import src.noaa_weather as noaa_w
         monkeypatch.setattr(noaa_w, "PIRATEWEATHER_VINTAGES_FILE", str(tmp_path / "pirateweather_vintages.json"))
+        monkeypatch.setattr(noaa_w, "DEGREE_DAYS_VINTAGE_FILE", str(tmp_path / "degree_days_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.bts_transportation as bts_t
+        monkeypatch.setattr(bts_t, "BTS_VINTAGE_FILE", str(tmp_path / "bts_vintages.json"))
+        monkeypatch.setattr(bts_t, "FHWA_VINTAGE_FILE", str(tmp_path / "fhwa_vmt_vintages.json"))
     except (ImportError, AttributeError):
         pass
 
@@ -210,6 +231,18 @@ def isolate_test_environment(tmp_path, monkeypatch):
     try:
         import src.key_movers_feed as kmf
         monkeypatch.setattr(kmf, "DEFAULT_KEY_MOVERS_VINTAGE_FILE", str(tmp_path / "key_movers_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.aqi_feed as aqi
+        monkeypatch.setattr(aqi, "AQI_VINTAGE_FILE", str(tmp_path / "aqi_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.noaa_weather as nw
+        monkeypatch.setattr(nw, "DEGREE_DAYS_VINTAGE_FILE", str(tmp_path / "degree_days_vintages.json"))
     except (ImportError, AttributeError):
         pass
 

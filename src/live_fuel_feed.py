@@ -188,6 +188,13 @@ REGION_METADATA = {
         "static_anchor": 4.145,
         "name": "Port St. Lucie, FL Metro Retail",
         "aaa_keywords": ["Port St. Lucie", "St. Lucie", "State Average"]
+    },
+    "Chicago_IL": {
+        "zip": "60601",
+        "state": "IL",
+        "static_anchor": 3.850,
+        "name": "Greater Chicago Metro Retail",
+        "aaa_keywords": ["Chicago", "Cook County", "Metro Average"]
     }
 }
 
@@ -419,7 +426,8 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                     "NorthBay_CA": 2.782,
                     "Greenville_NC": 0.781,
                     "Charlotte_NC": 0.811,
-                    "Port_St_Lucie_FL": 0.976
+                    "Port_St_Lucie_FL": 0.976,
+                    "Chicago_IL": 1.150
                 }
                 offset = margins.get(region_code, 0.95)
                 est_price = latest_rbob + offset

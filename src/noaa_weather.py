@@ -27,6 +27,7 @@ def fetch_live_noaa_alerts(zones: list = None) -> list:
     """
     Fetches active severe weather alerts from NOAA NWS API for specified state/zone codes with hourly lookup cache.
     Default zones: 'OK' (Oklahoma), 'TX' (Texas), 'LA' (Louisiana).
+    Supports 2-letter state/marine codes (/alerts/active/area/{st}) and NWS forecast zones (/alerts/active/zone/{zn}).
     """
     if zones is None:
         zones = ["OK", "TX", "LA"]
@@ -42,7 +43,11 @@ def fetch_live_noaa_alerts(zones: list = None) -> list:
     headers = {"User-Agent": USER_AGENT, "Accept": "application/geo+json"}
     
     for zone in zones:
-        url = f"{NOAA_API_BASE}/alerts/active/area/{zone}"
+        zone_clean = str(zone).strip()
+        if len(zone_clean) == 2 and zone_clean.isalpha():
+            url = f"{NOAA_API_BASE}/alerts/active/area/{zone_clean.upper()}"
+        else:
+            url = f"{NOAA_API_BASE}/alerts/active/zone/{zone_clean.upper()}"
         try:
             req = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(req, timeout=5) as response:
@@ -53,7 +58,7 @@ def fetch_live_noaa_alerts(zones: list = None) -> list:
                         props = feat.get('properties', {})
                         alerts.append({
                             "id": props.get("id"),
-                            "area": zone,
+                            "area": zone_clean,
                             "event": props.get("event"),
                             "headline": props.get("headline", props.get("event")),
                             "description": props.get("description", "")[:200],
@@ -62,18 +67,101 @@ def fetch_live_noaa_alerts(zones: list = None) -> list:
                             "effective": props.get("effective")
                         })
         except Exception as e:
-            logger.debug(f"NOAA API live fetch for zone {zone} notice: {e}")
+            logger.debug(f"NOAA API live fetch for zone {zone_clean} notice: {e}")
             
     global_cache.set(cache_key, {"alerts": alerts}, ttl_seconds=3600)
     return alerts
 
 
-def get_national_production_weather_dataset() -> pd.DataFrame:
+def fetch_live_weather_events(
+    zones: Optional[List[str]] = None,
+    zip_code: Optional[str] = None,
+    hub_code: Optional[str] = None,
+    region_label: str = "Regional"
+) -> List[Dict[str, Any]]:
     """
-    Historical NOAA Weather Event Dataset for Major US Oil & Gas Basins:
+    Fetches live weather observations and alerts from NOAA NWS (api.weather.gov),
+    wxs.us SPC convective outlooks, and Open-Meteo degree days.
+    Synthesizes active severe weather alerts, convective risk advisories, and extreme temperature
+    stress into structured event records compatible with Midgley event pipelines.
+    """
+    live_events: List[Dict[str, Any]] = []
+    today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    # 1. Fetch active NOAA NWS severe alerts
+    if zones:
+        try:
+            alerts = fetch_live_noaa_alerts(zones=zones)
+            for alert in alerts:
+                effective = alert.get("effective")
+                event_date = pd.to_datetime(effective).strftime("%Y-%m-%d") if effective else today_str
+                headline = alert.get("headline") or f"NOAA NWS {alert.get('event', 'Severe Weather')} in {alert.get('area')}"
+                live_events.append({
+                    "date": event_date,
+                    "headline": headline,
+                    "zone": f"{alert.get('area')} ({region_label})",
+                    "weather_type": alert.get("event", "Severe Weather Alert")
+                })
+        except Exception as e:
+            logger.debug(f"Live NOAA alerts fetch notice for {zones}: {e}")
+
+    # 2. Fetch live SPC convective outlook & localized severe risks from wxs.us
+    if zip_code:
+        try:
+            spc = extract_spc_convective_risk(location_or_zip=zip_code)
+            active_alerts = spc.get("active_alerts", [])
+            for alt in active_alerts:
+                if not any(alt in e.get("headline", "") for e in live_events):
+                    live_events.append({
+                        "date": today_str,
+                        "headline": f"NOAA NWS Alert ({region_label}): {alt}",
+                        "zone": f"{zip_code} ({region_label})",
+                        "weather_type": "Severe Weather Alert"
+                    })
+            score = float(spc.get("convective_risk_score", 0.0))
+            if score >= 0.60:
+                cat = spc.get("categorical_risk", "ELEVATED")
+                live_events.append({
+                    "date": today_str,
+                    "headline": f"NOAA SPC {cat} Risk Convective Advisory: {region_label} severe storm threat (Score: {score:.2f}, Tornado: {spc.get('tornado_risk_score'):.2f}, Hail: {spc.get('hail_risk_score'):.2f}, Wind: {spc.get('wind_risk_score'):.2f}).",
+                    "zone": f"{zip_code} ({region_label})",
+                    "weather_type": f"SPC Convective {cat}"
+                })
+        except Exception as e:
+            logger.debug(f"Live SPC risk fetch notice for {zip_code}: {e}")
+
+    # 3. Fetch live Open-Meteo degree days & thermal stress
+    if hub_code:
+        try:
+            connector = OpenMeteoDegreeDaysConnector()
+            hub_dd = connector.fetch_hub_degree_days(hub_code)
+            if hub_dd.get("freeze_warning"):
+                live_events.append({
+                    "date": today_str,
+                    "headline": f"NOAA/Open-Meteo Freeze Warning: Sub-freezing temperatures ({hub_dd.get('min_temp_f')}°F, HDD: {hub_dd.get('heating_degree_days_hdd')}) across {region_label} refining/pipeline corridor.",
+                    "zone": f"{hub_code} ({region_label})",
+                    "weather_type": "Freeze Warning"
+                })
+            elif hub_dd.get("extreme_heat_warning"):
+                live_events.append({
+                    "date": today_str,
+                    "headline": f"NOAA/Open-Meteo Excessive Heat Warning: Severe heatwave ({hub_dd.get('max_temp_f')}°F, CDD: {hub_dd.get('cooling_degree_days_cdd')}) creating refinery utility and power grid stress across {region_label}.",
+                    "zone": f"{hub_code} ({region_label})",
+                    "weather_type": "Heatwave Stress"
+                })
+        except Exception as e:
+            logger.debug(f"Live degree days fetch notice for {hub_code}: {e}")
+
+    return live_events
+
+
+def get_national_production_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Historical & Live NOAA Weather Event Dataset for Major US Oil & Gas Basins:
     - Gulf Coast Refining Hubs (Texas/Louisiana Hurricanes & Tropical Cyclones)
     - Permian Basin & Eagle Ford (West Texas Extreme Heat & Winter Freezes)
     - Bakken Shale & Midwest (Deep Polar Vortex Freezes)
+    - Actively queries live NOAA alerts and Open-Meteo degree days for energy production basins.
     """
     national_weather_events = [
         {"date": "2022-01-20", "headline": "NOAA NWS Hard Freeze Warning: Polar Vortex brings sub-zero temperatures to Bakken Shale and Midwest refiners.", "region": "Bakken/Midwest", "weather_type": "Polar Vortex"},
@@ -86,16 +174,28 @@ def get_national_production_weather_dataset() -> pd.DataFrame:
         {"date": "2025-08-15", "headline": "NOAA NWS Excessive Heat Warning: Record 112°F heatwave across Permian Basin causes power grid curtailments for oil pumps.", "region": "Permian Basin", "weather_type": "Heatwave"},
         {"date": "2026-02-05", "headline": "NOAA NWS Winter Freeze Watch: Arctic airmass threatens Texas and Louisiana refining belt with pipe freeze risks.", "region": "Gulf Coast", "weather_type": "Winter Freeze"}
     ]
-    df = pd.DataFrame(national_weather_events)
+    events = list(national_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["OK", "TX", "LA"],
+            zip_code="77002",
+            hub_code="gulf_coast_houston",
+            region_label="Gulf Coast"
+        )
+        for ev in live:
+            ev["region"] = ev.get("zone", "Gulf Coast")
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_tulsa_cushing_weather_dataset() -> pd.DataFrame:
+def get_tulsa_cushing_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather Dataset for Tulsa County (OKZ060) & Cushing/Payne County (OKZ066):
     - NOAA NWS Tornado Warnings & SPC Supercell Threat Levels (HF Sinclair West Tulsa Refinery)
     - Severe Winter Ice Freezes (Cushing Tank Farm utilities)
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     tulsa_weather_events = [
         {"date": "2022-05-04", "headline": "NOAA NWS Severe Thunderstorm Warning: Tornadoes and 80 mph winds sweep Tulsa County (OKZ060), damaging terminal power.", "zone": "OKZ060 (Tulsa)", "weather_type": "Tornado/Supercell"},
@@ -107,16 +207,26 @@ def get_tulsa_cushing_weather_dataset() -> pd.DataFrame:
         {"date": "2025-05-18", "headline": "NOAA NWS Tornado Emergency: EF-3 Tornado strikes West Tulsa industrial park near HF Sinclair loading docks.", "zone": "OKZ060 (Tulsa)", "weather_type": "Tornado Emergency"},
         {"date": "2026-02-10", "headline": "NOAA NWS Ice Storm Warning: Heavy freezing rain and ice accumulation freeze water lines across Cushing and Tulsa.", "zone": "Tulsa/Cushing", "weather_type": "Ice Storm"}
     ]
-    df = pd.DataFrame(tulsa_weather_events)
+    events = list(tulsa_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["OK", "OKZ060", "OKZ066"],
+            zip_code="74101",
+            hub_code="Tulsa_OK",
+            region_label="Tulsa / Cushing"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_newark_delaware_weather_dataset() -> pd.DataFrame:
+def get_newark_delaware_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather Dataset for Newark & New Castle County, DE (DEZ001) & KILG Wilmington Airport:
     - NOAA NWS Coastal Flood & High Wind Warnings (Delaware River storm surges near Delaware City Refinery)
     - Severe Mid-Atlantic Nor'easters (Ice/snow lockouts affecting C&D Canal and Delaware Bay lightering)
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     newark_weather_events = [
         {"date": "2021-02-12", "headline": "NOAA NWS Hard Freeze Watch: Severe ice accumulation halts Delaware Bay lightering at Big Stone Anchorage and freezes Delaware River shipping lanes.", "zone": "DEZ001 (New Castle DE)", "weather_type": "Ice Freeze / Lightering Halt"},
@@ -128,18 +238,28 @@ def get_newark_delaware_weather_dataset() -> pd.DataFrame:
         {"date": "2024-12-05", "headline": "NOAA NWS Dense Fog Advisory: Zero-visibility fog traps tanker ships in Delaware Bay channel queue for 48 hours.", "zone": "DEZ001 (New Castle DE)", "weather_type": "Dense Fog / Queue"},
         {"date": "2025-02-14", "headline": "NOAA NWS Freezing Rain Advisory: Glaze ice causes Coast Guard to enforce tugboat escort restrictions in C&D Canal.", "zone": "DEZ001 (New Castle DE)", "weather_type": "Ice Lockout / Canal Detour"}
     ]
-    df = pd.DataFrame(newark_weather_events)
+    events = list(newark_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["DE", "DEZ001"],
+            zip_code="19711",
+            hub_code="Newark_DE",
+            region_label="Newark / Delaware City"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_cincinnati_weather_dataset() -> pd.DataFrame:
+def get_cincinnati_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather & Hydrologic Dataset for Cincinnati Metro (OHZ077 Hamilton County OH)
     & Northern Kentucky (KYZ091/092/093 Boone/Kenton/Campbell Counties KY) & KCVG Airport:
     - NOAA NWS Hydrologic Drought Warnings (Mississippi & Ohio River low-water levels at Memphis & Cairo)
     - Severe Ohio River Ice Jams & Lock freeze-offs (Markland Locks & Dam)
     - Ohio Valley Severe Convective Squall Lines & Polar Vortex refinery freezes.
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     cincinnati_weather_events = [
         {"date": "2022-01-26", "headline": "NOAA NWS Hard Freeze Warning: Polar Vortex drops temperatures to -4°F in Hamilton County OH & NKY, freezing water cooling loops at Ohio Valley refiners.", "zone": "OHZ077 / KYZ091 (Cincinnati Metro)", "weather_type": "Polar Vortex Freeze"},
@@ -151,12 +271,54 @@ def get_cincinnati_weather_dataset() -> pd.DataFrame:
         {"date": "2024-04-03", "headline": "NOAA NWS Flood Warning: Ohio River crests at 54.5 ft in Cincinnati (Flood Stage 52 ft), inundating riverfront terminal docks and slowing barge discharge.", "zone": "OHZ077 (Cincinnati Riverfront)", "weather_type": "River Flood Crest"},
         {"date": "2025-01-20", "headline": "NOAA NWS Ice Storm Warning: Freezing rain locks Markland Locks & Dam on Ohio River, trapping upstream petroleum barges bound for Cincinnati.", "zone": "Ohio River Locks", "weather_type": "Ice Lockout / Barge Delay"}
     ]
-    df = pd.DataFrame(cincinnati_weather_events)
+    events = list(cincinnati_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["OH", "KY", "OHZ077", "KYZ091"],
+            zip_code="45202",
+            hub_code="Cincinnati_OH",
+            region_label="Cincinnati / Catlettsburg"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_oakland_weather_dataset() -> pd.DataFrame:
+def get_chicago_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather & Environmental Risk Dataset for Greater Chicago Metro (ILZ104 Cook County IL / INZ001 Lake County IN):
+    - Lake Michigan Blizzard & Polar Vortex Freezes (BP Whiting / Citgo Lemont refinery cooling line freeze-offs)
+    - Severe Midwest Summer Derechos & Thunderstorm Squall Lines (ComEd / MISO grid substation trips)
+    - Illinois Waterway / Des Plaines River Flash Flooding (Lockport & Lemont marine barge terminal restrictions)
+    - Summer High-Ozone / Air Stagnation Alerts (EPA Reformulated Gasoline volatility compliance stress)
+    - Actively queries live NOAA alerts (IL, IN, ILZ104, INZ001), SPC convective risks (60601), and Open-Meteo degree days.
+    """
+    chicago_weather_events = [
+        {"date": "2022-01-20", "headline": "NOAA NWS Blizzard Warning: Lake-effect snowstorm drops 14 inches across Chicagoland; sub-zero wind chills (-20°F) throttle BP Whiting and Citgo Lemont product loading.", "zone": "ILZ104 / INZ001 (Cook IL / Lake IN)", "weather_type": "Blizzard Freeze"},
+        {"date": "2022-06-13", "headline": "NOAA NWS Severe Thunderstorm & High Wind Warning: Destructive 80 mph derecho sweeps Northern Illinois, cutting power to 200,000 ComEd customers and idling Will County pipeline racks.", "zone": "ILZ104 (Cook County IL)", "weather_type": "Derecho / Severe Wind"},
+        {"date": "2022-12-23", "headline": "NOAA NWS Winter Storm Elliott: Record Arctic blast (-10°F) hits Lake Michigan shoreline, triggering emergency flaring and unit curtailments at BP Whiting refinery.", "zone": "INZ001 (Lake County IN)", "weather_type": "Arctic Freeze / Unit Trip"},
+        {"date": "2023-03-31", "headline": "NOAA SPC High Risk Tornado Warning: Severe convective outbreak damages power infrastructure near Joliet / Channahon refining corridor.", "zone": "ILZ104 (Will County IL)", "weather_type": "Tornado Outbreak"},
+        {"date": "2023-07-02", "headline": "NOAA NWS Flash Flood Emergency: Historic 9-inch deluge floods Chicago expressways and Des Plaines River basin, halting petroleum transport trucks.", "zone": "ILZ104 (Cook County IL)", "weather_type": "Flash Flood Deluge"},
+        {"date": "2024-01-14", "headline": "NOAA NWS Wind Chill Warning: Deep Arctic polar vortex plunges Chicagoland to -15°F, freezing Des Plaines River barge locks and expanding wholesale rack margins.", "zone": "ILZ104 / INZ001", "weather_type": "Polar Vortex Freeze"},
+        {"date": "2024-07-15", "headline": "NOAA NWS Tornado Warning: Derecho with multiple EF-0/EF-1 tornadoes tracks across Cook and Will counties, tripping transmission feeds near Lemont refinery.", "zone": "ILZ104 (Cook/Will IL)", "weather_type": "Derecho / Tornado Outbreak"},
+        {"date": "2025-01-21", "headline": "NOAA NWS Ice Storm Warning: Heavy freezing rain coats Northwest Indiana, causing ice jams in Calumet River and delaying petroleum barge deliveries.", "zone": "INZ001 (Lake County IN)", "weather_type": "Ice Lockout / Barge Delay"}
+    ]
+    events = list(chicago_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["IL", "IN", "ILZ104", "INZ001"],
+            zip_code="60601",
+            hub_code="Chicago_IL",
+            region_label="Chicago / NW Indiana"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+def get_oakland_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather, Environmental & Seismic Risk Dataset for Oakland & SF Bay Area Metro Region:
     - NOAA NWS Red Flag Wildfire Warnings & PG&E Public Safety Power Shutoffs (PSPS refinery blackout risks)
@@ -164,6 +326,7 @@ def get_oakland_weather_dataset() -> pd.DataFrame:
     - USGS Hayward Fault Seismic Quake Alerts (Kinder Morgan SFPP pipeline shutoffs & hydrocracker trips)
     - NOAA PTWC Pacific Tsunami Advisories (Golden Gate & Carquinez Strait crude tanker berth closures)
     - NHC Eastern Pacific (EPAC) Tropical Storm Remnant downpours (e.g. Tropical Storm Hilary)
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     oakland_weather_events = [
         {"date": "2021-10-24", "headline": "NOAA NWS High Wind & Flash Flood Warning: Bomb Cyclone atmospheric river dumps 5.5 inches of rain on Oakland & East Bay, causing power grid trips at Richmond refineries.", "zone": "CAZ508 (Alameda / Oakland)", "weather_type": "Atmospheric River / Flood"},
@@ -176,17 +339,27 @@ def get_oakland_weather_dataset() -> pd.DataFrame:
         {"date": "2025-01-15", "headline": "USGS & NOAA Tsunami Advisory: M7.3 Pacific subduction earthquake triggers coastal tsunami alert, forcing crude tankers in Carquinez Strait to weigh anchor.", "zone": "SF Bay / Carquinez Strait", "weather_type": "Tsunami Warning / Dock Closure"},
         {"date": "2026-01-22", "headline": "NOAA NWS Red Flag Warning: Winter Diablo wind event forces PG&E precautionary power shutoffs near Kinder Morgan SFPP pipeline corridors.", "zone": "East Bay Corridor", "weather_type": "Red Flag PSPS"}
     ]
-    df = pd.DataFrame(oakland_weather_events)
+    events = list(oakland_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["CA", "CAZ508", "CAZ511"],
+            zip_code="94612",
+            hub_code="Oakland_CA",
+            region_label="Oakland / Bay Area"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_greenville_weather_dataset() -> pd.DataFrame:
+def get_greenville_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather Dataset for Greenville & Pitt County, NC (NCZ081) & Eastern NC Coastal Corridor:
     - NOAA NHC Hurricane & Tropical Storm Warnings (Atlantic hurricanes impacting Pamlico Sound & Coastal NC)
     - NOAA NWS Flash Flood & River Flood Emergencies (Tar River basin flooding in Pitt County)
     - NOAA NWS Severe Convective Thunderstorms & Polar Vortex Freeze Alerts impacting Selma/Apex terminals.
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     greenville_weather_events = [
         {"date": "2021-07-08", "headline": "NOAA NHC Tropical Storm Warning: Tropical Storm Elsa brings 60 mph wind gusts and flash flooding across Pitt County (NCZ081).", "zone": "NCZ081 (Pitt NC)", "weather_type": "Tropical Storm / Wind"},
@@ -198,17 +371,27 @@ def get_greenville_weather_dataset() -> pd.DataFrame:
         {"date": "2025-01-21", "headline": "NOAA NWS Ice Storm Warning: Freezing rain covers Pitt and Beaufort counties, throttling tank truck rack deliveries out of Apex/Selma.", "zone": "NCZ081 (Pitt NC)", "weather_type": "Ice Storm / Rack Delay"},
         {"date": "2026-02-08", "headline": "NOAA SPC Severe Thunderstorm Watch: Squall line with 65 mph microbursts causes power outages across Greenville metro area.", "zone": "NCZ081 (Pitt NC)", "weather_type": "Severe Convective / Power Outage"}
     ]
-    df = pd.DataFrame(greenville_weather_events)
+    events = list(greenville_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["NC", "NCZ081"],
+            zip_code="27834",
+            hub_code="Greenville_NC",
+            region_label="Greenville / Selma"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_charlotte_weather_dataset() -> pd.DataFrame:
+def get_charlotte_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather Dataset for Charlotte & Mecklenburg County, NC (NCZ071) & Piedmont NC Region:
     - NOAA NHC Hurricane & Inland Tropical Cyclone Advisories (Atlantic hurricanes impacting Piedmont NC transit corridors)
     - NOAA NWS Flash Flood Emergencies (Catawba River basin flooding in Mecklenburg & York counties)
     - NOAA NWS Severe Convective Thunderstorms, Derecho Winds & Winter Ice Storm Alerts along I-85 / I-77.
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     charlotte_weather_events = [
         {"date": "2021-08-17", "headline": "NOAA NHC Tropical Depression Warning: Remnants of Tropical Storm Fred drop 5 inches of rain across Charlotte metro and Mecklenburg County (NCZ071).", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Tropical Storm / Inland Rain"},
@@ -220,17 +403,27 @@ def get_charlotte_weather_dataset() -> pd.DataFrame:
         {"date": "2025-01-22", "headline": "NOAA NWS Ice Storm Warning: Heavy freezing rain coats I-85 and I-77 in Mecklenburg County, locking down tank truck dispatch.", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Ice Storm / Transit Lockdown"},
         {"date": "2026-02-09", "headline": "NOAA SPC Severe Thunderstorm Watch: Squall line with 70 mph winds causes power substation trips near Paw Creek petroleum tank farm.", "zone": "NCZ071 (Mecklenburg NC)", "weather_type": "Severe Convective / Grid Trip"}
     ]
-    df = pd.DataFrame(charlotte_weather_events)
+    events = list(charlotte_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["NC", "NCZ071"],
+            zip_code="28202",
+            hub_code="Charlotte_NC",
+            region_label="Charlotte / Paw Creek"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
 
-def get_port_st_lucie_weather_dataset() -> pd.DataFrame:
+def get_port_st_lucie_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather Dataset for Port St. Lucie & St. Lucie County, FL (FLZ147 / Zip 34952):
     - NOAA NHC Atlantic Hurricane & Tropical Storm Advisories (Hurricanes impacting Port Everglades & Port Canaveral marine offloading)
     - NOAA NWS Flash Flood Emergencies (South Florida extreme deluge events flooding marine tank truck racks)
     - NOAA NWS Severe Convective Thunderstorms, Gale Warnings & Tropical Storm Alerts along I-95 & Florida's Turnpike.
+    - Actively queries live NOAA alerts, SPC convective outlooks, and Open-Meteo degree days.
     """
     port_st_lucie_weather_events = [
         {"date": "2021-08-18", "headline": "NOAA NHC Tropical Storm Warning: Remnants of Tropical Storm Grace cause heavy rainfall and gale sea conditions across South Florida marine channels.", "zone": "FLZ147 (St. Lucie FL)", "weather_type": "Tropical Storm / Marine Gale"},
@@ -241,7 +434,16 @@ def get_port_st_lucie_weather_dataset() -> pd.DataFrame:
         {"date": "2024-10-09", "headline": "NOAA NHC Hurricane Warning: Hurricane Milton landfall shuts Port Canaveral berths, triggering acute retail panic buying along I-95 Treasure Coast corridor.", "zone": "FLZ147 (St. Lucie FL)", "weather_type": "Hurricane / Panic Demand"},
         {"date": "2025-02-15", "headline": "NOAA NWS Gale Warning: Atlantic winter coastal squall line forces temporary hold on marine tank barge offloading at Port Everglades.", "zone": "FLZ147 (St. Lucie FL)", "weather_type": "Marine Gale Warning"}
     ]
-    df = pd.DataFrame(port_st_lucie_weather_events)
+    events = list(port_st_lucie_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["FL", "FLZ147"],
+            zip_code="34952",
+            hub_code="Port_St_Lucie_FL",
+            region_label="Port St. Lucie / Everglades"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
     df['date'] = pd.to_datetime(df['date'])
     return df.sort_values('date').reset_index(drop=True)
 
@@ -270,7 +472,8 @@ METRO_ZIP_MAP = {
     "Greenville_NC": "27834",   # Colonial Pipeline Line 1/2 Selma Hub
     "Charlotte_NC": "28202",    # Paw Creek Distribution Hub
     "Oakland_CA": "94612",       # SF Bay Area Chevron Richmond Refinery
-    "Port_St_Lucie_FL": "34952" # Port Everglades & Port Canaveral Marine Terminals
+    "Port_St_Lucie_FL": "34952", # Port Everglades & Port Canaveral Marine Terminals
+    "Chicago_IL": "60601"       # BP Whiting & Citgo Lemont Refining Corridor
 }
 
 
@@ -404,8 +607,12 @@ def get_all_metro_spc_convective_outlooks(custom_zip_map: dict = None) -> dict:
 DEGREE_DAYS_VINTAGE_FILE = os.path.join("data", "degree_days_vintages.json")
 
 
-def save_degree_days_vintage_record(record: dict, filepath: str = DEGREE_DAYS_VINTAGE_FILE) -> None:
+def save_degree_days_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time Open-Meteo degree days observation (Issue #288)."""
+    if filepath is None:
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
+        filepath = DEGREE_DAYS_VINTAGE_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -442,8 +649,10 @@ def save_degree_days_vintage_record(record: dict, filepath: str = DEGREE_DAYS_VI
         logger.debug(f"Could not persist Open-Meteo degree days vintage record: {e}")
 
 
-def get_degree_days_vintages_as_of(as_of_date: str, hub_code: str = None, filepath: str = DEGREE_DAYS_VINTAGE_FILE) -> list:
+def get_degree_days_vintages_as_of(as_of_date: str, hub_code: str = None, filepath: Optional[str] = None) -> list:
     """Retrieves all Open-Meteo degree days vintage records available as of a given cutoff date. (Issue #288)"""
+    if filepath is None:
+        filepath = DEGREE_DAYS_VINTAGE_FILE
     if not os.path.exists(filepath):
         return []
     try:
@@ -477,7 +686,8 @@ class OpenMeteoDegreeDaysConnector:
             "Oakland_CA": {"lat": 37.804, "lon": -122.271, "name": "Chevron Richmond & Martinez Refineries"},
             "Greenville_NC": {"lat": 35.612, "lon": -77.366, "name": "Colonial Pipeline Selma NC Breakout Hub"},
             "Charlotte_NC": {"lat": 35.227, "lon": -80.843, "name": "Paw Creek Petroleum Distribution Terminal"},
-            "Port_St_Lucie_FL": {"lat": 27.273, "lon": -80.358, "name": "Port Everglades & Port Canaveral Marine Terminals"}
+            "Port_St_Lucie_FL": {"lat": 27.273, "lon": -80.358, "name": "Port Everglades & Port Canaveral Marine Terminals"},
+            "Chicago_IL": {"lat": 41.678, "lon": -87.498, "name": "BP Whiting IN & Citgo Lemont IL Refineries"}
         }
 
     def save_degree_days_vintage_record(self, record: dict, filepath: str = None) -> None:
@@ -490,7 +700,13 @@ class OpenMeteoDegreeDaysConnector:
         import json
         import urllib.request
         timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        hub = self.refining_hubs.get(hub_code, self.refining_hubs["Tulsa_OK"])
+        hub_key = hub_code
+        if hub_key not in self.refining_hubs:
+            for k in self.refining_hubs:
+                if k.lower() == hub_code.lower() or k.lower().startswith(hub_code.lower()):
+                    hub_key = k
+                    break
+        hub = self.refining_hubs.get(hub_key, self.refining_hubs["Tulsa_OK"])
 
         # 6-Hour Cache Layer Check
         cache_key = f"degree_days_{hub_code}"
@@ -594,14 +810,17 @@ PIRATE_WEATHER_REFINING_HUBS = {
     "greenville_selma": {"name": "Colonial Pipeline Selma NC Breakout Hub", "lat": 35.612, "lon": -77.366},
     "charlotte_paw_creek": {"name": "Paw Creek Petroleum Distribution Terminal", "lat": 35.227, "lon": -80.843},
     "port_st_lucie_everglades": {"name": "Port Everglades & Port Canaveral Marine Terminals", "lat": 27.273, "lon": -80.358},
-    "gulf_coast_houston": {"name": "Gulf Coast Refining Complex (Houston / Baytown)", "lat": 29.760, "lon": -95.369}
+    "gulf_coast_houston": {"name": "Gulf Coast Refining Complex (Houston / Baytown)", "lat": 29.760, "lon": -95.369},
+    "chicago_whiting": {"name": "BP Whiting IN & Citgo Lemont IL Refineries", "lat": 41.678, "lon": -87.498}
 }
 
 
-def save_pirateweather_vintage_record(record: dict, filepath: str = PIRATEWEATHER_VINTAGES_FILE) -> None:
+def save_pirateweather_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time Pirate Weather reanalysis observation (Issue #442)."""
-    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
-        return
+    if filepath is None:
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
+        filepath = PIRATEWEATHER_VINTAGES_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -697,7 +916,11 @@ class PirateWeatherConnector:
             "everglades": "port_st_lucie_everglades",
             "national": "gulf_coast_houston",
             "houston": "gulf_coast_houston",
-            "gulf_coast": "gulf_coast_houston"
+            "gulf_coast": "gulf_coast_houston",
+            "chicago": "chicago_whiting",
+            "chicago_il": "chicago_whiting",
+            "whiting": "chicago_whiting",
+            "lemont": "chicago_whiting"
         }
         hub_mapped = REGION_TO_HUB_MAP.get(key)
         if hub_mapped and hub_mapped in self.hubs:

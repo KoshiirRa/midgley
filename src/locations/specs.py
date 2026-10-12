@@ -120,11 +120,26 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         sub_locales={"fort_pierce": -0.02, "stuart": 0.03, "vero_beach": 0.01},
         primary_refinery="Waterborne Jones Act Tankers from Houston/Pascagoula",
         primary_pipeline="Port Everglades & Port Canaveral Waterborne Terminals"
+    ),
+    "chicago": RegionSpec(
+        region_key="Chicago_IL",
+        slug="chicago",
+        display_name="Greater Chicago Metro, IL & IN (PADD 2)",
+        padd="PADD 2",
+        wholesale_spot_col="spot_chicago",
+        eia_retail_series_id="EMM_EPMR_PTE_Y03CH_DPG",
+        diesel_series_id="GASDESWMW",
+        baseline_tax_rate=0.550,
+        has_edgeworth_cycles=True,
+        sub_locales={"cook_county": 0.08, "chicago_city": 0.15, "dupage": -0.04, "will_county": -0.06, "nw_indiana": -0.38},
+        primary_refinery="BP Whiting Refinery (435 kbpd) & CITGO Lemont (177 kbpd)",
+        primary_pipeline="Explorer / Wolverine / West Shore / Badger Pipelines"
     )
 }
 
 # Alias oakland to bay_area spec for seamless backward compatibility
 REGIONAL_SPECS["oakland"] = REGIONAL_SPECS["bay_area"]
+REGIONAL_SPECS["chicago_il"] = REGIONAL_SPECS["chicago"]
 
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
@@ -134,6 +149,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
     key = region_id_or_slug.lower().strip()
     if key in ("oakland", "oakland_ca", "bayarea", "bayarea_ca", "bay_area", "sf_bay_area"):
         return REGIONAL_SPECS["bay_area"]
+    if key in ("chicago", "chicago_il", "greater_chicago"):
+        return REGIONAL_SPECS["chicago"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

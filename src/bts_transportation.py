@@ -58,11 +58,15 @@ HISTORICAL_BTS_BASELINE: List[Dict[str, Any]] = [
 ]
 
 
-def save_bts_vintage_record(record: Dict[str, Any], filepath: str = BTS_VINTAGE_FILE) -> None:
+def save_bts_vintage_record(record: Dict[str, Any], filepath: Optional[str] = None) -> None:
     """
     Persists a bitemporal point-in-time U.S. BTS observation record.
     Eliminates lookahead bias in historical model backtests.
     """
+    if filepath is None:
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
+        filepath = BTS_VINTAGE_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -98,10 +102,12 @@ def save_bts_vintage_record(record: Dict[str, Any], filepath: str = BTS_VINTAGE_
         logger.debug(f"Could not persist BTS vintage record: {e}")
 
 
-def get_bts_vintages_as_of(as_of_date: str, filepath: str = BTS_VINTAGE_FILE) -> List[Dict[str, Any]]:
+def get_bts_vintages_as_of(as_of_date: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Retrieves BTS vintage records available on or before as_of_date.
     """
+    if filepath is None:
+        filepath = BTS_VINTAGE_FILE
     if not os.path.exists(filepath):
         return []
     try:
@@ -173,6 +179,8 @@ class BTSTransportationConnector:
                                 continue
                             try:
                                 freight_val = float(row.get("tsi_freight", 0.0) or 0.0)
+                                if freight_val <= 0.0:
+                                    continue
                                 truck_val = float(row.get("truck_d11", row.get("idx_truck_d11", 0.0)) or 0.0)
                                 petro_val = float(row.get("petroleum_d11", row.get("petroleum", 0.0)) or 0.0)
                                 pass_val = float(row.get("tsi_passenger", 0.0) or 0.0)

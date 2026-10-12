@@ -92,3 +92,66 @@ def test_fetch_live_noaa_alerts_caching(mock_urlopen):
     noaa_calls2 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and urlparse(c.args[0].full_url).hostname == "api.weather.gov"]
     assert len(noaa_calls2) == 1
 
+
+@patch("src.noaa_weather.urllib.request.urlopen")
+def test_fetch_live_noaa_alerts_zone_and_area_routing(mock_urlopen):
+    from src.noaa_weather import fetch_live_noaa_alerts
+    from src.lookup_cache import global_cache
+
+    global_cache.clear()
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.read.return_value = b'{"features": []}'
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    # Test state area routing: "IL" -> /alerts/active/area/IL
+    fetch_live_noaa_alerts(["IL"])
+    call_url_il = mock_urlopen.call_args_list[-1].args[0].full_url
+    assert "/alerts/active/area/IL" in call_url_il
+
+    # Test NWS zone routing: "ILZ104" -> /alerts/active/zone/ILZ104
+    fetch_live_noaa_alerts(["ILZ104"])
+    call_url_zone = mock_urlopen.call_args_list[-1].args[0].full_url
+    assert "/alerts/active/zone/ILZ104" in call_url_zone
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_chicago_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_chicago_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-123",
+            "area": "ILZ104",
+            "event": "Lake Michigan Blizzard Warning",
+            "headline": "NOAA NWS Blizzard Warning for Central Cook County IL",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Tornado Watch"],
+        "convective_risk_score": 0.80,
+        "categorical_risk": "MDT",
+        "tornado_risk_score": 0.80,
+        "hail_risk_score": 0.60,
+        "wind_risk_score": 0.80
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Chicago_IL",
+        "min_temp_f": 18.0,
+        "max_temp_f": 30.0,
+        "heating_degree_days_hdd": 41.0,
+        "freeze_warning": True,
+        "extreme_heat_warning": False
+    }
+
+    df = get_chicago_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Blizzard Warning" in h for h in headlines)
+    assert any("Freeze Warning" in h for h in headlines)
+

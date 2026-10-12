@@ -18,6 +18,9 @@ from src.dashboard_generator import (
     CINCINNATI_PATH,
     GREENVILLE_PATH,
     CHARLOTTE_PATH,
+    PORT_ST_LUCIE_PATH,
+    CHICAGO_PATH,
+    CHICAGO_SUB_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -36,7 +39,7 @@ def test_dashboard_generation_and_math_katex():
     generate_public_dashboard()
 
     # Verify existence of all expected dashboard HTML files
-    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
+    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
         assert os.path.exists(path), f"Expected file does not exist: {path}"
         assert os.path.getsize(path) > 0, f"Generated file is empty: {path}"
 
@@ -963,6 +966,29 @@ def test_dashboard_pillars_grid_structure():
         f"Expected at least 2 closing </div> tags between Pillar 6 and CTA ribbon (card + grid), "
         f"found {div_close_count}. The CTA ribbon must not be nested inside the 3-column grid (Issue #592)."
     )
+
+
+def test_chicago_page_generation():
+    """Verify that generate_public_dashboard generates docs/chicago.html and docs/chicago/index.html
+    with Greater Chicago metro calibration content, Whiting/Lemont refining logistics,
+    and shock scenarios (Issue #219).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(CHICAGO_PATH), f"Expected file does not exist: {CHICAGO_PATH}"
+    assert os.path.getsize(CHICAGO_PATH) > 0, f"Generated file is empty: {CHICAGO_PATH}"
+    assert os.path.exists(CHICAGO_SUB_PATH), f"Expected file does not exist: {CHICAGO_SUB_PATH}"
+    assert os.path.getsize(CHICAGO_SUB_PATH) > 0, f"Generated file is empty: {CHICAGO_SUB_PATH}"
+
+    with open(CHICAGO_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Greater Chicago, IL/IN Metro Retail Gas Forecast" in content
+    assert "BP Whiting" in content
+    assert "Citgo Lemont" in content or "CITGO Lemont" in content
+    assert "PADD 2 Great Lakes Hub" in content
+    assert "file:///" not in content
+
 
 
 

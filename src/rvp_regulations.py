@@ -135,6 +135,15 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.10,
             "is_rfg": False,
             "is_carb": False
+        },
+        "Chicago_IL": {
+            "name": "Greater Chicago Metro (PADD 2)",
+            "program": "EPA Reformulated Gasoline (RFG)",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.18,
+            "is_rfg": True,
+            "is_carb": False
         }
     },
     "emergency_waivers": []
@@ -196,6 +205,9 @@ class RVPRegulatoryEngine:
                 "Greenville": "Greenville_NC",
                 "Charlotte": "Charlotte_NC",
                 "Port_St_Lucie": "Port_St_Lucie_FL",
+                "Chicago": "Chicago_IL",
+                "chicago": "Chicago_IL",
+                "chicago_il": "Chicago_IL",
                 "PADD1B": "Newark_NJ",
                 "PADD5": "Oakland_CA",
                 "PADD2": "Tulsa_OK",

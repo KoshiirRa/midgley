@@ -221,7 +221,10 @@ LOCALE_MAP = {
     "clt": "Charlotte_NC",
     "port_st_lucie": "Port_St_Lucie_FL",
     "port_st_lucie_fl": "Port_St_Lucie_FL",
-    "psl": "Port_St_Lucie_FL"
+    "psl": "Port_St_Lucie_FL",
+    "chicago": "Chicago_IL",
+    "chicago_il": "Chicago_IL",
+    "chi": "Chicago_IL"
 }
 
 # Regional PADD metadata
@@ -234,6 +237,7 @@ PADD_METADATA = {
     "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
+    "Chicago_IL": {"name": "Greater Chicago Metro Area, IL/IN", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -287,6 +291,33 @@ SCENARIOS_CATALOG = {
         "season_window": "Year-Round",
         "telemetry_hook": "evergreen",
         "locales": ["cincinnati", "national"]
+    },
+    "whiting_refinery_outage": {
+        "name": "BP Whiting IN Refinery Electrical Substation Outage & Unit Trip",
+        "headline": "Plant-wide power failure forces emergency shutdown of BP Whiting 435,000 bpd refinery, triggering Midwest supply spike.",
+        "shock_pct": 0.0740,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["chicago", "national"]
+    },
+    "lemont_des_plaines_lockout": {
+        "name": "CITGO Lemont Des Plaines Barge Canal Lockout",
+        "headline": "Illinois Waterway lock maintenance and barge groundings restrict marine fuel transfers from CITGO Lemont.",
+        "shock_pct": 0.0325,
+        "category": "hydrological",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_flow",
+        "locales": ["chicago", "national"]
+    },
+    "great_lakes_polar_vortex": {
+        "name": "Great Lakes Polar Vortex Freeze-Off & Terminal Disruption",
+        "headline": "Sub-zero Arctic blast and Lake Michigan freeze halts terminal rack loading and refinery cooling water loops across Chicagoland.",
+        "shock_pct": 0.0428,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Mar 15",
+        "telemetry_hook": "openmeteo_freeze",
+        "locales": ["chicago", "national"]
     },
     "mississippi_low_water": {
         "name": "Lower Mississippi & Ohio River Low-Water Barge Bottleneck",

@@ -85,7 +85,8 @@ DIESEL_BASE_ANCHORS = {
     "greenville": 3.710,
     "charlotte": 3.730,
     "oakland": 5.250,
-    "port_st_lucie": 3.820
+    "port_st_lucie": 3.820,
+    "chicago": 3.890
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -96,7 +97,8 @@ LOCALE_TO_REGION_MAP = {
     "greenville": "Greenville_NC",
     "charlotte": "Charlotte_NC",
     "oakland": "Oakland_CA",
-    "port_st_lucie": "Port_St_Lucie_FL"
+    "port_st_lucie": "Port_St_Lucie_FL",
+    "chicago": "Chicago_IL"
 }
 
 
@@ -365,7 +367,8 @@ DIESEL_REGION_LOG_KEYS = {
     "greenville": "Greenville_ULSD",
     "charlotte": "Charlotte_ULSD",
     "oakland": "Oakland_CARB_Diesel",
-    "port_st_lucie": "Port_St_Lucie_ULSD"
+    "port_st_lucie": "Port_St_Lucie_ULSD",
+    "chicago": "Chicago_ULSD"
 }
 
 

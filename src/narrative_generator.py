@@ -110,6 +110,12 @@ def generate_metro_narrative(
                 ("Port Everglades Terminal Throughput Spread", "TERMINAL_LOGISTICS"),
                 ("Southeast Atlantic Clean Product Inventory Buffer", "REGIONAL_BUFFER"),
             ]
+        elif "chicago" in reg_str:
+            factors = [
+                ("BP Whiting & Lemont Great Lakes Refining Complex", "REFINING_SUPPLY"),
+                ("Cook County / Northwest Indiana Tax Differential Arbitrage", "TAX_ARBITRAGE"),
+                ("Chicago CBOB Wholesale Spot Rack Basis", "SPOT_BASIS"),
+            ]
         else:
             factors = [
                 ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
@@ -305,6 +311,32 @@ def generate_metro_narrative(
             detailed_prose = (
                 f"Port St. Lucie & Treasure Coast retail prices are projected to remain steady{hub_info}, with consistent waterborne "
                 f"tanker discharge volumes at Port Everglades matching regional retail demand."
+            )
+
+    elif "chicago" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["Great Lakes Refining Cushion", "Chicago CBOB Basis Softening", "Cook/IN Border Tax Arbitrage"]
+            headline_summary = f"Chicagoland retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Chicagoland retail gasoline pricing is anchored to the Great Lakes refining complex{hub_info}, "
+                f"where robust runs at BP Whiting (435 kbpd) and CITGO Lemont (177 kbpd) support wholesale CBOB supplies. "
+                f"Persistent $0.35–$0.55/gal cross-state retail differentials along the Cook County/Northwest Indiana border "
+                f"incentivize commuter arbitrage, while wholesale basis normalization facilitates downward pump adjustments."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Great Lakes Refining Tightness", "Chicago CBOB Rack Premium", "Multi-Tier Tax Load Exposure"]
+            headline_summary = f"Chicagoland retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Chicagoland retail pricing reflects localized refining and pipeline confluence across northern Illinois and Indiana{hub_info}. "
+                f"Wholesale Chicago CBOB rack premiums and summer RFG 7.4 psi volatility constraints amplify upward price pass-through, "
+                f"while the heavy statutory tax load (Illinois, Cook County, City of Chicago) compounds wholesale cost increases at local retail pumps."
+            )
+        else:
+            badges = ["Midwest Refining Balance", "Chicago CBOB Parity"]
+            headline_summary = f"Chicagoland retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Chicagoland retail gasoline prices are projected to hold steady{hub_info}, as balanced throughput from BP Whiting "
+                f"and CITGO Lemont matches metropolitan commuter demand across Cook County and Northwest Indiana."
             )
 
     else:
