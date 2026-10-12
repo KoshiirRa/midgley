@@ -186,5 +186,101 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 - **Decoupled PADD 5 Architecture (#622)**: Initiated architectural decoupling of non-California PADD 5 sub-markets (Pacific Northwest Puget Sound refining / Olympic Pipeline, Desert Southwest pipeline egress to Phoenix & Las Vegas, and Alaska/Hawaii island logistics) from California's $0.953/gal CARBOB regulatory burden.
 - **50-State & Municipal Fuel Tax Ingestion (#623)**: Designed end-to-end integration uniting `src/zip_geocoding.py` with `src/state_open_data.py` (`STATE_METADATA`), International Fuel Tax Agreement (IFTA) quarterly schedules, and local option fuel taxes (LOFT) for Cook County/Chicago, Florida, Nevada, and Hawaii to ensure accurate tax pass-through across freeform ZIP codes and GPS coordinates.
 
+### 25. Dependency Security Upgrades & Ecosystem Alignment (PRs #624, #625, #626, #629)
+- **`source-map-js` Security Patch (PR #624)**: Bumped `source-map-js` from 1.2.1 to 1.2.2, patching CVE-2026-93749 (denial-of-service vulnerability from malicious indexed source maps) and resolving browser execution crashes under strict Content-Security-Policy rules that disallow `unsafe-eval`.
+- **Vitest & Tinypool Test Engine Upgrade (PR #625)**: Bumped `vitest` to 5.0.4 and `tinypool` to latest, streamlining modern concurrency pools and TypeScript test execution across Cloudflare worker suites.
+- **Sharp & Cloudflare Wrangler Upgrade (PR #626)**: Bumped `wrangler` to 4.149.0 and `sharp` to 0.35.5, adding `Retry-After` header adherence during static asset uploads and preserving `using`/`await using` declarations in Worker bundles.
+- **GitHub Actions Workflows Modernization (PR #629)**: Bumped all GitHub Actions workflow tasks across `.github/workflows/` (`actions/checkout@v4`, `actions/setup-python@v5`, `actions/setup-node@v4`, `actions/upload-artifact@v4`) with Node.js 24 runtime support.
+
+### 26. Continuous Integration & Test Suite Hardening
+- **Oakland Redirect Stub Social Embed Tags**: Injected Open Graph and Twitter Card metadata into the `docs/oakland.html` redirect stub, resolving `test_social_embed_generator.py`.
+- **Connector Test Persistence Isolation**: Hardened testing persistence guards in `src/usgs_seismic.py`, `src/usgs_water_feed.py`, `src/alternative_data_feeds.py`, `src/carb_compliance.py`, and `src/bts_transportation.py` to prevent test-run pollution in `data/` while preserving custom `tmp_path` fixture persistence.
+- **Fallback Telemetry Structure Isolation**: Applied `copy.deepcopy()` to eliminate mutable dictionary reference leaks across test invocations in `src/fallback_telemetry.py`.
+- **Key Manager Schema Initialization**: Corrected KeyManager SQLite schema initialization call in `tests/conftest.py` and added automatic test-teardown state rollback.
+- **BTS Transportation Index Lag Protection**: Filtered unreleased preliminary TSI freight months (`df['bts_tsi_freight'] > 0.0`) and applied forward-filling to handle preliminary indicator lags.
+- **Documentation Parity Synchronization**: Reconciled Section 14 (Geocoding & Locale Fuel Tax Ingestion) in `API.md` and aligned `README.md` and `AGENTS.md` mirrors to 100% byte-for-byte parity.
+
+---
+
+## 📦 Closed Issues, Pull Requests & Findings
+
+| Item | Title | Component |
+| :--- | :--- | :--- |
+| **#442** | `feat(weather): Wire Pirate Weather connector into feature engineering, scenario simulation, and MCP/REST API` | Weather / Feature Engineering |
+| **#601** | `fix(regulations): Correct tax calendar for Ohio holiday & statutory rates, and align calendar vs business-day evaluation window` | Regulations / MLOps |
+| **#602** | `fix(data-integrity): Unify forecast ID generation across logger, re-keying, and Turso migration to prevent ledger duplication` | Data Integrity / Ledger |
+| **#603** | `fix(data-ingestion): Fix geopolitical feed refresh data truncation and repair headline deduplication logic` | Data Ingestion / NLP |
+| **#604** | `fix(dashboard): Ground narrative card attribution drivers in computed model SHAP/linear impacts and verify KaTeX SRI hashes` | Dashboard / Presentation |
+| **#605** | `fix(security): Harden intraday flag links, enforce D1 replay table, fix headline truncation, and rotate committed FIRMS key` | Security / Edge |
+| **#606** | `fix(workflows): Fix dirty-tree guard, isolate Headline Arena sync, and ensure resilient forecast ledger commits` | CI/CD / Workflows |
+| **#607** | `fix(modeling): Reconcile asymmetric ECM retail forecasting with genuine retail price history and distinct model versioning` | Econometrics / Modeling |
+| **#608** | `fix(ground-truth): Ingest authentic regional retail gasoline price series and eliminate cross-geography fallbacks` | Ground Truth / EIA |
+| **#609** | `fix(econometrics): Standardize Clark-West covariance, one-sided Diebold-Mariano testing, and multi-horizon FWER/FDR adjustments` | Econometrics / Evaluation |
+| **#610** | `fix(nowcast): Standardize state-space nowcast likelihood, reference observation variance estimation, and production wiring` | Nowcasting / State-Space |
+| **#611** | `fix(volatility): Standardize RBOB volatility distribution engine, closed-form CRPS, and production density cone forecasting` | Volatility / Predictive Density |
+| **#612** | `fix(data-feeds): Repair FIRMS flaring anomaly telemetry, coordinate hub routing in weather, and Midwestern cycle modeling` | Data Ingestion / Feeds |
+| **#613** | `fix(testing): Ensure cutoff-row point-in-time invariance, isolate test environment sandbox, and add value-level math tests` | Testing / Quality Assurance |
+| **#614** | `fix(api): Harden API server rate limiting, PBKDF2 auth cache, SQLite circuit breaker, and evaluation batch inserts` | API / Security / Database |
+| **#615** | `docs(alignment): Audit component production callers, harmonize versioning to v0.8.5, and update multi-agent specifications` | Architecture / Documentation |
+| **Finding 3.1 / 3.2** | `feat(eia): Implement official EIA API v2 client and weekly retail ground truth with WPSR supply fundamentals` | Data Ingestion / EIA Client |
+| **Finding 3.2** | `feat(usgs): Migrate USGS water telemetry to OGC API continuous items endpoint ahead of sunset deadline` | Hydrology / Navigation |
+| **Finding 3.7** | `refactor(locations): Merge Oakland and Bay Area into canonical BayArea_CA hub with oakland.html redirect` | Locations / Dashboard |
+| **Finding T-1 / T-4** | `docs(taxes): Enrich statutory tax events in known_future_events.json with source URLs and announcement dates` | Regulations / Provenance |
+| **Finding A-5 / A-8** | `feat(calendar): Implement NYMEXTradingCalendar with CME holiday schedules and RBOB contract roll boundary detection` | Market Calendar / Models |
+| **Finding E-2** | `docs(governance): Document strict non-commercial policy and honest labeling of macro PADD regional actuals` | Governance / Documentation |
+| **#617** | `fix(edge): Gracefully fallback intraday flag signing keys to CLOUDFLARE_AUTH_TOKEN / ADMIN_TOKEN, suppress edible cooking oil false positives, and parse flag URLs in reviewer` | Edge / Ingestion / CI |
+| **#311** | `fix(ingestion): Ground truth resolution for Joliet refinery outage, Cincinnati/Midcontinent routing, and open-source paywall discovery` | Ingestion / Routing |
+| **#312** | `fix(nlp): Require energy commodity co-occurrence for macro sanctions and retaliation triggers` | Ingestion / NLP |
+| **#317** | `fix(nlp): Exclude localized data center and generator diesel spills, align RSS/edge cache TTL to 72h` | Ingestion / Edge Cache |
+| **#318** | `fix(nlp): Suppress non-petroleum diplomatic sanctions rhetoric from triggering intraday shock evaluation` | Ingestion / NLP |
+| **#258** | `feat(dedupe): Hindsight-driven cross-provider semantic deduplication, temporal clustering, and human-in-the-loop Discord review buttons` | NLP / Alerts / Edge |
+| **#618** | `feat(modeling): Expand PADD 4 Rocky Mountain econometric forecasting hub & Denver refinery crack spreads` | Modeling / Regional Hubs |
+| **#619** | `feat(modeling): Implement PADD 1A New England (Boston) regional model & Irving/Barge import logistics` | Modeling / Regional Hubs |
+| **#620** | `feat(modeling): Model PADD 6 Caribbean (Puerto Rico & Virgin Islands) maritime refined product logistics` | Modeling / Maritime Logistics |
+| **#621** | `feat(modeling): Model PADD 7 Pacific Territories (Guam & Northern Marianas) trans-Pacific MR tanker logistics` | Modeling / Maritime Logistics |
+| **#622** | `feat(modeling): Review & refactor PADD 5 modeling to decouple PNW, Desert Southwest & Island sub-markets from California CARB` | Modeling / PADD 5 Architecture |
+| **#623** | `feat(ingestion): Ingest & automate 50-state & local fuel tax schedules for freeform location resolution` | Data Ingestion / Tax Schedules |
+| **#624** | `chore(deps-dev): bump source-map-js from 1.2.1 to 1.2.2 (CVE-2026-93749 patch)` | Dependencies / Security |
+| **#625** | `chore(deps): bump tinypool and vitest (vitest 5.0.4)` | Dependencies / Testing |
+| **#626** | `chore(deps): bump sharp and wrangler (wrangler 4.149.0)` | Dependencies / Edge Tools |
+| **#629** | `chore(deps): bump the actions-workflows group across 1 directory with 9 updates` | CI/CD / Workflows |
+| **#488** | `chore(deps): bump vitest from 2.0.5 to 2.1.0` *(Closed — superseded by #625)* | Dependencies / Superseded |
+| **#588** | `chore(deps): bump wrangler and @cloudflare/workers-types` *(Closed — superseded by #626)* | Dependencies / Superseded |
+
+---
+
+## 🤖 AI Agent Reconciliation Block
+
+For autonomous AI coding assistants, downstream forks, and self-hosted deployments upgrading from **v0.8.4** to **v0.8.5**:
+
+### 1. Schema & Migration Summary
+* **Package Version**: `0.8.5`
+* **Model Engine Version**: `v1.6 Ipatieff` (`v2.1.0-asym-ecm` semantic model tags)
+* **Manifest Schema Version**: `3`
+* **Breaking Changes**: None (`breaking_changes: false`)
+* **Regional Retraining**: Not required (`requires_regional_retraining: false`)
+* **Database Migrations**:
+  - `20260917_add_gauge_stations`: Inland river gauge telemetry table.
+  - `20260918_add_reachability_telemetry`: Multi-protocol reachability tracking columns.
+  - Automatic on startup via `VintageStore` and `KeyManager`.
+
+### 2. Environment Variables & Credentials
+* **Added / Updated**:
+  - `USGS_WATER_FEED_ENABLED`: Default `true`. Enables OGC API continuous river collection telemetry.
+  - `HINDSIGHT_API_URL`: Vectorize Hosted SaaS endpoint (`https://api.hindsight.vectorize.io`).
+  - `HINDSIGHT_BANK_ID`: Default `"Midgley"`.
+  - `HINDSIGHT_API_KEY`: API token for episodic memory bank synchronization.
+* **Preserved Fallbacks**:
+  - All external data sources support transparent zero-cost fallbacks when credentials are unconfigured.
+
+### 3. Verification & Self-Hosted Upgrade Commands
+To verify and reconcile a self-hosted checkout against this release:
+```bash
+python scripts/check_updates.py --dry-run
+python scripts/verify_docs_parity.py
+ruff check .
+TESTING=1 pytest -v tests/
+```
+
 
 
