@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-12 14:52:01",
+  "last_updated": "2026-10-12 22:49:55",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-09-30 19:53:41",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 310.48,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:53:43",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 113.45,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:53:45",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 307.06,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:53:47",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 110.38,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-09-30 19:53:49",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9962,46 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-10-12 22:48:20",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 282.39,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-10-12 22:49:42",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 365.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 336 docs, 234 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-10-12 22:49:53",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 5199.61,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge 2e2841cf-842e-4287-88f0-ea80ff9f0a17): direction=bearish, confidence=0.8531, scored=True"
+    },
+    {
+      "timestamp": "2026-10-12 22:49:55",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 2138.76,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge d2153192-9d7f-46bd-8ea1-6e91f43f21ab): direction=bearish, confidence=0.8159, scored=True"
     }
   ]
 }

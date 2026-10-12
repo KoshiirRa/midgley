@@ -1037,12 +1037,13 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5": {
-    "timestamp": "2026-09-06T11:45:18.525767",
+    "timestamp": "2026-10-12T22:48:48.034863+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
     "headline": "How High Are Gas Prices Where You Live? - The New York Times",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9vN0tpNVdZWWNRUC1TdVFmZE1FNWpURGFiUlVQYU9ENW92U1k0U0tCMnVXcjdSd2xHRUV2bTFZMnVfM3pQWEFqNDdDalBIakJMOF80dXlVVTlRdw?oc=5": {
     "timestamp": "2026-10-03T12:45:18.769389+00:00",
@@ -11843,5 +11844,33 @@
     "headline": "Dearth Of Refineries And Tariffs Squeeze Americans - WIBC 93.1 FM",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMinAFBVV95cUxOdFlxVWN3ZkpCVmNVX255M0xDOGNESFk1MDE5Ui11c3F1em13dnZrQVY0WW5id29mNkVETEdUTC1uNktSSE5jV1NDZUxBeV9TZWx4dFdmSEtJSlBKTU10XzQ1eldscnNPUEpwa1FwVnc5ZHFNUVU5T1YzZV9uNzc4ekRyM2ZJUDVIdHJlV24zWDYwLTlVT3l1Q1czR0TSAaIBQVVfeXFMTnB0b3dIcklMOTh6a3JJV2VIdksyNlMxZUhSSWN2a184RFhGTThYRG5mWmR5TkVaTW8tbGJXSWZNVlZXN3hLRUVqSXM1YjNTY0dUVTk5cEZxVS1Lem9sNFoyenJCdlVyc0EzNlZVS3ZMMFFUWWtOSGdCdUI1UlRDejl5S2ZCMmJzYnNRQ1NlZGFobkJRc0pCQW9yY2w1VTdDQnN3?oc=5": {
+    "timestamp": "2026-10-12T22:48:33.469640+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOdFlxVWN3ZkpCVmNVX255M0xDOGNESFk1MDE5Ui11c3F1em13dnZrQVY0WW5id29mNkVETEdUTC1uNktSSE5jV1NDZUxBeV9TZWx4dFdmSEtJSlBKTU10XzQ1eldscnNPUEpwa1FwVnc5ZHFNUVU5T1YzZV9uNzc4ekRyM2ZJUDVIdHJlV24zWDYwLTlVT3l1Q1czR0TSAaIBQVVfeXFMTnB0b3dIcklMOTh6a3JJV2VIdksyNlMxZUhSSWN2a184RFhGTThYRG5mWmR5TkVaTW8tbGJXSWZNVlZXN3hLRUVqSXM1YjNTY0dUVTk5cEZxVS1Lem9sNFoyenJCdlVyc0EzNlZVS3ZMMFFUWWtOSGdCdUI1UlRDejl5S2ZCMmJzYnNRQ1NlZGFobkJRc0pCQW9yY2w1VTdDQnN3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOdFlxVWN3ZkpCVmNVX255M0xDOGNESFk1MDE5Ui11c3F1em13dnZrQVY0WW5id29mNkVETEdUTC1uNktSSE5jV1NDZUxBeV9TZWx4dFdmSEtJSlBKTU10XzQ1eldscnNPUEpwa1FwVnc5ZHFNUVU5T1YzZV9uNzc4ekRyM2ZJUDVIdHJlV24zWDYwLTlVT3l1Q1czR0TSAaIBQVVfeXFMTnB0b3dIcklMOTh6a3JJV2VIdksyNlMxZUhSSWN2a184RFhGTThYRG5mWmR5TkVaTW8tbGJXSWZNVlZXN3hLRUVqSXM1YjNTY0dUVTk5cEZxVS1Lem9sNFoyenJCdlVyc0EzNlZVS3ZMMFFUWWtOSGdCdUI1UlRDejl5S2ZCMmJzYnNRQ1NlZGFobkJRc0pCQW9yY2w1VTdDQnN3?oc=5",
+    "headline": "Diesel, gas prices begin to drop with fuel tax suspension - The Center Square",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinAFBVV95cUxOdFlxVWN3ZkpCVmNVX255M0xDOGNESFk1MDE5Ui11c3F1em13dnZrQVY0WW5id29mNkVETEdUTC1uNktSSE5jV1NDZUxBeV9TZWx4dFdmSEtJSlBKTU10XzQ1eldscnNPUEpwa1FwVnc5ZHFNUVU5T1YzZV9uNzc4ekRyM2ZJUDVIdHJlV24zWDYwLTlVT3l1Q1czR0TSAaIBQVVfeXFMTnB0b3dIcklMOTh6a3JJV2VIdksyNlMxZUhSSWN2a184RFhGTThYRG5mWmR5TkVaTW8tbGJXSWZNVlZXN3hLRUVqSXM1YjNTY0dUVTk5cEZxVS1Lem9sNFoyenJCdlVyc0EzNlZVS3ZMMFFUWWtOSGdCdUI1UlRDejl5S2ZCMmJzYnNRQ1NlZGFobkJRc0pCQW9yY2w1VTdDQnN3?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMickFVX3lxTE1UYmVZdnVTMkdRcDBrSWxRQm5hcjNnclVVYkRZZEtWTElHRVc4bmlSN1FiU1FoX0VyWmhNeTE1ZUY4bmZhOHZvX201aUcxVzdHSkRHd21xNUxCd2dyR19ldHhBVURNWVg3UW1FeXZVOEptZw?oc=5": {
+    "timestamp": "2026-10-12T22:48:40.874456+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1UYmVZdnVTMkdRcDBrSWxRQm5hcjNnclVVYkRZZEtWTElHRVc4bmlSN1FiU1FoX0VyWmhNeTE1ZUY4bmZhOHZvX201aUcxVzdHSkRHd21xNUxCd2dyR19ldHhBVURNWVg3UW1FeXZVOEptZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1UYmVZdnVTMkdRcDBrSWxRQm5hcjNnclVVYkRZZEtWTElHRVc4bmlSN1FiU1FoX0VyWmhNeTE1ZUY4bmZhOHZvX201aUcxVzdHSkRHd21xNUxCd2dyR19ldHhBVURNWVg3UW1FeXZVOEptZw?oc=5",
+    "headline": "The oil market that sets today’s gas prices was invented in Western Pennsylvania - Pittsburgh's Public Source",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMickFVX3lxTE1UYmVZdnVTMkdRcDBrSWxRQm5hcjNnclVVYkRZZEtWTElHRVc4bmlSN1FiU1FoX0VyWmhNeTE1ZUY4bmZhOHZvX201aUcxVzdHSkRHd21xNUxCd2dyR19ldHhBVURNWVg3UW1FeXZVOEptZw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMirgFBVV95cUxQLTlseWRrYXg1TTZMSktrSDlSajlmZ0RpRWxoNElleXFLRE4yak1KeUJ6cFZTZ28wX3BMNUtFclBLQjdYbHd6MzdPUTFoQUxtTkdCaXFYa09hM0VsdE00U3NLV0U0NEJObTR6LUxaMmdqd3VQUjMwbU5XVTF1a3ktUTNkcmRJaTF4WTBSak1yeWtIZDJmd1RTX0FuNzhuR2liZTRzZ0pIaUZkTHZhQ0E?oc=5": {
+    "timestamp": "2026-10-12T22:48:52.804739+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQLTlseWRrYXg1TTZMSktrSDlSajlmZ0RpRWxoNElleXFLRE4yak1KeUJ6cFZTZ28wX3BMNUtFclBLQjdYbHd6MzdPUTFoQUxtTkdCaXFYa09hM0VsdE00U3NLV0U0NEJObTR6LUxaMmdqd3VQUjMwbU5XVTF1a3ktUTNkcmRJaTF4WTBSak1yeWtIZDJmd1RTX0FuNzhuR2liZTRzZ0pIaUZkTHZhQ0E?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQLTlseWRrYXg1TTZMSktrSDlSajlmZ0RpRWxoNElleXFLRE4yak1KeUJ6cFZTZ28wX3BMNUtFclBLQjdYbHd6MzdPUTFoQUxtTkdCaXFYa09hM0VsdE00U3NLV0U0NEJObTR6LUxaMmdqd3VQUjMwbU5XVTF1a3ktUTNkcmRJaTF4WTBSak1yeWtIZDJmd1RTX0FuNzhuR2liZTRzZ0pIaUZkTHZhQ0E?oc=5",
+    "headline": "Gas prices still dropping in Florida, with some regions below $4 again - Sun Sentinel",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxQLTlseWRrYXg1TTZMSktrSDlSajlmZ0RpRWxoNElleXFLRE4yak1KeUJ6cFZTZ28wX3BMNUtFclBLQjdYbHd6MzdPUTFoQUxtTkdCaXFYa09hM0VsdE00U3NLV0U0NEJObTR6LUxaMmdqd3VQUjMwbU5XVTF1a3ktUTNkcmRJaTF4WTBSak1yeWtIZDJmd1RTX0FuNzhuR2liZTRzZ0pIaUZkTHZhQ0E?oc=5",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }
