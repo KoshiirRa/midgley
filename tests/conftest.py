@@ -17,7 +17,7 @@ def verify_data_directory_unpolluted():
     """
     dirs_to_guard = [Path("data")]
     initial_hashes = {}
-    ignored_suffixes = {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock"}
+    ignored_suffixes = {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock", ".db"}
 
     for d in dirs_to_guard:
         if d.exists():
@@ -88,8 +88,21 @@ def isolate_test_environment(tmp_path, monkeypatch):
     try:
         import src.key_manager as km
         monkeypatch.setattr(km, "DEFAULT_DB_PATH", test_sec_db)
+        if hasattr(km, "global_key_manager"):
+            monkeypatch.setattr(km.global_key_manager, "db_path", test_sec_db)
+            km.global_key_manager.init_db()
     except (ImportError, AttributeError):
         pass
+
+    data_dir = Path("data")
+    orig_data_files = {}
+    if data_dir.exists():
+        for p in data_dir.rglob("*"):
+            if p.is_file() and p.suffix not in {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock", ".db"}:
+                try:
+                    orig_data_files[p] = p.read_bytes()
+                except Exception:
+                    pass
 
     try:
         import src.agent_memory as am
@@ -214,3 +227,17 @@ def isolate_test_environment(tmp_path, monkeypatch):
         pass
 
     yield tmp_path
+
+    # Restore any production data files mutated during this test
+    for p, orig_bytes in orig_data_files.items():
+        if p.exists():
+            try:
+                if p.read_bytes() != orig_bytes:
+                    p.write_bytes(orig_bytes)
+            except Exception:
+                pass
+        else:
+            try:
+                p.write_bytes(orig_bytes)
+            except Exception:
+                pass

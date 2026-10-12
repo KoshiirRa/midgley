@@ -3379,6 +3379,8 @@ class OpenSourceAIRadarConnector:
 
     def _save_disk_cache(self, models: List[Dict[str, Any]]):
         """Saves radar records to data/radar_cache.json."""
+        if os.environ.get("TESTING") == "1":
+            return
         try:
             os.makedirs(os.path.dirname(self.CACHE_FILE), exist_ok=True)
             with open(self.CACHE_FILE, "w", encoding="utf-8") as f:

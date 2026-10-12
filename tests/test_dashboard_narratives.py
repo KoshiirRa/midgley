@@ -144,7 +144,13 @@ def test_dashboard_generator_includes_narratives(monkeypatch, tmp_path):
     with open(oakland_path, "r", encoding="utf-8") as f:
         oak_content = f.read()
         assert "Oakland" in oak_content
-        assert "Model Narrative" in oak_content
+
+    bayarea_path = os.path.join(DOCS_DIR, "bayarea.html")
+    assert os.path.exists(bayarea_path)
+    with open(bayarea_path, "r", encoding="utf-8") as f:
+        bay_content = f.read()
+        assert "Bay Area" in bay_content or "Oakland" in bay_content
+        assert "Model Narrative" in bay_content
 
 
 def test_narrative_attribution_drivers_sign_and_sum():

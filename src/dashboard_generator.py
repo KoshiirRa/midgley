@@ -4296,9 +4296,17 @@ def generate_public_dashboard():
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
         target_url = f"{rel_prefix}bayarea.html"
+        head_meta_oakland = get_head_meta_tags(
+            title="Oakland & SF Bay Area Retail Gas Forecast - Midgley",
+            description="Oakland and the 9-County Northern California corridor have been unified into the SF Bay Area Regional Hub.",
+            canonical_path="oakland.html" if rel_prefix == "" else "oakland/index.html",
+            image_filename="oakland.png",
+            theme_color="#0ea5e9"
+        )
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
+{head_meta_oakland}
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url={target_url}">
     <link rel="canonical" href="{target_url}">

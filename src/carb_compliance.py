@@ -154,6 +154,8 @@ class CARBComplianceConnector:
         return result
 
     def _persist_vintage(self, result: Dict[str, Any]) -> None:
+        if os.environ.get("TESTING") == "1" and os.path.abspath(self.vintage_file) == os.path.abspath(CARB_VINTAGE_FILE):
+            return
         try:
             with open(self.vintage_file, "r", encoding="utf-8") as f:
                 data = json.load(f)

@@ -112,6 +112,11 @@ def atomic_write(
         **kwargs: Additional arguments passed to open().
     """
     target_path = os.path.abspath(path)
+    if os.environ.get("TESTING") == "1" and os.environ.get("MIDGLEY_DATA_DIR"):
+        data_dir = os.path.abspath("data")
+        if target_path == data_dir or target_path.startswith(data_dir + os.sep):
+            rel = os.path.relpath(target_path, data_dir)
+            target_path = os.path.abspath(os.path.join(os.environ["MIDGLEY_DATA_DIR"], rel))
     directory = os.path.dirname(target_path) or "."
     os.makedirs(directory, exist_ok=True)
 
