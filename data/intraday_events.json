@@ -5422,5 +5422,26 @@
       "overall_price_pressure": 0.9
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-12T05:04:26.894283",
+    "headline": "Iran accuses CENTCOM chief of running oil smuggling operations in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.55,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    },
+    "discord_notified": true
   }
 ]

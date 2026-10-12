@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-12T01:42:35.295275",
+  "timestamp": "2026-10-12T05:04:51.992470",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -17,8 +17,8 @@
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-10-12T01:37:24Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-10-12T05:04:34Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,

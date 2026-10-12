@@ -3984,7 +3984,7 @@
     }
   },
   {
-    "as_of": "2026-10-12 01:40:27",
+    "as_of": "2026-10-12 05:04:37",
     "valid_date": "2026-10-12",
     "cluster_key": "all",
     "stations_monitored": 13,
@@ -4001,7 +4001,7 @@
     },
     "data": {
       "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-      "timestamp": "2026-10-12 01:40:27",
+      "timestamp": "2026-10-12 05:04:37",
       "status": "SUCCESS",
       "stations_monitored": 13,
       "stations": {
@@ -4030,10 +4030,10 @@
           "cluster": "inland_barge",
           "role": "cincinnati_terminal_stage",
           "gage_height_ft": 28.5,
-          "discharge_cfs": 22000.0,
+          "discharge_cfs": 23400.0,
           "water_temp_c": 20.0,
           "specific_conductance_us_cm": 310.0,
-          "last_updated": "2025-10-13T02:30:00+00:00"
+          "last_updated": "2025-10-13T06:00:00+00:00"
         },
         "08072050": {
           "name": "San Jacinto River nr Sheldon, TX (Houston Ship Channel)",
