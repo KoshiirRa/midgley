@@ -116,6 +116,15 @@
       "summer_compliance_premium_per_gal": 0.18,
       "is_rfg": true,
       "is_carb": false
+    },
+    "Los_Angeles_CA": {
+      "name": "Los Angeles Basin & South Coast (PADD 5)",
+      "program": "CARB Phase 3 CaRFG",
+      "summer_rvp_psi": 6.99,
+      "winter_rvp_psi": 9.0,
+      "summer_compliance_premium_per_gal": 0.28,
+      "is_rfg": false,
+      "is_carb": true
     }
   },
   "emergency_waivers": []

@@ -95,6 +95,7 @@ TRIGGER_KEYWORDS = [
     "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
     "sweeny refinery", "bayway refinery", "chicago cbob", "chicago spot",
     "baytown", "port arthur", "deer park", "texas city", "houston ship channel", "galveston bay", "motiva",
+    "el segundo", "torrance refinery", "carson refinery", "wilmington refinery", "la carbob", "watson station", "san pedro bay",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -435,6 +436,14 @@ class IntradayEventMonitor:
         # Oakland & SF Bay Area / Richmond / CARB / California
         if any(k in text for k in ["oakland", "sf bay", "san francisco", "richmond refinery", "carb", "california"]):
             targets.add("Oakland")
+
+        # Los Angeles Basin / South Bay Refining Hub (El Segundo, Torrance, Carson, Wilmington)
+        if any(k in text for k in [
+            "los angeles", "el segundo", "torrance", "carson refinery", "wilmington refinery",
+            "san pedro bay", "port of long beach", "watson station", "la carbob", "south coast aqmd",
+            "scaqmd", "palos verdes", "newport-inglewood"
+        ]):
+            targets.add("Los_Angeles")
 
         # Port St. Lucie / Florida / Waterborne Freight
         if any(k in text for k in ["port st. lucie", "port st lucie", "florida", "waterborne freight"]):

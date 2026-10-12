@@ -19,7 +19,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-# Standard Bottom-Level Metro Calibration Hubs (m = 11)
+# Standard Bottom-Level Metro Calibration Hubs (m = 12)
 BOTTOM_LEVEL_METROS = [
     "Tulsa_OK",
     "Newark_DE",
@@ -31,7 +31,8 @@ BOTTOM_LEVEL_METROS = [
     "Oakland_CA",
     "BayArea_CA",
     "Chicago_IL",
-    "Houston_TX"
+    "Houston_TX",
+    "Los_Angeles_CA"
 ]
 
 # Intermediate PADD / Regional Clusters (k = 5)
@@ -40,7 +41,7 @@ PADD_CLUSTERS = {
     "PADD_1C": ["Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"],
     "PADD_2": ["Tulsa_OK", "Cincinnati_OH", "Cincinnati_KY", "Chicago_IL"],
     "PADD_3": ["Houston_TX"],
-    "PADD_5": ["Oakland_CA", "BayArea_CA"]
+    "PADD_5": ["Oakland_CA", "BayArea_CA", "Los_Angeles_CA"]
 }
 
 TOTAL_HIERARCHICAL_NODES = ["National"] + list(PADD_CLUSTERS.keys()) + BOTTOM_LEVEL_METROS

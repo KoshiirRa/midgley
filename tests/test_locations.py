@@ -16,7 +16,8 @@ from src.locations import (
     run_charlotte_pipeline,
     run_oakland_pipeline,
     run_chicago_pipeline,
-    run_houston_pipeline
+    run_houston_pipeline,
+    run_los_angeles_pipeline
 )
 from src.locations.tulsa.regional import fetch_tulsa_market_data, get_tulsa_regional_events, _generate_synthetic_tulsa_data
 from src.locations.newark.regional import fetch_newark_market_data, get_newark_regional_events, _generate_synthetic_newark_data
@@ -26,11 +27,12 @@ from src.locations.charlotte.regional import fetch_charlotte_market_data, get_ch
 from src.locations.oakland.regional import fetch_oakland_market_data, get_oakland_regional_events, _generate_synthetic_oakland_data, TOTAL_CARB_TAX_BURDEN
 from src.locations.chicago.regional import fetch_chicago_market_data, get_chicago_regional_events, _generate_synthetic_chicago_data
 from src.locations.houston.regional import fetch_houston_market_data, get_houston_regional_events, _generate_synthetic_houston_data
+from src.locations.los_angeles.regional import fetch_los_angeles_market_data, get_los_angeles_regional_events, _generate_synthetic_los_angeles_data
 
 
 def test_locations_registry_structure():
     """Verify that all expected locations are registered with required keys."""
-    expected_locations = {"national", "tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "port_st_lucie", "chicago", "houston"}
+    expected_locations = {"national", "tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "port_st_lucie", "chicago", "houston", "los_angeles"}
     registered = set(list_locations())
     assert expected_locations.issubset(registered), f"Missing locations in registry: {expected_locations - registered}"
 
@@ -125,6 +127,18 @@ def test_houston_synthetic_market_data():
     assert pytest.approx(df["houston_tx_retail_gasoline"].iloc[-1], rel=1e-3) == 2.850
 
 
+def test_los_angeles_synthetic_market_data():
+    """Verify Los Angeles regional data generator creates required feature columns."""
+    df = _generate_synthetic_los_angeles_data("2024-01-01", "2024-01-31", live_pump_price=4.890)
+    assert not df.empty
+    assert "los_angeles_ca_retail_gasoline" in df.columns
+    assert "spot_los_angeles" in df.columns
+    assert "el_segundo_crack_spread" in df.columns
+    assert "los_angeles_rack_margin" in df.columns
+    assert "total_regulatory_tax_burden" in df.columns
+    assert pytest.approx(df["los_angeles_ca_retail_gasoline"].iloc[-1], rel=1e-3) == 4.890
+
+
 def test_regional_events_loading():
     """Verify regional events functions return populated DataFrames."""
     tulsa_events = get_tulsa_regional_events()
@@ -135,6 +149,7 @@ def test_regional_events_loading():
     oakland_events = get_oakland_regional_events()
     chicago_events = get_chicago_regional_events()
     houston_events = get_houston_regional_events()
+    los_angeles_events = get_los_angeles_regional_events()
 
     for name, ev_df in [
         ("Tulsa", tulsa_events),
@@ -144,9 +159,11 @@ def test_regional_events_loading():
         ("Charlotte", charlotte_events),
         ("Oakland", oakland_events),
         ("Chicago", chicago_events),
-        ("Houston", houston_events)
+        ("Houston", houston_events),
+        ("Los Angeles", los_angeles_events)
     ]:
         assert isinstance(ev_df, pd.DataFrame), f"{name} events is not a DataFrame"
         assert not ev_df.empty, f"{name} events DataFrame is empty"
         assert "date" in ev_df.columns
         assert "headline" in ev_df.columns
+

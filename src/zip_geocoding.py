@@ -34,7 +34,13 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "605": "chicago", "606": "chicago", "607": "chicago", "608": "chicago",
     "463": "chicago", "464": "chicago",
     "770": "houston", "772": "houston", "773": "houston", "774": "houston", "775": "houston",
-    "776": "houston", "777": "houston"
+    "776": "houston", "777": "houston",
+    "900": "los_angeles", "901": "los_angeles", "902": "los_angeles", "903": "los_angeles",
+    "904": "los_angeles", "905": "los_angeles", "906": "los_angeles", "907": "los_angeles",
+    "908": "los_angeles", "910": "los_angeles", "911": "los_angeles", "912": "los_angeles",
+    "913": "los_angeles", "914": "los_angeles", "915": "los_angeles", "916": "los_angeles",
+    "917": "los_angeles", "918": "los_angeles", "926": "los_angeles", "927": "los_angeles",
+    "928": "los_angeles"
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -404,6 +410,17 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd_name": "Gulf Coast",
         "state_tax": 0.200,
         "max_radius_miles": 120.0
+    },
+    "los_angeles": {
+        "name": "Los Angeles Basin & South Coast Hub, CA",
+        "region_id": "Los_Angeles_CA",
+        "lat": 34.0522,
+        "lon": -118.2437,
+        "state": "CA",
+        "padd": "PADD 5",
+        "padd_name": "West Coast",
+        "state_tax": 0.596,
+        "max_radius_miles": 100.0
     },
 }
 

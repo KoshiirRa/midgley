@@ -134,6 +134,20 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(sim["target_locale"], "Houston_TX")
         self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
 
+    def test_post_simulate_los_angeles_el_segundo(self):
+        payload = {
+            "scenario_id": "socal_refinery_fccu_outage",
+            "locale": "los_angeles"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "socal_refinery_fccu_outage")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "Los_Angeles_CA")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
     def test_post_simulate_invalid_id(self):
         payload = {
             "scenario_id": "invalid_scenario_xyz",

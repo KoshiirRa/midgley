@@ -544,7 +544,7 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, Chicago, Houston, regional diesel engines, and generates the public web dashboard):
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, Chicago, Houston, Los Angeles, regional diesel engines, and generates the public web dashboard):
 ```bash
 python3 run_all.py --use-llm-api
 ```

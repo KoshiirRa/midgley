@@ -803,10 +803,10 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">15-Min &bull; 90% Token Sav</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Ingests real-time NWS active alerts across 7 regional metro county zones and 5 key refining basins. Integrates <code class="text-cyan-300">t.wxs.us</code> lightweight endpoint saving 90-95% context tokens.
+                            Ingests real-time NWS active alerts across 10 regional metro county zones and 6 key refining basins. Integrates <code class="text-cyan-300">t.wxs.us</code> lightweight endpoint saving 90-95% context tokens.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Zones:</span> OKZ060, DEZ001, OHZ077, NCZ044, CAZ508</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Zones:</span> OKZ060, DEZ001, OHZ077, NCZ044, CAZ508, CAZ041</div>
                             <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/noaa_weather.py</code></div>
                         </div>
                     </div>
@@ -962,7 +962,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                 </div>
 
                 <!-- Card 4.7: USGS Earthquake Hazards Program -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="usgs earthquake seismic shakemap hayward fault new madrid refinery proximity">
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="usgs earthquake seismic shakemap hayward fault newport-inglewood new madrid refinery proximity">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">
@@ -977,7 +977,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Real-Time GeoJSON</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Real-time seismic events (&ge; M3.0), ShakeMap Peak Ground Acceleration (PGA), and refinery fault proximity for the Hayward Fault (Chevron Richmond) and New Madrid Seismic Zone.
+                            Real-time seismic events (&ge; M3.0), ShakeMap Peak Ground Acceleration (PGA), and refinery fault proximity for the Hayward Fault (Chevron Richmond), Newport-Inglewood / Palos Verdes Faults (El Segundo / Torrance), and New Madrid Seismic Zone.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
                             <div class="text-slate-400"><span class="text-slate-500">Variables:</span> Magnitude (M), Depth (km), Refinery Distance (d)</div>
@@ -991,7 +991,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                 </div>
 
                 <!-- Card 4.8: Air Quality & Refinery Flaring Feeds -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="aqi air quality purpleair openaq airnow flaring so2 pm2.5 refinery outage detection">
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="aqi air quality purpleair openaq airnow flaring so2 pm2.5 refinery outage detection el segundo torrance">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">
@@ -1006,7 +1006,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Hourly &bull; Issue #110</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Multi-feed air quality sensors monitoring fence-line particulate (PM<sub>2.5</sub>) and SO<sub>2</sub> anomalies near refineries (e.g. Richmond, Martinez, Delaware City) to detect unplanned unit flaring trips.
+                            Multi-feed air quality sensors monitoring fence-line particulate (PM<sub>2.5</sub>) and SO<sub>2</sub> anomalies near refineries (e.g. Richmond, Martinez, El Segundo, Torrance, Carson/Wilmington, Delaware City) to detect unplanned unit flaring trips.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
                             <div class="text-slate-400"><span class="text-slate-500">Metrics:</span> Flaring Anomaly Z-Score, Sensor Triangulation</div>
@@ -1172,7 +1172,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             Ingests real-time retail street pump benchmarks via GasBuddy GraphQL API and AAA Daily Fuel Gauge scraper. Backfills actual outcomes and anchors local baseline prices.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston, Los Angeles</div>
                             <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/live_fuel_feed.py</code></div>
                         </div>
                     </div>

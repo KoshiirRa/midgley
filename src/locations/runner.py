@@ -52,6 +52,8 @@ REGION_MODULE_MAP = {
     "chicago_il": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
     "houston": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
     "houston_tx": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
+    "los_angeles": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
+    "los_angeles_ca": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
 }
 
 
@@ -228,7 +230,7 @@ def run_regional_pipeline(
             except Exception:
                 sec_cached_prices[sec_key] = sec_default
 
-    is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean)
+    is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean or "los_angeles" in reg_clean)
 
     for h in [1, 2, 3, 4, 5]:
         h_res = multi_horizon_results.get(h)
@@ -313,7 +315,7 @@ def run_regional_pipeline(
 
         # Forward regulatory/tax deltas (Issue #451)
         tax_delta_h = get_known_future_tax_deltas(region=logger_region_key, as_of_date=str(last_date), horizon_days=h)
-        is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean)
+        is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean or "los_angeles" in reg_clean)
 
         # Calibrate with Asymmetric ECM pass-through (Issue #443)
         if ecm_model and ecm_model.is_fitted:

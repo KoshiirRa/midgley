@@ -51,6 +51,7 @@ class TestHierarchicalEngine(unittest.TestCase):
             "Port_St_Lucie_FL": 3.42,
             "Oakland_CA": 5.15,
             "BayArea_CA": 5.18,
+            "Los_Angeles_CA": 4.89,
             "Chicago_IL": 3.55,
             "Houston_TX": 2.85
         }
@@ -58,8 +59,8 @@ class TestHierarchicalEngine(unittest.TestCase):
         reconciled = engine.reconcile_forecast_dict(base_forecasts)
 
         # Check that reconciled forecasts satisfy exact aggregation constraints S * b_tilde = y_tilde
-        # 1. PADD_5 == average of Oakland and BayArea
-        padd5_calc = (reconciled["Oakland_CA"] + reconciled["BayArea_CA"]) / 2.0
+        # 1. PADD_5 == average of Oakland, BayArea, and Los Angeles
+        padd5_calc = (reconciled["Oakland_CA"] + reconciled["BayArea_CA"] + reconciled["Los_Angeles_CA"]) / 3.0
         self.assertAlmostEqual(reconciled["PADD_5"], padd5_calc, places=3)
 
         # 2. PADD_2 == average of Tulsa, Cincinnati_OH, Cincinnati_KY, and Chicago_IL

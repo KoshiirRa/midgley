@@ -202,6 +202,13 @@ REGION_METADATA = {
         "static_anchor": 2.850,
         "name": "Houston, TX Metro Retail",
         "aaa_keywords": ["Houston", "Harris County", "Texas"]
+    },
+    "Los_Angeles_CA": {
+        "zip": "90012",
+        "state": "CA",
+        "static_anchor": 4.890,
+        "name": "Los Angeles Basin, CA Metro Retail",
+        "aaa_keywords": ["Los Angeles", "Long Beach", "Orange County", "California"]
     }
 }
 
@@ -435,7 +442,8 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                     "Charlotte_NC": 0.811,
                     "Port_St_Lucie_FL": 0.976,
                     "Chicago_IL": 1.150,
-                    "Houston_TX": 0.520
+                    "Houston_TX": 0.520,
+                    "Los_Angeles_CA": 2.470
                 }
                 offset = margins.get(region_code, 0.95)
                 est_price = latest_rbob + offset
@@ -458,7 +466,7 @@ def fetch_history_last_known_price(region_code: str) -> dict:
             df = read_prediction_history(history_path)
             reg_df = df[df['region'] == region_code]
             if not reg_df.empty:
-                if region_code in ["Oakland_CA", "BayArea_CA"]:
+                if region_code in ["Oakland_CA", "BayArea_CA", "Los_Angeles_CA"]:
                     reg_df = reg_df[reg_df['current_base_price'] > 4.50]
                 if not reg_df.empty:
                     last_price = float(reg_df.iloc[-1]['current_base_price'])

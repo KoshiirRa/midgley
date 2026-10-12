@@ -122,6 +122,12 @@ def generate_metro_narrative(
                 ("Colonial Pipeline Line 1 Inbound Terminal Clearing", "PIPELINE_OUTFLOW"),
                 ("Houston Ship Channel Spot-to-Rack Compression", "GATE_PRICING"),
             ]
+        elif "los_angeles" in reg_str or "los angeles" in reg_str:
+            factors = [
+                ("South Bay / Harbor Refining Complex (Carson, El Segundo, Torrance)", "REFINING_SUPPLY"),
+                ("Los Angeles CARBOB Spot Basis & SCAQMD Summer RVP", "SPOT_BASIS"),
+                ("CARB LCFS, Cap-and-Trade & Statutory Tax Overhead", "CARBON_COMPLIANCE"),
+            ]
         else:
             factors = [
                 ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
@@ -369,6 +375,31 @@ def generate_metro_narrative(
             detailed_prose = (
                 f"Houston retail prices are projected to hold steady{hub_info}, as balanced throughput from Baytown, Deer Park, "
                 f"and Port Arthur refineries matches metropolitan commuter demand and outbound pipeline nominations."
+            )
+
+    elif "los_angeles" in region_lower or "los angeles" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["South Bay Refining Stability", "LA CARBOB Spot Easing", "San Pedro Bay Marine Supply"]
+            headline_summary = f"Los Angeles Basin & Southern California prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Los Angeles Basin retail prices are projected to moderate lower{hub_info}, as high operable throughput "
+                f"across Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd), and PBF Torrance (166 kbpd) "
+                f"compresses prompt Los Angeles CARBOB wholesale spot basis across Kinder Morgan Watson Station racks."
+            )
+        elif calc_delta > 0.005:
+            badges = ["LA CARBOB Basis Spike", "South Bay FCCU/Alky Tightness", "CARB CaRFG Compliance Burden"]
+            headline_summary = f"Los Angeles Basin & Southern California prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Los Angeles Basin retail pricing reflects Southern California's isolated PADD 5 refining island{hub_info}. "
+                f"Tightening Los Angeles CARBOB wholesale spot basis, South Coast AQMD 6.99 psi summer volatility compliance, "
+                f"and California's statutory environmental tax burden ($0.953/gal CARB/excise overhead) drive upward pump pass-through."
+            )
+        else:
+            badges = ["SoCal Refining Equilibrium", "Watson Hub Rack Parity"]
+            headline_summary = f"Los Angeles Basin & Southern California prices are projected to remain stable."
+            detailed_prose = (
+                f"Los Angeles Basin retail prices are projected to hold steady{hub_info}, as balanced CARBOB production across "
+                f"Carson, Wilmington, El Segundo, and Torrance matches commuter demand across the South Coast Air Basin."
             )
 
     else:

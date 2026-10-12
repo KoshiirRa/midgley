@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Subpackage implementation `src/locations/houston/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#220).
 - Public dashboard page `docs/houston.html` with USGC refining corridor shock simulations, plain-English automated narrative synthesis, and live weather telemetry (#220).
 - EIA API v2 retail gasoline series mappings (`EMM_EPMR_PTE_Y44HO_DPG` for Houston, `EMM_EPMR_PTE_STX_DPG` for Texas, `EMM_EPMR_PTE_R30_DPG` for PADD 3 Gulf Coast) in `src/eia_retail_feed.py` (#220).
+- Los Angeles Basin Metro Calibration Hub (`Los_Angeles_CA`, PADD 5) anchoring Southern California's CaRFG refining complex (Marathon Carson/Wilmington 363 kbpd, Chevron El Segundo 269 kbpd, PBF Torrance 166 kbpd, Phillips 66 Wilmington 139 kbpd, Valero Wilmington 85 kbpd) (#221).
+- Point-in-time regional metadata `data/regional_metadata/los_angeles_ca.json` with CARB regulatory burden ($0.953/gal statutory base, $1.407/gal total with local sales tax), LA CARBOB spot pass-through (`EER_EPMRU_PF4_RLA_DPG`), CARB Phase 3 RVP standard (7.0 psi March 1–October 31), and El Segundo/Torrance/Newport-Inglewood shock scenarios (#221).
+- Subpackage implementation `src/locations/los_angeles/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#221).
+- Public dashboard page `docs/los_angeles.html` with South Coast Basin refining shock simulations, plain-English automated narrative synthesis, and live weather/AQI telemetry (#221).
+- EIA API v2 retail gasoline series mapping (`GASREGWLA` -> `EMM_EPMR_PTE_Y05LA_DPG` for Los Angeles-Long Beach-Anaheim MSA) in `src/eia_retail_feed.py` (#221).
 
 ## [0.8.5] - 2026-10-06
 

@@ -144,6 +144,15 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.18,
             "is_rfg": True,
             "is_carb": False
+        },
+        "Los_Angeles_CA": {
+            "name": "Los Angeles Basin & South Coast (PADD 5)",
+            "program": "CARB Phase 3 CaRFG",
+            "summer_rvp_psi": 6.99,
+            "winter_rvp_psi": 9.0,
+            "summer_compliance_premium_per_gal": 0.28,
+            "is_rfg": False,
+            "is_carb": True
         }
     },
     "emergency_waivers": []
@@ -204,6 +213,12 @@ class RVPRegulatoryEngine:
                 "Newark_DE": "Newark_DE",
                 "Newark_NJ": "Newark_NJ",
                 "Oakland": "Oakland_CA",
+                "Los_Angeles": "Los_Angeles_CA",
+                "los_angeles": "Los_Angeles_CA",
+                "los_angeles_ca": "Los_Angeles_CA",
+                "la": "Los_Angeles_CA",
+                "la_basin": "Los_Angeles_CA",
+                "socal": "Los_Angeles_CA",
                 "Greenville": "Greenville_NC",
                 "Charlotte": "Charlotte_NC",
                 "Port_St_Lucie": "Port_St_Lucie_FL",

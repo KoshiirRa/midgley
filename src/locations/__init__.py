@@ -17,6 +17,7 @@ from src.locations.oakland import run_oakland_pipeline, build_oakland_notebook
 from src.locations.port_st_lucie import run_port_st_lucie_pipeline, build_port_st_lucie_notebook
 from src.locations.chicago import run_chicago_pipeline, build_chicago_notebook
 from src.locations.houston import run_houston_pipeline, build_houston_notebook
+from src.locations.los_angeles import run_los_angeles_pipeline, build_los_angeles_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_houston_pipeline,
         "build_notebook": build_houston_notebook,
         "notebook_filename": "houston_gas_price_llm_forecasting.ipynb"
+    },
+    "los_angeles": {
+        "id": "los_angeles",
+        "name": "Los Angeles Basin, CA (PADD 5)",
+        "type": "regional",
+        "module": "src.locations.los_angeles",
+        "run_pipeline": run_los_angeles_pipeline,
+        "build_notebook": build_los_angeles_notebook,
+        "notebook_filename": "los_angeles_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -126,6 +136,8 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "chicago"
     if loc_id in ("houston_tx", "houston_metro"):
         loc_id = "houston"
+    if loc_id in ("los_angeles_ca", "la", "la_basin", "socal"):
+        loc_id = "los_angeles"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]
@@ -170,5 +182,7 @@ __all__ = [
     "run_chicago_pipeline",
     "build_chicago_notebook",
     "run_houston_pipeline",
-    "build_houston_notebook"
+    "build_houston_notebook",
+    "run_los_angeles_pipeline",
+    "build_los_angeles_notebook"
 ]

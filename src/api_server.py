@@ -227,7 +227,12 @@ LOCALE_MAP = {
     "chi": "Chicago_IL",
     "houston": "Houston_TX",
     "houston_tx": "Houston_TX",
-    "hou": "Houston_TX"
+    "hou": "Houston_TX",
+    "los_angeles": "Los_Angeles_CA",
+    "los_angeles_ca": "Los_Angeles_CA",
+    "la": "Los_Angeles_CA",
+    "la_basin": "Los_Angeles_CA",
+    "socal": "Los_Angeles_CA"
 }
 
 # Regional PADD metadata
@@ -242,6 +247,7 @@ PADD_METADATA = {
     "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Chicago_IL": {"name": "Greater Chicago Metro Area, IL/IN", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Houston_TX": {"name": "Houston & USGC Refining Corridor, TX", "padd": "PADD 3 Gulf Coast", "carb_tax": 0.0},
+    "Los_Angeles_CA": {"name": "Los Angeles Basin & South Coast, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -350,6 +356,33 @@ SCENARIOS_CATALOG = {
         "telemetry_hook": "openmeteo_freeze",
         "locales": ["houston", "national"]
     },
+    "socal_refinery_fccu_outage": {
+        "name": "El Segundo / Torrance FCCU & Alkylation Unit Unplanned Trip",
+        "headline": "Emergency electrostatic precipitator and FCCU trip at PBF Torrance or Chevron El Segundo triggers acute LA CARBOB spot shortage.",
+        "shock_pct": 0.0859,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["los_angeles", "national"]
+    },
+    "usgs_newport_inglewood_quake": {
+        "name": "USGS Newport-Inglewood / Palos Verdes Fault Seismic Trip (M>=5.5)",
+        "headline": "Magnitude 5.8 earthquake along Newport-Inglewood fault forces automatic safety shut-ins across Wilmington and Carson refining complexes.",
+        "shock_pct": 0.1125,
+        "category": "geophysical",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_seismic",
+        "locales": ["los_angeles", "national"]
+    },
+    "santa_ana_psps_shutoff": {
+        "name": "Santa Ana Red Flag Wildfire & SCE/LADWP Grid PSPS Curtailment",
+        "headline": "Severe offshore Santa Ana windstorm triggers SCE Public Safety Power Shutoffs and pipeline pump station curtailments across LA Basin.",
+        "shock_pct": 0.0491,
+        "category": "meteorological_fire",
+        "season_window": "Sep 01 – Dec 15",
+        "telemetry_hook": "noaa_spc_fire",
+        "locales": ["los_angeles", "national"]
+    },
     "mississippi_low_water": {
         "name": "Lower Mississippi & Ohio River Low-Water Barge Bottleneck",
         "headline": "Severe drought restricts barge draft levels on Mississippi and Ohio rivers, raising Midwest rack freight.",
@@ -393,7 +426,7 @@ SCENARIOS_CATALOG = {
         "category": "regulatory_spec",
         "season_window": "Feb 15 – May 01",
         "telemetry_hook": "spec_calendar",
-        "locales": ["oakland", "national"]
+        "locales": ["oakland", "los_angeles", "national"]
     },
     "colonial_outage": {
         "name": "Colonial Pipeline Mainline Outage / Cyberattack Shock",

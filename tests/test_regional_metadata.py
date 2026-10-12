@@ -23,6 +23,7 @@ EXPECTED_REGIONS = [
     "port_st_lucie_fl",
     "chicago_il",
     "houston_tx",
+    "los_angeles_ca",
 ]
 
 

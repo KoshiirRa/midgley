@@ -169,6 +169,38 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 312000,
         "padd": "PADD 3",
         "primary_locales": ["Houston_TX"]
+    },
+    "Marathon_Carson_Wilmington": {
+        "name": "Marathon Los Angeles Refinery (Carson/Wilmington, CA)",
+        "lat": 33.8065,
+        "lon": -118.2412,
+        "capacity_bpd": 363000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "Chevron_El_Segundo": {
+        "name": "Chevron El Segundo Refinery (El Segundo, CA)",
+        "lat": 33.9089,
+        "lon": -118.4144,
+        "capacity_bpd": 269000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "PBF_Torrance": {
+        "name": "PBF Torrance Refinery (Torrance, CA)",
+        "lat": 33.8511,
+        "lon": -118.3314,
+        "capacity_bpd": 166000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "Phillips66_Wilmington": {
+        "name": "Phillips 66 Los Angeles Refinery (Wilmington/Carson, CA)",
+        "lat": 33.7820,
+        "lon": -118.2890,
+        "capacity_bpd": 139000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
     }
 }
 
@@ -239,6 +271,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 29.7604,
         "lon": -95.3698,
         "zip": "77002"
+    },
+    "Los_Angeles_CA": {
+        "name": "Los Angeles Basin & South Coast, CA",
+        "lat": 34.0522,
+        "lon": -118.2437,
+        "zip": "90012"
     }
 }
 

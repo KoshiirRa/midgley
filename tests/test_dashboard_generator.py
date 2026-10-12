@@ -23,6 +23,8 @@ from src.dashboard_generator import (
     CHICAGO_SUB_PATH,
     HOUSTON_PATH,
     HOUSTON_SUB_PATH,
+    LOS_ANGELES_PATH,
+    LOS_ANGELES_SUB_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -41,7 +43,7 @@ def test_dashboard_generation_and_math_katex():
     generate_public_dashboard()
 
     # Verify existence of all expected dashboard HTML files
-    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
+    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, LOS_ANGELES_PATH, LOS_ANGELES_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
         assert os.path.exists(path), f"Expected file does not exist: {path}"
         assert os.path.getsize(path) > 0, f"Generated file is empty: {path}"
 
@@ -1014,7 +1016,23 @@ def test_houston_page_generation():
     assert "file:///" not in content
 
 
+def test_los_angeles_page_generation():
+    """Verify that generate_public_dashboard generates docs/los_angeles.html and docs/los_angeles/index.html
+    with Los Angeles Basin CaRFG content, El Segundo/Torrance/Carson logistics,
+    and shock scenarios (Issue #221).
+    """
+    generate_public_dashboard()
 
+    assert os.path.exists(LOS_ANGELES_PATH), f"Expected file does not exist: {LOS_ANGELES_PATH}"
+    assert os.path.getsize(LOS_ANGELES_PATH) > 0, f"Generated file is empty: {LOS_ANGELES_PATH}"
+    assert os.path.exists(LOS_ANGELES_SUB_PATH), f"Expected file does not exist: {LOS_ANGELES_SUB_PATH}"
+    assert os.path.getsize(LOS_ANGELES_SUB_PATH) > 0, f"Generated file is empty: {LOS_ANGELES_SUB_PATH}"
 
+    with open(LOS_ANGELES_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
 
-
+    assert "Los Angeles, CA Metro Retail Gas Forecast" in content
+    assert "El Segundo" in content
+    assert "Torrance" in content
+    assert "PADD 5 South Coast CaRFG Hub" in content
+    assert "file:///" not in content

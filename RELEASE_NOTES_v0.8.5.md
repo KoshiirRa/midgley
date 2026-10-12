@@ -174,6 +174,9 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 | **#621** | `feat(modeling): Model PADD 7 Pacific Territories (Guam & Northern Marianas) trans-Pacific MR tanker logistics` | Modeling / Maritime Logistics |
 | **#622** | `feat(modeling): Review & refactor PADD 5 modeling to decouple PNW, Desert Southwest & Island sub-markets from California CARB` | Modeling / PADD 5 Architecture |
 | **#623** | `feat(ingestion): Ingest & automate 50-state & local fuel tax schedules for freeform location resolution` | Data Ingestion / Tax Schedules |
+| **#219** | `feat(regions): Implement Greater Chicago Metro Calibration Hub (PADD 2 / Whiting & Lemont)` | Locations / Regional Hubs |
+| **#220** | `feat(regions): Implement Houston & USGC Metro Calibration Hub (PADD 3 / Baytown & Port Arthur)` | Locations / Regional Hubs |
+| **#221** | `feat(regions): Implement Los Angeles Basin Metro Calibration Hub (PADD 5 / CaRFG & El Segundo/Torrance)` | Locations / Regional Hubs |
 
 ### 🔍 Headline Deduplication, Open Discovery & Anomaly Refinements (#311, #312, #317, #318, #258)
 - **Ground Truth & Regional Routing for Joliet Outage (#311)**: Identified the September 2026 power outage incident as ExxonMobil's 250,000 bpd Joliet Refinery in Will County, IL; mapped Joliet and Midcontinent refinery disruptions to Cincinnati (Chicago spot pricing hub) and Tulsa (Group 3).
@@ -186,5 +189,7 @@ Midgley **v0.8.5** is a comprehensive data integrity, econometric calibration, s
 - **Decoupled PADD 5 Architecture (#622)**: Initiated architectural decoupling of non-California PADD 5 sub-markets (Pacific Northwest Puget Sound refining / Olympic Pipeline, Desert Southwest pipeline egress to Phoenix & Las Vegas, and Alaska/Hawaii island logistics) from California's $0.953/gal CARBOB regulatory burden.
 - **50-State & Municipal Fuel Tax Ingestion (#623)**: Designed end-to-end integration uniting `src/zip_geocoding.py` with `src/state_open_data.py` (`STATE_METADATA`), International Fuel Tax Agreement (IFTA) quarterly schedules, and local option fuel taxes (LOFT) for Cook County/Chicago, Florida, Nevada, and Hawaii to ensure accurate tax pass-through across freeform ZIP codes and GPS coordinates.
 
-
-
+### 25. Regional Metro Calibration Expansion: Chicago (#219), Houston (#220) & Los Angeles Basin (#221)
+- **Greater Chicago Metro Calibration Hub (`Chicago_IL`, PADD 2, #219)**: Implemented `src/locations/chicago/`, `data/regional_metadata/chicago_il.json`, and `docs/chicago.html` calibrated to BP Whiting (435 kbpd), CITGO Lemont (177 kbpd), and ExxonMobil Joliet (251 kbpd), with EPA RFG 7.4 psi summer RVP rules and Illinois/Cook County/Chicago cross-border tax arbitrage.
+- **Houston & USGC Metro Calibration Hub (`Houston_TX`, PADD 3, #220)**: Implemented `src/locations/houston/`, `data/regional_metadata/houston_tx.json`, and `docs/houston.html` anchoring the US Gulf Coast mega-refining complex (ExxonMobil Baytown 560 kbpd, Motiva Port Arthur 630 kbpd, Marathon Galveston Bay 593 kbpd) with `spot_gulf_coast` (`EER_EPMRU_PF4_RGC_DPG`) and EIA series `GASREGWHO` (`EMM_EPMR_PTE_Y44HO_DPG`).
+- **Los Angeles Basin Metro Calibration Hub (`Los_Angeles_CA`, PADD 5, #221)**: Implemented `src/locations/los_angeles/`, `data/regional_metadata/los_angeles_ca.json`, and `docs/los_angeles.html` anchoring Southern California's 1.022M bpd CaRFG refining complex (Marathon Carson/Wilmington 363 kbpd, Chevron El Segundo 269 kbpd, PBF Torrance 166 kbpd, Phillips 66 Wilmington 139 kbpd, Valero Wilmington 85 kbpd), Kinder Morgan Watson Station / SFPP distribution, `spot_los_angeles` (`EER_EPMRU_PF4_RLA_DPG`), and EIA series `GASREGWLA` (`EMM_EPMR_PTE_Y05LA_DPG`).

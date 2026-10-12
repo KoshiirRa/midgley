@@ -40,6 +40,7 @@ CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
 PORT_ST_LUCIE_PATH = os.path.join(DOCS_DIR, "port_st_lucie.html")
 CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")
 HOUSTON_PATH = os.path.join(DOCS_DIR, "houston.html")
+LOS_ANGELES_PATH = os.path.join(DOCS_DIR, "los_angeles.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -59,6 +60,7 @@ CHARLOTTE_SUB_DIR = os.path.join(DOCS_DIR, "charlotte")
 PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 CHICAGO_SUB_DIR = os.path.join(DOCS_DIR, "chicago")
 HOUSTON_SUB_DIR = os.path.join(DOCS_DIR, "houston")
+LOS_ANGELES_SUB_DIR = os.path.join(DOCS_DIR, "los_angeles")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -75,6 +77,7 @@ CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
 PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 CHICAGO_SUB_PATH = os.path.join(CHICAGO_SUB_DIR, "index.html")
 HOUSTON_SUB_PATH = os.path.join(HOUSTON_SUB_DIR, "index.html")
+LOS_ANGELES_SUB_PATH = os.path.join(LOS_ANGELES_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -457,7 +460,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "los_angeles", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -475,6 +478,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     psl_link = f"{rel_prefix}port_st_lucie.html"
     chi_link = f"{rel_prefix}chicago.html"
     hou_link = f"{rel_prefix}houston.html"
+    la_link = f"{rel_prefix}los_angeles.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -540,6 +544,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a role="menuitem" href="{hou_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-industry text-amber-400" aria-hidden="true"></i> Houston, TX Retail
+                        </a>
+                        <a role="menuitem" href="{la_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-sun text-amber-400" aria-hidden="true"></i> Los Angeles, CA Retail
                         </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -639,6 +646,9 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
         ("Greenville_NC", "Greenville, NC Retail", 3.250, 3.150),
         ("Charlotte_NC", "Charlotte, NC Retail", 3.280, 3.180),
         ("Port_St_Lucie_FL", "Port St. Lucie, FL Retail", 3.380, 3.290),
+        ("Chicago_IL", "Chicago, IL/IN Retail", 3.850, 3.765),
+        ("Houston_TX", "Houston, TX Retail", 2.850, 2.785),
+        ("Los_Angeles_CA", "Los Angeles, CA Retail", 4.890, 4.780),
         ("Oakland_CA", "Oakland, CA Retail", 5.550, 4.840),
         ("BayArea_CA", "SF Bay Area Region", 5.650, 4.940),
     ]
@@ -2250,6 +2260,7 @@ def generate_public_dashboard():
         'Port_St_Lucie_FL': {'base': 4.145, 'pred': 4.050},
         'Chicago_IL': {'base': 3.850, 'pred': 3.765},
         'Houston_TX': {'base': 2.850, 'pred': 2.785},
+        'Los_Angeles_CA': {'base': 4.890, 'pred': 4.780},
         'Oakland_CA': {'base': 6.050, 'pred': 5.340},
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
@@ -2416,7 +2427,7 @@ def generate_public_dashboard():
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">10 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
@@ -2737,7 +2748,42 @@ def generate_public_dashboard():
                     </a>
                 </div>
 
-                <!-- Card 5: SF Bay Area 9-County Region (incl. Oakland) -->
+                <!-- Card 10: Los Angeles, CA Retail (PADD 5 SoCal Refining Cluster) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 SoCal Basin Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-sun text-amber-400"></i> Los Angeles, CA
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            95.3¢ CARB Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Los_Angeles_CA']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Los_Angeles_CA']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> El Segundo &amp; Torrance</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Los_Angeles_CA')}</strong></span>
+                    </div>
+
+                    <a href="los_angeles.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Los Angeles Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 11: SF Bay Area 9-County Region (incl. Oakland) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
@@ -4644,6 +4690,139 @@ def generate_public_dashboard():
         f.write(build_houston_html("../"))
 
     # ---------------------------------------------------------------------------
+    # LOS ANGELES METRO RETAIL GAS PAGE (docs/los_angeles.html & docs/los_angeles/index.html)
+    # ---------------------------------------------------------------------------
+    def build_los_angeles_html(rel_prefix: str = "") -> str:
+        nav_la = get_nav_header("los_angeles", rel_prefix)
+        la_base = prices_map['Los_Angeles_CA']['base']
+        la_pred = prices_map['Los_Angeles_CA']['pred']
+        la_delta = la_pred - la_base
+        la_pct = (la_delta / la_base * 100.0) if la_base > 0 else 0.0
+        la_sign = "+" if la_delta > 0 else ""
+        la_color = "#10b981" if la_pct < -0.2 else ("#ef4444" if la_pct > 0.2 else "#0ea5e9")
+        la_trend_text = f"{la_sign}{la_pct:.1f}% Projected Trend"
+        la_trend_color = "text-emerald-300" if la_pct < -0.2 else ("text-rose-300" if la_pct > 0.2 else "text-sky-300")
+        head_meta_la = get_head_meta_tags(
+            title=f"Los Angeles CA Retail Gas Forecast (${la_base:.3f} → ${la_pred:.3f} | {la_sign}{la_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Los Angeles Basin CA metro. Baseline ${la_base:.3f}/gal, projected target ${la_pred:.3f}/gal. Marathon Carson/Wilmington 363 kbpd, Chevron El Segundo 269 kbpd & PBF Torrance 166 kbpd CaRFG complex.",
+            canonical_path="los_angeles.html" if rel_prefix == "" else "los_angeles/index.html",
+            image_filename="los_angeles.png",
+            theme_color=la_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Angeles, CA Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_LOS_ANGELES}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Los Angeles Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-sun text-amber-400"></i> Los Angeles, CA Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                PADD 5 South Coast CaRFG Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{LA_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{LA_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{LA_TREND_COLOR}} font-semibold">{{LA_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{LA_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{LA_MAPE}} | RMSE: {{LA_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{LA_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Los Angeles Basin Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">El Segundo / Torrance FCC &amp; Alkylation Trip</h4>
+                    <p class="text-xs text-slate-400">Unplanned FCC or HF alkylation trip across Chevron El Segundo (269 kbpd) or PBF Torrance (166 kbpd) cuts LA CARBOB blendstock.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.450/gal (+9.20%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Newport-Inglewood M6.2+ Seismic Isolation</h4>
+                    <p class="text-xs text-slate-400">Triggers automatic SCADA shutoff across Kinder Morgan Watson Station and South Bay refinery product manifolds.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.380/gal (+7.77%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">San Pedro Bay Marine Berth &amp; Import Surge</h4>
+                    <p class="text-xs text-slate-400">Pacific swell closures at Port of LA/Long Beach delay Asian/Middle Eastern crude and CARBOB alkylate tankers.</p>
+                    <div class="text-sm font-extrabold text-amber-400">+ $0.215/gal (+4.40%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Los Angeles, CA Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_LOS_ANGELES}}", nav_la).replace("PREFIX", rel_prefix).replace("{{LA_BASE}}", f"{prices_map['Los_Angeles_CA']['base']:.3f}").replace("{{LA_PRED}}", f"{prices_map['Los_Angeles_CA']['pred']:.3f}").replace("{{LA_TREND_TEXT}}", la_trend_text).replace("{{LA_TREND_COLOR}}", la_trend_color).replace("{{LA_MAE}}", get_mae_display('los_angeles_ca')).replace("{{LA_MAPE}}", get_mape_display('los_angeles_ca')).replace("{{LA_RMSE}}", get_rmse_display('los_angeles_ca')).replace("{{LA_HIT_RATE}}", get_hit_rate_display('los_angeles_ca')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_la).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Los_Angeles_CA', prices_map['Los_Angeles_CA']['base'], prices_map['Los_Angeles_CA']['pred'], logistics_hub="Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd) CaRFG Complex")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Los_Angeles_CA', prices_map['Los_Angeles_CA']['base'], prices_map['Los_Angeles_CA']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('los_angeles_ca'))
+
+    os.makedirs(LOS_ANGELES_SUB_DIR, exist_ok=True)
+    with open(LOS_ANGELES_PATH, "w", encoding="utf-8") as f:
+        f.write(build_los_angeles_html(""))
+    with open(LOS_ANGELES_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_los_angeles_html("../"))
+
+    # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
@@ -5508,7 +5687,7 @@ def generate_public_dashboard():
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.1: Multi-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}} + \mathbf{W}_{\text{Chicago}} + \mathbf{W}_{\text{Houston}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}} + \mathbf{W}_{\text{Chicago}} + \mathbf{W}_{\text{Houston}} + \mathbf{W}_{\text{Los Angeles}}$$
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
                     <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks (PADD 3 refining corridor) &amp; Permian/Bakken production basin polar vortex freezes.<br>
@@ -5520,7 +5699,8 @@ def generate_public_dashboard():
                     <strong>Tier 2 (Oakland &amp; SF Bay Area CA):</strong> Alameda County (<code class="text-amber-300">CAZ508</code>) &amp; Contra Costa County (<code class="text-amber-300">CAZ511</code>) atmospheric river bomb cyclones, PG&amp;E Public Safety Power Shutoffs (PSPS) / Diablo winds impacting Chevron Richmond (\(245,000\text{ bpd}\)) CaRFG units, and USGS Hayward Fault seismic pipeline shutoffs.<br>
                     <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.<br>
                     <strong>Tier 2 (Chicago IL/IN):</strong> Cook County (<code class="text-amber-300">ILZ104</code> / Zip <code class="text-amber-300">60601</code>) and Lake County IN (<code class="text-amber-300">INZ001</code>) Lake Michigan polar vortex freezes, summer severe convective derechos, and BP Whiting/CITGO Lemont cooling water intake loops.<br>
-                    <strong>Tier 2 (Houston TX):</strong> Harris County (<code class="text-amber-300">TXZ213</code> / Zip <code class="text-amber-300">77002</code>) and Galveston/Jefferson Counties Gulf hurricane storm surges, tropical convective inundation (Harvey-style), winter freeze-offs, and Houston Ship Channel marine draft restrictions across Baytown (560 kbpd) and Port Arthur (630 kbpd).
+                    <strong>Tier 2 (Houston TX):</strong> Harris County (<code class="text-amber-300">TXZ213</code> / Zip <code class="text-amber-300">77002</code>) and Galveston/Jefferson Counties Gulf hurricane storm surges, tropical convective inundation (Harvey-style), winter freeze-offs, and Houston Ship Channel marine draft restrictions across Baytown (560 kbpd) and Port Arthur (630 kbpd).<br>
+                    <strong>Tier 2 (Los Angeles CA):</strong> Los Angeles County (<code class="text-amber-300">CAZ041</code> / Zip <code class="text-amber-300">90012</code>) Santa Ana Red Flag / SCE PSPS wind events, Pacific atmospheric river inundation, San Pedro Bay marine swell closures, and Newport-Inglewood seismic shutoffs across Carson/Wilmington (363 kbpd), El Segundo (269 kbpd), and Torrance (166 kbpd).
                 </p>
             </div>
         </section>
@@ -5682,7 +5862,7 @@ def generate_public_dashboard():
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Oakland (\(\$5.550/\text{gal}\)) and the 9-County SF Bay Area (\(\$5.650/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
+                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Los Angeles (\(\$4.890/\text{gal}\)), Oakland (\(\$5.550/\text{gal}\)), and the 9-County SF Bay Area (\(\$5.650/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
@@ -5695,8 +5875,8 @@ def generate_public_dashboard():
                     \end{aligned}$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    <strong>Refining Crack Spread:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
-                    <strong>Physical Risk Shocks:</strong> Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), PG&amp;E PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
+                    <strong>Refining Crack Spreads:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\), \(\text{ElSegundoCrack}_t = P_{\text{LA CARBOB}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
+                    <strong>Physical Risk Shocks:</strong> El Segundo / Torrance FCC Trip (\(+\$0.450/\text{gal}\)), Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), Newport-Inglewood Seismic (\(+\$0.380/\text{gal}\)), PG&amp;E / SCE PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
                 </p>
             </div>
         </section>
@@ -5769,7 +5949,8 @@ def generate_public_dashboard():
                     <strong>Oakland &amp; SF Bay Area CA:</strong> PADD 5 isolated island with statutory CARB regulatory burden (\(\$0.953/\text{gal}\)) and local county sales taxes.<br>
                     <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).<br>
                     <strong>Chicago IL/IN:</strong> Multi-tiered Illinois (\(\$0.470/\text{gal}\)), Cook County (\(\$0.060/\text{gal}\)), and Chicago city (\(\$0.080/\text{gal}\)) motor fuel taxes with Indiana cross-border arbitrage and BP Whiting / CITGO Lemont rack margin pass-through.<br>
-                    <strong>Houston TX:</strong> PADD 3 Gulf Coast refining epicenter directly adjacent to Baytown and Port Arthur mega-refineries, Texas state excise tax (\(\$0.200/\text{gal}\)), prompt USGC spot pass-through, and zero local pipeline import tariff.
+                    <strong>Houston TX:</strong> PADD 3 Gulf Coast refining epicenter directly adjacent to Baytown and Port Arthur mega-refineries, Texas state excise tax (\(\$0.200/\text{gal}\)), prompt USGC spot pass-through, and zero local pipeline import tariff.<br>
+                    <strong>Los Angeles CA:</strong> PADD 5 South Coast Basin refining cluster (Marathon Carson/Wilmington, Chevron El Segundo, PBF Torrance), statutory CARB regulatory burden (\(\$0.953/\text{gal}\)), LA CARBOB spot pass-through, and Kinder Morgan Watson Station rack distribution.
                 </p>
             </div>
         </section>
@@ -5903,6 +6084,7 @@ def get_savings_regional_trajectories() -> dict:
         "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.380, "delta": -0.025},
         "Chicago_IL": {"name": "Chicago, IL/IN Retail", "base": 3.850, "delta": -0.040},
         "Houston_TX": {"name": "Houston, TX Retail", "base": 2.850, "delta": -0.020},
+        "Los_Angeles_CA": {"name": "Los Angeles, CA Retail", "base": 4.890, "delta": -0.055},
         "Oakland_CA": {"name": "Oakland, CA Retail", "base": 4.850, "delta": -0.060},
         "BayArea_CA": {"name": "SF Bay Area Region", "base": 4.950, "delta": -0.058},
     }

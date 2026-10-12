@@ -148,6 +148,21 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         sub_locales={"houston_city": 0.00, "galveston": 0.04, "baytown": -0.03, "pasadena": -0.02, "sugar_land": 0.02, "the_woodlands": 0.03, "beaumont_port_arthur": -0.04},
         primary_refinery="ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd)",
         primary_pipeline="Colonial Pipeline Lines 1 & 2 / Explorer Pipeline"
+    ),
+    "los_angeles": RegionSpec(
+        region_key="Los_Angeles_CA",
+        slug="los_angeles",
+        display_name="Los Angeles Basin, CA (PADD 5)",
+        padd="PADD 5",
+        wholesale_spot_col="spot_los_angeles",
+        eia_retail_series_id="EMM_EPMR_PTE_Y05LA_DPG",
+        diesel_series_id="GASDESWCA",
+        baseline_tax_rate=0.953,
+        has_edgeworth_cycles=False,
+        has_carb_compliance=True,
+        sub_locales={"los_angeles_city": 0.04, "westside_santa_monica": 0.16, "south_bay_torrance": -0.05, "long_beach_harbor": -0.04, "orange_county": -0.06, "inland_empire": -0.10, "san_fernando_valley": 0.02},
+        primary_refinery="Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd)",
+        primary_pipeline="Kinder Morgan SFPP West/South Lines & San Pedro Bay Marine Terminals"
     )
 }
 
@@ -155,6 +170,7 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
 REGIONAL_SPECS["oakland"] = REGIONAL_SPECS["bay_area"]
 REGIONAL_SPECS["chicago_il"] = REGIONAL_SPECS["chicago"]
 REGIONAL_SPECS["houston_tx"] = REGIONAL_SPECS["houston"]
+REGIONAL_SPECS["los_angeles_ca"] = REGIONAL_SPECS["los_angeles"]
 
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
@@ -168,6 +184,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
         return REGIONAL_SPECS["chicago"]
     if key in ("houston", "houston_tx", "houston_metro"):
         return REGIONAL_SPECS["houston"]
+    if key in ("los_angeles", "los_angeles_ca", "la", "la_basin", "socal"):
+        return REGIONAL_SPECS["los_angeles"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

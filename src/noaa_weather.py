@@ -351,6 +351,40 @@ def get_houston_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_los_angeles_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather, Wildfire & Seismic Risk Dataset for Los Angeles Basin & South Coast Refining Corridor (CAZ041 / CAZ087 / Zip 90012):
+    - NOAA NWS Red Flag Wildfire Warnings & Santa Ana Offshore Winds (SCE/LADWP Public Safety Power Shutoff risks to Kinder Morgan SFPP pump stations)
+    - Atmospheric River Winter Deluges & Coastal Storm Surges (Port of Long Beach / San Pedro Bay marine crude tanker offloading holds)
+    - USGS Newport-Inglewood & Palos Verdes Fault Seismic Alerts (Wilmington, Carson, Torrance, and El Segundo refinery safety trips)
+    - NHC Eastern Pacific (EPAC) Tropical Cyclone Advisories (e.g., Tropical Storm Hilary flooding across Southern California)
+    - NOAA NWS Excessive Heat Warnings (CAISO Flex Alerts and refinery cooling loop pressure)
+    - Actively queries live NOAA alerts (CA, CAZ041, CAZ087), SPC convective risks (90012), and Open-Meteo degree days.
+    """
+    los_angeles_weather_events = [
+        {"date": "2021-10-25", "headline": "NOAA NWS High Surf & Gale Warning: Early-season Pacific storm system halts crude oil tanker mooring at Chevron El Segundo marine terminal and Port of Long Beach.", "zone": "CAZ041 (LA Coastal)", "weather_type": "Marine Gale / Mooring Hold"},
+        {"date": "2022-09-05", "headline": "NOAA NWS Excessive Heat Warning: Historic 10-day Southern California heatwave (112°F) triggers CAISO EEA-3 Flex Alerts and trips cooling units at Wilmington and Torrance refineries.", "zone": "CAZ041 / CAZ087 (LA Basin)", "weather_type": "Excessive Heatwave / Grid Stress"},
+        {"date": "2023-02-25", "headline": "NOAA NWS Blizzard & Flash Flood Emergency: Rare winter storm dumps 6 inches of rain across Los Angeles Basin, flooding I-710 freight lanes and Carson rack terminals.", "zone": "CAZ041 (Los Angeles County)", "weather_type": "Atmospheric River / Flash Flood"},
+        {"date": "2023-08-20", "headline": "NOAA NHC Tropical Storm Warning: Tropical Storm Hilary makes first Southern California tropical landfall in 84 years, dropping record rainfall and delaying San Pedro Bay fuel tankers.", "zone": "CAZ041 / PADD 5 South", "weather_type": "EPAC Tropical Storm Hilary"},
+        {"date": "2024-02-05", "headline": "NOAA NWS Flash Flood Emergency: Atmospheric river stalls over Los Angeles County, dropping 9 inches of rain and causing power flickers at Torrance and Wilmington complexes.", "zone": "CAZ041 (LA Coastal / South Bay)", "weather_type": "Atmospheric River Deluge"},
+        {"date": "2024-09-06", "headline": "NOAA NWS Excessive Heat Warning & Red Flag Alert: Triple-digit temperatures (111°F in Downtown LA) and Line Fire smoke trigger South Coast AQMD Ozone Advisories and refinery flaring.", "zone": "CAZ041 / South Coast Basin", "weather_type": "Extreme Heatwave / Ozone Alert"},
+        {"date": "2024-11-06", "headline": "NOAA NWS Particularly Dangerous Situation (PDS) Red Flag Warning: 80 mph Santa Ana winds prompt Southern California Edison (SCE) PSPS de-energizations near pipeline pump stations.", "zone": "CAZ041 / Ventura-LA Corridor", "weather_type": "PDS Santa Ana Winds / PSPS"},
+        {"date": "2025-01-08", "headline": "NOAA NWS PDS Red Flag & Hurricane-Force Wind Warning: 95 mph Santa Ana windstorm and Palisades/Eaton wildfires trigger widespread SCE/LADWP power shutoffs across LA Basin.", "zone": "CAZ041 / CAZ087 (LA Metro)", "weather_type": "Catastrophic Santa Ana / Wildfire PSPS"}
+    ]
+    events = list(los_angeles_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["CA", "CAZ041", "CAZ087"],
+            zip_code="90012",
+            hub_code="Los_Angeles_CA",
+            region_label="Los Angeles / South Bay Refining"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
 def get_oakland_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather, Environmental & Seismic Risk Dataset for Oakland & SF Bay Area Metro Region:
@@ -507,7 +541,8 @@ METRO_ZIP_MAP = {
     "Oakland_CA": "94612",       # SF Bay Area Chevron Richmond Refinery
     "Port_St_Lucie_FL": "34952", # Port Everglades & Port Canaveral Marine Terminals
     "Chicago_IL": "60601",      # BP Whiting & Citgo Lemont Refining Corridor
-    "Houston_TX": "77002"       # Houston Ship Channel & USGC Refining Corridor
+    "Houston_TX": "77002",      # Houston Ship Channel & USGC Refining Corridor
+    "Los_Angeles_CA": "90012"   # Chevron El Segundo & South Bay Refining Complex
 }
 
 
@@ -624,7 +659,7 @@ def extract_spc_convective_risk(location_or_zip: str = "74101", raw_data: dict =
 def get_all_metro_spc_convective_outlooks(custom_zip_map: dict = None) -> dict:
     """
     Fetches real-time localized weather alerts and SPC convective outlooks
-    for all 6 primary modeled metro regions in Midgley.
+    for all primary modeled metro regions in Midgley.
     Returns dictionary mapping metro name -> extracted convective risk structure.
     """
     if custom_zip_map is None:
@@ -722,7 +757,8 @@ class OpenMeteoDegreeDaysConnector:
             "Charlotte_NC": {"lat": 35.227, "lon": -80.843, "name": "Paw Creek Petroleum Distribution Terminal"},
             "Port_St_Lucie_FL": {"lat": 27.273, "lon": -80.358, "name": "Port Everglades & Port Canaveral Marine Terminals"},
             "Chicago_IL": {"lat": 41.678, "lon": -87.498, "name": "BP Whiting IN & Citgo Lemont IL Refineries"},
-            "Houston_TX": {"lat": 29.760, "lon": -95.369, "name": "Houston Ship Channel & USGC Refining Complex"}
+            "Houston_TX": {"lat": 29.760, "lon": -95.369, "name": "Houston Ship Channel & USGC Refining Complex"},
+            "Los_Angeles_CA": {"lat": 33.919, "lon": -118.416, "name": "Chevron El Segundo & Wilmington/Torrance Refining Hub"}
         }
 
     def save_degree_days_vintage_record(self, record: dict, filepath: str = None) -> None:
@@ -846,7 +882,8 @@ PIRATE_WEATHER_REFINING_HUBS = {
     "charlotte_paw_creek": {"name": "Paw Creek Petroleum Distribution Terminal", "lat": 35.227, "lon": -80.843},
     "port_st_lucie_everglades": {"name": "Port Everglades & Port Canaveral Marine Terminals", "lat": 27.273, "lon": -80.358},
     "gulf_coast_houston": {"name": "Gulf Coast Refining Complex (Houston / Baytown)", "lat": 29.760, "lon": -95.369},
-    "chicago_whiting": {"name": "BP Whiting IN & Citgo Lemont IL Refineries", "lat": 41.678, "lon": -87.498}
+    "chicago_whiting": {"name": "BP Whiting IN & Citgo Lemont IL Refineries", "lat": 41.678, "lon": -87.498},
+    "los_angeles_el_segundo": {"name": "Chevron El Segundo & Wilmington/Torrance Refining Complex", "lat": 33.919, "lon": -118.416}
 }
 
 
@@ -951,11 +988,20 @@ class PirateWeatherConnector:
             "everglades": "port_st_lucie_everglades",
             "national": "gulf_coast_houston",
             "houston": "gulf_coast_houston",
+            "houston_tx": "gulf_coast_houston",
             "gulf_coast": "gulf_coast_houston",
             "chicago": "chicago_whiting",
             "chicago_il": "chicago_whiting",
             "whiting": "chicago_whiting",
-            "lemont": "chicago_whiting"
+            "lemont": "chicago_whiting",
+            "los_angeles": "los_angeles_el_segundo",
+            "los_angeles_ca": "los_angeles_el_segundo",
+            "la": "los_angeles_el_segundo",
+            "la_basin": "los_angeles_el_segundo",
+            "socal": "los_angeles_el_segundo",
+            "el_segundo": "los_angeles_el_segundo",
+            "torrance": "los_angeles_el_segundo",
+            "wilmington": "los_angeles_el_segundo"
         }
         hub_mapped = REGION_TO_HUB_MAP.get(key)
         if hub_mapped and hub_mapped in self.hubs:

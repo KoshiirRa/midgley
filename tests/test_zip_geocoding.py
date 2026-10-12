@@ -46,22 +46,40 @@ def test_metro_cluster_zip_resolution():
     assert res_bayarea["locale_code"] == "bayarea"
     assert res_bayarea["state"] == "CA"
 
+    res_houston = resolve_zip_code("77002")
+    assert res_houston["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_houston["is_metro_cluster_hit"] is True
+    assert res_houston["locale_code"] == "houston"
+    assert res_houston["state"] == "TX"
+
+    res_la = resolve_zip_code("90012")
+    assert res_la["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_la["is_metro_cluster_hit"] is True
+    assert res_la["locale_code"] == "los_angeles"
+    assert res_la["state"] == "CA"
+
+    res_beverly = resolve_zip_code("90210")
+    assert res_beverly["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_beverly["is_metro_cluster_hit"] is True
+    assert res_beverly["locale_code"] == "los_angeles"
+    assert res_beverly["state"] == "CA"
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
-    res_la = resolve_zip_code("90210")
-    assert res_la["status"] == "success"
-    assert res_la["resolution_tier"] == "STATE_PADD_FALLBACK"
-    assert res_la["is_metro_cluster_hit"] is False
-    assert res_la["state"] == "CA"
-    assert res_la["padd_region"] == "PADD 5"
-    assert res_la["locale_code"] == "oakland"
-    assert res_la["state_tax_rate_per_gal"] == 0.596
+    res_sac = resolve_zip_code("95814")
+    assert res_sac["status"] == "success"
+    assert res_sac["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_sac["is_metro_cluster_hit"] is False
+    assert res_sac["state"] == "CA"
+    assert res_sac["padd_region"] == "PADD 5"
+    assert res_sac["locale_code"] == "oakland"
+    assert res_sac["state_tax_rate_per_gal"] == 0.596
 
-    res_houston = resolve_zip_code("77002")
-    assert res_houston["resolution_tier"] == "STATE_PADD_FALLBACK"
-    assert res_houston["state"] == "TX"
-    assert res_houston["padd_region"] == "PADD 3"
+    res_dallas = resolve_zip_code("75201")
+    assert res_dallas["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_dallas["state"] == "TX"
+    assert res_dallas["padd_region"] == "PADD 3"
 
     res_nyc = resolve_zip_code("10001")
     assert res_nyc["state"] == "NY"

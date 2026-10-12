@@ -198,3 +198,43 @@ def test_get_houston_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa)
     assert any("Excessive Heat Warning" in h for h in headlines)
 
 
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_los_angeles_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_los_angeles_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-789",
+            "area": "CAZ041",
+            "event": "Red Flag Warning",
+            "headline": "NOAA NWS Red Flag Warning for Los Angeles County Coast and Basin",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["High Wind Watch"],
+        "convective_risk_score": 0.70,
+        "categorical_risk": "ENH",
+        "tornado_risk_score": 0.10,
+        "hail_risk_score": 0.20,
+        "wind_risk_score": 0.85
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Los_Angeles_CA",
+        "min_temp_f": 68.0,
+        "max_temp_f": 96.0,
+        "heating_degree_days_hdd": 0.0,
+        "cooling_degree_days_cdd": 17.0,
+        "freeze_warning": False,
+        "extreme_heat_warning": True
+    }
+
+    df = get_los_angeles_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Red Flag Warning" in h for h in headlines)
+    assert any("Excessive Heat Warning" in h for h in headlines)
