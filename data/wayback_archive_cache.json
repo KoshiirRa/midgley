@@ -690,13 +690,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5": {
-    "timestamp": "2026-10-09T23:56:12.005677+00:00",
+    "timestamp": "2026-10-12T14:49:24.677041+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
     "headline": "Power Outage Forces Venezuela’s Largest Refinery to Shut Down, Sources Say - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
-    "error": "The read operation timed out"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZW9WWXV4amNCdXcyZm13UU9rZU5aYlh3TVJSbGUtNGNFUjZNVUh3NURTa0Z0cG4tVlppbjNhVFJhZ1RrVDJWMmV3RW9xaXo4Qk9vMEg1TjRuZzdBU1Y2VEIzNTJFd0lxU1Fsem1mYkUtUFZPNmJhd0d1WE9nU3MxakNWNTZHb212TVZiVkFJVFEzSzI1d3dPU1N0ZnRNR2xNa2lXQlYyLVDSAa4BQVVfeXFMTXRRT250QW9TcGdBM3pUcDByUjFhNDJ0OTZabXhpblJFc1Q3UkxDSXhva1U5dVp3WWU0NkhYeEt1aDRNaDJSbUJLdWM2bkdxZzg2LUFUNExOakJJVnZfN2tEWmNVQjFDUjR1QkRIcWdhUzFuQ2VVY2tVWVg5cm9remp0WGktREtod19zSmlzcmY0OW5rR3ROTTI3UFNqOS0taUdMdVJoelJsWmxYRGN3?oc=5": {
     "timestamp": "2026-09-05T05:30:28.751876",
@@ -11671,6 +11671,177 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
     "headline": "Iran accuses CENTCOM chief of running oil smuggling operations in Strait of Hormuz",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaHdrLWVoaVlmQmtsdTBYYXZOWmpsZ1JZWmUwZkQ4ZTdsSjloWW82Tk1FZDlYMFJ0M2FJcXhwZEs5OXlHVWhLRGlyaWZvS3hPazVxU0pjcWs3RjF6VEJqOXFxXy0zOUoyd2ZFYVRxbzJMM1kyYjdqUUVCSV9kbmxOSnJzTkFWdUNzRktpTlJUM2lGTFNIWWZkbzJ1SVlpRWNOWGMyQW1yYVh0QU1RZEhvQlFfeWFOVTBWcTBuM25tZkNodzY0eXc0?oc=5": {
+    "timestamp": "2026-10-12T14:47:48.653758+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaHdrLWVoaVlmQmtsdTBYYXZOWmpsZ1JZWmUwZkQ4ZTdsSjloWW82Tk1FZDlYMFJ0M2FJcXhwZEs5OXlHVWhLRGlyaWZvS3hPazVxU0pjcWs3RjF6VEJqOXFxXy0zOUoyd2ZFYVRxbzJMM1kyYjdqUUVCSV9kbmxOSnJzTkFWdUNzRktpTlJUM2lGTFNIWWZkbzJ1SVlpRWNOWGMyQW1yYVh0QU1RZEhvQlFfeWFOVTBWcTBuM25tZkNodzY0eXc0?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaHdrLWVoaVlmQmtsdTBYYXZOWmpsZ1JZWmUwZkQ4ZTdsSjloWW82Tk1FZDlYMFJ0M2FJcXhwZEs5OXlHVWhLRGlyaWZvS3hPazVxU0pjcWs3RjF6VEJqOXFxXy0zOUoyd2ZFYVRxbzJMM1kyYjdqUUVCSV9kbmxOSnJzTkFWdUNzRktpTlJUM2lGTFNIWWZkbzJ1SVlpRWNOWGMyQW1yYVh0QU1RZEhvQlFfeWFOVTBWcTBuM25tZkNodzY0eXc0?oc=5",
+    "headline": "Michigan gas prices climb again, AAA says - The Detroit News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixwFBVV95cUxOaHdrLWVoaVlmQmtsdTBYYXZOWmpsZ1JZWmUwZkQ4ZTdsSjloWW82Tk1FZDlYMFJ0M2FJcXhwZEs5OXlHVWhLRGlyaWZvS3hPazVxU0pjcWs3RjF6VEJqOXFxXy0zOUoyd2ZFYVRxbzJMM1kyYjdqUUVCSV9kbmxOSnJzTkFWdUNzRktpTlJUM2lGTFNIWWZkbzJ1SVlpRWNOWGMyQW1yYVh0QU1RZEhvQlFfeWFOVTBWcTBuM25tZkNodzY0eXc0?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMihAFBVV95cUxOdUtFeE1nOU1aeWRqb01qdTRWVlZaM2x0UFIzNklRNG91dHdHdldYM2tHbFh0aTRZbkNjMWJtSDdETWFKYm9MOFF1aU9QLXpZeGswSnpIR2ZSd3NydnRlaE5GRnh2NWR5WjV5aW9rZDEwQ25kQklhUE9ycnlramtvalpob2g?oc=5": {
+    "timestamp": "2026-10-12T14:47:59.343977+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOdUtFeE1nOU1aeWRqb01qdTRWVlZaM2x0UFIzNklRNG91dHdHdldYM2tHbFh0aTRZbkNjMWJtSDdETWFKYm9MOFF1aU9QLXpZeGswSnpIR2ZSd3NydnRlaE5GRnh2NWR5WjV5aW9rZDEwQ25kQklhUE9ycnlramtvalpob2g?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOdUtFeE1nOU1aeWRqb01qdTRWVlZaM2x0UFIzNklRNG91dHdHdldYM2tHbFh0aTRZbkNjMWJtSDdETWFKYm9MOFF1aU9QLXpZeGswSnpIR2ZSd3NydnRlaE5GRnh2NWR5WjV5aW9rZDEwQ25kQklhUE9ycnlramtvalpob2g?oc=5",
+    "headline": "Michigan unleaded gas prices up 19 cents from last week, AAA says - CBS News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxOdUtFeE1nOU1aeWRqb01qdTRWVlZaM2x0UFIzNklRNG91dHdHdldYM2tHbFh0aTRZbkNjMWJtSDdETWFKYm9MOFF1aU9QLXpZeGswSnpIR2ZSd3NydnRlaE5GRnh2NWR5WjV5aW9rZDEwQ25kQklhUE9ycnlramtvalpob2g?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPaVpUNDRHdFY1MnprUjBIckJiV2FUeFMzTTJTQy1kZl85bXZnVEJZZ3FhaG9WT0dzeGx3cTdLZURKNUNyTXhtOHJ2eXBTenpqWDhvR01DS3NhemVFazJ2bVdtczZKUjB4Q2pMSGsxRzhVVkhTLVRlWWJPWnBjbW9lLWVkNUlRb19LVnNLMzNDZ1A0VFBuZGY0VDgtSjVUWnZYTU13QVlhZGkxMi1mTzlOaVlid1VGS0xRNDlxUzRPT1BiUQ?oc=5": {
+    "timestamp": "2026-10-12T14:48:10.870979+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPaVpUNDRHdFY1MnprUjBIckJiV2FUeFMzTTJTQy1kZl85bXZnVEJZZ3FhaG9WT0dzeGx3cTdLZURKNUNyTXhtOHJ2eXBTenpqWDhvR01DS3NhemVFazJ2bVdtczZKUjB4Q2pMSGsxRzhVVkhTLVRlWWJPWnBjbW9lLWVkNUlRb19LVnNLMzNDZ1A0VFBuZGY0VDgtSjVUWnZYTU13QVlhZGkxMi1mTzlOaVlid1VGS0xRNDlxUzRPT1BiUQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPaVpUNDRHdFY1MnprUjBIckJiV2FUeFMzTTJTQy1kZl85bXZnVEJZZ3FhaG9WT0dzeGx3cTdLZURKNUNyTXhtOHJ2eXBTenpqWDhvR01DS3NhemVFazJ2bVdtczZKUjB4Q2pMSGsxRzhVVkhTLVRlWWJPWnBjbW9lLWVkNUlRb19LVnNLMzNDZ1A0VFBuZGY0VDgtSjVUWnZYTU13QVlhZGkxMi1mTzlOaVlid1VGS0xRNDlxUzRPT1BiUQ?oc=5",
+    "headline": "Virginia Gas Prices: Cheapest and most expensive places to fill up - Oct. 12, 2026 - WSLS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxPaVpUNDRHdFY1MnprUjBIckJiV2FUeFMzTTJTQy1kZl85bXZnVEJZZ3FhaG9WT0dzeGx3cTdLZURKNUNyTXhtOHJ2eXBTenpqWDhvR01DS3NhemVFazJ2bVdtczZKUjB4Q2pMSGsxRzhVVkhTLVRlWWJPWnBjbW9lLWVkNUlRb19LVnNLMzNDZ1A0VFBuZGY0VDgtSjVUWnZYTU13QVlhZGkxMi1mTzlOaVlid1VGS0xRNDlxUzRPT1BiUQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPMzBBQkZzdFlIVGRna1RLSmp3NEVFSl9MbGpSZ05CaUZDY2xhSHRQTFdMNXNQNWRPelBkMkFJaDlkZ0I5YmtMODRMS0hra2VNTEVpakI0RHJfY1ZwVldnVzgzMDR5MExFSVJDNDZQc215ejlRVDVfeUcxZGdJQnA2dnAwRmpjdHgzWFQ1ZFlBN3Z1cXdUSWE3dzVBaEtvcnlyV3AwWkdreVZYU19mQ0luQldOcTFFYll0cmhROHU1VkVsektTOHE2NldoZGlsTDBHNVBLSFJOVC15OEhWZTlCTzc5eG1WaTJuYjQ4?oc=5": {
+    "timestamp": "2026-10-12T14:48:21.632756+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPMzBBQkZzdFlIVGRna1RLSmp3NEVFSl9MbGpSZ05CaUZDY2xhSHRQTFdMNXNQNWRPelBkMkFJaDlkZ0I5YmtMODRMS0hra2VNTEVpakI0RHJfY1ZwVldnVzgzMDR5MExFSVJDNDZQc215ejlRVDVfeUcxZGdJQnA2dnAwRmpjdHgzWFQ1ZFlBN3Z1cXdUSWE3dzVBaEtvcnlyV3AwWkdreVZYU19mQ0luQldOcTFFYll0cmhROHU1VkVsektTOHE2NldoZGlsTDBHNVBLSFJOVC15OEhWZTlCTzc5eG1WaTJuYjQ4?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPMzBBQkZzdFlIVGRna1RLSmp3NEVFSl9MbGpSZ05CaUZDY2xhSHRQTFdMNXNQNWRPelBkMkFJaDlkZ0I5YmtMODRMS0hra2VNTEVpakI0RHJfY1ZwVldnVzgzMDR5MExFSVJDNDZQc215ejlRVDVfeUcxZGdJQnA2dnAwRmpjdHgzWFQ1ZFlBN3Z1cXdUSWE3dzVBaEtvcnlyV3AwWkdreVZYU19mQ0luQldOcTFFYll0cmhROHU1VkVsektTOHE2NldoZGlsTDBHNVBLSFJOVC15OEhWZTlCTzc5eG1WaTJuYjQ4?oc=5",
+    "headline": "West Virginia gas prices remain well above year-ago levels, AAA reports - WV News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi6wFBVV95cUxPMzBBQkZzdFlIVGRna1RLSmp3NEVFSl9MbGpSZ05CaUZDY2xhSHRQTFdMNXNQNWRPelBkMkFJaDlkZ0I5YmtMODRMS0hra2VNTEVpakI0RHJfY1ZwVldnVzgzMDR5MExFSVJDNDZQc215ejlRVDVfeUcxZGdJQnA2dnAwRmpjdHgzWFQ1ZFlBN3Z1cXdUSWE3dzVBaEtvcnlyV3AwWkdreVZYU19mQ0luQldOcTFFYll0cmhROHU1VkVsektTOHE2NldoZGlsTDBHNVBLSFJOVC15OEhWZTlCTzc5eG1WaTJuYjQ4?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNMmJidGg0TGMzSnp0OGhrRjhWV3FaQVBhOFF3ZU1GcGZPV1FFU1R0MEc5dGNrbEQ4Sl9QWDVaMzVsYzlvRWxxMC1ueHA3cWNNbFptM3pRU2RBdWVoeE9SWE0wREh6TEthOEswU1BhNlpxNGtTak8zM3QzakZTRVRjMnlVdkZ6LU9BeFJOTWNGQ3R4am95Z3VaSHJvZ1MxMEppUVVGMEtxbW5ndUdVWGJTT3ozeE5zSWFHRkxBZXpVc3YwTlk?oc=5": {
+    "timestamp": "2026-10-12T14:48:32.188443+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNMmJidGg0TGMzSnp0OGhrRjhWV3FaQVBhOFF3ZU1GcGZPV1FFU1R0MEc5dGNrbEQ4Sl9QWDVaMzVsYzlvRWxxMC1ueHA3cWNNbFptM3pRU2RBdWVoeE9SWE0wREh6TEthOEswU1BhNlpxNGtTak8zM3QzakZTRVRjMnlVdkZ6LU9BeFJOTWNGQ3R4am95Z3VaSHJvZ1MxMEppUVVGMEtxbW5ndUdVWGJTT3ozeE5zSWFHRkxBZXpVc3YwTlk?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNMmJidGg0TGMzSnp0OGhrRjhWV3FaQVBhOFF3ZU1GcGZPV1FFU1R0MEc5dGNrbEQ4Sl9QWDVaMzVsYzlvRWxxMC1ueHA3cWNNbFptM3pRU2RBdWVoeE9SWE0wREh6TEthOEswU1BhNlpxNGtTak8zM3QzakZTRVRjMnlVdkZ6LU9BeFJOTWNGQ3R4am95Z3VaSHJvZ1MxMEppUVVGMEtxbW5ndUdVWGJTT3ozeE5zSWFHRkxBZXpVc3YwTlk?oc=5",
+    "headline": "North Carolina suspends gas tax. How much will you save? - The Asheville Citizen Times",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwwFBVV95cUxNMmJidGg0TGMzSnp0OGhrRjhWV3FaQVBhOFF3ZU1GcGZPV1FFU1R0MEc5dGNrbEQ4Sl9QWDVaMzVsYzlvRWxxMC1ueHA3cWNNbFptM3pRU2RBdWVoeE9SWE0wREh6TEthOEswU1BhNlpxNGtTak8zM3QzakZTRVRjMnlVdkZ6LU9BeFJOTWNGQ3R4am95Z3VaSHJvZ1MxMEppUVVGMEtxbW5ndUdVWGJTT3ozeE5zSWFHRkxBZXpVc3YwTlk?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY3BtSnFUTHBieXQ5SlVHeWM0a2hPUGVqQW0wb1dqYXpacnpVWEVuSGZNS2VEdVlQbW5qakg4cF9TTDlfZ0lSRTJiVEVCNWxIdVlDc1UyOTQ4dFNMd2dzeHI2cERfYVFrOXlzR016c1h1bHJtQVdYc2lMdEkxQmVDTndTVF9rSm91UmxyRjEwaGg3STFocE4yUWVSMWJWcmhkWUd5cnluRQ?oc=5": {
+    "timestamp": "2026-10-12T14:48:42.657397+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY3BtSnFUTHBieXQ5SlVHeWM0a2hPUGVqQW0wb1dqYXpacnpVWEVuSGZNS2VEdVlQbW5qakg4cF9TTDlfZ0lSRTJiVEVCNWxIdVlDc1UyOTQ4dFNMd2dzeHI2cERfYVFrOXlzR016c1h1bHJtQVdYc2lMdEkxQmVDTndTVF9rSm91UmxyRjEwaGg3STFocE4yUWVSMWJWcmhkWUd5cnluRQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY3BtSnFUTHBieXQ5SlVHeWM0a2hPUGVqQW0wb1dqYXpacnpVWEVuSGZNS2VEdVlQbW5qakg4cF9TTDlfZ0lSRTJiVEVCNWxIdVlDc1UyOTQ4dFNMd2dzeHI2cERfYVFrOXlzR016c1h1bHJtQVdYc2lMdEkxQmVDTndTVF9rSm91UmxyRjEwaGg3STFocE4yUWVSMWJWcmhkWUd5cnluRQ?oc=5",
+    "headline": "Fuel tax cuts feel like relief. The bill just shows up later - Türkiye Today",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipwFBVV95cUxQY3BtSnFUTHBieXQ5SlVHeWM0a2hPUGVqQW0wb1dqYXpacnpVWEVuSGZNS2VEdVlQbW5qakg4cF9TTDlfZ0lSRTJiVEVCNWxIdVlDc1UyOTQ4dFNMd2dzeHI2cERfYVFrOXlzR016c1h1bHJtQVdYc2lMdEkxQmVDTndTVF9rSm91UmxyRjEwaGg3STFocE4yUWVSMWJWcmhkWUd5cnluRQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMikgFBVV95cUxPUWVabXFuMnBfMzY0SnRYLXFYeGMtaS1qYU1pSlQtdUZmQW54cGpuZURaQzBsVXc5WllVSFhkekJtU0t1dFBOUUhBQ2hnOUQzSXE0SzdTSlZrbnBYRHpGRGREdl9pLW5XZlpNQUNGOUZUcTVMWHVyVGE5NXFZVy14ZUZyVVZDMXUxVU9MTnB6ekNMZw?oc=5": {
+    "timestamp": "2026-10-12T14:48:53.076524+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPUWVabXFuMnBfMzY0SnRYLXFYeGMtaS1qYU1pSlQtdUZmQW54cGpuZURaQzBsVXc5WllVSFhkekJtU0t1dFBOUUhBQ2hnOUQzSXE0SzdTSlZrbnBYRHpGRGREdl9pLW5XZlpNQUNGOUZUcTVMWHVyVGE5NXFZVy14ZUZyVVZDMXUxVU9MTnB6ekNMZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPUWVabXFuMnBfMzY0SnRYLXFYeGMtaS1qYU1pSlQtdUZmQW54cGpuZURaQzBsVXc5WllVSFhkekJtU0t1dFBOUUhBQ2hnOUQzSXE0SzdTSlZrbnBYRHpGRGREdl9pLW5XZlpNQUNGOUZUcTVMWHVyVGE5NXFZVy14ZUZyVVZDMXUxVU9MTnB6ekNMZw?oc=5",
+    "headline": "E10 gasoline has received positive feedback from professional motorsports. - Vietnam.vn",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxPUWVabXFuMnBfMzY0SnRYLXFYeGMtaS1qYU1pSlQtdUZmQW54cGpuZURaQzBsVXc5WllVSFhkekJtU0t1dFBOUUhBQ2hnOUQzSXE0SzdTSlZrbnBYRHpGRGREdl9pLW5XZlpNQUNGOUZUcTVMWHVyVGE5NXFZVy14ZUZyVVZDMXUxVU9MTnB6ekNMZw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQZERDX0FVQzJ2bXlmclVPVkN0NEM0Q3NwUThxX01uZXlVeHh2dkdXenBJQ2RoWVptRlBVbnFkd2toSUd0cUxLbk9ydUNxYVowdnZPVUl1cVRnc0ZFVm03c1M5enZoaDRtVk0yUWJ0ZkpBMl8wYWlKc2gwbEFpMHRzc0lxYng2YTk3UzBKbkRrUTBLMURqeXEyQWR3aEhEZkpvc0RWUThobGFZS01EbjEweTZBcy1jY0NZVW9PNk9feXMzczh6Q2VERFRpRUt1Q1BTR2xmWWNTRDJZbFlTLUZGWGNR?oc=5": {
+    "timestamp": "2026-10-12T14:49:03.536345+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQZERDX0FVQzJ2bXlmclVPVkN0NEM0Q3NwUThxX01uZXlVeHh2dkdXenBJQ2RoWVptRlBVbnFkd2toSUd0cUxLbk9ydUNxYVowdnZPVUl1cVRnc0ZFVm03c1M5enZoaDRtVk0yUWJ0ZkpBMl8wYWlKc2gwbEFpMHRzc0lxYng2YTk3UzBKbkRrUTBLMURqeXEyQWR3aEhEZkpvc0RWUThobGFZS01EbjEweTZBcy1jY0NZVW9PNk9feXMzczh6Q2VERFRpRUt1Q1BTR2xmWWNTRDJZbFlTLUZGWGNR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQZERDX0FVQzJ2bXlmclVPVkN0NEM0Q3NwUThxX01uZXlVeHh2dkdXenBJQ2RoWVptRlBVbnFkd2toSUd0cUxLbk9ydUNxYVowdnZPVUl1cVRnc0ZFVm03c1M5enZoaDRtVk0yUWJ0ZkpBMl8wYWlKc2gwbEFpMHRzc0lxYng2YTk3UzBKbkRrUTBLMURqeXEyQWR3aEhEZkpvc0RWUThobGFZS01EbjEweTZBcy1jY0NZVW9PNk9feXMzczh6Q2VERFRpRUt1Q1BTR2xmWWNTRDJZbFlTLUZGWGNR?oc=5",
+    "headline": "Where to find the cheapest fuel in Lismore - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4gFBVV95cUxQZERDX0FVQzJ2bXlmclVPVkN0NEM0Q3NwUThxX01uZXlVeHh2dkdXenBJQ2RoWVptRlBVbnFkd2toSUd0cUxLbk9ydUNxYVowdnZPVUl1cVRnc0ZFVm03c1M5enZoaDRtVk0yUWJ0ZkpBMl8wYWlKc2gwbEFpMHRzc0lxYng2YTk3UzBKbkRrUTBLMURqeXEyQWR3aEhEZkpvc0RWUThobGFZS01EbjEweTZBcy1jY0NZVW9PNk9feXMzczh6Q2VERFRpRUt1Q1BTR2xmWWNTRDJZbFlTLUZGWGNR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiakFVX3lxTFB0cVRaeG5qZDRWU1RXVmwtYXI0M245WnlVd3FMZjJVdUIwNENna3ZsMnp4U3RmS3ZXVzNGcVJGOW91ZGhpNXFLazhTcUZmXzVBVE9LWXhrdDZYOWdSdGVnQUtRVHQ3V3ZEc2c?oc=5": {
+    "timestamp": "2026-10-12T14:49:14.166456+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFB0cVRaeG5qZDRWU1RXVmwtYXI0M245WnlVd3FMZjJVdUIwNENna3ZsMnp4U3RmS3ZXVzNGcVJGOW91ZGhpNXFLazhTcUZmXzVBVE9LWXhrdDZYOWdSdGVnQUtRVHQ3V3ZEc2c?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFB0cVRaeG5qZDRWU1RXVmwtYXI0M245WnlVd3FMZjJVdUIwNENna3ZsMnp4U3RmS3ZXVzNGcVJGOW91ZGhpNXFLazhTcUZmXzVBVE9LWXhrdDZYOWdSdGVnQUtRVHQ3V3ZEc2c?oc=5",
+    "headline": "Papua New Guinea Fuel Prices, 11 Oct 2026 — Diesel 5.90 PGK/L (€1.20/$1.34) · Petrol 5.90 PGK/L (€1.20/$1.34) - OpenVan.camp",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTFB0cVRaeG5qZDRWU1RXVmwtYXI0M245WnlVd3FMZjJVdUIwNENna3ZsMnp4U3RmS3ZXVzNGcVJGOW91ZGhpNXFLazhTcUZmXzVBVE9LWXhrdDZYOWdSdGVnQUtRVHQ3V3ZEc2c?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMirAFBVV95cUxPQnFNSldiSGpHUlNGanh0Qnhwcmc3eEhlcWludWQzai16ZG9RbEJWdk5fdkdhRFo2WE54RWtUNmExVTFST1hnLURlYXhlZm85QndjVWcyLUVLRy1NUUk1LXhxZEoxblEzRVVIbGk0WjJpUHcyLWlIMXVPeG9VTVhqTHZNNXNFdVdEMmxMLW9ER0o1SjExRjQ2c1k2WEwwbHVEUGhjTXhsSmFFd1NS?oc=5": {
+    "timestamp": "2026-10-12T14:49:35.222104+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPQnFNSldiSGpHUlNGanh0Qnhwcmc3eEhlcWludWQzai16ZG9RbEJWdk5fdkdhRFo2WE54RWtUNmExVTFST1hnLURlYXhlZm85QndjVWcyLUVLRy1NUUk1LXhxZEoxblEzRVVIbGk0WjJpUHcyLWlIMXVPeG9VTVhqTHZNNXNFdVdEMmxMLW9ER0o1SjExRjQ2c1k2WEwwbHVEUGhjTXhsSmFFd1NS?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPQnFNSldiSGpHUlNGanh0Qnhwcmc3eEhlcWludWQzai16ZG9RbEJWdk5fdkdhRFo2WE54RWtUNmExVTFST1hnLURlYXhlZm85QndjVWcyLUVLRy1NUUk1LXhxZEoxblEzRVVIbGk0WjJpUHcyLWlIMXVPeG9VTVhqTHZNNXNFdVdEMmxMLW9ER0o1SjExRjQ2c1k2WEwwbHVEUGhjTXhsSmFFd1NS?oc=5",
+    "headline": "Sonatrach's Augusta refinery shuts crude unit on electrical fault - Quantum Commodity Intelligence",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirAFBVV95cUxPQnFNSldiSGpHUlNGanh0Qnhwcmc3eEhlcWludWQzai16ZG9RbEJWdk5fdkdhRFo2WE54RWtUNmExVTFST1hnLURlYXhlZm85QndjVWcyLUVLRy1NUUk1LXhxZEoxblEzRVVIbGk0WjJpUHcyLWlIMXVPeG9VTVhqTHZNNXNFdVdEMmxMLW9ER0o1SjExRjQ2c1k2WEwwbHVEUGhjTXhsSmFFd1NS?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiigFBVV95cUxQcEE5WEh3S0g3Y1VLUnYyVkZvQ3IzNy1jWmtMU3dyeS1HakdlaVZIYVhKVmZHd3NBSzd1ekhBWFhTQjlIbUIwcEYzRXJPQ2F1WGVvLTJIUDB5UXdCT3JxN1dNcnpwRWtHT3pYU2JRMDVoQmlRUWkzeE5DcW9PNGxiUWlJVU1fcmdHd3c?oc=5": {
+    "timestamp": "2026-10-12T14:49:47.959901+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQcEE5WEh3S0g3Y1VLUnYyVkZvQ3IzNy1jWmtMU3dyeS1HakdlaVZIYVhKVmZHd3NBSzd1ekhBWFhTQjlIbUIwcEYzRXJPQ2F1WGVvLTJIUDB5UXdCT3JxN1dNcnpwRWtHT3pYU2JRMDVoQmlRUWkzeE5DcW9PNGxiUWlJVU1fcmdHd3c?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQcEE5WEh3S0g3Y1VLUnYyVkZvQ3IzNy1jWmtMU3dyeS1HakdlaVZIYVhKVmZHd3NBSzd1ekhBWFhTQjlIbUIwcEYzRXJPQ2F1WGVvLTJIUDB5UXdCT3JxN1dNcnpwRWtHT3pYU2JRMDVoQmlRUWkzeE5DcW9PNGxiUWlJVU1fcmdHd3c?oc=5",
+    "headline": "US importers win class-action route to Trump tariff refunds - ICLG",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxQcEE5WEh3S0g3Y1VLUnYyVkZvQ3IzNy1jWmtMU3dyeS1HakdlaVZIYVhKVmZHd3NBSzd1ekhBWFhTQjlIbUIwcEYzRXJPQ2F1WGVvLTJIUDB5UXdCT3JxN1dNcnpwRWtHT3pYU2JRMDVoQmlRUWkzeE5DcW9PNGxiUWlJVU1fcmdHd3c?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMijAFBVV95cUxQRkExR2syOGhmYXpYNnZ4VGFoaVg5cWJTVktiVVMzOVZwS3ZfWmdfZHJpVU9rc0pxbGxhYnBCZmlxU01kX3h3UGJhZU9pcU43enRpZnNVV1U3VXRLOUtlTDhUM0NvOGU2RzZmdFJ6SEdmT1p2NnROTUIwOVhjelZ1LWRuelF3UFhZbjcydQ?oc=5": {
+    "timestamp": "2026-10-12T14:49:58.498793+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQRkExR2syOGhmYXpYNnZ4VGFoaVg5cWJTVktiVVMzOVZwS3ZfWmdfZHJpVU9rc0pxbGxhYnBCZmlxU01kX3h3UGJhZU9pcU43enRpZnNVV1U3VXRLOUtlTDhUM0NvOGU2RzZmdFJ6SEdmT1p2NnROTUIwOVhjelZ1LWRuelF3UFhZbjcydQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQRkExR2syOGhmYXpYNnZ4VGFoaVg5cWJTVktiVVMzOVZwS3ZfWmdfZHJpVU9rc0pxbGxhYnBCZmlxU01kX3h3UGJhZU9pcU43enRpZnNVV1U3VXRLOUtlTDhUM0NvOGU2RzZmdFJ6SEdmT1p2NnROTUIwOVhjelZ1LWRuelF3UFhZbjcydQ?oc=5",
+    "headline": "President Trump defends record on gas and grocery costs - WZTV",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijAFBVV95cUxQRkExR2syOGhmYXpYNnZ4VGFoaVg5cWJTVktiVVMzOVZwS3ZfWmdfZHJpVU9rc0pxbGxhYnBCZmlxU01kX3h3UGJhZU9pcU43enRpZnNVV1U3VXRLOUtlTDhUM0NvOGU2RzZmdFJ6SEdmT1p2NnROTUIwOVhjelZ1LWRuelF3UFhZbjcydQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMikAFBVV95cUxOa3lOdUZHbjJuMXBOU0pmUE05dk5GSUhvZU5PSEhkN0oya1ItWVhfTElzU0RwSXF4UFg0V1drXzVtMUxfdC12RFpoYS1GVHNXeUxiQWRwdWo3ZUplMllpNF85MTM4bzAyN3Frd1hVNUVfd1JRclZUNHBsWGI0MElDOGxfdDFoMWpKR1U4dXNaMUzSAZABQVVfeXFMTmt5TnVGR24ybjFwTlNKZlBNOXZORklIb2VOT0hIZDdKMmtSLVlYX0xJc1NEcElxeFBYNFdXa181bTFMX3QtdkRaaGEtRlRzV3lMYkFkcHVqN2VKZTJZaTRfOTEzOG8wMjdxa3dYVTVFX3dSUXJWVDRwbFhiNDBJQzhsX3QxaDFqSkdVOHVzWjFM?oc=5": {
+    "timestamp": "2026-10-12T14:50:16.524685+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOa3lOdUZHbjJuMXBOU0pmUE05dk5GSUhvZU5PSEhkN0oya1ItWVhfTElzU0RwSXF4UFg0V1drXzVtMUxfdC12RFpoYS1GVHNXeUxiQWRwdWo3ZUplMllpNF85MTM4bzAyN3Frd1hVNUVfd1JRclZUNHBsWGI0MElDOGxfdDFoMWpKR1U4dXNaMUzSAZABQVVfeXFMTmt5TnVGR24ybjFwTlNKZlBNOXZORklIb2VOT0hIZDdKMmtSLVlYX0xJc1NEcElxeFBYNFdXa181bTFMX3QtdkRaaGEtRlRzV3lMYkFkcHVqN2VKZTJZaTRfOTEzOG8wMjdxa3dYVTVFX3dSUXJWVDRwbFhiNDBJQzhsX3QxaDFqSkdVOHVzWjFM?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOa3lOdUZHbjJuMXBOU0pmUE05dk5GSUhvZU5PSEhkN0oya1ItWVhfTElzU0RwSXF4UFg0V1drXzVtMUxfdC12RFpoYS1GVHNXeUxiQWRwdWo3ZUplMllpNF85MTM4bzAyN3Frd1hVNUVfd1JRclZUNHBsWGI0MElDOGxfdDFoMWpKR1U4dXNaMUzSAZABQVVfeXFMTmt5TnVGR24ybjFwTlNKZlBNOXZORklIb2VOT0hIZDdKMmtSLVlYX0xJc1NEcElxeFBYNFdXa181bTFMX3QtdkRaaGEtRlRzV3lMYkFkcHVqN2VKZTJZaTRfOTEzOG8wMjdxa3dYVTVFX3dSUXJWVDRwbFhiNDBJQzhsX3QxaDFqSkdVOHVzWjFM?oc=5",
+    "headline": "Trump's energy efforts, European bonds, retailers' inventory balancing act and more in Morning Squawk - CNBC",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikAFBVV95cUxOa3lOdUZHbjJuMXBOU0pmUE05dk5GSUhvZU5PSEhkN0oya1ItWVhfTElzU0RwSXF4UFg0V1drXzVtMUxfdC12RFpoYS1GVHNXeUxiQWRwdWo3ZUplMllpNF85MTM4bzAyN3Frd1hVNUVfd1JRclZUNHBsWGI0MElDOGxfdDFoMWpKR1U4dXNaMUzSAZABQVVfeXFMTmt5TnVGR24ybjFwTlNKZlBNOXZORklIb2VOT0hIZDdKMmtSLVlYX0xJc1NEcElxeFBYNFdXa181bTFMX3QtdkRaaGEtRlRzV3lMYkFkcHVqN2VKZTJZaTRfOTEzOG8wMjdxa3dYVTVFX3dSUXJWVDRwbFhiNDBJQzhsX3QxaDFqSkdVOHVzWjFM?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMilwFBVV95cUxQdk1IU3pjdm9JS3cyN282bFYxMnVJLURkempsQlU1aHZHT3pjU1dOYVZsaVFvQnJ6UExwaDljOWh6bF93ek13ZTRNanh3XzJRTG1QdjAzdmpWcGNkMkNLdmNqYTZPaEdsTE93N19mWTdESzVzQ3VlQUg3OFkzR1FfdWF3bHFJZ21FVUZKTk1ZazR1NnNTLWdV?oc=5": {
+    "timestamp": "2026-10-12T14:50:27.257915+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQdk1IU3pjdm9JS3cyN282bFYxMnVJLURkempsQlU1aHZHT3pjU1dOYVZsaVFvQnJ6UExwaDljOWh6bF93ek13ZTRNanh3XzJRTG1QdjAzdmpWcGNkMkNLdmNqYTZPaEdsTE93N19mWTdESzVzQ3VlQUg3OFkzR1FfdWF3bHFJZ21FVUZKTk1ZazR1NnNTLWdV?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQdk1IU3pjdm9JS3cyN282bFYxMnVJLURkempsQlU1aHZHT3pjU1dOYVZsaVFvQnJ6UExwaDljOWh6bF93ek13ZTRNanh3XzJRTG1QdjAzdmpWcGNkMkNLdmNqYTZPaEdsTE93N19mWTdESzVzQ3VlQUg3OFkzR1FfdWF3bHFJZ21FVUZKTk1ZazR1NnNTLWdV?oc=5",
+    "headline": "India’s Trump Problem: Submit, Retaliate Or Play Hardball? - StratNews Global",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilwFBVV95cUxQdk1IU3pjdm9JS3cyN282bFYxMnVJLURkempsQlU1aHZHT3pjU1dOYVZsaVFvQnJ6UExwaDljOWh6bF93ek13ZTRNanh3XzJRTG1QdjAzdmpWcGNkMkNLdmNqYTZPaEdsTE93N19mWTdESzVzQ3VlQUg3OFkzR1FfdWF3bHFJZ21FVUZKTk1ZazR1NnNTLWdV?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMixAFBVV95cUxQUzlyaU9hc1pjZkZ4WldjZ2Y4NlpUNFBmUzJBQ1AzcmVzbi0wenlFVGZ2Q0t2QjFjZE5GT3Vqd25NSFNzU3NvTlFlOUdnVloyUnRWVWdmRHdCM3k1U2NJdm1relVwNF9fTWNxdXQtckhVWUhTbUZKQmdqaXhWTkprS0IxSGxQdUF6VUZpN0hSY01tbTUtNzNhNll5QTJLWUhJSVo3OWxqeVNSNTJzZFdPYl92aWJNZ3BwYkFiNWtEZGpNaWlB0gHKAUFVX3lxTFBnTXFxZ0RwMjNUS2hqUlJFUHhnN1VHSVVpTVZKQlYxTW5Nb0dLZURiNVBzdmUwN2JsVTdUUF9zMF9Rb1VBb24wZk94RE9adzZYa0haYS1acExIdDJucnZ3NDk0S0NOR1ZRdGljOFJQc2tLVUZiNXVxRElDVXFrcThrdmlYcGF6ZUZ5ZW5janl1Z3duekllbTBJUEF3TGRybEIwblpqTXF1VUc5Mm8ydllCWDhsVlJLMVlvTzV6RzBRTUljV2J5WVBpMWc?oc=5": {
+    "timestamp": "2026-10-12T14:50:37.746115+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQUzlyaU9hc1pjZkZ4WldjZ2Y4NlpUNFBmUzJBQ1AzcmVzbi0wenlFVGZ2Q0t2QjFjZE5GT3Vqd25NSFNzU3NvTlFlOUdnVloyUnRWVWdmRHdCM3k1U2NJdm1relVwNF9fTWNxdXQtckhVWUhTbUZKQmdqaXhWTkprS0IxSGxQdUF6VUZpN0hSY01tbTUtNzNhNll5QTJLWUhJSVo3OWxqeVNSNTJzZFdPYl92aWJNZ3BwYkFiNWtEZGpNaWlB0gHKAUFVX3lxTFBnTXFxZ0RwMjNUS2hqUlJFUHhnN1VHSVVpTVZKQlYxTW5Nb0dLZURiNVBzdmUwN2JsVTdUUF9zMF9Rb1VBb24wZk94RE9adzZYa0haYS1acExIdDJucnZ3NDk0S0NOR1ZRdGljOFJQc2tLVUZiNXVxRElDVXFrcThrdmlYcGF6ZUZ5ZW5janl1Z3duekllbTBJUEF3TGRybEIwblpqTXF1VUc5Mm8ydllCWDhsVlJLMVlvTzV6RzBRTUljV2J5WVBpMWc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQUzlyaU9hc1pjZkZ4WldjZ2Y4NlpUNFBmUzJBQ1AzcmVzbi0wenlFVGZ2Q0t2QjFjZE5GT3Vqd25NSFNzU3NvTlFlOUdnVloyUnRWVWdmRHdCM3k1U2NJdm1relVwNF9fTWNxdXQtckhVWUhTbUZKQmdqaXhWTkprS0IxSGxQdUF6VUZpN0hSY01tbTUtNzNhNll5QTJLWUhJSVo3OWxqeVNSNTJzZFdPYl92aWJNZ3BwYkFiNWtEZGpNaWlB0gHKAUFVX3lxTFBnTXFxZ0RwMjNUS2hqUlJFUHhnN1VHSVVpTVZKQlYxTW5Nb0dLZURiNVBzdmUwN2JsVTdUUF9zMF9Rb1VBb24wZk94RE9adzZYa0haYS1acExIdDJucnZ3NDk0S0NOR1ZRdGljOFJQc2tLVUZiNXVxRElDVXFrcThrdmlYcGF6ZUZ5ZW5janl1Z3duekllbTBJUEF3TGRybEIwblpqTXF1VUc5Mm8ydllCWDhsVlJLMVlvTzV6RzBRTUljV2J5WVBpMWc?oc=5",
+    "headline": "Has Trump struck an ‘illegal’ diesel deal with Putin? US banned Russian energy imports in 2022 - Firstpost",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixAFBVV95cUxQUzlyaU9hc1pjZkZ4WldjZ2Y4NlpUNFBmUzJBQ1AzcmVzbi0wenlFVGZ2Q0t2QjFjZE5GT3Vqd25NSFNzU3NvTlFlOUdnVloyUnRWVWdmRHdCM3k1U2NJdm1relVwNF9fTWNxdXQtckhVWUhTbUZKQmdqaXhWTkprS0IxSGxQdUF6VUZpN0hSY01tbTUtNzNhNll5QTJLWUhJSVo3OWxqeVNSNTJzZFdPYl92aWJNZ3BwYkFiNWtEZGpNaWlB0gHKAUFVX3lxTFBnTXFxZ0RwMjNUS2hqUlJFUHhnN1VHSVVpTVZKQlYxTW5Nb0dLZURiNVBzdmUwN2JsVTdUUF9zMF9Rb1VBb24wZk94RE9adzZYa0haYS1acExIdDJucnZ3NDk0S0NOR1ZRdGljOFJQc2tLVUZiNXVxRElDVXFrcThrdmlYcGF6ZUZ5ZW5janl1Z3duekllbTBJUEF3TGRybEIwblpqTXF1VUc5Mm8ydllCWDhsVlJLMVlvTzV6RzBRTUljV2J5WVBpMWc?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilAFBVV95cUxQWUdkVGtEX1dYaTBGSmpQX08wWGwwdk9GZ3dnU2dBd2xoQXpkMjBOOVR0aU1nWU9aekpTc2d1dW1NYWVJVDMwQVZ3TGxiOTliamkzTXh4Q1kzNXNYaEVqMGJ3MDA4X2tUY0NXSWdWSEZuaEVqUWFzRFFleHBKcVVMWXNvVl82SURZLUxhcERjUzdOcTY0?oc=5": {
+    "timestamp": "2026-10-12T14:50:48.343787+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQWUdkVGtEX1dYaTBGSmpQX08wWGwwdk9GZ3dnU2dBd2xoQXpkMjBOOVR0aU1nWU9aekpTc2d1dW1NYWVJVDMwQVZ3TGxiOTliamkzTXh4Q1kzNXNYaEVqMGJ3MDA4X2tUY0NXSWdWSEZuaEVqUWFzRFFleHBKcVVMWXNvVl82SURZLUxhcERjUzdOcTY0?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQWUdkVGtEX1dYaTBGSmpQX08wWGwwdk9GZ3dnU2dBd2xoQXpkMjBOOVR0aU1nWU9aekpTc2d1dW1NYWVJVDMwQVZ3TGxiOTliamkzTXh4Q1kzNXNYaEVqMGJ3MDA4X2tUY0NXSWdWSEZuaEVqUWFzRFFleHBKcVVMWXNvVl82SURZLUxhcERjUzdOcTY0?oc=5",
+    "headline": "President Trump says tariffs funded relief for farmers at Clarksville rally - WZTV",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxQWUdkVGtEX1dYaTBGSmpQX08wWGwwdk9GZ3dnU2dBd2xoQXpkMjBOOVR0aU1nWU9aekpTc2d1dW1NYWVJVDMwQVZ3TGxiOTliamkzTXh4Q1kzNXNYaEVqMGJ3MDA4X2tUY0NXSWdWSEZuaEVqUWFzRFFleHBKcVVMWXNvVl82SURZLUxhcERjUzdOcTY0?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilgFBVV95cUxPbmk0Vy1mQ0hlYUk3amt4OFdZOTk1QWxCOE15aHJzVW5FOFVMRF9BRHUxOV9VWFhvOHBMZXhwLTVPbWI5dUNQaTRmRkFpOTRUbURxaXU5alUxZzVWWUhxMVVhVHliQ3JvcFZCenBwdXlxOUg3S01tNGVWV3U3WTNEVHZ2bFFvV05FRTEyQnVHejhIRVQ2alE?oc=5": {
+    "timestamp": "2026-10-12T14:50:59.116475+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPbmk0Vy1mQ0hlYUk3amt4OFdZOTk1QWxCOE15aHJzVW5FOFVMRF9BRHUxOV9VWFhvOHBMZXhwLTVPbWI5dUNQaTRmRkFpOTRUbURxaXU5alUxZzVWWUhxMVVhVHliQ3JvcFZCenBwdXlxOUg3S01tNGVWV3U3WTNEVHZ2bFFvV05FRTEyQnVHejhIRVQ2alE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPbmk0Vy1mQ0hlYUk3amt4OFdZOTk1QWxCOE15aHJzVW5FOFVMRF9BRHUxOV9VWFhvOHBMZXhwLTVPbWI5dUNQaTRmRkFpOTRUbURxaXU5alUxZzVWWUhxMVVhVHliQ3JvcFZCenBwdXlxOUg3S01tNGVWV3U3WTNEVHZ2bFFvV05FRTEyQnVHejhIRVQ2alE?oc=5",
+    "headline": "Oil Prices Decline as Investors Await US Inflation Data and Bank Earnings Amid Geopolitical Tensions: Dow Jones, S&P, Nasdaq, Wall Street Futures - Yahoo Finance",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxPbmk0Vy1mQ0hlYUk3amt4OFdZOTk1QWxCOE15aHJzVW5FOFVMRF9BRHUxOV9VWFhvOHBMZXhwLTVPbWI5dUNQaTRmRkFpOTRUbURxaXU5alUxZzVWWUhxMVVhVHliQ3JvcFZCenBwdXlxOUg3S01tNGVWV3U3WTNEVHZ2bFFvV05FRTEyQnVHejhIRVQ2alE?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMicEFVX3lxTFA5aW14bUk2LUttd09OR1NpMjBqTnBVS0t3NzdxX0ozZXFYS2JFb3VGSDNGN2ZhNmxDOVg1NWpRQW5FNTJ3SGhpaDFNbVhLNjhmVWVNRGc0OUFtZGU4Q19ZZVRsRHVHTW42S0JWTUl1b1o?oc=5": {
+    "timestamp": "2026-10-12T14:51:09.593767+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFA5aW14bUk2LUttd09OR1NpMjBqTnBVS0t3NzdxX0ozZXFYS2JFb3VGSDNGN2ZhNmxDOVg1NWpRQW5FNTJ3SGhpaDFNbVhLNjhmVWVNRGc0OUFtZGU4Q19ZZVRsRHVHTW42S0JWTUl1b1o?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFA5aW14bUk2LUttd09OR1NpMjBqTnBVS0t3NzdxX0ozZXFYS2JFb3VGSDNGN2ZhNmxDOVg1NWpRQW5FNTJ3SGhpaDFNbVhLNjhmVWVNRGc0OUFtZGU4Q19ZZVRsRHVHTW42S0JWTUl1b1o?oc=5",
+    "headline": "Why Is the Dollar so Strong? - Robin J Brooks | Substack",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMicEFVX3lxTFA5aW14bUk2LUttd09OR1NpMjBqTnBVS0t3NzdxX0ozZXFYS2JFb3VGSDNGN2ZhNmxDOVg1NWpRQW5FNTJ3SGhpaDFNbVhLNjhmVWVNRGc0OUFtZGU4Q19ZZVRsRHVHTW42S0JWTUl1b1o?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5": {
+    "timestamp": "2026-10-12T14:51:37.448945+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
+    "headline": "Dearth Of Refineries And Tariffs Squeeze Americans - WIBC 93.1 FM",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
     "error": "<urlopen error timed out>"
   }
 }
