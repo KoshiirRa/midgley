@@ -38,8 +38,10 @@ CACHE_TTL_AIRNOW = 3600      # 1 hour for official EPA AirNow observations
 AQI_VINTAGE_FILE = os.path.join("data", "aqi_vintages.json")
 
 
-def save_aqi_vintage_record(record: dict, filepath: str = AQI_VINTAGE_FILE) -> None:
+def save_aqi_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time AQI and emissions observation (Issue #291)."""
+    if filepath is None:
+        filepath = AQI_VINTAGE_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -75,8 +77,10 @@ def save_aqi_vintage_record(record: dict, filepath: str = AQI_VINTAGE_FILE) -> N
         logger.debug(f"Could not persist AQI vintage record: {e}")
 
 
-def get_aqi_vintages_as_of(as_of_date: str, corridor: str = None, zip_code: str = None, filepath: str = AQI_VINTAGE_FILE) -> list:
+def get_aqi_vintages_as_of(as_of_date: str, corridor: str = None, zip_code: str = None, filepath: Optional[str] = None) -> list:
     """Retrieves all AQI vintage records available as of a given cutoff date. (Issue #291)"""
+    if filepath is None:
+        filepath = AQI_VINTAGE_FILE
     if not os.path.exists(filepath):
         return []
     try:
@@ -109,6 +113,9 @@ METRO_ZIP_MAP: Dict[str, str] = {
     "carolinas_piedmont": "28202",
     "port_st_lucie": "34984",
     "south_florida": "34984",
+    "chicago": "60601",
+    "chicago_il": "60601",
+    "great_lakes": "60601",
 }
 
 # Refining Hub Coordinates, EPA Sites, Statutory RVP Limits & Fence-Line Sensor Profiles
@@ -362,6 +369,56 @@ AQI_CORRIDORS: Dict[str, Dict[str, Any]] = {
             "openaq_stations": ["FLDEP-StLucie", "FLDEP-Broward"],
             "airnow_site": "12-111-0012"
         }
+    },
+    "chicago": {
+        "name": "Greater Chicago & Northwest Indiana Refining Corridor (PADD 2)",
+        "center": {"lat": 41.6784, "lon": -87.4981},
+        "bbox": {
+            "minlatitude": 41.40,
+            "maxlatitude": 42.10,
+            "minlongitude": -88.30,
+            "maxlongitude": -87.30
+        },
+        "primary_zip": "60601",
+        "statutory_rvp_psi": 7.4,  # Clean Air Act Section 211(k) RFG 7.4 psi summer standard
+        "base_summer_rvp_surcharge": 0.180,
+        "assets": {
+            "bp_whiting": {
+                "name": "BP Whiting Refinery",
+                "lat": 41.6784,
+                "lon": -87.4981,
+                "capacity_bpd": 435000,
+                "criticality": 1.0,
+                "baseline_pm25": 11.2,
+                "baseline_so2": 2.5,
+                "rack_margin_shock": 0.35
+            },
+            "citgo_lemont": {
+                "name": "CITGO Lemont Refinery",
+                "lat": 41.6702,
+                "lon": -88.0553,
+                "capacity_bpd": 177000,
+                "criticality": 0.85,
+                "baseline_pm25": 9.5,
+                "baseline_so2": 1.8,
+                "rack_margin_shock": 0.20
+            },
+            "exxonmobil_joliet": {
+                "name": "ExxonMobil Joliet Refinery",
+                "lat": 41.4392,
+                "lon": -88.1633,
+                "capacity_bpd": 251000,
+                "criticality": 0.90,
+                "baseline_pm25": 10.0,
+                "baseline_so2": 2.0,
+                "rack_margin_shock": 0.25
+            }
+        },
+        "monitors": {
+            "purpleair_group": "chicago_industrial_corridor",
+            "openaq_stations": ["IDEM-Whiting", "IEPA-Cook-Alsip"],
+            "airnow_site": "17-031-0001"
+        }
     }
 }
 
@@ -594,6 +651,11 @@ class AQIFeedConnector:
             base_pm = 30 if is_summer else 26
             area_name = "Port St. Lucie, FL"
             state = "FL"
+        elif zip_code in ["60601", "17-031-0001", "46394"]:  # Chicago / Whiting Corridor
+            base_o3 = 62 if is_summer else 28
+            base_pm = 46 if is_summer else 38
+            area_name = "Chicago-Naperville-Elgin, IL-IN-WI"
+            state = "IL"
         else:
             base_o3 = 45 if is_summer else 30
             base_pm = 40 if is_summer else 35

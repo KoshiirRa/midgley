@@ -107,6 +107,15 @@
       "summer_compliance_premium_per_gal": 0.1,
       "is_rfg": false,
       "is_carb": false
+    },
+    "Chicago_IL": {
+      "name": "Greater Chicago Metro (PADD 2)",
+      "program": "EPA Reformulated Gasoline (RFG)",
+      "summer_rvp_psi": 7.4,
+      "winter_rvp_psi": 13.0,
+      "summer_compliance_premium_per_gal": 0.18,
+      "is_rfg": true,
+      "is_carb": false
     }
   },
   "emergency_waivers": []

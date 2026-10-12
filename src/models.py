@@ -349,6 +349,8 @@ LOCALE_COMPONENT_WEIGHTS = {
     "Greenville_NC": {"regional_logistics": 0.40, "futures_commodity": 0.25, "refining_crack_margin": 0.15, "weather_environmental": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
     "Charlotte_NC": {"regional_logistics": 0.40, "futures_commodity": 0.25, "refining_crack_margin": 0.15, "weather_environmental": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
     "Port_St_Lucie_FL": {"regional_logistics": 0.35, "futures_commodity": 0.25, "weather_environmental": 0.15, "tax_regulatory": 0.12, "refining_crack_margin": 0.08, "unstructured_sentiment": 0.05},
+    "Chicago_IL": {"tax_regulatory": 0.30, "refining_crack_margin": 0.25, "regional_logistics": 0.20, "futures_commodity": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Chicago": {"tax_regulatory": 0.30, "refining_crack_margin": 0.25, "regional_logistics": 0.20, "futures_commodity": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
     "National": {"futures_commodity": 0.45, "refining_crack_margin": 0.25, "unstructured_sentiment": 0.15, "weather_environmental": 0.075, "regional_logistics": 0.05, "tax_regulatory": 0.025}
 }
 

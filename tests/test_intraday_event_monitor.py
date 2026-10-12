@@ -130,6 +130,10 @@ class TestIntradayEventMonitor(unittest.TestCase):
         t_oakland = self.monitor.resolve_target_locales("Chevron Richmond Refinery Flaring Triggers CARB Compliance Warning")
         self.assertEqual(t_oakland, ["Oakland"])
 
+        # Test Chicago locale routing
+        t_chicago = self.monitor.resolve_target_locales("BP Whiting Refinery reports flaring incident in Northwest Indiana")
+        self.assertEqual(t_chicago, ["Chicago"])
+
         # Test Default National routing
         t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
         self.assertEqual(t_nat, ["National"])
@@ -415,7 +419,7 @@ class TestIntradayEventMonitor(unittest.TestCase):
     def test_resolve_target_locales_joliet_and_midcontinent(self):
         """Verifies Joliet (Chicago spot benchmark) and Midcontinent map to regional hubs."""
         locs_joliet = self.monitor.resolve_target_locales("Total power outage forces emergency shutdown of Joliet refinery")
-        self.assertIn("Cincinnati", locs_joliet)
+        self.assertIn("Chicago", locs_joliet)
 
         locs_midcont = self.monitor.resolve_target_locales("Midcontinent refinery outage threatens regional fuel stocks")
         self.assertIn("Cincinnati", locs_midcont)

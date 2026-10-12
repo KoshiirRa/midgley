@@ -88,12 +88,12 @@ TRIGGER_KEYWORDS = [
     "executive order", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
     # Logistics & Infrastructure Hubs
     "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
-    "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
+    "catlettsburg", "delaware city", "west tulsa", "richmond refinery", "bp whiting", "citgo lemont", "whiting refinery", "lemont refinery",
     # Refinery Operator 8-K Signals (Issue #129 — EDGAR 8-K Monitor)
-    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66", "bp plc", "citgo",
     "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
     "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
-    "sweeny refinery", "bayway refinery",
+    "sweeny refinery", "bayway refinery", "chicago cbob", "chicago spot",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -408,12 +408,18 @@ class IntradayEventMonitor:
         if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b"]):
             targets.add("Newark")
 
-        # Cincinnati / Catlettsburg / Ohio River / Chicago Spot / Joliet (PADD 2 Midwest)
+        # Cincinnati / Catlettsburg / Ohio River (PADD 2 Ohio Valley)
         if any(k in text for k in [
-            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock",
-            "joliet", "chicago", "will county"
+            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock", "hamilton county", "kenton county"
         ]):
             targets.add("Cincinnati")
+
+        # Chicago / Whiting / Lemont / Joliet / Des Plaines (PADD 2 Great Lakes)
+        if any(k in text for k in [
+            "chicago", "whiting", "lemont", "joliet", "will county", "cook county",
+            "bp whiting", "citgo lemont", "exxonmobil joliet", "illinois waterway", "chicago cbob", "chicago spot"
+        ]):
+            targets.add("Chicago")
 
         # Midcontinent / Group 3 Refining Corridor
         if any(k in text for k in ["midcontinent", "mid-continent", "group 3"]):
@@ -445,6 +451,10 @@ class IntradayEventMonitor:
         # Marathon Petroleum → Cincinnati (Catlettsburg, PADD 3/2 junction)
         if any(k in text for k in ["marathon petroleum", "marathon 8-k"]):
             targets.add("Cincinnati")
+
+        # BP / Citgo → Chicago (Whiting & Lemont Refineries, PADD 2 Great Lakes)
+        if any(k in text for k in ["bp whiting", "citgo lemont", "whiting refinery", "lemont refinery"]):
+            targets.add("Chicago")
 
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
         if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery", "bayway refinery"]):

@@ -38,6 +38,7 @@ CINCINNATI_PATH = os.path.join(DOCS_DIR, "cincinnati.html")
 GREENVILLE_PATH = os.path.join(DOCS_DIR, "greenville.html")
 CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
 PORT_ST_LUCIE_PATH = os.path.join(DOCS_DIR, "port_st_lucie.html")
+CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -55,6 +56,7 @@ CINCINNATI_SUB_DIR = os.path.join(DOCS_DIR, "cincinnati")
 GREENVILLE_SUB_DIR = os.path.join(DOCS_DIR, "greenville")
 CHARLOTTE_SUB_DIR = os.path.join(DOCS_DIR, "charlotte")
 PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
+CHICAGO_SUB_DIR = os.path.join(DOCS_DIR, "chicago")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -69,6 +71,7 @@ CINCINNATI_SUB_PATH = os.path.join(CINCINNATI_SUB_DIR, "index.html")
 GREENVILLE_SUB_PATH = os.path.join(GREENVILLE_SUB_DIR, "index.html")
 CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
 PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
+CHICAGO_SUB_PATH = os.path.join(CHICAGO_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -451,7 +454,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -467,6 +470,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     grn_link = f"{rel_prefix}greenville.html"
     clt_link = f"{rel_prefix}charlotte.html"
     psl_link = f"{rel_prefix}port_st_lucie.html"
+    chi_link = f"{rel_prefix}chicago.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -526,6 +530,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a role="menuitem" href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a role="menuitem" href="{chi_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-sky-400" aria-hidden="true"></i> Chicago, IL/IN Retail
                         </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -2234,6 +2241,7 @@ def generate_public_dashboard():
         'Greenville_NC': {'base': 3.950, 'pred': 3.850},
         'Charlotte_NC': {'base': 3.980, 'pred': 3.880},
         'Port_St_Lucie_FL': {'base': 4.145, 'pred': 4.050},
+        'Chicago_IL': {'base': 3.850, 'pred': 3.765},
         'Oakland_CA': {'base': 6.050, 'pred': 5.340},
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
@@ -2648,6 +2656,41 @@ def generate_public_dashboard():
 
                     <a href="port_st_lucie.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Port St. Lucie Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 8: Greater Chicago, IL/IN Retail (BP Whiting & CITGO Lemont Refining Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-semibold">PADD 2 Great Lakes Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-city text-sky-400"></i> Greater Chicago, IL/IN
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            80.5¢ Base Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Chicago_IL']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-sky-400 mt-1">${prices_map['Chicago_IL']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> BP Whiting & Lemont</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Chicago_IL')}</strong></span>
+                    </div>
+
+                    <a href="chicago.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Chicago Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -4292,6 +4335,139 @@ def generate_public_dashboard():
         f.write(build_port_st_lucie_html("../"))
 
     # ---------------------------------------------------------------------------
+    # CHICAGO METRO RETAIL GAS PAGE (docs/chicago.html & docs/chicago/index.html)
+    # ---------------------------------------------------------------------------
+    def build_chicago_html(rel_prefix: str = "") -> str:
+        nav_chicago = get_nav_header("chicago", rel_prefix)
+        chi_base = prices_map['Chicago_IL']['base']
+        chi_pred = prices_map['Chicago_IL']['pred']
+        chi_delta = chi_pred - chi_base
+        chi_pct = (chi_delta / chi_base * 100.0) if chi_base > 0 else 0.0
+        chi_sign = "+" if chi_delta > 0 else ""
+        chi_color = "#10b981" if chi_pct < -0.2 else ("#ef4444" if chi_pct > 0.2 else "#0ea5e9")
+        chi_trend_text = f"{chi_sign}{chi_pct:.1f}% Projected Trend"
+        chi_trend_color = "text-emerald-300" if chi_pct < -0.2 else ("text-rose-300" if chi_pct > 0.2 else "text-sky-300")
+        head_meta_chicago = get_head_meta_tags(
+            title=f"Greater Chicago IL/IN Retail Gas Forecast (${chi_base:.3f} → ${chi_pred:.3f} | {chi_sign}{chi_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Greater Chicago IL/IN metro. Baseline ${chi_base:.3f}/gal, projected target ${chi_pred:.3f}/gal. BP Whiting 435 kbpd & CITGO Lemont refinery model.",
+            canonical_path="chicago.html" if rel_prefix == "" else "chicago/index.html",
+            image_filename="chicago.png",
+            theme_color=chi_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greater Chicago, IL/IN Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(14, 165, 233, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_CHICAGO}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-sky-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Greater Chicago Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-city text-sky-400"></i> Greater Chicago, IL/IN Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                PADD 2 Great Lakes Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{CHICAGO_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-sky-400">${{CHICAGO_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{CHICAGO_TREND_COLOR}} font-semibold">{{CHICAGO_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{CHICAGO_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{CHICAGO_MAPE}} | RMSE: {{CHICAGO_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{CHICAGO_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-sky-400"></i> Greater Chicago Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">BP Whiting Power Failure & Unit Trip</h4>
+                    <p class="text-xs text-slate-400">Plant-wide electrical outage halts 435 kbpd refining operations at Whiting IN.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.285/gal (+7.40%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Citgo Lemont Des Plaines Barge Lockout</h4>
+                    <p class="text-xs text-slate-400">Illinois Waterway lock maintenance restricts marine fuel transfers from 177 kbpd Lemont refinery.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.125/gal (+3.25%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Great Lakes Polar Vortex Freeze-Off</h4>
+                    <p class="text-xs text-slate-400">Sub-zero Lake Michigan freeze halts terminal rack loading and refinery water cooling intake loops.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.165/gal (+4.28%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Greater Chicago, IL/IN Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_CHICAGO}}", nav_chicago).replace("PREFIX", rel_prefix).replace("{{CHICAGO_BASE}}", f"{prices_map['Chicago_IL']['base']:.3f}").replace("{{CHICAGO_PRED}}", f"{prices_map['Chicago_IL']['pred']:.3f}").replace("{{CHICAGO_TREND_TEXT}}", chi_trend_text).replace("{{CHICAGO_TREND_COLOR}}", chi_trend_color).replace("{{CHICAGO_MAE}}", get_mae_display('chicago_il')).replace("{{CHICAGO_MAPE}}", get_mape_display('chicago_il')).replace("{{CHICAGO_RMSE}}", get_rmse_display('chicago_il')).replace("{{CHICAGO_HIT_RATE}}", get_hit_rate_display('chicago_il')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_chicago).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Chicago_IL', prices_map['Chicago_IL']['base'], prices_map['Chicago_IL']['pred'], logistics_hub="BP Whiting (435 kbpd) & CITGO Lemont (177 kbpd) Refining Complex")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Chicago_IL', prices_map['Chicago_IL']['base'], prices_map['Chicago_IL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('chicago_il'))
+
+    os.makedirs(CHICAGO_SUB_DIR, exist_ok=True)
+    with open(CHICAGO_PATH, "w", encoding="utf-8") as f:
+        f.write(build_chicago_html(""))
+    with open(CHICAGO_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_chicago_html("../"))
+
+    # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
@@ -4302,6 +4478,12 @@ def generate_public_dashboard():
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url={target_url}">
     <link rel="canonical" href="{target_url}">
+    <meta property="og:site_name" content="Midgley Gas Price Predictor">
+    <meta property="og:title" content="Oakland & SF Bay Area Retail Gas Forecast - Midgley">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/og-preview.png">
+    <meta property="og:description" content="Oakland and SF Bay Area retail gas forecast and fuel logistics.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#020617">
     <title>Oakland & SF Bay Area Retail Gas Forecast - Midgley</title>
     <script>window.location.href = "{target_url}";</script>
 </head>
@@ -4309,6 +4491,7 @@ def generate_public_dashboard():
     <h2 style="font-size:24px; font-weight:bold;">Oakland Regional Hub Merged</h2>
     <p style="margin-top:12px; color:#94a3b8;">Oakland and the 9-County Northern California corridor have been unified into the <a href="{target_url}" style="color:#38bdf8; text-decoration:underline;">SF Bay Area Regional Hub</a>.</p>
     <p style="margin-top:8px; font-size:14px; color:#64748b;">Redirecting to <a href="{target_url}" style="color:#38bdf8;">{target_url}</a>...</p>
+    <p style="display:none;" class="sr-only">Model Narrative: Oakland and Northern California sub-locales are calibrated under the SF Bay Area hub.</p>
 </body>
 </html>"""
         nav_oakland = get_nav_header("oakland", rel_prefix)
@@ -5149,7 +5332,7 @@ def generate_public_dashboard():
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.1: Multi-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}} + \mathbf{W}_{\text{Chicago}}$$
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
                     <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks (PADD 3 refining corridor) &amp; Permian/Bakken production basin polar vortex freezes.<br>
@@ -5159,7 +5342,8 @@ def generate_public_dashboard():
                     <strong>Tier 2 (Greenville NC):</strong> Pitt County (<code class="text-amber-300">NCZ081</code>) Atlantic hurricane coastal inundation, Tar River flood crests (\(&gt;19\text{ ft}\)), and winter ice storms throttling Selma/Apex terminal rack dispatch on Colonial Pipeline Lines 1 &amp; 2.<br>
                     <strong>Tier 2 (Charlotte NC):</strong> Mecklenburg County (<code class="text-amber-300">NCZ071</code>) inland tropical cyclone wind gusts, Catawba River basin flooding, and severe convective power substation trips halting truck dispatches at Paw Creek petroleum tank farms.<br>
                     <strong>Tier 2 (Oakland &amp; SF Bay Area CA):</strong> Alameda County (<code class="text-amber-300">CAZ508</code>) &amp; Contra Costa County (<code class="text-amber-300">CAZ511</code>) atmospheric river bomb cyclones, PG&amp;E Public Safety Power Shutoffs (PSPS) / Diablo winds impacting Chevron Richmond (\(245,000\text{ bpd}\)) CaRFG units, and USGS Hayward Fault seismic pipeline shutoffs.<br>
-                    <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.
+                    <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.<br>
+                    <strong>Tier 2 (Chicago IL/IN):</strong> Cook County (<code class="text-amber-300">ILZ104</code> / Zip <code class="text-amber-300">60601</code>) and Lake County IN (<code class="text-amber-300">INZ001</code>) Lake Michigan polar vortex freezes, summer severe convective derechos, and BP Whiting/CITGO Lemont cooling water intake loops.
                 </p>
             </div>
         </section>
@@ -5406,7 +5590,8 @@ def generate_public_dashboard():
                     <strong>Cincinnati OH/KY:</strong> Dual-state Ohio (\(\$0.385/\text{gal}\)) and Kentucky (\(\$0.287/\text{gal}\)) tax differential and Ohio River barge transit rates.<br>
                     <strong>Greenville NC &amp; Charlotte NC:</strong> PADD 1C Colonial Pipeline Line 1 tariffs, Selma/Apex rack differentials, and North Carolina excise tax (\(\$0.404/\text{gal}\)).<br>
                     <strong>Oakland &amp; SF Bay Area CA:</strong> PADD 5 isolated island with statutory CARB regulatory burden (\(\$0.953/\text{gal}\)) and local county sales taxes.<br>
-                    <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).
+                    <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).<br>
+                    <strong>Chicago IL/IN:</strong> Multi-tiered Illinois (\(\$0.470/\text{gal}\)), Cook County (\(\$0.060/\text{gal}\)), and Chicago city (\(\$0.080/\text{gal}\)) motor fuel taxes with Indiana cross-border arbitrage and BP Whiting / CITGO Lemont rack margin pass-through.
                 </p>
             </div>
         </section>
@@ -5538,6 +5723,7 @@ def get_savings_regional_trajectories() -> dict:
         "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.250, "delta": -0.028},
         "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.280, "delta": -0.030},
         "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.380, "delta": -0.025},
+        "Chicago_IL": {"name": "Chicago, IL/IN Retail", "base": 3.850, "delta": -0.040},
         "Oakland_CA": {"name": "Oakland, CA Retail", "base": 4.850, "delta": -0.060},
         "BayArea_CA": {"name": "SF Bay Area Region", "base": 4.950, "delta": -0.058},
     }

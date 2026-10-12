@@ -20,6 +20,8 @@ EXPECTED_REGIONS = [
     "charlotte_nc",
     "oakland_ca",
     "bayarea_ca",
+    "port_st_lucie_fl",
+    "chicago_il",
 ]
 
 

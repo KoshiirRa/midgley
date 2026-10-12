@@ -342,6 +342,8 @@ class AgentMemoryManager:
         Persists authoritative memory bank counts to data/agent_memory_vintages.json
         for resilient fallback in ephemeral CI environments and offline runs.
         """
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return False
         if not inventory or (inventory.get("memories_count", 0) == 0 and inventory.get("reflections_count", 0) == 0):
             return False
         try:

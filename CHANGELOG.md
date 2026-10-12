@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Greater Chicago Metro Calibration Hub (`Chicago_IL`, PADD 2) covering BP Whiting (435 kbpd), CITGO Lemont (177 kbpd), and ExxonMobil Joliet (251 kbpd) refineries (#219).
+- Point-in-time regional metadata `data/regional_metadata/chicago_il.json` with Cook County/Chicago tax structure ($0.805/gal statutory base), Indiana cross-border arbitrage, EPA RFG 7.4 psi RVP limits, and shock scenarios (#219).
+- Subpackage implementation `src/locations/chicago/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#219).
+- Public dashboard page `docs/chicago.html` with multi-agent architecture, Leaflet refinery delivery corridor maps, and live weather telemetry (#219).
+- EPA RVP Reformulated Gasoline (RFG) rules (7.4 psi summer, 13.0 psi winter) for Greater Chicago in `data/regulatory_rvp_rules.json` and `src/rvp_regulations.py` (#219).
+
 ## [0.8.5] - 2026-10-06
 
 ### Added

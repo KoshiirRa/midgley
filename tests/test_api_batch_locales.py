@@ -33,6 +33,7 @@ def test_get_locales_endpoint():
     assert "tulsa" in locales
     assert "oakland" in locales
     assert "newark" in locales
+    assert "chicago" in locales
 
     tulsa = locales["tulsa"]
     assert tulsa["code"] == "tulsa"
@@ -40,6 +41,12 @@ def test_get_locales_endpoint():
     assert "padd_region" in tulsa
     assert "carb_tax_regulatory_burden_per_gal" in tulsa
     assert "metadata_profile" in tulsa
+
+    chicago = locales["chicago"]
+    assert chicago["code"] == "chicago"
+    assert chicago["region_id"] == "Chicago_IL"
+    assert "PADD 2" in chicago["padd_region"]
+    assert chicago["metadata_profile"]["primary_city"] == "Chicago, IL"
 
 
 def test_post_forecast_batch_endpoint():

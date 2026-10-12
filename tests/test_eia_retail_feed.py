@@ -24,7 +24,7 @@ class TestEIARetailFeed(unittest.TestCase):
     def test_region_series_mapping_coverage(self):
         """Verify all supported metro regions are mapped to EIA/FRED series."""
         required_regions = [
-            "National", "Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Cincinnati_KY",
+            "National", "Tulsa_OK", "Newark_DE", "Cincinnati_OH", "Cincinnati_KY", "Chicago_IL",
             "Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL", "Oakland_CA", "BayArea_CA"
         ]
         for reg in required_regions:
@@ -46,6 +46,7 @@ class TestEIARetailFeed(unittest.TestCase):
         self.assertEqual(REGION_TO_EIA_SERIES["Tulsa_OK"][0][0], "GASREGWMW")
         self.assertEqual(REGION_TO_EIA_SERIES["Newark_DE"][0][0], "GASREGW01B")
         self.assertEqual(REGION_TO_EIA_SERIES["Cincinnati_KY"][0][0], "GASREGWMW")
+        self.assertEqual(REGION_TO_EIA_SERIES["Chicago_IL"][0][0], "GASREGWCHI")
         self.assertEqual(REGION_TO_EIA_SERIES["Greenville_NC"][0][0], "GASREGW01C")
         self.assertEqual(REGION_TO_EIA_SERIES["Charlotte_NC"][0][0], "GASREGW01C")
 
