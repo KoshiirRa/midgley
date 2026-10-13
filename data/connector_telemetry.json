@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-13 03:11:23",
+  "last_updated": "2026-10-13 06:03:40",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-09-30 19:54:06",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 299.81,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:54:08",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 125.7,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:54:09",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 108.95,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-09-30 19:54:13",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 300.94,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-09-30 19:54:15",
       "connector_name": "HindsightHosted",
@@ -9999,6 +9959,46 @@
       "target": "CL",
       "status": "ALREADY_SUBMITTED_TODAY",
       "latency_ms": 2369.96,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge d2153192-9d7f-46bd-8ea1-6e91f43f21ab already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-10-13 06:02:13",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 225.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-10-13 06:03:29",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 251.46,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 336 docs, 234 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-10-13 06:03:39",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 4243.68,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 2e2841cf-842e-4287-88f0-ea80ff9f0a17 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-10-13 06:03:40",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1345.41,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge d2153192-9d7f-46bd-8ea1-6e91f43f21ab already predicted (HTTP 400)"
