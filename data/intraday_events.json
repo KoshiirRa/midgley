@@ -5506,5 +5506,26 @@
       "overall_price_pressure": -0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-13T15:42:08.925382",
+    "headline": "Trump makes plans with Russia, signs executive order to lower diesel prices - Spectrum News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRFdBMm9jUFpZNU10LVh6WVlxeDhyR1pCYUdjV0ktUnd2aXBHWU9tR3Z4UkZadWxybkhDcDQ4blFPVHFGYmtsTXNXQVNGWS03Y2c3M3R2RGRuajBtSDl4cnNhekVUNjBfYk9QbGF0MTUzZ2h5NXlCdElvSm9yTWdaNE9PalQwTGtGSFo3cnJzVU1TdW1ldVlwWnVCdUJHQ3BlTWg2LTdweE0?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRFdBMm9jUFpZNU10LVh6WVlxeDhyR1pCYUdjV0ktUnd2aXBHWU9tR3Z4UkZadWxybkhDcDQ4blFPVHFGYmtsTXNXQVNGWS03Y2c3M3R2RGRuajBtSDl4cnNhekVUNjBfYk9QbGF0MTUzZ2h5NXlCdElvSm9yTWdaNE9PalQwTGtGSFo3cnJzVU1TdW1ldVlwWnVCdUJHQ3BlTWg2LTdweE0?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRFdBMm9jUFpZNU10LVh6WVlxeDhyR1pCYUdjV0ktUnd2aXBHWU9tR3Z4UkZadWxybkhDcDQ4blFPVHFGYmtsTXNXQVNGWS03Y2c3M3R2RGRuajBtSDl4cnNhekVUNjBfYk9QbGF0MTUzZ2h5NXlCdElvSm9yTWdaNE9PalQwTGtGSFo3cnJzVU1TdW1ldVlwWnVCdUJHQ3BlTWg2LTdweE0?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": -0.1,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    },
+    "discord_notified": true
   }
 ]

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-13T06:03:32.904367",
+  "timestamp": "2026-10-13T15:42:36.501749",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.898,
+    "current_price_per_gal": 3.787,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-13T06:03:08Z"
+      "timestamp": "2026-10-13T15:42:17Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-19",
-    "current_base_price": 3.898,
-    "predicted_price_per_gal": 3.755,
+    "current_base_price": 3.787,
+    "predicted_price_per_gal": 3.644,
     "expected_change_dollars": -0.143,
-    "expected_change_percent": -3.67,
+    "expected_change_percent": -3.78,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.635,
-    "prediction_upper_95ci": 3.875,
+    "prediction_lower_95ci": 3.524,
+    "prediction_upper_95ci": 3.764,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.869,
-    "day_2_price": 3.807,
-    "day_3_price": 3.751,
-    "day_4_price": 3.756,
-    "day_5_price": 3.755,
+    "day_1_price": 3.758,
+    "day_2_price": 3.696,
+    "day_3_price": 3.64,
+    "day_4_price": 3.645,
+    "day_5_price": 3.644,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast $-0.143/gal (-3.67%): Driven primarily by Regional Logistics & Hub Delivery ($-0.057/gal), Futures & Commodity Benchmark ($-0.036/gal).",
+      "summary_text": "Charlotte NC forecast $-0.143/gal (-3.78%): Driven primarily by Regional Logistics & Hub Delivery ($-0.057/gal), Futures & Commodity Benchmark ($-0.036/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.057,
-          "impact_pct": -1.46,
+          "impact_pct": -1.51,
           "share_pct": 40.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.036,
-          "impact_pct": -0.92,
+          "impact_pct": -0.95,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.021,
-          "impact_pct": -0.54,
+          "impact_pct": -0.55,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
@@ -126,7 +126,7 @@
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.014,
-          "impact_pct": -0.36,
+          "impact_pct": -0.37,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.057,
-      "impact_pct": -1.46,
+      "impact_pct": -1.51,
       "share_pct": 40.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.036,
-      "impact_pct": -0.92,
+      "impact_pct": -0.95,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.021,
-      "impact_pct": -0.54,
+      "impact_pct": -0.55,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
@@ -178,7 +178,7 @@
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.014,
-      "impact_pct": -0.36,
+      "impact_pct": -0.37,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast $-0.143/gal (-3.67%): Driven primarily by Regional Logistics & Hub Delivery ($-0.057/gal), Futures & Commodity Benchmark ($-0.036/gal).",
+    "summary_text": "Charlotte NC forecast $-0.143/gal (-3.78%): Driven primarily by Regional Logistics & Hub Delivery ($-0.057/gal), Futures & Commodity Benchmark ($-0.036/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
