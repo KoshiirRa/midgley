@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-10-12 01:41:40",
-  "records_count": 34,
+  "last_refreshed_utc": "2026-10-13 03:10:27",
+  "records_count": 39,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -294,17 +294,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-12 01:36:39",
-      "platform": "Google News RSS",
-      "post_text": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-10-12 01:36:39",
+      "date": "2026-10-13 03:04:12",
       "platform": "Google News RSS",
       "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
       "target": "Energy_Market",
@@ -314,7 +304,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-12 01:36:39",
+      "date": "2026-10-13 03:04:12",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -324,9 +314,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-12 01:36:39",
+      "date": "2026-10-13 03:04:12",
       "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -334,9 +324,69 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-12 01:36:39",
+      "date": "2026-10-13 03:04:12",
       "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow",
+      "post_text": "OPEC Cuts Oil Demand Growth Forecast to 400,000 bpd - Tempo.co English",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-13 03:04:12",
+      "platform": "Google News RSS",
+      "post_text": "CARNEY RESPONDS - \u201cThey Asked Too Much and Offered Too Little\u201d: Carney Draws a Line as Canada - U.S. Trade Talks Collapse - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-13 03:04:12",
+      "platform": "Google News RSS",
+      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-13 03:04:12",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-13 03:04:12",
+      "platform": "Google News RSS",
+      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-13 03:04:12",
+      "platform": "Google News RSS",
+      "post_text": "OPEC Cuts Oil Demand Growth Forecast to 400,000 bpd - Tempo.co English",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-13 03:04:12",
+      "platform": "Google News RSS",
+      "post_text": "CARNEY RESPONDS - \u201cThey Asked Too Much and Offered Too Little\u201d: Carney Draws a Line as Canada - U.S. Trade Talks Collapse - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
