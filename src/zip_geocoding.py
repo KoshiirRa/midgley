@@ -187,10 +187,76 @@ STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
 }
 
 
+# Baseline statutory motor fuel excise tax rates ($/gal) for calibrated reference hubs
+HUB_BASELINE_TAXES: Dict[str, float] = {
+    "newark": 0.230,
+    "tulsa": 0.190,
+    "cincinnati": 0.385,
+    "greenville": 0.404,
+    "charlotte": 0.404,
+    "port_st_lucie": 0.362,
+    "chicago": 0.550,
+    "houston": 0.200,
+    "los_angeles": 0.953,
+    "oakland": 0.634,
+    "bayarea": 0.634,
+    "national": 0.184
+}
+
+# Known regional locality names for 5-digit ZIPs and 3-digit prefixes to preserve true geographic identity
+KNOWN_ZIP_LOCALITIES: Dict[str, str] = {
+    "12946": "Lake Placid, NY",
+    "129": "Adirondacks / Plattsburgh, NY",
+    "100": "Manhattan, NYC",
+    "101": "Manhattan, NYC",
+    "102": "Manhattan, NYC",
+    "103": "Staten Island, NYC",
+    "104": "Bronx, NYC",
+    "112": "Brooklyn, NYC",
+    "111": "Queens, NYC",
+    "113": "Queens, NYC",
+    "114": "Queens, NYC",
+    "115": "Nassau County, Long Island",
+    "117": "Suffolk County, Long Island",
+    "119": "Hamptons, Long Island",
+    "120": "Capital District, NY",
+    "122": "Albany, NY",
+    "128": "Glens Falls / Adirondacks, NY",
+    "132": "Syracuse, NY",
+    "142": "Buffalo, NY",
+    "146": "Rochester, NY",
+    "191": "Philadelphia, PA",
+    "152": "Pittsburgh, PA",
+    "021": "Boston, MA",
+    "029": "Providence, RI",
+    "061": "Hartford, CT",
+    "031": "Manchester, NH",
+    "054": "Burlington, VT",
+    "041": "Portland, ME",
+    "802": "Denver, CO",
+    "841": "Salt Lake City, UT",
+    "820": "Cheyenne, WY",
+    "591": "Billings, MT",
+    "837": "Boise, ID",
+    "74103": "Tulsa Metro, OK",
+    "64101": "Kansas City, MO",
+}
+
+
+def resolve_location_name(zip_code: str, prefix_3: str, state_code: str) -> str:
+    """Resolves human-readable locality string from ZIP or prefix."""
+    if zip_code in KNOWN_ZIP_LOCALITIES:
+        return KNOWN_ZIP_LOCALITIES[zip_code]
+    if prefix_3 in KNOWN_ZIP_LOCALITIES:
+        return KNOWN_ZIP_LOCALITIES[prefix_3]
+    return f"ZIP {zip_code} ({state_code})"
+
+
 def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     """
     Resolves a 5-digit US ZIP code to mapped metro area locale, PADD region, state,
-    state fuel tax, and resolution tier. Logs unmapped out-of-metro lookups.
+    state fuel tax, resolution tier, and departure diagnostics.
+    Logs unmapped out-of-metro lookups.
     Zero-pads numeric inputs (e.g. 7001 -> 07001 NJ) to prevent leading-zero misrouting (Issue #335).
     """
     raw_str = str(zip_code).strip().split("-")[0].strip()
@@ -202,9 +268,15 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
             "is_metro_cluster_hit": False,
             "locale_code": "national",
             "region_id": "National",
+            "location_name": f"ZIP {raw_str[:5]} (US)",
             "padd_region": "PADD 2 (Midwest)",
             "state": "US",
-            "state_tax_rate_per_gal": 0.184
+            "state_tax_rate_per_gal": 0.184,
+            "hub_baseline_tax_rate": 0.184,
+            "tax_delta_per_gal": 0.0,
+            "is_significant_departure": False,
+            "departure_reason": "",
+            "estimated_basis_delta": 0.0
         }
 
     zip_clean = raw_str.zfill(5)[:5]
@@ -215,6 +287,8 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
         metro_loc = ZIP_METRO_PREFIX_MAP[prefix_3]
         state_code = ZIP_PREFIX_STATE_MAP.get(prefix_3, "US")
         state_meta = STATE_PADD_MODEL_MAP.get(state_code, {})
+        loc_name = resolve_location_name(zip_clean, prefix_3, state_code)
+        hub_tax = HUB_BASELINE_TAXES.get(metro_loc, 0.250)
 
         res = {
             "status": "success",
@@ -222,10 +296,16 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
             "resolution_tier": "METRO_CLUSTER_HIT",
             "is_metro_cluster_hit": True,
             "locale_code": metro_loc,
+            "location_name": loc_name,
             "prefix_3": prefix_3,
             "state": state_code,
             "padd_region": state_meta.get("padd", "PADD 2"),
-            "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250)
+            "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250),
+            "hub_baseline_tax_rate": hub_tax,
+            "tax_delta_per_gal": 0.0,
+            "is_significant_departure": False,
+            "departure_reason": "",
+            "estimated_basis_delta": 0.0
         }
         return res
 
@@ -234,19 +314,53 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     state_meta = STATE_PADD_MODEL_MAP.get(state_code, {
         "padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "national", "fallback_model": "National Wholesale", "state_tax": 0.250
     })
+    loc_name = resolve_location_name(zip_clean, prefix_3, state_code)
+    fallback_hub = state_meta.get("fallback_locale", "national")
+    hub_tax = HUB_BASELINE_TAXES.get(fallback_hub, 0.250)
+    state_tax = state_meta.get("state_tax", 0.250)
+    tax_delta = round(state_tax - hub_tax, 3)
+
+    padd_str = state_meta.get("padd", "PADD 2")
+    is_departure = (
+        abs(tax_delta) >= 0.15
+        or padd_str in ("PADD 1A", "PADD 4")
+        or (state_code == "NY" and fallback_hub == "newark")
+    )
+
+    departure_reason = ""
+    if is_departure:
+        if state_code == "NY" and fallback_hub == "newark":
+            departure_reason = f"High statutory tax wedge (+${tax_delta:.3f}/gal vs DE) and Adirondack/Upstate logistics basis"
+        elif padd_str == "PADD 1A":
+            departure_reason = f"PADD 1A New England regional disconnect from coastal rack hub ({fallback_hub})"
+        elif padd_str == "PADD 4":
+            departure_reason = f"PADD 4 Rocky Mountain inter-PADD corridor fallback ({fallback_hub})"
+        else:
+            departure_reason = f"Statutory tax wedge of {tax_delta:+.3f}/gal vs hub baseline ({fallback_hub})"
+
+    # Estimated regional logistics basis premium over rack (e.g. mountain/rural freight)
+    extra_logistics = 0.35 if (zip_clean == "12946" or prefix_3 == "129") else (0.15 if state_code == "NY" else 0.0)
+    est_basis = round(tax_delta + extra_logistics, 3)
 
     res = {
         "status": "success",
         "zip_code": zip_clean,
         "resolution_tier": "STATE_PADD_FALLBACK",
         "is_metro_cluster_hit": False,
-        "locale_code": state_meta.get("fallback_locale", "national"),
+        "locale_code": fallback_hub,
+        "location_name": loc_name,
         "prefix_3": prefix_3,
         "state": state_code,
-        "padd_region": state_meta.get("padd", "PADD 2"),
+        "padd_region": padd_str,
         "padd_name": state_meta.get("padd_name", "Midwest"),
         "calibrated_model_used": state_meta.get("fallback_model", "National Wholesale"),
-        "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250)
+        "state_tax_rate_per_gal": state_tax,
+        "hub_baseline_tax_rate": hub_tax,
+        "tax_delta_per_gal": tax_delta,
+        "is_significant_departure": is_departure,
+        "departure_reason": departure_reason,
+        "estimated_basis_delta": est_basis,
+        "tracking_issue_number": 635 if state_code == "NY" else None
     }
 
     # Log telemetry for out-of-metro lookups
