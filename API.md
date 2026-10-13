@@ -28,7 +28,7 @@ For lightweight client applications (such as mobile apps, automotive head units,
 | `https://koshiirra.github.io/midgley/api/v1/combined/{locale}.json` | `GET` | Sub-directory route alias for REST path compatibility |
 
 ### Available Locales for Static API
-`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `bayarea`
+`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `bayarea`
 
 ### Example Request
 ```bash

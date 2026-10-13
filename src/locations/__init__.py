@@ -18,6 +18,7 @@ from src.locations.port_st_lucie import run_port_st_lucie_pipeline, build_port_s
 from src.locations.chicago import run_chicago_pipeline, build_chicago_notebook
 from src.locations.houston import run_houston_pipeline, build_houston_notebook
 from src.locations.los_angeles import run_los_angeles_pipeline, build_los_angeles_notebook
+from src.locations.denver import run_denver_pipeline, build_denver_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +121,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_los_angeles_pipeline,
         "build_notebook": build_los_angeles_notebook,
         "notebook_filename": "los_angeles_gas_price_llm_forecasting.ipynb"
+    },
+    "denver": {
+        "id": "denver",
+        "name": "Denver Metro & Rocky Mountain Hub, CO (PADD 4)",
+        "type": "regional",
+        "module": "src.locations.denver",
+        "run_pipeline": run_denver_pipeline,
+        "build_notebook": build_denver_notebook,
+        "notebook_filename": "denver_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -138,6 +148,8 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "houston"
     if loc_id in ("los_angeles_ca", "la", "la_basin", "socal"):
         loc_id = "los_angeles"
+    if loc_id in ("denver_co", "rocky_mountain"):
+        loc_id = "denver"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]

@@ -96,6 +96,7 @@ TRIGGER_KEYWORDS = [
     "sweeny refinery", "bayway refinery", "chicago cbob", "chicago spot",
     "baytown", "port arthur", "deer park", "texas city", "houston ship channel", "galveston bay", "motiva",
     "el segundo", "torrance refinery", "carson refinery", "wilmington refinery", "la carbob", "watson station", "san pedro bay",
+    "suncor", "commerce city", "suncor refinery", "denver rack", "rocky mountain refining", "dj basin",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -476,6 +477,17 @@ class IntradayEventMonitor:
         # Motiva / Baytown / Port Arthur → Houston (USGC Refining Hub)
         if any(k in text for k in ["motiva", "baytown refinery", "port arthur refinery"]):
             targets.add("Houston")
+
+        # Denver / Suncor Commerce City / Rocky Mountain (PADD 4)
+        if any(k in text for k in [
+            "denver", "commerce city", "suncor", "suncor refinery", "padd 4", "padd4",
+            "rocky mountain", "rockies", "front range", "dj basin"
+        ]):
+            targets.add("Denver")
+
+        # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
+        if any(k in text for k in ["suncor 8-k", "suncor energy"]):
+            targets.add("Denver")
 
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
         if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery", "bayway refinery"]):

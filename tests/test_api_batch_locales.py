@@ -36,6 +36,7 @@ def test_get_locales_endpoint():
     assert "chicago" in locales
     assert "houston" in locales
     assert "los_angeles" in locales
+    assert "denver" in locales
 
     tulsa = locales["tulsa"]
     assert tulsa["code"] == "tulsa"
@@ -62,6 +63,12 @@ def test_get_locales_endpoint():
     assert "PADD 5" in los_angeles["padd_region"]
     assert los_angeles["carb_tax_regulatory_burden_per_gal"] == 0.953
     assert los_angeles["metadata_profile"]["primary_city"] == "Los Angeles, CA"
+
+    denver = locales["denver"]
+    assert denver["code"] == "denver"
+    assert denver["region_id"] == "Denver_CO"
+    assert "PADD 4" in denver["padd_region"]
+    assert denver["metadata_profile"]["primary_city"] == "Denver, CO"
 
 
 def test_post_forecast_batch_endpoint():

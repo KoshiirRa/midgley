@@ -40,7 +40,8 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "908": "los_angeles", "910": "los_angeles", "911": "los_angeles", "912": "los_angeles",
     "913": "los_angeles", "914": "los_angeles", "915": "los_angeles", "916": "los_angeles",
     "917": "los_angeles", "918": "los_angeles", "926": "los_angeles", "927": "los_angeles",
-    "928": "los_angeles"
+    "928": "los_angeles",
+    "800": "denver", "801": "denver", "802": "denver", "803": "denver", "804": "denver", "805": "denver", "806": "denver"
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -158,11 +159,11 @@ STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
     "AL": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.290},
     "NM": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.189},
     # PADD 4 (Rocky Mountain)
-    "CO": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2/4 Corridor)", "state_tax": 0.220},
-    "UT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 4/5 Corridor)", "state_tax": 0.365},
-    "WY": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2/4 Corridor)", "state_tax": 0.240},
-    "MT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2/4 Corridor)", "state_tax": 0.330},
-    "ID": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 4/5 Corridor)", "state_tax": 0.320},
+    "CO": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.280},
+    "UT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.365},
+    "WY": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.240},
+    "MT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.330},
+    "ID": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.320},
 }
 
 # Geographic centroids for all 50 US states + DC for out-of-metro ZIP heatmap plotting
@@ -198,6 +199,7 @@ HUB_BASELINE_TAXES: Dict[str, float] = {
     "chicago": 0.550,
     "houston": 0.200,
     "los_angeles": 0.953,
+    "denver": 0.280,
     "oakland": 0.634,
     "bayarea": 0.634,
     "national": 0.184
@@ -728,6 +730,17 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd_name": "West Coast",
         "state_tax": 0.596,
         "max_radius_miles": 100.0
+    },
+    "denver": {
+        "name": "Denver Metro & Rocky Mountain Hub, CO",
+        "region_id": "Denver_CO",
+        "lat": 39.7392,
+        "lon": -104.9903,
+        "state": "CO",
+        "padd": "PADD 4",
+        "padd_name": "Rocky Mountain",
+        "state_tax": 0.280,
+        "max_radius_miles": 120.0
     },
 }
 

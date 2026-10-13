@@ -64,6 +64,12 @@ def test_metro_cluster_zip_resolution():
     assert res_beverly["locale_code"] == "los_angeles"
     assert res_beverly["state"] == "CA"
 
+    res_denver = resolve_zip_code("80202")
+    assert res_denver["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_denver["is_metro_cluster_hit"] is True
+    assert res_denver["locale_code"] == "denver"
+    assert res_denver["state"] == "CO"
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
@@ -199,16 +205,23 @@ def test_coordinate_resolution_metro_hit():
     assert res_newark["locale_code"] == "newark"
     assert res_newark["state"] == "NJ"
 
+    # 4. Denver Downtown coordinates (39.7392, -104.9903)
+    res_den = resolve_coordinates(39.7392, -104.9903)
+    assert res_den["status"] == "success"
+    assert res_den["is_metro_cluster_hit"] is True
+    assert res_den["locale_code"] == "denver"
+    assert res_den["state"] == "CO"
+    assert res_den["distance_to_hub_miles"] < 5.0
+
 
 def test_coordinate_resolution_spatial_fallback():
     """Verifies out-of-metro GPS coordinates fall back gracefully to nearest regional model."""
-    # Denver, CO coordinates (39.7392, -104.9903) - outside 150mi of Tulsa
-    res_denver = resolve_coordinates(39.7392, -104.9903)
-    assert res_denver["status"] == "success"
-    assert res_denver["is_metro_cluster_hit"] is False
-    assert res_denver["resolution_tier"] == "SPATIAL_PROXIMITY_FALLBACK"
-    assert res_denver["nearest_hub"] == "tulsa"
-    assert res_denver["distance_to_hub_miles"] > 400.0
+    # Fargo, ND coordinates (46.8772, -96.7898) - outside 150mi of calibration hubs
+    res_fargo = resolve_coordinates(46.8772, -96.7898)
+    assert res_fargo["status"] == "success"
+    assert res_fargo["is_metro_cluster_hit"] is False
+    assert res_fargo["resolution_tier"] == "SPATIAL_PROXIMITY_FALLBACK"
+    assert res_fargo["distance_to_hub_miles"] > 300.0
 
 
 def test_unified_location_resolver():

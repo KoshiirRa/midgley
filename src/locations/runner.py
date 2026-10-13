@@ -54,6 +54,8 @@ REGION_MODULE_MAP = {
     "houston_tx": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
     "los_angeles": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
     "los_angeles_ca": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
+    "denver": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
+    "denver_co": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
 }
 
 

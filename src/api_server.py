@@ -232,7 +232,10 @@ LOCALE_MAP = {
     "los_angeles_ca": "Los_Angeles_CA",
     "la": "Los_Angeles_CA",
     "la_basin": "Los_Angeles_CA",
-    "socal": "Los_Angeles_CA"
+    "socal": "Los_Angeles_CA",
+    "denver": "Denver_CO",
+    "denver_co": "Denver_CO",
+    "den": "Denver_CO"
 }
 
 # Regional PADD metadata
@@ -248,6 +251,7 @@ PADD_METADATA = {
     "Chicago_IL": {"name": "Greater Chicago Metro Area, IL/IN", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
     "Houston_TX": {"name": "Houston & USGC Refining Corridor, TX", "padd": "PADD 3 Gulf Coast", "carb_tax": 0.0},
     "Los_Angeles_CA": {"name": "Los Angeles Basin & South Coast, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "Denver_CO": {"name": "Denver Metro Area & Rocky Mountain Hub, CO", "padd": "PADD 4 Rocky Mountain", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},

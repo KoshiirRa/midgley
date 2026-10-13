@@ -1006,7 +1006,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-medium">Hourly &bull; Issue #110</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Multi-feed air quality sensors monitoring fence-line particulate (PM<sub>2.5</sub>) and SO<sub>2</sub> anomalies near refineries (e.g. Richmond, Martinez, El Segundo, Torrance, Carson/Wilmington, Delaware City) to detect unplanned unit flaring trips.
+                            Multi-feed air quality sensors monitoring fence-line particulate (PM<sub>2.5</sub>) and SO<sub>2</sub> anomalies near refineries (e.g. Richmond, Martinez, El Segundo, Torrance, Carson/Wilmington, Delaware City, Commerce City) to detect unplanned unit flaring trips.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
                             <div class="text-slate-400"><span class="text-slate-500">Metrics:</span> Flaring Anomaly Z-Score, Sensor Triangulation</div>
@@ -1154,7 +1154,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                 </div>
 
                 <!-- Card 5.3: Crowdsourced Retail Pump Prices -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="live retail pump prices gasbuddy graphql aaa fuel gauge scraper opis rack margins">
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="live retail pump prices gasbuddy graphql aaa fuel gauge scraper opis rack margins denver suncor colorado">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">
@@ -1172,7 +1172,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             Ingests real-time retail street pump benchmarks via GasBuddy GraphQL API and AAA Daily Fuel Gauge scraper. Backfills actual outcomes and anchors local baseline prices.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston, Los Angeles</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston, Los Angeles, Denver</div>
                             <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/live_fuel_feed.py</code></div>
                         </div>
                     </div>

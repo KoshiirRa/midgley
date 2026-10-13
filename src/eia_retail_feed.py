@@ -71,6 +71,14 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "GASDESWCA": "EMD_EPD2D_PTE_SCA_DPG",
     "GASDESWGC": "EMD_EPD2D_PTE_R30_DPG",
     "EMD_EPD2D_PTE_R30_DPG": "EMD_EPD2D_PTE_R30_DPG",
+    "GASREGWDEN": "EMM_EPMR_PTE_Y35DE_DPG",
+    "GASREGWCO": "EMM_EPMR_PTE_SCO_DPG",
+    "GASREGWRM": "EMM_EPMR_PTE_R40_DPG",
+    "EMM_EPMR_PTE_Y35DE_DPG": "EMM_EPMR_PTE_Y35DE_DPG",
+    "EMM_EPMR_PTE_SCO_DPG": "EMM_EPMR_PTE_SCO_DPG",
+    "EMM_EPMR_PTE_R40_DPG": "EMM_EPMR_PTE_R40_DPG",
+    "GASDESWRM": "EMD_EPD2D_PTE_R40_DPG",
+    "EMD_EPD2D_PTE_R40_DPG": "EMD_EPD2D_PTE_R40_DPG",
 }
 
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
@@ -84,6 +92,7 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Chicago_IL": [("GASREGWCHI", "Chicago Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWIL", "Illinois Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
     "Houston_TX": [("GASREGWHO", "Houston Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWTX", "Texas Regular Conventional Retail Price"), ("GASREGWGC", "PADD 3 Gulf Coast Regular Retail Price")],
     "Los_Angeles_CA": [("GASREGWLA", "Los Angeles Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "Denver_CO": [("GASREGWDEN", "Denver Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWCO", "Colorado Regular Conventional Retail Price"), ("GASREGWRM", "PADD 4 Rocky Mountain Regular Retail Price")],
     "Greenville_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Charlotte_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Port_St_Lucie_FL": [("GASREGWFL", "Florida Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
@@ -107,6 +116,8 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Houston_Diesel": [("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price (Official Regional Benchmark for TX)")],
     "Los_Angeles_ULSD": [("GASDESWCA", "California No 2 Diesel Retail Price")],
     "Los_Angeles_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Denver_ULSD": [("GASDESWRM", "PADD 4 Rocky Mountain No 2 Diesel Retail Price (Official Regional Benchmark for CO)")],
+    "Denver_Diesel": [("GASDESWRM", "PADD 4 Rocky Mountain No 2 Diesel Retail Price (Official Regional Benchmark for CO)")],
     "Greenville_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
     "Greenville_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
     "Charlotte_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
@@ -155,7 +166,15 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASDESWFL": 3.820,
     "GASDESWCA": 5.150,
     "GASDESWGC": 3.450,
-    "EMD_EPD2D_PTE_R30_DPG": 3.450
+    "EMD_EPD2D_PTE_R30_DPG": 3.450,
+    "GASREGWDEN": 3.150,
+    "GASREGWCO": 3.100,
+    "GASREGWRM": 3.120,
+    "EMM_EPMR_PTE_Y35DE_DPG": 3.150,
+    "EMM_EPMR_PTE_SCO_DPG": 3.100,
+    "EMM_EPMR_PTE_R40_DPG": 3.120,
+    "GASDESWRM": 3.750,
+    "EMD_EPD2D_PTE_R40_DPG": 3.750
 }
 
 
