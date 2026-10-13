@@ -101,7 +101,9 @@ def _generate_synthetic_denver_data(
         'brent_crude_per_gal': brent_crude / 42.0,
         'wti_crude_per_gal': wti_crude / 42.0,
         'denver_crack_spread': spot_denver - (wti_crude / 42.0),
-        'denver_rack_margin': denver_retail - spot_denver
+        'suncor_crack_spread': spot_denver - (wti_crude / 42.0),
+        'denver_rack_margin': denver_retail - spot_denver,
+        'total_regulatory_tax_burden': 0.280 + 0.184
     })
 
 
