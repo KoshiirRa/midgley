@@ -201,6 +201,14 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 139000,
         "padd": "PADD 5",
         "primary_locales": ["Los_Angeles_CA"]
+    },
+    "Suncor_Commerce_City": {
+        "name": "Suncor Commerce City Refinery (Commerce City, CO)",
+        "lat": 39.8080,
+        "lon": -104.9450,
+        "capacity_bpd": 103000,
+        "padd": "PADD 4",
+        "primary_locales": ["Denver_CO"]
     }
 }
 
@@ -277,6 +285,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 34.0522,
         "lon": -118.2437,
         "zip": "90012"
+    },
+    "Denver_CO": {
+        "name": "Denver Metro & Rocky Mountain Hub, CO",
+        "lat": 39.7392,
+        "lon": -104.9903,
+        "zip": "80202"
     }
 }
 

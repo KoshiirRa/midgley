@@ -7,7 +7,7 @@ from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec
 
 
 def test_get_region_spec_all_metros():
-    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago", "houston", "los_angeles"]
+    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago", "houston", "los_angeles", "denver"]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
         assert spec is not None
@@ -38,6 +38,12 @@ def test_get_region_spec_all_metros():
         assert la_spec is not None
         assert la_spec.slug == "los_angeles"
 
+    # Ensure denver_co and rocky_mountain aliases resolve cleanly to denver spec
+    for den_alias in ("denver_co", "rocky_mountain", "padd4"):
+        den_spec = get_region_spec(den_alias)
+        assert den_spec is not None
+        assert den_spec.slug == "denver"
+
 
 def test_get_region_spec_by_region_key():
     spec = get_region_spec("Tulsa_OK")
@@ -64,6 +70,12 @@ def test_get_region_spec_by_region_key():
     assert la_spec.slug == "los_angeles"
     assert la_spec.wholesale_spot_col == "spot_los_angeles"
 
+    den_spec = get_region_spec("Denver_CO")
+    assert den_spec is not None
+    assert den_spec.region_key == "Denver_CO"
+    assert den_spec.slug == "denver"
+    assert den_spec.wholesale_spot_col == "spot_denver_rack"
+
 
 def test_region_spec_microstructure_flags():
     cincy = get_region_spec("cincinnati")
@@ -81,7 +93,11 @@ def test_region_spec_microstructure_flags():
     assert los_angeles.has_carb_compliance is True
     assert los_angeles.baseline_tax_rate == 0.953
     assert los_angeles.padd == "PADD 5"
-    
+
+    denver = get_region_spec("denver")
+    assert denver.baseline_tax_rate == 0.280
+    assert denver.padd == "PADD 4"
+
     oakland = get_region_spec("oakland")
     assert oakland.has_carb_compliance is True
     assert oakland.baseline_tax_rate >= 0.50

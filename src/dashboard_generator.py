@@ -41,6 +41,7 @@ PORT_ST_LUCIE_PATH = os.path.join(DOCS_DIR, "port_st_lucie.html")
 CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")
 HOUSTON_PATH = os.path.join(DOCS_DIR, "houston.html")
 LOS_ANGELES_PATH = os.path.join(DOCS_DIR, "los_angeles.html")
+DENVER_PATH = os.path.join(DOCS_DIR, "denver.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -61,6 +62,7 @@ PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
 CHICAGO_SUB_DIR = os.path.join(DOCS_DIR, "chicago")
 HOUSTON_SUB_DIR = os.path.join(DOCS_DIR, "houston")
 LOS_ANGELES_SUB_DIR = os.path.join(DOCS_DIR, "los_angeles")
+DENVER_SUB_DIR = os.path.join(DOCS_DIR, "denver")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -78,6 +80,7 @@ PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
 CHICAGO_SUB_PATH = os.path.join(CHICAGO_SUB_DIR, "index.html")
 HOUSTON_SUB_PATH = os.path.join(HOUSTON_SUB_DIR, "index.html")
 LOS_ANGELES_SUB_PATH = os.path.join(LOS_ANGELES_SUB_DIR, "index.html")
+DENVER_SUB_PATH = os.path.join(DENVER_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -460,7 +463,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "los_angeles", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -479,6 +482,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     chi_link = f"{rel_prefix}chicago.html"
     hou_link = f"{rel_prefix}houston.html"
     la_link = f"{rel_prefix}los_angeles.html"
+    den_link = f"{rel_prefix}denver.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -547,6 +551,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a role="menuitem" href="{la_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-sun text-amber-400" aria-hidden="true"></i> Los Angeles, CA Retail
+                        </a>
+                        <a role="menuitem" href="{den_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-mountain text-amber-400" aria-hidden="true"></i> Denver, CO Retail
                         </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -649,6 +656,7 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
         ("Chicago_IL", "Chicago, IL/IN Retail", 3.850, 3.765),
         ("Houston_TX", "Houston, TX Retail", 2.850, 2.785),
         ("Los_Angeles_CA", "Los Angeles, CA Retail", 4.890, 4.780),
+        ("Denver_CO", "Denver, CO Retail", 3.150, 3.095),
         ("Oakland_CA", "Oakland, CA Retail", 5.550, 4.840),
         ("BayArea_CA", "SF Bay Area Region", 5.650, 4.940),
     ]
@@ -2261,6 +2269,7 @@ def generate_public_dashboard():
         'Chicago_IL': {'base': 3.850, 'pred': 3.765},
         'Houston_TX': {'base': 2.850, 'pred': 2.785},
         'Los_Angeles_CA': {'base': 4.890, 'pred': 4.780},
+        'Denver_CO': {'base': 3.150, 'pred': 3.095},
         'Oakland_CA': {'base': 6.050, 'pred': 5.340},
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
@@ -2427,7 +2436,7 @@ def generate_public_dashboard():
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">10 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">11 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
@@ -2780,6 +2789,41 @@ def generate_public_dashboard():
 
                     <a href="los_angeles.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
                         Explore Los Angeles Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 11: Denver, CO Retail (PADD 4 Rocky Mountain Refining Island) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 4 Rocky Mountain Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-mountain text-amber-400"></i> Denver, CO
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            28.0¢ CO Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Denver_CO']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Denver_CO']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-mountain mr-1 text-slate-500"></i> Suncor Commerce City</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Denver_CO')}</strong></span>
+                    </div>
+
+                    <a href="denver.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Denver Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -4821,6 +4865,139 @@ def generate_public_dashboard():
         f.write(build_los_angeles_html(""))
     with open(LOS_ANGELES_SUB_PATH, "w", encoding="utf-8") as f:
         f.write(build_los_angeles_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # DENVER METRO RETAIL GAS PAGE (docs/denver.html & docs/denver/index.html)
+    # ---------------------------------------------------------------------------
+    def build_denver_html(rel_prefix: str = "") -> str:
+        nav_denver = get_nav_header("denver", rel_prefix)
+        denver_base = prices_map['Denver_CO']['base']
+        denver_pred = prices_map['Denver_CO']['pred']
+        denver_delta = denver_pred - denver_base
+        denver_pct = (denver_delta / denver_base * 100.0) if denver_base > 0 else 0.0
+        denver_sign = "+" if denver_delta > 0 else ""
+        denver_color = "#10b981" if denver_pct < -0.2 else ("#ef4444" if denver_pct > 0.2 else "#0ea5e9")
+        denver_trend_text = f"{denver_sign}{denver_pct:.1f}% Projected Trend"
+        denver_trend_color = "text-emerald-300" if denver_pct < -0.2 else ("text-rose-300" if denver_pct > 0.2 else "text-sky-300")
+        head_meta_denver = get_head_meta_tags(
+            title=f"Denver CO Retail Gas Forecast (${denver_base:.3f} → ${denver_pred:.3f} | {denver_sign}{denver_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Denver Front Range CO metro and PADD 4. Baseline ${denver_base:.3f}/gal, projected target ${denver_pred:.3f}/gal. Suncor Commerce City 103 kbpd refinery and Colorado Front Range 7.8 psi summer RVP logistics.",
+            canonical_path="denver.html" if rel_prefix == "" else "denver/index.html",
+            image_filename="denver.png",
+            theme_color=denver_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denver, CO Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_DENVER}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Denver Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-mountain text-amber-400"></i> Denver, CO Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                PADD 4 Rocky Mountain Refining Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{DENVER_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{DENVER_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{DENVER_TREND_COLOR}} font-semibold">{{DENVER_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{DENVER_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{DENVER_MAPE}} | RMSE: {{DENVER_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{DENVER_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Front Range &amp; PADD 4 Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Suncor Commerce City Total Freeze / Outage</h4>
+                    <p class="text-xs text-slate-400">Unplanned cold-snap shutdown at Colorado's sole 103 kbpd refinery forces emergency product rail from Kansas/Texas and truck imports from Sinclair WY.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.385/gal (+12.20%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Front Range Ozone Nonattainment Summer RFG Transition</h4>
+                    <p class="text-xs text-slate-400">Annual switch to strict 7.8 psi Reid Vapor Pressure high-altitude boutique blend across 9 Front Range nonattainment counties.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.180/gal (+5.70%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">DJ Basin Sweet Feedstock Discount &amp; Debottlenecking</h4>
+                    <p class="text-xs text-slate-400">Record local Niobrara / DJ Basin crude production drives inland feedstock discounts against Brent/WTI, compressing refining input costs.</p>
+                    <div class="text-sm font-extrabold text-emerald-400">- $0.105/gal (-3.30%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Denver, CO Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_DENVER}}", nav_denver).replace("PREFIX", rel_prefix).replace("{{DENVER_BASE}}", f"{prices_map['Denver_CO']['base']:.3f}").replace("{{DENVER_PRED}}", f"{prices_map['Denver_CO']['pred']:.3f}").replace("{{DENVER_TREND_TEXT}}", denver_trend_text).replace("{{DENVER_TREND_COLOR}}", denver_trend_color).replace("{{DENVER_MAE}}", get_mae_display('denver_co')).replace("{{DENVER_MAPE}}", get_mape_display('denver_co')).replace("{{DENVER_RMSE}}", get_rmse_display('denver_co')).replace("{{DENVER_HIT_RATE}}", get_hit_rate_display('denver_co')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_denver).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Denver_CO', prices_map['Denver_CO']['base'], prices_map['Denver_CO']['pred'], logistics_hub="Suncor Commerce City Refinery (103 kbpd) & Front Range Pipeline System")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Denver_CO', prices_map['Denver_CO']['base'], prices_map['Denver_CO']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('denver_co'))
+
+    os.makedirs(DENVER_SUB_DIR, exist_ok=True)
+    with open(DENVER_PATH, "w", encoding="utf-8") as f:
+        f.write(build_denver_html(""))
+    with open(DENVER_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_denver_html("../"))
 
     # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)

@@ -25,6 +25,8 @@ from src.dashboard_generator import (
     HOUSTON_SUB_PATH,
     LOS_ANGELES_PATH,
     LOS_ANGELES_SUB_PATH,
+    DENVER_PATH,
+    DENVER_SUB_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -43,7 +45,7 @@ def test_dashboard_generation_and_math_katex():
     generate_public_dashboard()
 
     # Verify existence of all expected dashboard HTML files
-    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, LOS_ANGELES_PATH, LOS_ANGELES_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
+    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, LOS_ANGELES_PATH, LOS_ANGELES_SUB_PATH, DENVER_PATH, DENVER_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
         assert os.path.exists(path), f"Expected file does not exist: {path}"
         assert os.path.getsize(path) > 0, f"Generated file is empty: {path}"
 
@@ -1035,4 +1037,25 @@ def test_los_angeles_page_generation():
     assert "El Segundo" in content
     assert "Torrance" in content
     assert "PADD 5 South Coast CaRFG Hub" in content
+    assert "file:///" not in content
+
+
+def test_denver_page_generation():
+    """Verify that generate_public_dashboard generates docs/denver.html and docs/denver/index.html
+    with Denver & Rocky Mountain refining content, Suncor Commerce City logistics,
+    and shock scenarios (Issue #618).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(DENVER_PATH), f"Expected file does not exist: {DENVER_PATH}"
+    assert os.path.getsize(DENVER_PATH) > 0, f"Generated file is empty: {DENVER_PATH}"
+    assert os.path.exists(DENVER_SUB_PATH), f"Expected file does not exist: {DENVER_SUB_PATH}"
+    assert os.path.getsize(DENVER_SUB_PATH) > 0, f"Generated file is empty: {DENVER_SUB_PATH}"
+
+    with open(DENVER_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Denver, CO Metro Retail Gas Forecast" in content
+    assert "Suncor Commerce City" in content
+    assert "PADD 4 Rocky Mountain Refining Hub" in content
     assert "file:///" not in content

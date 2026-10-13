@@ -238,3 +238,45 @@ def test_get_los_angeles_weather_dataset_live_merge(mock_meteo, mock_spc, mock_n
     headlines = df["headline"].tolist()
     assert any("Red Flag Warning" in h for h in headlines)
     assert any("Excessive Heat Warning" in h for h in headlines)
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_denver_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_denver_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-den-123",
+            "area": "COZ040",
+            "event": "Blizzard Warning",
+            "headline": "NOAA NWS Blizzard Warning for Denver Metro and Front Range",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Severe Thunderstorm Watch"],
+        "convective_risk_score": 0.60,
+        "categorical_risk": "SLGT",
+        "tornado_risk_score": 0.20,
+        "hail_risk_score": 0.60,
+        "wind_risk_score": 0.40
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Denver_CO",
+        "min_temp_f": 5.0,
+        "max_temp_f": 25.0,
+        "heating_degree_days_hdd": 50.0,
+        "cooling_degree_days_cdd": 0.0,
+        "freeze_warning": True,
+        "extreme_heat_warning": False
+    }
+
+    df = get_denver_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Blizzard Warning" in h for h in headlines)
+    assert any("Freeze Warning" in h for h in headlines)

@@ -544,6 +544,15 @@ class TestIntradayEventMonitor(unittest.TestCase):
             self.assertFalse(res.get("pending_review", False))
             mock_retain.assert_called_once_with(res)
 
+    def test_resolve_target_locales_denver(self):
+        h1 = "Suncor Commerce City Refinery suffers unplanned FCC freeze outage in Colorado"
+        locales1 = self.monitor.resolve_target_locales(h1)
+        self.assertIn("Denver", locales1)
+
+        h2 = "Denver rack fuel supplies tighten following Rocky Mountain pipeline disruption"
+        locales2 = self.monitor.resolve_target_locales(h2)
+        self.assertIn("Denver", locales2)
+
 
 if __name__ == "__main__":
     unittest.main()

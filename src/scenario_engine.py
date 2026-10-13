@@ -255,6 +255,26 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "locales": ["national"],
         "season_label": "Evergreen Year-Round Trade Policy Shock",
         "peak_label": None
+    },
+    "suncor_commerce_city_freeze_outage": {
+        "name": "Suncor Commerce City Total Freeze / Outage",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["denver", "national"],
+        "season_label": "Evergreen Year-Round Refinery Outage Risk",
+        "peak_label": None
+    },
+    "front_range_ozone_rfg_transition": {
+        "name": "Front Range Severe Ozone Nonattainment Summer RFG Transition",
+        "category": "regulatory_spec",
+        "active_window": (5, 1, 9, 15),
+        "peak_window": (5, 15, 6, 15),
+        "telemetry_hook": "spec_calendar",
+        "locales": ["denver", "national"],
+        "season_label": "Front Range 7.8 psi Summer RVP Transition Window (May 01 – Sep 15)",
+        "peak_label": "Peak Summer Spec Transition Squeeze (May 15 – Jun 15)"
     }
 }
 

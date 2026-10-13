@@ -148,6 +148,28 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(sim["target_locale"], "Los_Angeles_CA")
         self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
 
+    def test_get_denver_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=denver")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "Denver_CO")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 4 Rocky Mountain")
+
+    def test_post_simulate_denver_suncor(self):
+        payload = {
+            "scenario_id": "suncor_commerce_city_freeze_outage",
+            "locale": "denver"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "suncor_commerce_city_freeze_outage")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "Denver_CO")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
     def test_post_simulate_invalid_id(self):
         payload = {
             "scenario_id": "invalid_scenario_xyz",

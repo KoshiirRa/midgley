@@ -385,6 +385,38 @@ def get_los_angeles_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_denver_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather, Winter Storm & Air Quality Risk Dataset for Denver Metro & Front Range Corridor (COZ040 / Zip 80202):
+    - NOAA NWS Hard Freeze & Blizzard Warnings (extreme cold snaps causing Suncor Commerce City unit freeze-offs)
+    - Front Range Summer Ozone Action Days & Stagnation Inversions (air quality alerts increasing reformulated fuel blending constraints)
+    - Severe Convective Hail & High Wind Advisories along eastern Colorado plains
+    - Actively queries live NOAA alerts (CO, COZ040), SPC convective risks (80202), and Open-Meteo degree days.
+    """
+    denver_weather_events = [
+        {"date": "2021-02-14", "headline": "NOAA NWS Wind Chill Warning: Arctic blast drops Denver to -12°F with -30°F wind chills, causing instrumentation freeze issues across Adams County industrial terminals.", "zone": "COZ040 (Denver Metro)", "weather_type": "Arctic Freeze Warning"},
+        {"date": "2021-03-14", "headline": "NOAA NWS Blizzard Warning: Historic March snowstorm dumps 27 inches of snow on Denver, closing I-70 and I-25 and halting Front Range fuel transport tanker traffic.", "zone": "COZ040 (Denver Metro)", "weather_type": "Blizzard / Highway Closure"},
+        {"date": "2022-07-22", "headline": "NOAA NWS Heat Advisory: Prolonged 100°F heatwave across Colorado Front Range triggers CDPHE Ozone Action Day alerts across the 9-county nonattainment region.", "zone": "COZ040 (Denver / Adams)", "weather_type": "Excessive Heat / Ozone Action"},
+        {"date": "2022-12-22", "headline": "NOAA NWS Flash Freeze & Blizzard Warning: Arctic bomb cyclone plunges Denver temperatures 47 degrees in two hours to -24°F, causing extreme freeze damage at Commerce City refinery.", "zone": "COZ040 (Denver / Adams)", "weather_type": "Bomb Cyclone Flash Freeze"},
+        {"date": "2023-05-11", "headline": "NOAA NWS Severe Thunderstorm & Flash Flood Watch: Severe convective storms across Adams County trigger localized flooding near Sand Creek and refinery perimeter.", "zone": "COZ040 (Adams County)", "weather_type": "Severe Convective / Flood"},
+        {"date": "2023-07-18", "headline": "NOAA NWS Air Quality Alert: Elevated ozone and wildfire smoke create persistent Front Range inversion, highlighting nonattainment fuel reformulation rules.", "zone": "COZ040 (Denver Metro)", "weather_type": "Air Quality / Inversion"},
+        {"date": "2024-01-13", "headline": "NOAA NWS Wind Chill Warning: Deep Arctic airmass grips Front Range with temperatures staying below zero for 60 consecutive hours, stressing refinery boiler loops.", "zone": "COZ040 (Denver Metro)", "weather_type": "Extreme Wind Chill"},
+        {"date": "2024-03-14", "headline": "NOAA NWS Winter Storm Warning: Major late-winter blizzard drops 18 inches in Denver metro, shutting highway freight corridors into Wyoming and Nebraska.", "zone": "COZ040 (Denver Metro)", "weather_type": "Winter Storm / Transport Halt"}
+    ]
+    events = list(denver_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["CO", "COZ040"],
+            zip_code="80202",
+            hub_code="Denver_CO",
+            region_label="Denver / Rocky Mountain Hub"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
 def get_oakland_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather, Environmental & Seismic Risk Dataset for Oakland & SF Bay Area Metro Region:

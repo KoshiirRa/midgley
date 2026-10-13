@@ -91,7 +91,8 @@ DIESEL_BASE_ANCHORS = {
     "port_st_lucie": 3.820,
     "chicago": 3.890,
     "houston": 3.450,
-    "los_angeles": 5.190
+    "los_angeles": 5.190,
+    "denver": 3.750
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -105,7 +106,8 @@ LOCALE_TO_REGION_MAP = {
     "port_st_lucie": "Port_St_Lucie_FL",
     "chicago": "Chicago_IL",
     "houston": "Houston_TX",
-    "los_angeles": "Los_Angeles_CA"
+    "los_angeles": "Los_Angeles_CA",
+    "denver": "Denver_CO"
 }
 
 

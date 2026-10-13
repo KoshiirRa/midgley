@@ -153,6 +153,15 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.28,
             "is_rfg": False,
             "is_carb": True
+        },
+        "Denver_CO": {
+            "name": "Denver Metro & Front Range (PADD 4)",
+            "program": "EPA Front Range Ozone Nonattainment / High-Altitude RVP",
+            "summer_rvp_psi": 7.8,
+            "winter_rvp_psi": 13.5,
+            "summer_compliance_premium_per_gal": 0.16,
+            "is_rfg": True,
+            "is_carb": False
         }
     },
     "emergency_waivers": []

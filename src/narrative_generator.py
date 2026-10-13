@@ -128,6 +128,12 @@ def generate_metro_narrative(
                 ("Los Angeles CARBOB Spot Basis & SCAQMD Summer RVP", "SPOT_BASIS"),
                 ("CARB LCFS, Cap-and-Trade & Statutory Tax Overhead", "CARBON_COMPLIANCE"),
             ]
+        elif "denver" in reg_str:
+            factors = [
+                ("Suncor Commerce City Operable Run Rate & Rack Supply", "REFINING_SUPPLY"),
+                ("Front Range Summer Ozone Nonattainment RVP Blending Premium", "ENVIRONMENTAL_RVP"),
+                ("Rockies Isolated Product Logistics & DJ Basin Sweet Differentials", "ISOLATED_LOGISTICS"),
+            ]
         else:
             factors = [
                 ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
@@ -400,6 +406,31 @@ def generate_metro_narrative(
             detailed_prose = (
                 f"Los Angeles Basin retail prices are projected to hold steady{hub_info}, as balanced CARBOB production across "
                 f"Carson, Wilmington, El Segundo, and Torrance matches commuter demand across the South Coast Air Basin."
+            )
+
+    elif "denver" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["Rocky Mountain Refining Stability", "Commerce City High Runs", "Denver Rack Easing"]
+            headline_summary = f"Denver & Rocky Mountain retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Denver metropolitan retail prices are projected to ease lower{hub_info}, as high operable throughput "
+                f"at Suncor Commerce City (103 kbpd) satisfies regional Front Range wholesale rack demand. Isolated regional midstream "
+                f"logistics and steady Colorado motor fuel excise taxes ($0.280/gal) facilitate prompt downward pass-through to retail dispensers."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Suncor Outage Risk", "Isolated PADD 4 Decoupling", "Front Range Ozone RVP Premium"]
+            headline_summary = f"Denver & Rocky Mountain retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Denver metropolitan retail fuel pricing reflects PADD 4's isolated high-altitude refining island{hub_info}. "
+                f"With virtually zero refined product pipeline ingress from the Gulf Coast, unplanned disruptions at Suncor Commerce City, "
+                f"DJ Basin feedstock bottlenecks, or Front Range severe ozone nonattainment reformulated summer blending rules drive localized retail price decoupling from national benchmarks."
+            )
+        else:
+            badges = ["Front Range Refining Equilibrium", "Denver Rack Clearing Parity"]
+            headline_summary = f"Denver & Rocky Mountain retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Denver metropolitan retail prices are projected to hold steady{hub_info}, as balanced throughput from Suncor Commerce City "
+                f"matches Front Range commuter demand across Adams, Arapahoe, Jefferson, and Denver counties."
             )
 
     else:
