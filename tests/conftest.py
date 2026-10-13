@@ -320,8 +320,8 @@ def isolate_test_environment(tmp_path, monkeypatch):
         monkeypatch.setattr(di, "FRED_VINTAGE_FILE", str(tmp_path / "fred_vintages.json"))
         monkeypatch.setattr(di, "RADAR_VINTAGE_FILE", str(tmp_path / "radar_vintages.json"))
         monkeypatch.setattr(di, "CFTC_VINTAGE_FILE", str(tmp_path / "cftc_vintages.json"))
-        if hasattr(di, "RadarFuelTrackerConnector"):
-            monkeypatch.setattr(di.RadarFuelTrackerConnector, "CACHE_FILE", str(tmp_path / "radar_cache.json"))
+        if hasattr(di, "OpenSourceAIRadarConnector"):
+            monkeypatch.setattr(di.OpenSourceAIRadarConnector, "CACHE_FILE", str(tmp_path / "radar_cache.json"))
     except (ImportError, AttributeError):
         pass
 
