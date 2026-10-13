@@ -24,6 +24,11 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **Locale, Shock Threshold, Directional Bias & Catalyst Filtering**: Implemented [`dispatch_to_matching_subscribers()`](src/discord_notifier.py) to concurrently fan out intraday shock alerts to subscribers matching `target_locales`, `min_shock_threshold`, `direction_filter` (`all_shocks`, `spikes_only`, `drops_only`), and `catalyst_domains` (`refinery_pipeline`, `weather_hurricane`, `geopolitical_opec`, `regulatory_tax`), with automatic circuit breaking on HTTP `404`/`410` dead webhooks, HTTP `403` (`50007` blocked DMs), or 3 consecutive delivery failures.
 - **REST API Subscription & Diagnostic Endpoints**: Added `POST /api/v1/notifications/discord/subscribe` (protected by IPASIS IP reputation checks), `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`, `GET /api/v1/notifications/discord/subscriptions/status`, and `POST /api/v1/notifications/discord/test` in [`src/api_server.py`](src/api_server.py).
 - **Interactive `/midgley` Slash Commands & Zero Chat Spam**: Extended [`handleDiscordInteraction()`](workers/intraday_monitor_worker.ts) in [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts) to process `APPLICATION_COMMAND` (`type: 2`) and `APPLICATION_COMMAND_AUTOCOMPLETE` (`type: 4`) for `/midgley subscribe`, `unsubscribe`, `status`, `forecast`, and `test-alert`, plus the `mute_hub:` 24-hour snooze button (`type: 3`). Commands reply ephemerally (`flags: 64`) in-channel while delivering rich forecast and alert cards directly to the caller's DMs (with automatic ephemeral fallback if Discord returns `Error 50007`). Added [`scripts/register_discord_commands.py`](scripts/register_discord_commands.py) supporting both Guild-Install and User-Install contexts (`integration_types: [0, 1]`, `contexts: [0, 1, 2]`).
+- **5-Digit US ZIP Code Subscriptions, Forecasts & Out-of-Metro Demand Heatmap Integration**:
+  - Users can now pass any 5-digit US ZIP code directly to `/midgley subscribe`, `/midgley forecast`, `/midgley unsubscribe` (via `locale` or `zip_code`), and `POST /api/v1/notifications/discord/subscribe` (`zip_codes` / `zip_code` / `target_locales`).
+  - Expanded [`src/zip_geocoding.py`](src/zip_geocoding.py) (`STATE_PADD_MODEL_MAP` and `STATE_CENTER_COORDS`) to cover all 50 U.S. states and Washington, D.C., distinguishing direct metro cluster hits (`METRO_CLUSTER_HIT`, e.g., `74103` → `Tulsa`) from regional PADD supply corridor fallbacks (`STATE_PADD_FALLBACK`, e.g., `64101` → `MO / PADD 2`, displaying state statutory excise tax rates without misrepresenting regional fallback forecasts as local actuals).
+  - Out-of-metro ZIP code subscriptions and lookups from both the FastAPI gateway and Cloudflare Worker edge (`unmapped_zip:<zip>` in Cloudflare D1, exposed via `GET /telemetry/unmapped-zips`, plus `unmapped_zip_telemetry` in SQLite/Turso) are automatically aggregated by [`get_unmapped_zip_telemetry()`](src/zip_geocoding.py) to update the **Out-of-Metro ZIP Code Query Heatmap** on [`docs/telemetry.html`](docs/telemetry.html).
+- **Telemetry Leaflet Basemap Tile Authentication (`CARTO_API_KEY`)**: Updated [`src/dashboard_generator.py`](src/dashboard_generator.py) and regenerated [`docs/telemetry.html`](docs/telemetry.html) to authenticate CARTO Dark Matter Leaflet map tiles via `CARTO_API_KEY` (`?key=...`, `subdomains: 'abcd'`) and plot state-level demand centroids across all 50 U.S. states + D.C.
 
 ### 5. Alternative Data Feed & Test Sandbox Hardening
 - **Dynamic Fetch Counter & Sandbox Guard**: Initialized `dynamic_fetches_succeeded` counter and guarded test-mode persistence in [`src/alternative_data_feeds.py`](src/alternative_data_feeds.py) (`e2973fea`).
@@ -37,7 +42,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#219 / #630** | `feat(regions): Implement Greater Chicago Metro Calibration Hub (PADD 2 / BP Whiting & Citgo Lemont)` | Locations / Regional Hubs |
 | **#220** | `feat(regions): Implement Houston & USGC Metro Calibration Hub (PADD 3 / Houston Ship Channel Refineries)` | Locations / Regional Hubs |
 | **#221** | `feat(regions): Implement Los Angeles Basin Metro Calibration Hub (PADD 5 / CaRFG & El Segundo/Torrance)` | Locations / Regional Hubs |
-| **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands` | API / Notifications / Edge |
+| **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 
 ---
 
@@ -49,18 +54,21 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
 * **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`)
 * **Database Schema Additions**:
-  - `discord_subscriptions` table and indexes (`idx_discord_subs_active`, `idx_discord_subs_webhook_hash`, `idx_discord_subs_user_id`) in `src/db/schema.sql` and `data/subscribers.sqlite`.
+  - `discord_subscriptions` table (including `zip_codes TEXT NOT NULL DEFAULT '[]'`) and indexes (`idx_discord_subs_active`, `idx_discord_subs_webhook_hash`, `idx_discord_subs_user_id`) in `src/db/schema.sql` and `data/subscribers.sqlite`.
+  - `unmapped_zip_telemetry` table and index (`idx_unmapped_zip_hits`) in `src/db/schema.sql` for persistent cross-run out-of-metro ZIP demand tracking.
 
 ### 2. Environment Variables & Credentials
 * **Added / Optional**:
   - `DISCORD_BOT_TOKEN`: Discord Bot token used to open DM channels (`POST /api/v10/users/@me/channels`) and deliver private Direct Message alerts (`delivery_type="discord_dm"`).
   - `DISCORD_APP_ID`: Discord Application ID for registering `/midgley` slash commands (`scripts/register_discord_commands.py`).
   - `DISCORD_PUBLIC_KEY`: Ed25519 public key for verifying `/discord/interactions` requests.
+  - `CARTO_API_KEY`: Optional CARTO Basemaps API key appended to Leaflet dark tile URLs on `docs/telemetry.html`.
   - `MIDGLEY_SUBSCRIBERS_DB_PATH`: Optional override path for the SQLite subscriber registry (defaults to `data/subscribers.sqlite`).
 
 ### 3. Verification Commands
 ```bash
 python scripts/register_discord_commands.py --dry-run
-TESTING=1 pytest -v tests/test_discord_subscriptions.py tests/test_discord_notifier.py tests/test_discord_interactions.py tests/test_docs_links.py
+TESTING=1 pytest -v tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_system_telemetry.py tests/test_docs_links.py
 npx vitest run tests/workers.test.ts
 ```
+

@@ -817,6 +817,7 @@ export interface WorkerDMSubscriptionRecord {
   discord_user_id: string;
   dm_channel_id?: string | null;
   target_locales: string[];
+  zip_codes?: string[];
   min_shock_threshold: number;
   direction_filter: string;
   delivery_mode: string;
@@ -825,10 +826,308 @@ export interface WorkerDMSubscriptionRecord {
   created_at: string;
 }
 
+export interface WorkerZipResolution {
+  status: "success" | "fallback";
+  zip_code: string;
+  prefix_3: string;
+  resolution_tier: "METRO_CLUSTER_HIT" | "STATE_PADD_FALLBACK" | "INVALID_INPUT_FALLBACK";
+  is_metro_cluster_hit: boolean;
+  locale_code: string;
+  canonical_hub: string;
+  state: string;
+  padd_region: string;
+  padd_name: string;
+  calibrated_model_used: string;
+  state_tax_rate_per_gal: number;
+}
+
+export interface WorkerUnmappedZipTelemetryRecord {
+  zip_code: string;
+  state: string;
+  padd_region: string;
+  calibrated_model_used: string;
+  hit_count: number;
+  first_searched_at: string;
+  last_searched_at: string;
+}
+
 const WORKER_DM_SUBSCRIPTIONS = new Map<string, WorkerDMSubscriptionRecord>();
+const WORKER_UNMAPPED_ZIPS = new Map<string, WorkerUnmappedZipTelemetryRecord>();
+
+const WORKER_ZIP_METRO_PREFIX_MAP: Record<string, string> = {
+  "740": "Tulsa", "741": "Tulsa", "742": "Tulsa", "743": "Tulsa",
+  "197": "Newark", "198": "Newark", "199": "Newark",
+  "450": "Cincinnati", "451": "Cincinnati", "452": "Cincinnati",
+  "278": "Greenville", "279": "Greenville",
+  "280": "Charlotte", "281": "Charlotte", "282": "Charlotte",
+  "940": "Oakland", "941": "Oakland", "942": "Oakland", "943": "Oakland", "944": "Oakland",
+  "945": "Oakland", "946": "Oakland",
+  "349": "Port_St_Lucie",
+  "600": "Chicago", "601": "Chicago", "602": "Chicago", "603": "Chicago", "604": "Chicago",
+  "605": "Chicago", "606": "Chicago", "607": "Chicago", "608": "Chicago", "463": "Chicago", "464": "Chicago",
+  "770": "Houston", "772": "Houston", "773": "Houston", "774": "Houston", "775": "Houston", "776": "Houston", "777": "Houston",
+  "900": "Los_Angeles", "901": "Los_Angeles", "902": "Los_Angeles", "903": "Los_Angeles", "904": "Los_Angeles",
+  "905": "Los_Angeles", "906": "Los_Angeles", "907": "Los_Angeles", "908": "Los_Angeles", "910": "Los_Angeles",
+  "911": "Los_Angeles", "912": "Los_Angeles", "913": "Los_Angeles", "914": "Los_Angeles", "915": "Los_Angeles",
+  "916": "Los_Angeles", "917": "Los_Angeles", "918": "Los_Angeles", "926": "Los_Angeles", "927": "Los_Angeles", "928": "Los_Angeles"
+};
+
+const WORKER_STATE_PADD_MAP: Record<string, { padd: string; paddName: string; hub: string; model: string; tax: number }> = {
+  CA: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.596 },
+  OR: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.400 },
+  WA: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.494 },
+  NV: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.505 },
+  AZ: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.180 },
+  AK: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.089 },
+  HI: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.160 },
+  ME: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.300 },
+  NH: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.222 },
+  VT: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.310 },
+  MA: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.240 },
+  RI: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.370 },
+  CT: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.250 },
+  NY: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.472 },
+  NJ: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.423 },
+  PA: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.576 },
+  DE: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.230 },
+  MD: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.470 },
+  DC: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.348 },
+  NC: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.404 },
+  SC: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.280 },
+  FL: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Port_St_Lucie", model: "Port_St_Lucie_FL (PADD 1C)", tax: 0.362 },
+  GA: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.312 },
+  VA: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.298 },
+  WV: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.357 },
+  OK: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.190 },
+  OH: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.385 },
+  IL: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.470 },
+  IN: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.350 },
+  MI: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.300 },
+  WI: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.309 },
+  MN: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.285 },
+  IA: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.300 },
+  MO: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.245 },
+  KS: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.240 },
+  NE: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.296 },
+  ND: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.230 },
+  SD: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.280 },
+  KY: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.287 },
+  TN: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.274 },
+  TX: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.200 },
+  LA: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.200 },
+  AR: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.248 },
+  MS: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.184 },
+  AL: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.290 },
+  NM: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.189 },
+  CO: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Tulsa", model: "Tulsa_OK (PADD 2/4 Corridor)", tax: 0.220 },
+  UT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Oakland", model: "Oakland_CA (PADD 4/5 Corridor)", tax: 0.365 },
+  WY: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Tulsa", model: "Tulsa_OK (PADD 2/4 Corridor)", tax: 0.240 },
+  MT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Tulsa", model: "Tulsa_OK (PADD 2/4 Corridor)", tax: 0.330 },
+  ID: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Oakland", model: "Oakland_CA (PADD 4/5 Corridor)", tax: 0.320 }
+};
+
+function resolveStateFromZipPrefix(prefix3: string): string {
+  const p = parseInt(prefix3, 10);
+  if (isNaN(p)) return "US";
+  if (p >= 10 && p <= 27) return "MA";
+  if (p >= 28 && p <= 29) return "RI";
+  if (p >= 30 && p <= 38) return "NH";
+  if (p >= 39 && p <= 49) return "ME";
+  if (p >= 50 && p <= 59) return "VT";
+  if (p >= 60 && p <= 69) return "CT";
+  if (p >= 70 && p <= 89) return "NJ";
+  if (p >= 100 && p <= 149) return "NY";
+  if (p >= 150 && p <= 196) return "PA";
+  if (p >= 197 && p <= 199) return "DE";
+  if (p >= 200 && p <= 205) return "DC";
+  if (p >= 206 && p <= 219) return "MD";
+  if (p >= 220 && p <= 246) return "VA";
+  if (p >= 247 && p <= 268) return "WV";
+  if (p >= 270 && p <= 289) return "NC";
+  if (p >= 290 && p <= 299) return "SC";
+  if ((p >= 300 && p <= 319) || (p >= 398 && p <= 399)) return "GA";
+  if (p >= 320 && p <= 349) return "FL";
+  if (p >= 350 && p <= 369) return "AL";
+  if (p >= 370 && p <= 385) return "TN";
+  if (p >= 386 && p <= 397) return "MS";
+  if (p >= 400 && p <= 427) return "KY";
+  if (p >= 430 && p <= 458) return "OH";
+  if (p >= 460 && p <= 479) return "IN";
+  if (p >= 480 && p <= 499) return "MI";
+  if (p >= 500 && p <= 528) return "IA";
+  if (p >= 530 && p <= 549) return "WI";
+  if (p >= 550 && p <= 567) return "MN";
+  if (p >= 570 && p <= 577) return "SD";
+  if (p >= 580 && p <= 588) return "ND";
+  if (p >= 590 && p <= 599) return "MT";
+  if (p >= 600 && p <= 629) return "IL";
+  if (p >= 630 && p <= 658) return "MO";
+  if (p >= 660 && p <= 679) return "KS";
+  if (p >= 680 && p <= 693) return "NE";
+  if (p >= 700 && p <= 714) return "LA";
+  if (p >= 716 && p <= 729) return "AR";
+  if (p >= 730 && p <= 749) return "OK";
+  if (p >= 750 && p <= 799) return "TX";
+  if (p >= 800 && p <= 816) return "CO";
+  if (p >= 820 && p <= 831) return "WY";
+  if (p >= 832 && p <= 838) return "ID";
+  if (p >= 840 && p <= 847) return "UT";
+  if (p >= 850 && p <= 865) return "AZ";
+  if (p >= 870 && p <= 884) return "NM";
+  if (p >= 890 && p <= 898) return "NV";
+  if (p >= 900 && p <= 961) return "CA";
+  if (p >= 967 && p <= 968) return "HI";
+  if (p >= 970 && p <= 979) return "OR";
+  if (p >= 980 && p <= 994) return "WA";
+  if (p >= 995 && p <= 999) return "AK";
+  return "US";
+}
+
+export function looksLikeZipCode(rawInput?: string): boolean {
+  if (!rawInput) return false;
+  const base = String(rawInput).trim().split("-")[0].trim();
+  return /^\d{3,5}$/.test(base);
+}
+
+export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
+  const base = String(rawZip || "").trim().split("-")[0].trim();
+  if (!/^\d{3,5}$/.test(base)) {
+    return {
+      status: "fallback",
+      zip_code: base.slice(0, 5),
+      prefix_3: "",
+      resolution_tier: "INVALID_INPUT_FALLBACK",
+      is_metro_cluster_hit: false,
+      locale_code: "national",
+      canonical_hub: "National",
+      state: "US",
+      padd_region: "PADD 2",
+      padd_name: "Midwest",
+      calibrated_model_used: "National Wholesale",
+      state_tax_rate_per_gal: 0.184
+    };
+  }
+
+  const zipClean = base.padStart(5, "0").slice(0, 5);
+  const prefix3 = zipClean.slice(0, 3);
+  const stateCode = resolveStateFromZipPrefix(prefix3);
+  const stateMeta = WORKER_STATE_PADD_MAP[stateCode] || {
+    padd: "PADD 2",
+    paddName: "Midwest",
+    hub: "National",
+    model: "National Wholesale",
+    tax: 0.250
+  };
+
+  if (prefix3 in WORKER_ZIP_METRO_PREFIX_MAP) {
+    const metroHub = WORKER_ZIP_METRO_PREFIX_MAP[prefix3];
+    return {
+      status: "success",
+      zip_code: zipClean,
+      prefix_3: prefix3,
+      resolution_tier: "METRO_CLUSTER_HIT",
+      is_metro_cluster_hit: true,
+      locale_code: metroHub.toLowerCase(),
+      canonical_hub: metroHub,
+      state: stateCode,
+      padd_region: stateMeta.padd,
+      padd_name: stateMeta.paddName,
+      calibrated_model_used: `${metroHub} (Direct Metro Cluster)`,
+      state_tax_rate_per_gal: stateMeta.tax
+    };
+  }
+
+  return {
+    status: "success",
+    zip_code: zipClean,
+    prefix_3: prefix3,
+    resolution_tier: "STATE_PADD_FALLBACK",
+    is_metro_cluster_hit: false,
+    locale_code: stateMeta.hub.toLowerCase(),
+    canonical_hub: stateMeta.hub,
+    state: stateCode,
+    padd_region: stateMeta.padd,
+    padd_name: stateMeta.paddName,
+    calibrated_model_used: stateMeta.model,
+    state_tax_rate_per_gal: stateMeta.tax
+  };
+}
+
+export async function recordWorkerUnmappedZip(res: WorkerZipResolution, env: Env): Promise<void> {
+  if (res.is_metro_cluster_hit || res.resolution_tier === "INVALID_INPUT_FALLBACK") {
+    return;
+  }
+  const nowIso = new Date().toISOString();
+  const zKey = res.zip_code;
+  const existingMem = WORKER_UNMAPPED_ZIPS.get(zKey);
+
+  let record: WorkerUnmappedZipTelemetryRecord = existingMem
+    ? {
+        ...existingMem,
+        hit_count: existingMem.hit_count + 1,
+        last_searched_at: nowIso
+      }
+    : {
+        zip_code: zKey,
+        state: res.state,
+        padd_region: res.padd_region,
+        calibrated_model_used: res.calibrated_model_used,
+        hit_count: 1,
+        first_searched_at: nowIso,
+        last_searched_at: nowIso
+      };
+
+  if (env.DB) {
+    try {
+      const dbKey = `unmapped_zip:${zKey}`;
+      const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(dbKey).first();
+      if (row && row.value) {
+        const parsed = JSON.parse(row.value) as WorkerUnmappedZipTelemetryRecord;
+        record = {
+          ...parsed,
+          hit_count: (parsed.hit_count || 0) + 1,
+          last_searched_at: nowIso
+        };
+      }
+      await env.DB.prepare(
+        "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
+      )
+        .bind(dbKey, JSON.stringify(record))
+        .run();
+    } catch {
+      // Fallback to in-memory map
+    }
+  }
+  WORKER_UNMAPPED_ZIPS.set(zKey, record);
+}
+
+export async function getWorkerUnmappedZips(env: Env): Promise<WorkerUnmappedZipTelemetryRecord[]> {
+  const merged = new Map<string, WorkerUnmappedZipTelemetryRecord>(WORKER_UNMAPPED_ZIPS);
+  if (env.DB) {
+    try {
+      const res = await env.DB.prepare(
+        "SELECT value FROM flag_replay_tokens WHERE clean_key LIKE 'unmapped_zip:%'"
+      ).all();
+      const rows = (res?.results || []) as Array<{ value?: string }>;
+      for (const r of rows) {
+        if (!r.value) continue;
+        const parsed = JSON.parse(r.value) as WorkerUnmappedZipTelemetryRecord;
+        if (parsed && parsed.zip_code) {
+          merged.set(parsed.zip_code, parsed);
+        }
+      }
+    } catch {
+      // Ignore if query unsupported in mock
+    }
+  }
+  return Array.from(merged.values()).sort((a, b) => b.hit_count - a.hit_count);
+}
 
 export function normalizeWorkerLocale(rawLocale?: string): string {
   if (!rawLocale) return "National";
+  if (looksLikeZipCode(rawLocale)) {
+    return resolveWorkerZipCode(rawLocale).canonical_hub;
+  }
   const clean = rawLocale.trim().toLowerCase().replace(/[\s.-]+/g, "_");
   const aliases: Record<string, string> = {
     national: "National",
@@ -883,6 +1182,28 @@ export async function getWorkerUserSubscription(userId: string, env: Env): Promi
   return null;
 }
 
+export async function getAllWorkerSubscriptions(env: Env): Promise<WorkerDMSubscriptionRecord[]> {
+  const merged = new Map<string, WorkerDMSubscriptionRecord>(WORKER_DM_SUBSCRIPTIONS);
+  if (env.DB) {
+    try {
+      const res = await env.DB.prepare(
+        "SELECT value FROM flag_replay_tokens WHERE clean_key LIKE 'discord_sub:%'"
+      ).all();
+      const rows = (res?.results || []) as Array<{ value?: string }>;
+      for (const r of rows) {
+        if (!r.value) continue;
+        const parsed = JSON.parse(r.value) as WorkerDMSubscriptionRecord;
+        if (parsed && parsed.discord_user_id) {
+          merged.set(parsed.discord_user_id, parsed);
+        }
+      }
+    } catch {
+      // Fallback to in-memory map
+    }
+  }
+  return Array.from(merged.values());
+}
+
 export async function saveWorkerUserSubscription(record: WorkerDMSubscriptionRecord, env: Env): Promise<void> {
   WORKER_DM_SUBSCRIPTIONS.set(record.discord_user_id, record);
   if (env.DB) {
@@ -910,6 +1231,7 @@ export async function deleteWorkerUserSubscription(userId: string, env: Env): Pr
     }
   }
 }
+
 
 export async function sendDiscordDirectMessage(
   userId: string,
@@ -1056,15 +1378,31 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     });
   }
 
-  // Type 4: APPLICATION_COMMAND_AUTOCOMPLETE (Autocomplete for `locale` parameter)
+  // Type 4: APPLICATION_COMMAND_AUTOCOMPLETE (Autocomplete for `locale` or `zip_code` parameter)
   if (interaction.type === 4) {
     const { options } = extractCommandOptions(interaction);
-    const query = String(options.locale || "").toLowerCase().trim();
-    const choices = SUPPORTED_DISCORD_LOCALES.filter(
+    const rawQuery = String(options.locale || options.zip_code || "").trim();
+    const query = rawQuery.toLowerCase();
+    const choices: Array<{ name: string; value: string }> = [];
+
+    if (looksLikeZipCode(rawQuery)) {
+      const zRes = resolveWorkerZipCode(rawQuery);
+      const tierLabel = zRes.is_metro_cluster_hit
+        ? `Direct Metro Cluster → ${zRes.canonical_hub}`
+        : `${zRes.padd_region} ${zRes.padd_name} Corridor → via ${zRes.canonical_hub}`;
+      choices.push({
+        name: `📮 ZIP ${zRes.zip_code} (${zRes.state} • ${tierLabel})`,
+        value: zRes.zip_code
+      });
+    }
+
+    const localeChoices = SUPPORTED_DISCORD_LOCALES.filter(
       l => !query || l.name.toLowerCase().includes(query) || l.value.toLowerCase().includes(query)
     )
-      .slice(0, 25)
+      .slice(0, 25 - choices.length)
       .map(l => ({ name: l.name, value: l.value }));
+
+    choices.push(...localeChoices);
     return new Response(JSON.stringify({ type: 8, data: { choices } }), {
       headers: { "Content-Type": "application/json" }
     });
@@ -1078,26 +1416,56 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     const { subcommand, options } = extractCommandOptions(interaction);
 
     if (subcommand === "subscribe") {
-      const locale = normalizeWorkerLocale(options.locale);
+      const rawInput = String(options.zip_code || options.locale || "National").trim();
+      const isZip = looksLikeZipCode(rawInput);
+      const zipRes = isZip ? resolveWorkerZipCode(rawInput) : null;
+      if (zipRes) {
+        await recordWorkerUnmappedZip(zipRes, env);
+      }
+
+      const locale = zipRes ? zipRes.canonical_hub : normalizeWorkerLocale(rawInput);
       const minShock = typeof options.min_shock === "number" ? Math.max(0, Math.min(5, options.min_shock)) : 0.25;
       const direction = String(options.direction || "all_shocks").toLowerCase();
       const delivery = String(options.delivery || "dm").toLowerCase();
 
       const existing = await getWorkerUserSubscription(userId, env);
       const mergedLocales = existing?.target_locales ? Array.from(new Set([...existing.target_locales, locale])) : [locale];
+      const mergedZips = existing?.zip_codes ? [...existing.zip_codes] : [];
+      if (zipRes && !mergedZips.includes(zipRes.zip_code)) {
+        mergedZips.push(zipRes.zip_code);
+      }
       const subId = existing?.subscription_id || `sub_dm_${userId.slice(-8)}`;
+
+      const embedFields: Array<{ name: string; value: string; inline: boolean }> = [
+        { name: "📍 Subscribed Hubs", value: `\`${mergedLocales.join(", ")}\``, inline: true },
+        { name: "⚡ Min Shock (|ΔP|)", value: `\`>= $${minShock.toFixed(2)}/gal\``, inline: true },
+        { name: "🧭 Direction Bias", value: `\`${direction}\``, inline: true },
+        { name: "📬 Delivery Channel", value: delivery === "dm" ? "`Private Direct Message (DM)`" : "`Ephemeral Server Reply`", inline: true }
+      ];
+
+      if (zipRes) {
+        const tierBadge = zipRes.is_metro_cluster_hit
+          ? `Direct Metro Cluster Hit (\`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`
+          : `${zipRes.padd_region} ${zipRes.padd_name} Corridor Fallback (routed via \`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`;
+        embedFields.push({
+          name: "📮 Subscribed ZIP Code Routing",
+          value: `\`ZIP ${zipRes.zip_code}\` (${zipRes.state}) • ${tierBadge} • State Tax: \`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\``,
+          inline: false
+        });
+      } else if (mergedZips.length > 0) {
+        embedFields.push({
+          name: "📮 Active ZIP Codes",
+          value: `\`${mergedZips.join(", ")}\``,
+          inline: true
+        });
+      }
 
       const embed = {
         title: "✅ Midgley Direct Message Alert Subscription Active",
         description: `Subscribed **@${username}** to real-time intraday gasoline shock alerts without cluttering shared server chat.`,
         url: "https://koshiirRa.github.io/midgley/",
         color: 3066993,
-        fields: [
-          { name: "📍 Subscribed Hubs", value: `\`${mergedLocales.join(", ")}\``, inline: true },
-          { name: "⚡ Min Shock (|ΔP|)", value: `\`>= $${minShock.toFixed(2)}/gal\``, inline: true },
-          { name: "🧭 Direction Bias", value: `\`${direction}\``, inline: true },
-          { name: "📬 Delivery Channel", value: delivery === "dm" ? "`Private Direct Message (DM)`" : "`Ephemeral Server Reply`", inline: true }
-        ],
+        fields: embedFields,
         footer: { text: `Midgley Notification Gateway • Subscription ID: ${subId}` },
         timestamp: new Date().toISOString()
       };
@@ -1114,6 +1482,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
         discord_user_id: userId,
         dm_channel_id: dmResult.dmChannelId || existing?.dm_channel_id || null,
         target_locales: mergedLocales,
+        zip_codes: mergedZips,
         min_shock_threshold: minShock,
         direction_filter: direction,
         delivery_mode: "realtime",
@@ -1129,12 +1498,16 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
         ? "\n📬 *A confirmation card has been delivered to your Direct Messages.*"
         : "";
 
+      const zipSummary = zipRes
+        ? ` (ZIP \`${zipRes.zip_code}\` → \`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`${zipRes.is_metro_cluster_hit ? "" : " • logged to Out-of-Metro Demand Heatmap"})`
+        : "";
+
       return new Response(
         JSON.stringify({
           type: 4,
           data: {
             flags: 64, // Ephemeral: only visible to the command caller
-            content: `✅ **Subscription updated for \`${mergedLocales.join(", ")}\`** (|ΔP| >= $${minShock.toFixed(2)}/gal, \`${direction}\`).${privacyNotice}`,
+            content: `✅ **Subscription updated for \`${mergedLocales.join(", ")}\`${zipSummary}** (|ΔP| >= $${minShock.toFixed(2)}/gal, \`${direction}\`).${privacyNotice}`,
             embeds: [embed]
           }
         }),
@@ -1143,7 +1516,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     }
 
     if (subcommand === "unsubscribe") {
-      const rawLocale = options.locale ? String(options.locale).trim() : "all";
+      const rawLocale = options.zip_code ? String(options.zip_code).trim() : options.locale ? String(options.locale).trim() : "all";
       const existing = await getWorkerUserSubscription(userId, env);
       if (!existing || !existing.is_active) {
         return new Response(
@@ -1172,6 +1545,24 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
         );
       }
 
+      if (looksLikeZipCode(rawLocale) && existing.zip_codes && existing.zip_codes.length > 0) {
+        const zClean = resolveWorkerZipCode(rawLocale).zip_code;
+        if (existing.zip_codes.includes(zClean)) {
+          existing.zip_codes = existing.zip_codes.filter(z => z !== zClean);
+          await saveWorkerUserSubscription(existing, env);
+          return new Response(
+            JSON.stringify({
+              type: 4,
+              data: {
+                flags: 64,
+                content: `✅ Removed ZIP \`${zClean}\` from your subscription. Active hubs: \`${existing.target_locales.join(", ")}\`.`
+              }
+            }),
+            { headers: { "Content-Type": "application/json" } }
+          );
+        }
+      }
+
       const targetLoc = normalizeWorkerLocale(rawLocale);
       const remaining = existing.target_locales.filter(l => l !== targetLoc);
       if (remaining.length === 0) {
@@ -1198,6 +1589,26 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
 
     if (subcommand === "status") {
       const existing = await getWorkerUserSubscription(userId, env);
+      const statusFields =
+        existing && existing.is_active
+          ? [
+              { name: "🆔 Subscription ID", value: `\`${existing.subscription_id}\``, inline: true },
+              { name: "📍 Subscribed Hubs", value: `\`${existing.target_locales.join(", ")}\``, inline: true },
+              ...(existing.zip_codes && existing.zip_codes.length > 0
+                ? [{ name: "📮 Subscribed ZIPs", value: `\`${existing.zip_codes.join(", ")}\``, inline: true }]
+                : []),
+              { name: "⚡ Shock Threshold", value: `\`>= $${existing.min_shock_threshold.toFixed(2)}/gal\``, inline: true },
+              { name: "🧭 Direction Filter", value: `\`${existing.direction_filter}\``, inline: true },
+              { name: "🔕 Mute Status", value: existing.muted_until ? `\`Muted until ${existing.muted_until}\`` : "`Active (Unmuted)`", inline: true }
+            ]
+          : [
+              {
+                name: "💡 Quick Start",
+                value: "Run `/midgley subscribe locale:Tulsa min_shock:0.25` or `/midgley subscribe locale:74103` to receive private DM alerts.",
+                inline: false
+              }
+            ];
+
       const statusEmbed = {
         title: "📊 Midgley Discord Alert Subscription Status",
         description: existing && existing.is_active
@@ -1205,17 +1616,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
           : `No active Direct Message subscriptions found for **@${username}**. Use \`/midgley subscribe\` to register.`,
         url: "https://koshiirRa.github.io/midgley/",
         color: existing && existing.is_active ? 3447003 : 9807270,
-        fields: existing && existing.is_active
-          ? [
-              { name: "🆔 Subscription ID", value: `\`${existing.subscription_id}\``, inline: true },
-              { name: "📍 Subscribed Hubs", value: `\`${existing.target_locales.join(", ")}\``, inline: true },
-              { name: "⚡ Shock Threshold", value: `\`>= $${existing.min_shock_threshold.toFixed(2)}/gal\``, inline: true },
-              { name: "🧭 Direction Filter", value: `\`${existing.direction_filter}\``, inline: true },
-              { name: "🔕 Mute Status", value: existing.muted_until ? `\`Muted until ${existing.muted_until}\`` : "`Active (Unmuted)`", inline: true }
-            ]
-          : [
-              { name: "💡 Quick Start", value: "Run `/midgley subscribe locale:Tulsa min_shock:0.25` to receive private DM alerts.", inline: false }
-            ],
+        fields: statusFields,
         timestamp: new Date().toISOString()
       };
 
@@ -1234,26 +1635,46 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     }
 
     if (subcommand === "forecast") {
-      const locale = normalizeWorkerLocale(options.locale);
+      const rawInput = String(options.zip_code || options.locale || "National").trim();
+      const isZip = looksLikeZipCode(rawInput);
+      const zipRes = isZip ? resolveWorkerZipCode(rawInput) : null;
+      if (zipRes) {
+        await recordWorkerUnmappedZip(zipRes, env);
+      }
+
+      const locale = zipRes ? zipRes.canonical_hub : normalizeWorkerLocale(rawInput);
       const horizon = Number(options.horizon || 5);
       const localeMeta = SUPPORTED_DISCORD_LOCALES.find(l => l.value === locale) || SUPPORTED_DISCORD_LOCALES[0];
       const dashboardUrl = `https://koshiirRa.github.io/midgley/${localeMeta.slug}`;
 
+      const forecastFields: Array<{ name: string; value: string; inline: boolean }> = [
+        { name: "📍 Regional Hub", value: `\`${locale}\``, inline: true },
+        { name: "🛢️ PADD Supply Corridor", value: `\`${zipRes ? `${zipRes.padd_region} (${zipRes.padd_name})` : localeMeta.padd}\``, inline: true },
+        { name: "📅 Forecast Horizon", value: `\`1D – ${horizon}D Out-of-Time\``, inline: true }
+      ];
+
+      if (zipRes) {
+        const tierDesc = zipRes.is_metro_cluster_hit
+          ? `Direct Metro Cluster Hit (\`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`
+          : `State/PADD Supply Corridor Fallback (\`${zipRes.calibrated_model_used}\` • \`${zipRes.resolution_tier}\`)`;
+        forecastFields.push(
+          { name: "📮 ZIP Code Resolution", value: `\`${zipRes.zip_code}\` (${zipRes.state}) — ${tierDesc}`, inline: false },
+          { name: "🏛️ State Statutory Fuel Tax", value: `\`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\` (${zipRes.state})`, inline: true }
+        );
+      }
+
+      forecastFields.push({
+        name: "🔗 Live Interactive Views",
+        value: `[📊 Regional Dashboard](${dashboardUrl}) • [📈 Technical Attribution](https://koshiirRa.github.io/midgley/technical_breakdown.html) • [🗺️ ZIP Demand Heatmap](https://koshiirRa.github.io/midgley/telemetry.html)`,
+        inline: false
+      });
+
       const forecastEmbed = {
-        title: `⛽ Midgley ${horizon}D Forecast & Regime Brief — ${locale.replace(/_/g, " ")}`,
+        title: `⛽ Midgley ${horizon}D Forecast & Regime Brief — ${zipRes ? `ZIP ${zipRes.zip_code} (${locale.replace(/_/g, " ")})` : locale.replace(/_/g, " ")}`,
         description: `Point-in-time quantitative regime & shock attribution summary for **${localeMeta.name}**.`,
         url: dashboardUrl,
         color: 3447003,
-        fields: [
-          { name: "📍 Regional Hub", value: `\`${locale}\``, inline: true },
-          { name: "🛢️ PADD Supply Corridor", value: `\`${localeMeta.padd}\``, inline: true },
-          { name: "📅 Forecast Horizon", value: `\`1D – ${horizon}D Out-of-Time\``, inline: true },
-          {
-            name: "🔗 Live Interactive Views",
-            value: `[📊 Regional Dashboard](${dashboardUrl}) • [📈 Technical Attribution](https://koshiirRa.github.io/midgley/technical_breakdown.html) • [📡 Data Sources](https://koshiirRa.github.io/midgley/sources.html)`,
-            inline: false
-          }
-        ],
+        fields: forecastFields,
         footer: { text: "Midgley Energy Complex Forecasting • Delivered Privately via Slash Command" },
         timestamp: new Date().toISOString()
       };
@@ -1278,6 +1699,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
         { headers: { "Content-Type": "application/json" } }
       );
     }
+
 
     if (subcommand === "test-alert") {
       const locale = normalizeWorkerLocale(options.locale);
@@ -2293,6 +2715,43 @@ export default {
         return await handleDiscordInteraction(request, env, ctx);
       }
 
+      // Edge Unmapped ZIP Demand Telemetry Sync Route (Issue #50, #195, #235)
+      if (url.pathname === "/telemetry/unmapped-zips") {
+        const topUnmapped = await getWorkerUnmappedZips(env);
+        return new Response(
+          JSON.stringify({
+            status: "success",
+            timestamp: new Date().toISOString(),
+            unique_unmapped_zips: topUnmapped.length,
+            total_unmapped_queries: topUnmapped.reduce((acc, r) => acc + (r.hit_count || 1), 0),
+            top_unmapped_zips: topUnmapped
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      // Authenticated Edge Discord Subscriptions Sync Route (Issue #235)
+      if (url.pathname === "/discord/subscriptions") {
+        const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim() || "";
+        const adminOk = Boolean(env.ADMIN_TOKEN && authHeader && timingSafeEqual(authHeader, env.ADMIN_TOKEN));
+        const botOk = Boolean(env.DISCORD_BOT_TOKEN && authHeader && timingSafeEqual(authHeader, env.DISCORD_BOT_TOKEN));
+        if (!adminOk && !botOk) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+        const subs = await getAllWorkerSubscriptions(env);
+        return new Response(
+          JSON.stringify({
+            status: "success",
+            timestamp: new Date().toISOString(),
+            subscriptions: subs
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
       // Secure manual run & trigger endpoints (Fail-Closed, Issues #438, #574)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -2314,10 +2773,11 @@ export default {
           status: "active",
           service: "midgley-intraday-monitor",
           timestamp: new Date().toISOString(),
-          endpoints: ["/run", "/trigger", "/status", "/flag", "/discord/interactions"]
+          endpoints: ["/run", "/trigger", "/status", "/flag", "/discord/interactions", "/telemetry/unmapped-zips", "/discord/subscriptions"]
         }, null, 2),
         { headers: { "Content-Type": "application/json" } }
       );
+
     } catch (err: any) {
       console.error(`[Fetch Exception] ${err.message || String(err)}`);
       await captureSentryException(env, ctx, err, { pathname: url.pathname });

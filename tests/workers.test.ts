@@ -817,7 +817,96 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         globalThis.fetch = originalFetch;
       }
     });
+
+    it("supports 5-digit US ZIP code subscriptions & forecasts and records out-of-metro ZIPs in telemetry", async () => {
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+        if (String(url).includes("/users/@me/channels")) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ id: "dm_channel_zip" }),
+            text: async () => '{"id":"dm_channel_zip"}'
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ id: "msg_zip" }),
+          text: async () => '{"id":"msg_zip"}'
+        };
+      });
+
+      const env: IntradayEnv = {
+        DISCORD_PUBLIC_KEY: publicKeyHex,
+        DISCORD_BOT_TOKEN: "mock_bot_token_235"
+      };
+
+      try {
+        // Subscribe to out-of-metro ZIP 64101 (Kansas City, MO -> STATE_PADD_FALLBACK)
+        const subZipReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "555666777888", username: "mo_driver" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "subscribe",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "64101" },
+                  { name: "delivery", type: 3, value: "dm" }
+                ]
+              }
+            ]
+          }
+        });
+        const subZipRes = await handleDiscordInteraction(subZipReq, env, {});
+        expect(subZipRes.status).toBe(200);
+        const subZipJson = (await subZipRes.json()) as any;
+        expect(subZipJson.data.flags).toBe(64);
+        expect(subZipJson.data.content).toContain("64101");
+        expect(subZipJson.data.content).toContain("STATE_PADD_FALLBACK");
+
+        // Query /midgley forecast for ZIP 74103 (Tulsa Metro -> METRO_CLUSTER_HIT)
+        const fcZipReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "555666777888", username: "mo_driver" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "74103" },
+                  { name: "horizon", type: 4, value: 1 }
+                ]
+              }
+            ]
+          }
+        });
+        const fcZipRes = await handleDiscordInteraction(fcZipReq, env, {});
+        expect(fcZipRes.status).toBe(200);
+        const fcZipJson = (await fcZipRes.json()) as any;
+        expect(fcZipJson.data.embeds[0].title).toContain("ZIP 74103");
+        expect(JSON.stringify(fcZipJson.data.embeds[0])).toContain("METRO_CLUSTER_HIT");
+
+        // Check /telemetry/unmapped-zips endpoint on worker
+        const telReq = new Request("https://worker.local/telemetry/unmapped-zips", { method: "GET" });
+        const telRes = await intradayWorker.fetch(telReq, env, {});
+        expect(telRes.status).toBe(200);
+        const telJson = (await telRes.json()) as any;
+        expect(telJson.unique_unmapped_zips).toBeGreaterThanOrEqual(1);
+        expect(telJson.top_unmapped_zips.some((item: any) => item.zip_code === "64101" && item.state === "MO")).toBe(true);
+        // 74103 is a metro cluster hit so it must NOT appear in unmapped zips
+        expect(telJson.top_unmapped_zips.some((item: any) => item.zip_code === "74103")).toBe(false);
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
   });
 });
+
 
 

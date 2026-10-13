@@ -105,27 +105,85 @@ ZIP_PREFIX_STATE_MAP: Dict[str, str] = {
 
 # State to PADD & Calibrated Model fallback mapping
 STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
+    # PADD 5 (West Coast)
     "CA": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.596},
     "OR": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.400},
     "WA": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.494},
     "NV": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.505},
     "AZ": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.180},
+    "AK": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.089},
+    "HI": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.160},
+    # PADD 1A (New England)
+    "ME": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.300},
+    "NH": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.222},
+    "VT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.310},
+    "MA": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.240},
+    "RI": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.370},
+    "CT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.250},
+    # PADD 1B (Central Atlantic)
     "NY": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.472},
     "NJ": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.423},
     "PA": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.576},
     "DE": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.230},
     "MD": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.470},
+    "DC": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.348},
+    # PADD 1C (Lower Atlantic)
     "NC": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.404},
     "SC": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.280},
     "FL": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "port_st_lucie", "fallback_model": "Port_St_Lucie_FL (PADD 1C)", "state_tax": 0.362},
     "GA": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.312},
     "VA": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.298},
+    "WV": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.357},
+    # PADD 2 (Midwest)
     "OK": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.190},
     "OH": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.385},
     "IL": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.470},
     "IN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.350},
+    "MI": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.300},
+    "WI": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.309},
+    "MN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.285},
+    "IA": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.300},
+    "MO": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.245},
+    "KS": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.240},
+    "NE": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.296},
+    "ND": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.230},
+    "SD": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.280},
+    "KY": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.287},
+    "TN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.274},
+    # PADD 3 (Gulf Coast)
     "TX": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200},
-    "LA": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200}
+    "LA": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200},
+    "AR": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.248},
+    "MS": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.184},
+    "AL": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.290},
+    "NM": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.189},
+    # PADD 4 (Rocky Mountain)
+    "CO": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2/4 Corridor)", "state_tax": 0.220},
+    "UT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 4/5 Corridor)", "state_tax": 0.365},
+    "WY": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2/4 Corridor)", "state_tax": 0.240},
+    "MT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2/4 Corridor)", "state_tax": 0.330},
+    "ID": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 4/5 Corridor)", "state_tax": 0.320},
+}
+
+# Geographic centroids for all 50 US states + DC for out-of-metro ZIP heatmap plotting
+STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
+    "AL": (32.8067, -86.7911), "AK": (61.3707, -152.4044), "AZ": (33.7298, -111.4312),
+    "AR": (34.9697, -92.3731), "CA": (36.7783, -119.4179), "CO": (39.5501, -105.7821),
+    "CT": (41.5978, -72.7554), "DE": (38.9108, -75.5277), "DC": (38.9072, -77.0369),
+    "FL": (27.6648, -81.5158), "GA": (32.1656, -82.9001), "HI": (21.0943, -157.4983),
+    "ID": (44.2405, -114.4788), "IL": (40.6331, -89.3985), "IN": (39.8494, -86.2583),
+    "IA": (42.0115, -93.2105), "KS": (38.5266, -96.7265), "KY": (37.6681, -84.6701),
+    "LA": (31.1695, -91.8678), "ME": (44.6939, -69.3819), "MD": (39.0639, -76.8021),
+    "MA": (42.2302, -71.5301), "MI": (43.3266, -84.5361), "MN": (45.6945, -93.9002),
+    "MS": (32.7416, -89.6787), "MO": (38.4561, -92.2884), "MT": (46.9219, -110.4544),
+    "NE": (41.1254, -98.2681), "NV": (38.3135, -117.0554), "NH": (43.4525, -71.5639),
+    "NJ": (40.2989, -74.5210), "NM": (34.8405, -106.2485), "NY": (40.7128, -74.0060),
+    "NC": (35.7596, -79.0193), "ND": (47.5289, -99.7840), "OH": (40.4173, -82.9071),
+    "OK": (35.4676, -97.5164), "OR": (44.5720, -122.0709), "PA": (41.2033, -77.1945),
+    "RI": (41.6809, -71.5118), "SC": (33.8569, -80.9450), "SD": (44.2998, -99.4388),
+    "TN": (35.7478, -86.6923), "TX": (31.9686, -99.9018), "UT": (40.1500, -111.8624),
+    "VT": (44.0459, -72.7107), "VA": (37.7693, -78.1700), "WA": (47.4009, -121.4905),
+    "WV": (38.4912, -80.9545), "WI": (44.2685, -89.6165), "WY": (42.7560, -107.3025),
 }
 
 
@@ -202,8 +260,9 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
 
 def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
     """
-    Logs an unmapped out-of-metro ZIP code lookup to data/unmapped_zip_telemetry.json,
-    incrementing query hit count and updating timestamps.
+    Logs an unmapped out-of-metro ZIP code lookup to data/unmapped_zip_telemetry.json
+    and the SQLite/Turso unmapped_zip_telemetry table, incrementing query hit count
+    and updating timestamps.
     """
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR, exist_ok=True)
@@ -218,7 +277,10 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
             data = {}
 
     now_iso = datetime.now().isoformat()
-    z_key = str(zip_code)
+    z_key = str(zip_code).strip().zfill(5)[:5]
+    state_val = str(resolution.get("state", "US"))
+    padd_val = str(resolution.get("padd_region", "PADD 2"))
+    model_val = str(resolution.get("calibrated_model_used", "National Wholesale"))
 
     if z_key in data:
         data[z_key]["hit_count"] += 1
@@ -226,9 +288,9 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
     else:
         data[z_key] = {
             "zip_code": z_key,
-            "state": resolution.get("state", "US"),
-            "padd_region": resolution.get("padd_region", "PADD 2"),
-            "calibrated_model_used": resolution.get("calibrated_model_used", "National Wholesale"),
+            "state": state_val,
+            "padd_region": padd_val,
+            "calibrated_model_used": model_val,
             "hit_count": 1,
             "first_searched_at": now_iso,
             "last_searched_at": now_iso
@@ -240,13 +302,154 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
     except Exception as e:
         logger.error(f"Error writing to {TELEMETRY_FILE}: {e}")
 
+    # Persist to SQLite/Turso unmapped_zip_telemetry table for edge/backend synchronization
+    try:
+        from src.db.client import get_db_client
+        db = get_db_client()
+        db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS unmapped_zip_telemetry (
+                zip_code TEXT PRIMARY KEY,
+                state TEXT NOT NULL DEFAULT 'US',
+                padd_region TEXT NOT NULL DEFAULT 'PADD 2',
+                calibrated_model_used TEXT NOT NULL DEFAULT 'National Wholesale',
+                hit_count INTEGER NOT NULL DEFAULT 1,
+                first_searched_at TEXT NOT NULL,
+                last_searched_at TEXT NOT NULL
+            )
+            """
+        )
+        db.execute(
+            """
+            INSERT INTO unmapped_zip_telemetry (
+                zip_code, state, padd_region, calibrated_model_used,
+                hit_count, first_searched_at, last_searched_at
+            ) VALUES (?, ?, ?, ?, 1, ?, ?)
+            ON CONFLICT(zip_code) DO UPDATE SET
+                hit_count = unmapped_zip_telemetry.hit_count + 1,
+                last_searched_at = excluded.last_searched_at
+            """,
+            (z_key, state_val, padd_val, model_val, now_iso, now_iso),
+        )
+    except Exception as db_err:
+        logger.debug(f"Could not sync unmapped ZIP '{z_key}' to database: {db_err}")
+
 
 def get_unmapped_zip_telemetry() -> Dict[str, Any]:
     """
     Returns aggregated unmapped ZIP code lookup telemetry, sorted by hit count,
-    including state/PADD query distributions and recommended expansion metro hubs.
+    merging data/unmapped_zip_telemetry.json with Turso/SQLite unmapped_zip_telemetry
+    and out-of-metro Discord ZIP subscriptions.
     """
-    if not os.path.exists(TELEMETRY_FILE):
+    data: Dict[str, Dict[str, Any]] = {}
+    if os.path.exists(TELEMETRY_FILE):
+        try:
+            with open(TELEMETRY_FILE, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+                if isinstance(loaded, dict):
+                    data.update(loaded)
+        except Exception as e:
+            logger.error(f"Error reading {TELEMETRY_FILE}: {e}")
+            return {
+                "status": "error",
+                "message": str(e),
+                "top_unmapped_zips": []
+            }
+
+    # Merge records from SQLite/Turso unmapped_zip_telemetry and discord_subscriptions
+    try:
+        from src.db.client import get_db_client
+        db = get_db_client()
+        try:
+            rows = db.query("SELECT zip_code, state, padd_region, calibrated_model_used, hit_count, first_searched_at, last_searched_at FROM unmapped_zip_telemetry")
+            for row in rows:
+                z_key = str(row.get("zip_code") or "").strip()
+                if not z_key:
+                    continue
+                db_hits = int(row.get("hit_count") or 1)
+                if z_key in data:
+                    data[z_key]["hit_count"] = max(int(data[z_key].get("hit_count", 1)), db_hits)
+                    if str(row.get("last_searched_at") or "") > str(data[z_key].get("last_searched_at") or ""):
+                        data[z_key]["last_searched_at"] = row["last_searched_at"]
+                else:
+                    data[z_key] = {
+                        "zip_code": z_key,
+                        "state": row.get("state", "US"),
+                        "padd_region": row.get("padd_region", "PADD 2"),
+                        "calibrated_model_used": row.get("calibrated_model_used", "National Wholesale"),
+                        "hit_count": db_hits,
+                        "first_searched_at": row.get("first_searched_at") or datetime.now().isoformat(),
+                        "last_searched_at": row.get("last_searched_at") or datetime.now().isoformat(),
+                    }
+        except Exception:
+            pass
+
+        try:
+            sub_rows = db.query("SELECT zip_codes, created_at FROM discord_subscriptions WHERE zip_codes IS NOT NULL AND zip_codes != '[]'")
+            for srow in sub_rows:
+                raw_zips = srow.get("zip_codes")
+                z_list = json.loads(raw_zips) if isinstance(raw_zips, str) else (raw_zips or [])
+                for z_raw in z_list:
+                    z_str = str(z_raw).strip().zfill(5)[:5]
+                    if len(z_str) == 5 and z_str.isdigit() and z_str[:3] not in ZIP_METRO_PREFIX_MAP:
+                        prefix_3 = z_str[:3]
+                        st_code = ZIP_PREFIX_STATE_MAP.get(prefix_3, "US")
+                        st_meta = STATE_PADD_MODEL_MAP.get(st_code, {})
+                        if z_str not in data:
+                            ts = srow.get("created_at") or datetime.now().isoformat()
+                            data[z_str] = {
+                                "zip_code": z_str,
+                                "state": st_code,
+                                "padd_region": st_meta.get("padd", "PADD 2"),
+                                "calibrated_model_used": st_meta.get("fallback_model", "National Wholesale"),
+                                "hit_count": 1,
+                                "first_searched_at": ts,
+                                "last_searched_at": ts,
+                            }
+        except Exception:
+            pass
+    except Exception as db_err:
+        logger.debug(f"Could not merge database unmapped ZIP telemetry: {db_err}")
+
+    # Merge edge Cloudflare Worker D1 unmapped ZIP telemetry (from /midgley Discord slash commands)
+    if os.environ.get("TESTING") != "1":
+        try:
+            import urllib.request
+            worker_base = os.environ.get(
+                "MIDGLEY_WORKER_BASE_URL",
+                "https://midgley-intraday-monitor.m-cubed-3.workers.dev"
+            ).rstrip("/")
+            req = urllib.request.Request(
+                f"{worker_base}/telemetry/unmapped-zips",
+                headers={"User-Agent": "Midgley-Telemetry-Sync/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                if resp.status == 200:
+                    edge_payload = json.loads(resp.read().decode("utf-8"))
+                    for erow in edge_payload.get("top_unmapped_zips", []):
+                        z_key = str(erow.get("zip_code") or "").strip()
+                        if not z_key:
+                            continue
+                        e_hits = int(erow.get("hit_count") or 1)
+                        if z_key in data:
+                            data[z_key]["hit_count"] = max(int(data[z_key].get("hit_count", 1)), e_hits)
+                            if str(erow.get("last_searched_at") or "") > str(data[z_key].get("last_searched_at") or ""):
+                                data[z_key]["last_searched_at"] = erow["last_searched_at"]
+                        else:
+                            data[z_key] = {
+                                "zip_code": z_key,
+                                "state": erow.get("state", "US"),
+                                "padd_region": erow.get("padd_region", "PADD 2"),
+                                "calibrated_model_used": erow.get("calibrated_model_used", "National Wholesale"),
+                                "hit_count": e_hits,
+                                "first_searched_at": erow.get("first_searched_at") or datetime.now().isoformat(),
+                                "last_searched_at": erow.get("last_searched_at") or datetime.now().isoformat(),
+                            }
+        except Exception as edge_err:
+            logger.debug(f"Could not merge edge Worker unmapped ZIP telemetry: {edge_err}")
+
+    if not data:
+
         return {
             "status": "success",
             "timestamp": datetime.now().isoformat(),
@@ -255,17 +458,6 @@ def get_unmapped_zip_telemetry() -> Dict[str, Any]:
             "top_unmapped_zips": [],
             "state_distribution": {},
             "recommended_expansion_hubs": []
-        }
-
-    try:
-        with open(TELEMETRY_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception as e:
-        logger.error(f"Error reading {TELEMETRY_FILE}: {e}")
-        return {
-            "status": "error",
-            "message": str(e),
-            "top_unmapped_zips": []
         }
 
     records = list(data.values())
@@ -297,6 +489,7 @@ def get_unmapped_zip_telemetry() -> Dict[str, Any]:
         "state_distribution": state_dist,
         "recommended_expansion_hubs": expansion_hubs
     }
+
 
 
 # Calibration hub centroids with spatial coordinates and maximum metro radii

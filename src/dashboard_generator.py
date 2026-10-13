@@ -6733,7 +6733,7 @@ def generate_telemetry_page():
     header_html = get_nav_header("telemetry", rel_prefix="")
     sub_header_html = get_nav_header("telemetry", rel_prefix="../")
 
-    from src.zip_geocoding import get_unmapped_zip_telemetry
+    from src.zip_geocoding import get_unmapped_zip_telemetry, STATE_CENTER_COORDS
     from src.finlight_feed import get_finlight_quota_status
     from src.tokentab_accounting import token_tab_manager
     from src.ipasis_security import get_ipasis_telemetry
@@ -6820,21 +6820,13 @@ def generate_telemetry_page():
         "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
         "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
         "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
-        "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)")
+        "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)"),
+        "64101": (39.0997, -94.5786, "Kansas City, MO (PADD 2)"),
+        "80202": (39.7392, -104.9903, "Denver, CO (PADD 4)"),
+        "98101": (47.6062, -122.3321, "Seattle, WA (PADD 5)"),
+        "02138": (42.3736, -71.1097, "Cambridge / Boston, MA (PADD 1A)"),
     }
-    state_center_coords = {
-        "CA": (36.7783, -119.4179),
-        "TX": (31.9686, -99.9018),
-        "NY": (40.7128, -74.0060),
-        "IL": (40.6331, -89.3985),
-        "FL": (27.6648, -81.5158),
-        "PA": (41.2033, -77.1945),
-        "OH": (40.4173, -82.9071),
-        "NC": (35.7596, -79.0193),
-        "GA": (32.1656, -82.9001),
-        "OK": (35.4676, -97.5164),
-        "DE": (38.9108, -75.5277),
-    }
+    state_center_coords = dict(STATE_CENTER_COORDS)
 
     zip_records = tele_data.get('top_unmapped_zips', [])
     map_points = []
@@ -6853,6 +6845,13 @@ def generate_telemetry_page():
     if not map_points:
         map_points = []
     map_points_json = json.dumps(map_points)
+    carto_api_key = os.environ.get("CARTO_API_KEY", "cb1_4iqf_1_7880b5cbe390b5b1835b1f06").strip()
+    carto_tile_url = (
+        f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
+        if carto_api_key
+        else "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    )
+
 
     def build_telemetry_html(hdr, learning_section_html=""):
         return f"""<!DOCTYPE html>
@@ -7344,10 +7343,12 @@ def generate_telemetry_page():
     <script>
         document.addEventListener('DOMContentLoaded', function() {{
             var map = L.map('zipMap').setView([38.5000, -96.0000], 4);
-            L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+            L.tileLayer('{carto_tile_url}', {{
                 attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
                 maxZoom: 18
             }}).addTo(map);
+
 
             var zipPoints = {map_points_json};
 

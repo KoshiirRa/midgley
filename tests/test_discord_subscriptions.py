@@ -261,3 +261,47 @@ class TestDiscordSubscriptionsAPIEndpoints:
         )
         assert resp_del.status_code == 200
         assert resp_del.json()["status"] == "unsubscribed"
+
+
+def test_zip_code_subscription_and_telemetry_heatmap_update(tmp_path):
+    """Verifies subscribing via 5-digit US ZIP code resolves supply corridors and updates unmapped ZIP telemetry."""
+    from fastapi.testclient import TestClient
+    from src.api_server import app
+    from src.zip_geocoding import get_unmapped_zip_telemetry
+
+    db_path = str(tmp_path / "zip_sub_test.sqlite")
+    get_subscription_registry(db_path=db_path, reset=True)
+
+    with patch.dict(os.environ, {"TESTING": "1", "MIDGLEY_SUBSCRIBERS_DB_PATH": db_path}):
+        client = TestClient(app)
+
+        # 1. Subscribe via out-of-metro ZIP code (64101 Kansas City, MO -> PADD 2 Tulsa corridor)
+        #    and direct metro ZIP code (74103 Tulsa, OK -> METRO_CLUSTER_HIT)
+        resp_zip = client.post(
+            "/api/v1/notifications/discord/subscribe",
+            json={
+                "delivery_type": "discord_dm",
+                "discord_user_id": "998877665544332211",
+                "zip_codes": ["64101", "74103"],
+                "minimum_shock_threshold": 0.20,
+                "direction_filter": "all_shocks",
+            }
+        )
+        assert resp_zip.status_code == 200
+        sub = resp_zip.json()["subscription"]
+        assert "Tulsa" in sub["target_locales"]
+        assert sub["zip_codes"] == ["64101", "74103"]
+        res_by_zip = {r["zip_code"]: r for r in sub["zip_resolutions"]}
+        assert res_by_zip["74103"]["is_metro_cluster_hit"] is True
+        assert res_by_zip["64101"]["is_metro_cluster_hit"] is False
+        assert res_by_zip["64101"]["state"] == "MO"
+        assert res_by_zip["64101"]["padd_region"] == "PADD 2"
+
+        # 2. Verify out-of-metro ZIP 64101 automatically updated the unmapped ZIP query heatmap telemetry
+        tele = get_unmapped_zip_telemetry()
+        top_zips = {r["zip_code"]: r for r in tele["top_unmapped_zips"]}
+        assert "64101" in top_zips
+        assert top_zips["64101"]["state"] == "MO"
+        assert top_zips["64101"]["hit_count"] >= 1
+        assert "74103" not in top_zips
+

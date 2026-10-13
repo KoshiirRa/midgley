@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS discord_subscriptions (
     discord_user_id TEXT,
     dm_channel_id TEXT,
     target_locales TEXT NOT NULL,
+    zip_codes TEXT NOT NULL DEFAULT '[]',
     min_shock_threshold REAL DEFAULT 0.25,
     direction_filter TEXT NOT NULL DEFAULT 'all_shocks',
     catalyst_domains TEXT,
@@ -147,5 +148,18 @@ CREATE TABLE IF NOT EXISTS discord_subscriptions (
 CREATE INDEX IF NOT EXISTS idx_discord_subs_active ON discord_subscriptions (is_active, delivery_type);
 CREATE INDEX IF NOT EXISTS idx_discord_subs_webhook_hash ON discord_subscriptions (webhook_url_hash);
 CREATE INDEX IF NOT EXISTS idx_discord_subs_user_id ON discord_subscriptions (discord_user_id);
+
+CREATE TABLE IF NOT EXISTS unmapped_zip_telemetry (
+    zip_code TEXT PRIMARY KEY,
+    state TEXT NOT NULL DEFAULT 'US',
+    padd_region TEXT NOT NULL DEFAULT 'PADD 2',
+    calibrated_model_used TEXT NOT NULL DEFAULT 'National Wholesale',
+    hit_count INTEGER NOT NULL DEFAULT 1,
+    first_searched_at TEXT NOT NULL,
+    last_searched_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_unmapped_zip_hits ON unmapped_zip_telemetry (hit_count DESC);
+
 
 

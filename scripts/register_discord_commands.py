@@ -52,9 +52,16 @@ def build_midgley_command_manifest() -> List[Dict[str, Any]]:
                     "options": [
                         {
                             "name": "locale",
-                            "description": "Target regional metro hub or National wholesale benchmark",
+                            "description": "Metro hub, 'National', or 5-digit US ZIP code (e.g. Tulsa, 74103, 64101)",
                             "type": 3,  # STRING
                             "required": True,
+                            "autocomplete": True,
+                        },
+                        {
+                            "name": "zip_code",
+                            "description": "Optional 5-digit US ZIP code (resolves supply hub & logs regional demand)",
+                            "type": 3,  # STRING
+                            "required": False,
                             "autocomplete": True,
                         },
                         {
@@ -95,11 +102,17 @@ def build_midgley_command_manifest() -> List[Dict[str, Any]]:
                     "options": [
                         {
                             "name": "locale",
-                            "description": "Specific metro hub to remove, or 'all' to clear all subscriptions",
+                            "description": "Specific metro hub, 5-digit ZIP code, or 'all' to clear all subscriptions",
                             "type": 3,  # STRING
                             "required": False,
                             "autocomplete": True,
-                        }
+                        },
+                        {
+                            "name": "zip_code",
+                            "description": "Optional specific 5-digit US ZIP code to remove",
+                            "type": 3,  # STRING
+                            "required": False,
+                        },
                     ],
                 },
                 {
@@ -114,9 +127,16 @@ def build_midgley_command_manifest() -> List[Dict[str, Any]]:
                     "options": [
                         {
                             "name": "locale",
-                            "description": "Target regional metro hub or National",
+                            "description": "Target metro hub, 'National', or 5-digit US ZIP code (e.g. 74103, 64101)",
                             "type": 3,  # STRING
                             "required": True,
+                            "autocomplete": True,
+                        },
+                        {
+                            "name": "zip_code",
+                            "description": "Optional 5-digit US ZIP code to resolve PADD corridor & state fuel tax",
+                            "type": 3,  # STRING
+                            "required": False,
                             "autocomplete": True,
                         },
                         {
@@ -141,7 +161,7 @@ def build_midgley_command_manifest() -> List[Dict[str, Any]]:
                     "options": [
                         {
                             "name": "locale",
-                            "description": "Sample metro hub for the synthetic alert card",
+                            "description": "Sample metro hub or 5-digit US ZIP code for the synthetic alert card",
                             "type": 3,  # STRING
                             "required": False,
                             "autocomplete": True,
@@ -149,6 +169,7 @@ def build_midgley_command_manifest() -> List[Dict[str, Any]]:
                     ],
                 },
             ],
+
         }
     ]
 

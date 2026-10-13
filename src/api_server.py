@@ -2048,7 +2048,9 @@ class DiscordSubscribeRequest(BaseModel):
     webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL (required when delivery_type='webhook')")
     discord_user_id: Optional[str] = Field(None, description="Discord User Snowflake ID (required when delivery_type='discord_dm')")
     dm_channel_id: Optional[str] = Field(None, description="Optional pre-resolved Discord DM channel ID")
-    target_locales: List[str] = Field(default_factory=lambda: ["National"], description="Target metro hubs or 'National'")
+    target_locales: Optional[List[str]] = Field(None, description="Target metro hubs, 'National', or 5-digit US ZIP codes")
+    zip_codes: Optional[List[str]] = Field(None, description="Optional list of 5-digit US ZIP codes to subscribe to")
+    zip_code: Optional[str] = Field(None, description="Optional single 5-digit US ZIP code to subscribe to")
     minimum_shock_threshold: float = Field(0.25, ge=0.0, le=5.0, description="Minimum |ΔP| shock threshold in $/gal")
     direction_filter: Optional[str] = Field("all_shocks", description="Directional bias: 'all_shocks', 'spikes_only', or 'drops_only'")
     catalyst_domains: Optional[List[str]] = Field(None, description="Optional catalyst domains filter")
@@ -2071,7 +2073,9 @@ async def subscribe_discord_notifications(request: Request, req: DiscordSubscrib
     """
     Issue #235: Registers a multi-subscriber Discord channel webhook (`delivery_type='webhook'`)
     or personal Direct Message (`delivery_type='discord_dm'`) alert subscription with locale,
-    shock magnitude, and directional filtering. Protected by IPASIS IP reputation check.
+    5-digit US ZIP code resolution, shock magnitude, and directional filtering.
+    Out-of-metro ZIP codes automatically update the unmapped ZIP query heatmap.
+    Protected by IPASIS IP reputation check.
     """
     client_ip = (
         request.headers.get("cf-connecting-ip")
@@ -2091,10 +2095,17 @@ async def subscribe_discord_notifications(request: Request, req: DiscordSubscrib
     from src.discord_notifier import get_subscription_registry
     registry = get_subscription_registry()
 
+    merged_zips: List[str] = []
+    if req.zip_codes:
+        merged_zips.extend(req.zip_codes)
+    if req.zip_code:
+        merged_zips.append(req.zip_code)
+
     dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
     try:
         sub_record = registry.register_subscription(
             target_locales=req.target_locales,
+            zip_codes=merged_zips if merged_zips else None,
             minimum_shock_threshold=req.minimum_shock_threshold,
             delivery_type=dtype,
             webhook_url=req.webhook_url,
@@ -2117,6 +2128,7 @@ async def subscribe_discord_notifications(request: Request, req: DiscordSubscrib
         "subscription": sub_record,
         "ip_security": ip_status
     }
+
 
 
 @app.delete("/api/v1/notifications/discord/subscriptions/{subscription_id}", summary="Unsubscribe a Discord Webhook or DM Alert Subscription", tags=["Notifications & Alerts"])

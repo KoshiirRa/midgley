@@ -135,6 +135,61 @@ def normalize_locale_list(locales: Optional[List[str]]) -> List[str]:
     return normalized
 
 
+def _looks_like_zip_code(val: str) -> bool:
+    """Returns True if `val` is a 3-to-5 digit US ZIP code or ZIP+4 string."""
+    if not val or not isinstance(val, str):
+        return False
+    base = val.strip().split("-")[0].strip()
+    return base.isdigit() and 3 <= len(base) <= 5
+
+
+def resolve_subscription_locales_and_zips(
+    target_locales: Optional[List[str]] = None,
+    zip_codes: Optional[List[str]] = None,
+) -> Tuple[List[str], List[str], List[Dict[str, Any]]]:
+    """
+    Resolves both named metro/PADD locales and 5-digit US ZIP codes (passed either in
+    `target_locales` or `zip_codes`). Out-of-metro ZIPs automatically update the
+    unmapped ZIP telemetry heatmap via `resolve_zip_code()`.
+    """
+    from src.zip_geocoding import resolve_zip_code
+
+    normalized_locales: List[str] = []
+    normalized_zips: List[str] = []
+    zip_resolutions: List[Dict[str, Any]] = []
+
+    raw_items: List[str] = []
+    if target_locales:
+        raw_items.extend(str(x).strip() for x in target_locales if x is not None and str(x).strip())
+
+    raw_zips: List[str] = []
+    if zip_codes:
+        raw_zips.extend(str(z).strip() for z in zip_codes if z is not None and str(z).strip())
+
+    for item in raw_items:
+        if _looks_like_zip_code(item):
+            raw_zips.append(item)
+        else:
+            canon = normalize_locale_name(item)
+            if canon and canon not in normalized_locales:
+                normalized_locales.append(canon)
+
+    for z_item in raw_zips:
+        res = resolve_zip_code(z_item)
+        if res.get("resolution_tier") == "INVALID_INPUT_FALLBACK":
+            continue
+        clean_zip = str(res.get("zip_code") or "").strip()
+        if clean_zip and clean_zip not in normalized_zips:
+            normalized_zips.append(clean_zip)
+            zip_resolutions.append(res)
+        canon_hub = normalize_locale_name(str(res.get("locale_code") or "National"))
+        if canon_hub and canon_hub not in normalized_locales:
+            normalized_locales.append(canon_hub)
+
+    return normalized_locales, normalized_zips, zip_resolutions
+
+
+
 def validate_discord_webhook_url(webhook_url: Optional[str]) -> bool:
     """Validates that a URL is a well-formed HTTPS Discord Incoming Webhook URL."""
     if not webhook_url or not isinstance(webhook_url, str):
@@ -574,7 +629,9 @@ def format_welcome_verification_payload(
     direction_filter: str = "all_shocks",
     delivery_type: str = "webhook",
     client_label: Optional[str] = None,
-    subscription_id: Optional[str] = None
+    subscription_id: Optional[str] = None,
+    zip_codes: Optional[List[str]] = None,
+    zip_resolutions: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Formats a handshake/welcome verification embed sent upon subscription registration or test."""
     locales_str = ", ".join(target_locales) if target_locales else "National"
@@ -598,6 +655,27 @@ def format_welcome_verification_payload(
         },
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
+    if zip_resolutions:
+        zip_lines = []
+        for zr in zip_resolutions[:5]:
+            zc = zr.get("zip_code", "")
+            st = zr.get("state", "US")
+            padd = zr.get("padd_region", "PADD 2")
+            hub = normalize_locale_name(str(zr.get("locale_code") or "National")) or "National"
+            tax = float(zr.get("state_tax_rate_per_gal", 0.25))
+            tier_badge = "Direct Metro Cluster" if zr.get("is_metro_cluster_hit") else f"{padd} Corridor Fallback"
+            zip_lines.append(f"`{zc}` ({st} • {tier_badge} → `{hub}` | State Tax: `${tax:.3f}/gal`)")
+        embed["fields"].append({
+            "name": "📮 Subscribed ZIP Code Routing",
+            "value": "\n".join(zip_lines),
+            "inline": False,
+        })
+    elif zip_codes:
+        embed["fields"].append({
+            "name": "📮 Subscribed ZIP Codes",
+            "value": f"`{', '.join(zip_codes)}`",
+            "inline": True,
+        })
     if client_label:
         embed["fields"].append({"name": "🏷️ Client Label", "value": f"`{client_label}`", "inline": True})
     return {
@@ -635,6 +713,7 @@ class DiscordSubscriptionRegistry:
                     discord_user_id TEXT,
                     dm_channel_id TEXT,
                     target_locales TEXT NOT NULL,
+                    zip_codes TEXT NOT NULL DEFAULT '[]',
                     min_shock_threshold REAL DEFAULT 0.25,
                     direction_filter TEXT NOT NULL DEFAULT 'all_shocks',
                     catalyst_domains TEXT,
@@ -649,6 +728,12 @@ class DiscordSubscriptionRegistry:
                     failure_count INTEGER DEFAULT 0
                 )
             """)
+            try:
+                cols = [r["name"] for r in conn.execute("PRAGMA table_info(discord_subscriptions)").fetchall()]
+                if "zip_codes" not in cols:
+                    conn.execute("ALTER TABLE discord_subscriptions ADD COLUMN zip_codes TEXT NOT NULL DEFAULT '[]';")
+            except Exception:
+                pass
             conn.execute("CREATE INDEX IF NOT EXISTS idx_discord_subs_active ON discord_subscriptions (is_active, delivery_type);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_discord_subs_webhook_hash ON discord_subscriptions (webhook_url_hash);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_discord_subs_user_id ON discord_subscriptions (discord_user_id);")
@@ -671,19 +756,30 @@ class DiscordSubscriptionRegistry:
         delivery_mode: str = "realtime",
         role_mention: Optional[str] = None,
         client_label: Optional[str] = None,
-        verify_handshake: bool = True
+        verify_handshake: bool = True,
+        zip_codes: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """
         Registers or updates a Discord webhook or DM alert subscription.
+        Supports both regional metro/PADD hub names and 5-digit US ZIP codes.
+        Out-of-metro ZIP codes automatically update the unmapped ZIP query heatmap.
         Returns subscription metadata including `subscription_id` and `manage_token`.
         """
         delivery_type_norm = (delivery_type or "webhook").strip().lower()
         if delivery_type_norm not in VALID_DELIVERY_TYPES:
             raise ValueError(f"Invalid delivery_type '{delivery_type}'. Must be one of {sorted(VALID_DELIVERY_TYPES)}.")
 
-        locales_norm = normalize_locale_list(target_locales)
-        if not locales_norm:
-            raise ValueError("At least one valid target locale is required.")
+        if not target_locales and not zip_codes:
+            locales_norm = ["National"]
+            zips_norm: List[str] = []
+            zip_resolutions: List[Dict[str, Any]] = []
+        else:
+            locales_norm, zips_norm, zip_resolutions = resolve_subscription_locales_and_zips(
+                target_locales=target_locales,
+                zip_codes=zip_codes,
+            )
+            if not locales_norm:
+                raise ValueError("At least one valid target locale or 5-digit US ZIP code is required.")
 
         threshold_val = max(0.0, min(5.0, float(minimum_shock_threshold)))
         dir_norm = (direction_filter or "all_shocks").strip().lower()
@@ -748,7 +844,9 @@ class DiscordSubscriptionRegistry:
                 direction_filter=dir_norm,
                 delivery_type=delivery_type_norm,
                 client_label=client_label,
-                subscription_id=sub_id
+                subscription_id=sub_id,
+                zip_codes=zips_norm,
+                zip_resolutions=zip_resolutions,
             )
             if delivery_type_norm == "webhook" and webhook_url:
                 ok, status, err = _post_webhook_payload(webhook_url.strip(), welcome_payload)
@@ -777,6 +875,7 @@ class DiscordSubscriptionRegistry:
                         discord_user_id = ?,
                         dm_channel_id = ?,
                         target_locales = ?,
+                        zip_codes = ?,
                         min_shock_threshold = ?,
                         direction_filter = ?,
                         catalyst_domains = ?,
@@ -796,6 +895,7 @@ class DiscordSubscriptionRegistry:
                         clean_user_id,
                         resolved_dm_channel,
                         json.dumps(locales_norm),
+                        json.dumps(zips_norm),
                         threshold_val,
                         dir_norm,
                         json.dumps(domains_norm) if domains_norm else None,
@@ -811,10 +911,10 @@ class DiscordSubscriptionRegistry:
                     """
                     INSERT INTO discord_subscriptions (
                         subscription_id, delivery_type, webhook_url_hash, encrypted_webhook_url,
-                        discord_user_id, dm_channel_id, target_locales, min_shock_threshold,
+                        discord_user_id, dm_channel_id, target_locales, zip_codes, min_shock_threshold,
                         direction_filter, catalyst_domains, delivery_mode, role_mention,
                         client_label, manage_token_hash, is_active, created_at, failure_count
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, 0)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, 0)
                     """,
                     (
                         sub_id,
@@ -824,6 +924,7 @@ class DiscordSubscriptionRegistry:
                         clean_user_id,
                         resolved_dm_channel,
                         json.dumps(locales_norm),
+                        json.dumps(zips_norm),
                         threshold_val,
                         dir_norm,
                         json.dumps(domains_norm) if domains_norm else None,
@@ -843,6 +944,8 @@ class DiscordSubscriptionRegistry:
             "discord_user_id": clean_user_id,
             "dm_channel_id": resolved_dm_channel,
             "target_locales": locales_norm,
+            "zip_codes": zips_norm,
+            "zip_resolutions": zip_resolutions,
             "minimum_shock_threshold": threshold_val,
             "direction_filter": dir_norm,
             "catalyst_domains": domains_norm,
@@ -877,44 +980,76 @@ class DiscordSubscriptionRegistry:
 
     def unsubscribe_by_discord_user(self, discord_user_id: str, locale: Optional[str] = None) -> Dict[str, Any]:
         """
-        Unsubscribes a Discord user from DM alerts (either a specific locale or all locales).
+        Unsubscribes a Discord user from DM alerts (either a specific locale/ZIP or all locales).
         Used by `/midgley unsubscribe`.
         """
         clean_uid = str(discord_user_id or "").strip()
         if not clean_uid:
-            return {"removed": False, "remaining_locales": []}
+            return {"removed": False, "remaining_locales": [], "remaining_zip_codes": []}
 
         with self._get_conn() as conn:
             row = conn.execute(
-                "SELECT subscription_id, target_locales FROM discord_subscriptions WHERE discord_user_id = ? AND delivery_type = 'discord_dm' AND is_active = 1",
+                "SELECT subscription_id, target_locales, zip_codes FROM discord_subscriptions WHERE discord_user_id = ? AND delivery_type = 'discord_dm' AND is_active = 1",
                 (clean_uid,)
             ).fetchone()
             if not row:
-                return {"removed": False, "remaining_locales": []}
+                return {"removed": False, "remaining_locales": [], "remaining_zip_codes": []}
 
             sub_id = row["subscription_id"]
             current_locales = json.loads(row["target_locales"] or '["National"]')
+            try:
+                current_zips = json.loads(row["zip_codes"] or "[]")
+            except Exception:
+                current_zips = []
+
             if not locale or locale.strip().lower() == "all":
                 conn.execute("DELETE FROM discord_subscriptions WHERE subscription_id = ?", (sub_id,))
                 conn.commit()
-                return {"removed": True, "subscription_id": sub_id, "remaining_locales": []}
+                return {"removed": True, "subscription_id": sub_id, "remaining_locales": [], "remaining_zip_codes": []}
 
-            canon_target = normalize_locale_name(locale)
+            raw_loc = locale.strip()
+            if _looks_like_zip_code(raw_loc):
+                clean_zip = raw_loc.split("-")[0].strip().zfill(5)[:5]
+                if clean_zip in current_zips:
+                    remaining_zips = [z for z in current_zips if z != clean_zip]
+                    conn.execute(
+                        "UPDATE discord_subscriptions SET zip_codes = ? WHERE subscription_id = ?",
+                        (json.dumps(remaining_zips), sub_id)
+                    )
+                    conn.commit()
+                    return {
+                        "removed": True,
+                        "subscription_id": sub_id,
+                        "remaining_locales": current_locales,
+                        "remaining_zip_codes": remaining_zips,
+                    }
+
+            canon_target = normalize_locale_name(raw_loc)
             if not canon_target or canon_target not in current_locales:
-                return {"removed": False, "subscription_id": sub_id, "remaining_locales": current_locales}
+                return {
+                    "removed": False,
+                    "subscription_id": sub_id,
+                    "remaining_locales": current_locales,
+                    "remaining_zip_codes": current_zips,
+                }
 
             remaining = [loc for loc in current_locales if loc != canon_target]
             if not remaining:
                 conn.execute("DELETE FROM discord_subscriptions WHERE subscription_id = ?", (sub_id,))
                 conn.commit()
-                return {"removed": True, "subscription_id": sub_id, "remaining_locales": []}
+                return {"removed": True, "subscription_id": sub_id, "remaining_locales": [], "remaining_zip_codes": []}
             else:
                 conn.execute(
                     "UPDATE discord_subscriptions SET target_locales = ? WHERE subscription_id = ?",
                     (json.dumps(remaining), sub_id)
                 )
                 conn.commit()
-                return {"removed": True, "subscription_id": sub_id, "remaining_locales": remaining}
+                return {
+                    "removed": True,
+                    "subscription_id": sub_id,
+                    "remaining_locales": remaining,
+                    "remaining_zip_codes": current_zips,
+                }
 
     def get_user_subscription(self, discord_user_id: str) -> Optional[Dict[str, Any]]:
         """Returns the active DM subscription record for a given `discord_user_id`, if any."""
@@ -947,6 +1082,10 @@ class DiscordSubscriptionRegistry:
             d["target_locales"] = json.loads(d.get("target_locales") or '["National"]')
         except Exception:
             d["target_locales"] = ["National"]
+        try:
+            d["zip_codes"] = json.loads(d.get("zip_codes") or "[]")
+        except Exception:
+            d["zip_codes"] = []
         try:
             d["catalyst_domains"] = json.loads(d["catalyst_domains"]) if d.get("catalyst_domains") else None
         except Exception:
@@ -1052,9 +1191,10 @@ class DiscordSubscriptionRegistry:
             conn.commit()
 
     def get_status_summary(self) -> Dict[str, Any]:
-        """Returns active subscription counts grouped by regional metro hub and delivery type."""
+        """Returns active subscription counts grouped by regional metro hub, delivery type, and ZIP codes."""
         by_locale: Dict[str, int] = {loc: 0 for loc in SUPPORTED_LOCALES}
         by_delivery_type: Dict[str, int] = {"webhook": 0, "discord_dm": 0}
+        by_zip_code: Dict[str, int] = {}
         active_count = 0
         inactive_count = 0
 
@@ -1069,6 +1209,8 @@ class DiscordSubscriptionRegistry:
                 by_delivery_type[dtype] = by_delivery_type.get(dtype, 0) + 1
                 for loc in sub.get("target_locales", []):
                     by_locale[loc] = by_locale.get(loc, 0) + 1
+                for zc in sub.get("zip_codes", []):
+                    by_zip_code[zc] = by_zip_code.get(zc, 0) + 1
             else:
                 inactive_count += 1
 
@@ -1078,7 +1220,9 @@ class DiscordSubscriptionRegistry:
             "inactive_subscriptions": inactive_count,
             "by_delivery_type": by_delivery_type,
             "by_locale": by_locale,
+            "by_zip_code": by_zip_code,
         }
+
 
 
 _global_subscription_registry: Optional[DiscordSubscriptionRegistry] = None
