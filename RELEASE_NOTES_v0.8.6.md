@@ -90,7 +90,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 ### 3. Verification Commands
 ```bash
 python scripts/register_discord_commands.py --dry-run
-TESTING=1 pytest -v tests/test_denver_hub.py tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_zero_cost_fallbacks.py tests/test_hindsight_benchmark.py tests/test_open_source_ai_radar.py tests/test_system_telemetry.py tests/test_docs_links.py
+TESTING=1 pytest -v tests/test_declarative_regions.py tests/test_locations.py tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_zero_cost_fallbacks.py tests/test_hindsight_benchmark.py tests/test_open_source_ai_radar.py tests/test_system_telemetry.py tests/test_docs_links.py
 npx vitest run tests/workers.test.ts
 ```
 
