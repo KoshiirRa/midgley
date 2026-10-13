@@ -1132,12 +1132,12 @@ class DiscordSubscriptionRegistry:
                 d["webhook_url"] = None
         return d
 
-    def sync_edge_subscriptions(self) -> int:
+    def sync_edge_subscriptions(self, force: bool = False) -> int:
         """
         Pulls edge Discord DM subscriptions registered via Cloudflare Worker slash commands
         (/midgley subscribe) from the edge worker and merges them into the local subscription registry.
         """
-        if os.environ.get("TESTING") == "1":
+        if os.environ.get("TESTING") == "1" and not force:
             return 0
 
         auth_token = os.environ.get("DISCORD_BOT_TOKEN") or os.environ.get("ADMIN_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")

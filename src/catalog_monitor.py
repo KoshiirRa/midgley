@@ -76,6 +76,8 @@ def load_catalog_state() -> dict:
 
 def save_catalog_state(state: dict):
     """Saves persistent catalog state to JSON file."""
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
     state["last_scan"] = datetime.now().isoformat()
     try:

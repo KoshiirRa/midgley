@@ -246,4 +246,83 @@ def isolate_test_environment(tmp_path, monkeypatch):
     except (ImportError, AttributeError):
         pass
 
+    try:
+        import src.portwatch_connector as pwc
+        monkeypatch.setattr(pwc, "PORTWATCH_VINTAGE_FILE", str(tmp_path / "imf_portwatch_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.census_demographics as cd
+        monkeypatch.setattr(cd, "CENSUS_VINTAGE_FILE", str(tmp_path / "census_demographics_vintages.json"))
+        monkeypatch.setattr(cd, "CENSUS_CACHE_FILE", str(tmp_path / "census_demographics_cache.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.firms_satellite_feed as fsf
+        monkeypatch.setattr(fsf, "FIRMS_VINTAGES_FILE", str(tmp_path / "firms_satellite_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.state_open_data as sod
+        monkeypatch.setattr(sod, "STATE_SURVEYS_VINTAGE_FILE", str(tmp_path / "state_surveys_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.bsee_shutins as bss
+        monkeypatch.setattr(bss, "BSEE_VINTAGE_FILE", str(tmp_path / "bsee_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.nhc_hurricane as nhc
+        monkeypatch.setattr(nhc, "NHC_VINTAGE_FILE", str(tmp_path / "nhc_hurricane_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.energy_equities_feed as eef
+        monkeypatch.setattr(eef, "ENERGY_EQUITIES_VINTAGE_FILE", str(tmp_path / "energy_equities_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.headline_arena_connector as hac
+        monkeypatch.setattr(hac, "SUBMITTED_LEDGER_FILE", str(tmp_path / "headline_arena_submitted_ledger.json"))
+        monkeypatch.setattr(hac, "PENDING_FORECASTS_FILE", str(tmp_path / "headline_arena_pending_forecasts.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.catalog_monitor as cm
+        monkeypatch.setattr(cm, "STATE_FILE", str(tmp_path / "catalog_monitors_state.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.treasury_yield_feed as tyf
+        monkeypatch.setattr(tyf, "TREASURY_VINTAGE_FILE", str(tmp_path / "treasury_vintages.json"))
+        monkeypatch.setattr(tyf, "TREASURY_CACHE_PATH", str(tmp_path / "treasury_cache.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.diesel_regional as dr
+        monkeypatch.setattr(dr, "DIESEL_VINTAGE_FILE", str(tmp_path / "diesel_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.data_ingestion as di
+        monkeypatch.setattr(di, "FRED_VINTAGE_FILE", str(tmp_path / "fred_vintages.json"))
+        monkeypatch.setattr(di, "RADAR_VINTAGE_FILE", str(tmp_path / "radar_vintages.json"))
+        monkeypatch.setattr(di, "CFTC_VINTAGE_FILE", str(tmp_path / "cftc_vintages.json"))
+        if hasattr(di, "RadarFuelTrackerConnector"):
+            monkeypatch.setattr(di.RadarFuelTrackerConnector, "CACHE_FILE", str(tmp_path / "radar_cache.json"))
+    except (ImportError, AttributeError):
+        pass
+
     yield tmp_path

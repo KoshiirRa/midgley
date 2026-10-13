@@ -247,7 +247,7 @@ def record_submitted_challenge(
         "response": response
     }
 
-    if os.environ.get("TESTING") == "1" and filepath is None:
+    if (os.environ.get("TESTING") == "1" or os.environ.get("PYTEST_CURRENT_TEST")) and (filepath is None or os.path.abspath(filepath) == os.path.abspath(SUBMITTED_LEDGER_FILE)) and os.environ.get("TEST_PERSIST_RECORD") != "1":
         if not hasattr(load_submitted_ledger, "_test_mock_ledger"):
             load_submitted_ledger._test_mock_ledger = {"submitted_challenges": {}}
         load_submitted_ledger._test_mock_ledger["submitted_challenges"][str(challenge_id)] = entry

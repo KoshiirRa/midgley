@@ -108,6 +108,8 @@ class IMFPortWatchConnector:
             return {"vintages": {}, "last_updated": None}
 
     def _save_vintages(self, data: Dict[str, Any]) -> None:
+        if os.environ.get("TESTING") == "1" and os.path.abspath(self.vintage_file) == os.path.abspath(os.path.join("data", "imf_portwatch_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             with open(self.vintage_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)

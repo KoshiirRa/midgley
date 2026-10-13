@@ -424,13 +424,16 @@ HISTORICAL_FHWA_BASELINE: List[Dict[str, Any]] = [
 ]
 
 
-def save_fhwa_vintage_record(record: Dict[str, Any], filepath: str = FHWA_VINTAGE_FILE) -> None:
+def save_fhwa_vintage_record(record: Dict[str, Any], filepath: Optional[str] = None) -> None:
     """
     Persists a bitemporal point-in-time FHWA Traffic Volume observation record.
     Eliminates lookahead bias in historical model backtests.
     """
+    fp = filepath or FHWA_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(FHWA_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:

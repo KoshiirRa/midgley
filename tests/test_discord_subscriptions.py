@@ -358,9 +358,9 @@ def test_sync_edge_subscriptions(tmp_path):
     mock_resp.read.return_value = json.dumps(edge_payload).encode("utf-8")
     mock_resp.__enter__.return_value = mock_resp
 
-    with patch.dict(os.environ, {"TESTING": "0", "DISCORD_BOT_TOKEN": "mock_token"}), \
+    with patch.dict(os.environ, {"DISCORD_BOT_TOKEN": "mock_token"}), \
          patch("urllib.request.urlopen", return_value=mock_resp):
-        synced = reg.sync_edge_subscriptions()
+        synced = reg.sync_edge_subscriptions(force=True)
         assert synced == 1
 
         subs = reg.get_matching_subscribers(event_locales=["Newark"], price_pressure=0.30)
