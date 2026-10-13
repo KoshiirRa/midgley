@@ -521,6 +521,24 @@ SCENARIOS_CATALOG = {
         "season_window": "Dec 01 – Feb 28",
         "telemetry_hook": "noaa_freeze",
         "locales": ["tulsa", "cincinnati", "national"]
+    },
+    "suncor_commerce_city_freeze_outage": {
+        "name": "Suncor Commerce City Total Freeze / Outage",
+        "headline": "Severe Arctic cold front causes equipment freeze damage and fires at Suncor Commerce City, forcing total shutdown of Colorado's sole 103 kbpd refinery.",
+        "shock_pct": 0.1220,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["denver", "national"]
+    },
+    "front_range_ozone_rfg_transition": {
+        "name": "Front Range Severe Ozone Nonattainment Summer RFG Transition",
+        "headline": "Statutory EPA Severe Ozone nonattainment mandate cuts over to 7.8 psi summer blend, driving Denver rack supply tightness.",
+        "shock_pct": 0.0570,
+        "category": "regulatory_spec",
+        "season_window": "May 01 – Sep 15",
+        "telemetry_hook": "spec_calendar",
+        "locales": ["denver", "national"]
     }
 }
 

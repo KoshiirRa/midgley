@@ -545,13 +545,12 @@ class TestIntradayEventMonitor(unittest.TestCase):
             mock_retain.assert_called_once_with(res)
 
     def test_resolve_target_locales_denver(self):
-        from src.intraday_event_monitor import resolve_target_locales
         h1 = "Suncor Commerce City Refinery suffers unplanned FCC freeze outage in Colorado"
-        locales1 = resolve_target_locales(h1)
+        locales1 = self.monitor.resolve_target_locales(h1)
         self.assertIn("Denver", locales1)
 
         h2 = "Denver rack fuel supplies tighten following Rocky Mountain pipeline disruption"
-        locales2 = resolve_target_locales(h2)
+        locales2 = self.monitor.resolve_target_locales(h2)
         self.assertIn("Denver", locales2)
 
 
