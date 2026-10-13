@@ -12,6 +12,8 @@ import intradayWorker, {
   generateEventToken,
   getWorkerSigningSecret,
   timingSafeEqual as intradayTimingSafeEqual,
+  clearWorkerSubscriptionsMemoryForTesting,
+  ensureFlagReplaySchema,
   Env as IntradayEnv,
   QueueMessageBatch
 } from "../workers/intraday_monitor_worker";
@@ -23,28 +25,64 @@ function uint8ArrayToHex(arr: Uint8Array): string {
     .join("");
 }
 
-function createMockD1Database() {
+function createMockD1Database(initialColumns: string[] = ["clean_key", "value", "used_at"]) {
   const store = new Map<string, any>();
+  const columns = new Set<string>(initialColumns);
   return {
     store,
+    columns,
     prepare(query: string) {
+      if (query.includes("PRAGMA table_info(flag_replay_tokens)")) {
+        return {
+          async all() {
+            return {
+              results: Array.from(columns).map(c => ({ name: c }))
+            };
+          }
+        };
+      }
+      if (query.includes("ALTER TABLE flag_replay_tokens ADD COLUMN value")) {
+        return {
+          async run() {
+            columns.add("value");
+            return { success: true };
+          }
+        };
+      }
       return {
         bind(...args: any[]) {
           return {
             async first() {
               const key = args[0];
+              if (query.includes("value") && !columns.has("value")) {
+                throw new Error("no such column: value");
+              }
               if (store.has(key)) {
                 return store.get(key);
               }
               return null;
             },
             async run() {
+              if (query.includes("value") && !columns.has("value")) {
+                throw new Error("table flag_replay_tokens has no column named value");
+              }
+              if (query.startsWith("DELETE")) {
+                store.delete(args[0]);
+                return { success: true };
+              }
               const key = args[0];
               const value = args[1] || "{}";
               store.set(key, { clean_key: key, value, created_at: new Date().toISOString() });
               return { success: true };
             }
           };
+        },
+        async all() {
+          if (query.includes("value") && !columns.has("value")) {
+            throw new Error("no such column: value");
+          }
+          const results = Array.from(store.values());
+          return { results };
         },
         async run() {
           return { success: true };
@@ -901,6 +939,212 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         expect(telJson.top_unmapped_zips.some((item: any) => item.zip_code === "64101" && item.state === "MO")).toBe(true);
         // 74103 is a metro cluster hit so it must NOT appear in unmapped zips
         expect(telJson.top_unmapped_zips.some((item: any) => item.zip_code === "74103")).toBe(false);
+
+        // Subscribe to ZIP 12946 (Lake Placid, NY -> Significant Departure from Newark, DE)
+        const subNyReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "999888777666", username: "adk_skier" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "subscribe",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "12946" },
+                  { name: "delivery", type: 3, value: "dm" }
+                ]
+              }
+            ]
+          }
+        });
+        const subNyRes = await handleDiscordInteraction(subNyReq, env, {});
+        expect(subNyRes.status).toBe(200);
+        const subNyJson = (await subNyRes.json()) as any;
+        expect(subNyJson.data.flags).toBe(64);
+        expect(subNyJson.data.content).toContain("Lake Placid, NY");
+        expect(subNyJson.data.content).toContain("635"); // Tracking issue #635 for NY
+        expect(JSON.stringify(subNyJson.data.embeds)).toContain("Lake Placid, NY");
+        expect(JSON.stringify(subNyJson.data.embeds)).toContain("+$0.242/gal"); // Tax wedge
+        expect(JSON.stringify(subNyJson.data.embeds)).toContain("Regional Basis & Tax Departure");
+
+        // Forecast for ZIP 12946 (Lake Placid, NY)
+        const fcNyReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "999888777666", username: "adk_skier" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "12946" },
+                  { name: "horizon", type: 4, value: 3 }
+                ]
+              }
+            ]
+          }
+        });
+        const fcNyRes = await handleDiscordInteraction(fcNyReq, env, {});
+        expect(fcNyRes.status).toBe(200);
+        const fcNyJson = (await fcNyRes.json()) as any;
+        expect(fcNyJson.data.embeds[0].title).toContain("Lake Placid, NY");
+        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("Statutory Tax Wedge");
+        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("+$0.242/gal");
+        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("Estimated Basis & Price Synthesis");
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
+
+    it("retains DM alert subscriptions across worker memory cache evictions with D1 database binding", async () => {
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+        if (String(url).includes("/users/@me/channels")) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ id: "dm_channel_concentus" }),
+            text: async () => '{"id":"dm_channel_concentus"}'
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ id: "msg_dm" }),
+          text: async () => '{"id":"msg_dm"}'
+        };
+      });
+
+      const mockDb = createMockD1Database(["clean_key", "value", "used_at"]);
+      const env: IntradayEnv = {
+        DISCORD_PUBLIC_KEY: publicKeyHex,
+        DISCORD_BOT_TOKEN: "mock_bot_token_concentus",
+        DB: mockDb
+      };
+
+      try {
+        clearWorkerSubscriptionsMemoryForTesting();
+
+        // 1. Subscribe user @concentus (id: "53711617") to Newark
+        const subReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "53711617", username: "concentus" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "subscribe",
+                type: 1,
+                options: [
+                  { name: "locale", type: 3, value: "Newark" },
+                  { name: "min_shock", type: 10, value: 0.25 },
+                  { name: "direction", type: 3, value: "all_shocks" },
+                  { name: "delivery", type: 3, value: "dm" }
+                ]
+              }
+            ]
+          }
+        });
+        const subRes = await handleDiscordInteraction(subReq, env, {});
+        expect(subRes.status).toBe(200);
+
+        // 2. Simulate worker isolate recycling / cold start by evicting memory cache
+        clearWorkerSubscriptionsMemoryForTesting();
+
+        // 3. /midgley status must still find the active subscription from D1
+        const statusReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "53711617", username: "concentus" } },
+          data: {
+            name: "midgley",
+            options: [{ name: "status", type: 1 }]
+          }
+        });
+        const statusRes = await handleDiscordInteraction(statusReq, env, {});
+        expect(statusRes.status).toBe(200);
+        const statusJson = (await statusRes.json()) as any;
+        expect(statusJson.data.flags).toBe(64);
+        expect(JSON.stringify(statusJson.data.embeds)).toContain("Newark");
+        expect(JSON.stringify(statusJson.data.embeds)).toContain("sub_dm_53711617");
+        expect(JSON.stringify(statusJson.data.embeds)).not.toContain("No active Direct Message subscriptions found");
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
+
+    it("auto-migrates missing 'value' column in flag_replay_tokens table when subscriber registers", async () => {
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+        if (String(url).includes("/users/@me/channels")) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ id: "dm_channel_legacy" }),
+            text: async () => '{"id":"dm_channel_legacy"}'
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ id: "msg_legacy" }),
+          text: async () => '{"id":"msg_legacy"}'
+        };
+      });
+
+      // Initially lacking the 'value' column as in legacy init_d1_schema.sql
+      const mockDb = createMockD1Database(["clean_key", "used_at"]);
+      expect(mockDb.columns.has("value")).toBe(false);
+
+      const env: IntradayEnv = {
+        DISCORD_PUBLIC_KEY: publicKeyHex,
+        DISCORD_BOT_TOKEN: "mock_bot_token_legacy",
+        DB: mockDb
+      };
+
+      try {
+        clearWorkerSubscriptionsMemoryForTesting();
+
+        // Subscribe user
+        const subReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "888999111", username: "migrated_user" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "subscribe",
+                type: 1,
+                options: [
+                  { name: "locale", type: 3, value: "Tulsa" },
+                  { name: "delivery", type: 3, value: "dm" }
+                ]
+              }
+            ]
+          }
+        });
+        const subRes = await handleDiscordInteraction(subReq, env, {});
+        expect(subRes.status).toBe(200);
+
+        // Verify that 'value' column was automatically added via schema self-healing
+        expect(mockDb.columns.has("value")).toBe(true);
+
+        // Evict in-memory cache to simulate isolate recycle
+        clearWorkerSubscriptionsMemoryForTesting();
+
+        // Verify /midgley status retrieves record from D1
+        const statusReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "888999111", username: "migrated_user" } },
+          data: {
+            name: "midgley",
+            options: [{ name: "status", type: 1 }]
+          }
+        });
+        const statusRes = await handleDiscordInteraction(statusReq, env, {});
+        const statusJson = (await statusRes.json()) as any;
+        expect(JSON.stringify(statusJson.data.embeds)).toContain("Tulsa");
       } finally {
         globalThis.fetch = originalFetch;
       }

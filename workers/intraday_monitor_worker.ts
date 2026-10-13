@@ -834,11 +834,18 @@ export interface WorkerZipResolution {
   is_metro_cluster_hit: boolean;
   locale_code: string;
   canonical_hub: string;
+  location_name: string;
   state: string;
   padd_region: string;
   padd_name: string;
   calibrated_model_used: string;
   state_tax_rate_per_gal: number;
+  hub_baseline_tax_rate: number;
+  tax_delta_per_gal: number;
+  is_significant_departure: boolean;
+  departure_reason: string;
+  estimated_basis_delta: number;
+  tracking_issue_number?: number | null;
 }
 
 export interface WorkerUnmappedZipTelemetryRecord {
@@ -853,6 +860,97 @@ export interface WorkerUnmappedZipTelemetryRecord {
 
 const WORKER_DM_SUBSCRIPTIONS = new Map<string, WorkerDMSubscriptionRecord>();
 const WORKER_UNMAPPED_ZIPS = new Map<string, WorkerUnmappedZipTelemetryRecord>();
+const WORKER_DEPARTURE_ISSUES_CACHE = new Map<string, { issueNumber: number; issueUrl: string }>();
+
+let flagReplaySchemaInitialized = false;
+
+export function clearWorkerSubscriptionsMemoryForTesting(): void {
+  WORKER_DM_SUBSCRIPTIONS.clear();
+  flagReplaySchemaInitialized = false;
+}
+
+export async function ensureFlagReplaySchema(env: Env): Promise<void> {
+  if (!env.DB || flagReplaySchemaInitialized) return;
+  try {
+    await env.DB.prepare(
+      "CREATE TABLE IF NOT EXISTS flag_replay_tokens (clean_key TEXT PRIMARY KEY, value TEXT, used_at TEXT NOT NULL DEFAULT (datetime('now')))"
+    ).run();
+
+    try {
+      const tableInfo = await env.DB.prepare("PRAGMA table_info(flag_replay_tokens)").all();
+      const cols = new Set(((tableInfo && tableInfo.results) || []).map((c: any) => c.name));
+      if (cols.size > 0 && !cols.has("value")) {
+        await env.DB.prepare("ALTER TABLE flag_replay_tokens ADD COLUMN value TEXT").run();
+      }
+    } catch {
+      // PRAGMA table_info might fail in certain environments or mocks
+    }
+
+    flagReplaySchemaInitialized = true;
+  } catch (err: any) {
+    console.warn(`[D1 Schema Init Notice] ensureFlagReplaySchema: ${err?.message || String(err)}`);
+  }
+}
+
+// Baseline statutory motor fuel excise taxes ($/gal) for calibrated reference hubs
+export const WORKER_HUB_BASELINE_TAXES: Record<string, number> = {
+  Newark: 0.230,
+  Tulsa: 0.190,
+  Cincinnati: 0.385,
+  Greenville: 0.404,
+  Charlotte: 0.404,
+  Port_St_Lucie: 0.362,
+  Chicago: 0.550,
+  Houston: 0.200,
+  Los_Angeles: 0.953,
+  Oakland: 0.634,
+  National: 0.184
+};
+
+// Known regional locality names to preserve true human-readable geographic identity
+export const WORKER_KNOWN_ZIP_LOCALITIES: Record<string, string> = {
+  "12946": "Lake Placid, NY",
+  "129": "Adirondacks / Plattsburgh, NY",
+  "100": "Manhattan, NYC",
+  "101": "Manhattan, NYC",
+  "102": "Manhattan, NYC",
+  "103": "Staten Island, NYC",
+  "104": "Bronx, NYC",
+  "112": "Brooklyn, NYC",
+  "111": "Queens, NYC",
+  "113": "Queens, NYC",
+  "114": "Queens, NYC",
+  "115": "Nassau County, Long Island",
+  "117": "Suffolk County, Long Island",
+  "119": "Hamptons, Long Island",
+  "120": "Capital District, NY",
+  "122": "Albany, NY",
+  "128": "Glens Falls / Adirondacks, NY",
+  "132": "Syracuse, NY",
+  "142": "Buffalo, NY",
+  "146": "Rochester, NY",
+  "191": "Philadelphia, PA",
+  "152": "Pittsburgh, PA",
+  "021": "Boston, MA",
+  "029": "Providence, RI",
+  "061": "Hartford, CT",
+  "031": "Manchester, NH",
+  "054": "Burlington, VT",
+  "041": "Portland, ME",
+  "802": "Denver, CO",
+  "841": "Salt Lake City, UT",
+  "820": "Cheyenne, WY",
+  "591": "Billings, MT",
+  "837": "Boise, ID",
+  "74103": "Tulsa Metro, OK",
+  "64101": "Kansas City, MO",
+};
+
+export function resolveWorkerLocationName(zipCode: string, prefix3: string, state: string): string {
+  if (WORKER_KNOWN_ZIP_LOCALITIES[zipCode]) return WORKER_KNOWN_ZIP_LOCALITIES[zipCode];
+  if (WORKER_KNOWN_ZIP_LOCALITIES[prefix3]) return WORKER_KNOWN_ZIP_LOCALITIES[prefix3];
+  return `ZIP ${zipCode} (${state})`;
+}
 
 const WORKER_ZIP_METRO_PREFIX_MAP: Record<string, string> = {
   "740": "Tulsa", "741": "Tulsa", "742": "Tulsa", "743": "Tulsa",
@@ -945,7 +1043,7 @@ function resolveStateFromZipPrefix(prefix3: string): string {
   if (p >= 247 && p <= 268) return "WV";
   if (p >= 270 && p <= 289) return "NC";
   if (p >= 290 && p <= 299) return "SC";
-  if ((p >= 300 && p <= 319) || (p >= 398 && p <= 399)) return "GA";
+  if (p >= 300 && p <= 319 || p === 398 || p === 399) return "GA";
   if (p >= 320 && p <= 349) return "FL";
   if (p >= 350 && p <= 369) return "AL";
   if (p >= 370 && p <= 385) return "TN";
@@ -974,7 +1072,7 @@ function resolveStateFromZipPrefix(prefix3: string): string {
   if (p >= 840 && p <= 847) return "UT";
   if (p >= 850 && p <= 865) return "AZ";
   if (p >= 870 && p <= 884) return "NM";
-  if (p >= 890 && p <= 898) return "NV";
+  if (p >= 889 && p <= 898) return "NV";
   if (p >= 900 && p <= 961) return "CA";
   if (p >= 967 && p <= 968) return "HI";
   if (p >= 970 && p <= 979) return "OR";
@@ -1000,11 +1098,17 @@ export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
       is_metro_cluster_hit: false,
       locale_code: "national",
       canonical_hub: "National",
+      location_name: `ZIP ${base.slice(0, 5)} (US)`,
       state: "US",
       padd_region: "PADD 2",
       padd_name: "Midwest",
       calibrated_model_used: "National Wholesale",
-      state_tax_rate_per_gal: 0.184
+      state_tax_rate_per_gal: 0.184,
+      hub_baseline_tax_rate: 0.184,
+      tax_delta_per_gal: 0.0,
+      is_significant_departure: false,
+      departure_reason: "",
+      estimated_basis_delta: 0.0
     };
   }
 
@@ -1019,8 +1123,11 @@ export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
     tax: 0.250
   };
 
+  const locName = resolveWorkerLocationName(zipClean, prefix3, stateCode);
+
   if (prefix3 in WORKER_ZIP_METRO_PREFIX_MAP) {
     const metroHub = WORKER_ZIP_METRO_PREFIX_MAP[prefix3];
+    const hubTax = WORKER_HUB_BASELINE_TAXES[metroHub] || 0.250;
     return {
       status: "success",
       zip_code: zipClean,
@@ -1029,13 +1136,45 @@ export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
       is_metro_cluster_hit: true,
       locale_code: metroHub.toLowerCase(),
       canonical_hub: metroHub,
+      location_name: locName,
       state: stateCode,
       padd_region: stateMeta.padd,
       padd_name: stateMeta.paddName,
       calibrated_model_used: `${metroHub} (Direct Metro Cluster)`,
-      state_tax_rate_per_gal: stateMeta.tax
+      state_tax_rate_per_gal: stateMeta.tax,
+      hub_baseline_tax_rate: hubTax,
+      tax_delta_per_gal: 0.0,
+      is_significant_departure: false,
+      departure_reason: "",
+      estimated_basis_delta: 0.0
     };
   }
+
+  const fallbackHub = stateMeta.hub;
+  const hubTax = WORKER_HUB_BASELINE_TAXES[fallbackHub] || 0.250;
+  const taxDelta = Number((stateMeta.tax - hubTax).toFixed(3));
+  const isDeparture = (
+    Math.abs(taxDelta) >= 0.15
+    || stateMeta.padd === "PADD 1A"
+    || stateMeta.padd === "PADD 4"
+    || (stateCode === "NY" && fallbackHub === "Newark")
+  );
+
+  let departureReason = "";
+  if (isDeparture) {
+    if (stateCode === "NY" && fallbackHub === "Newark") {
+      departureReason = `High statutory tax wedge (+${taxDelta.toFixed(3)}/gal vs DE) and Adirondack/Upstate logistics basis`;
+    } else if (stateMeta.padd === "PADD 1A") {
+      departureReason = `PADD 1A New England regional disconnect from coastal rack hub (${fallbackHub})`;
+    } else if (stateMeta.padd === "PADD 4") {
+      departureReason = `PADD 4 Rocky Mountain inter-PADD corridor fallback (${fallbackHub})`;
+    } else {
+      departureReason = `Statutory tax wedge of ${taxDelta >= 0 ? "+" : ""}${taxDelta.toFixed(3)}/gal vs hub baseline (${fallbackHub})`;
+    }
+  }
+
+  const extraLogistics = (zipClean === "12946" || prefix3 === "129") ? 0.35 : (stateCode === "NY" ? 0.15 : 0.0);
+  const estBasis = Number((taxDelta + extraLogistics).toFixed(3));
 
   return {
     status: "success",
@@ -1043,14 +1182,121 @@ export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
     prefix_3: prefix3,
     resolution_tier: "STATE_PADD_FALLBACK",
     is_metro_cluster_hit: false,
-    locale_code: stateMeta.hub.toLowerCase(),
-    canonical_hub: stateMeta.hub,
+    locale_code: fallbackHub.toLowerCase(),
+    canonical_hub: fallbackHub,
+    location_name: locName,
     state: stateCode,
     padd_region: stateMeta.padd,
     padd_name: stateMeta.paddName,
     calibrated_model_used: stateMeta.model,
-    state_tax_rate_per_gal: stateMeta.tax
+    state_tax_rate_per_gal: stateMeta.tax,
+    hub_baseline_tax_rate: hubTax,
+    tax_delta_per_gal: taxDelta,
+    is_significant_departure: isDeparture,
+    departure_reason: departureReason,
+    estimated_basis_delta: estBasis,
+    tracking_issue_number: stateCode === "NY" ? 635 : null
   };
+}
+
+export async function maybeTriggerHubDepartureIssue(
+  res: WorkerZipResolution,
+  env: Env
+): Promise<{ triggered: boolean; issueNumber?: number; issueUrl?: string }> {
+  if (!res.is_significant_departure || res.is_metro_cluster_hit) {
+    return { triggered: false };
+  }
+
+  // New York already has active tracking issue #635
+  if (res.state === "NY") {
+    return {
+      triggered: true,
+      issueNumber: 635,
+      issueUrl: "https://github.com/KoshiirRa/midgley/issues/635"
+    };
+  }
+
+  const cacheKey = res.state;
+  const cached = WORKER_DEPARTURE_ISSUES_CACHE.get(cacheKey);
+  if (cached) {
+    return { triggered: true, issueNumber: cached.issueNumber, issueUrl: cached.issueUrl };
+  }
+
+  const d1Key = `departure_issue:${res.state}`;
+  if (env.DB) {
+    try {
+      await ensureFlagReplaySchema(env);
+      const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(d1Key).first();
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value) as { issue_number: number; issue_url: string };
+        WORKER_DEPARTURE_ISSUES_CACHE.set(cacheKey, { issueNumber: parsed.issue_number, issueUrl: parsed.issue_url });
+        return { triggered: true, issueNumber: parsed.issue_number, issueUrl: parsed.issue_url };
+      }
+    } catch (e) {
+      console.warn("[Departure Issue D1 Query Error]", e);
+    }
+  }
+
+  const token = (env as any).GH_PAT || (env as any).GITHUB_PAT || (env as any).GITHUB_TOKEN;
+  if (!token) {
+    return { triggered: false };
+  }
+
+  const owner = "KoshiirRa";
+  const repo = "midgley";
+  const title = `feat(regions): Implement ${res.state} Regional Calibration Hub (Triggered by Out-of-Metro Demand for ZIP ${res.zip_code})`;
+  const body = `### 📮 Automated Region Departure Trigger\n` +
+    `A subscriber requested shock notifications for **ZIP ${res.zip_code} (${res.location_name})**, which departs significantly from its current PADD calibration hub (**${res.calibrated_model_used}**).\n\n` +
+    `### 📊 Calibration Gap Diagnostics\n` +
+    `- **Requested Location:** \`${res.location_name}\` (ZIP \`${res.zip_code}\`, \`${res.state}\`)\n` +
+    `- **Assigned Fallback Hub:** \`${res.canonical_hub}\` (\`${res.calibrated_model_used}\`)\n` +
+    `- **State Statutory Tax:** \`$${res.state_tax_rate_per_gal.toFixed(3)}/gal\`\n` +
+    `- **Hub Baseline Tax:** \`$${res.hub_baseline_tax_rate.toFixed(3)}/gal\`\n` +
+    `- **Statutory Tax Wedge (Δτ):** \`${res.tax_delta_per_gal >= 0 ? "+" : ""}$${res.tax_delta_per_gal.toFixed(3)}/gal\`\n` +
+    `- **Estimated Basis Spread:** \`${res.estimated_basis_delta >= 0 ? "+" : ""}$${res.estimated_basis_delta.toFixed(2)}/gal\` over rack\n` +
+    `- **Departure Reason:** ${res.departure_reason}\n\n` +
+    `### 🎯 Action Item\n` +
+    `Evaluate adding a native regional calibration hub for **${res.state}** (or incorporating a sub-PADD basis adjustment model) to prevent pricing distortion when serving out-of-metro subscribers.`;
+
+  try {
+    const postRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "User-Agent": "Midgley-Discord-Worker",
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        labels: ["enhancement", "modeling", "regions"]
+      })
+    });
+
+    if (postRes.ok) {
+      const issueData: any = await postRes.json();
+      const issueNumber = issueData.number as number;
+      const issueUrl = issueData.html_url as string;
+
+      WORKER_DEPARTURE_ISSUES_CACHE.set(cacheKey, { issueNumber, issueUrl });
+      if (env.DB) {
+        try {
+          await ensureFlagReplaySchema(env);
+          await env.DB.prepare("INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value")
+            .bind(d1Key, JSON.stringify({ issue_number: issueNumber, issue_url: issueUrl, created_at: new Date().toISOString() }))
+            .run();
+        } catch (dbErr) {
+          console.warn("[Departure Issue D1 Store Error]", dbErr);
+        }
+      }
+      return { triggered: true, issueNumber, issueUrl };
+    }
+  } catch (err) {
+    console.warn("[Departure Issue Creation Error]", err);
+  }
+
+  return { triggered: false };
 }
 
 export async function recordWorkerUnmappedZip(res: WorkerZipResolution, env: Env): Promise<void> {
@@ -1079,10 +1325,11 @@ export async function recordWorkerUnmappedZip(res: WorkerZipResolution, env: Env
 
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       const dbKey = `unmapped_zip:${zKey}`;
       const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(dbKey).first();
-      if (row && row.value) {
-        const parsed = JSON.parse(row.value) as WorkerUnmappedZipTelemetryRecord;
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value) as WorkerUnmappedZipTelemetryRecord;
         record = {
           ...parsed,
           hit_count: (parsed.hit_count || 0) + 1,
@@ -1094,8 +1341,8 @@ export async function recordWorkerUnmappedZip(res: WorkerZipResolution, env: Env
       )
         .bind(dbKey, JSON.stringify(record))
         .run();
-    } catch {
-      // Fallback to in-memory map
+    } catch (d1Err: any) {
+      console.warn(`[D1 RecordUnmappedZip Notice] ${d1Err?.message || String(d1Err)}`);
     }
   }
   WORKER_UNMAPPED_ZIPS.set(zKey, record);
@@ -1105,6 +1352,7 @@ export async function getWorkerUnmappedZips(env: Env): Promise<WorkerUnmappedZip
   const merged = new Map<string, WorkerUnmappedZipTelemetryRecord>(WORKER_UNMAPPED_ZIPS);
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       const res = await env.DB.prepare(
         "SELECT value FROM flag_replay_tokens WHERE clean_key LIKE 'unmapped_zip:%'"
       ).all();
@@ -1116,8 +1364,8 @@ export async function getWorkerUnmappedZips(env: Env): Promise<WorkerUnmappedZip
           merged.set(parsed.zip_code, parsed);
         }
       }
-    } catch {
-      // Ignore if query unsupported in mock
+    } catch (d1Err: any) {
+      console.warn(`[D1 GetUnmappedZips Notice] ${d1Err?.message || String(d1Err)}`);
     }
   }
   return Array.from(merged.values()).sort((a, b) => b.hit_count - a.hit_count);
@@ -1167,16 +1415,29 @@ export async function getWorkerUserSubscription(userId: string, env: Env): Promi
     return WORKER_DM_SUBSCRIPTIONS.get(userId) || null;
   }
   if (env.DB) {
+    const key = `discord_sub:${userId}`;
     try {
-      const key = `discord_sub:${userId}`;
+      await ensureFlagReplaySchema(env);
       const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(key).first();
-      if (row && row.value) {
-        const parsed = JSON.parse(row.value) as WorkerDMSubscriptionRecord;
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value) as WorkerDMSubscriptionRecord;
         WORKER_DM_SUBSCRIPTIONS.set(userId, parsed);
         return parsed;
       }
-    } catch {
-      // Fallback to in-memory map
+    } catch (d1Err: any) {
+      console.warn(`[D1 Subscription Get Retry] ${d1Err?.message || String(d1Err)}`);
+      try {
+        flagReplaySchemaInitialized = false;
+        await ensureFlagReplaySchema(env);
+        const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(key).first();
+        if (row && (row as any).value) {
+          const parsed = JSON.parse((row as any).value) as WorkerDMSubscriptionRecord;
+          WORKER_DM_SUBSCRIPTIONS.set(userId, parsed);
+          return parsed;
+        }
+      } catch (retryErr: any) {
+        console.error(`[D1 Subscription Get Failed] ${retryErr?.message || String(retryErr)}`);
+      }
     }
   }
   return null;
@@ -1186,6 +1447,7 @@ export async function getAllWorkerSubscriptions(env: Env): Promise<WorkerDMSubsc
   const merged = new Map<string, WorkerDMSubscriptionRecord>(WORKER_DM_SUBSCRIPTIONS);
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       const res = await env.DB.prepare(
         "SELECT value FROM flag_replay_tokens WHERE clean_key LIKE 'discord_sub:%'"
       ).all();
@@ -1197,8 +1459,8 @@ export async function getAllWorkerSubscriptions(env: Env): Promise<WorkerDMSubsc
           merged.set(parsed.discord_user_id, parsed);
         }
       }
-    } catch {
-      // Fallback to in-memory map
+    } catch (d1Err: any) {
+      console.warn(`[D1 GetAllSubscriptions Notice] ${d1Err?.message || String(d1Err)}`);
     }
   }
   return Array.from(merged.values());
@@ -1207,15 +1469,28 @@ export async function getAllWorkerSubscriptions(env: Env): Promise<WorkerDMSubsc
 export async function saveWorkerUserSubscription(record: WorkerDMSubscriptionRecord, env: Env): Promise<void> {
   WORKER_DM_SUBSCRIPTIONS.set(record.discord_user_id, record);
   if (env.DB) {
+    const key = `discord_sub:${record.discord_user_id}`;
+    const valueJson = JSON.stringify(record);
     try {
-      const key = `discord_sub:${record.discord_user_id}`;
+      await ensureFlagReplaySchema(env);
       await env.DB.prepare(
         "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
       )
-        .bind(key, JSON.stringify(record))
+        .bind(key, valueJson)
         .run();
-    } catch {
-      // Fallback to in-memory map
+    } catch (d1Err: any) {
+      console.warn(`[D1 Subscription Save Retry] ${d1Err?.message || String(d1Err)}`);
+      try {
+        flagReplaySchemaInitialized = false;
+        await ensureFlagReplaySchema(env);
+        await env.DB.prepare(
+          "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
+        )
+          .bind(key, valueJson)
+          .run();
+      } catch (retryErr: any) {
+        console.error(`[D1 Subscription Save Failed] ${retryErr?.message || String(retryErr)}`);
+      }
     }
   }
 }
@@ -1224,10 +1499,11 @@ export async function deleteWorkerUserSubscription(userId: string, env: Env): Pr
   WORKER_DM_SUBSCRIPTIONS.delete(userId);
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       const key = `discord_sub:${userId}`;
       await env.DB.prepare("DELETE FROM flag_replay_tokens WHERE clean_key = ?").bind(key).run();
-    } catch {
-      // Ignore if table/column absent
+    } catch (d1Err: any) {
+      console.warn(`[D1 DeleteSubscription Notice] ${d1Err?.message || String(d1Err)}`);
     }
   }
 }
@@ -1428,6 +1704,8 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
       const direction = String(options.direction || "all_shocks").toLowerCase();
       const delivery = String(options.delivery || "dm").toLowerCase();
 
+      const depIssue = zipRes ? await maybeTriggerHubDepartureIssue(zipRes, env) : null;
+
       const existing = await getWorkerUserSubscription(userId, env);
       const mergedLocales = existing?.target_locales ? Array.from(new Set([...existing.target_locales, locale])) : [locale];
       const mergedZips = existing?.zip_codes ? [...existing.zip_codes] : [];
@@ -1436,8 +1714,11 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
       }
       const subId = existing?.subscription_id || `sub_dm_${userId.slice(-8)}`;
 
+      const targetDisplayName = zipRes ? zipRes.location_name : mergedLocales.join(", ");
+
       const embedFields: Array<{ name: string; value: string; inline: boolean }> = [
-        { name: "📍 Subscribed Hubs", value: `\`${mergedLocales.join(", ")}\``, inline: true },
+        { name: "📍 Subscribed Location", value: `\`${targetDisplayName}\``, inline: true },
+        { name: "🛢️ Wholesale Supply Corridor", value: `\`${zipRes ? `${zipRes.padd_region} (${zipRes.padd_name})` : mergedLocales.join(", ")}\``, inline: true },
         { name: "⚡ Min Shock (|ΔP|)", value: `\`>= $${minShock.toFixed(2)}/gal\``, inline: true },
         { name: "🧭 Direction Bias", value: `\`${direction}\``, inline: true },
         { name: "📬 Delivery Channel", value: delivery === "dm" ? "`Private Direct Message (DM)`" : "`Ephemeral Server Reply`", inline: true }
@@ -1447,11 +1728,33 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
         const tierBadge = zipRes.is_metro_cluster_hit
           ? `Direct Metro Cluster Hit (\`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`
           : `${zipRes.padd_region} ${zipRes.padd_name} Corridor Fallback (routed via \`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`;
+        const taxDetails = zipRes.tax_delta_per_gal !== 0
+          ? `State Tax: \`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\` (Coastal Base: \`$${zipRes.hub_baseline_tax_rate.toFixed(3)}/gal\` • Wedge: \`${zipRes.tax_delta_per_gal >= 0 ? "+" : ""}$${zipRes.tax_delta_per_gal.toFixed(3)}/gal\`)`
+          : `State Tax: \`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\``;
+
         embedFields.push({
           name: "📮 Subscribed ZIP Code Routing",
-          value: `\`ZIP ${zipRes.zip_code}\` (${zipRes.state}) • ${tierBadge} • State Tax: \`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\``,
+          value: `\`${zipRes.location_name}\` (ZIP \`${zipRes.zip_code}\`, ${zipRes.state}) • ${tierBadge}\n${taxDetails}`,
           inline: false
         });
+
+        if (zipRes.is_significant_departure) {
+          const wedgeSign = zipRes.tax_delta_per_gal >= 0 ? "+" : "";
+          const basisSign = zipRes.estimated_basis_delta >= 0 ? "+" : "";
+          embedFields.push({
+            name: "⚠️ Regional Basis & Tax Departure",
+            value: `State fuel taxes in **${zipRes.state}** (\`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\`) depart from the \`${zipRes.canonical_hub}\` coastal rack baseline (\`$${zipRes.hub_baseline_tax_rate.toFixed(3)}/gal\`) by \`${wedgeSign}$${zipRes.tax_delta_per_gal.toFixed(3)}/gal\`. Local pump prices trade at an estimated \`${basisSign}$${zipRes.estimated_basis_delta.toFixed(2)}/gal\` basis spread over coastal rack benchmarks. Shock alerts (|ΔP|) will track wholesale transmission from **${zipRes.padd_name}** wholesale racks.`,
+            inline: false
+          });
+
+          if (depIssue?.issueNumber) {
+            embedFields.push({
+              name: "🏛️ Regional Calibration Hub Tracking",
+              value: `A dedicated calibration hub tracking issue is open on the Midgley repository: [#${depIssue.issueNumber}](${depIssue.issueUrl || `https://github.com/KoshiirRa/midgley/issues/${depIssue.issueNumber}`})`,
+              inline: false
+            });
+          }
+        }
       } else if (mergedZips.length > 0) {
         embedFields.push({
           name: "📮 Active ZIP Codes",
@@ -1461,7 +1764,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
       }
 
       const embed = {
-        title: "✅ Midgley Direct Message Alert Subscription Active",
+        title: zipRes ? `✅ Midgley Alert Subscription Active — ${zipRes.location_name}` : "✅ Midgley Direct Message Alert Subscription Active",
         description: `Subscribed **@${username}** to real-time intraday gasoline shock alerts without cluttering shared server chat.`,
         url: "https://koshiirRa.github.io/midgley/",
         color: 3066993,
@@ -1501,13 +1804,14 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
       const zipSummary = zipRes
         ? ` (ZIP \`${zipRes.zip_code}\` → \`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`${zipRes.is_metro_cluster_hit ? "" : " • logged to Out-of-Metro Demand Heatmap"})`
         : "";
+      const issueNote = depIssue?.issueNumber ? ` • [Hub Issue #${depIssue.issueNumber}]` : "";
 
       return new Response(
         JSON.stringify({
           type: 4,
           data: {
             flags: 64, // Ephemeral: only visible to the command caller
-            content: `✅ **Subscription updated for \`${mergedLocales.join(", ")}\`${zipSummary}** (|ΔP| >= $${minShock.toFixed(2)}/gal, \`${direction}\`).${privacyNotice}`,
+            content: `✅ **Subscription updated for \`${targetDisplayName}\`${zipSummary}** (|ΔP| >= $${minShock.toFixed(2)}/gal, \`${direction}\`)${issueNote}.${privacyNotice}`,
             embeds: [embed]
           }
         }),
@@ -1646,9 +1950,10 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
       const horizon = Number(options.horizon || 5);
       const localeMeta = SUPPORTED_DISCORD_LOCALES.find(l => l.value === locale) || SUPPORTED_DISCORD_LOCALES[0];
       const dashboardUrl = `https://koshiirRa.github.io/midgley/${localeMeta.slug}`;
+      const targetDisplayName = zipRes ? zipRes.location_name : locale.replace(/_/g, " ");
 
       const forecastFields: Array<{ name: string; value: string; inline: boolean }> = [
-        { name: "📍 Regional Hub", value: `\`${locale}\``, inline: true },
+        { name: "📍 Target Location", value: `\`${targetDisplayName}\``, inline: true },
         { name: "🛢️ PADD Supply Corridor", value: `\`${zipRes ? `${zipRes.padd_region} (${zipRes.padd_name})` : localeMeta.padd}\``, inline: true },
         { name: "📅 Forecast Horizon", value: `\`1D – ${horizon}D Out-of-Time\``, inline: true }
       ];
@@ -1658,9 +1963,22 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
           ? `Direct Metro Cluster Hit (\`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`
           : `State/PADD Supply Corridor Fallback (\`${zipRes.calibrated_model_used}\` • \`${zipRes.resolution_tier}\`)`;
         forecastFields.push(
-          { name: "📮 ZIP Code Resolution", value: `\`${zipRes.zip_code}\` (${zipRes.state}) — ${tierDesc}`, inline: false },
+          { name: "📮 Regional Supply Routing", value: `\`${zipRes.location_name}\` (ZIP \`${zipRes.zip_code}\`, ${zipRes.state}) — ${tierDesc}`, inline: false },
           { name: "🏛️ State Statutory Fuel Tax", value: `\`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\` (${zipRes.state})`, inline: true }
         );
+
+        if (zipRes.is_significant_departure) {
+          const wedgeSign = zipRes.tax_delta_per_gal >= 0 ? "+" : "";
+          const basisSign = zipRes.estimated_basis_delta >= 0 ? "+" : "";
+          forecastFields.push(
+            { name: "⚖️ Statutory Tax Wedge", value: `\`${wedgeSign}$${zipRes.tax_delta_per_gal.toFixed(3)}/gal\` vs ${zipRes.canonical_hub} rack baseline (\`$${zipRes.hub_baseline_tax_rate.toFixed(3)}/gal\`)`, inline: true },
+            {
+              name: "🏷️ Estimated Basis & Price Synthesis",
+              value: `Local pump prices in **${zipRes.state}** trade at an estimated **${basisSign}$${zipRes.estimated_basis_delta.toFixed(2)}/gal** basis differential over ${zipRes.canonical_hub} coastal rack benchmarks due to state tax differentials and regional/mountain distribution logistics. Point-in-time quantitative shocks (|ΔP|) track wholesale transmission down the **${zipRes.padd_name}** corridor.`,
+              inline: false
+            }
+          );
+        }
       }
 
       forecastFields.push({
@@ -1670,8 +1988,8 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
       });
 
       const forecastEmbed = {
-        title: `⛽ Midgley ${horizon}D Forecast & Regime Brief — ${zipRes ? `ZIP ${zipRes.zip_code} (${locale.replace(/_/g, " ")})` : locale.replace(/_/g, " ")}`,
-        description: `Point-in-time quantitative regime & shock attribution summary for **${localeMeta.name}**.`,
+        title: `⛽ Midgley ${horizon}D Forecast — ${targetDisplayName}${zipRes && !targetDisplayName.includes(zipRes.zip_code) ? ` (ZIP ${zipRes.zip_code})` : ""}`,
+        description: `Point-in-time quantitative regime & shock attribution summary for **${targetDisplayName}** (${zipRes ? `${zipRes.padd_region} corridor` : localeMeta.name}).`,
         url: dashboardUrl,
         color: 3447003,
         fields: forecastFields,
@@ -2067,6 +2385,7 @@ export async function isTokenUsed(tokenKey: string, env: Env): Promise<boolean> 
   if (USED_TOKENS_CACHE.has(tokenKey)) return true;
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       const row = await env.DB.prepare("SELECT clean_key FROM flag_replay_tokens WHERE clean_key = ?").bind(tokenKey).first();
       if (row) return true;
     } catch {
@@ -2080,6 +2399,7 @@ export async function markTokenUsed(tokenKey: string, env: Env): Promise<void> {
   USED_TOKENS_CACHE.add(tokenKey);
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       await env.DB.prepare("INSERT INTO flag_replay_tokens (clean_key, used_at) VALUES (?, datetime('now')) ON CONFLICT(clean_key) DO NOTHING").bind(tokenKey).run();
     } catch {
       // D1 schema table may not exist

@@ -657,19 +657,52 @@ def format_welcome_verification_payload(
     }
     if zip_resolutions:
         zip_lines = []
+        departure_warnings = []
+        tracking_issues = []
         for zr in zip_resolutions[:5]:
             zc = zr.get("zip_code", "")
+            loc_name = zr.get("location_name") or f"ZIP {zc}"
             st = zr.get("state", "US")
             padd = zr.get("padd_region", "PADD 2")
             hub = normalize_locale_name(str(zr.get("locale_code") or "National")) or "National"
             tax = float(zr.get("state_tax_rate_per_gal", 0.25))
+            hub_tax = float(zr.get("hub_baseline_tax_rate", 0.25))
+            tax_delta = float(zr.get("tax_delta_per_gal", 0.0))
+            is_dep = bool(zr.get("is_significant_departure"))
             tier_badge = "Direct Metro Cluster" if zr.get("is_metro_cluster_hit") else f"{padd} Corridor Fallback"
-            zip_lines.append(f"`{zc}` ({st} • {tier_badge} → `{hub}` | State Tax: `${tax:.3f}/gal`)")
+            
+            tax_note = f"State Tax: `${tax:.3f}/gal`"
+            if tax_delta != 0:
+                tax_note += f" (Hub Base: `${hub_tax:.3f}/gal` • Wedge: `${tax_delta:+.3f}/gal`)"
+            
+            zip_lines.append(f"**{loc_name}** (`{zc}` {st} • {tier_badge} → `{hub}` | {tax_note})")
+            
+            if is_dep:
+                est_basis = float(zr.get("estimated_basis_delta", tax_delta))
+                departure_warnings.append(
+                    f"State fuel taxes in **{st}** (`${tax:.3f}/gal`) depart from `{hub}` coastal rack base (`${hub_tax:.3f}/gal`) by `{tax_delta:+.3f}/gal`. "
+                    f"Retail pump prices trade at an estimated `{est_basis:+.2f}/gal` basis differential over coastal rack benchmarks due to state taxes and regional distribution logistics. Shocks (|ΔP|) will track wholesale transmission from `{padd}`."
+                )
+            if zr.get("tracking_issue_number"):
+                tracking_issues.append(f"[#{zr.get('tracking_issue_number')}](https://github.com/KoshiirRa/midgley/issues/{zr.get('tracking_issue_number')})")
+
         embed["fields"].append({
             "name": "📮 Subscribed ZIP Code Routing",
             "value": "\n".join(zip_lines),
             "inline": False,
         })
+        if departure_warnings:
+            embed["fields"].append({
+                "name": "⚠️ Regional Basis & Tax Departure",
+                "value": "\n\n".join(departure_warnings),
+                "inline": False
+            })
+        if tracking_issues:
+            embed["fields"].append({
+                "name": "🏛️ Regional Calibration Hub Tracking",
+                "value": f"A dedicated calibration hub tracking issue is open on the Midgley repository: {', '.join(tracking_issues)}",
+                "inline": False
+            })
     elif zip_codes:
         embed["fields"].append({
             "name": "📮 Subscribed ZIP Codes",
@@ -1099,6 +1132,79 @@ class DiscordSubscriptionRegistry:
                 d["webhook_url"] = None
         return d
 
+    def sync_edge_subscriptions(self) -> int:
+        """
+        Pulls edge Discord DM subscriptions registered via Cloudflare Worker slash commands
+        (/midgley subscribe) from the edge worker and merges them into the local subscription registry.
+        """
+        if os.environ.get("TESTING") == "1":
+            return 0
+
+        auth_token = os.environ.get("DISCORD_BOT_TOKEN") or os.environ.get("ADMIN_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+        if not auth_token:
+            return 0
+
+        worker_base = os.environ.get(
+            "MIDGLEY_WORKER_BASE_URL",
+            "https://midgley-intraday-monitor.m-cubed-3.workers.dev"
+        ).rstrip("/")
+
+        synced_count = 0
+        try:
+            req = urllib.request.Request(
+                f"{worker_base}/discord/subscriptions",
+                headers={
+                    "Authorization": f"Bearer {auth_token}",
+                    "User-Agent": "Midgley-Subscription-Sync/1.0"
+                }
+            )
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                if resp.status == 200:
+                    payload = json.loads(resp.read().decode("utf-8"))
+                    subs = payload.get("subscriptions", [])
+                    with self._get_conn() as conn:
+                        for s in subs:
+                            user_id = s.get("discord_user_id")
+                            sub_id = s.get("subscription_id")
+                            if not user_id or not sub_id:
+                                continue
+                            target_locales = json.dumps(s.get("target_locales") or ["National"])
+                            zip_codes = json.dumps(s.get("zip_codes") or [])
+                            min_shock = float(s.get("min_shock_threshold", 0.25))
+                            direction = s.get("direction_filter", "all_shocks")
+                            delivery_mode = s.get("delivery_mode", "realtime")
+                            dm_channel = s.get("dm_channel_id")
+                            is_active = 1 if s.get("is_active", True) else 0
+                            muted_until = s.get("muted_until")
+                            created_at = s.get("created_at") or datetime.now(timezone.utc).isoformat()
+                            dummy_token_hash = self._hash_token(f"edge_{sub_id}")
+
+                            conn.execute("""
+                                INSERT INTO discord_subscriptions (
+                                    subscription_id, delivery_type, discord_user_id, dm_channel_id,
+                                    target_locales, zip_codes, min_shock_threshold, direction_filter,
+                                    delivery_mode, manage_token_hash, is_active, muted_until, created_at
+                                ) VALUES (?, 'discord_dm', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                ON CONFLICT(subscription_id) DO UPDATE SET
+                                    target_locales = excluded.target_locales,
+                                    zip_codes = excluded.zip_codes,
+                                    min_shock_threshold = excluded.min_shock_threshold,
+                                    direction_filter = excluded.direction_filter,
+                                    dm_channel_id = COALESCE(excluded.dm_channel_id, discord_subscriptions.dm_channel_id),
+                                    is_active = excluded.is_active,
+                                    muted_until = excluded.muted_until
+                            """, (
+                                sub_id, user_id, dm_channel,
+                                target_locales, zip_codes, min_shock, direction,
+                                delivery_mode, dummy_token_hash, is_active, muted_until, created_at
+                            ))
+                            synced_count += 1
+                        conn.commit()
+        except Exception as err:
+            logger.debug(f"Edge Discord subscription sync skipped or failed: {err}")
+
+        return synced_count
+
     def get_matching_subscribers(
         self,
         event_locales: List[str],
@@ -1110,6 +1216,12 @@ class DiscordSubscriptionRegistry:
         Queries active subscribers matching:
         locales(s) ∩ event_locales ≠ ∅  AND  |ΔP| >= threshold(s)  AND  direction_matches(s, ΔP)
         """
+        if os.environ.get("TESTING") != "1":
+            try:
+                self.sync_edge_subscriptions()
+            except Exception:
+                pass
+
         norm_event_locales = set(normalize_locale_list(event_locales))
         abs_dp = abs(float(price_pressure))
         now_iso = datetime.now(timezone.utc).isoformat()

@@ -305,3 +305,68 @@ def test_zip_code_subscription_and_telemetry_heatmap_update(tmp_path):
         assert top_zips["64101"]["hit_count"] >= 1
         assert "74103" not in top_zips
 
+        # 3. Test significant departure region (ZIP 12946 Lake Placid, NY -> PADD 1B Newark DE fallback)
+        resp_ny = client.post(
+            "/api/v1/notifications/discord/subscribe",
+            json={
+                "delivery_type": "discord_dm",
+                "discord_user_id": "112233445566778899",
+                "zip_codes": ["12946"],
+                "minimum_shock_threshold": 0.25,
+                "direction_filter": "all_shocks",
+            }
+        )
+        assert resp_ny.status_code == 200
+        sub_ny = resp_ny.json()["subscription"]
+        assert sub_ny["zip_codes"] == ["12946"]
+        ny_res = sub_ny["zip_resolutions"][0]
+        assert ny_res["zip_code"] == "12946"
+        assert ny_res["location_name"] == "Lake Placid, NY"
+        assert ny_res["state"] == "NY"
+        assert ny_res["padd_region"] == "PADD 1B"
+        assert ny_res["hub_baseline_tax_rate"] == 0.230
+        assert ny_res["tax_delta_per_gal"] == 0.242
+        assert ny_res["is_significant_departure"] is True
+        assert ny_res["tracking_issue_number"] == 635
+
+
+def test_sync_edge_subscriptions(tmp_path):
+    db_file = str(tmp_path / "sync_subs_test.sqlite")
+    reg = DiscordSubscriptionRegistry(db_path=db_file)
+
+    edge_payload = {
+        "status": "success",
+        "subscriptions": [
+            {
+                "subscription_id": "sub_dm_53711617",
+                "discord_user_id": "53711617",
+                "dm_channel_id": "dm_channel_123",
+                "target_locales": ["Newark"],
+                "zip_codes": ["12946"],
+                "min_shock_threshold": 0.25,
+                "direction_filter": "all_shocks",
+                "delivery_mode": "realtime",
+                "is_active": True,
+                "muted_until": None,
+                "created_at": "2026-10-13T09:49:00Z"
+            }
+        ]
+    }
+
+    mock_resp = MagicMock()
+    mock_resp.status = 200
+    mock_resp.read.return_value = json.dumps(edge_payload).encode("utf-8")
+    mock_resp.__enter__.return_value = mock_resp
+
+    with patch.dict(os.environ, {"TESTING": "0", "DISCORD_BOT_TOKEN": "mock_token"}), \
+         patch("urllib.request.urlopen", return_value=mock_resp):
+        synced = reg.sync_edge_subscriptions()
+        assert synced == 1
+
+        subs = reg.get_matching_subscribers(event_locales=["Newark"], price_pressure=0.30)
+        assert len(subs) == 1
+        assert subs[0]["subscription_id"] == "sub_dm_53711617"
+        assert subs[0]["discord_user_id"] == "53711617"
+        assert subs[0]["delivery_type"] == "discord_dm"
+
+
