@@ -620,5 +620,204 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
       expect(intradayTimingSafeEqual("", "")).toBe(true);
     });
   });
+
+  describe("Discord Slash Commands (/midgley) & Direct Message Delivery (Issue #235)", () => {
+    const keyPair = nacl.sign.keyPair();
+    const publicKeyHex = uint8ArrayToHex(keyPair.publicKey);
+    const secretKey = keyPair.secretKey;
+
+    function createSignedInteractionRequest(payload: Record<string, any>): Request {
+      const timestamp = String(Math.floor(Date.now() / 1000));
+      const body = JSON.stringify(payload);
+      const message = new TextEncoder().encode(timestamp + body);
+      const signature = nacl.sign.detached(message, secretKey);
+      const signatureHex = uint8ArrayToHex(signature);
+      return new Request("https://worker.local/discord/interactions", {
+        method: "POST",
+        headers: {
+          "X-Signature-Ed25519": signatureHex,
+          "X-Signature-Timestamp": timestamp,
+          "Content-Type": "application/json"
+        },
+        body
+      });
+    }
+
+    it("handles locale autocomplete interactions (type 4) and returns filtered choices (type 8)", async () => {
+      const req = createSignedInteractionRequest({
+        type: 4,
+        data: {
+          name: "midgley",
+          options: [
+            {
+              name: "subscribe",
+              type: 1,
+              options: [{ name: "locale", type: 3, value: "tul", focused: true }]
+            }
+          ]
+        }
+      });
+      const res = await handleDiscordInteraction(req, { DISCORD_PUBLIC_KEY: publicKeyHex }, {});
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as any;
+      expect(body.type).toBe(8);
+      expect(body.data.choices.some((c: any) => c.value === "Tulsa")).toBe(true);
+    });
+
+    it("handles /midgley subscribe, /midgley status, /midgley forecast, and /midgley unsubscribe with ephemeral + DM delivery", async () => {
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+        if (String(url).includes("/users/@me/channels")) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ id: "dm_channel_999" }),
+            text: async () => '{"id":"dm_channel_999"}'
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ id: "msg_1" }),
+          text: async () => '{"id":"msg_1"}'
+        };
+      });
+
+      const env: IntradayEnv = {
+        DISCORD_PUBLIC_KEY: publicKeyHex,
+        DISCORD_BOT_TOKEN: "mock_bot_token_235"
+      };
+
+      try {
+        // 1. /midgley subscribe locale:Tulsa min_shock:0.30
+        const subReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "777888999000", username: "energy_trader" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "subscribe",
+                type: 1,
+                options: [
+                  { name: "locale", type: 3, value: "Tulsa" },
+                  { name: "min_shock", type: 10, value: 0.3 },
+                  { name: "direction", type: 3, value: "spikes_only" },
+                  { name: "delivery", type: 3, value: "dm" }
+                ]
+              }
+            ]
+          }
+        });
+        const subRes = await handleDiscordInteraction(subReq, env, {});
+        expect(subRes.status).toBe(200);
+        const subJson = (await subRes.json()) as any;
+        expect(subJson.type).toBe(4);
+        expect(subJson.data.flags).toBe(64); // Ephemeral
+        expect(subJson.data.content).toContain("Tulsa");
+        expect(subJson.data.content).toContain("Direct Messages");
+
+        // 2. /midgley status
+        const statusReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "777888999000", username: "energy_trader" } },
+          data: {
+            name: "midgley",
+            options: [{ name: "status", type: 1 }]
+          }
+        });
+        const statusRes = await handleDiscordInteraction(statusReq, env, {});
+        const statusJson = (await statusRes.json()) as any;
+        expect(statusJson.data.flags).toBe(64);
+        expect(JSON.stringify(statusJson.data.embeds)).toContain("Tulsa");
+
+        // 3. /midgley forecast locale:Oakland horizon:3
+        const fcReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "777888999000", username: "energy_trader" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "locale", type: 3, value: "Oakland" },
+                  { name: "horizon", type: 4, value: 3 }
+                ]
+              }
+            ]
+          }
+        });
+        const fcRes = await handleDiscordInteraction(fcReq, env, {});
+        const fcJson = (await fcRes.json()) as any;
+        expect(fcJson.data.flags).toBe(64);
+        expect(fcJson.data.embeds[0].title).toContain("3D Forecast");
+
+        // 4. /midgley unsubscribe locale:all
+        const unsubReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "777888999000", username: "energy_trader" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "unsubscribe",
+                type: 1,
+                options: [{ name: "locale", type: 3, value: "all" }]
+              }
+            ]
+          }
+        });
+        const unsubRes = await handleDiscordInteraction(unsubReq, env, {});
+        const unsubJson = (await unsubRes.json()) as any;
+        expect(unsubJson.data.flags).toBe(64);
+        expect(unsubJson.data.content).toContain("Unsubscribed");
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
+
+    it("gracefully falls back to ephemeral warning when Discord blocks DM with HTTP 403 (Error 50007)", async () => {
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        text: async () => '{"message": "Cannot send messages to this user", "code": 50007}'
+      });
+
+      const env: IntradayEnv = {
+        DISCORD_PUBLIC_KEY: publicKeyHex,
+        DISCORD_BOT_TOKEN: "mock_bot_token_235"
+      };
+
+      try {
+        const testAlertReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "111222333444", username: "privacy_locked_user" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "test-alert",
+                type: 1,
+                options: [{ name: "locale", type: 3, value: "Cincinnati" }]
+              }
+            ]
+          }
+        });
+        const res = await handleDiscordInteraction(testAlertReq, env, {});
+        expect(res.status).toBe(200);
+        const body = (await res.json()) as any;
+        expect(body.type).toBe(4);
+        expect(body.data.flags).toBe(64);
+        expect(body.data.content).toContain("50007");
+        expect(body.data.embeds.length).toBe(1);
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+    });
+  });
 });
+
 

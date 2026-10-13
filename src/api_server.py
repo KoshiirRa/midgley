@@ -2043,6 +2043,193 @@ def get_ipasis_security_telemetry():
     }
 
 
+class DiscordSubscribeRequest(BaseModel):
+    delivery_type: Optional[str] = Field("webhook", description="Delivery target type: 'webhook' or 'discord_dm'")
+    webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL (required when delivery_type='webhook')")
+    discord_user_id: Optional[str] = Field(None, description="Discord User Snowflake ID (required when delivery_type='discord_dm')")
+    dm_channel_id: Optional[str] = Field(None, description="Optional pre-resolved Discord DM channel ID")
+    target_locales: List[str] = Field(default_factory=lambda: ["National"], description="Target metro hubs or 'National'")
+    minimum_shock_threshold: float = Field(0.25, ge=0.0, le=5.0, description="Minimum |ΔP| shock threshold in $/gal")
+    direction_filter: Optional[str] = Field("all_shocks", description="Directional bias: 'all_shocks', 'spikes_only', or 'drops_only'")
+    catalyst_domains: Optional[List[str]] = Field(None, description="Optional catalyst domains filter")
+    delivery_mode: Optional[str] = Field("realtime", description="Delivery cadence: 'realtime' or 'daily_digest'")
+    role_mention: Optional[str] = Field(None, description="Optional role/user mention for high-severity shocks")
+    client_label: Optional[str] = Field(None, description="Optional human-readable subscriber label")
+    verify_handshake: bool = Field(True, description="Whether to dispatch an immediate verification handshake embed")
+
+
+class DiscordTestNotificationRequest(BaseModel):
+    delivery_type: Optional[str] = Field("webhook", description="Target type: 'webhook' or 'discord_dm'")
+    webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL to test")
+    discord_user_id: Optional[str] = Field(None, description="Discord User ID to test DM reachability")
+    dm_channel_id: Optional[str] = Field(None, description="Optional DM channel ID")
+    target_locales: Optional[List[str]] = Field(default_factory=lambda: ["National"], description="Sample locales for test embed")
+
+
+@app.post("/api/v1/notifications/discord/subscribe", summary="Register Discord Webhook or Direct Message Alert Subscription", tags=["Notifications & Alerts"])
+async def subscribe_discord_notifications(request: Request, req: DiscordSubscribeRequest):
+    """
+    Issue #235: Registers a multi-subscriber Discord channel webhook (`delivery_type='webhook'`)
+    or personal Direct Message (`delivery_type='discord_dm'`) alert subscription with locale,
+    shock magnitude, and directional filtering. Protected by IPASIS IP reputation check.
+    """
+    client_ip = (
+        request.headers.get("cf-connecting-ip")
+        or request.headers.get("x-forwarded-for")
+        or request.headers.get("x-real-ip")
+        or (request.client.host if request.client else "127.0.0.1")
+    )
+    from src.ipasis_security import IPASISSecurityVerifier
+    verifier = IPASISSecurityVerifier()
+    ip_status = verifier.check_ip_reputation(client_ip)
+    if ip_status.get("is_blocked", False) and os.environ.get("IPASIS_BLOCK_HIGH_RISK", "1") != "0":
+        raise HTTPException(
+            status_code=403,
+            detail=f"Forbidden: Request origin IP '{client_ip}' flagged as high-risk by IPASIS security filter."
+        )
+
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+
+    dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
+    try:
+        sub_record = registry.register_subscription(
+            target_locales=req.target_locales,
+            minimum_shock_threshold=req.minimum_shock_threshold,
+            delivery_type=dtype,
+            webhook_url=req.webhook_url,
+            discord_user_id=req.discord_user_id,
+            dm_channel_id=req.dm_channel_id,
+            direction_filter=req.direction_filter or "all_shocks",
+            catalyst_domains=req.catalyst_domains,
+            delivery_mode=req.delivery_mode or "realtime",
+            role_mention=req.role_mention,
+            client_label=req.client_label,
+            verify_handshake=req.verify_handshake
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=422, detail=str(ve))
+    except RuntimeError as re_err:
+        raise HTTPException(status_code=502, detail=str(re_err))
+
+    return {
+        "status": "subscribed",
+        "subscription": sub_record,
+        "ip_security": ip_status
+    }
+
+
+@app.delete("/api/v1/notifications/discord/subscriptions/{subscription_id}", summary="Unsubscribe a Discord Webhook or DM Alert Subscription", tags=["Notifications & Alerts"])
+async def unsubscribe_discord_notification(
+    subscription_id: str,
+    manage_token: Optional[str] = Query(None, description="Subscription manage_token returned upon registration"),
+    x_manage_token: Optional[str] = Header(None, alias="X-Manage-Token"),
+    x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
+):
+    """
+    Issue #235: Unsubscribes a registered Discord webhook or DM alert subscription using its `manage_token`
+    (passed via query param `?manage_token=...` or `X-Manage-Token` header) or administrative secret.
+    """
+    token = manage_token or x_manage_token
+    expected_admin = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    is_admin = bool(
+        expected_admin
+        and x_admin_secret
+        and hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_admin.encode("utf-8"))
+    )
+    if not token and not is_admin:
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized: Missing manage_token (supply via ?manage_token= or X-Manage-Token header)."
+        )
+
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+    removed = registry.unsubscribe(subscription_id=subscription_id, manage_token=token, is_admin=is_admin)
+    if not removed:
+        raise HTTPException(
+            status_code=404,
+            detail="Subscription not found or invalid manage_token."
+        )
+    return {
+        "status": "unsubscribed",
+        "subscription_id": subscription_id,
+        "removed_at": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@app.get("/api/v1/notifications/discord/subscriptions/status", dependencies=[Depends(get_api_key_user)], summary="Get Active Discord Subscription Counts by Metro Hub & Delivery Mode", tags=["Notifications & Alerts"])
+async def get_discord_subscriptions_status():
+    """
+    Issue #235: Returns active subscription counts grouped by regional metro hub and delivery type (`webhook` vs `discord_dm`).
+    Requires valid API key authentication.
+    """
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+    return {
+        "status": "success",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "summary": registry.get_status_summary()
+    }
+
+
+@app.post("/api/v1/notifications/discord/test", summary="Send Dry-Run Test Alert to Discord Webhook or User DM", tags=["Notifications & Alerts"])
+async def test_discord_notification_delivery(req: DiscordTestNotificationRequest):
+    """
+    Issue #235: Self-service health diagnostic endpoint allowing subscribers to send an immediate
+    synthetic dry-run alert embed to their Discord channel webhook or personal DM.
+    """
+    from src.discord_notifier import (
+        validate_discord_webhook_url,
+        normalize_locale_list,
+        format_welcome_verification_payload,
+        _post_webhook_payload,
+        send_discord_dm_payload
+    )
+
+    locales = normalize_locale_list(req.target_locales)
+    dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
+    payload = format_welcome_verification_payload(
+        target_locales=locales,
+        min_shock_threshold=0.25,
+        direction_filter="all_shocks",
+        delivery_type=dtype,
+        client_label="Dry-Run Diagnostic Test",
+        subscription_id="dry-run-test"
+    )
+
+    if dtype == "discord_dm":
+        if not req.discord_user_id or not str(req.discord_user_id).strip().isdigit():
+            raise HTTPException(status_code=422, detail="Valid numeric discord_user_id is required for discord_dm test.")
+        ok, ch_id, status, err = send_discord_dm_payload(
+            payload,
+            discord_user_id=str(req.discord_user_id).strip(),
+            dm_channel_id=req.dm_channel_id
+        )
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Discord DM test delivery failed: {err or f'HTTP {status}'}")
+        return {
+            "status": "delivered",
+            "delivery_type": "discord_dm",
+            "discord_user_id": str(req.discord_user_id).strip(),
+            "dm_channel_id": ch_id,
+            "target_locales": locales
+        }
+    else:
+        if not validate_discord_webhook_url(req.webhook_url):
+            raise HTTPException(status_code=422, detail="Invalid Discord webhook URL.")
+        ok, status, err = _post_webhook_payload(req.webhook_url.strip(), payload)
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Discord webhook test delivery failed: {err or f'HTTP {status}'}")
+        return {
+            "status": "delivered",
+            "delivery_type": "webhook",
+            "http_status": status,
+            "target_locales": locales
+        }
+
+
+
 @app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")
 def trigger_event_polling(
     x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature"),

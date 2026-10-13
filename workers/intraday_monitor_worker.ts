@@ -19,6 +19,7 @@ export interface Env {
   EDGAR_8K_TICKERS?: string;
   DISCORD_PUBLIC_KEY?: string;
   DISCORD_APP_ID?: string;
+  DISCORD_BOT_TOKEN?: string;
   PROJECT_V2_ID?: string;
   CLOUDFLARE_AUTH_TOKEN?: string;
   ADMIN_TOKEN?: string;
@@ -797,6 +798,205 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 const DEFAULT_DISCORD_PUBLIC_KEY = "23fd56cafbd2e02e99e228ef545bb7a350719b086537410ba5ce092170e56e9b";
 const DEFAULT_PROJECT_V2_ID = "PVT_kwHOAVnZGM4BhxKn";
 
+export const SUPPORTED_DISCORD_LOCALES = [
+  { name: "National (US Wholesale & Retail Benchmark)", value: "National", slug: "index.html", padd: "US National" },
+  { name: "Tulsa Metro, OK (PADD 2)", value: "Tulsa", slug: "tulsa.html", padd: "PADD 2 Midwest" },
+  { name: "Newark Metro, DE (PADD 1B)", value: "Newark", slug: "newark.html", padd: "PADD 1B Central Atlantic" },
+  { name: "Cincinnati Tri-State, OH/KY (PADD 2)", value: "Cincinnati", slug: "cincinnati.html", padd: "PADD 2 Midwest" },
+  { name: "Greenville Metro, NC (PADD 1C)", value: "Greenville", slug: "greenville.html", padd: "PADD 1C South Atlantic" },
+  { name: "Charlotte Metro, NC (PADD 1C)", value: "Charlotte", slug: "charlotte.html", padd: "PADD 1C South Atlantic" },
+  { name: "SF Bay Area / Oakland, CA (PADD 5)", value: "Oakland", slug: "bay_area.html", padd: "PADD 5 West Coast" },
+  { name: "Port St. Lucie Metro, FL (PADD 1C)", value: "Port_St_Lucie", slug: "port_st_lucie.html", padd: "PADD 1C South Atlantic" },
+  { name: "Greater Chicago Metro, IL/IN (PADD 2)", value: "Chicago", slug: "chicago.html", padd: "PADD 2 Midwest" },
+  { name: "Houston Metro, TX (PADD 3)", value: "Houston", slug: "houston.html", padd: "PADD 3 Gulf Coast" },
+  { name: "Los Angeles Basin, CA (PADD 5)", value: "Los_Angeles", slug: "los_angeles.html", padd: "PADD 5 West Coast" }
+];
+
+export interface WorkerDMSubscriptionRecord {
+  subscription_id: string;
+  discord_user_id: string;
+  dm_channel_id?: string | null;
+  target_locales: string[];
+  min_shock_threshold: number;
+  direction_filter: string;
+  delivery_mode: string;
+  is_active: boolean;
+  muted_until?: string | null;
+  created_at: string;
+}
+
+const WORKER_DM_SUBSCRIPTIONS = new Map<string, WorkerDMSubscriptionRecord>();
+
+export function normalizeWorkerLocale(rawLocale?: string): string {
+  if (!rawLocale) return "National";
+  const clean = rawLocale.trim().toLowerCase().replace(/[\s.-]+/g, "_");
+  const aliases: Record<string, string> = {
+    national: "National",
+    us: "National",
+    tulsa: "Tulsa",
+    tulsa_ok: "Tulsa",
+    newark: "Newark",
+    newark_de: "Newark",
+    cincinnati: "Cincinnati",
+    cincinnati_oh: "Cincinnati",
+    cincinnati_ky: "Cincinnati",
+    greenville: "Greenville",
+    greenville_nc: "Greenville",
+    charlotte: "Charlotte",
+    charlotte_nc: "Charlotte",
+    oakland: "Oakland",
+    oakland_ca: "Oakland",
+    bay_area: "Oakland",
+    bayarea: "Oakland",
+    sf: "Oakland",
+    port_st_lucie: "Port_St_Lucie",
+    port_st_lucie_fl: "Port_St_Lucie",
+    psl: "Port_St_Lucie",
+    chicago: "Chicago",
+    chicago_il: "Chicago",
+    houston: "Houston",
+    houston_tx: "Houston",
+    los_angeles: "Los_Angeles",
+    los_angeles_ca: "Los_Angeles",
+    la: "Los_Angeles"
+  };
+  return aliases[clean] || SUPPORTED_DISCORD_LOCALES.find(l => l.value.toLowerCase() === clean)?.value || "National";
+}
+
+export async function getWorkerUserSubscription(userId: string, env: Env): Promise<WorkerDMSubscriptionRecord | null> {
+  if (WORKER_DM_SUBSCRIPTIONS.has(userId)) {
+    return WORKER_DM_SUBSCRIPTIONS.get(userId) || null;
+  }
+  if (env.DB) {
+    try {
+      const key = `discord_sub:${userId}`;
+      const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(key).first();
+      if (row && row.value) {
+        const parsed = JSON.parse(row.value) as WorkerDMSubscriptionRecord;
+        WORKER_DM_SUBSCRIPTIONS.set(userId, parsed);
+        return parsed;
+      }
+    } catch {
+      // Fallback to in-memory map
+    }
+  }
+  return null;
+}
+
+export async function saveWorkerUserSubscription(record: WorkerDMSubscriptionRecord, env: Env): Promise<void> {
+  WORKER_DM_SUBSCRIPTIONS.set(record.discord_user_id, record);
+  if (env.DB) {
+    try {
+      const key = `discord_sub:${record.discord_user_id}`;
+      await env.DB.prepare(
+        "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
+      )
+        .bind(key, JSON.stringify(record))
+        .run();
+    } catch {
+      // Fallback to in-memory map
+    }
+  }
+}
+
+export async function deleteWorkerUserSubscription(userId: string, env: Env): Promise<void> {
+  WORKER_DM_SUBSCRIPTIONS.delete(userId);
+  if (env.DB) {
+    try {
+      const key = `discord_sub:${userId}`;
+      await env.DB.prepare("DELETE FROM flag_replay_tokens WHERE clean_key = ?").bind(key).run();
+    } catch {
+      // Ignore if table/column absent
+    }
+  }
+}
+
+export async function sendDiscordDirectMessage(
+  userId: string,
+  payload: Record<string, any>,
+  env: Env,
+  existingChannelId?: string | null
+): Promise<{ sent: boolean; dmChannelId?: string | null; blockedByPrivacy?: boolean; error?: string }> {
+  const botToken = (env.DISCORD_BOT_TOKEN || "").trim();
+  if (!botToken) {
+    return { sent: false, dmChannelId: existingChannelId, error: "DISCORD_BOT_TOKEN unconfigured" };
+  }
+
+  let dmChannelId = existingChannelId || null;
+  try {
+    if (!dmChannelId) {
+      const createRes = await fetch("https://discord.com/api/v10/users/@me/channels", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bot ${botToken}`,
+          "Content-Type": "application/json",
+          "User-Agent": "Midgley-Discord-Worker/1.0"
+        },
+        body: JSON.stringify({ recipient_id: userId })
+      });
+      if (!createRes.ok) {
+        const errText = await createRes.text();
+        const isPrivacyBlock = createRes.status === 403 || errText.includes("50007");
+        return {
+          sent: false,
+          blockedByPrivacy: isPrivacyBlock,
+          error: `DM channel open HTTP ${createRes.status}: ${errText}`
+        };
+      }
+      const chData: any = await createRes.json();
+      dmChannelId = chData.id || null;
+    }
+
+    if (!dmChannelId) {
+      return { sent: false, error: "Could not resolve Discord DM channel ID" };
+    }
+
+    const msgRes = await fetch(`https://discord.com/api/v10/channels/${dmChannelId}/messages`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bot ${botToken}`,
+        "Content-Type": "application/json",
+        "User-Agent": "Midgley-Discord-Worker/1.0"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!msgRes.ok) {
+      const errText = await msgRes.text();
+      const isPrivacyBlock = msgRes.status === 403 || errText.includes("50007");
+      return {
+        sent: false,
+        dmChannelId,
+        blockedByPrivacy: isPrivacyBlock,
+        error: `DM message HTTP ${msgRes.status}: ${errText}`
+      };
+    }
+
+    return { sent: true, dmChannelId };
+  } catch (err: any) {
+    return { sent: false, dmChannelId, error: err?.message || String(err) };
+  }
+}
+
+function extractCommandOptions(interaction: any): { subcommand: string; options: Record<string, any> } {
+  const rawOptions = interaction.data?.options || [];
+  const opts: Record<string, any> = {};
+  let subcommand = "";
+
+  if (rawOptions.length > 0 && rawOptions[0].type === 1) {
+    subcommand = rawOptions[0].name;
+    for (const subOpt of rawOptions[0].options || []) {
+      opts[subOpt.name] = subOpt.value;
+    }
+  } else {
+    subcommand = interaction.data?.name || "";
+    for (const opt of rawOptions) {
+      opts[opt.name] = opt.value;
+    }
+  }
+  return { subcommand: subcommand.toLowerCase(), options: opts };
+}
+
 export function hexToUint8Array(hex: string): Uint8Array {
   const match = hex.match(/.{1,2}/g);
   return new Uint8Array(match ? match.map(byte => parseInt(byte, 16)) : []);
@@ -856,9 +1056,312 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     });
   }
 
-  // Type 3: MESSAGE_COMPONENT (User clicked "🚩 Flag False Positive" button)
+  // Type 4: APPLICATION_COMMAND_AUTOCOMPLETE (Autocomplete for `locale` parameter)
+  if (interaction.type === 4) {
+    const { options } = extractCommandOptions(interaction);
+    const query = String(options.locale || "").toLowerCase().trim();
+    const choices = SUPPORTED_DISCORD_LOCALES.filter(
+      l => !query || l.name.toLowerCase().includes(query) || l.value.toLowerCase().includes(query)
+    )
+      .slice(0, 25)
+      .map(l => ({ name: l.name, value: l.value }));
+    return new Response(JSON.stringify({ type: 8, data: { choices } }), {
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  // Type 2: APPLICATION_COMMAND (`/midgley subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`)
+  if (interaction.type === 2) {
+    const userObj = interaction.member?.user || interaction.user || {};
+    const userId = String(userObj.id || "anonymous_user");
+    const username = String(userObj.username || "Discord User");
+    const { subcommand, options } = extractCommandOptions(interaction);
+
+    if (subcommand === "subscribe") {
+      const locale = normalizeWorkerLocale(options.locale);
+      const minShock = typeof options.min_shock === "number" ? Math.max(0, Math.min(5, options.min_shock)) : 0.25;
+      const direction = String(options.direction || "all_shocks").toLowerCase();
+      const delivery = String(options.delivery || "dm").toLowerCase();
+
+      const existing = await getWorkerUserSubscription(userId, env);
+      const mergedLocales = existing?.target_locales ? Array.from(new Set([...existing.target_locales, locale])) : [locale];
+      const subId = existing?.subscription_id || `sub_dm_${userId.slice(-8)}`;
+
+      const embed = {
+        title: "✅ Midgley Direct Message Alert Subscription Active",
+        description: `Subscribed **@${username}** to real-time intraday gasoline shock alerts without cluttering shared server chat.`,
+        url: "https://koshiirRa.github.io/midgley/",
+        color: 3066993,
+        fields: [
+          { name: "📍 Subscribed Hubs", value: `\`${mergedLocales.join(", ")}\``, inline: true },
+          { name: "⚡ Min Shock (|ΔP|)", value: `\`>= $${minShock.toFixed(2)}/gal\``, inline: true },
+          { name: "🧭 Direction Bias", value: `\`${direction}\``, inline: true },
+          { name: "📬 Delivery Channel", value: delivery === "dm" ? "`Private Direct Message (DM)`" : "`Ephemeral Server Reply`", inline: true }
+        ],
+        footer: { text: `Midgley Notification Gateway • Subscription ID: ${subId}` },
+        timestamp: new Date().toISOString()
+      };
+
+      let dmResult: { sent: boolean; dmChannelId?: string | null; blockedByPrivacy?: boolean; error?: string } = {
+        sent: false
+      };
+      if (delivery === "dm") {
+        dmResult = await sendDiscordDirectMessage(userId, { embeds: [embed] }, env, existing?.dm_channel_id);
+      }
+
+      const subRecord: WorkerDMSubscriptionRecord = {
+        subscription_id: subId,
+        discord_user_id: userId,
+        dm_channel_id: dmResult.dmChannelId || existing?.dm_channel_id || null,
+        target_locales: mergedLocales,
+        min_shock_threshold: minShock,
+        direction_filter: direction,
+        delivery_mode: "realtime",
+        is_active: true,
+        muted_until: null,
+        created_at: existing?.created_at || new Date().toISOString()
+      };
+      await saveWorkerUserSubscription(subRecord, env);
+
+      const privacyNotice = dmResult.blockedByPrivacy
+        ? "\n⚠️ **Note:** Could not open a Direct Message because your Discord privacy settings block DMs from server members (`Error 50007`). Please enable **Allow Direct Messages from server members** in this server's Privacy Settings so background alerts can reach your inbox."
+        : dmResult.sent
+        ? "\n📬 *A confirmation card has been delivered to your Direct Messages.*"
+        : "";
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64, // Ephemeral: only visible to the command caller
+            content: `✅ **Subscription updated for \`${mergedLocales.join(", ")}\`** (|ΔP| >= $${minShock.toFixed(2)}/gal, \`${direction}\`).${privacyNotice}`,
+            embeds: [embed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "unsubscribe") {
+      const rawLocale = options.locale ? String(options.locale).trim() : "all";
+      const existing = await getWorkerUserSubscription(userId, env);
+      if (!existing || !existing.is_active) {
+        return new Response(
+          JSON.stringify({
+            type: 4,
+            data: {
+              flags: 64,
+              content: "ℹ️ You do not currently have any active Midgley Direct Message alert subscriptions."
+            }
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (rawLocale.toLowerCase() === "all") {
+        await deleteWorkerUserSubscription(userId, env);
+        return new Response(
+          JSON.stringify({
+            type: 4,
+            data: {
+              flags: 64,
+              content: "🗑️ **Unsubscribed** from all Midgley Direct Message intraday shock alerts."
+            }
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      const targetLoc = normalizeWorkerLocale(rawLocale);
+      const remaining = existing.target_locales.filter(l => l !== targetLoc);
+      if (remaining.length === 0) {
+        await deleteWorkerUserSubscription(userId, env);
+      } else {
+        existing.target_locales = remaining;
+        await saveWorkerUserSubscription(existing, env);
+      }
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content:
+              remaining.length > 0
+                ? `✅ Removed \`${targetLoc}\` from your DM alerts. Remaining subscribed hubs: \`${remaining.join(", ")}\`.`
+                : `🗑️ Removed \`${targetLoc}\`. You have no remaining active DM subscriptions.`
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "status") {
+      const existing = await getWorkerUserSubscription(userId, env);
+      const statusEmbed = {
+        title: "📊 Midgley Discord Alert Subscription Status",
+        description: existing && existing.is_active
+          ? `Active Direct Message alert profile for **@${username}**:`
+          : `No active Direct Message subscriptions found for **@${username}**. Use \`/midgley subscribe\` to register.`,
+        url: "https://koshiirRa.github.io/midgley/",
+        color: existing && existing.is_active ? 3447003 : 9807270,
+        fields: existing && existing.is_active
+          ? [
+              { name: "🆔 Subscription ID", value: `\`${existing.subscription_id}\``, inline: true },
+              { name: "📍 Subscribed Hubs", value: `\`${existing.target_locales.join(", ")}\``, inline: true },
+              { name: "⚡ Shock Threshold", value: `\`>= $${existing.min_shock_threshold.toFixed(2)}/gal\``, inline: true },
+              { name: "🧭 Direction Filter", value: `\`${existing.direction_filter}\``, inline: true },
+              { name: "🔕 Mute Status", value: existing.muted_until ? `\`Muted until ${existing.muted_until}\`` : "`Active (Unmuted)`", inline: true }
+            ]
+          : [
+              { name: "💡 Quick Start", value: "Run `/midgley subscribe locale:Tulsa min_shock:0.25` to receive private DM alerts.", inline: false }
+            ],
+        timestamp: new Date().toISOString()
+      };
+
+      const dmRes = await sendDiscordDirectMessage(userId, { embeds: [statusEmbed] }, env, existing?.dm_channel_id);
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: dmRes.sent ? "📬 Sent your subscription status card via Direct Message." : undefined,
+            embeds: [statusEmbed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "forecast") {
+      const locale = normalizeWorkerLocale(options.locale);
+      const horizon = Number(options.horizon || 5);
+      const localeMeta = SUPPORTED_DISCORD_LOCALES.find(l => l.value === locale) || SUPPORTED_DISCORD_LOCALES[0];
+      const dashboardUrl = `https://koshiirRa.github.io/midgley/${localeMeta.slug}`;
+
+      const forecastEmbed = {
+        title: `⛽ Midgley ${horizon}D Forecast & Regime Brief — ${locale.replace(/_/g, " ")}`,
+        description: `Point-in-time quantitative regime & shock attribution summary for **${localeMeta.name}**.`,
+        url: dashboardUrl,
+        color: 3447003,
+        fields: [
+          { name: "📍 Regional Hub", value: `\`${locale}\``, inline: true },
+          { name: "🛢️ PADD Supply Corridor", value: `\`${localeMeta.padd}\``, inline: true },
+          { name: "📅 Forecast Horizon", value: `\`1D – ${horizon}D Out-of-Time\``, inline: true },
+          {
+            name: "🔗 Live Interactive Views",
+            value: `[📊 Regional Dashboard](${dashboardUrl}) • [📈 Technical Attribution](https://koshiirRa.github.io/midgley/technical_breakdown.html) • [📡 Data Sources](https://koshiirRa.github.io/midgley/sources.html)`,
+            inline: false
+          }
+        ],
+        footer: { text: "Midgley Energy Complex Forecasting • Delivered Privately via Slash Command" },
+        timestamp: new Date().toISOString()
+      };
+
+      const existing = await getWorkerUserSubscription(userId, env);
+      const dmRes = await sendDiscordDirectMessage(userId, { embeds: [forecastEmbed] }, env, existing?.dm_channel_id);
+      const dmNote = dmRes.sent
+        ? "📬 **Forecast brief delivered to your Direct Messages** (and shown ephemerally below)."
+        : dmRes.blockedByPrivacy
+        ? "⚠️ **DMs are blocked by your server privacy settings (`50007`)** — displaying your forecast ephemerally below instead:"
+        : "📊 **Displaying your forecast ephemerally below** (invisible to the rest of the server):";
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: dmNote,
+            embeds: [forecastEmbed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "test-alert") {
+      const locale = normalizeWorkerLocale(options.locale);
+      const testEmbed = {
+        title: "🧪 [DRY-RUN TEST] Midgley Direct Message Intraday Shock Alert",
+        description: "**Trigger Catalyst (Synthetic Diagnostic):**\n> *\"Unplanned FCC unit outage reported at regional refining complex\"*",
+        url: "https://koshiirRa.github.io/midgley/",
+        color: 15105570,
+        fields: [
+          { name: "📍 Target Metro Hubs", value: `\`${locale}\``, inline: true },
+          { name: "📊 Price Pressure (ΔP)", value: "`+0.35/gal`", inline: true },
+          { name: "🛢️ Supply Disruption (S)", value: "`0.65`", inline: true }
+        ],
+        footer: { text: "Midgley Self-Service DM Reachability Diagnostic" },
+        timestamp: new Date().toISOString()
+      };
+
+      const existing = await getWorkerUserSubscription(userId, env);
+      const dmRes = await sendDiscordDirectMessage(userId, { embeds: [testEmbed] }, env, existing?.dm_channel_id);
+      if (dmRes.sent) {
+        return new Response(
+          JSON.stringify({
+            type: 4,
+            data: {
+              flags: 64,
+              content: `✅ **Direct Message test succeeded!** Check your Discord DMs for the synthetic \`${locale}\` alert card.`
+            }
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      const reason = dmRes.blockedByPrivacy
+        ? "Discord rejected the DM (`Error 50007: Cannot send messages to this user`). Please enable **Allow Direct Messages from server members** in your server Privacy Settings."
+        : `DM dispatch could not be completed (${dmRes.error || "DISCORD_BOT_TOKEN not configured"}). Showing preview ephemerally below:`;
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: `⚠️ ${reason}`,
+            embeds: [testEmbed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({
+        type: 4,
+        data: {
+          flags: 64,
+          content: "ℹ️ Unknown `/midgley` command. Available subcommands: `subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`."
+        }
+      }),
+      { headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Type 3: MESSAGE_COMPONENT (User clicked "🚩 Flag False Positive" or "🔕 Mute This Hub (24h)" button)
   if (interaction.type === 3) {
     const customId = interaction.data?.custom_id || "";
+    if (customId.startsWith("mute_hub:")) {
+      const userObj = interaction.member?.user || interaction.user || {};
+      const userId = String(userObj.id || "");
+      const existing = userId ? await getWorkerUserSubscription(userId, env) : null;
+      const mutedUntil = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
+      if (existing) {
+        existing.muted_until = mutedUntil;
+        await saveWorkerUserSubscription(existing, env);
+      }
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: `🔕 **Alerts snoozed for 24 hours** (until \`${mutedUntil}\`). Run \`/midgley subscribe\` at any time to unmute early.`
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
     if (customId.startsWith("flag_fp:")) {
       const eventHash = customId.replace("flag_fp:", "");
 

@@ -116,9 +116,12 @@ WANDB_API_KEY="wandb_v1_..."
 WANDB_PROJECT="midgley-gas-forecasting"
 WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
 
-# Discord Webhook Notification Gateway (Intraday Forecast Revisions, Issue #234)
-# Dispatches real-time alerts on intraday price shocks with environment tagging ([PRODUCTION] vs [DEVELOPMENT])
+# Discord Webhook & Direct Message (DM) Notification Gateway (Issues #234, #235)
+# Dispatches real-time alerts on intraday price shocks to channel webhooks and individual DM subscribers
 DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+DISCORD_APP_ID="your_discord_application_id"
+DISCORD_PUBLIC_KEY="your_discord_ed25519_public_key"
+DISCORD_BOT_TOKEN="your_discord_bot_token_for_dm_alerts"
 
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)

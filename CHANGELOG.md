@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Subpackage implementation `src/locations/los_angeles/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#221).
 - Public dashboard page `docs/los_angeles.html` with South Coast Basin refining shock simulations, plain-English automated narrative synthesis, and live weather/AQI telemetry (#221).
 - EIA API v2 retail gasoline series mapping (`GASREGWLA` -> `EMM_EPMR_PTE_Y05LA_DPG` for Los Angeles-Long Beach-Anaheim MSA) in `src/eia_retail_feed.py` (#221).
+- Multi-subscriber Discord Webhook & Direct Message (`discord_dm`) subscription registry (`DiscordSubscriptionRegistry` in `src/discord_notifier.py`, `discord_subscriptions` table in `src/db/schema.sql`) with Fernet/HMAC encryption at rest, locale/threshold/direction/catalyst filtering, and automatic dead-webhook (`HTTP 404/410`) and blocked-DM (`HTTP 403 / 50007`) circuit breaking (#235).
+- REST API Discord subscription & diagnostic endpoints (`POST /api/v1/notifications/discord/subscribe`, `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`, `GET /api/v1/notifications/discord/subscriptions/status`, `POST /api/v1/notifications/discord/test`) protected by IPASIS IP reputation checks in `src/api_server.py` (#235).
+- Interactive `/midgley` Discord Application Slash Commands (`subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`) and locale autocomplete on `/discord/interactions` in `workers/intraday_monitor_worker.ts` with ephemeral (`flags: 64`) in-channel responses, private Direct Message delivery (`DISCORD_BOT_TOKEN`), and `scripts/register_discord_commands.py` (#235).
+
+### Fixed
+- Initialized `dynamic_fetches_succeeded` counter and guarded test-mode persistence in `src/alternative_data_feeds.py`.
 
 ## [0.8.5] - 2026-10-06
 

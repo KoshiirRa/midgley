@@ -1,0 +1,66 @@
+# Release Notes - v0.8.6 (Draft)
+
+Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with three major U.S. refining and consumption corridors (**Greater Chicago**, **Houston & USGC**, and the **Los Angeles Basin**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
+
+---
+
+## 🎯 Highlights & Improvements
+
+### 1. Greater Chicago Metro Calibration Hub — PADD 2 (`Chicago_IL`, Issue #219 / PR #630)
+- **Refining & Midstream Topology**: Added [`src/locations/chicago/`](src/locations/chicago/) (`main.py`, `regional.py`, `notebook_builder.py`) and [`data/regional_metadata/chicago_il.json`](data/regional_metadata/chicago_il.json) calibrated to BP Whiting (435 kbpd, Indiana), CITGO Lemont (177 kbpd, Illinois), and ExxonMobil Joliet (251 kbpd, Illinois), alongside Explorer, Wolverine, West Shore, and Badger pipeline corridors.
+- **Tax Arbitrage & EPA RFG 7.4 psi Modeling**: Modeled Illinois state excise ($0.470/gal), Cook County ($0.060/gal), and City of Chicago ($0.080/gal) stacked municipal fuel taxes ($0.805/gal statutory base plus 6.25%–10.25% sales tax compounding) and Northwest Indiana cross-border arbitrage (`nw_indiana: -0.38`), plus EPA Reformulated Gasoline (RFG) 7.4 psi summer RVP rules in [`data/regulatory_rvp_rules.json`](data/regulatory_rvp_rules.json) and [`src/rvp_regulations.py`](src/rvp_regulations.py).
+- **Midwestern Edgeworth Price Cycles & Public Dashboard**: Enabled `has_edgeworth_cycles=True` for Greater Chicago in [`src/locations/specs.py`](src/locations/specs.py), mapped official EIA weekly retail series `EMM_EPMR_PTE_Y03CH_DPG` (`GASREGWCH`), and generated [`docs/chicago.html`](docs/chicago.html).
+
+### 2. Houston & USGC Metro Calibration Hub — PADD 3 (`Houston_TX`, Issue #220)
+- **Gulf Coast Mega-Refining Corridor**: Added [`src/locations/houston/`](src/locations/houston/) and [`data/regional_metadata/houston_tx.json`](data/regional_metadata/houston_tx.json) anchoring >52% of U.S. operable refining capacity across the Houston Ship Channel and Beaumont/Port Arthur corridor (ExxonMobil Baytown 560 kbpd, Motiva Port Arthur 630 kbpd, Marathon Galveston Bay 593 kbpd, LyondellBasell 268 kbpd, Valero Houston 235 kbpd, Deer Park 312 kbpd, Chevron Pasadena 110 kbpd) and Colonial Pipeline Lines 1 & 2 origin injection at Pasadena/Hebert.
+- **Tax Structure, RVP & EIA Series Integration**: Modeled Texas's fixed statutory excise tax ($0.200/gal state + $0.184/gal federal = $0.384/gal total with zero state/local sales tax on motor fuel), Houston-Galveston-Brazoria 7.8 psi Low-RVP summer rules, `spot_gulf_coast` (`EER_EPMRU_PF4_RGC_DPG`) pass-through, and official EIA weekly retail series `EMM_EPMR_PTE_Y44HO_DPG` (`GASREGWHO`) in [`src/eia_retail_feed.py`](src/eia_retail_feed.py), plus [`docs/houston.html`](docs/houston.html).
+
+### 3. Los Angeles Basin Metro Calibration Hub — PADD 5 (`Los_Angeles_CA`, Issue #221)
+- **South Coast CaRFG Refining Island**: Added [`src/locations/los_angeles/`](src/locations/los_angeles/) and [`data/regional_metadata/los_angeles_ca.json`](data/regional_metadata/los_angeles_ca.json) calibrating Southern California's 1.022M bpd refining cluster (Marathon Carson/Wilmington 363 kbpd, Chevron El Segundo 269 kbpd, PBF Torrance 166 kbpd, Phillips 66 Wilmington 139 kbpd, Valero Wilmington 85 kbpd), Kinder Morgan Watson Station / SFPP West & South Line pipelines, and San Pedro Bay (Ports of Los Angeles & Long Beach) waterborne imports.
+- **CARB Phase 3 RVP, Tax Stack & EIA Series**: Modeled California's $0.953/gal statutory base ($0.616/gal SB 1 excise + Cap-and-Trade + LCFS + UST fee, ~\$1.407/gal total with local sales tax), extended CARB Phase 3 7.0 psi RVP window (March 1–October 31), `spot_los_angeles` (`EER_EPMRU_PF4_RLA_DPG`), and official EIA weekly retail series `EMM_EPMR_PTE_Y05LA_DPG` (`GASREGWLA`), plus [`docs/los_angeles.html`](docs/los_angeles.html).
+
+### 4. Multi-Subscriber Discord Webhooks, Direct Message (`discord_dm`) Alerts & `/midgley` Slash Commands (Issue #235)
+- **Dual-Target Persistent Subscription Registry**: Added `discord_subscriptions` in [`src/db/schema.sql`](src/db/schema.sql) and [`DiscordSubscriptionRegistry`](src/discord_notifier.py) in [`src/discord_notifier.py`](src/discord_notifier.py) supporting both shared channel incoming webhooks (`delivery_type="webhook"`, encrypted at rest via `cryptography.fernet` or HMAC-SHA256 authenticated stream cipher) and personal Discord Direct Message subscriptions (`delivery_type="discord_dm"`, storing `discord_user_id` and cached `dm_channel_id` via `DISCORD_BOT_TOKEN`).
+- **Locale, Shock Threshold, Directional Bias & Catalyst Filtering**: Implemented [`dispatch_to_matching_subscribers()`](src/discord_notifier.py) to concurrently fan out intraday shock alerts to subscribers matching `target_locales`, `min_shock_threshold`, `direction_filter` (`all_shocks`, `spikes_only`, `drops_only`), and `catalyst_domains` (`refinery_pipeline`, `weather_hurricane`, `geopolitical_opec`, `regulatory_tax`), with automatic circuit breaking on HTTP `404`/`410` dead webhooks, HTTP `403` (`50007` blocked DMs), or 3 consecutive delivery failures.
+- **REST API Subscription & Diagnostic Endpoints**: Added `POST /api/v1/notifications/discord/subscribe` (protected by IPASIS IP reputation checks), `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`, `GET /api/v1/notifications/discord/subscriptions/status`, and `POST /api/v1/notifications/discord/test` in [`src/api_server.py`](src/api_server.py).
+- **Interactive `/midgley` Slash Commands & Zero Chat Spam**: Extended [`handleDiscordInteraction()`](workers/intraday_monitor_worker.ts) in [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts) to process `APPLICATION_COMMAND` (`type: 2`) and `APPLICATION_COMMAND_AUTOCOMPLETE` (`type: 4`) for `/midgley subscribe`, `unsubscribe`, `status`, `forecast`, and `test-alert`, plus the `mute_hub:` 24-hour snooze button (`type: 3`). Commands reply ephemerally (`flags: 64`) in-channel while delivering rich forecast and alert cards directly to the caller's DMs (with automatic ephemeral fallback if Discord returns `Error 50007`). Added [`scripts/register_discord_commands.py`](scripts/register_discord_commands.py) supporting both Guild-Install and User-Install contexts (`integration_types: [0, 1]`, `contexts: [0, 1, 2]`).
+
+### 5. Alternative Data Feed & Test Sandbox Hardening
+- **Dynamic Fetch Counter & Sandbox Guard**: Initialized `dynamic_fetches_succeeded` counter and guarded test-mode persistence in [`src/alternative_data_feeds.py`](src/alternative_data_feeds.py) (`e2973fea`).
+
+---
+
+## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
+
+| Issue / PR | Title | Component |
+| :--- | :--- | :--- |
+| **#219 / #630** | `feat(regions): Implement Greater Chicago Metro Calibration Hub (PADD 2 / BP Whiting & Citgo Lemont)` | Locations / Regional Hubs |
+| **#220** | `feat(regions): Implement Houston & USGC Metro Calibration Hub (PADD 3 / Houston Ship Channel Refineries)` | Locations / Regional Hubs |
+| **#221** | `feat(regions): Implement Los Angeles Basin Metro Calibration Hub (PADD 5 / CaRFG & El Segundo/Torrance)` | Locations / Regional Hubs |
+| **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands` | API / Notifications / Edge |
+
+---
+
+## 🤖 AI Agent Reconciliation Block (Draft for v0.8.6)
+
+For autonomous AI coding assistants, downstream forks, and self-hosted deployments tracking `dev` toward **v0.8.6**:
+
+### 1. Schema & Migration Summary
+* **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
+* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`)
+* **Database Schema Additions**:
+  - `discord_subscriptions` table and indexes (`idx_discord_subs_active`, `idx_discord_subs_webhook_hash`, `idx_discord_subs_user_id`) in `src/db/schema.sql` and `data/subscribers.sqlite`.
+
+### 2. Environment Variables & Credentials
+* **Added / Optional**:
+  - `DISCORD_BOT_TOKEN`: Discord Bot token used to open DM channels (`POST /api/v10/users/@me/channels`) and deliver private Direct Message alerts (`delivery_type="discord_dm"`).
+  - `DISCORD_APP_ID`: Discord Application ID for registering `/midgley` slash commands (`scripts/register_discord_commands.py`).
+  - `DISCORD_PUBLIC_KEY`: Ed25519 public key for verifying `/discord/interactions` requests.
+  - `MIDGLEY_SUBSCRIBERS_DB_PATH`: Optional override path for the SQLite subscriber registry (defaults to `data/subscribers.sqlite`).
+
+### 3. Verification Commands
+```bash
+python scripts/register_discord_commands.py --dry-run
+TESTING=1 pytest -v tests/test_discord_subscriptions.py tests/test_discord_notifier.py tests/test_discord_interactions.py tests/test_docs_links.py
+npx vitest run tests/workers.test.ts
+```

@@ -122,3 +122,30 @@ CREATE TABLE IF NOT EXISTS hindsight_telemetry (
 
 CREATE INDEX IF NOT EXISTS idx_hindsight_telemetry_op ON hindsight_telemetry (operation, created_at);
 
+CREATE TABLE IF NOT EXISTS discord_subscriptions (
+    subscription_id TEXT PRIMARY KEY,
+    delivery_type TEXT NOT NULL DEFAULT 'webhook',
+    webhook_url_hash TEXT,
+    encrypted_webhook_url TEXT,
+    discord_user_id TEXT,
+    dm_channel_id TEXT,
+    target_locales TEXT NOT NULL,
+    min_shock_threshold REAL DEFAULT 0.25,
+    direction_filter TEXT NOT NULL DEFAULT 'all_shocks',
+    catalyst_domains TEXT,
+    delivery_mode TEXT NOT NULL DEFAULT 'realtime',
+    role_mention TEXT,
+    client_label TEXT,
+    manage_token_hash TEXT NOT NULL,
+    is_active INTEGER DEFAULT 1,
+    muted_until TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    last_notified_at TEXT,
+    failure_count INTEGER DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_discord_subs_active ON discord_subscriptions (is_active, delivery_type);
+CREATE INDEX IF NOT EXISTS idx_discord_subs_webhook_hash ON discord_subscriptions (webhook_url_hash);
+CREATE INDEX IF NOT EXISTS idx_discord_subs_user_id ON discord_subscriptions (discord_user_id);
+
+

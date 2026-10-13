@@ -349,6 +349,31 @@ For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView), se
 
 ---
 
+## 💬 Multi-Subscriber Discord Webhooks, Direct Message (DM) Alerts & `/midgley` Slash Commands (Issue #235)
+
+Allows external fleet operators, regional traders, and individual members sharing a Discord server to subscribe to locale-filtered intraday shock revisions via either **Channel Incoming Webhooks (`delivery_type: "webhook"`)** or **Private Direct Messages (`delivery_type: "discord_dm"`)**, and interact with the Midgley Bot via `/midgley` slash commands without spamming server chat channels.
+
+### 1. REST Subscription Endpoints (`src/api_server.py`)
+* `POST /api/v1/notifications/discord/subscribe`: Registers a channel webhook or personal Discord User ID (`discord_user_id`) for locale-filtered alerts (`target_locales`, `minimum_shock_threshold`, `direction_filter`: `all_shocks` | `spikes_only` | `drops_only`). Encrypted at rest and protected by IPASIS IP reputation checks. Returns `subscription_id` and `manage_token`.
+* `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`: Unsubscribes a webhook or DM subscription using `?manage_token=...` or `X-Manage-Token` header.
+* `GET /api/v1/notifications/discord/subscriptions/status`: *(Requires API Key)* Returns active subscriber counts grouped by metro hub and delivery type (`webhook` vs `discord_dm`).
+* `POST /api/v1/notifications/discord/test`: Sends an immediate dry-run diagnostic embed to a Discord channel webhook or user DM.
+
+### 2. Interactive `/midgley` Discord Slash Commands (`POST /discord/interactions`)
+Handled on the Cloudflare Edge Worker (`workers/intraday_monitor_worker.ts`) with Ed25519 signature verification (`X-Signature-Ed25519`) and ephemeral in-channel acknowledgments (`flags: 64`) paired with Direct Message delivery (`DISCORD_BOT_TOKEN`):
+* `/midgley subscribe locale:<hub> [min_shock:0.25] [direction:all_shocks|spikes_only|drops_only] [delivery:dm|channel_ephemeral]`
+* `/midgley unsubscribe [locale:<hub>|all]`
+* `/midgley status`
+* `/midgley forecast locale:<hub> [horizon:1..5]`
+* `/midgley test-alert [locale:<hub>]`
+
+Register or update the global/guild command manifest via:
+```bash
+python scripts/register_discord_commands.py --dry-run
+```
+
+---
+
 ## 📦 Cloudflare Queue Batch Consumer Endpoint (`POST /api/v1/events/queue-consumer`)
 
 * **Endpoint:** `POST /api/v1/events/queue-consumer`
