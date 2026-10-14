@@ -5569,5 +5569,26 @@
       "overall_price_pressure": -0.75
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T07:17:55.560810",
+    "headline": "Will Phillips 66 (PSX) Face A Bayway Refinery Strike? - Yahoo Finance",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.6,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.5
+    },
+    "discord_notified": true
   }
 ]
