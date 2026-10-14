@@ -248,7 +248,7 @@ Respond strictly in valid JSON format with:
 }}"""
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.8-flash",
             contents=prompt
         )
         text_resp = response.text.strip()

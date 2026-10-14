@@ -596,7 +596,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 
                 <!-- Card 3.1: Finlight.me Financial News API -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="finlight news reuters bloomberg gemini 2.5 flash quota 150/mo circuit breaker">
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="finlight news reuters bloomberg gemini 3.8 flash quota 150/mo circuit breaker">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">

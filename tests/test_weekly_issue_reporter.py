@@ -134,6 +134,14 @@ def test_evaluate_open_issues_llm_mock(sample_issues):
         assert "Adjust exponential decay" in result["recommended_implementation"]
         assert "High-Impact Modeling Issue" in result["summary_markdown"] or "Highest-Impact" in result["summary_markdown"]
 
+        call_kwargs = mock_genai_client.models.generate_content.call_args[1]
+        assert call_kwargs["model"] == "gemini-3.8-flash"
+        config = call_kwargs["config"]
+        assert getattr(config, "temperature", None) is None
+        assert getattr(config, "top_p", None) is None
+        assert getattr(config, "top_k", None) is None
+        assert getattr(config, "thinking_budget", None) is None
+
 
 def test_generate_weekly_markdown_report_includes_self_review(sample_issues):
     with patch("src.weekly_issue_reporter.fetch_open_github_issues", return_value=sample_issues):

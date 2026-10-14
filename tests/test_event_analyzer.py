@@ -94,5 +94,71 @@ class TestEventAnalyzer(unittest.TestCase):
             self.assertEqual(mock_extract_llm.call_count, 3)
 
 
+    def test_extract_event_features_llm_gemini_38_flash(self):
+        """Verifies single extraction targets gemini-3.8-flash with thinking_level='low' and no deprecated params."""
+        headline = "Saudi Aramco unexpectedly cuts crude output by 500k bpd"
+        with patch("google.genai.Client") as mock_genai_client, \
+             patch("src.event_analyzer.log_llm_usage") as mock_log_usage, \
+             patch("src.event_analyzer.token_tab_manager.record_usage") as mock_tab_record:
+
+            mock_client_instance = MagicMock()
+            mock_resp = MagicMock()
+            mock_resp.text = json.dumps({
+                "geopolitical_risk": 0.3,
+                "supply_disruption": 0.8,
+                "demand_sentiment": 0.0,
+                "opec_action": 0.9,
+                "overall_price_pressure": 0.75
+            })
+            mock_client_instance.models.generate_content.return_value = mock_resp
+            mock_genai_client.return_value = mock_client_instance
+
+            scores = extract_event_features_llm(headline, api_key="fake_gemini_key")
+            self.assertEqual(scores["overall_price_pressure"], 0.75)
+
+            call_kwargs = mock_client_instance.models.generate_content.call_args[1]
+            self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
+            config = call_kwargs["config"]
+            self.assertIsNone(getattr(config, "temperature", None))
+            self.assertIsNone(getattr(config, "top_p", None))
+            self.assertIsNone(getattr(config, "top_k", None))
+            self.assertIsNone(getattr(config, "thinking_budget", None))
+            self.assertIn("low", str(config.thinking_config.thinking_level).lower())
+
+            mock_log_usage.assert_called_once()
+            self.assertEqual(mock_log_usage.call_args[0][1], "gemini-3.8-flash")
+            mock_tab_record.assert_called_once()
+            self.assertEqual(mock_tab_record.call_args[0][0], "gemini-3.8-flash")
+
+    def test_extract_batch_event_features_llm_gemini_38_flash(self):
+        """Verifies batch extraction targets gemini-3.8-flash with thinking_level='low' and no deprecated params."""
+        headlines = [
+            "Colonial Pipeline resumes normal service after inspection",
+            "Midwest refinery announces scheduled unit overhaul"
+        ]
+        with patch("google.genai.Client") as mock_genai_client:
+            mock_client_instance = MagicMock()
+            mock_resp = MagicMock()
+            mock_resp.text = json.dumps([
+                {"geopolitical_risk": 0.0, "supply_disruption": -0.2, "demand_sentiment": 0.0, "opec_action": 0.0, "overall_price_pressure": -0.1},
+                {"geopolitical_risk": 0.0, "supply_disruption": 0.3, "demand_sentiment": 0.0, "opec_action": 0.0, "overall_price_pressure": 0.15}
+            ])
+            mock_client_instance.models.generate_content.return_value = mock_resp
+            mock_genai_client.return_value = mock_client_instance
+
+            results = extract_batch_event_features_llm(headlines, api_key="fake_gemini_key")
+            self.assertEqual(len(results), 2)
+            self.assertEqual(results[0]["overall_price_pressure"], -0.1)
+
+            call_kwargs = mock_client_instance.models.generate_content.call_args[1]
+            self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
+            config = call_kwargs["config"]
+            self.assertIsNone(getattr(config, "temperature", None))
+            self.assertIsNone(getattr(config, "top_p", None))
+            self.assertIsNone(getattr(config, "top_k", None))
+            self.assertIsNone(getattr(config, "thinking_budget", None))
+            self.assertIn("low", str(config.thinking_config.thinking_level).lower())
+
+
 if __name__ == "__main__":
     unittest.main()

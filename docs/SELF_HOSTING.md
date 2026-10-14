@@ -332,7 +332,7 @@ To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
      -e HINDSIGHT_API_PORT="8888" \
      -e DATABASE_URL="$SUPABASE_DATABASE_URL" \
      -e HINDSIGHT_API_LLM_PROVIDER="gemini" \
-     -e HINDSIGHT_API_LLM_MODEL="gemini-2.5-flash" \
+     -e HINDSIGHT_API_LLM_MODEL="gemini-3.8-flash" \
      -e HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY" \
      ghcr.io/vectorize-io/hindsight:latest
    ```

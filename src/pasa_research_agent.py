@@ -339,9 +339,9 @@ Return ONLY a valid JSON object matching this schema:
             from google import genai
             from google.genai import types
             client = genai.Client(api_key=actual_key)
-            config = types.GenerateContentConfig(temperature=0.1)
+            config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-3.8-flash',
                 contents=prompt_str,
                 config=config
             )
@@ -352,7 +352,7 @@ Return ONLY a valid JSON object matching this schema:
                 raw_text = raw_text.split("```")[1].split("```")[0].strip()
 
             parsed = json.loads(raw_text)
-            token_tab_manager.record_usage("gemini-2.5-flash", "pasa_selector_eval", 400, 200, status="success")
+            token_tab_manager.record_usage("gemini-3.8-flash", "pasa_selector_eval", 400, 200, status="success")
 
             eval_map = {e["doc_id"]: e for e in parsed.get("evaluations", []) if "doc_id" in e}
             selected = []

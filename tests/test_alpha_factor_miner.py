@@ -49,8 +49,16 @@ class TestAlphaFactorMinerLLM(unittest.TestCase):
             self.assertEqual(res[0]["expression"], "Delta(crack_spread_321, 5)")
             self.assertEqual(res[1]["name"], "ovx_zscore_10d")
 
-            # Verify prompt content
+            # Verify prompt content and model parameters
             call_kwargs = mock_client.models.generate_content.call_args[1]
+            self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
+            config = call_kwargs["config"]
+            self.assertNotIn("temperature", config)
+            self.assertNotIn("top_p", config)
+            self.assertNotIn("top_k", config)
+            self.assertNotIn("thinking_budget", config)
+            thinking_config = config.get("thinking_config", {})
+            self.assertEqual(thinking_config.get("thinking_level"), "low")
             contents_str = call_kwargs["contents"]
             self.assertIn("gasoline_rbob", contents_str)
             self.assertIn("cboe_ovx", contents_str)

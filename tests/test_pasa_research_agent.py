@@ -186,6 +186,15 @@ def test_selector_llm_evaluation_mock():
         assert "pipeline_basis_premium" in params
         assert params["pipeline_basis_premium"]["value"] == 0.12
 
+        call_kwargs = mock_client.models.generate_content.call_args[1]
+        assert call_kwargs["model"] == "gemini-3.8-flash"
+        config = call_kwargs["config"]
+        assert getattr(config, "temperature", None) is None
+        assert getattr(config, "top_p", None) is None
+        assert getattr(config, "top_k", None) is None
+        assert getattr(config, "thinking_budget", None) is None
+        assert "low" in str(config.thinking_config.thinking_level).lower()
+
 
 def test_pasa_multi_hop_investigation_loop():
     """Verifies multi-hop execution flow and result assembly in testing mode."""

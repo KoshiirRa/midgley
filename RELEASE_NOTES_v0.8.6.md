@@ -42,7 +42,8 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - **Statutory Tax Wedge & Regional Basis Spread Synthesis (Option B)**: For regions with significant divergence from reference coastal hubs, Midgley computes the exact statutory tax differential $\Delta \tau = \tau_{\text{state}} - \tau_{\text{hub\_base}}$ (e.g. NY `$0.472` vs DE `$0.230` $\rightarrow$ `+$0.242/gal` wedge) and estimated mountain/rural freight spread (e.g. `+$0.59/gal` total basis spread for Adirondacks/Lake Placid), displaying synthesized price guidance while clarifying that quantitative price shocks ($|\Delta P|$) track PADD wholesale pipeline transmission.
   - **Automated Regional Calibration Hub GitHub Issue Trigger**: When a user subscribes for notifications in a region that departs significantly from its PADD calibration hub ($|\Delta \tau| \ge \$0.15/\text{gal}$ or sub-PADD disconnects), the gateway automatically logs/opens a deduplicated issue on the repository (e.g. tracking issue [#635](https://github.com/KoshiirRa/midgley/issues/635) for New York Harbor / New York State) to prioritize calibrating a dedicated regional model.
   - Out-of-metro ZIP code subscriptions and lookups from both the FastAPI gateway and Cloudflare Worker edge (`unmapped_zip:<zip>` in Cloudflare D1, exposed via `GET /telemetry/unmapped-zips`, plus `unmapped_zip_telemetry` in SQLite/Turso) are automatically aggregated by [`get_unmapped_zip_telemetry()`](src/zip_geocoding.py) to update the **Out-of-Metro ZIP Code Query Heatmap** on [`docs/telemetry.html`](docs/telemetry.html).
-- **Telemetry Leaflet Basemap Tile Authentication (`CARTO_API_KEY`)**: Updated [`src/dashboard_generator.py`](src/dashboard_generator.py) and regenerated [`docs/telemetry.html`](docs/telemetry.html) to authenticate CARTO Dark Matter Leaflet map tiles via `CARTO_API_KEY` (`?key=...`, `subdomains: 'abcd'`) and plot state-level demand centroids across all 50 U.S. states + D.C.
+- **Telemetry Leaflet Basemap Tile Authentication & Fallback Hardening (`CARTO_API_KEY`)**: Updated [`src/dashboard_generator.py`](src/dashboard_generator.py) and regenerated [`docs/telemetry.html`](docs/telemetry.html) to authenticate CARTO Dark Matter Leaflet map tiles via `CARTO_API_KEY` (`?key=...`, `subdomains: 'abcd'`) and plot state-level demand centroids across all 50 U.S. states + D.C. Hardened key resolution with `(os.environ.get("CARTO_API_KEY") or DEFAULT_KEY).strip()` so empty or whitespace-only environment variables safely fall back to the valid default key rather than emitting unauthenticated tile requests that render CARTO's `API KEY REQUIRED` watermark.
+- **Dev-VM Systemd Service Directory Realignment**: Realigned `~/.config/systemd/user/midgley-api.service` (port 8000) and `midgley-dev.service` (port 8080) on `dev-vm` (`10.42.42.54`) to run out of `/home/marty/projects/midgley-main` rather than legacy `/home/marty/projects/midgley`, ensuring long-running dev API instances serve current templates and authenticated basemaps.
 
 ### 7. Alternative Data Feed & Test Sandbox Hardening
 - **Dynamic Fetch Counter & Sandbox Guard**: Initialized `dynamic_fetches_succeeded` counter and guarded test-mode persistence in [`src/alternative_data_feeds.py`](src/alternative_data_feeds.py) (`e2973fea`).
@@ -56,6 +57,28 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **ZIP Geocoding Locality Identity Preservation**: Ensured `resolve_zip_code()` in [`src/zip_geocoding.py`](src/zip_geocoding.py) always populates `location_name` ("City, ST", "State, USA", or "US ZIP <zip>"), preventing `KeyError: 'location_name'` during Discord subscription dispatch and regional telemetry updates.
 - **Safe Edge Subscription Sync Testing**: Added `force: bool = False` to `sync_edge_subscriptions()` in [`src/discord_notifier.py`](src/discord_notifier.py) to allow test execution without disabling `TESTING="1"` process-wide.
 
+### 9. Google Gemini 3.8 Flash Migration & Thinking Level Configuration (Issue #616)
+- **Gemini 3.8 Flash Upgrade Ahead of Oct 20 Retirement**: Upgraded all runtime Gemini model identifiers from `gemini-2.5-flash` to `gemini-3.8-flash` across all operational pipelines:
+  - Qualitative event shock feature extraction ([`src/event_analyzer.py`](src/event_analyzer.py), single & batch extractions).
+  - Episodic memory post-mortem reflections ([`src/agent_memory.py`](src/agent_memory.py)).
+  - Counterfactual 4-persona cohort market simulation ([`src/scenario_simulator.py`](src/scenario_simulator.py)).
+  - PaSa dual-agent academic hypothesis selection ([`src/pasa_research_agent.py`](src/pasa_research_agent.py)).
+  - Symbolic alpha formula generation ([`src/alpha_factor_miner.py`](src/alpha_factor_miner.py)).
+  - Tool and pipeline candidate evaluations ([`src/catalog_monitor.py`](src/catalog_monitor.py)).
+  - Automated weekly issue priority ranking and self-reviews ([`src/weekly_issue_reporter.py`](src/weekly_issue_reporter.py)).
+  - Headline Arena agent registry defaults ([`src/headline_arena_connector.py`](src/headline_arena_connector.py)).
+  - Cloud Run Hindsight default LLM deployment configuration ([`scripts/deploy_hindsight_cloudrun.sh`](scripts/deploy_hindsight_cloudrun.sh) and [`SELF_HOSTING.md`](SELF_HOSTING.md)).
+- **Deprecated Parameter Elimination & Thinking Level Calibration**:
+  - Completely purged deprecated sampling arguments (`temperature`, `top_p`, `top_k`, and `thinking_budget`) from `GenerateContentConfig` and dictionary configurations passed to `google.genai` client calls to prevent upcoming hard `400 INVALID_ARGUMENT` errors.
+  - Explicitly configured `thinking_config=types.ThinkingConfig(thinking_level="low")` on structured JSON extraction and evaluation tasks ([`src/event_analyzer.py`](src/event_analyzer.py), [`src/alpha_factor_miner.py`](src/alpha_factor_miner.py), [`src/pasa_research_agent.py`](src/pasa_research_agent.py)), preventing default `"medium"` reasoning token inflation ($3.75/1M output tokens) while preserving sharp extraction precision and bounded costs.
+- **Telemetry, Prometheus & TokenTab Cost Accounting**:
+  - Registered `gemini-3.8-flash` in [`src/telemetry.py`](src/telemetry.py) (`MODEL_PRICING`) and [`src/tokentab_accounting.py`](src/tokentab_accounting.py) (`PROVIDER_PRICING`) with introductory rates ($0.75 / 1M prompt tokens, $3.75 / 1M output tokens).
+  - Maintained legacy `gemini-2.5-flash` entries ($0.075 / $0.300) for historical cost calculations.
+  - Updated Prometheus metrics in `format_prometheus_metrics()` to export `model="gemini-3.8-flash"`.
+  - Updated public telemetry dashboard ([`src/dashboard_generator.py`](src/dashboard_generator.py)) to aggregate historical and active Gemini metrics under the `Gemini 3.8 Flash (Tier 1)` audit card.
+- **Hermetic Test Suite Verification**:
+  - Updated unit test suites and mock assertions across [`tests/test_event_analyzer.py`](tests/test_event_analyzer.py), [`tests/test_alpha_factor_miner.py`](tests/test_alpha_factor_miner.py), [`tests/test_pasa_research_agent.py`](tests/test_pasa_research_agent.py), [`tests/test_weekly_issue_reporter.py`](tests/test_weekly_issue_reporter.py), [`tests/test_system_telemetry.py`](tests/test_system_telemetry.py), [`tests/test_tokentab_accounting.py`](tests/test_tokentab_accounting.py), and [`tests/test_scenario_simulator.py`](tests/test_scenario_simulator.py) to assert calls to `gemini-3.8-flash` with `thinking_level="low"` and verify no deprecated sampling parameters are passed.
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -66,6 +89,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#220** | `feat(regions): Implement Houston & USGC Metro Calibration Hub (PADD 3 / Houston Ship Channel Refineries)` | Locations / Regional Hubs |
 | **#221** | `feat(regions): Implement Los Angeles Basin Metro Calibration Hub (PADD 5 / CaRFG & El Segundo/Torrance)` | Locations / Regional Hubs |
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
+| **#616** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
@@ -91,7 +115,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
   - `DISCORD_BOT_TOKEN`: Discord Bot token used to open DM channels (`POST /api/v10/users/@me/channels`) and deliver private Direct Message alerts (`delivery_type="discord_dm"`).
   - `DISCORD_APP_ID`: Discord Application ID for registering `/midgley` slash commands (`scripts/register_discord_commands.py`).
   - `DISCORD_PUBLIC_KEY`: Ed25519 public key for verifying `/discord/interactions` requests.
-  - `CARTO_API_KEY`: Optional CARTO Basemaps API key appended to Leaflet dark tile URLs on `docs/telemetry.html`.
+  - `CARTO_API_KEY`: Optional CARTO Basemaps API key appended to Leaflet dark tile URLs on `docs/telemetry.html` (defaults to bundled public non-commercial key if unset or empty).
   - `MIDGLEY_SUBSCRIBERS_DB_PATH`: Optional override path for the SQLite subscriber registry (defaults to `data/subscribers.sqlite`).
 
 ### 3. Verification Commands

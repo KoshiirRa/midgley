@@ -18,6 +18,7 @@ TELEMETRY_LEDGER_PATH = os.path.join("data", "telemetry_ledger.json")
 
 # Model pricing estimates (USD per 1,000,000 tokens)
 MODEL_PRICING = {
+    "gemini-3.8-flash": {"prompt": 0.75, "completion": 3.75},
     "gemini-2.5-flash": {"prompt": 0.075, "completion": 0.30},
     "gemini-1.5-flash": {"prompt": 0.075, "completion": 0.30},
     "gpt-4o-mini": {"prompt": 0.15, "completion": 0.60},
@@ -324,13 +325,13 @@ def format_prometheus_metrics(environment: Optional[str] = None) -> str:
     lines = []
     lines.append("# HELP llm_tokens_consumed_total Total LLM tokens consumed by extraction agents.")
     lines.append("# TYPE llm_tokens_consumed_total counter")
-    lines.append(f'llm_tokens_consumed_total{{environment="{environment}",vendor="google",model="gemini-2.5-flash",type="prompt"}} {totals.get("prompt_tokens", 0)}')
-    lines.append(f'llm_tokens_consumed_total{{environment="{environment}",vendor="google",model="gemini-2.5-flash",type="completion"}} {totals.get("completion_tokens", 0)}')
-    lines.append(f'llm_tokens_consumed_total{{environment="{environment}",vendor="google",model="gemini-2.5-flash",type="total"}} {totals.get("total_tokens", 0)}')
+    lines.append(f'llm_tokens_consumed_total{{environment="{environment}",vendor="google",model="gemini-3.8-flash",type="prompt"}} {totals.get("prompt_tokens", 0)}')
+    lines.append(f'llm_tokens_consumed_total{{environment="{environment}",vendor="google",model="gemini-3.8-flash",type="completion"}} {totals.get("completion_tokens", 0)}')
+    lines.append(f'llm_tokens_consumed_total{{environment="{environment}",vendor="google",model="gemini-3.8-flash",type="total"}} {totals.get("total_tokens", 0)}')
 
     lines.append("# HELP llm_estimated_cost_usd_total Total estimated USD cost for LLM executions.")
     lines.append("# TYPE llm_estimated_cost_usd_total counter")
-    lines.append(f'llm_estimated_cost_usd_total{{environment="{environment}",vendor="google",model="gemini-2.5-flash"}} {totals.get("estimated_cost_usd", 0.0):.6f}')
+    lines.append(f'llm_estimated_cost_usd_total{{environment="{environment}",vendor="google",model="gemini-3.8-flash"}} {totals.get("estimated_cost_usd", 0.0):.6f}')
 
     lines.append("# HELP llm_tier_fallback_activations_total Total times extraction fell back to offline lexicon.")
     lines.append("# TYPE llm_tier_fallback_activations_total counter")

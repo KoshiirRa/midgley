@@ -14,6 +14,7 @@ from src.scenario_simulator import (
     export_scenario_decision_graph_mermaid,
     _classify_scenario_category,
     _evaluate_tier3_deterministic_cohort,
+    _call_gemini_single_round_cohort,
     ENV_ENABLE_MULTI_AGENT_SIM
 )
 from src.dashboard_generator import get_multi_agent_sim_badge
@@ -166,6 +167,43 @@ class TestScenarioSimulator(unittest.TestCase):
 
         # Cleanup
         os.environ[ENV_ENABLE_MULTI_AGENT_SIM] = "0"
+
+    def test_call_gemini_single_round_cohort_gemini_38(self):
+        """Verifies _call_gemini_single_round_cohort targets gemini-3.8-flash without deprecated temperature."""
+        with patch("google.genai.Client") as mock_genai_client:
+            mock_client_instance = MagicMock()
+            mock_resp = MagicMock()
+            mock_resp.text = json.dumps({
+                "personas": {
+                    "Agent_Refiner": {"stance": "bullish", "price_shock_pct": 0.05, "confidence": 0.85, "key_catalysts": ["refinery run cut"]},
+                    "Agent_Logistics": {"stance": "neutral", "price_shock_pct": 0.0, "confidence": 0.8, "key_catalysts": ["pipeline flow ok"]},
+                    "Agent_Consumer": {"stance": "bearish", "price_shock_pct": -0.01, "confidence": 0.75, "key_catalysts": ["demand destruction"]},
+                    "Agent_Macro": {"stance": "bullish", "price_shock_pct": 0.03, "confidence": 0.8, "key_catalysts": ["crude rally"]}
+                },
+                "consensus": {
+                    "price_shock_pct": 0.025,
+                    "divergence_index": 0.45,
+                    "rbob_shock_dollars_per_gal": 0.075,
+                    "ho_distillate_shock_dollars_per_gal": 0.060,
+                    "regional_freight_basis_delta_cents": 2.5
+                }
+            })
+            mock_client_instance.models.generate_content.return_value = mock_resp
+            mock_genai_client.return_value = mock_client_instance
+
+            res = _call_gemini_single_round_cohort("Colonial Line 1 shutdown", "newark", 3.10, "fake_gemini_key")
+            self.assertIsNotNone(res)
+            self.assertIn("personas", res)
+
+            call_kwargs = mock_client_instance.models.generate_content.call_args[1]
+            self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
+            config = call_kwargs["config"]
+            self.assertIsNone(getattr(config, "temperature", None))
+            self.assertIsNone(getattr(config, "top_p", None))
+            self.assertIsNone(getattr(config, "top_k", None))
+            self.assertIsNone(getattr(config, "thinking_budget", None))
+            self.assertEqual(config.max_output_tokens, 1024)
+            self.assertEqual(config.response_mime_type, "application/json")
 
 
 if __name__ == "__main__":

@@ -796,7 +796,7 @@ class HeadlineArenaConnector:
         name: str = "Midgley-Energy-Agent",
         description: str = "Multi-agent RBOB wholesale gasoline and Cushing WTI crude forecasting engine",
         model_provider: str = "google",
-        model_name: str = "gemini-2.5-flash",
+        model_name: str = "gemini-3.8-flash",
         scopes: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
@@ -1663,7 +1663,7 @@ def main():
     parser.add_argument("--name", type=str, default="Midgley-Energy-Agent", help="Agent name for registration")
     parser.add_argument("--description", type=str, default="Probabilistic multi-agent RBOB gasoline and WTI crude forecaster", help="Agent description")
     parser.add_argument("--model-provider", type=str, default="google", help="Underlying model provider (default: google)")
-    parser.add_argument("--model-name", type=str, default="gemini-2.5-flash", help="Underlying model name (default: gemini-2.5-flash)")
+    parser.add_argument("--model-name", type=str, default="gemini-3.8-flash", help="Underlying model name (default: gemini-3.8-flash)")
     parser.add_argument("--sync", action="store_true", help="Dispatch pending cached forecasts against active challenges")
     parser.add_argument("--submit-test", action="store_true", help="Perform a test prediction submission")
     parser.add_argument("--live", action="store_true", help="Enable live submission in dev environment (tags as [DEV-TEST])")
