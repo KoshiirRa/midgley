@@ -553,6 +553,15 @@ class TestIntradayEventMonitor(unittest.TestCase):
         locales2 = self.monitor.resolve_target_locales(h2)
         self.assertIn("Denver", locales2)
 
+    def test_resolve_target_locales_new_york(self):
+        h1 = "Phillips 66 Bayway Refinery initiates unplanned FCCU turnaround in New Jersey"
+        locales1 = self.monitor.resolve_target_locales(h1)
+        self.assertIn("New_York", locales1)
+
+        h2 = "Buckeye Pipeline Linden terminal suffers power outage cutting New York fuel deliveries"
+        locales2 = self.monitor.resolve_target_locales(h2)
+        self.assertIn("New_York", locales2)
+
 
 if __name__ == "__main__":
     unittest.main()

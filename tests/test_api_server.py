@@ -170,6 +170,28 @@ class TestAPIServer(unittest.TestCase):
         self.assertEqual(sim["target_locale"], "Denver_CO")
         self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
 
+    def test_get_new_york_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=new_york")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "New_York_NY")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 1B Central Atlantic")
+
+    def test_post_simulate_new_york_buckeye(self):
+        payload = {
+            "scenario_id": "buckeye_pipeline_linden_disruption",
+            "locale": "new_york"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "buckeye_pipeline_linden_disruption")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "New_York_NY")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
     def test_post_simulate_invalid_id(self):
         payload = {
             "scenario_id": "invalid_scenario_xyz",

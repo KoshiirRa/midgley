@@ -7,7 +7,7 @@ from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec
 
 
 def test_get_region_spec_all_metros():
-    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago", "houston", "los_angeles", "denver"]
+    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york"]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
         assert spec is not None
@@ -44,6 +44,12 @@ def test_get_region_spec_all_metros():
         assert den_spec is not None
         assert den_spec.slug == "denver"
 
+    # Ensure new_york_ny, nyc, and ny_harbor aliases resolve cleanly to new_york spec
+    for ny_alias in ("new_york_ny", "nyc", "ny_harbor", "new_york_metro"):
+        ny_spec = get_region_spec(ny_alias)
+        assert ny_spec is not None
+        assert ny_spec.slug == "new_york"
+
 
 def test_get_region_spec_by_region_key():
     spec = get_region_spec("Tulsa_OK")
@@ -76,6 +82,12 @@ def test_get_region_spec_by_region_key():
     assert den_spec.slug == "denver"
     assert den_spec.wholesale_spot_col == "spot_denver_rack"
 
+    ny_spec = get_region_spec("New_York_NY")
+    assert ny_spec is not None
+    assert ny_spec.region_key == "New_York_NY"
+    assert ny_spec.slug == "new_york"
+    assert ny_spec.wholesale_spot_col == "spot_ny_harbor"
+
 
 def test_region_spec_microstructure_flags():
     cincy = get_region_spec("cincinnati")
@@ -97,6 +109,10 @@ def test_region_spec_microstructure_flags():
     denver = get_region_spec("denver")
     assert denver.baseline_tax_rate == 0.280
     assert denver.padd == "PADD 4"
+
+    ny = get_region_spec("new_york")
+    assert ny.baseline_tax_rate == 0.472
+    assert ny.padd == "PADD 1B"
 
     oakland = get_region_spec("oakland")
     assert oakland.has_carb_compliance is True

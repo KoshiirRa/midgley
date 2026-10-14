@@ -19,6 +19,7 @@ from src.locations.chicago import run_chicago_pipeline, build_chicago_notebook
 from src.locations.houston import run_houston_pipeline, build_houston_notebook
 from src.locations.los_angeles import run_los_angeles_pipeline, build_los_angeles_notebook
 from src.locations.denver import run_denver_pipeline, build_denver_notebook
+from src.locations.new_york import run_new_york_pipeline, build_new_york_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -130,6 +131,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_denver_pipeline,
         "build_notebook": build_denver_notebook,
         "notebook_filename": "denver_gas_price_llm_forecasting.ipynb"
+    },
+    "new_york": {
+        "id": "new_york",
+        "name": "New York Harbor & NY State Hub, NY (PADD 1B)",
+        "type": "regional",
+        "module": "src.locations.new_york",
+        "run_pipeline": run_new_york_pipeline,
+        "build_notebook": build_new_york_notebook,
+        "notebook_filename": "new_york_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -150,6 +160,8 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "los_angeles"
     if loc_id in ("denver_co", "rocky_mountain"):
         loc_id = "denver"
+    if loc_id in ("new_york_ny", "nyc", "ny_harbor", "ny_state", "newyork"):
+        loc_id = "new_york"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]

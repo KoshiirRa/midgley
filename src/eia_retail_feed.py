@@ -79,6 +79,12 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "EMM_EPMR_PTE_R40_DPG": "EMM_EPMR_PTE_R40_DPG",
     "GASDESWRM": "EMD_EPD2D_PTE_R40_DPG",
     "EMD_EPD2D_PTE_R40_DPG": "EMD_EPD2D_PTE_R40_DPG",
+    "GASREGWNYC": "EMM_EPMR_PTE_Y35NY_DPG",
+    "GASREGWNY": "EMM_EPMR_PTE_SNY_DPG",
+    "EMM_EPMR_PTE_Y35NY_DPG": "EMM_EPMR_PTE_Y35NY_DPG",
+    "EMM_EPMR_PTE_SNY_DPG": "EMM_EPMR_PTE_SNY_DPG",
+    "GASDESWNY": "EMD_EPD2D_PTE_SNY_DPG",
+    "EMD_EPD2D_PTE_SNY_DPG": "EMD_EPD2D_PTE_SNY_DPG",
 }
 
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
@@ -87,6 +93,7 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "National": [("GASREGW", "U.S. Regular All Formulations Retail Price")],
     "Tulsa_OK": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for OK)")],
     "Newark_DE": [("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "New_York_NY": [("GASREGWNYC", "New York City Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWNY", "New York State Regular Conventional Retail Price"), ("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price")],
     "Cincinnati_OH": [("GASREGWOH", "Ohio Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
     "Cincinnati_KY": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for KY)")],
     "Chicago_IL": [("GASREGWCHI", "Chicago Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWIL", "Illinois Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
@@ -108,6 +115,8 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Tulsa_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OK)")],
     "Newark_ULSD": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price (Official Regional Benchmark for DE/NJ)")],
     "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "New_York_ULSD": [("GASDESWNY", "New York No 2 Diesel Retail Price"), ("GASDESW01B", "PADD 1B Central Atlantic No 2 Diesel Retail Price")],
+    "New_York_Diesel": [("GASDESWNY", "New York No 2 Diesel Retail Price"), ("GASDESW01B", "PADD 1B Central Atlantic No 2 Diesel Retail Price")],
     "Cincinnati_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
     "Cincinnati_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
     "Chicago_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for IL/IN)")],
@@ -174,7 +183,13 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "EMM_EPMR_PTE_SCO_DPG": 3.100,
     "EMM_EPMR_PTE_R40_DPG": 3.120,
     "GASDESWRM": 3.750,
-    "EMD_EPD2D_PTE_R40_DPG": 3.750
+    "EMD_EPD2D_PTE_R40_DPG": 3.750,
+    "GASREGWNYC": 3.480,
+    "GASREGWNY": 3.420,
+    "EMM_EPMR_PTE_Y35NY_DPG": 3.480,
+    "EMM_EPMR_PTE_SNY_DPG": 3.420,
+    "GASDESWNY": 4.150,
+    "EMD_EPD2D_PTE_SNY_DPG": 4.150
 }
 
 

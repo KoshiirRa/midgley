@@ -43,6 +43,11 @@ REGION_ALIASES: Dict[str, str] = {
     "denver": "denver_co",
     "denver_metro": "denver_co",
     "rocky_mountain": "denver_co",
+    "new_york": "new_york_ny",
+    "nyc": "new_york_ny",
+    "ny_state": "new_york_ny",
+    "ny_harbor": "new_york_ny",
+    "new_york_metro": "new_york_ny",
 }
 
 

@@ -485,12 +485,19 @@ class IntradayEventMonitor:
         ]):
             targets.add("Denver")
 
+        # New York Harbor & New York State / Bayway Refinery / Buckeye Pipeline (PADD 1B)
+        if any(k in text for k in [
+            "new york", "ny harbor", "new york harbor", "buckeye pipeline", "bayway refinery", "long island",
+            "hudson river", "arthur kill", "albany rack", "buffalo rack"
+        ]):
+            targets.add("New_York")
+
         # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
         if any(k in text for k in ["suncor 8-k", "suncor energy"]):
             targets.add("Denver")
 
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
-        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery", "bayway refinery"]):
+        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery"]):
             targets.add("National")
 
         if not targets:

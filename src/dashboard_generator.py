@@ -42,6 +42,7 @@ CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")
 HOUSTON_PATH = os.path.join(DOCS_DIR, "houston.html")
 LOS_ANGELES_PATH = os.path.join(DOCS_DIR, "los_angeles.html")
 DENVER_PATH = os.path.join(DOCS_DIR, "denver.html")
+NEW_YORK_PATH = os.path.join(DOCS_DIR, "new_york.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -63,6 +64,7 @@ CHICAGO_SUB_DIR = os.path.join(DOCS_DIR, "chicago")
 HOUSTON_SUB_DIR = os.path.join(DOCS_DIR, "houston")
 LOS_ANGELES_SUB_DIR = os.path.join(DOCS_DIR, "los_angeles")
 DENVER_SUB_DIR = os.path.join(DOCS_DIR, "denver")
+NEW_YORK_SUB_DIR = os.path.join(DOCS_DIR, "new_york")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -81,6 +83,7 @@ CHICAGO_SUB_PATH = os.path.join(CHICAGO_SUB_DIR, "index.html")
 HOUSTON_SUB_PATH = os.path.join(HOUSTON_SUB_DIR, "index.html")
 LOS_ANGELES_SUB_PATH = os.path.join(LOS_ANGELES_SUB_DIR, "index.html")
 DENVER_SUB_PATH = os.path.join(DENVER_SUB_DIR, "index.html")
+NEW_YORK_SUB_PATH = os.path.join(NEW_YORK_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -463,7 +466,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -483,6 +486,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     hou_link = f"{rel_prefix}houston.html"
     la_link = f"{rel_prefix}los_angeles.html"
     den_link = f"{rel_prefix}denver.html"
+    ny_link = f"{rel_prefix}new_york.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -554,6 +558,9 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         </a>
                         <a role="menuitem" href="{den_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-mountain text-amber-400" aria-hidden="true"></i> Denver, CO Retail
+                        </a>
+                        <a role="menuitem" href="{ny_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-ship text-sky-400" aria-hidden="true"></i> New York, NY Retail
                         </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -657,6 +664,7 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
         ("Houston_TX", "Houston, TX Retail", 2.850, 2.785),
         ("Los_Angeles_CA", "Los Angeles, CA Retail", 4.890, 4.780),
         ("Denver_CO", "Denver, CO Retail", 3.150, 3.095),
+        ("New_York_NY", "New York, NY Retail", 3.480, 3.425),
         ("Oakland_CA", "Oakland, CA Retail", 5.550, 4.840),
         ("BayArea_CA", "SF Bay Area Region", 5.650, 4.940),
     ]
@@ -2270,6 +2278,7 @@ def generate_public_dashboard():
         'Houston_TX': {'base': 2.850, 'pred': 2.785},
         'Los_Angeles_CA': {'base': 4.890, 'pred': 4.780},
         'Denver_CO': {'base': 3.150, 'pred': 3.095},
+        'New_York_NY': {'base': 3.480, 'pred': 3.425},
         'Oakland_CA': {'base': 6.050, 'pred': 5.340},
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
@@ -2827,7 +2836,42 @@ def generate_public_dashboard():
                     </a>
                 </div>
 
-                <!-- Card 11: SF Bay Area 9-County Region (incl. Oakland) -->
+                <!-- Card 12: New York, NY Retail (PADD 1B Central Atlantic / NY Harbor Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-semibold">PADD 1B Central Atlantic Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-ship text-sky-400"></i> New York, NY
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            47.2¢ NY Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['New_York_NY']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['New_York_NY']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Phillips 66 Bayway / Buckeye</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('New_York_NY')}</strong></span>
+                    </div>
+
+                    <a href="new_york.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore New York Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 13: SF Bay Area 9-County Region (incl. Oakland) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
@@ -4998,6 +5042,139 @@ def generate_public_dashboard():
         f.write(build_denver_html(""))
     with open(DENVER_SUB_PATH, "w", encoding="utf-8") as f:
         f.write(build_denver_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # NEW YORK METRO RETAIL GAS PAGE (docs/new_york.html & docs/new_york/index.html)
+    # ---------------------------------------------------------------------------
+    def build_new_york_html(rel_prefix: str = "") -> str:
+        nav_new_york = get_nav_header("new_york", rel_prefix)
+        ny_base = prices_map['New_York_NY']['base']
+        ny_pred = prices_map['New_York_NY']['pred']
+        ny_delta = ny_pred - ny_base
+        ny_pct = (ny_delta / ny_base * 100.0) if ny_base > 0 else 0.0
+        ny_sign = "+" if ny_delta > 0 else ""
+        ny_color = "#10b981" if ny_pct < -0.2 else ("#ef4444" if ny_pct > 0.2 else "#0ea5e9")
+        ny_trend_text = f"{ny_sign}{ny_pct:.1f}% Projected Trend"
+        ny_trend_color = "text-emerald-300" if ny_pct < -0.2 else ("text-rose-300" if ny_pct > 0.2 else "text-sky-300")
+        head_meta_ny = get_head_meta_tags(
+            title=f"New York NY Retail Gas Forecast (${ny_base:.3f} → ${ny_pred:.3f} | {ny_sign}{ny_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for New York City NY metro and PADD 1B Central Atlantic. Baseline ${ny_base:.3f}/gal, projected target ${ny_pred:.3f}/gal. Phillips 66 Bayway 258 kbpd refinery, Buckeye Pipeline, and New York Harbor waterborne barge logistics.",
+            canonical_path="new_york.html" if rel_prefix == "" else "new_york/index.html",
+            image_filename="new_york.png",
+            theme_color=ny_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York, NY Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(14, 165, 233, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_NEW_YORK}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">New York Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-ship text-sky-400"></i> New York, NY Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                PADD 1B Central Atlantic Refining Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{NY_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{NY_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{NY_TREND_COLOR}} font-semibold">{{NY_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{NY_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{NY_MAPE}} | RMSE: {{NY_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{NY_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-sky-400"></i> New York Harbor &amp; PADD 1B Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Buckeye Pipeline Linden Terminal Junction Disruption</h4>
+                    <p class="text-xs text-slate-400">Severe pumping disruption or electrical outage at Buckeye Linden NJ terminal restricts pipeline batch delivery to NYC metro airports and Long Island terminals.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.320/gal (+9.20%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">New York Harbor Barge Freeze &amp; Fog Halt</h4>
+                    <p class="text-xs text-slate-400">Extended polar vortex ice floes along the Hudson River and Arthur Kill halt waterborne barge traffic supplying terminal racks.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.220/gal (+6.32%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Phillips 66 Bayway FCCU Spring Maintenance Turnaround</h4>
+                    <p class="text-xs text-slate-400">Scheduled 4-week catalytic cracking turnaround at Bayway Refinery (258 kbpd) temporarily curtails regional clean product output.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.180/gal (+5.17%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; New York, NY Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_NEW_YORK}}", nav_new_york).replace("PREFIX", rel_prefix).replace("{{NY_BASE}}", f"{prices_map['New_York_NY']['base']:.3f}").replace("{{NY_PRED}}", f"{prices_map['New_York_NY']['pred']:.3f}").replace("{{NY_TREND_TEXT}}", ny_trend_text).replace("{{NY_TREND_COLOR}}", ny_trend_color).replace("{{NY_MAE}}", get_mae_display('new_york_ny')).replace("{{NY_MAPE}}", get_mape_display('new_york_ny')).replace("{{NY_RMSE}}", get_rmse_display('new_york_ny')).replace("{{NY_HIT_RATE}}", get_hit_rate_display('new_york_ny')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_ny).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('New_York_NY', prices_map['New_York_NY']['base'], prices_map['New_York_NY']['pred'], logistics_hub="Phillips 66 Bayway Refinery (258 kbpd) & Buckeye Pipeline System")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('New_York_NY', prices_map['New_York_NY']['base'], prices_map['New_York_NY']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('new_york_ny'))
+
+    os.makedirs(NEW_YORK_SUB_DIR, exist_ok=True)
+    with open(NEW_YORK_PATH, "w", encoding="utf-8") as f:
+        f.write(build_new_york_html(""))
+    with open(NEW_YORK_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_new_york_html("../"))
 
     # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)

@@ -178,6 +178,21 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         sub_locales={"denver_city": 0.00, "aurora": -0.02, "lakewood": 0.01, "boulder": 0.08, "commerce_city": -0.04, "fort_collins": -0.02, "colorado_springs": -0.03},
         primary_refinery="Suncor Commerce City Refinery (103 kbpd)",
         primary_pipeline="Rocky Mountain Refined Product Midstream / Magellan Corridor"
+    ),
+    "new_york": RegionSpec(
+        region_key="New_York_NY",
+        slug="new_york",
+        display_name="New York Harbor & NY State Hub, NY (PADD 1B)",
+        padd="PADD 1B",
+        wholesale_spot_col="spot_ny_harbor",
+        eia_retail_series_id="EMM_EPMR_PTE_Y35NY_DPG",
+        diesel_series_id="GASDESW01B",
+        baseline_tax_rate=0.472,
+        has_edgeworth_cycles=False,
+        has_carb_compliance=False,
+        sub_locales={"nyc_manhattan": 0.14, "brooklyn_queens": 0.04, "long_island_nassau": 0.02, "westchester": 0.06, "albany_capital": -0.05, "buffalo_erie": -0.08, "adirondacks_essex": 0.18},
+        primary_refinery="Phillips 66 Bayway Refinery (258 kbpd) & NY Harbor Barges",
+        primary_pipeline="Buckeye Pipeline System & Colonial Pipeline Terminus"
     )
 }
 
@@ -187,6 +202,8 @@ REGIONAL_SPECS["chicago_il"] = REGIONAL_SPECS["chicago"]
 REGIONAL_SPECS["houston_tx"] = REGIONAL_SPECS["houston"]
 REGIONAL_SPECS["los_angeles_ca"] = REGIONAL_SPECS["los_angeles"]
 REGIONAL_SPECS["denver_co"] = REGIONAL_SPECS["denver"]
+REGIONAL_SPECS["new_york_ny"] = REGIONAL_SPECS["new_york"]
+REGIONAL_SPECS["nyc"] = REGIONAL_SPECS["new_york"]
 
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
@@ -204,6 +221,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
         return REGIONAL_SPECS["los_angeles"]
     if key in ("denver", "denver_co", "rocky_mountain", "padd4", "padd_4", "front_range"):
         return REGIONAL_SPECS["denver"]
+    if key in ("new_york", "new_york_ny", "nyc", "ny_harbor", "ny_state", "newyork", "new_york_metro"):
+        return REGIONAL_SPECS["new_york"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

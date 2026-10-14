@@ -417,6 +417,40 @@ def get_denver_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_new_york_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather, Coastal Nor'easter, Winter Freeze & Marine Storm Dataset for New York Harbor & Metro (NYZ072 / Zip 10001):
+    - NOAA NWS Coastal Flood & Storm Surge Warnings across New York Harbor, Arthur Kill, and Jamaica Bay terminals
+    - Winter Nor'easters and Arctic Freezes causing Hudson River and Long Island Sound petroleum barge lightering halts
+    - Flash Floods and Tropical Cyclone Remnants impacting Buckeye Pipeline Linden delivery hubs and airport spur lines
+    - Summer Air Quality & Ground-Level Ozone Action Days reinforcing EPA reformulated fuel blending standards
+    - Actively queries live NOAA alerts (NY, NYZ072), SPC convective risks (10001), and Open-Meteo degree days.
+    """
+    new_york_weather_events = [
+        {"date": "2021-08-22", "headline": "NOAA NWS Flash Flood Watch: Tropical Storm Henri makes landfall near Long Island, bringing torrential rainfall and temporary road freight suspensions.", "zone": "NYZ072 (NYC Metro)", "weather_type": "Tropical Storm / Flooding"},
+        {"date": "2021-09-01", "headline": "NOAA NWS Flash Flood Emergency: Remnants of Hurricane Ida unleash historic 3.15 inches of rain in one hour on NYC, halting regional fuel distribution corridors.", "zone": "NYZ072 (NYC Metro)", "weather_type": "Historic Flash Flood"},
+        {"date": "2022-01-29", "headline": "NOAA NWS Blizzard Warning: Powerful bomb cyclone Nor'easter dumps 24 inches on Long Island with hurricane-force wind gusts, shutting NY Harbor tanker berths.", "zone": "NYZ072 (NYC / Long Island)", "weather_type": "Blizzard / Nor'easter"},
+        {"date": "2022-07-20", "headline": "NOAA NWS Excessive Heat Warning: Prolonged 98°F heatwave across New York metro triggers DEC Ozone Action Day alerts across the NYC metropolitan nonattainment area.", "zone": "NYZ072 (NYC Metro)", "weather_type": "Excessive Heat / Ozone Action"},
+        {"date": "2022-12-23", "headline": "NOAA NWS Flash Freeze & Coastal Flood Warning: Arctic blast drops temperatures from 55°F to 10°F in four hours, causing storm surge flooding across NY Harbor terminals.", "zone": "NYZ072 (NY Harbor)", "weather_type": "Flash Freeze / Storm Surge"},
+        {"date": "2023-06-07", "headline": "NOAA NWS Air Quality Alert: Dense Canadian wildfire smoke triggers hazardous Code Red AQI across NYC and Hudson Valley, reducing refinery and terminal outdoor activity.", "zone": "NYZ072 (NYC Metro)", "weather_type": "Air Quality Smoke Emergency"},
+        {"date": "2023-09-29", "headline": "NOAA NWS Flash Flood Warning: Record rainstorm swamps Brooklyn and JFK/LaGuardia terminals, delaying Buckeye Pipeline and transport tanker movements.", "zone": "NYZ072 (NYC Metro)", "weather_type": "Severe Convective / Flood"},
+        {"date": "2024-01-15", "headline": "NOAA NWS Winter Storm Warning: Heavy snow and freezing temperatures cause ice flows along Hudson River barge lanes, delaying Upstate petroleum deliveries.", "zone": "NYZ072 (Hudson River / NYC)", "weather_type": "Winter Storm / River Ice"}
+    ]
+    events = list(new_york_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["NY", "NYZ072"],
+            zip_code="10001",
+            hub_code="New_York_NY",
+            region_label="New York Harbor & NYC Metro"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+
 def get_oakland_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     """
     Localized NOAA Weather, Environmental & Seismic Risk Dataset for Oakland & SF Bay Area Metro Region:

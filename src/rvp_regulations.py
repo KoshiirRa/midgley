@@ -162,6 +162,15 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.16,
             "is_rfg": True,
             "is_carb": False
+        },
+        "New_York_NY": {
+            "name": "New York Harbor & NYC Metro (PADD 1B)",
+            "program": "EPA Reformulated Gasoline (RFG) & NY Low RVP Program",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.16,
+            "is_rfg": True,
+            "is_carb": False
         }
     },
     "emergency_waivers": []
