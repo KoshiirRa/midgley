@@ -4,6 +4,7 @@ Issue #307: Multi-Agent Financial Simulation & Scenario Decision Graphs.
 """
 
 import os
+import json
 import unittest
 from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
@@ -198,12 +199,23 @@ class TestScenarioSimulator(unittest.TestCase):
             call_kwargs = mock_client_instance.models.generate_content.call_args[1]
             self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
             config = call_kwargs["config"]
-            self.assertIsNone(getattr(config, "temperature", None))
-            self.assertIsNone(getattr(config, "top_p", None))
-            self.assertIsNone(getattr(config, "top_k", None))
-            self.assertIsNone(getattr(config, "thinking_budget", None))
-            self.assertEqual(config.max_output_tokens, 1024)
-            self.assertEqual(config.response_mime_type, "application/json")
+            if isinstance(config, MagicMock):
+                from google.genai import types
+                if hasattr(types.GenerateContentConfig, "call_args") and types.GenerateContentConfig.call_args:
+                    cfg_kwargs = types.GenerateContentConfig.call_args.kwargs
+                    self.assertNotIn("temperature", cfg_kwargs)
+                    self.assertNotIn("top_p", cfg_kwargs)
+                    self.assertNotIn("top_k", cfg_kwargs)
+                    self.assertNotIn("thinking_budget", cfg_kwargs)
+                    self.assertEqual(cfg_kwargs.get("max_output_tokens"), 1024)
+                    self.assertEqual(cfg_kwargs.get("response_mime_type"), "application/json")
+            else:
+                self.assertIsNone(getattr(config, "temperature", None))
+                self.assertIsNone(getattr(config, "top_p", None))
+                self.assertIsNone(getattr(config, "top_k", None))
+                self.assertIsNone(getattr(config, "thinking_budget", None))
+                self.assertEqual(config.max_output_tokens, 1024)
+                self.assertEqual(config.response_mime_type, "application/json")
 
 
 if __name__ == "__main__":

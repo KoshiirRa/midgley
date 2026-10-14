@@ -7109,6 +7109,7 @@ def generate_telemetry_page():
     tok_data = token_tab_manager.get_accounting_summary()
     tok_summary = tok_data.get('summary', {})
     tok_prov = tok_data.get('provider_breakdown', {})
+    tok_warn = tok_data.get('budget_warnings', [{}])[0] if tok_data.get('budget_warnings') else {}
     gemini_38 = tok_prov.get('gemini-3.8-flash', {})
     gemini_25 = tok_prov.get('gemini-2.5-flash', {})
     gemini_stats = {

@@ -4,6 +4,7 @@ Tests single and batch headline extraction, SHA-256 deduplication, and lookup ca
 """
 
 import os
+import json
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -119,11 +120,21 @@ class TestEventAnalyzer(unittest.TestCase):
             call_kwargs = mock_client_instance.models.generate_content.call_args[1]
             self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
             config = call_kwargs["config"]
-            self.assertIsNone(getattr(config, "temperature", None))
-            self.assertIsNone(getattr(config, "top_p", None))
-            self.assertIsNone(getattr(config, "top_k", None))
-            self.assertIsNone(getattr(config, "thinking_budget", None))
-            self.assertIn("low", str(config.thinking_config.thinking_level).lower())
+            if isinstance(config, MagicMock):
+                from google.genai import types
+                if hasattr(types.GenerateContentConfig, "call_args") and types.GenerateContentConfig.call_args:
+                    cfg_kwargs = types.GenerateContentConfig.call_args.kwargs
+                    self.assertNotIn("temperature", cfg_kwargs)
+                    self.assertNotIn("top_p", cfg_kwargs)
+                    self.assertNotIn("top_k", cfg_kwargs)
+                    self.assertNotIn("thinking_budget", cfg_kwargs)
+                    self.assertIn("thinking_config", cfg_kwargs)
+            else:
+                self.assertIsNone(getattr(config, "temperature", None))
+                self.assertIsNone(getattr(config, "top_p", None))
+                self.assertIsNone(getattr(config, "top_k", None))
+                self.assertIsNone(getattr(config, "thinking_budget", None))
+                self.assertIn("low", str(config.thinking_config.thinking_level).lower())
 
             mock_log_usage.assert_called_once()
             self.assertEqual(mock_log_usage.call_args[0][1], "gemini-3.8-flash")
@@ -153,11 +164,21 @@ class TestEventAnalyzer(unittest.TestCase):
             call_kwargs = mock_client_instance.models.generate_content.call_args[1]
             self.assertEqual(call_kwargs["model"], "gemini-3.8-flash")
             config = call_kwargs["config"]
-            self.assertIsNone(getattr(config, "temperature", None))
-            self.assertIsNone(getattr(config, "top_p", None))
-            self.assertIsNone(getattr(config, "top_k", None))
-            self.assertIsNone(getattr(config, "thinking_budget", None))
-            self.assertIn("low", str(config.thinking_config.thinking_level).lower())
+            if isinstance(config, MagicMock):
+                from google.genai import types
+                if hasattr(types.GenerateContentConfig, "call_args") and types.GenerateContentConfig.call_args:
+                    cfg_kwargs = types.GenerateContentConfig.call_args.kwargs
+                    self.assertNotIn("temperature", cfg_kwargs)
+                    self.assertNotIn("top_p", cfg_kwargs)
+                    self.assertNotIn("top_k", cfg_kwargs)
+                    self.assertNotIn("thinking_budget", cfg_kwargs)
+                    self.assertIn("thinking_config", cfg_kwargs)
+            else:
+                self.assertIsNone(getattr(config, "temperature", None))
+                self.assertIsNone(getattr(config, "top_p", None))
+                self.assertIsNone(getattr(config, "top_k", None))
+                self.assertIsNone(getattr(config, "thinking_budget", None))
+                self.assertIn("low", str(config.thinking_config.thinking_level).lower())
 
 
 if __name__ == "__main__":

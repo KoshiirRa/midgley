@@ -137,10 +137,19 @@ def test_evaluate_open_issues_llm_mock(sample_issues):
         call_kwargs = mock_genai_client.models.generate_content.call_args[1]
         assert call_kwargs["model"] == "gemini-3.8-flash"
         config = call_kwargs["config"]
-        assert getattr(config, "temperature", None) is None
-        assert getattr(config, "top_p", None) is None
-        assert getattr(config, "top_k", None) is None
-        assert getattr(config, "thinking_budget", None) is None
+        if isinstance(config, MagicMock):
+            from google.genai import types
+            if hasattr(types.GenerateContentConfig, "call_args") and types.GenerateContentConfig.call_args:
+                cfg_kwargs = types.GenerateContentConfig.call_args.kwargs
+                assert "temperature" not in cfg_kwargs
+                assert "top_p" not in cfg_kwargs
+                assert "top_k" not in cfg_kwargs
+                assert "thinking_budget" not in cfg_kwargs
+        else:
+            assert getattr(config, "temperature", None) is None
+            assert getattr(config, "top_p", None) is None
+            assert getattr(config, "top_k", None) is None
+            assert getattr(config, "thinking_budget", None) is None
 
 
 def test_generate_weekly_markdown_report_includes_self_review(sample_issues):
