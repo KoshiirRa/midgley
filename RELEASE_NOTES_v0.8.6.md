@@ -1,6 +1,6 @@
 # Release Notes - v0.8.6 (Draft)
 
-Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with nine major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, and the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
+Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with ten major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**, and the PADD 7 trans-Pacific island hub: **Guam & U.S. Pacific Island Territories**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
 
 ---
 
@@ -93,7 +93,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Registered trigger keywords and localized routing in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py) and [`src/discord_notifier.py`](src/discord_notifier.py).
   - Updated API normalization and `PADD_METADATA` (`carb_tax: 0.0`) in [`src/api_server.py`](src/api_server.py).
 
-### 11. Guam & U.S. Pacific Island Territories Calibration Hub — PADD 7 (`Guam_GU`, Issue #621)
+### 11. Guam & U.S. Pacific Island Territories Calibration Hub — PADD 7 (`Guam_GU`, Issue #621 / Commit [`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97))
 - **Decoupled Trans-Pacific Import Logistics & MOPS Benchmark**:
   - Implemented dedicated regional forecasting and calibration hub for **Hagåtña / Apra Harbor, Guam (`Guam_GU`, `guam`)**, representing the **U.S. Pacific Island Territories petroleum district (`PADD 7`)** encompassing Guam, American Samoa, and CNMI.
   - Decoupled from domestic North American pipelines and Gulf Coast RBOB; modeled 100% finished product imports via Medium Range (MR) product tankers originating from Asian refining hubs (Singapore Jurong, South Korea Ulsan/Yeosu, Japan) and Defense Logistics Agency (DLA) Energy bulk tenders.
@@ -122,7 +122,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
-| **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` | Locations / Regional Hubs / PADD 7 |
+| **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
@@ -136,6 +136,11 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
 * **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`)
+* **Hierarchical Engine & Regional Topology Additions**:
+  - Added `PADD_7` cluster and `Guam_GU` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence ($S$ matrix reconciliation).
+  - Modeled landed Asian wholesale acquisition benchmark `spot_mops_92_rack = rbob + 0.350` and Cabras Island terminal rack throughput charges.
+  - Registered flat tropical 9.0 psi year-round RVP regulation standard in [`src/rvp_regulations.py`](src/rvp_regulations.py).
+  - Mapped Guam Liquid Fuel Tax ($0.150/gal) + Mass Transit surcharge ($0.040/gal) = $0.190/gal local tax base in [`src/zip_geocoding.py`](src/zip_geocoding.py) and [`data/regional_metadata/guam_gu.json`](data/regional_metadata/guam_gu.json).
 * **LLM Engine & Deprecation Migration**:
   - Runtime generative extractions and agent tasks migrated from deprecated `gemini-2.5-flash` to `gemini-3.8-flash`.
   - Deprecated sampling parameters (`temperature`, `top_p`, `top_k`, `thinking_budget`) are completely removed; structured JSON extraction and evaluation tasks explicitly configure `thinking_level="low"`.
