@@ -105,6 +105,9 @@ TRIGGER_KEYWORDS = [
     # PADD 7 Pacific Island Territories Refining & Distribution (Issue #621)
     "apra harbor", "guam energy office", "mops 92", "mops mogas", "mobil oil guam",
     "ip&e guam", "shell guam", "sppc 76", "cabras island", "port of guam",
+    # PADD 6 Caribbean Territories Logistics & DACO Regulation (Issue #620)
+    "san juan", "daco", "puerto rico", "capeco", "jones act tanker", "luma energy",
+    "san juan harbor", "puerto nuevo terminal", "puma energy caribe",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -535,6 +538,13 @@ class IntradayEventMonitor:
             "mobil oil guam", "ip&e guam", "shell guam", "sppc", "guam energy office", "port of guam"
         ]):
             targets.add("Guam")
+
+        # San Juan / Puerto Rico / DACO / Caribbean / PADD 6 (Issue #620)
+        if any(k in text for k in [
+            "san juan", "puerto rico", "daco", "capeco", "luma energy", "san juan harbor",
+            "puerto nuevo", "puma energy caribe", "caribbean petroleum", "caribbean territories"
+        ]):
+            targets.add("San_Juan")
 
         # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
         if any(k in text for k in ["suncor 8-k", "suncor energy"]):

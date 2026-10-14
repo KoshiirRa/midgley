@@ -223,6 +223,13 @@ REGION_METADATA = {
         "static_anchor": 3.480,
         "name": "New York, NY Metro Retail",
         "aaa_keywords": ["New York", "New York City", "Manhattan", "Long Island", "State Average"]
+    },
+    "San_Juan_PR": {
+        "zip": "00901",
+        "state": "PR",
+        "static_anchor": 3.490,
+        "name": "San Juan, PR Metro Retail",
+        "aaa_keywords": ["San Juan", "Puerto Rico", "DACO"]
     }
 }
 

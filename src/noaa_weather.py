@@ -727,6 +727,36 @@ def get_guam_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_san_juan_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for San Juan & Caribbean Territories Hub, PR (PRZ001 / Zip 00901):
+    - Atlantic Hurricane Alley & Tropical Cyclone Statements (NHC / WFO San Juan SJU bulletins)
+    - US Coast Guard Sector San Juan Port Condition Zulu harbor closures
+    - Flash Flood Emergencies from tropical waves impacting fuel transport infrastructure
+    - Actively queries live NOAA alerts (PR, PRZ001, AMZ710), SPC/NHC outlooks, and Open-Meteo degree days.
+    """
+    san_juan_weather_events = [
+        {"date": "2021-08-11", "headline": "NOAA NWS WFO San Juan Tropical Storm Warning: Tropical Storm Fred generates tropical-storm-force gusts and coastal surf across eastern Puerto Rico.", "zone": "PRZ001 (San Juan Coastal)", "weather_type": "Tropical Storm Warning"},
+        {"date": "2022-09-17", "headline": "NOAA NWS NHC Hurricane Warning: Hurricane Fiona approaches southwest Puerto Rico, prompting US Coast Guard Port Condition Zulu for San Juan Harbor.", "zone": "PRZ001 / AMZ710", "weather_type": "Hurricane Emergency"},
+        {"date": "2022-09-19", "headline": "NOAA NWS WFO San Juan Flash Flood Emergency: Catastrophic rainfall from Fiona triggers islandwide river flooding and infrastructure washouts.", "zone": "PRZ001 (Puerto Rico Islandwide)", "weather_type": "Flash Flood Catastrophe"},
+        {"date": "2023-08-22", "headline": "NOAA NWS NHC Tropical Storm Watch: Tropical Storm Franklin tracks through Caribbean waters south of Puerto Rico, generating rough marine conditions.", "zone": "AMZ710 (San Juan Waters)", "weather_type": "Tropical Storm Advisory"},
+        {"date": "2024-08-13", "headline": "NOAA NWS NHC Hurricane Warning: Hurricane Ernesto delivers hurricane-force winds and torrential rains, suspending product tanker offloading across San Juan Bay.", "zone": "PRZ001 / AMZ710", "weather_type": "Hurricane Marine Warning"},
+        {"date": "2024-11-06", "headline": "NOAA NWS WFO San Juan High Surf Advisory: Large north-northeast swell generates 12-foot breakers and hazardous harbor entrance currents.", "zone": "PRZ001 (North Coast PR)", "weather_type": "High Surf Marine Advisory"}
+    ]
+    events = list(san_juan_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["PR", "PRZ001"],
+            zip_code="00901",
+            hub_code="San_Juan_PR",
+            region_label="San Juan / Caribbean"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
 # ==============================================================================
 # wxs.us Weather & SPC Convective Outlook Integration (Token-Efficient Ingestion)
 # ==============================================================================
@@ -761,7 +791,8 @@ METRO_ZIP_MAP = {
     "Phoenix_AZ": "85001",      # Desert Southwest & Kinder Morgan SFPP Terminal
     "Anchorage_AK": "99501",    # Port of Alaska & Cook Inlet Kenai Refinery
     "Honolulu_HI": "96813",     # Par Hawaii Kapolei & Island Barge Hub
-    "Guam_GU": "96910"          # Apra Harbor & Cabras Island Fuel Terminal (PADD 7)
+    "Guam_GU": "96910",         # Apra Harbor & Cabras Island Fuel Terminal (PADD 7)
+    "San_Juan_PR": "00901"      # San Juan Bay Deepwater Terminals (PADD 6)
 }
 
 

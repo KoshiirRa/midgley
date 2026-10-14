@@ -62,7 +62,9 @@ class TestHierarchicalEngine(unittest.TestCase):
             "Anchorage_AK": 3.85,
             "Honolulu_HI": 4.65,
             "Guam_GU": 4.89,
-            "PADD_7": 4.90
+            "PADD_7": 4.90,
+            "San_Juan_PR": 3.49,
+            "PADD_6": 3.50
         }
 
         reconciled = engine.reconcile_forecast_dict(base_forecasts)
@@ -96,7 +98,11 @@ class TestHierarchicalEngine(unittest.TestCase):
         padd1b_calc = (reconciled["Newark_DE"] + reconciled["New_York_NY"]) / 2.0
         self.assertAlmostEqual(reconciled["PADD_1B"], padd1b_calc, places=3)
 
-        # 6. PADD_7 == Guam_GU
+        # 6. PADD_6 == San_Juan_PR
+        padd6_calc = reconciled["San_Juan_PR"]
+        self.assertAlmostEqual(reconciled["PADD_6"], padd6_calc, places=3)
+
+        # 7. PADD_7 == Guam_GU
         padd7_calc = reconciled["Guam_GU"]
         self.assertAlmostEqual(reconciled["PADD_7"], padd7_calc, places=3)
 

@@ -69,6 +69,8 @@ REGION_MODULE_MAP = {
     "honolulu_hi": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
     "guam": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
     "guam_gu": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
+    "san_juan": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
+    "san_juan_pr": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
 }
 
 

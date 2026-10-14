@@ -66,6 +66,14 @@ REGION_ALIASES: Dict[str, str] = {
     "apra_harbor": "guam_gu",
     "padd7": "guam_gu",
     "padd_7": "guam_gu",
+    "san_juan": "san_juan_pr",
+    "san_juan_pr": "san_juan_pr",
+    "puerto_rico": "san_juan_pr",
+    "pr": "san_juan_pr",
+    "sju": "san_juan_pr",
+    "padd6": "san_juan_pr",
+    "padd_6": "san_juan_pr",
+    "caribbean": "san_juan_pr",
 }
 
 

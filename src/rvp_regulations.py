@@ -216,6 +216,15 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.00,
             "is_rfg": False,
             "is_carb": False
+        },
+        "San_Juan_PR": {
+            "name": "San Juan Metro & Caribbean Hub (PADD 6)",
+            "program": "Tropical Caribbean Maritime Flat RVP Specification",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 9.0,
+            "summer_compliance_premium_per_gal": 0.00,
+            "is_rfg": False,
+            "is_carb": False
         }
     },
     "emergency_waivers": []

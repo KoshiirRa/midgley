@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "san_juan_pr",
+  "logger_region_key": "San_Juan_PR",
+  "display_name": "San Juan Metro & Caribbean Hub, PR",
+  "padd_region": "PADD 6 Caribbean Territories",
+  "primary_city": "San Juan, PR",
+  "counties": [
+    "San Juan",
+    "Bayamón",
+    "Carolina",
+    "Ponce",
+    "Caguas",
+    "Mayagüez",
+    "Arecibo",
+    "St. Thomas (USVI)",
+    "St. Croix (USVI)"
+  ],
+  "baseline_price": 3.49,
+  "icon_class": "fa-ship",
+  "theme_color": "amber",
+  "econometric_drivers": {
+    "title": "100% Maritime Island Supply Logistics, Jones Act Clean Tanker Freights & DACO Price Regulation",
+    "description": "Puerto Rico and the U.S. Virgin Islands constitute the PADD 6 Caribbean petroleum district, an isolated island market completely decoupled from North American mainland pipeline infrastructure. Since the closure of the Caribbean Petroleum (CAPECO) Bayamón refinery in PR and Hovensa/Limetree Bay in St. Croix, 100% of refined motor fuel is imported via coastal product tankers. Under the Merchant Marine Act of 1920 (Jones Act), shipments from US Gulf Coast refining centers (Houston/Corpus Christi) must transit on Jones Act-qualified clean product tankers, adding a significant marine freight spread over Gulf Coast spot RBOB. Retail prices are monitored and surveyed daily in cents per liter (¢/L) by the Puerto Rico Department of Consumer Affairs (DACO), which enforces statutory profit margin caps and price freezes during declared states of emergency."
+  },
+  "refining_logistics": {
+    "title": "San Juan Harbor Deepwater Commercial Petroleum Terminals & USGC Tanker Sea Lanes",
+    "description": "Refined motor gasoline and distillate cargoes arrive via coastal product tankers discharging at deepwater marine terminals in San Juan Bay (Puerto Nuevo, Cataño), Guayanilla, and Yabucoa. Wholesale distribution is anchored by Puma Energy Caribe (operating the former CAPECO Bayamón storage facility), TotalEnergies PR, and Sol Puerto Rico (Shell licensee). Inter-island distribution across the Caribbean basin to Vieques, Culebra, and the USVI relies on coastal fuel barges and tugs.",
+    "primary_refinery": "Waterborne Coastal Tankers from US Gulf Coast (PADD 3) & Caribbean Terminals",
+    "capacity_bpd": 0,
+    "pipelines": [
+      "San Juan Harbor Commercial Deepwater Tanker Headers",
+      "Cataño & Bayamón Petroleum Terminal Corridors",
+      "Yabucoa Deepwater Marine Product Pier"
+    ]
+  },
+  "tax_structure": {
+    "title": "Puerto Rico Commonwealth Petroleum Product Tax (Arbitrio) & Federal Excise",
+    "description": "Puerto Rico fuel taxation is governed by the Commonwealth excise tax (arbitrio) on gasoline and petroleum products, equivalent to $0.160 per gallon ($0.0423/liter), plus the Federal excise tax of $0.184/gal, yielding a combined baseline tax burden of $0.344/gal. Note that while Puerto Rico is subject to Jones Act cabotage requirements, petroleum shipments into the U.S. Virgin Islands are exempt from Jones Act build mandates under 48 U.S.C. § 1405c.",
+    "state_tax_per_gal": 0.160,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.344,
+    "notes": "Puerto Rico Commonwealth gasoline arbitrio of $0.160/gal equivalent. Retail prices legally quoted in cents per liter (¢/L) subject to daily DACO survey monitoring and emergency gross margin freezes."
+  },
+  "infrastructure_delivery": {
+    "title": "Jones Act Ocean Freight Differential & San Juan Terminal Throughput",
+    "equation_latex": "\\text{Rack Margin}_{\\text{San Juan}} = P_{\\text{San Juan Retail}} - (P_{\\text{USGC Spot}} + \\text{Freight}_{\\text{Jones Act}}) = \\$3.490 - (\\$2.250 + \\$0.145) = \\$1.095/\\text{gal}",
+    "description": "Wholesale acquisition costs in San Juan Harbor equal US Gulf Coast waterborne conventional cargo spot prices plus Jones Act clean tanker charter freight, marine insurance, and Puerto Nuevo/Cataño terminal throughput tariffs.",
+    "hub_distance_miles": 5,
+    "hub_name": "San Juan Bay Deepwater Fuel Terminals (Puerto Nuevo & Cataño)"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Atlantic Hurricane Forces San Juan Harbor Port Condition Zulu",
+      "subtitle": "Category 4 Hurricane Shuts Maritime Channels and Terminal Ingestion",
+      "price_impact_per_gal": 0.520,
+      "pct_impact": 14.90,
+      "description": "Severe Atlantic hurricane traverses Puerto Rico; US Coast Guard Sector San Juan sets Port Condition Zulu, barring vessel entry into San Juan Bay and halting product tanker offloading, triggering panic retail fuel queues."
+    },
+    {
+      "name": "LUMA Island Grid Blackout Surges Generator Diesel and Pump Fuel Demand",
+      "subtitle": "Islandwide Power Grid Failure Triggers Unscheduled Fuel Burn",
+      "price_impact_per_gal": 0.380,
+      "pct_impact": 10.89,
+      "description": "Major transmission trip on the LUMA electrical grid triggers an islandwide blackout, causing commercial facilities, hospitals, and residential complexes to switch to backup diesel generators, inducing severe supply drawdown at wholesale distribution racks."
+    },
+    {
+      "name": "Jones Act USGC Clean Tanker Fleet Tightness",
+      "subtitle": "Jones Act Tanker Premium Elevates Maritime Landed Cargo Costs",
+      "price_impact_per_gal": 0.210,
+      "pct_impact": 6.02,
+      "description": "Scarcity of Jones Act-compliant clean product tankers on the Houston/Corpus Christi-to-San Juan lane escalates maritime charter rates, widening the landed wholesale cargo differential above Gulf Coast spot RBOB."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 145000,
+    "zero_vehicle_pct": 18.2,
+    "vehicles_per_household": 1.45,
+    "drive_alone_share": 0.785,
+    "carpool_share": 0.095,
+    "public_transit_share": 0.025,
+    "work_from_home_share": 0.055,
+    "mean_commute_minutes": 29.8,
+    "vehicle_dependency_ratio": 0.880,
+    "transit_alternative_index": 0.065,
+    "inelastic_demand_score": 0.910
+  }
+}

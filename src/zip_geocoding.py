@@ -54,6 +54,8 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "967": "honolulu", "968": "honolulu",
     # 969: Hagåtña / Apra Harbor, Guam & Pacific Territories (Issue #621)
     "969": "guam",
+    # 006-009: San Juan Metro & Caribbean Territories Hub (Issue #620)
+    "006": "san_juan", "007": "san_juan", "008": "san_juan", "009": "san_juan",
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -114,11 +116,16 @@ ZIP_PREFIX_STATE_MAP: Dict[str, str] = {
     "850": "AZ", "851": "AZ", "852": "AZ", "853": "AZ", "855": "AZ", "856": "AZ", "857": "AZ", "859": "AZ", "860": "AZ", "863": "AZ", "864": "AZ", "865": "AZ",
     "995": "AK", "996": "AK", "997": "AK", "998": "AK", "999": "AK",
     "967": "HI", "968": "HI",
-    "969": "GU"
+    "969": "GU",
+    # PADD 6 (Caribbean Territories - Issue #620)
+    "006": "PR", "007": "PR", "008": "VI", "009": "PR"
 }
 
 # State to PADD & Calibrated Model fallback mapping
 STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
+    # PADD 6 (U.S. Caribbean Territories - Issue #620)
+    "PR": {"padd": "PADD 6", "padd_name": "U.S. Caribbean Territories", "fallback_locale": "san_juan", "fallback_model": "San_Juan_PR (PADD 6)", "state_tax": 0.160},
+    "VI": {"padd": "PADD 6", "padd_name": "U.S. Virgin Islands", "fallback_locale": "san_juan", "fallback_model": "San_Juan_PR (PADD 6)", "state_tax": 0.160},
     # PADD 7 (U.S. Pacific Island Territories - Issue #621)
     "GU": {"padd": "PADD 7", "padd_name": "U.S. Pacific Island Territories", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
     "MP": {"padd": "PADD 7", "padd_name": "Northern Mariana Islands", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
@@ -203,6 +210,7 @@ STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
     "VT": (44.0459, -72.7107), "VA": (37.7693, -78.1700), "WA": (47.4009, -121.4905),
     "WV": (38.4912, -80.9545), "WI": (44.2685, -89.6165), "WY": (42.7560, -107.3025),
     "GU": (13.4443, 144.7937), "MP": (15.1794, 145.7483), "AS": (-14.2710, -170.7020),
+    "PR": (18.2208, -66.5901), "VI": (18.3358, -64.8963),
 }
 
 
@@ -226,11 +234,18 @@ HUB_BASELINE_TAXES: Dict[str, float] = {
     "anchorage": 0.0895,
     "honolulu": 0.330,
     "guam": 0.190,
+    "san_juan": 0.160,
     "national": 0.184
 }
 
 # Known regional locality names for 5-digit ZIPs and 3-digit prefixes to preserve true geographic identity
 KNOWN_ZIP_LOCALITIES: Dict[str, str] = {
+    "009": "San Juan Metro, PR",
+    "00901": "Old San Juan, PR",
+    "00907": "Condado / San Juan, PR",
+    "00725": "Caguas, PR",
+    "00801": "St. Thomas, VI",
+    "00820": "St. Croix, VI",
     "969": "Hagåtña / Apra Harbor, GU",
     "96910": "Hagåtña, GU",
     "96913": "Barrigada / Tamuning, GU",
@@ -836,6 +851,17 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd": "PADD 7",
         "padd_name": "Pacific Territories",
         "state_tax": 0.190,
+        "max_radius_miles": 200.0
+    },
+    "san_juan": {
+        "name": "San Juan Metro & U.S. Caribbean Territories Hub, PR (PADD 6)",
+        "region_id": "San_Juan_PR",
+        "lat": 18.4655,
+        "lon": -66.1057,
+        "state": "PR",
+        "padd": "PADD 6",
+        "padd_name": "Caribbean Territories",
+        "state_tax": 0.160,
         "max_radius_miles": 200.0
     },
 }

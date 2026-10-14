@@ -262,7 +262,12 @@ LOCALE_MAP = {
     "guam_gu": "Guam_GU",
     "gu": "Guam_GU",
     "hagatna": "Guam_GU",
-    "apra_harbor": "Guam_GU"
+    "apra_harbor": "Guam_GU",
+    "san_juan": "San_Juan_PR",
+    "san_juan_pr": "San_Juan_PR",
+    "puerto_rico": "San_Juan_PR",
+    "pr": "San_Juan_PR",
+    "sju": "San_Juan_PR"
 }
 
 # Regional PADD metadata
@@ -289,7 +294,8 @@ PADD_METADATA = {
     "Phoenix_AZ": {"name": "Phoenix Metro & Desert Southwest Corridor, AZ", "padd": "PADD 5 West Coast (Southwest)", "carb_tax": 0.0},
     "Anchorage_AK": {"name": "Anchorage Metro & Cook Inlet Corridor, AK", "padd": "PADD 5 West Coast (Alaska)", "carb_tax": 0.0},
     "Honolulu_HI": {"name": "Honolulu Metro & Oahu Island Supply System, HI", "padd": "PADD 5 West Coast (Hawaii)", "carb_tax": 0.0},
-    "Guam_GU": {"name": "Hagåtña & Apra Harbor, Guam", "padd": "PADD 7 Pacific Territories", "carb_tax": 0.0}
+    "Guam_GU": {"name": "Hagåtña & Apra Harbor, Guam", "padd": "PADD 7 Pacific Territories", "carb_tax": 0.0},
+    "San_Juan_PR": {"name": "San Juan Metro & U.S. Caribbean Territories Hub, PR", "padd": "PADD 6 Caribbean Territories", "carb_tax": 0.0}
 }
 
 # Scenario Simulator Catalog

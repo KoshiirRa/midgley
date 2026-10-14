@@ -268,6 +268,21 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         sub_locales={"hagatna": 0.00, "tamuning_tumon": 0.05, "dededo": -0.02, "yigo_andersen": -0.04, "santa_rita_apra": -0.03, "saipan_cnmi": 0.45, "pago_pago_as": 0.55},
         primary_refinery="Asia-Pacific Product Tanker Imports (Singapore / South Korea)",
         primary_pipeline="Cabras Island Fuel Pier & Apra Harbor Marine Headers"
+    ),
+    "san_juan": RegionSpec(
+        region_key="San_Juan_PR",
+        slug="san_juan",
+        display_name="San Juan Metro & U.S. Caribbean Territories Hub, PR (PADD 6)",
+        padd="PADD 6",
+        wholesale_spot_col="spot_gulf_coast",
+        eia_retail_series_id="DACO_RETAIL_PR",
+        diesel_series_id="GASDESWPR",
+        baseline_tax_rate=0.160,
+        has_edgeworth_cycles=False,
+        has_carb_compliance=False,
+        sub_locales={"san_juan_metro": 0.00, "bayamon": -0.02, "carolina": 0.01, "ponce": -0.04, "mayaguez": -0.03, "caguas": 0.00, "arecibo": -0.02, "st_thomas_usvi": 0.45, "st_croix_usvi": 0.38},
+        primary_refinery="Waterborne Jones Act Tankers from Houston/Corpus Christi & USVI Terminals",
+        primary_pipeline="San Juan Harbor Deepwater Tanker Berths & Coastal Product Barges"
     )
 }
 
@@ -297,6 +312,13 @@ REGIONAL_SPECS["padd_7"] = REGIONAL_SPECS["guam"]
 REGIONAL_SPECS["hagatna"] = REGIONAL_SPECS["guam"]
 REGIONAL_SPECS["apra_harbor"] = REGIONAL_SPECS["guam"]
 REGIONAL_SPECS["marianas"] = REGIONAL_SPECS["guam"]
+REGIONAL_SPECS["san_juan_pr"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["puerto_rico"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["pr"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["padd6"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["padd_6"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["sju"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["caribbean"] = REGIONAL_SPECS["san_juan"]
 
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
@@ -326,6 +348,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
         return REGIONAL_SPECS["honolulu"]
     if key in ("guam", "guam_gu", "padd7", "padd_7", "hagatna", "apra_harbor", "marianas"):
         return REGIONAL_SPECS["guam"]
+    if key in ("san_juan", "san_juan_pr", "puerto_rico", "pr", "padd6", "padd_6", "sju", "caribbean", "daco"):
+        return REGIONAL_SPECS["san_juan"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

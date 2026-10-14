@@ -1,6 +1,6 @@
 # Release Notes - v0.8.6 (Draft)
 
-Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with ten major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**, and the PADD 7 trans-Pacific island hub: **Guam & U.S. Pacific Island Territories**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
+Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with eleven major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**, the PADD 6 Caribbean hub: **San Juan & U.S. Caribbean Territories**, and the PADD 7 trans-Pacific island hub: **Guam & U.S. Pacific Island Territories**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
 
 ---
 
@@ -110,6 +110,24 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Added Guam centroid `(13.4443, 144.7937)` and ZIP prefix `969` to `CALIBRATION_HUBS`, `ZIP_METRO_PREFIX_MAP`, and `STATE_PADD_MODEL_MAP` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
   - Updated API normalization in [`src/api_server.py`](src/api_server.py), Discord notifier in [`src/discord_notifier.py`](src/discord_notifier.py), and intraday trigger keywords in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py).
 
+### 12. San Juan Metro & U.S. Caribbean Territories Calibration Hub — PADD 6 (`San_Juan_PR`, Issue #620)
+- **100% Maritime Island Supply Logistics & Jones Act Clean Tanker Freights**:
+  - Implemented dedicated regional forecasting and calibration hub for **San Juan, Puerto Rico (`San_Juan_PR`, `san_juan`)**, representing the **U.S. Caribbean Territories petroleum district (`PADD 6 / PADD VI`)** encompassing Puerto Rico and the U.S. Virgin Islands (USVI).
+  - Modeled 100% finished product imports via coastal clean product tankers from US Gulf Coast refining centers (Houston/Corpus Christi) following the historic closures of the Caribbean Petroleum (CAPECO) Bayamón refinery in PR and Hovensa/Limetree Bay in St. Croix.
+  - Incorporated Jones Act clean product tanker marine freight differentials (`spot_caribbean_waterborne = spot_gulf_coast + 0.145`) and deepwater terminal headers in San Juan Bay (Puerto Nuevo, Cataño) and Yabucoa.
+- **DACO Price Regulation, Margin Caps & Metric Conversion**:
+  - Modeled daily retail fuel price surveys from the Puerto Rico Department of Consumer Affairs (**DACO - Departamento de Asuntos del Consumidor**), supporting authentic metric price conversion between cents per liter (¢/L) and dollars per gallon (`$/gal = (¢/L / 100) * 3.78541`).
+  - Accounted for statutory emergency price freeze powers and distributor gross margin caps during declared states of emergency.
+  - Modeled the Puerto Rico Commonwealth petroleum product arbitrio ($0.160/gal equivalent) plus Federal excise ($0.184/gal) for a combined baseline tax burden of $0.344/gal.
+- **Tropical Convective Risk & LUMA Electrical Grid Vulnerability**:
+  - Integrated NOAA WFO San Juan (`SJU` / `PRZ001`) and National Hurricane Center (NHC) tropical storm bulletins, modeling Atlantic hurricane landfalls (Hurricanes Maria, Fiona, Ernesto) and US Coast Guard Port Condition Zulu harbor closures.
+  - Modeled LUMA Energy electrical transmission grid failures driving sudden surges in backup emergency diesel generator and pump gasoline demand.
+- **Hierarchical MinT Coherence, Geocoding & Notification Integration**:
+  - Registered `san_juan` in [`src/locations/specs.py`](src/locations/specs.py), created schema-valid [`data/regional_metadata/san_juan_pr.json`](data/regional_metadata/san_juan_pr.json), and built [`src/locations/san_juan/`](src/locations/san_juan/) package.
+  - Integrated `San_Juan_PR` and `PADD_6` into [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum coherence.
+  - Added San Juan centroid `(18.4655, -66.1057)` and ZIP prefixes `006`-`009` to `CALIBRATION_HUBS`, `ZIP_METRO_PREFIX_MAP`, and `STATE_PADD_MODEL_MAP` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
+  - Updated API normalization in [`src/api_server.py`](src/api_server.py), Discord notifier in [`src/discord_notifier.py`](src/discord_notifier.py), and intraday trigger keywords in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py).
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -122,6 +140,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
+| **#620** | `feat(regions): Implement San Juan & Caribbean Territories Calibration Hub (PADD 6 / DACO Price Regulation)` | Locations / Regional Hubs / PADD 6 |
 | **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
@@ -135,13 +154,17 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
-* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`)
+* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`), `San_Juan_PR` (`san_juan`)
 * **Hierarchical Engine & Regional Topology Additions**:
-  - Added `PADD_7` cluster and `Guam_GU` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence ($S$ matrix reconciliation).
+  - Added `PADD_6` cluster and `San_Juan_PR` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence ($S$ matrix reconciliation).
+  - Added `PADD_7` cluster and `Guam_GU` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence.
+  - Modeled landed USGC conventional cargo benchmark with Jones Act clean tanker differential `spot_caribbean_waterborne = spot_gulf_coast + 0.145` and San Juan Bay terminal throughput charges.
   - Modeled landed Asian wholesale acquisition benchmark `spot_mops_92_rack = rbob + 0.350` and Cabras Island terminal rack throughput charges.
-  - Registered flat tropical 9.0 psi year-round RVP regulation standard in [`src/rvp_regulations.py`](src/rvp_regulations.py).
+  - Registered flat tropical 9.0 psi year-round RVP regulation standards in [`src/rvp_regulations.py`](src/rvp_regulations.py).
+  - Mapped Puerto Rico Commonwealth gasoline arbitrio ($0.160/gal) in [`src/zip_geocoding.py`](src/zip_geocoding.py) and [`data/regional_metadata/san_juan_pr.json`](data/regional_metadata/san_juan_pr.json).
   - Mapped Guam Liquid Fuel Tax ($0.150/gal) + Mass Transit surcharge ($0.040/gal) = $0.190/gal local tax base in [`src/zip_geocoding.py`](src/zip_geocoding.py) and [`data/regional_metadata/guam_gu.json`](data/regional_metadata/guam_gu.json).
 * **LLM Engine & Deprecation Migration**:
+
   - Runtime generative extractions and agent tasks migrated from deprecated `gemini-2.5-flash` to `gemini-3.8-flash`.
   - Deprecated sampling parameters (`temperature`, `top_p`, `top_k`, `thinking_budget`) are completely removed; structured JSON extraction and evaluation tasks explicitly configure `thinking_level="low"`.
   - Telemetry rates updated to $0.75 / 1M prompt and $3.75 / 1M output tokens while preserving legacy rates for historical accounting.

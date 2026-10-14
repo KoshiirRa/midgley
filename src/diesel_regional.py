@@ -98,7 +98,8 @@ DIESEL_BASE_ANCHORS = {
     "phoenix": 3.750,
     "anchorage": 4.150,
     "honolulu": 5.450,
-    "guam": 5.250
+    "guam": 5.250,
+    "san_juan": 3.950
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -119,7 +120,8 @@ LOCALE_TO_REGION_MAP = {
     "phoenix": "Phoenix_AZ",
     "anchorage": "Anchorage_AK",
     "honolulu": "Honolulu_HI",
-    "guam": "Guam_GU"
+    "guam": "Guam_GU",
+    "san_juan": "San_Juan_PR"
 }
 
 
@@ -398,7 +400,8 @@ DIESEL_REGION_LOG_KEYS = {
     "phoenix": "Phoenix_ULSD",
     "anchorage": "Anchorage_ULSD",
     "honolulu": "Honolulu_ULSD",
-    "guam": "Guam_ULSD"
+    "guam": "Guam_ULSD",
+    "san_juan": "San_Juan_ULSD"
 }
 
 

@@ -127,6 +127,7 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Anchorage_AK": [("GASREGWAK", "Alaska Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     "Honolulu_HI": [("GASREGWHI", "Hawaii Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     "Guam_GU": [("GEO_RETAIL_GUAM", "Guam Energy Office Monthly Petroleum Monitor"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "San_Juan_PR": [("DACO_RETAIL_PR", "Puerto Rico DACO Daily Fuel Price Survey"), ("GASREGW", "U.S. Regular Gasoline Retail Price")],
     # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
     "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
@@ -165,6 +166,8 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Honolulu_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
     "Guam_ULSD": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
     "Guam_Diesel": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "San_Juan_ULSD": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "San_Juan_Diesel": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -236,7 +239,11 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GEO_RETAIL_GUAM": 4.890,
     "GEODESWGUAM": 5.250,
     "GASREGWGUAM": 4.890,
-    "GASDESWGUAM": 5.250
+    "GASDESWGUAM": 5.250,
+    "DACO_RETAIL_PR": 3.490,
+    "DACODESWPR": 3.950,
+    "GASREGWPR": 3.490,
+    "GASDESWPR": 3.950
 }
 
 

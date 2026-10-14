@@ -114,6 +114,14 @@ def test_metro_cluster_zip_resolution():
     assert res_guam["padd_region"] == "PADD 7"
     assert res_guam["hub_baseline_tax_rate"] == 0.190
 
+    res_sj = resolve_zip_code("00901")
+    assert res_sj["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_sj["is_metro_cluster_hit"] is True
+    assert res_sj["locale_code"] == "san_juan"
+    assert res_sj["state"] == "PR"
+    assert res_sj["padd_region"] == "PADD 6"
+    assert res_sj["hub_baseline_tax_rate"] == 0.160
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
@@ -279,6 +287,14 @@ def test_coordinate_resolution_metro_hit():
     assert res_guam_coord["locale_code"] == "guam"
     assert res_guam_coord["state"] == "GU"
     assert res_guam_coord["distance_to_hub_miles"] < 5.0
+
+    # 6. San Juan, Puerto Rico coordinates (18.4655, -66.1057)
+    res_sj_coord = resolve_coordinates(18.4655, -66.1057)
+    assert res_sj_coord["status"] == "success"
+    assert res_sj_coord["is_metro_cluster_hit"] is True
+    assert res_sj_coord["locale_code"] == "san_juan"
+    assert res_sj_coord["state"] == "PR"
+    assert res_sj_coord["distance_to_hub_miles"] < 5.0
 
 
 def test_coordinate_resolution_spatial_fallback():

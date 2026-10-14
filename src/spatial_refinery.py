@@ -281,6 +281,14 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 0,
         "padd": "PADD 7",
         "primary_locales": ["Guam_GU"]
+    },
+    "San_Juan_Terminal": {
+        "name": "San Juan Harbor Petroleum Marine Terminal & Yabucoa (PR)",
+        "lat": 18.4411,
+        "lon": -66.1130,
+        "capacity_bpd": 0,
+        "padd": "PADD 6",
+        "primary_locales": ["San_Juan_PR"]
     }
 }
 
@@ -399,6 +407,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 13.4443,
         "lon": 144.7937,
         "zip": "96910"
+    },
+    "San_Juan_PR": {
+        "name": "San Juan Metro & Caribbean Territories Hub, PR",
+        "lat": 18.4655,
+        "lon": -66.1057,
+        "zip": "00901"
     }
 }
 
