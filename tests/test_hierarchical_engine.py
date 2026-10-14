@@ -56,14 +56,28 @@ class TestHierarchicalEngine(unittest.TestCase):
             "Chicago_IL": 3.55,
             "Houston_TX": 2.85,
             "Denver_CO": 3.12,
-            "New_York_NY": 3.65
+            "New_York_NY": 3.65,
+            "Seattle_WA": 4.15,
+            "Phoenix_AZ": 3.25,
+            "Anchorage_AK": 3.85,
+            "Honolulu_HI": 4.65,
+            "Guam_GU": 4.89,
+            "PADD_7": 4.90
         }
 
         reconciled = engine.reconcile_forecast_dict(base_forecasts)
 
         # Check that reconciled forecasts satisfy exact aggregation constraints S * b_tilde = y_tilde
-        # 1. PADD_5 == average of Oakland, BayArea, and Los Angeles
-        padd5_calc = (reconciled["Oakland_CA"] + reconciled["BayArea_CA"] + reconciled["Los_Angeles_CA"]) / 3.0
+        # 1. PADD_5 == average of Oakland, BayArea, Los Angeles, Seattle, Phoenix, Anchorage, Honolulu
+        padd5_calc = (
+            reconciled["Oakland_CA"]
+            + reconciled["BayArea_CA"]
+            + reconciled["Los_Angeles_CA"]
+            + reconciled["Seattle_WA"]
+            + reconciled["Phoenix_AZ"]
+            + reconciled["Anchorage_AK"]
+            + reconciled["Honolulu_HI"]
+        ) / 7.0
         self.assertAlmostEqual(reconciled["PADD_5"], padd5_calc, places=3)
 
         # 2. PADD_2 == average of Tulsa, Cincinnati_OH, Cincinnati_KY, and Chicago_IL
@@ -81,6 +95,10 @@ class TestHierarchicalEngine(unittest.TestCase):
         # 5. PADD_1B == average of Newark_DE and New_York_NY
         padd1b_calc = (reconciled["Newark_DE"] + reconciled["New_York_NY"]) / 2.0
         self.assertAlmostEqual(reconciled["PADD_1B"], padd1b_calc, places=3)
+
+        # 6. PADD_7 == Guam_GU
+        padd7_calc = reconciled["Guam_GU"]
+        self.assertAlmostEqual(reconciled["PADD_7"], padd7_calc, places=3)
 
     def test_empirical_bayes_shrinkage_regression(self):
         np.random.seed(42)

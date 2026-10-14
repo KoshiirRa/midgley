@@ -679,7 +679,7 @@ def get_honolulu_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     honolulu_weather_events = [
         {"date": "2021-12-05", "headline": "NOAA NWS Flash Flood Emergency: Catastrophic Kona low storm drops 12 inches on Oahu, swamping roads and pausing fuel truck movements from Kapolei.", "zone": "HIZ002 (Honolulu / Oahu)", "weather_type": "Kona Low Deluge"},
         {"date": "2022-07-24", "headline": "NOAA CPHC Tropical Storm Statement: Remnants of Tropical Storm Darby bring high surf and gale warnings to Hawaiian coastal marine waters.", "zone": "HIZ002 (Oahu Coastal)", "weather_type": "Tropical Storm / High Surf"},
-        {"date": "2023-08-08", "headline": "NOAA NWS High Wind Warning: Strong pressure gradient from Hurricane Dora produces 60 mph downslope winds across Hawaiian Islands.", "zone": "HIZ002 (Oahu / Leeward)", "weather_type": "High Wind Emergency"},
+        {"date": "2023-08-08", "headline": "NOAA NWS High Wind Warning: Strong pressure gradient from Hurricane Dora produces 60 mph winds across Hawaiian Islands.", "zone": "HIZ002 (Oahu / Leeward)", "weather_type": "High Wind Emergency"},
         {"date": "2024-01-16", "headline": "NOAA NWS High Surf Warning: Massive North Shore winter swell with 35-foot faces generates rough marine channel conditions for inter-island tugs.", "zone": "HIZ002 (Oahu Waters)", "weather_type": "High Surf Marine Warning"},
         {"date": "2024-08-23", "headline": "NOAA CPHC Tropical Storm Warning: Tropical Storm Hone approaches Hawaiian Islands, prompting US Coast Guard harbor safety advisories.", "zone": "HIZ002 (Honolulu Coastal)", "weather_type": "Tropical Cyclone Advisory"}
     ]
@@ -690,6 +690,36 @@ def get_honolulu_weather_dataset(include_live: bool = True) -> pd.DataFrame:
             zip_code="96813",
             hub_code="Honolulu_HI",
             region_label="Honolulu / Oahu Island"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+def get_guam_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for Hagåtña & Apra Harbor, Guam (GUZ001 / Zip 96910):
+    - Western Pacific Typhoon Alley & Super Typhoon Warnings (JTWC / WFO Guam bulletins)
+    - Monsoon Surges and Tropical Disturbance Deluges halting Apra Harbor tanker lightering
+    - US Coast Guard Port Condition Zulu / Yankee marine advisories.
+    - Actively queries live NOAA alerts (GU, GUZ001, GMZ011), SPC/JTWC outlooks, and Open-Meteo degree days.
+    """
+    guam_weather_events = [
+        {"date": "2022-09-09", "headline": "NOAA NWS WFO Guam Tropical Storm Watch: Tropical Storm Muifa passes north of Marianas, generating 12-foot seas in Apra Harbor entrance channel.", "zone": "GUZ001 (Guam Marine)", "weather_type": "Tropical Storm / High Surf"},
+        {"date": "2023-05-23", "headline": "NOAA NWS WFO Guam Extreme Wind Warning: Category 4 Super Typhoon Mawar brings 140 mph sustained winds and torrential flooding across Guam.", "zone": "GUZ001 (Guam Islandwide)", "weather_type": "Super Typhoon Direct Hit"},
+        {"date": "2023-05-25", "headline": "US Coast Guard Port Condition Zulu: Apra Harbor closed to commercial vessel traffic pending sonar survey of submerged navigation hazards.", "zone": "GMZ011 (Apra Harbor)", "weather_type": "Port Shutdown Emergency"},
+        {"date": "2023-10-10", "headline": "NOAA NWS WFO Guam Typhoon Warning: Typhoon Bolaven tracks through Rota Channel with 80 mph gusts, pausing commercial tanker offloading at Cabras Island.", "zone": "GUZ001 / GMZ017", "weather_type": "Typhoon Marine Warning"},
+        {"date": "2024-07-25", "headline": "NOAA NWS WFO Guam Flood Watch: Southwest monsoon surge delivers 6 inches of rain across southern Guam mountains, washing out roadways.", "zone": "GUZ001 (Guam Coastal)", "weather_type": "Monsoon Deluge / Flood"},
+        {"date": "2024-11-11", "headline": "NOAA NWS WFO Guam Gale Warning: Intense tropical disturbance 94W generates 40-knot gale winds and rough seas across Western Pacific shipping lanes.", "zone": "GMZ011 (Mariana Waters)", "weather_type": "Marine Gale Warning"}
+    ]
+    events = list(guam_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["GU", "GUZ001"],
+            zip_code="96910",
+            hub_code="Guam_GU",
+            region_label="Hagåtña / Apra Harbor"
         )
         events.extend(live)
     df = pd.DataFrame(events)
@@ -730,7 +760,8 @@ METRO_ZIP_MAP = {
     "Seattle_WA": "98101",      # Puget Sound Refining & Olympic Pipeline Hub
     "Phoenix_AZ": "85001",      # Desert Southwest & Kinder Morgan SFPP Terminal
     "Anchorage_AK": "99501",    # Port of Alaska & Cook Inlet Kenai Refinery
-    "Honolulu_HI": "96813"      # Par Hawaii Kapolei & Island Barge Hub
+    "Honolulu_HI": "96813",     # Par Hawaii Kapolei & Island Barge Hub
+    "Guam_GU": "96910"          # Apra Harbor & Cabras Island Fuel Terminal (PADD 7)
 }
 
 

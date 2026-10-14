@@ -257,7 +257,12 @@ LOCALE_MAP = {
     "honolulu_hi": "Honolulu_HI",
     "hnl": "Honolulu_HI",
     "hawaii": "Honolulu_HI",
-    "oahu": "Honolulu_HI"
+    "oahu": "Honolulu_HI",
+    "guam": "Guam_GU",
+    "guam_gu": "Guam_GU",
+    "gu": "Guam_GU",
+    "hagatna": "Guam_GU",
+    "apra_harbor": "Guam_GU"
 }
 
 # Regional PADD metadata
@@ -283,7 +288,8 @@ PADD_METADATA = {
     "Seattle_WA": {"name": "Seattle & Puget Sound Refining Corridor, WA", "padd": "PADD 5 West Coast (PNW)", "carb_tax": 0.0},
     "Phoenix_AZ": {"name": "Phoenix Metro & Desert Southwest Corridor, AZ", "padd": "PADD 5 West Coast (Southwest)", "carb_tax": 0.0},
     "Anchorage_AK": {"name": "Anchorage Metro & Cook Inlet Corridor, AK", "padd": "PADD 5 West Coast (Alaska)", "carb_tax": 0.0},
-    "Honolulu_HI": {"name": "Honolulu Metro & Oahu Island Supply System, HI", "padd": "PADD 5 West Coast (Hawaii)", "carb_tax": 0.0}
+    "Honolulu_HI": {"name": "Honolulu Metro & Oahu Island Supply System, HI", "padd": "PADD 5 West Coast (Hawaii)", "carb_tax": 0.0},
+    "Guam_GU": {"name": "Hagåtña & Apra Harbor, Guam", "padd": "PADD 7 Pacific Territories", "carb_tax": 0.0}
 }
 
 # Scenario Simulator Catalog

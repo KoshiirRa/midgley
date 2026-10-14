@@ -10,7 +10,7 @@ def test_get_region_spec_all_metros():
     expected_slugs = [
         "tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area",
         "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york",
-        "seattle", "phoenix", "anchorage", "honolulu"
+        "seattle", "phoenix", "anchorage", "honolulu", "guam"
     ]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
@@ -78,6 +78,12 @@ def test_get_region_spec_all_metros():
         assert hnl_spec is not None
         assert hnl_spec.slug == "honolulu"
 
+    # Ensure guam aliases resolve cleanly to guam spec
+    for gum_alias in ("guam_gu", "padd7", "padd_7", "hagatna", "apra_harbor", "marianas"):
+        gum_spec = get_region_spec(gum_alias)
+        assert gum_spec is not None
+        assert gum_spec.slug == "guam"
+
 
 def test_get_region_spec_by_region_key():
     spec = get_region_spec("Tulsa_OK")
@@ -140,6 +146,12 @@ def test_get_region_spec_by_region_key():
     assert hnl_spec.slug == "honolulu"
     assert hnl_spec.wholesale_spot_col == "spot_oahu_rack"
 
+    gum_spec = get_region_spec("Guam_GU")
+    assert gum_spec is not None
+    assert gum_spec.region_key == "Guam_GU"
+    assert gum_spec.slug == "guam"
+    assert gum_spec.wholesale_spot_col == "spot_mops_92_rack"
+
 
 def test_region_spec_microstructure_flags():
     cincy = get_region_spec("cincinnati")
@@ -189,4 +201,9 @@ def test_region_spec_microstructure_flags():
     assert honolulu.has_carb_compliance is False
     assert honolulu.baseline_tax_rate == 0.330
     assert honolulu.padd == "PADD 5D"
+
+    guam = get_region_spec("guam")
+    assert guam.has_carb_compliance is False
+    assert guam.baseline_tax_rate == 0.190
+    assert guam.padd == "PADD 7"
 

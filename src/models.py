@@ -367,6 +367,8 @@ LOCALE_COMPONENT_WEIGHTS = {
     "Anchorage": {"regional_logistics": 0.45, "weather_environmental": 0.25, "refining_crack_margin": 0.15, "futures_commodity": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
     "Honolulu_HI": {"regional_logistics": 0.45, "refining_crack_margin": 0.20, "futures_commodity": 0.20, "weather_environmental": 0.08, "tax_regulatory": 0.05, "unstructured_sentiment": 0.02},
     "Honolulu": {"regional_logistics": 0.45, "refining_crack_margin": 0.20, "futures_commodity": 0.20, "weather_environmental": 0.08, "tax_regulatory": 0.05, "unstructured_sentiment": 0.02},
+    "Guam_GU": {"regional_logistics": 0.50, "futures_commodity": 0.20, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Guam": {"regional_logistics": 0.50, "futures_commodity": 0.20, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
     "National": {"futures_commodity": 0.45, "refining_crack_margin": 0.25, "unstructured_sentiment": 0.15, "weather_environmental": 0.075, "regional_logistics": 0.05, "tax_regulatory": 0.025}
 }
 

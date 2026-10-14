@@ -52,6 +52,8 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "995": "anchorage", "996": "anchorage",
     # 967-968: Honolulu & Hawaiian Islands Hub (Issue #622)
     "967": "honolulu", "968": "honolulu",
+    # 969: Hagåtña / Apra Harbor, Guam & Pacific Territories (Issue #621)
+    "969": "guam",
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -111,11 +113,16 @@ ZIP_PREFIX_STATE_MAP: Dict[str, str] = {
     "890": "NV", "891": "NV", "893": "NV", "894": "NV", "895": "NV", "897": "NV", "898": "NV",
     "850": "AZ", "851": "AZ", "852": "AZ", "853": "AZ", "855": "AZ", "856": "AZ", "857": "AZ", "859": "AZ", "860": "AZ", "863": "AZ", "864": "AZ", "865": "AZ",
     "995": "AK", "996": "AK", "997": "AK", "998": "AK", "999": "AK",
-    "967": "HI", "968": "HI"
+    "967": "HI", "968": "HI",
+    "969": "GU"
 }
 
 # State to PADD & Calibrated Model fallback mapping
 STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
+    # PADD 7 (U.S. Pacific Island Territories - Issue #621)
+    "GU": {"padd": "PADD 7", "padd_name": "U.S. Pacific Island Territories", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
+    "MP": {"padd": "PADD 7", "padd_name": "Northern Mariana Islands", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
+    "AS": {"padd": "PADD 7", "padd_name": "American Samoa", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
     # PADD 5 (West Coast Sub-Districts - Issue #622 Decoupling)
     "CA": {"padd": "PADD 5", "padd_name": "West Coast (California CARB)", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.596},
     "OR": {"padd": "PADD 5", "padd_name": "Pacific Northwest", "fallback_locale": "seattle", "fallback_model": "Seattle_WA (PADD 5B PNW)", "state_tax": 0.400},
@@ -195,6 +202,7 @@ STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
     "TN": (35.7478, -86.6923), "TX": (31.9686, -99.9018), "UT": (40.1500, -111.8624),
     "VT": (44.0459, -72.7107), "VA": (37.7693, -78.1700), "WA": (47.4009, -121.4905),
     "WV": (38.4912, -80.9545), "WI": (44.2685, -89.6165), "WY": (42.7560, -107.3025),
+    "GU": (13.4443, 144.7937), "MP": (15.1794, 145.7483), "AS": (-14.2710, -170.7020),
 }
 
 
@@ -213,11 +221,22 @@ HUB_BASELINE_TAXES: Dict[str, float] = {
     "new_york": 0.472,
     "oakland": 0.634,
     "bayarea": 0.634,
+    "seattle": 0.494,
+    "phoenix": 0.180,
+    "anchorage": 0.0895,
+    "honolulu": 0.330,
+    "guam": 0.190,
     "national": 0.184
 }
 
 # Known regional locality names for 5-digit ZIPs and 3-digit prefixes to preserve true geographic identity
 KNOWN_ZIP_LOCALITIES: Dict[str, str] = {
+    "969": "Hagåtña / Apra Harbor, GU",
+    "96910": "Hagåtña, GU",
+    "96913": "Barrigada / Tamuning, GU",
+    "96915": "Santa Rita / Apra Harbor, GU",
+    "96929": "Yigo / Andersen AFB, GU",
+    "96950": "Saipan, MP",
     "12946": "Lake Placid, NY",
     "129": "Adirondacks / Plattsburgh, NY",
     "100": "Manhattan, NYC",
@@ -763,6 +782,61 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd_name": "Central Atlantic",
         "state_tax": 0.472,
         "max_radius_miles": 120.0
+    },
+    "seattle": {
+        "name": "Seattle-Tacoma & Puget Sound, WA",
+        "region_id": "Seattle_WA",
+        "lat": 47.6062,
+        "lon": -122.3321,
+        "state": "WA",
+        "padd": "PADD 5B",
+        "padd_name": "Pacific Northwest",
+        "state_tax": 0.494,
+        "max_radius_miles": 150.0
+    },
+    "phoenix": {
+        "name": "Phoenix Metro & Desert Southwest, AZ",
+        "region_id": "Phoenix_AZ",
+        "lat": 33.4484,
+        "lon": -112.0740,
+        "state": "AZ",
+        "padd": "PADD 5C",
+        "padd_name": "Desert Southwest",
+        "state_tax": 0.180,
+        "max_radius_miles": 150.0
+    },
+    "anchorage": {
+        "name": "Anchorage & Southcentral Alaska Hub, AK",
+        "region_id": "Anchorage_AK",
+        "lat": 61.2181,
+        "lon": -149.9003,
+        "state": "AK",
+        "padd": "PADD 5D",
+        "padd_name": "Alaska",
+        "state_tax": 0.0895,
+        "max_radius_miles": 250.0
+    },
+    "honolulu": {
+        "name": "Honolulu & Oahu Island Hub, HI",
+        "region_id": "Honolulu_HI",
+        "lat": 21.3069,
+        "lon": -157.8583,
+        "state": "HI",
+        "padd": "PADD 5D",
+        "padd_name": "Hawaii",
+        "state_tax": 0.330,
+        "max_radius_miles": 200.0
+    },
+    "guam": {
+        "name": "Hagåtña & Apra Harbor, Guam (PADD 7)",
+        "region_id": "Guam_GU",
+        "lat": 13.4443,
+        "lon": 144.7937,
+        "state": "GU",
+        "padd": "PADD 7",
+        "padd_name": "Pacific Territories",
+        "state_tax": 0.190,
+        "max_radius_miles": 200.0
     },
 }
 

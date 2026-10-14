@@ -126,6 +126,7 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Phoenix_AZ": [("GASREGWAZ", "Arizona Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     "Anchorage_AK": [("GASREGWAK", "Alaska Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     "Honolulu_HI": [("GASREGWHI", "Hawaii Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Guam_GU": [("GEO_RETAIL_GUAM", "Guam Energy Office Monthly Petroleum Monitor"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
     "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
@@ -162,6 +163,8 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Anchorage_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
     "Honolulu_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
     "Honolulu_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Guam_ULSD": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Guam_Diesel": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -229,7 +232,11 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASREGW5XCA": 3.950,
     "EMM_EPMR_PTE_R50XCA_DPG": 3.950,
     "GASDESW5XCA": 4.450,
-    "EMD_EPD2D_PTE_R50XCA_DPG": 4.450
+    "EMD_EPD2D_PTE_R50XCA_DPG": 4.450,
+    "GEO_RETAIL_GUAM": 4.890,
+    "GEODESWGUAM": 5.250,
+    "GASREGWGUAM": 4.890,
+    "GASDESWGUAM": 5.250
 }
 
 

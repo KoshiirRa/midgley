@@ -106,6 +106,14 @@ def test_metro_cluster_zip_resolution():
     assert res_honolulu["locale_code"] == "honolulu"
     assert res_honolulu["state"] == "HI"
 
+    res_guam = resolve_zip_code("96910")
+    assert res_guam["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_guam["is_metro_cluster_hit"] is True
+    assert res_guam["locale_code"] == "guam"
+    assert res_guam["state"] == "GU"
+    assert res_guam["padd_region"] == "PADD 7"
+    assert res_guam["hub_baseline_tax_rate"] == 0.190
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
@@ -263,6 +271,14 @@ def test_coordinate_resolution_metro_hit():
     assert res_den["locale_code"] == "denver"
     assert res_den["state"] == "CO"
     assert res_den["distance_to_hub_miles"] < 5.0
+
+    # 5. Hagåtña / Apra Harbor, Guam coordinates (13.4443, 144.7937)
+    res_guam_coord = resolve_coordinates(13.4443, 144.7937)
+    assert res_guam_coord["status"] == "success"
+    assert res_guam_coord["is_metro_cluster_hit"] is True
+    assert res_guam_coord["locale_code"] == "guam"
+    assert res_guam_coord["state"] == "GU"
+    assert res_guam_coord["distance_to_hub_miles"] < 5.0
 
 
 def test_coordinate_resolution_spatial_fallback():

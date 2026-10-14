@@ -112,6 +112,11 @@ CANONICAL_LOCALE_ALIASES: Dict[str, str] = {
     "hnl": "Honolulu",
     "hawaii": "Honolulu",
     "oahu": "Honolulu",
+    "guam": "Guam",
+    "guam_gu": "Guam",
+    "gu": "Guam",
+    "hagatna": "Guam",
+    "apra_harbor": "Guam",
 }
 
 SUPPORTED_LOCALES = [
@@ -132,6 +137,7 @@ SUPPORTED_LOCALES = [
     "Phoenix",
     "Anchorage",
     "Honolulu",
+    "Guam",
 ]
 
 VALID_DIRECTION_FILTERS = {"all_shocks", "spikes_only", "drops_only"}

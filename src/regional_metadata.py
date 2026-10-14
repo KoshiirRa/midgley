@@ -60,6 +60,12 @@ REGION_ALIASES: Dict[str, str] = {
     "honolulu": "honolulu_hi",
     "oahu": "honolulu_hi",
     "hawaii": "honolulu_hi",
+    "guam": "guam_gu",
+    "guam_gu": "guam_gu",
+    "hagatna": "guam_gu",
+    "apra_harbor": "guam_gu",
+    "padd7": "guam_gu",
+    "padd_7": "guam_gu",
 }
 
 

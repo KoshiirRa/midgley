@@ -24,6 +24,7 @@ from src.locations.seattle import run_seattle_pipeline, build_seattle_notebook
 from src.locations.phoenix import run_phoenix_pipeline, build_phoenix_notebook
 from src.locations.anchorage import run_anchorage_pipeline, build_anchorage_notebook
 from src.locations.honolulu import run_honolulu_pipeline, build_honolulu_notebook
+from src.locations.guam import run_guam_pipeline, build_guam_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -180,6 +181,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_honolulu_pipeline,
         "build_notebook": build_honolulu_notebook,
         "notebook_filename": "honolulu_gas_price_llm_forecasting.ipynb"
+    },
+    "guam": {
+        "id": "guam",
+        "name": "Hagåtña & Apra Harbor, Guam (PADD 7)",
+        "type": "regional",
+        "module": "src.locations.guam",
+        "run_pipeline": run_guam_pipeline,
+        "build_notebook": build_guam_notebook,
+        "notebook_filename": "guam_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -210,6 +220,8 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "anchorage"
     if loc_id in ("honolulu_hi", "hawaii", "oahu"):
         loc_id = "honolulu"
+    if loc_id in ("guam_gu", "padd7", "padd_7", "hagatna", "apra_harbor", "marianas"):
+        loc_id = "guam"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]
@@ -268,5 +280,7 @@ __all__ = [
     "run_anchorage_pipeline",
     "build_anchorage_notebook",
     "run_honolulu_pipeline",
-    "build_honolulu_notebook"
+    "build_honolulu_notebook",
+    "run_guam_pipeline",
+    "build_guam_notebook"
 ]

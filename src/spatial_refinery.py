@@ -273,6 +273,14 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 94000,
         "padd": "PADD 5",
         "primary_locales": ["Honolulu_HI"]
+    },
+    "Cabras_Island_Terminal": {
+        "name": "Cabras Island Commercial Petroleum Terminal (Apra Harbor, GU)",
+        "lat": 13.4443,
+        "lon": 144.6667,
+        "capacity_bpd": 0,
+        "padd": "PADD 7",
+        "primary_locales": ["Guam_GU"]
     }
 }
 
@@ -385,6 +393,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 21.3069,
         "lon": -157.8583,
         "zip": "96813"
+    },
+    "Guam_GU": {
+        "name": "Hagåtña & Apra Harbor Hub, Guam",
+        "lat": 13.4443,
+        "lon": 144.7937,
+        "zip": "96910"
     }
 }
 

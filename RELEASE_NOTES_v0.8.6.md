@@ -93,6 +93,23 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Registered trigger keywords and localized routing in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py) and [`src/discord_notifier.py`](src/discord_notifier.py).
   - Updated API normalization and `PADD_METADATA` (`carb_tax: 0.0`) in [`src/api_server.py`](src/api_server.py).
 
+### 11. Guam & U.S. Pacific Island Territories Calibration Hub — PADD 7 (`Guam_GU`, Issue #621)
+- **Decoupled Trans-Pacific Import Logistics & MOPS Benchmark**:
+  - Implemented dedicated regional forecasting and calibration hub for **Hagåtña / Apra Harbor, Guam (`Guam_GU`, `guam`)**, representing the **U.S. Pacific Island Territories petroleum district (`PADD 7`)** encompassing Guam, American Samoa, and CNMI.
+  - Decoupled from domestic North American pipelines and Gulf Coast RBOB; modeled 100% finished product imports via Medium Range (MR) product tankers originating from Asian refining hubs (Singapore Jurong, South Korea Ulsan/Yeosu, Japan) and Defense Logistics Agency (DLA) Energy bulk tenders.
+  - Anchored local wholesale acquisition costs to the **Mean of Platts Singapore (MOPS) 92 RON Mogas** landed benchmark (`spot_mops_92_rack`) plus trans-Pacific tanker freight charters and Cabras Island terminal throughput fees.
+- **Territorial Tax & Retail Oligopoly Structure**:
+  - Modeled Guam Liquid Fuel Tax ($0.150/gal) plus statutory Mass Transit surcharge ($0.040/gal) for a combined territorial tax burden of $0.190/gal ($0.374/gal composite with Federal excise).
+  - Preserved statutory Jones Act U.S.-build exemption documentation under 48 U.S.C. § 1421r.
+  - Modeled retail distribution dynamics across the three primary commercial operators: Mobil Oil Guam, IP&E (Shell), and South Pacific Petroleum Corporation (76).
+- **Extreme Weather Exposure & JTWC Typhoon Alley Modeling**:
+  - Integrated Joint Typhoon Warning Center (JTWC) and NOAA WFO Guam (`GUM` / `GUZ001`) tropical cyclone bulletins, modeling Category 4/5 super typhoons (e.g. Typhoon Mawar, Typhoon Bolaven), US Coast Guard Port Condition Zulu port closures, and post-storm retail panic surges.
+- **Hierarchical MinT Coherence, Geocoding & Notification Integration**:
+  - Registered `guam` in [`src/locations/specs.py`](src/locations/specs.py), created schema-valid [`data/regional_metadata/guam_gu.json`](data/regional_metadata/guam_gu.json), and built [`src/locations/guam/`](src/locations/guam/) package.
+  - Integrated `Guam_GU` and `PADD_7` into [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum coherence.
+  - Added Guam centroid `(13.4443, 144.7937)` and ZIP prefix `969` to `CALIBRATION_HUBS`, `ZIP_METRO_PREFIX_MAP`, and `STATE_PADD_MODEL_MAP` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
+  - Updated API normalization in [`src/api_server.py`](src/api_server.py), Discord notifier in [`src/discord_notifier.py`](src/discord_notifier.py), and intraday trigger keywords in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py).
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -105,6 +122,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
+| **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
@@ -117,7 +135,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
-* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`)
+* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`)
 * **LLM Engine & Deprecation Migration**:
   - Runtime generative extractions and agent tasks migrated from deprecated `gemini-2.5-flash` to `gemini-3.8-flash`.
   - Deprecated sampling parameters (`temperature`, `top_p`, `top_k`, `thinking_budget`) are completely removed; structured JSON extraction and evaluation tasks explicitly configure `thinking_level="low"`.
