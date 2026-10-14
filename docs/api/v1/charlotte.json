@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-14T07:18:22.978248",
+  "timestamp": "2026-10-14T13:27:54.821720",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.787,
+    "current_price_per_gal": 3.74,
     "source": "AAA Web Scraper (Charlotte, NC)",
     "provenance": {
       "source": "AAA Web Scraper (Charlotte, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-14T07:18:05Z"
+      "timestamp": "2026-10-14T13:27:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-20",
-    "current_base_price": 3.787,
-    "predicted_price_per_gal": 3.71,
+    "current_base_price": 3.74,
+    "predicted_price_per_gal": 3.663,
     "expected_change_dollars": -0.077,
-    "expected_change_percent": -2.03,
+    "expected_change_percent": -2.06,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.59,
-    "prediction_upper_95ci": 3.83,
+    "prediction_lower_95ci": 3.543,
+    "prediction_upper_95ci": 3.783,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.772,
-    "day_2_price": 3.74,
-    "day_3_price": 3.718,
-    "day_4_price": 3.723,
-    "day_5_price": 3.71,
+    "day_1_price": 3.725,
+    "day_2_price": 3.693,
+    "day_3_price": 3.671,
+    "day_4_price": 3.676,
+    "day_5_price": 3.663,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast $-0.077/gal (-2.03%): Driven primarily by Regional Logistics & Hub Delivery ($-0.031/gal), Futures & Commodity Benchmark ($-0.019/gal).",
+      "summary_text": "Charlotte NC forecast $-0.077/gal (-2.06%): Driven primarily by Regional Logistics & Hub Delivery ($-0.031/gal), Futures & Commodity Benchmark ($-0.019/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.031,
-          "impact_pct": -0.82,
+          "impact_pct": -0.83,
           "share_pct": 40.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.019,
-          "impact_pct": -0.5,
+          "impact_pct": -0.51,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.031,
-      "impact_pct": -0.82,
+      "impact_pct": -0.83,
       "share_pct": 40.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.019,
-      "impact_pct": -0.5,
+      "impact_pct": -0.51,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast $-0.077/gal (-2.03%): Driven primarily by Regional Logistics & Hub Delivery ($-0.031/gal), Futures & Commodity Benchmark ($-0.019/gal).",
+    "summary_text": "Charlotte NC forecast $-0.077/gal (-2.06%): Driven primarily by Regional Logistics & Hub Delivery ($-0.031/gal), Futures & Commodity Benchmark ($-0.019/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

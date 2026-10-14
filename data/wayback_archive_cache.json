@@ -11404,13 +11404,14 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMidkFVX3lxTE9IallURXBBNXZxaHdJLXNLR3lQNF9oV3hXTDU1T3laRTFvT0xCVnQzcDBEeWNqRkdWRER2Z2FlUlFkSmdMU3A0eWtVZlZFVTVOTXBRU21aTmN6anpHNVNfRUU1UHh3SlR2Unh4LWJteXYtTFVqaXc?oc=5": {
-    "timestamp": "2026-10-11T23:30:50.285801+00:00",
+    "timestamp": "2026-10-14T13:26:57.082959+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9IallURXBBNXZxaHdJLXNLR3lQNF9oV3hXTDU1T3laRTFvT0xCVnQzcDBEeWNqRkdWRER2Z2FlUlFkSmdMU3A0eWtVZlZFVTVOTXBRU21aTmN6anpHNVNfRUU1UHh3SlR2Unh4LWJteXYtTFVqaXc?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9IallURXBBNXZxaHdJLXNLR3lQNF9oV3hXTDU1T3laRTFvT0xCVnQzcDBEeWNqRkdWRER2Z2FlUlFkSmdMU3A0eWtVZlZFVTVOTXBRU21aTmN6anpHNVNfRUU1UHh3SlR2Unh4LWJteXYtTFVqaXc?oc=5",
     "headline": "Woman Goes To Racetrac For Gas. Then She Calls Her Husband Because She Sees 6 Fuel Choices - Motor1.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidkFVX3lxTE9IallURXBBNXZxaHdJLXNLR3lQNF9oV3hXTDU1T3laRTFvT0xCVnQzcDBEeWNqRkdWRER2Z2FlUlFkSmdMU3A0eWtVZlZFVTVOTXBRU21aTmN6anpHNVNfRUU1UHh3SlR2Unh4LWJteXYtTFVqaXc?oc=5",
-    "error": "The read operation timed out"
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMie0FVX3lxTE9sYnRzNlZ4NDVXTTRJdDRVczhtMmtUaTNCZy12S1ktQ2sydXFrOGJwdjZpRnlJZkhndzJlclk2ajI0RWNrcWZtR2ozSy04aFJlazctN09qajZaeWxkc3M4RGZOWWF3dGJ0d0NveG1QQzdnekRNY0pQWlJEZ9IBe0FVX3lxTE9sYnRzNlZ4NDVXTTRJdDRVczhtMmtUaTNCZy12S1ktQ2sydXFrOGJwdjZpRnlJZkhndzJlclk2ajI0RWNrcWZtR2ozSy04aFJlazctN09qajZaeWxkc3M4RGZOWWF3dGJ0d0NveG1QQzdnekRNY0pQWlJEZw?oc=5": {
     "timestamp": "2026-10-11T23:31:00.899855+00:00",
@@ -12082,5 +12083,32 @@
     "headline": "Will Phillips 66 (PSX) Face A Bayway Refinery Strike? - Yahoo Finance",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi9wFBVV95cUxNcnlOVHZNVGNDc0VWeC1EM0tDd2d2Qzg2N2NMTXVXNjl6Ri1zS0lNd2lfOFVmelNXcHc3QTJnMUxiSGtVVWdESEVoYVZBU2U0eFN2NXFmSXVmWTkzNklKb3pxWkQ0UmFkZlRhcWpjUGxnejFpX2dMQXU5SGk1S1U2ZUpJREVXd1VONUplaVdPS0RyWHBhUi1GTWhhNDVZeHpqZ1pZcGdIUXZkMjNLM0lERlNzdnpPeEpGa29iZi12Z0FlaFg2aUFETENObFJMWnF6cFBkaEg1N2JEUVBHZ21RSmxlTDhmcURCVjhwN0ZFU3l1N3hNYXRj?oc=5": {
+    "timestamp": "2026-10-14T13:26:30.788705+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxNcnlOVHZNVGNDc0VWeC1EM0tDd2d2Qzg2N2NMTXVXNjl6Ri1zS0lNd2lfOFVmelNXcHc3QTJnMUxiSGtVVWdESEVoYVZBU2U0eFN2NXFmSXVmWTkzNklKb3pxWkQ0UmFkZlRhcWpjUGxnejFpX2dMQXU5SGk1S1U2ZUpJREVXd1VONUplaVdPS0RyWHBhUi1GTWhhNDVZeHpqZ1pZcGdIUXZkMjNLM0lERlNzdnpPeEpGa29iZi12Z0FlaFg2aUFETENObFJMWnF6cFBkaEg1N2JEUVBHZ21RSmxlTDhmcURCVjhwN0ZFU3l1N3hNYXRj?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxNcnlOVHZNVGNDc0VWeC1EM0tDd2d2Qzg2N2NMTXVXNjl6Ri1zS0lNd2lfOFVmelNXcHc3QTJnMUxiSGtVVWdESEVoYVZBU2U0eFN2NXFmSXVmWTkzNklKb3pxWkQ0UmFkZlRhcWpjUGxnejFpX2dMQXU5SGk1S1U2ZUpJREVXd1VONUplaVdPS0RyWHBhUi1GTWhhNDVZeHpqZ1pZcGdIUXZkMjNLM0lERlNzdnpPeEpGa29iZi12Z0FlaFg2aUFETENObFJMWnF6cFBkaEg1N2JEUVBHZ21RSmxlTDhmcURCVjhwN0ZFU3l1N3hNYXRj?oc=5",
+    "headline": "Suspended fuel tax lifts NC to top three in US for lowest gas prices - Rocky Mount Telegram",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9wFBVV95cUxNcnlOVHZNVGNDc0VWeC1EM0tDd2d2Qzg2N2NMTXVXNjl6Ri1zS0lNd2lfOFVmelNXcHc3QTJnMUxiSGtVVWdESEVoYVZBU2U0eFN2NXFmSXVmWTkzNklKb3pxWkQ0UmFkZlRhcWpjUGxnejFpX2dMQXU5SGk1S1U2ZUpJREVXd1VONUplaVdPS0RyWHBhUi1GTWhhNDVZeHpqZ1pZcGdIUXZkMjNLM0lERlNzdnpPeEpGa29iZi12Z0FlaFg2aUFETENObFJMWnF6cFBkaEg1N2JEUVBHZ21RSmxlTDhmcURCVjhwN0ZFU3l1N3hNYXRj?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNSHRkTG9jRURPQVZ4SHJELTRZWlJSNlE4cUxxN0R6TS14M2NLX21Nc1pTS2RLUFJqekJXSlNmaEc0M1dhZFdXUDhkeDRrR2g0U3RLSUJnM0YxalJycnhvZjF2ZTA2OUFWWVpsM25JSGRKZHZPTTZFSGtuRzVYXzYyclA3NmJiUW5jZG42d29QbGl1WEc0ZS1vNENDNnFlVTNqQXlmN1NQT21EZnl5M2puN000YUUwbkVxb2dOOThHWWRIQQ?oc=5": {
+    "timestamp": "2026-10-14T13:26:41.557097+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNSHRkTG9jRURPQVZ4SHJELTRZWlJSNlE4cUxxN0R6TS14M2NLX21Nc1pTS2RLUFJqekJXSlNmaEc0M1dhZFdXUDhkeDRrR2g0U3RLSUJnM0YxalJycnhvZjF2ZTA2OUFWWVpsM25JSGRKZHZPTTZFSGtuRzVYXzYyclA3NmJiUW5jZG42d29QbGl1WEc0ZS1vNENDNnFlVTNqQXlmN1NQT21EZnl5M2puN000YUUwbkVxb2dOOThHWWRIQQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNSHRkTG9jRURPQVZ4SHJELTRZWlJSNlE4cUxxN0R6TS14M2NLX21Nc1pTS2RLUFJqekJXSlNmaEc0M1dhZFdXUDhkeDRrR2g0U3RLSUJnM0YxalJycnhvZjF2ZTA2OUFWWVpsM25JSGRKZHZPTTZFSGtuRzVYXzYyclA3NmJiUW5jZG42d29QbGl1WEc0ZS1vNENDNnFlVTNqQXlmN1NQT21EZnl5M2puN000YUUwbkVxb2dOOThHWWRIQQ?oc=5",
+    "headline": "Virginia Gas Prices: Cheapest and most expensive places to fill up - Oct. 14, 2026 - WSLS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxNSHRkTG9jRURPQVZ4SHJELTRZWlJSNlE4cUxxN0R6TS14M2NLX21Nc1pTS2RLUFJqekJXSlNmaEc0M1dhZFdXUDhkeDRrR2g0U3RLSUJnM0YxalJycnhvZjF2ZTA2OUFWWVpsM25JSGRKZHZPTTZFSGtuRzVYXzYyclA3NmJiUW5jZG42d29QbGl1WEc0ZS1vNENDNnFlVTNqQXlmN1NQT21EZnl5M2puN000YUUwbkVxb2dOOThHWWRIQQ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMivgFBVV95cUxQSm5KMGt6cDh1MzYtYXZjTnYxMVcyUXl0VnlZNUtvSVNpZWR6NXRYZ1Eyc0E0X0t6dXVPUXVBX1Fzb1I4aE4zVUxNVGtpdlVZUXk0ZF9yWDl1OG5FWkFSSFItS3lLdlRDVHJodkFzakY1RGtZaGctR2c0aUVVWmRBdURha0hERGpCbkx0UWxDd0MyS1FtQVdQMlg4YnRtdXdQM1VGXzcxWWdoZ01zY3plRldhQU5Qa1k5bkRNWkN3?oc=5": {
+    "timestamp": "2026-10-14T13:26:52.235670+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQSm5KMGt6cDh1MzYtYXZjTnYxMVcyUXl0VnlZNUtvSVNpZWR6NXRYZ1Eyc0E0X0t6dXVPUXVBX1Fzb1I4aE4zVUxNVGtpdlVZUXk0ZF9yWDl1OG5FWkFSSFItS3lLdlRDVHJodkFzakY1RGtZaGctR2c0aUVVWmRBdURha0hERGpCbkx0UWxDd0MyS1FtQVdQMlg4YnRtdXdQM1VGXzcxWWdoZ01zY3plRldhQU5Qa1k5bkRNWkN3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQSm5KMGt6cDh1MzYtYXZjTnYxMVcyUXl0VnlZNUtvSVNpZWR6NXRYZ1Eyc0E0X0t6dXVPUXVBX1Fzb1I4aE4zVUxNVGtpdlVZUXk0ZF9yWDl1OG5FWkFSSFItS3lLdlRDVHJodkFzakY1RGtZaGctR2c0aUVVWmRBdURha0hERGpCbkx0UWxDd0MyS1FtQVdQMlg4YnRtdXdQM1VGXzcxWWdoZ01zY3plRldhQU5Qa1k5bkRNWkN3?oc=5",
+    "headline": "Inflation jumps to 3.7% as gas and diesel prices squeeze consumers ahead of the midterms - NBC News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxQSm5KMGt6cDh1MzYtYXZjTnYxMVcyUXl0VnlZNUtvSVNpZWR6NXRYZ1Eyc0E0X0t6dXVPUXVBX1Fzb1I4aE4zVUxNVGtpdlVZUXk0ZF9yWDl1OG5FWkFSSFItS3lLdlRDVHJodkFzakY1RGtZaGctR2c0aUVVWmRBdURha0hERGpCbkx0UWxDd0MyS1FtQVdQMlg4YnRtdXdQM1VGXzcxWWdoZ01zY3plRldhQU5Qa1k5bkRNWkN3?oc=5",
+    "error": "The read operation timed out"
   }
 }

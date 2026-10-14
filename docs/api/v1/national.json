@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-14T07:18:20.993347",
+  "timestamp": "2026-10-14T13:27:53.609020",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.341,
+    "current_price_per_gal": 4.333,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-14T07:18:20Z"
+      "timestamp": "2026-10-14T13:27:53Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-20",
-    "current_base_price": 4.341,
-    "predicted_price_per_gal": 4.273,
+    "current_base_price": 4.333,
+    "predicted_price_per_gal": 4.265,
     "expected_change_dollars": -0.068,
     "expected_change_percent": -1.57,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 4.084,
-    "prediction_upper_95ci": 4.462,
+    "prediction_lower_95ci": 4.076,
+    "prediction_upper_95ci": 4.454,
     "calibration_method": "conformal",
     "calibration_sample_size": 16,
     "directional_hit_rate_historical": 0.125,
     "historical_mae_dollars": 0.2188,
     "evaluation_sample_size": 16,
-    "day_1_price": 4.327,
-    "day_2_price": 4.3,
-    "day_3_price": 4.281,
-    "day_4_price": 4.285,
-    "day_5_price": 4.273,
+    "day_1_price": 4.319,
+    "day_2_price": 4.292,
+    "day_3_price": 4.273,
+    "day_4_price": 4.277,
+    "day_5_price": 4.265,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -102,7 +102,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.031,
-          "impact_pct": -0.71,
+          "impact_pct": -0.72,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.031,
-      "impact_pct": -0.71,
+      "impact_pct": -0.72,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
