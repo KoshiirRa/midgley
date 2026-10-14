@@ -757,6 +757,39 @@ def get_san_juan_weather_dataset(include_live: bool = True) -> pd.DataFrame:
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_boston_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather, Coastal Nor'easter, Winter Freeze & Marine Storm Dataset for Boston Metro (MAZ015 / Zip 02108):
+    - NOAA NWS Coastal Flood & Marine Gale Warnings across Boston Harbor, Chelsea River, and Massachusetts Bay
+    - Winter Nor'easters and Arctic Freezes causing marine petroleum tanker discharge delays and heating oil demand surges
+    - Arctic cold snaps driving ISO-NE dual-fuel electric power generation switches and distillate reserve drawdowns
+    - Summer Air Quality & Ground-Level Ozone Action Days reinforcing EPA Reformulated Gasoline (RFG) summer blending standards
+    - Actively queries live NOAA alerts (MA, MAZ015), SPC convective risks (02108), and Open-Meteo degree days.
+    """
+    boston_weather_events = [
+        {"date": "2021-02-01", "headline": "NOAA NWS Winter Storm Warning: Major Nor'easter dumps 18 inches of snow across Greater Boston, delaying coastal fuel distribution and truck rack loading.", "zone": "MAZ015 (Boston Metro)", "weather_type": "Nor'easter / Heavy Snow"},
+        {"date": "2021-12-19", "headline": "NOAA NWS Coastal Flood Advisory: Astronomical high tides and northeast winds generate minor coastal flooding along Boston Harbor and Chelsea River piers.", "zone": "MAZ015 (Boston Harbor)", "weather_type": "Coastal Flood / High Tides"},
+        {"date": "2022-01-29", "headline": "NOAA NWS Blizzard Warning: Historic bomb cyclone dumps 24 inches on Boston with 70 mph wind gusts, closing Boston Harbor shipping channels and suspending vessel offloading.", "zone": "MAZ015 (Suffolk / Boston)", "weather_type": "Historic Blizzard / Bomb Cyclone"},
+        {"date": "2022-07-21", "headline": "NOAA NWS Heat Advisory: Multi-day 96°F heatwave across eastern Massachusetts prompts MassDEP ground-level ozone air quality alerts.", "zone": "MAZ015 (Boston Metro)", "weather_type": "Excessive Heat / Ozone Alert"},
+        {"date": "2022-12-24", "headline": "NOAA NWS Flash Freeze & High Wind Warning: Arctic cold front plunges temperatures 40 degrees in six hours with 60 mph gusts, straining regional heating oil and dual-fuel grid supplies.", "zone": "MAZ015 (Boston Metro)", "weather_type": "Flash Freeze / Arctic Front"},
+        {"date": "2023-02-04", "headline": "NOAA NWS Wind Chill Warning: Historic polar vortex outbreak drops Boston wind chills to -36°F, causing critical freeze-off concerns and emergency fuel oil burn.", "zone": "MAZ015 (Eastern MA)", "weather_type": "Extreme Polar Vortex"},
+        {"date": "2023-09-16", "headline": "NOAA NWS Tropical Storm Watch: Post-tropical Cyclone Lee generates 15-foot seas in Massachusetts Bay, pausing outer harbor vessel pilotage.", "zone": "MAZ015 / ANZ251", "weather_type": "Tropical Storm / Marine Gale"},
+        {"date": "2024-01-10", "headline": "NOAA NWS High Wind & Coastal Flood Warning: Severe storm causes storm surge flooding along East Boston and Chelsea River waterfronts, slowing rack operations.", "zone": "MAZ015 (Chelsea River / Boston)", "weather_type": "Coastal Storm Surge"}
+    ]
+    events = list(boston_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["MA", "MAZ015"],
+            zip_code="02108",
+            hub_code="Boston_MA",
+            region_label="Boston Metro & New England"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
 # ==============================================================================
 # wxs.us Weather & SPC Convective Outlook Integration (Token-Efficient Ingestion)
 # ==============================================================================
@@ -792,7 +825,8 @@ METRO_ZIP_MAP = {
     "Anchorage_AK": "99501",    # Port of Alaska & Cook Inlet Kenai Refinery
     "Honolulu_HI": "96813",     # Par Hawaii Kapolei & Island Barge Hub
     "Guam_GU": "96910",         # Apra Harbor & Cabras Island Fuel Terminal (PADD 7)
-    "San_Juan_PR": "00901"      # San Juan Bay Deepwater Terminals (PADD 6)
+    "San_Juan_PR": "00901",     # San Juan Bay Deepwater Terminals (PADD 6)
+    "Boston_MA": "02108"        # Boston Harbor & Chelsea River Marine Terminals (PADD 1A)
 }
 
 
@@ -1008,7 +1042,8 @@ class OpenMeteoDegreeDaysConnector:
             "Port_St_Lucie_FL": {"lat": 27.273, "lon": -80.358, "name": "Port Everglades & Port Canaveral Marine Terminals"},
             "Chicago_IL": {"lat": 41.678, "lon": -87.498, "name": "BP Whiting IN & Citgo Lemont IL Refineries"},
             "Houston_TX": {"lat": 29.760, "lon": -95.369, "name": "Houston Ship Channel & USGC Refining Complex"},
-            "Los_Angeles_CA": {"lat": 33.919, "lon": -118.416, "name": "Chevron El Segundo & Wilmington/Torrance Refining Hub"}
+            "Los_Angeles_CA": {"lat": 33.919, "lon": -118.416, "name": "Chevron El Segundo & Wilmington/Torrance Refining Hub"},
+            "Boston_MA": {"lat": 42.360, "lon": -71.059, "name": "Boston Harbor & Chelsea River Marine Terminals"}
         }
 
     def save_degree_days_vintage_record(self, record: dict, filepath: str = None) -> None:
@@ -1133,7 +1168,8 @@ PIRATE_WEATHER_REFINING_HUBS = {
     "port_st_lucie_everglades": {"name": "Port Everglades & Port Canaveral Marine Terminals", "lat": 27.273, "lon": -80.358},
     "gulf_coast_houston": {"name": "Gulf Coast Refining Complex (Houston / Baytown)", "lat": 29.760, "lon": -95.369},
     "chicago_whiting": {"name": "BP Whiting IN & Citgo Lemont IL Refineries", "lat": 41.678, "lon": -87.498},
-    "los_angeles_el_segundo": {"name": "Chevron El Segundo & Wilmington/Torrance Refining Complex", "lat": 33.919, "lon": -118.416}
+    "los_angeles_el_segundo": {"name": "Chevron El Segundo & Wilmington/Torrance Refining Complex", "lat": 33.919, "lon": -118.416},
+    "boston_chelsea": {"name": "Boston Harbor Chelsea River Marine Terminals", "lat": 42.392, "lon": -71.033}
 }
 
 
@@ -1251,7 +1287,10 @@ class PirateWeatherConnector:
             "socal": "los_angeles_el_segundo",
             "el_segundo": "los_angeles_el_segundo",
             "torrance": "los_angeles_el_segundo",
-            "wilmington": "los_angeles_el_segundo"
+            "wilmington": "los_angeles_el_segundo",
+            "boston": "boston_chelsea",
+            "boston_ma": "boston_chelsea",
+            "chelsea": "boston_chelsea"
         }
         hub_mapped = REGION_TO_HUB_MAP.get(key)
         if hub_mapped and hub_mapped in self.hubs:

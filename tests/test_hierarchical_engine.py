@@ -25,7 +25,9 @@ class TestHierarchicalEngine(unittest.TestCase):
         self.assertEqual(len(node_names), n)
         self.assertEqual(node_names[0], "National")
         self.assertIn("PADD_1B", node_names)
+        self.assertIn("PADD_1A", node_names)
         self.assertIn("Tulsa_OK", node_names)
+        self.assertIn("Boston_MA", node_names)
 
         # Bottom rows should be identity matrix
         bottom_block = S[1 + k:, :]
@@ -37,6 +39,7 @@ class TestHierarchicalEngine(unittest.TestCase):
         # Incoherent synthetic base forecasts
         base_forecasts = {
             "National": 3.45,
+            "PADD_1A": 3.45,
             "PADD_1B": 3.70,
             "PADD_1C": 3.35,
             "PADD_2": 3.20,
@@ -44,6 +47,7 @@ class TestHierarchicalEngine(unittest.TestCase):
             "PADD_4": 3.15,
             "PADD_5": 5.10,
             "Tulsa_OK": 3.10,
+            "Boston_MA": 3.45,
             "Newark_DE": 3.75,
             "Cincinnati_OH": 3.25,
             "Cincinnati_KY": 3.15,
@@ -105,6 +109,10 @@ class TestHierarchicalEngine(unittest.TestCase):
         # 7. PADD_7 == Guam_GU
         padd7_calc = reconciled["Guam_GU"]
         self.assertAlmostEqual(reconciled["PADD_7"], padd7_calc, places=3)
+
+        # 8. PADD_1A == Boston_MA
+        padd1a_calc = reconciled["Boston_MA"]
+        self.assertAlmostEqual(reconciled["PADD_1A"], padd1a_calc, places=3)
 
     def test_empirical_bayes_shrinkage_regression(self):
         np.random.seed(42)

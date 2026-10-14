@@ -122,6 +122,14 @@ def test_metro_cluster_zip_resolution():
     assert res_sj["padd_region"] == "PADD 6"
     assert res_sj["hub_baseline_tax_rate"] == 0.160
 
+    res_bos = resolve_zip_code("02108")
+    assert res_bos["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_bos["is_metro_cluster_hit"] is True
+    assert res_bos["locale_code"] == "boston"
+    assert res_bos["state"] == "MA"
+    assert res_bos["padd_region"] == "PADD 1A"
+    assert res_bos["hub_baseline_tax_rate"] == 0.240
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
@@ -158,6 +166,13 @@ def test_out_of_metro_zip_resolution_and_telemetry():
     assert res_nv["state"] == "NV"
     assert res_nv["padd_region"] == "PADD 5"
     assert res_nv["locale_code"] == "phoenix"
+
+    # New Hampshire out-of-cluster resolves to Boston / New England hub in PADD 1A
+    res_nh = resolve_zip_code("03301")
+    assert res_nh["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_nh["state"] == "NH"
+    assert res_nh["padd_region"] == "PADD 1A"
+    assert res_nh["locale_code"] == "boston"
 
 
 def test_unmapped_telemetry_aggregation():
@@ -234,6 +249,7 @@ def test_leading_zero_zip_resolution():
     assert res_ma_int["zip_code"] == "02138"
     assert res_ma_int["state"] == "MA"
     assert res_ma_int["prefix_3"] == "021"
+    assert res_ma_int["locale_code"] == "boston"
 
     # 3. ZIP+4 with leading zero
     res_nj_plus4 = resolve_zip_code("07001-1234")
@@ -295,6 +311,14 @@ def test_coordinate_resolution_metro_hit():
     assert res_sj_coord["locale_code"] == "san_juan"
     assert res_sj_coord["state"] == "PR"
     assert res_sj_coord["distance_to_hub_miles"] < 5.0
+
+    # 7. Boston Downtown coordinates (42.3601, -71.0589)
+    res_bos_coord = resolve_coordinates(42.3601, -71.0589)
+    assert res_bos_coord["status"] == "success"
+    assert res_bos_coord["is_metro_cluster_hit"] is True
+    assert res_bos_coord["locale_code"] == "boston"
+    assert res_bos_coord["state"] == "MA"
+    assert res_bos_coord["distance_to_hub_miles"] < 5.0
 
 
 def test_coordinate_resolution_spatial_fallback():

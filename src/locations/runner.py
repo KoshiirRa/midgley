@@ -71,6 +71,8 @@ REGION_MODULE_MAP = {
     "guam_gu": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
     "san_juan": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
     "san_juan_pr": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
+    "boston": ("src.locations.boston.regional", "fetch_boston_market_data", "get_boston_regional_events", "Boston_MA"),
+    "boston_ma": ("src.locations.boston.regional", "fetch_boston_market_data", "get_boston_regional_events", "Boston_MA"),
 }
 
 

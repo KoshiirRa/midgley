@@ -99,7 +99,8 @@ DIESEL_BASE_ANCHORS = {
     "anchorage": 4.150,
     "honolulu": 5.450,
     "guam": 5.250,
-    "san_juan": 3.950
+    "san_juan": 3.950,
+    "boston": 4.150
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -121,7 +122,8 @@ LOCALE_TO_REGION_MAP = {
     "anchorage": "Anchorage_AK",
     "honolulu": "Honolulu_HI",
     "guam": "Guam_GU",
-    "san_juan": "San_Juan_PR"
+    "san_juan": "San_Juan_PR",
+    "boston": "Boston_MA"
 }
 
 

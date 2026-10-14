@@ -371,6 +371,8 @@ LOCALE_COMPONENT_WEIGHTS = {
     "Guam": {"regional_logistics": 0.50, "futures_commodity": 0.20, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
     "San_Juan_PR": {"regional_logistics": 0.45, "futures_commodity": 0.25, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
     "San_Juan": {"regional_logistics": 0.45, "futures_commodity": 0.25, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
+    "Boston_MA": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
+    "Boston": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
     "National": {"futures_commodity": 0.45, "refining_crack_margin": 0.25, "unstructured_sentiment": 0.15, "weather_environmental": 0.075, "regional_logistics": 0.05, "tax_regulatory": 0.025}
 }
 

@@ -1172,7 +1172,7 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             Ingests real-time retail street pump benchmarks via GasBuddy GraphQL API and AAA Daily Fuel Gauge scraper. Backfills actual outcomes and anchors local baseline prices.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston, Los Angeles, Denver, New York, Seattle, Phoenix, Anchorage, Honolulu, Guam, San Juan</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston, Los Angeles, Denver, New York, Seattle, Phoenix, Anchorage, Honolulu, Guam, San Juan, Boston</div>
                             <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/live_fuel_feed.py</code></div>
                         </div>
                     </div>

@@ -56,6 +56,8 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "969": "guam",
     # 006-009: San Juan Metro & Caribbean Territories Hub (Issue #620)
     "006": "san_juan", "007": "san_juan", "008": "san_juan", "009": "san_juan",
+    # 021-022, 024: Boston Metro & New England Regional Hub (Issue #619)
+    "021": "boston", "022": "boston", "024": "boston",
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -139,12 +141,12 @@ STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
     "AK": {"padd": "PADD 5", "padd_name": "Alaska", "fallback_locale": "anchorage", "fallback_model": "Anchorage_AK (PADD 5D Alaska)", "state_tax": 0.089},
     "HI": {"padd": "PADD 5", "padd_name": "Hawaii", "fallback_locale": "honolulu", "fallback_model": "Honolulu_HI (PADD 5D Hawaii)", "state_tax": 0.160},
     # PADD 1A (New England)
-    "ME": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.300},
-    "NH": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.222},
-    "VT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.310},
-    "MA": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.240},
-    "RI": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.370},
-    "CT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.250},
+    "ME": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.300},
+    "NH": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.222},
+    "VT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.310},
+    "MA": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.240},
+    "RI": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.370},
+    "CT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.250},
     # PADD 1B (Central Atlantic)
     "NY": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "new_york", "fallback_model": "New_York_NY (PADD 1B)", "state_tax": 0.472},
     "NJ": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.423},
@@ -235,6 +237,7 @@ HUB_BASELINE_TAXES: Dict[str, float] = {
     "honolulu": 0.330,
     "guam": 0.190,
     "san_juan": 0.160,
+    "boston": 0.240,
     "national": 0.184
 }
 
@@ -863,6 +866,17 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd_name": "Caribbean Territories",
         "state_tax": 0.160,
         "max_radius_miles": 200.0
+    },
+    "boston": {
+        "name": "Boston Metro & New England Hub, MA",
+        "region_id": "Boston_MA",
+        "lat": 42.3601,
+        "lon": -71.0589,
+        "state": "MA",
+        "padd": "PADD 1A",
+        "padd_name": "New England",
+        "state_tax": 0.240,
+        "max_radius_miles": 120.0
     },
 }
 

@@ -122,6 +122,10 @@ CANONICAL_LOCALE_ALIASES: Dict[str, str] = {
     "puerto_rico": "San_Juan",
     "pr": "San_Juan",
     "sju": "San_Juan",
+    "boston": "Boston",
+    "boston_ma": "Boston",
+    "bos": "Boston",
+    "new_england": "Boston",
 }
 
 SUPPORTED_LOCALES = [
@@ -144,6 +148,7 @@ SUPPORTED_LOCALES = [
     "Honolulu",
     "Guam",
     "San_Juan",
+    "Boston",
 ]
 
 VALID_DIRECTION_FILTERS = {"all_shocks", "spikes_only", "drops_only"}
