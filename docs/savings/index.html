@@ -159,15 +159,15 @@
                 <div class="space-y-2">
                     <label for="regionPreset" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
                     <select id="regionPreset" aria-label="Target Market or Metro Region" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
-                        <option value="Cincinnati_OH" selected>Cincinnati, OH/KY Retail ($3.894/gal)</option>
-                        <option value="National">National Wholesale RBOB ($3.131/gal)</option>
-                        <option value="Tulsa_OK">Tulsa, OK Retail ($4.001/gal)</option>
-                        <option value="Newark_DE">Newark, DE Retail ($4.238/gal)</option>
-                        <option value="Greenville_NC">Greenville, NC Retail ($3.914/gal)</option>
-                        <option value="Charlotte_NC">Charlotte, NC Retail ($3.899/gal)</option>
-                        <option value="Port_St_Lucie_FL">Port St. Lucie, FL Retail ($4.102/gal)</option>
-                        <option value="Oakland_CA">Oakland, CA Retail ($6.365/gal)</option>
-                        <option value="BayArea_CA">SF Bay Area Region ($6.454/gal)</option>
+                        <option value="Cincinnati_OH" selected>Cincinnati, OH/KY Retail ($3.861/gal)</option>
+                        <option value="National">National Wholesale RBOB ($3.152/gal)</option>
+                        <option value="Tulsa_OK">Tulsa, OK Retail ($3.992/gal)</option>
+                        <option value="Newark_DE">Newark, DE Retail ($4.212/gal)</option>
+                        <option value="Greenville_NC">Greenville, NC Retail ($3.812/gal)</option>
+                        <option value="Charlotte_NC">Charlotte, NC Retail ($3.788/gal)</option>
+                        <option value="Port_St_Lucie_FL">Port St. Lucie, FL Retail ($4.131/gal)</option>
+                        <option value="Oakland_CA">Oakland, CA Retail ($6.335/gal)</option>
+                        <option value="BayArea_CA">SF Bay Area Region ($6.424/gal)</option>
                         <option value="custom">Custom Local Pump Price...</option>
                     </select>
                 </div>
@@ -274,7 +274,7 @@
 
     <!-- Interactive Calculation Script -->
     <script>
-        const REGIONAL_TRAJECTORIES = {"Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 3.894, "trajectory": [3.894, 3.894, 3.894, 3.894, 3.894, 3.894]}, "National": {"name": "National Wholesale RBOB", "base": 3.131, "trajectory": [3.131, 3.079, 3.032, 3.009, 3.021, 3.015]}, "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 4.001, "trajectory": [4.001, 4.001, 4.001, 4.001, 4.001, 4.001]}, "Newark_DE": {"name": "Newark, DE Retail", "base": 4.238, "trajectory": [4.238, 4.168, 4.106, 4.075, 4.091, 4.083]}, "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.914, "trajectory": [3.914, 3.849, 3.792, 3.763, 3.777, 3.77]}, "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.899, "trajectory": [3.899, 3.835, 3.777, 3.749, 3.763, 3.756]}, "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 4.102, "trajectory": [4.102, 4.033, 3.973, 3.942, 3.957, 3.95]}, "Oakland_CA": {"name": "Oakland, CA Retail", "base": 6.365, "trajectory": [6.365, 6.365, 6.365, 6.365, 6.365, 6.365]}, "BayArea_CA": {"name": "SF Bay Area Region", "base": 6.454, "trajectory": [6.454, 6.349, 6.255, 6.208, 6.232, 6.22]}};
+        const REGIONAL_TRAJECTORIES = {"Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 3.861, "trajectory": [3.861, 3.861, 3.861, 3.861, 3.861, 3.861]}, "National": {"name": "National Wholesale RBOB", "base": 3.152, "trajectory": [3.152, 3.121, 3.094, 3.08, 3.087, 3.083]}, "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 3.992, "trajectory": [3.992, 3.992, 3.992, 3.992, 3.992, 3.992]}, "Newark_DE": {"name": "Newark, DE Retail", "base": 4.212, "trajectory": [4.212, 4.171, 4.135, 4.117, 4.126, 4.122]}, "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.812, "trajectory": [3.812, 3.775, 3.741, 3.725, 3.733, 3.729]}, "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.788, "trajectory": [3.788, 3.753, 3.723, 3.707, 3.715, 3.711]}, "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 4.131, "trajectory": [4.131, 4.091, 4.055, 4.037, 4.046, 4.041]}, "Oakland_CA": {"name": "Oakland, CA Retail", "base": 6.335, "trajectory": [6.335, 6.335, 6.335, 6.335, 6.335, 6.335]}, "BayArea_CA": {"name": "SF Bay Area Region", "base": 6.424, "trajectory": [6.424, 6.361, 6.306, 6.278, 6.292, 6.285]}};
 
         function applyVehiclePreset() {
             const val = document.getElementById('vehiclePreset').value;
