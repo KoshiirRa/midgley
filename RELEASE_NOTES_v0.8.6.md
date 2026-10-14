@@ -1,6 +1,6 @@
 # Release Notes - v0.8.6 (Draft)
 
-Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with five major U.S. refining and consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, and **New York Harbor & New York State**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
+Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with nine major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, and the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
 
 ---
 
@@ -141,7 +141,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 ```bash
 python scripts/register_discord_commands.py --dry-run
 TESTING=1 pytest -v tests/test_docs_parity.py tests/test_event_analyzer.py tests/test_alpha_factor_miner.py tests/test_pasa_research_agent.py tests/test_weekly_issue_reporter.py tests/test_system_telemetry.py tests/test_tokentab_accounting.py tests/test_scenario_simulator.py tests/test_oilpriceapi_dynamic.py tests/test_oilpriceapi_ingestion.py
-TESTING=1 pytest -v tests/test_declarative_regions.py tests/test_locations.py tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_api_server.py tests/test_hierarchical_engine.py tests/test_zero_cost_fallbacks.py tests/test_hindsight_benchmark.py tests/test_open_source_ai_radar.py tests/test_system_telemetry.py tests/test_docs_links.py
+TESTING=1 pytest -v tests/test_declarative_regions.py tests/test_locations.py tests/test_regional_metadata.py tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_api_server.py tests/test_hierarchical_engine.py tests/test_zero_cost_fallbacks.py tests/test_hindsight_benchmark.py tests/test_open_source_ai_radar.py tests/test_system_telemetry.py tests/test_docs_links.py
 npx vitest run tests/workers.test.ts
 ```
 
