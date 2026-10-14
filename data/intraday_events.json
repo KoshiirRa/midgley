@@ -5611,5 +5611,26 @@
       "overall_price_pressure": -0.4
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T18:26:50.977909",
+    "headline": "Tariff Pass-Through and the Energy Shock: Why the Pump Has Weighed on Inflation More Than Customs - https://economy.ac/",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA3M1c1dkdwOGpkSVNsQ2dCcDNrSExwMXREN3JTNzNhakkwOFRWczkwYUFvT0ZIcXlXYzJ3UHItSEFUV3d5ZXkyRTNHbHFnc2FaN252UThPeXNGQQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA3M1c1dkdwOGpkSVNsQ2dCcDNrSExwMXREN3JTNzNhakkwOFRWczkwYUFvT0ZIcXlXYzJ3UHItSEFUV3d5ZXkyRTNHbHFnc2FaN252UThPeXNGQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiWkFVX3lxTFA3M1c1dkdwOGpkSVNsQ2dCcDNrSExwMXREN3JTNzNhakkwOFRWczkwYUFvT0ZIcXlXYzJ3UHItSEFUV3d5ZXkyRTNHbHFnc2FaN252UThPeXNGQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.5
+    },
+    "discord_notified": true
   }
 ]
