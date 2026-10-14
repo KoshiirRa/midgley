@@ -305,7 +305,7 @@ def test_zip_code_subscription_and_telemetry_heatmap_update(tmp_path):
         assert top_zips["64101"]["hit_count"] >= 1
         assert "74103" not in top_zips
 
-        # 3. Test significant departure region (ZIP 12946 Lake Placid, NY -> PADD 1B Newark DE fallback)
+        # 3. Test New York resolution (ZIP 12946 Lake Placid, NY -> Native New York Hub, Issue #635)
         resp_ny = client.post(
             "/api/v1/notifications/discord/subscribe",
             json={
@@ -324,10 +324,31 @@ def test_zip_code_subscription_and_telemetry_heatmap_update(tmp_path):
         assert ny_res["location_name"] == "Lake Placid, NY"
         assert ny_res["state"] == "NY"
         assert ny_res["padd_region"] == "PADD 1B"
-        assert ny_res["hub_baseline_tax_rate"] == 0.230
-        assert ny_res["tax_delta_per_gal"] == 0.242
-        assert ny_res["is_significant_departure"] is True
-        assert ny_res["tracking_issue_number"] == 635
+        assert ny_res["locale_code"] == "new_york"
+        assert ny_res["hub_baseline_tax_rate"] == 0.472
+        assert ny_res["tax_delta_per_gal"] == 0.0
+
+        # 4. Test significant departure region (ZIP 19104 Philadelphia, PA -> PADD 1B Newark DE fallback)
+        resp_pa = client.post(
+            "/api/v1/notifications/discord/subscribe",
+            json={
+                "delivery_type": "discord_dm",
+                "discord_user_id": "112233445566778899",
+                "zip_codes": ["19104"],
+                "minimum_shock_threshold": 0.25,
+                "direction_filter": "all_shocks",
+            }
+        )
+        assert resp_pa.status_code == 200
+        sub_pa = resp_pa.json()["subscription"]
+        assert sub_pa["zip_codes"] == ["19104"]
+        pa_res = sub_pa["zip_resolutions"][0]
+        assert pa_res["zip_code"] == "19104"
+        assert pa_res["state"] == "PA"
+        assert pa_res["padd_region"] == "PADD 1B"
+        assert pa_res["hub_baseline_tax_rate"] == 0.230
+        assert pa_res["tax_delta_per_gal"] == 0.346
+        assert pa_res["is_significant_departure"] is True
 
 
 def test_sync_edge_subscriptions(tmp_path):

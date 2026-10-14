@@ -275,6 +275,26 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "locales": ["denver", "national"],
         "season_label": "Front Range 7.8 psi Summer RVP Transition Window (May 01 – Sep 15)",
         "peak_label": "Peak Summer Spec Transition Squeeze (May 15 – Jun 15)"
+    },
+    "buckeye_pipeline_linden_disruption": {
+        "name": "Buckeye Pipeline Linden Terminal Disruption",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["new_york", "national"],
+        "season_label": "Evergreen Year-Round Midstream Pipeline Disruption",
+        "peak_label": None
+    },
+    "ny_harbor_barge_freeze_halt": {
+        "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+        "category": "weather",
+        "active_window": (12, 1, 2, 28),
+        "peak_window": (1, 1, 1, 31),
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["new_york", "national"],
+        "season_label": "Winter Marine Barge Freeze-Up Risk (Dec 01 – Feb 28)",
+        "peak_label": "Peak Ice Jam Squeeze (Jan 01 – Jan 31)"
     }
 }
 

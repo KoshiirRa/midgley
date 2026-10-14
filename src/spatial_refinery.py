@@ -209,6 +209,14 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 103000,
         "padd": "PADD 4",
         "primary_locales": ["Denver_CO"]
+    },
+    "Phillips66_Bayway": {
+        "name": "Phillips 66 Bayway Refinery (Linden, NJ / NY Harbor)",
+        "lat": 40.6387,
+        "lon": -74.2238,
+        "capacity_bpd": 258000,
+        "padd": "PADD 1B",
+        "primary_locales": ["New_York_NY"]
     }
 }
 
@@ -291,6 +299,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 39.7392,
         "lon": -104.9903,
         "zip": "80202"
+    },
+    "New_York_NY": {
+        "name": "New York Metro & State Hub, NY",
+        "lat": 40.7128,
+        "lon": -74.0060,
+        "zip": "10001"
     }
 }
 

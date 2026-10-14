@@ -92,7 +92,8 @@ DIESEL_BASE_ANCHORS = {
     "chicago": 3.890,
     "houston": 3.450,
     "los_angeles": 5.190,
-    "denver": 3.750
+    "denver": 3.750,
+    "new_york": 4.150
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -107,7 +108,8 @@ LOCALE_TO_REGION_MAP = {
     "chicago": "Chicago_IL",
     "houston": "Houston_TX",
     "los_angeles": "Los_Angeles_CA",
-    "denver": "Denver_CO"
+    "denver": "Denver_CO",
+    "new_york": "New_York_NY"
 }
 
 

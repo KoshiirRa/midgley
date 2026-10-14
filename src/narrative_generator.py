@@ -134,6 +134,12 @@ def generate_metro_narrative(
                 ("Front Range Summer Ozone Nonattainment RVP Blending Premium", "ENVIRONMENTAL_RVP"),
                 ("Rockies Isolated Product Logistics & DJ Basin Sweet Differentials", "ISOLATED_LOGISTICS"),
             ]
+        elif "new_york" in reg_str or "new york" in reg_str:
+            factors = [
+                ("NY Harbor RBOB Spot Parity & Barge Lightering Logistics", "SPOT_BASIS"),
+                ("New York State Statutory Fuel Tax & PBT Burden", "TAX_REGULATORY"),
+                ("Buckeye Pipeline & Midstream Rack Distribution", "REGIONAL_LOGISTICS"),
+            ]
         else:
             factors = [
                 ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
@@ -431,6 +437,32 @@ def generate_metro_narrative(
             detailed_prose = (
                 f"Denver metropolitan retail prices are projected to hold steady{hub_info}, as balanced throughput from Suncor Commerce City "
                 f"matches Front Range commuter demand across Adams, Arapahoe, Jefferson, and Denver counties."
+            )
+
+    elif "new_york" in region_lower or "new york" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["NY Harbor Spot Easing", "Buckeye Midstream Stability", "Bayway FCCU Run-Rate Cushion"]
+            headline_summary = f"New York Harbor & NY State retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"New York metropolitan and state retail prices are projected to ease lower{hub_info}, as high operable throughput "
+                f"at Phillips 66 Bayway (258 kbpd) and stable Buckeye Pipeline terminal deliveries compress prompt New York Harbor "
+                f"barge spot basis. While New York's heavy statutory baseline tax burden ($0.472/gal) sets a firm floor, softening "
+                f"wholesale spot prices are translating into downward pump relief."
+            )
+        elif calc_delta > 0.005:
+            badges = ["NY Harbor Spot Tightness", "Buckeye Pipeline Allocations", "Statutory Tax Load Exposure"]
+            headline_summary = f"New York Harbor & NY State retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"New York metropolitan and statewide fuel pricing reflects New York Harbor's physical clearing hub{hub_info}. "
+                f"Prompt NYMEX RBOB barge basis premiums, Buckeye Pipeline Linden terminal allocations to Upstate New York, and "
+                f"New York's statutory state fuel taxes ($0.472/gal baseline plus county sales surcharges) amplify upward wholesale cost pass-through to retail dispensers."
+            )
+        else:
+            badges = ["New York Harbor Barge Parity", "Buckeye Midstream Parity"]
+            headline_summary = f"New York Harbor & NY State retail prices are projected to remain stable."
+            detailed_prose = (
+                f"New York retail prices are projected to hold steady{hub_info}, as balanced throughput from Bayway and coastal "
+                f"waterborne receipts matches regional commuter and transport demand across New York City, Long Island, and Upstate corridors."
             )
 
     else:

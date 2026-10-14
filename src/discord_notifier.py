@@ -82,6 +82,18 @@ CANONICAL_LOCALE_ALIASES: Dict[str, str] = {
     "la": "Los_Angeles",
     "la_basin": "Los_Angeles",
     "socal": "Los_Angeles",
+    "denver": "Denver",
+    "denver_co": "Denver",
+    "rocky_mountain": "Denver",
+    "padd4": "Denver",
+    "padd_4": "Denver",
+    "new_york": "New_York",
+    "new_york_ny": "New_York",
+    "nyc": "New_York",
+    "ny": "New_York",
+    "ny_harbor": "New_York",
+    "ny_state": "New_York",
+    "new_york_metro": "New_York",
 }
 
 SUPPORTED_LOCALES = [
@@ -96,6 +108,8 @@ SUPPORTED_LOCALES = [
     "Chicago",
     "Houston",
     "Los_Angeles",
+    "Denver",
+    "New_York",
 ]
 
 VALID_DIRECTION_FILTERS = {"all_shocks", "spikes_only", "drops_only"}

@@ -56,6 +56,9 @@ REGION_MODULE_MAP = {
     "los_angeles_ca": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
     "denver": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
     "denver_co": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
+    "new_york": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "new_york_ny": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "nyc": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
 }
 
 

@@ -216,6 +216,13 @@ REGION_METADATA = {
         "static_anchor": 3.150,
         "name": "Denver, CO Metro Retail",
         "aaa_keywords": ["Denver", "Colorado", "Boulder", "State Average"]
+    },
+    "New_York_NY": {
+        "zip": "10001",
+        "state": "NY",
+        "static_anchor": 3.480,
+        "name": "New York, NY Metro Retail",
+        "aaa_keywords": ["New York", "New York City", "Manhattan", "Long Island", "State Average"]
     }
 }
 
@@ -451,7 +458,8 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                     "Chicago_IL": 1.150,
                     "Houston_TX": 0.520,
                     "Los_Angeles_CA": 2.470,
-                    "Denver_CO": 0.850
+                    "Denver_CO": 0.850,
+                    "New_York_NY": 1.180
                 }
                 offset = margins.get(region_code, 0.95)
                 est_price = latest_rbob + offset

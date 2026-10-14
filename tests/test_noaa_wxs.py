@@ -280,3 +280,45 @@ def test_get_denver_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
     headlines = df["headline"].tolist()
     assert any("Blizzard Warning" in h for h in headlines)
     assert any("Freeze Warning" in h for h in headlines)
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_new_york_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_new_york_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-ny-123",
+            "area": "NYZ072",
+            "event": "Coastal Flood Warning",
+            "headline": "NOAA NWS Coastal Flood Warning for New York Harbor and Hudson River",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Severe Thunderstorm Watch"],
+        "convective_risk_score": 0.40,
+        "categorical_risk": "MRGL",
+        "tornado_risk_score": 0.10,
+        "hail_risk_score": 0.30,
+        "wind_risk_score": 0.50
+    }
+    mock_meteo.return_value = {
+        "hub_code": "New_York_NY",
+        "min_temp_f": 18.0,
+        "max_temp_f": 32.0,
+        "heating_degree_days_hdd": 40.0,
+        "cooling_degree_days_cdd": 0.0,
+        "freeze_warning": True,
+        "extreme_heat_warning": False
+    }
+
+    df = get_new_york_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Coastal Flood Warning" in h for h in headlines)
+    assert any("Freeze Warning" in h for h in headlines)

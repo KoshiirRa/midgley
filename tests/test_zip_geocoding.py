@@ -70,6 +70,18 @@ def test_metro_cluster_zip_resolution():
     assert res_denver["locale_code"] == "denver"
     assert res_denver["state"] == "CO"
 
+    res_nyc = resolve_zip_code("10001")
+    assert res_nyc["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_nyc["is_metro_cluster_hit"] is True
+    assert res_nyc["locale_code"] == "new_york"
+    assert res_nyc["state"] == "NY"
+    assert res_nyc["hub_baseline_tax_rate"] == 0.472
+
+    res_lake_placid = resolve_zip_code("12946")
+    assert res_lake_placid["locale_code"] == "new_york"
+    assert res_lake_placid["state"] == "NY"
+    assert res_lake_placid["hub_baseline_tax_rate"] == 0.472
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
@@ -87,10 +99,11 @@ def test_out_of_metro_zip_resolution_and_telemetry():
     assert res_dallas["state"] == "TX"
     assert res_dallas["padd_region"] == "PADD 3"
 
-    res_nyc = resolve_zip_code("10001")
-    assert res_nyc["state"] == "NY"
-    assert res_nyc["padd_region"] == "PADD 1B"
-    assert res_nyc["locale_code"] == "newark"
+    res_pa = resolve_zip_code("15201")
+    assert res_pa["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_pa["state"] == "PA"
+    assert res_pa["padd_region"] == "PADD 1B"
+    assert res_pa["locale_code"] == "newark"
 
 
 def test_unmapped_telemetry_aggregation():
@@ -234,7 +247,7 @@ def test_unified_location_resolver():
     # ZIP fallback when no coordinates
     res_zip = resolve_location(zip_code="10001")
     assert res_zip["query_type"] == "zip" if "query_type" in res_zip else True
-    assert res_zip["locale_code"] == "newark"
+    assert res_zip["locale_code"] == "new_york"
 
     # Default national when neither provided
     res_default = resolve_location()

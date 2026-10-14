@@ -41,7 +41,9 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "913": "los_angeles", "914": "los_angeles", "915": "los_angeles", "916": "los_angeles",
     "917": "los_angeles", "918": "los_angeles", "926": "los_angeles", "927": "los_angeles",
     "928": "los_angeles",
-    "800": "denver", "801": "denver", "802": "denver", "803": "denver", "804": "denver", "805": "denver", "806": "denver"
+    "800": "denver", "801": "denver", "802": "denver", "803": "denver", "804": "denver", "805": "denver", "806": "denver",
+    # 100-149: New York Harbor & New York State Metro Calibration Hub (Issue #635)
+    **{f"{i:03d}": "new_york" for i in range(100, 150)}
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -122,7 +124,7 @@ STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
     "RI": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.370},
     "CT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.250},
     # PADD 1B (Central Atlantic)
-    "NY": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.472},
+    "NY": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "new_york", "fallback_model": "New_York_NY (PADD 1B)", "state_tax": 0.472},
     "NJ": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.423},
     "PA": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.576},
     "DE": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.230},
@@ -200,6 +202,7 @@ HUB_BASELINE_TAXES: Dict[str, float] = {
     "houston": 0.200,
     "los_angeles": 0.953,
     "denver": 0.280,
+    "new_york": 0.472,
     "oakland": 0.634,
     "bayarea": 0.634,
     "national": 0.184
@@ -740,6 +743,17 @@ CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
         "padd": "PADD 4",
         "padd_name": "Rocky Mountain",
         "state_tax": 0.280,
+        "max_radius_miles": 120.0
+    },
+    "new_york": {
+        "name": "New York Metro & State Hub, NY",
+        "region_id": "New_York_NY",
+        "lat": 40.7128,
+        "lon": -74.0060,
+        "state": "NY",
+        "padd": "PADD 1B",
+        "padd_name": "Central Atlantic",
+        "state_tax": 0.472,
         "max_radius_miles": 120.0
     },
 }

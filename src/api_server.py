@@ -235,7 +235,11 @@ LOCALE_MAP = {
     "socal": "Los_Angeles_CA",
     "denver": "Denver_CO",
     "denver_co": "Denver_CO",
-    "den": "Denver_CO"
+    "den": "Denver_CO",
+    "new_york": "New_York_NY",
+    "new_york_ny": "New_York_NY",
+    "nyc": "New_York_NY",
+    "ny": "New_York_NY"
 }
 
 # Regional PADD metadata
@@ -252,6 +256,7 @@ PADD_METADATA = {
     "Houston_TX": {"name": "Houston & USGC Refining Corridor, TX", "padd": "PADD 3 Gulf Coast", "carb_tax": 0.0},
     "Los_Angeles_CA": {"name": "Los Angeles Basin & South Coast, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "Denver_CO": {"name": "Denver Metro Area & Rocky Mountain Hub, CO", "padd": "PADD 4 Rocky Mountain", "carb_tax": 0.0},
+    "New_York_NY": {"name": "New York Harbor & NY State Hub, NY", "padd": "PADD 1B Central Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
@@ -539,6 +544,24 @@ SCENARIOS_CATALOG = {
         "season_window": "May 01 – Sep 15",
         "telemetry_hook": "spec_calendar",
         "locales": ["denver", "national"]
+    },
+    "buckeye_pipeline_linden_disruption": {
+        "name": "Buckeye Pipeline Linden Terminal Disruption",
+        "headline": "Midstream valve and pumping failure at Buckeye Pipeline Linden hub curtails refined product deliveries across Long Island and Upstate NY.",
+        "shock_pct": 0.0819,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["new_york", "national"]
+    },
+    "ny_harbor_barge_freeze_halt": {
+        "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+        "headline": "Severe Arctic cold freeze creates thick ice floes along the Hudson River, halting coastal fuel barges into Upstate NY terminal racks.",
+        "shock_pct": 0.0560,
+        "category": "weather",
+        "season_window": "Dec 01 – Feb 28",
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["new_york", "national"]
     }
 }
 

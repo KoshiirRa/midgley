@@ -27,6 +27,8 @@ from src.dashboard_generator import (
     LOS_ANGELES_SUB_PATH,
     DENVER_PATH,
     DENVER_SUB_PATH,
+    NEW_YORK_PATH,
+    NEW_YORK_SUB_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -45,7 +47,7 @@ def test_dashboard_generation_and_math_katex():
     generate_public_dashboard()
 
     # Verify existence of all expected dashboard HTML files
-    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, LOS_ANGELES_PATH, LOS_ANGELES_SUB_PATH, DENVER_PATH, DENVER_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
+    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, LOS_ANGELES_PATH, LOS_ANGELES_SUB_PATH, DENVER_PATH, DENVER_SUB_PATH, NEW_YORK_PATH, NEW_YORK_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
         assert os.path.exists(path), f"Expected file does not exist: {path}"
         assert os.path.getsize(path) > 0, f"Generated file is empty: {path}"
 
@@ -1058,4 +1060,25 @@ def test_denver_page_generation():
     assert "Denver, CO Metro Retail Gas Forecast" in content
     assert "Suncor Commerce City" in content
     assert "PADD 4 Rocky Mountain Refining Hub" in content
+    assert "file:///" not in content
+
+
+def test_new_york_page_generation():
+    """Verify that generate_public_dashboard generates docs/new_york.html and docs/new_york/index.html
+    with New York & PADD 1B refining content, Phillips 66 Bayway / Buckeye logistics,
+    and shock scenarios (Issue #635).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(NEW_YORK_PATH), f"Expected file does not exist: {NEW_YORK_PATH}"
+    assert os.path.getsize(NEW_YORK_PATH) > 0, f"Generated file is empty: {NEW_YORK_PATH}"
+    assert os.path.exists(NEW_YORK_SUB_PATH), f"Expected file does not exist: {NEW_YORK_SUB_PATH}"
+    assert os.path.getsize(NEW_YORK_SUB_PATH) > 0, f"Generated file is empty: {NEW_YORK_SUB_PATH}"
+
+    with open(NEW_YORK_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "New York, NY Metro Retail Gas Forecast" in content
+    assert "Phillips 66 Bayway" in content
+    assert "PADD 1B Central Atlantic Refining Hub" in content
     assert "file:///" not in content
