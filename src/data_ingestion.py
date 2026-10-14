@@ -2513,6 +2513,8 @@ OILPRICEAPI_MAX_DAILY_CALLS = 25
 
 def save_oilpriceapi_vintage_record(record: dict, filepath: str = OILPRICEAPI_VINTAGE_FILE) -> None:
     """Persists a bitemporal point-in-time OilpriceAPI observation (Issue #284)."""
+    if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "oilpriceapi_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -2652,6 +2654,14 @@ class OilPriceAPIDataConnector:
         data["daily_calls"][day_key] = today_calls + 1
         data["last_call"] = now.isoformat()
 
+        if os.environ.get("TESTING") == "1" and os.path.abspath(OILPRICEAPI_QUOTA_FILE) == os.path.abspath(os.path.join("data", "oilpriceapi_quota.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return True, {
+                "allowed": True,
+                "today_calls": today_calls + 1,
+                "max_daily_calls": self.max_daily_calls,
+                "safety_valve_active": False
+            }
+
         try:
             with open(OILPRICEAPI_QUOTA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
@@ -2710,6 +2720,9 @@ class OilPriceAPIDataConnector:
             global_cache.set(f"oilpriceapi_{cache_key}", payload, ttl_seconds=86400)
         except Exception:
             pass
+
+        if os.environ.get("TESTING") == "1" and os.path.abspath(OILPRICEAPI_CACHE_FILE) == os.path.abspath(os.path.join("data", "oilpriceapi_cache.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
 
         # Write to local JSON disk response cache file
         os.makedirs("data", exist_ok=True)
