@@ -36,7 +36,7 @@ The project distinguishes between **Development & Code Review Assistance** (offl
 │       architectural critique, security assessment, and test validation.     │
 │                                                                             │
 │  ⚡ RUNTIME PIPELINE & EVENT EXTRACTION AGENTS                              │
-│     • Primary Model: Google Gemini (gemini-2.5-flash / gemini-1.5-flash)    │
+│     • Primary Model: Google Gemini (gemini-3.8-flash / gemini-2.5-flash legacy)│
 │     • Scope: Ingestion & impact scoring of unstructured financial news,     │
 │       NOAA weather alerts, geopolitical disruption headlines, weekly issue  │
 │       self-reviews, and Hindsight episodic memory post-mortems.             │
@@ -74,7 +74,7 @@ The project distinguishes between **Development & Code Review Assistance** (offl
 
 ## 3. ⚡ In-Pipeline Event Extraction & Runtime Agents
 
-* **Primary LLM Engine:** **Google Gemini** (`gemini-2.5-flash` / `gemini-1.5-flash` via `google-genai` SDK)
+* **Primary LLM Engine:** **Google Gemini** (`gemini-3.8-flash` via `google-genai` SDK with low thinking level, `gemini-2.5-flash` legacy)
 * **Applications:**
   - **Event & Sentiment Analysis ([`src/event_analyzer.py`](src/event_analyzer.py)):** Parsing live financial news (`finlight.me`), geopolitical headlines, and maritime chokepoints into structured, bounded impact vectors $[-1.0, +1.0]$.
   - **Weekly Performance Review & Issue Triage ([`src/weekly_issue_reporter.py`](src/weekly_issue_reporter.py)):** Automated weekly self-review of model accuracy convergence and GitHub issue backlog prioritization.
@@ -93,4 +93,4 @@ It is critical to note that **the core quantitative price forecasting models are
 
 This disclosure is maintained as a living document under version control. Whenever new LLM models, code review agents, or automated developer tools are introduced into the project workflow, this document is updated accordingly.
 
-*Last Updated: September 2026*
+*Last Updated: October 2026*

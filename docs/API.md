@@ -28,7 +28,7 @@ For lightweight client applications (such as mobile apps, automotive head units,
 | `https://koshiirra.github.io/midgley/api/v1/combined/{locale}.json` | `GET` | Sub-directory route alias for REST path compatibility |
 
 ### Available Locales for Static API
-`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `bayarea`
+`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `bayarea`
 
 ### Example Request
 ```bash
@@ -114,7 +114,7 @@ curl -X DELETE "http://localhost:8000/api/v1/admin/keys/mg_prod_a1b2c3d4" \
 Fetches real-time unleaded gas price data using the multi-tiered fallback chain (GasBuddy GraphQL -> AAA Web Scraper -> EIA/yfinance Benchmark -> Prediction History -> Static Anchor) with 15-minute response caching.
 
 **Query Parameters:**
-* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `oakland`, `bayarea`. Default: `national`.
+* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `oakland`, `bayarea`. Default: `national`.
 * `zip_code` (optional, string): 5-digit US zip code for station-level GasBuddy search.
 
 **Example Request:**
@@ -129,7 +129,7 @@ curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland" \
 Generates 1-to-5 day out-of-time discrete quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), component-level feature attributions (XAI), and natural language driver summary text.
 
 **Query Parameters:**
-* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `oakland`, `bayarea`).
+* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `oakland`, `bayarea`).
 * `days` (optional, integer): Forecast horizon in days (1 to 30). Default: `5`.
 
 **Example Request:**
@@ -186,7 +186,7 @@ curl -X POST "http://localhost:8000/api/v1/combined/batch" \
 Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
 
 **Query Parameters:**
-* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `oakland`, `bayarea`, `all`). Default: `all`.
+* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `oakland`, `bayarea`, `all`). Default: `all`.
 * `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
 * `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
 * `include_retroactive` (optional, boolean): Restrict strictly to forward out-of-time predictions (`false`). Default: `false`.

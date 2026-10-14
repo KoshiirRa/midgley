@@ -39,9 +39,13 @@ class TestSystemTelemetry(unittest.TestCase):
 
     def test_llm_cost_calculation(self):
         """Verify LLM cost estimation logic per 1M tokens."""
-        cost_gemini = calculate_llm_cost("gemini-2.5-flash", prompt_tokens=100_000, completion_tokens=100_000)
+        cost_gemini_38 = calculate_llm_cost("gemini-3.8-flash", prompt_tokens=100_000, completion_tokens=100_000)
+        # (0.1M * 0.75) + (0.1M * 3.75) = 0.075 + 0.375 = 0.45
+        self.assertAlmostEqual(cost_gemini_38, 0.45, places=4)
+
+        cost_gemini_legacy = calculate_llm_cost("gemini-2.5-flash", prompt_tokens=100_000, completion_tokens=100_000)
         # (0.1M * 0.075) + (0.1M * 0.30) = 0.0075 + 0.03 = 0.0375
-        self.assertAlmostEqual(cost_gemini, 0.0375, places=4)
+        self.assertAlmostEqual(cost_gemini_legacy, 0.0375, places=4)
 
         cost_gpt = calculate_llm_cost("gpt-4o-mini", prompt_tokens=1_000_000, completion_tokens=1_000_000)
         # (1M * 0.15) + (1M * 0.60) = 0.75
@@ -50,7 +54,7 @@ class TestSystemTelemetry(unittest.TestCase):
     def test_telemetry_logging_persistence_test_mode(self):
         """Verify log_llm_usage respects testing suppression or persistence flags."""
         os.environ["TEST_TELEMETRY_PERSIST"] = "1"
-        res = log_llm_usage("google", "gemini-2.5-flash", prompt_tokens=150, completion_tokens=50, environment="dev")
+        res = log_llm_usage("google", "gemini-3.8-flash", prompt_tokens=150, completion_tokens=50, environment="dev")
         self.assertIn("total_tokens", res)
         self.assertEqual(res["total_tokens"], 200)
         del os.environ["TEST_TELEMETRY_PERSIST"]
@@ -81,6 +85,7 @@ class TestSystemTelemetry(unittest.TestCase):
         metrics_text = format_prometheus_metrics(environment="dev")
         self.assertIn("llm_tokens_consumed_total", metrics_text)
         self.assertIn("llm_estimated_cost_usd_total", metrics_text)
+        self.assertIn('model="gemini-3.8-flash"', metrics_text)
         self.assertIn("api_quota_remaining_ratio", metrics_text)
         self.assertIn("agent_memory_operations_total", metrics_text)
         self.assertIn("agent_memory_backend_calls_total", metrics_text)

@@ -16,8 +16,9 @@ logger = logging.getLogger(__name__)
 
 # Standard Token & API Rate Cards (USD per 1,000,000 tokens / calls)
 PROVIDER_PRICING: Dict[str, Dict[str, float]] = {
+    "gemini-3.8-flash": {"input_rate": 0.750, "output_rate": 3.750},
     "gemini-2.5-flash": {"input_rate": 0.075, "output_rate": 0.300},
-    "gemini": {"input_rate": 0.075, "output_rate": 0.300},
+    "gemini": {"input_rate": 0.750, "output_rate": 3.750},
     "gpt-4o-mini": {"input_rate": 0.150, "output_rate": 0.600},
     "openai": {"input_rate": 0.150, "output_rate": 0.600},
     "claude-3-5-haiku": {"input_rate": 0.800, "output_rate": 4.000},

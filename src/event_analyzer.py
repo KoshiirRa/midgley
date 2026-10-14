@@ -252,9 +252,9 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 from google import genai
                 from google.genai import types
                 client = genai.Client(api_key=api_key)
-                config = types.GenerateContentConfig(temperature=0.1)
+                config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model='gemini-3.8-flash',
                     contents=prompt_str,
                     config=config
                 )
@@ -279,9 +279,9 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 "opec_action": float(parsed.get("opec_action", 0.0)),
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
             }
-            provider_used = "gemini-2.5-flash"
-            log_llm_usage("google", "gemini-2.5-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
-            token_tab_manager.record_usage("gemini-2.5-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
+            provider_used = "gemini-3.8-flash"
+            log_llm_usage("google", "gemini-3.8-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
+            token_tab_manager.record_usage("gemini-3.8-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
         except Exception as e:
             logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
 
@@ -382,9 +382,9 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
                     from google import genai
                     from google.genai import types
                     client = genai.Client(api_key=api_key)
-                    config = types.GenerateContentConfig(temperature=0.1)
+                    config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                     response = client.models.generate_content(
-                        model='gemini-2.5-flash',
+                        model='gemini-3.8-flash',
                         contents=prompt,
                         config=config
                     )

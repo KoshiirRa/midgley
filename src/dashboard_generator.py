@@ -7110,7 +7110,14 @@ def generate_telemetry_page():
     tok_summary = tok_data.get('summary', {})
     tok_prov = tok_data.get('provider_breakdown', {})
     tok_warn = tok_data.get('budget_warnings', [{}])[0] if tok_data.get('budget_warnings') else {}
-    gemini_stats = tok_prov.get('gemini-2.5-flash', {})
+    gemini_38 = tok_prov.get('gemini-3.8-flash', {})
+    gemini_25 = tok_prov.get('gemini-2.5-flash', {})
+    gemini_stats = {
+        'calls': gemini_38.get('calls', 0) + gemini_25.get('calls', 0),
+        'input_tokens': gemini_38.get('input_tokens', 0) + gemini_25.get('input_tokens', 0),
+        'output_tokens': gemini_38.get('output_tokens', 0) + gemini_25.get('output_tokens', 0),
+        'cost_usd': gemini_38.get('cost_usd', 0.0) + gemini_25.get('cost_usd', 0.0),
+    }
     gpt_stats = tok_prov.get('gpt-4o-mini', {})
     claude_stats = tok_prov.get('claude-3-5-haiku', {})
     finlight_stats = tok_prov.get('finlight', {})
@@ -7199,7 +7206,7 @@ def generate_telemetry_page():
     if not map_points:
         map_points = []
     map_points_json = json.dumps(map_points)
-    carto_api_key = os.environ.get("CARTO_API_KEY", "cb1_4iqf_1_7880b5cbe390b5b1835b1f06").strip()
+    carto_api_key = (os.environ.get("CARTO_API_KEY") or "cb1_4iqf_1_7880b5cbe390b5b1835b1f06").strip()
     carto_tile_url = (
         f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
         if carto_api_key
@@ -7596,7 +7603,7 @@ def generate_telemetry_page():
                             </thead>
                             <tbody class="divide-y divide-slate-800/50">
                                 <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 3.8 Flash (Tier 1)</td>
                                     <td class="py-2 px-3 text-center">{gemini_stats.get('calls', 0):,}</td>
                                     <td class="py-2 px-3 text-center">{gemini_stats.get('input_tokens', 0):,}</td>
                                     <td class="py-2 px-3 text-center">{gemini_stats.get('output_tokens', 0):,}</td>
