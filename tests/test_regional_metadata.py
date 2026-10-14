@@ -26,6 +26,10 @@ EXPECTED_REGIONS = [
     "los_angeles_ca",
     "denver_co",
     "new_york_ny",
+    "seattle_wa",
+    "phoenix_az",
+    "anchorage_ak",
+    "honolulu_hi",
 ]
 
 

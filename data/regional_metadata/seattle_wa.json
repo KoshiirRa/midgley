@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "seattle_wa",
+  "logger_region_key": "Seattle_WA",
+  "display_name": "Seattle-Tacoma & Puget Sound, WA",
+  "padd_region": "PADD 5B Pacific Northwest",
+  "primary_city": "Seattle, WA",
+  "counties": [
+    "King",
+    "Pierce",
+    "Snohomish",
+    "Kitsap",
+    "Skagit",
+    "Whatcom",
+    "Thurston"
+  ],
+  "baseline_price": 4.15,
+  "icon_class": "fa-water",
+  "theme_color": "emerald",
+  "econometric_drivers": {
+    "title": "Puget Sound Refining Complex & Trans Mountain Feedstock Decoupling",
+    "description": "The Pacific Northwest operates as an autonomous refining center independent of California. Regional refineries (bp Cherry Point, Phillips 66 Ferndale, Marathon Anacortes, HF Sinclair Puget Sound) process Canadian crude via the Trans Mountain Pipeline system and Alaska North Slope (ANS) crude delivered via marine tankers, completely decoupled from California CARBOB formulations."
+  },
+  "refining_logistics": {
+    "title": "Olympic Pipeline System & Puget Sound Marine Terminals",
+    "description": "Refined product distribution is anchored by the 400-mile Olympic Pipeline originating in Ferndale and Anacortes, traversing Seattle and Tacoma, and terminating in Portland, OR. Secondary regional distribution relies on marine barges throughout Puget Sound and the Columbia River.",
+    "primary_refinery": "bp Cherry Point Refinery (242 kbpd) & Phillips 66 Ferndale (105 kbpd)",
+    "capacity_bpd": 616000,
+    "pipelines": [
+      "Olympic Pipeline Mainline",
+      "Trans Mountain Pipeline Puget Sound Spur",
+      "Kinder Morgan Olympic Delivery Line"
+    ]
+  },
+  "tax_structure": {
+    "title": "Washington State Motor Fuel Tax & Climate Commitment Act (CCA)",
+    "description": "Washington levies a statutory motor fuel excise tax of $0.494/gal plus the Climate Commitment Act (CCA) cap-and-invest carbon allowance compliance costs. Combined with Federal excise ($0.184/gal), the statutory baseline burden is $0.678/gal (excluding carbon allowances).",
+    "state_tax_per_gal": 0.494,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.678,
+    "notes": "Statutory baseline excise tax of $0.678/gal; Washington Climate Commitment Act (CCA) carbon allowance mechanism operates separately from California LCFS/Cap-and-Trade."
+  },
+  "infrastructure_delivery": {
+    "title": "Olympic Pipeline Seattle Rack Spreads & Puget Sound Logistics",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Seattle}} = P_{\\text{Seattle Retail}} - P_{\\text{Olympic Rack}} = \\$4.150 - \\$2.850 = \\$1.300/\\text{gal}",
+    "description": "Seattle wholesale rack prices reflect Olympic Pipeline tariffs, Puget Sound refining crack spreads against ANS/WCS crude, and regional tank farm inventories at Renton and Harbor Island.",
+    "hub_distance_miles": 12,
+    "hub_name": "Renton Olympic Pipeline Junction & Harbor Island Marine Terminals"
+  },
+  "shock_scenarios": [
+    {
+      "name": "bp Cherry Point Unplanned Hydrocracker Outage",
+      "subtitle": "Major Puget Sound Refining Unit Flaring & Tripping",
+      "price_impact_per_gal": 0.320,
+      "pct_impact": 7.71,
+      "description": "Unplanned outage at the 242 kbpd bp Cherry Point refinery restricts regional supply, spiking Olympic Pipeline rack premiums across Seattle and Portland."
+    },
+    {
+      "name": "Olympic Pipeline High-Pressure Integrity Lockdown",
+      "subtitle": "Mainline Flow Suspension from Ferndale to Portland",
+      "price_impact_per_gal": 0.450,
+      "pct_impact": 10.84,
+      "description": "Pipeline inspection anomaly shuts Olympic Pipeline mainline deliveries south of Snohomish, stranding Puget Sound production and forcing expensive truck and marine barge substitution."
+    },
+    {
+      "name": "Trans Mountain Pipeline Expansion Ingress Surge",
+      "subtitle": "Western Canadian Crude Influx Softening Feedstock Costs",
+      "price_impact_per_gal": -0.125,
+      "pct_impact": -3.01,
+      "description": "Expanded heavy Canadian crude throughput into Puget Sound refineries depresses regional input costs, narrowing regional wholesale crack margins."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 1650000,
+    "zero_vehicle_pct": 7.4,
+    "vehicles_per_household": 1.74,
+    "drive_alone_share": 0.638,
+    "carpool_share": 0.092,
+    "public_transit_share": 0.095,
+    "work_from_home_share": 0.175,
+    "mean_commute_minutes": 31.4,
+    "vehicle_dependency_ratio": 0.730,
+    "transit_alternative_index": 0.190,
+    "inelastic_demand_score": 0.745
+  }
+}

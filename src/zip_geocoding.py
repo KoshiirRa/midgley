@@ -43,7 +43,15 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "928": "los_angeles",
     "800": "denver", "801": "denver", "802": "denver", "803": "denver", "804": "denver", "805": "denver", "806": "denver",
     # 100-149: New York Harbor & New York State Metro Calibration Hub (Issue #635)
-    **{f"{i:03d}": "new_york" for i in range(100, 150)}
+    **{f"{i:03d}": "new_york" for i in range(100, 150)},
+    # 980-985: Seattle-Tacoma & Puget Sound Regional Calibration Hub (Issue #622)
+    "980": "seattle", "981": "seattle", "982": "seattle", "983": "seattle", "984": "seattle", "985": "seattle",
+    # 850-853, 890-891: Phoenix Metro & Desert Southwest Calibration Hub (Issue #622)
+    "850": "phoenix", "851": "phoenix", "852": "phoenix", "853": "phoenix", "890": "phoenix", "891": "phoenix",
+    # 995-996: Anchorage & Southcentral Alaska Hub (Issue #622)
+    "995": "anchorage", "996": "anchorage",
+    # 967-968: Honolulu & Hawaiian Islands Hub (Issue #622)
+    "967": "honolulu", "968": "honolulu",
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -108,14 +116,14 @@ ZIP_PREFIX_STATE_MAP: Dict[str, str] = {
 
 # State to PADD & Calibrated Model fallback mapping
 STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
-    # PADD 5 (West Coast)
-    "CA": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.596},
-    "OR": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.400},
-    "WA": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.494},
-    "NV": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.505},
-    "AZ": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.180},
-    "AK": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.089},
-    "HI": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.160},
+    # PADD 5 (West Coast Sub-Districts - Issue #622 Decoupling)
+    "CA": {"padd": "PADD 5", "padd_name": "West Coast (California CARB)", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.596},
+    "OR": {"padd": "PADD 5", "padd_name": "Pacific Northwest", "fallback_locale": "seattle", "fallback_model": "Seattle_WA (PADD 5B PNW)", "state_tax": 0.400},
+    "WA": {"padd": "PADD 5", "padd_name": "Pacific Northwest", "fallback_locale": "seattle", "fallback_model": "Seattle_WA (PADD 5B PNW)", "state_tax": 0.494},
+    "NV": {"padd": "PADD 5", "padd_name": "Desert Southwest", "fallback_locale": "phoenix", "fallback_model": "Phoenix_AZ (PADD 5C Desert SW)", "state_tax": 0.505},
+    "AZ": {"padd": "PADD 5", "padd_name": "Desert Southwest", "fallback_locale": "phoenix", "fallback_model": "Phoenix_AZ (PADD 5C Desert SW)", "state_tax": 0.180},
+    "AK": {"padd": "PADD 5", "padd_name": "Alaska", "fallback_locale": "anchorage", "fallback_model": "Anchorage_AK (PADD 5D Alaska)", "state_tax": 0.089},
+    "HI": {"padd": "PADD 5", "padd_name": "Hawaii", "fallback_locale": "honolulu", "fallback_model": "Honolulu_HI (PADD 5D Hawaii)", "state_tax": 0.160},
     # PADD 1A (New England)
     "ME": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.300},
     "NH": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B NY Harbor)", "state_tax": 0.222},

@@ -94,6 +94,24 @@ CANONICAL_LOCALE_ALIASES: Dict[str, str] = {
     "ny_harbor": "New_York",
     "ny_state": "New_York",
     "new_york_metro": "New_York",
+    "seattle": "Seattle",
+    "seattle_wa": "Seattle",
+    "puget_sound": "Seattle",
+    "pnw": "Seattle",
+    "sea": "Seattle",
+    "phoenix": "Phoenix",
+    "phoenix_az": "Phoenix",
+    "phx": "Phoenix",
+    "desert_southwest": "Phoenix",
+    "anchorage": "Anchorage",
+    "anchorage_ak": "Anchorage",
+    "anc": "Anchorage",
+    "alaska": "Anchorage",
+    "honolulu": "Honolulu",
+    "honolulu_hi": "Honolulu",
+    "hnl": "Honolulu",
+    "hawaii": "Honolulu",
+    "oahu": "Honolulu",
 }
 
 SUPPORTED_LOCALES = [
@@ -110,6 +128,10 @@ SUPPORTED_LOCALES = [
     "Los_Angeles",
     "Denver",
     "New_York",
+    "Seattle",
+    "Phoenix",
+    "Anchorage",
+    "Honolulu",
 ]
 
 VALID_DIRECTION_FILTERS = {"all_shocks", "spikes_only", "drops_only"}

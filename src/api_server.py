@@ -239,7 +239,25 @@ LOCALE_MAP = {
     "new_york": "New_York_NY",
     "new_york_ny": "New_York_NY",
     "nyc": "New_York_NY",
-    "ny": "New_York_NY"
+    "ny": "New_York_NY",
+    "seattle": "Seattle_WA",
+    "seattle_wa": "Seattle_WA",
+    "puget_sound": "Seattle_WA",
+    "pnw": "Seattle_WA",
+    "sea": "Seattle_WA",
+    "phoenix": "Phoenix_AZ",
+    "phoenix_az": "Phoenix_AZ",
+    "phx": "Phoenix_AZ",
+    "desert_southwest": "Phoenix_AZ",
+    "anchorage": "Anchorage_AK",
+    "anchorage_ak": "Anchorage_AK",
+    "anc": "Anchorage_AK",
+    "alaska": "Anchorage_AK",
+    "honolulu": "Honolulu_HI",
+    "honolulu_hi": "Honolulu_HI",
+    "hnl": "Honolulu_HI",
+    "hawaii": "Honolulu_HI",
+    "oahu": "Honolulu_HI"
 }
 
 # Regional PADD metadata
@@ -261,7 +279,11 @@ PADD_METADATA = {
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanJose_CA": {"name": "San Jose / Silicon Valley, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
-    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953}
+    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "Seattle_WA": {"name": "Seattle & Puget Sound Refining Corridor, WA", "padd": "PADD 5 West Coast (PNW)", "carb_tax": 0.0},
+    "Phoenix_AZ": {"name": "Phoenix Metro & Desert Southwest Corridor, AZ", "padd": "PADD 5 West Coast (Southwest)", "carb_tax": 0.0},
+    "Anchorage_AK": {"name": "Anchorage Metro & Cook Inlet Corridor, AK", "padd": "PADD 5 West Coast (Alaska)", "carb_tax": 0.0},
+    "Honolulu_HI": {"name": "Honolulu Metro & Oahu Island Supply System, HI", "padd": "PADD 5 West Coast (Hawaii)", "carb_tax": 0.0}
 }
 
 # Scenario Simulator Catalog

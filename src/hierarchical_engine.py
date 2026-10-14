@@ -34,7 +34,11 @@ BOTTOM_LEVEL_METROS = [
     "Houston_TX",
     "Los_Angeles_CA",
     "Denver_CO",
-    "New_York_NY"
+    "New_York_NY",
+    "Seattle_WA",
+    "Phoenix_AZ",
+    "Anchorage_AK",
+    "Honolulu_HI"
 ]
 
 # Intermediate PADD / Regional Clusters (k = 6)
@@ -44,7 +48,7 @@ PADD_CLUSTERS = {
     "PADD_2": ["Tulsa_OK", "Cincinnati_OH", "Cincinnati_KY", "Chicago_IL"],
     "PADD_3": ["Houston_TX"],
     "PADD_4": ["Denver_CO"],
-    "PADD_5": ["Oakland_CA", "BayArea_CA", "Los_Angeles_CA"]
+    "PADD_5": ["Oakland_CA", "BayArea_CA", "Los_Angeles_CA", "Seattle_WA", "Phoenix_AZ", "Anchorage_AK", "Honolulu_HI"]
 }
 
 TOTAL_HIERARCHICAL_NODES = ["National"] + list(PADD_CLUSTERS.keys()) + BOTTOM_LEVEL_METROS

@@ -359,6 +359,14 @@ LOCALE_COMPONENT_WEIGHTS = {
     "Denver": {"refining_crack_margin": 0.35, "regional_logistics": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.05, "unstructured_sentiment": 0.05},
     "New_York_NY": {"refining_crack_margin": 0.30, "futures_commodity": 0.25, "tax_regulatory": 0.20, "regional_logistics": 0.15, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
     "New_York": {"refining_crack_margin": 0.30, "futures_commodity": 0.25, "tax_regulatory": 0.20, "regional_logistics": 0.15, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "Seattle_WA": {"refining_crack_margin": 0.30, "tax_regulatory": 0.25, "futures_commodity": 0.20, "regional_logistics": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Seattle": {"refining_crack_margin": 0.30, "tax_regulatory": 0.25, "futures_commodity": 0.20, "regional_logistics": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Phoenix_AZ": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.07, "unstructured_sentiment": 0.05, "tax_regulatory": 0.03},
+    "Phoenix": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.07, "unstructured_sentiment": 0.05, "tax_regulatory": 0.03},
+    "Anchorage_AK": {"regional_logistics": 0.45, "weather_environmental": 0.25, "refining_crack_margin": 0.15, "futures_commodity": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Anchorage": {"regional_logistics": 0.45, "weather_environmental": 0.25, "refining_crack_margin": 0.15, "futures_commodity": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Honolulu_HI": {"regional_logistics": 0.45, "refining_crack_margin": 0.20, "futures_commodity": 0.20, "weather_environmental": 0.08, "tax_regulatory": 0.05, "unstructured_sentiment": 0.02},
+    "Honolulu": {"regional_logistics": 0.45, "refining_crack_margin": 0.20, "futures_commodity": 0.20, "weather_environmental": 0.08, "tax_regulatory": 0.05, "unstructured_sentiment": 0.02},
     "National": {"futures_commodity": 0.45, "refining_crack_margin": 0.25, "unstructured_sentiment": 0.15, "weather_environmental": 0.075, "regional_logistics": 0.05, "tax_regulatory": 0.025}
 }
 

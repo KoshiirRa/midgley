@@ -93,7 +93,11 @@ DIESEL_BASE_ANCHORS = {
     "houston": 3.450,
     "los_angeles": 5.190,
     "denver": 3.750,
-    "new_york": 4.150
+    "new_york": 4.150,
+    "seattle": 4.450,
+    "phoenix": 3.750,
+    "anchorage": 4.150,
+    "honolulu": 5.450
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -109,7 +113,11 @@ LOCALE_TO_REGION_MAP = {
     "houston": "Houston_TX",
     "los_angeles": "Los_Angeles_CA",
     "denver": "Denver_CO",
-    "new_york": "New_York_NY"
+    "new_york": "New_York_NY",
+    "seattle": "Seattle_WA",
+    "phoenix": "Phoenix_AZ",
+    "anchorage": "Anchorage_AK",
+    "honolulu": "Honolulu_HI"
 }
 
 
@@ -379,7 +387,15 @@ DIESEL_REGION_LOG_KEYS = {
     "charlotte": "Charlotte_ULSD",
     "oakland": "Oakland_CARB_Diesel",
     "port_st_lucie": "Port_St_Lucie_ULSD",
-    "chicago": "Chicago_ULSD"
+    "chicago": "Chicago_ULSD",
+    "houston": "Houston_ULSD",
+    "los_angeles": "Los_Angeles_CARB_Diesel",
+    "denver": "Denver_ULSD",
+    "new_york": "New_York_ULSD",
+    "seattle": "Seattle_ULSD",
+    "phoenix": "Phoenix_ULSD",
+    "anchorage": "Anchorage_ULSD",
+    "honolulu": "Honolulu_ULSD"
 }
 
 

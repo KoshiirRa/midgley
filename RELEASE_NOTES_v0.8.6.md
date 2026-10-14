@@ -79,6 +79,20 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **Hermetic Test Suite Verification**:
   - Updated unit test suites and mock assertions across [`tests/test_event_analyzer.py`](tests/test_event_analyzer.py), [`tests/test_alpha_factor_miner.py`](tests/test_alpha_factor_miner.py), [`tests/test_pasa_research_agent.py`](tests/test_pasa_research_agent.py), [`tests/test_weekly_issue_reporter.py`](tests/test_weekly_issue_reporter.py), [`tests/test_system_telemetry.py`](tests/test_system_telemetry.py), [`tests/test_tokentab_accounting.py`](tests/test_tokentab_accounting.py), and [`tests/test_scenario_simulator.py`](tests/test_scenario_simulator.py) to assert calls to `gemini-3.8-flash` with `thinking_level="low"` and verify no deprecated sampling parameters are passed.
 
+### 10. Decoupling PADD 5 Sub-Markets (PNW, Desert Southwest, Alaska, Hawaii) from California CARB (Issue #622)
+- **Decoupling Non-California PADD 5 from CARBOB & California Regulatory Tax**: Decoupled non-California PADD 5 states (`WA`, `OR`, `NV`, `AZ`, `AK`, `HI`) from the California CARBOB formulation and California regulatory tax stack (+$0.953/gal: SB 1 excise + Cap-and-Trade + LCFS) into 4 distinct regional calibration hubs:
+  - **Seattle & Puget Sound, WA (`Seattle_WA`, `seattle`)**: Modeled Puget Sound's 616 kbpd refining hub (BP Cherry Point 242 kbpd, Phillips 66 Ferndale 105 kbpd, Marathon Anacortes 120 kbpd, HF Sinclair Puget Sound 149 kbpd), Olympic Pipeline, Washington statutory excise + CCA carbon allowances ($0.494/gal), EPA 9.0 psi summer RVP, and EIA retail series `EMM_EPMR_PTE_Y48SE_DPG` (`GASREGWSEA`).
+  - **Phoenix & Desert Southwest, AZ (`Phoenix_AZ`, `phoenix`)**: Modeled zero in-state refining footprint, 100% pipeline import reliance via Kinder Morgan SFPP West Line (SoCal) and East Line (Texas/El Paso), Maricopa County Cleaner Burning Gasoline (CBG 7.0 psi summer RVP), Arizona statutory excise ($0.180/gal — among lowest in US), and EIA retail series `EMM_EPMR_PTE_SAZ_DPG` (`GASREGWAZ`).
+  - **Anchorage & Cook Inlet, AK (`Anchorage_AK`, `anchorage`)**: Modeled Marathon Kenai refinery (68 kbpd), Cook Inlet sea ice logistics, Alaska Railroad tank cars, Alaska state fuel excise ($0.0895/gal — lowest in US), sub-zero winter 15.0 psi RVP, and EIA retail series `EMM_EPMR_PTE_SAK_DPG` (`GASREGWAK`).
+  - **Honolulu & Oahu Island System, HI (`Honolulu_HI`, `honolulu`)**: Modeled Par Hawaii Kapolei refinery (94 kbpd), crude waterborne import logistics, Young Brothers inter-island ocean barges, Hawaii statutory baseline ($0.330/gal), and EIA retail series `EMM_EPMR_PTE_SHI_DPG` (`GASREGWHI`).
+- **PADD 5 Regional Specs, Metadata & Hierarchical Engine Coherence**: Added declarative [`RegionSpec`](src/locations/specs.py) definitions, schema-valid regional JSON profiles in [`data/regional_metadata/`](data/regional_metadata/), sub-location packages in [`src/locations/`](src/locations/), and integrated the 4 hubs into [`src/hierarchical_engine.py`](src/hierarchical_engine.py) bottom-level reconciliation and PADD 5 clusters.
+- **Microstructure, Diesel, Geocoding & Intraday Monitoring Integration**:
+  - Decoupled `STATE_PADD_MODEL_MAP` and ZIP prefix routing in [`src/zip_geocoding.py`](src/zip_geocoding.py) (OR/WA to `seattle`, AZ/NV to `phoenix`, AK to `anchorage`, HI to `honolulu`).
+  - Added retail diesel base anchors and EIA series `GASDESW5XCA` in [`src/diesel_regional.py`](src/diesel_regional.py).
+  - Added NOAA weather endpoints in [`src/noaa_weather.py`](src/noaa_weather.py) and refinery centroid data in [`src/spatial_refinery.py`](src/spatial_refinery.py).
+  - Registered trigger keywords and localized routing in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py) and [`src/discord_notifier.py`](src/discord_notifier.py).
+  - Updated API normalization and `PADD_METADATA` (`carb_tax: 0.0`) in [`src/api_server.py`](src/api_server.py).
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -91,6 +105,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
+| **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
 
@@ -102,7 +117,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
-* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`)
+* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`)
 * **LLM Engine & Deprecation Migration**:
   - Runtime generative extractions and agent tasks migrated from deprecated `gemini-2.5-flash` to `gemini-3.8-flash`.
   - Deprecated sampling parameters (`temperature`, `top_p`, `top_k`, `thinking_budget`) are completely removed; structured JSON extraction and evaluation tasks explicitly configure `thinking_level="low"`.

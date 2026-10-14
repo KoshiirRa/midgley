@@ -171,6 +171,42 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.16,
             "is_rfg": True,
             "is_carb": False
+        },
+        "Seattle_WA": {
+            "name": "Seattle-Tacoma & Puget Sound (PADD 5B)",
+            "program": "EPA Conventional / WA Clean Fuel Standard",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 13.5,
+            "summer_compliance_premium_per_gal": 0.10,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Phoenix_AZ": {
+            "name": "Phoenix Metro & Desert Southwest (PADD 5C)",
+            "program": "Arizona Cleaner Burning Gasoline (CBG) / Maricopa County",
+            "summer_rvp_psi": 7.0,
+            "winter_rvp_psi": 13.5,
+            "summer_compliance_premium_per_gal": 0.18,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Anchorage_AK": {
+            "name": "Anchorage & Southcentral Alaska Hub (PADD 5D)",
+            "program": "Alaska Sub-Arctic Extreme Winter RVP Specification",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 15.0,
+            "summer_compliance_premium_per_gal": 0.05,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Honolulu_HI": {
+            "name": "Honolulu & Oahu Island Hub (PADD 5D)",
+            "program": "Hawaii Tropical Island Conventional Baseline",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 11.5,
+            "summer_compliance_premium_per_gal": 0.04,
+            "is_rfg": False,
+            "is_carb": False
         }
     },
     "emergency_waivers": []

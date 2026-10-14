@@ -48,6 +48,18 @@ REGION_ALIASES: Dict[str, str] = {
     "ny_state": "new_york_ny",
     "ny_harbor": "new_york_ny",
     "new_york_metro": "new_york_ny",
+    "seattle": "seattle_wa",
+    "puget_sound": "seattle_wa",
+    "pnw": "seattle_wa",
+    "phoenix": "phoenix_az",
+    "phx": "phoenix_az",
+    "desert_southwest": "phoenix_az",
+    "anchorage": "anchorage_ak",
+    "kenai": "anchorage_ak",
+    "alaska": "anchorage_ak",
+    "honolulu": "honolulu_hi",
+    "oahu": "honolulu_hi",
+    "hawaii": "honolulu_hi",
 }
 
 

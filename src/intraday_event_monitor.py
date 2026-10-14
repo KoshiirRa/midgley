@@ -97,6 +97,11 @@ TRIGGER_KEYWORDS = [
     "baytown", "port arthur", "deer park", "texas city", "houston ship channel", "galveston bay", "motiva",
     "el segundo", "torrance refinery", "carson refinery", "wilmington refinery", "la carbob", "watson station", "san pedro bay",
     "suncor", "commerce city", "suncor refinery", "denver rack", "rocky mountain refining", "dj basin",
+    # PADD 5 Sub-Market Refining & Distribution (Issue #622)
+    "puget sound", "olympic pipeline", "cherry point", "ferndale refinery", "anacortes refinery",
+    "kinder morgan sfpp", "sfpp pipeline", "maricopa cbg", "phoenix rack",
+    "kenai refinery", "cook inlet", "trans-alaska pipeline", "taps",
+    "kapolei refinery", "par hawaii", "young brothers", "inter-island barge",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -492,9 +497,42 @@ class IntradayEventMonitor:
         ]):
             targets.add("New_York")
 
+        # Seattle / Puget Sound / PNW / Olympic Pipeline (PADD 5 Northwest)
+        if any(k in text for k in [
+            "seattle", "puget sound", "olympic pipeline", "cherry point", "ferndale",
+            "anacortes", "washington state", "pnw", "bp cherry point", "phillips 66 ferndale",
+            "hf sinclair puget sound"
+        ]):
+            targets.add("Seattle")
+
+        # Phoenix / Desert Southwest / SFPP Pipeline / Maricopa CBG (PADD 5 Southwest)
+        if any(k in text for k in [
+            "phoenix", "desert southwest", "sfpp", "kinder morgan sfpp", "east line", "west line",
+            "maricopa county", "maricopa cbg", "arizona fuel"
+        ]):
+            targets.add("Phoenix")
+
+        # Anchorage / Cook Inlet / Kenai / TAPS / Alaska (PADD 5 Alaska)
+        if any(k in text for k in [
+            "anchorage", "cook inlet", "kenai", "kenai refinery", "trans-alaska pipeline",
+            "taps", "ans crude", "alaska north slope", "alaska railbelt"
+        ]):
+            targets.add("Anchorage")
+
+        # Honolulu / Oahu / Kapolei / Par Hawaii / Inter-Island Barge (PADD 5 Hawaii)
+        if any(k in text for k in [
+            "honolulu", "kapolei", "par hawaii", "oahu", "young brothers", "inter-island barge",
+            "hawaiian islands", "barbers point", "par pacific"
+        ]):
+            targets.add("Honolulu")
+
         # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
         if any(k in text for k in ["suncor 8-k", "suncor energy"]):
             targets.add("Denver")
+
+        # Par Pacific → Honolulu (Kapolei Refinery, PADD 5 Hawaii)
+        if any(k in text for k in ["par pacific", "par pacific 8-k", "par hawaii"]):
+            targets.add("Honolulu")
 
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
         if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery"]):

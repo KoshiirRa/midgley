@@ -82,6 +82,30 @@ def test_metro_cluster_zip_resolution():
     assert res_lake_placid["state"] == "NY"
     assert res_lake_placid["hub_baseline_tax_rate"] == 0.472
 
+    res_seattle = resolve_zip_code("98101")
+    assert res_seattle["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_seattle["is_metro_cluster_hit"] is True
+    assert res_seattle["locale_code"] == "seattle"
+    assert res_seattle["state"] == "WA"
+
+    res_phoenix = resolve_zip_code("85001")
+    assert res_phoenix["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_phoenix["is_metro_cluster_hit"] is True
+    assert res_phoenix["locale_code"] == "phoenix"
+    assert res_phoenix["state"] == "AZ"
+
+    res_anchorage = resolve_zip_code("99501")
+    assert res_anchorage["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_anchorage["is_metro_cluster_hit"] is True
+    assert res_anchorage["locale_code"] == "anchorage"
+    assert res_anchorage["state"] == "AK"
+
+    res_honolulu = resolve_zip_code("96813")
+    assert res_honolulu["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_honolulu["is_metro_cluster_hit"] is True
+    assert res_honolulu["locale_code"] == "honolulu"
+    assert res_honolulu["state"] == "HI"
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
@@ -104,6 +128,20 @@ def test_out_of_metro_zip_resolution_and_telemetry():
     assert res_pa["state"] == "PA"
     assert res_pa["padd_region"] == "PADD 1B"
     assert res_pa["locale_code"] == "newark"
+
+    # Oregon out-of-cluster resolves to Seattle / PNW hub in PADD 5
+    res_or = resolve_zip_code("97201")
+    assert res_or["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_or["state"] == "OR"
+    assert res_or["padd_region"] == "PADD 5"
+    assert res_or["locale_code"] == "seattle"
+
+    # Nevada out-of-cluster resolves to Phoenix / Desert Southwest hub in PADD 5
+    res_nv = resolve_zip_code("89403")
+    assert res_nv["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_nv["state"] == "NV"
+    assert res_nv["padd_region"] == "PADD 5"
+    assert res_nv["locale_code"] == "phoenix"
 
 
 def test_unmapped_telemetry_aggregation():

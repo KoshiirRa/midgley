@@ -19,7 +19,11 @@ from src.locations import (
     run_houston_pipeline,
     run_los_angeles_pipeline,
     run_denver_pipeline,
-    run_new_york_pipeline
+    run_new_york_pipeline,
+    run_seattle_pipeline,
+    run_phoenix_pipeline,
+    run_anchorage_pipeline,
+    run_honolulu_pipeline
 )
 from src.locations.tulsa.regional import fetch_tulsa_market_data, get_tulsa_regional_events, _generate_synthetic_tulsa_data
 from src.locations.newark.regional import fetch_newark_market_data, get_newark_regional_events, _generate_synthetic_newark_data
@@ -32,11 +36,19 @@ from src.locations.houston.regional import fetch_houston_market_data, get_housto
 from src.locations.los_angeles.regional import fetch_los_angeles_market_data, get_los_angeles_regional_events, _generate_synthetic_los_angeles_data
 from src.locations.denver.regional import fetch_denver_market_data, get_denver_regional_events, _generate_synthetic_denver_data
 from src.locations.new_york.regional import fetch_new_york_market_data, get_new_york_regional_events, _generate_synthetic_new_york_data
+from src.locations.seattle.regional import fetch_seattle_market_data, get_seattle_regional_events, _generate_synthetic_seattle_data
+from src.locations.phoenix.regional import fetch_phoenix_market_data, get_phoenix_regional_events, _generate_synthetic_phoenix_data
+from src.locations.anchorage.regional import fetch_anchorage_market_data, get_anchorage_regional_events, _generate_synthetic_anchorage_data
+from src.locations.honolulu.regional import fetch_honolulu_market_data, get_honolulu_regional_events, _generate_synthetic_honolulu_data
 
 
 def test_locations_registry_structure():
     """Verify that all expected locations are registered with required keys."""
-    expected_locations = {"national", "tulsa", "newark", "cincinnati", "greenville", "charlotte", "oakland", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york"}
+    expected_locations = {
+        "national", "tulsa", "newark", "cincinnati", "greenville", "charlotte",
+        "oakland", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york",
+        "seattle", "phoenix", "anchorage", "honolulu"
+    }
     registered = set(list_locations())
     assert expected_locations.issubset(registered), f"Missing locations in registry: {expected_locations - registered}"
 
@@ -167,6 +179,54 @@ def test_new_york_synthetic_market_data():
     assert pytest.approx(df["new_york_ny_retail_gasoline"].iloc[-1], rel=1e-3) == 3.480
 
 
+def test_seattle_synthetic_market_data():
+    """Verify Seattle regional data generator creates required feature columns."""
+    df = _generate_synthetic_seattle_data("2024-01-01", "2024-01-31", live_pump_price=4.250)
+    assert not df.empty
+    assert "seattle_wa_retail_gasoline" in df.columns
+    assert "spot_pnw_rack" in df.columns
+    assert "puget_sound_crack_spread" in df.columns
+    assert "seattle_rack_margin" in df.columns
+    assert "total_regulatory_tax_burden" in df.columns
+    assert pytest.approx(df["seattle_wa_retail_gasoline"].iloc[-1], rel=1e-3) == 4.250
+
+
+def test_phoenix_synthetic_market_data():
+    """Verify Phoenix regional data generator creates required feature columns."""
+    df = _generate_synthetic_phoenix_data("2024-01-01", "2024-01-31", live_pump_price=3.550)
+    assert not df.empty
+    assert "phoenix_az_retail_gasoline" in df.columns
+    assert "spot_phoenix_pipe" in df.columns
+    assert "desert_crack_spread" in df.columns
+    assert "phoenix_rack_margin" in df.columns
+    assert "total_regulatory_tax_burden" in df.columns
+    assert pytest.approx(df["phoenix_az_retail_gasoline"].iloc[-1], rel=1e-3) == 3.550
+
+
+def test_anchorage_synthetic_market_data():
+    """Verify Anchorage regional data generator creates required feature columns."""
+    df = _generate_synthetic_anchorage_data("2024-01-01", "2024-01-31", live_pump_price=3.850)
+    assert not df.empty
+    assert "anchorage_ak_retail_gasoline" in df.columns
+    assert "spot_ans_rack" in df.columns
+    assert "kenai_crack_spread" in df.columns
+    assert "anchorage_rack_margin" in df.columns
+    assert "total_regulatory_tax_burden" in df.columns
+    assert pytest.approx(df["anchorage_ak_retail_gasoline"].iloc[-1], rel=1e-3) == 3.850
+
+
+def test_honolulu_synthetic_market_data():
+    """Verify Honolulu regional data generator creates required feature columns."""
+    df = _generate_synthetic_honolulu_data("2024-01-01", "2024-01-31", live_pump_price=4.750)
+    assert not df.empty
+    assert "honolulu_hi_retail_gasoline" in df.columns
+    assert "spot_oahu_rack" in df.columns
+    assert "kapolei_crack_spread" in df.columns
+    assert "honolulu_rack_margin" in df.columns
+    assert "total_regulatory_tax_burden" in df.columns
+    assert pytest.approx(df["honolulu_hi_retail_gasoline"].iloc[-1], rel=1e-3) == 4.750
+
+
 def test_regional_events_loading():
     """Verify regional events functions return populated DataFrames."""
     tulsa_events = get_tulsa_regional_events()
@@ -180,6 +240,10 @@ def test_regional_events_loading():
     los_angeles_events = get_los_angeles_regional_events()
     denver_events = get_denver_regional_events()
     new_york_events = get_new_york_regional_events()
+    seattle_events = get_seattle_regional_events()
+    phoenix_events = get_phoenix_regional_events()
+    anchorage_events = get_anchorage_regional_events()
+    honolulu_events = get_honolulu_regional_events()
 
     for name, ev_df in [
         ("Tulsa", tulsa_events),
@@ -192,7 +256,11 @@ def test_regional_events_loading():
         ("Houston", houston_events),
         ("Los Angeles", los_angeles_events),
         ("Denver", denver_events),
-        ("New York", new_york_events)
+        ("New York", new_york_events),
+        ("Seattle", seattle_events),
+        ("Phoenix", phoenix_events),
+        ("Anchorage", anchorage_events),
+        ("Honolulu", honolulu_events)
     ]:
         assert isinstance(ev_df, pd.DataFrame), f"{name} events is not a DataFrame"
         assert not ev_df.empty, f"{name} events DataFrame is empty"

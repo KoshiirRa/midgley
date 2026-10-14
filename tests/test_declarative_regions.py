@@ -7,7 +7,11 @@ from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec
 
 
 def test_get_region_spec_all_metros():
-    expected_slugs = ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york"]
+    expected_slugs = [
+        "tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area",
+        "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york",
+        "seattle", "phoenix", "anchorage", "honolulu"
+    ]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
         assert spec is not None
@@ -50,6 +54,30 @@ def test_get_region_spec_all_metros():
         assert ny_spec is not None
         assert ny_spec.slug == "new_york"
 
+    # Ensure seattle aliases resolve cleanly to seattle spec
+    for sea_alias in ("seattle_wa", "puget_sound", "pnw"):
+        sea_spec = get_region_spec(sea_alias)
+        assert sea_spec is not None
+        assert sea_spec.slug == "seattle"
+
+    # Ensure phoenix aliases resolve cleanly to phoenix spec
+    for phx_alias in ("phoenix_az", "phx", "desert_southwest"):
+        phx_spec = get_region_spec(phx_alias)
+        assert phx_spec is not None
+        assert phx_spec.slug == "phoenix"
+
+    # Ensure anchorage aliases resolve cleanly to anchorage spec
+    for anc_alias in ("anchorage_ak", "kenai", "alaska"):
+        anc_spec = get_region_spec(anc_alias)
+        assert anc_spec is not None
+        assert anc_spec.slug == "anchorage"
+
+    # Ensure honolulu aliases resolve cleanly to honolulu spec
+    for hnl_alias in ("honolulu_hi", "oahu", "hawaii"):
+        hnl_spec = get_region_spec(hnl_alias)
+        assert hnl_spec is not None
+        assert hnl_spec.slug == "honolulu"
+
 
 def test_get_region_spec_by_region_key():
     spec = get_region_spec("Tulsa_OK")
@@ -88,6 +116,30 @@ def test_get_region_spec_by_region_key():
     assert ny_spec.slug == "new_york"
     assert ny_spec.wholesale_spot_col == "spot_ny_harbor"
 
+    sea_spec = get_region_spec("Seattle_WA")
+    assert sea_spec is not None
+    assert sea_spec.region_key == "Seattle_WA"
+    assert sea_spec.slug == "seattle"
+    assert sea_spec.wholesale_spot_col == "spot_pnw_rack"
+
+    phx_spec = get_region_spec("Phoenix_AZ")
+    assert phx_spec is not None
+    assert phx_spec.region_key == "Phoenix_AZ"
+    assert phx_spec.slug == "phoenix"
+    assert phx_spec.wholesale_spot_col == "spot_phoenix_pipe"
+
+    anc_spec = get_region_spec("Anchorage_AK")
+    assert anc_spec is not None
+    assert anc_spec.region_key == "Anchorage_AK"
+    assert anc_spec.slug == "anchorage"
+    assert anc_spec.wholesale_spot_col == "spot_ans_rack"
+
+    hnl_spec = get_region_spec("Honolulu_HI")
+    assert hnl_spec is not None
+    assert hnl_spec.region_key == "Honolulu_HI"
+    assert hnl_spec.slug == "honolulu"
+    assert hnl_spec.wholesale_spot_col == "spot_oahu_rack"
+
 
 def test_region_spec_microstructure_flags():
     cincy = get_region_spec("cincinnati")
@@ -117,4 +169,24 @@ def test_region_spec_microstructure_flags():
     oakland = get_region_spec("oakland")
     assert oakland.has_carb_compliance is True
     assert oakland.baseline_tax_rate >= 0.50
+
+    seattle = get_region_spec("seattle")
+    assert seattle.has_carb_compliance is False
+    assert seattle.baseline_tax_rate == 0.494
+    assert seattle.padd == "PADD 5B"
+
+    phoenix = get_region_spec("phoenix")
+    assert phoenix.has_carb_compliance is False
+    assert phoenix.baseline_tax_rate == 0.180
+    assert phoenix.padd == "PADD 5C"
+
+    anchorage = get_region_spec("anchorage")
+    assert anchorage.has_carb_compliance is False
+    assert anchorage.baseline_tax_rate == 0.0895
+    assert anchorage.padd == "PADD 5D"
+
+    honolulu = get_region_spec("honolulu")
+    assert honolulu.has_carb_compliance is False
+    assert honolulu.baseline_tax_rate == 0.330
+    assert honolulu.padd == "PADD 5D"
 

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "anchorage_ak",
+  "logger_region_key": "Anchorage_AK",
+  "display_name": "Anchorage & Southcentral Alaska Hub, AK",
+  "padd_region": "PADD 5D Alaska",
+  "primary_city": "Anchorage, AK",
+  "counties": [
+    "Anchorage",
+    "Matanuska-Susitna",
+    "Kenai Peninsula"
+  ],
+  "baseline_price": 3.85,
+  "icon_class": "fa-snowflake",
+  "theme_color": "sky",
+  "econometric_drivers": {
+    "title": "Kenai Refining Island, ANS Feedstock & Arctic Volatility Dynamics",
+    "description": "Alaska constitutes an isolated sub-arctic petroleum subsystem. The Marathon Kenai Refinery (68 kbpd) on Cook Inlet supplies Southcentral Alaska and the railbelt via pipeline and marine barges, running Alaska North Slope (ANS) and local Cook Inlet crude. Remote interior and bush communities rely on seasonal ice-free summer river barges and Alaska Railroad tank cars, governed by extreme sub-zero winter volatility blending requirements (15.0+ psi RVP)."
+  },
+  "refining_logistics": {
+    "title": "Marathon Kenai Refinery & Cook Inlet Marine Corridors",
+    "description": "Supply is anchored by the 68,000 bpd Marathon Kenai Refinery located on Cook Inlet, producing gasoline, jet fuel for international air cargo at Ted Stevens Anchorage International Airport, and ultra-low sulfur diesel. Refined products move across Cook Inlet to the Port of Alaska in Anchorage via marine tanker, barge, and pipeline.",
+    "primary_refinery": "Marathon Kenai Refinery (68 kbpd)",
+    "capacity_bpd": 68000,
+    "pipelines": [
+      "Cook Inlet Marine Tanker Transit",
+      "Alaska Railroad Railbelt Tank Car Line",
+      "Kenai Pipeline System"
+    ]
+  },
+  "tax_structure": {
+    "title": "Alaska Lowest U.S. Statutory Motor Fuel Excise Tax Burden",
+    "description": "Alaska enforces the lowest state motor fuel excise tax in the nation at only $0.0895/gal. Combined with Federal excise ($0.184/gal), the statutory baseline burden is only $0.2735/gal, over 67 cents below California and 40 cents below Washington.",
+    "state_tax_per_gal": 0.0895,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.274,
+    "notes": "Statutory baseline excise tax of $0.274/gal; lowest motor fuel tax burden in the United States."
+  },
+  "infrastructure_delivery": {
+    "title": "Port of Alaska Terminal Margin & Railbelt Logistics",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Anchorage}} = P_{\\text{Anchorage Retail}} - P_{\\text{Kenai Rack}} = \\$3.850 - \\$2.650 = \\$1.200/\\text{gal}",
+    "description": "Anchorage rack prices reflect Kenai marine transit across Cook Inlet and terminal handling at the Port of Alaska, which processes over 85% of all refined fuel consumed in Southcentral and Interior Alaska.",
+    "hub_distance_miles": 65,
+    "hub_name": "Port of Alaska Anchorage Marine Fuel Terminal & Kenai Dock"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Cook Inlet Severe Sea Ice Marine Transit Suspension",
+      "subtitle": "Winter Dynamic Sea Ice Stranding Fuel Tankers and Barges",
+      "price_impact_per_gal": 0.420,
+      "pct_impact": 10.91,
+      "description": "Heavy pan ice in upper Cook Inlet halts barge movements into the Port of Alaska, threatening fuel reserves and requiring emergency highway trucking from Kenai."
+    },
+    {
+      "name": "Marathon Kenai Refinery Unplanned FCC Unit Outage",
+      "subtitle": "Single-Refinery Alaskan Supply Shocks",
+      "price_impact_per_gal": 0.380,
+      "pct_impact": 9.87,
+      "description": "Fluid catalytic cracker outage at Kenai reduces in-state production by 60%, necessitating costly waterborne marine imports from Puget Sound."
+    },
+    {
+      "name": "ANS Crude In-State Feedstock Surplus Discount",
+      "subtitle": "Trans-Alaska Pipeline Supply Abundance Softening Costs",
+      "price_impact_per_gal": -0.110,
+      "pct_impact": -2.86,
+      "description": "Increased North Slope crude availability depresses local feedstock acquisition costs at Cook Inlet refineries."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 115000,
+    "zero_vehicle_pct": 5.8,
+    "vehicles_per_household": 1.82,
+    "drive_alone_share": 0.765,
+    "carpool_share": 0.112,
+    "public_transit_share": 0.018,
+    "work_from_home_share": 0.098,
+    "mean_commute_minutes": 20.4,
+    "vehicle_dependency_ratio": 0.877,
+    "transit_alternative_index": 0.035,
+    "inelastic_demand_score": 0.865
+  }
+}

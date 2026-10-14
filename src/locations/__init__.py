@@ -20,6 +20,10 @@ from src.locations.houston import run_houston_pipeline, build_houston_notebook
 from src.locations.los_angeles import run_los_angeles_pipeline, build_los_angeles_notebook
 from src.locations.denver import run_denver_pipeline, build_denver_notebook
 from src.locations.new_york import run_new_york_pipeline, build_new_york_notebook
+from src.locations.seattle import run_seattle_pipeline, build_seattle_notebook
+from src.locations.phoenix import run_phoenix_pipeline, build_phoenix_notebook
+from src.locations.anchorage import run_anchorage_pipeline, build_anchorage_notebook
+from src.locations.honolulu import run_honolulu_pipeline, build_honolulu_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -140,6 +144,42 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_new_york_pipeline,
         "build_notebook": build_new_york_notebook,
         "notebook_filename": "new_york_gas_price_llm_forecasting.ipynb"
+    },
+    "seattle": {
+        "id": "seattle",
+        "name": "Seattle-Tacoma & Puget Sound, WA (PADD 5B)",
+        "type": "regional",
+        "module": "src.locations.seattle",
+        "run_pipeline": run_seattle_pipeline,
+        "build_notebook": build_seattle_notebook,
+        "notebook_filename": "seattle_gas_price_llm_forecasting.ipynb"
+    },
+    "phoenix": {
+        "id": "phoenix",
+        "name": "Phoenix Metro & Desert Southwest, AZ (PADD 5C)",
+        "type": "regional",
+        "module": "src.locations.phoenix",
+        "run_pipeline": run_phoenix_pipeline,
+        "build_notebook": build_phoenix_notebook,
+        "notebook_filename": "phoenix_gas_price_llm_forecasting.ipynb"
+    },
+    "anchorage": {
+        "id": "anchorage",
+        "name": "Anchorage & Southcentral Alaska Hub, AK (PADD 5D)",
+        "type": "regional",
+        "module": "src.locations.anchorage",
+        "run_pipeline": run_anchorage_pipeline,
+        "build_notebook": build_anchorage_notebook,
+        "notebook_filename": "anchorage_gas_price_llm_forecasting.ipynb"
+    },
+    "honolulu": {
+        "id": "honolulu",
+        "name": "Honolulu & Oahu Island Hub, HI (PADD 5D)",
+        "type": "regional",
+        "module": "src.locations.honolulu",
+        "run_pipeline": run_honolulu_pipeline,
+        "build_notebook": build_honolulu_notebook,
+        "notebook_filename": "honolulu_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -162,6 +202,14 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "denver"
     if loc_id in ("new_york_ny", "nyc", "ny_harbor", "ny_state", "newyork"):
         loc_id = "new_york"
+    if loc_id in ("seattle_wa", "puget_sound", "pnw"):
+        loc_id = "seattle"
+    if loc_id in ("phoenix_az", "desert_southwest", "phx"):
+        loc_id = "phoenix"
+    if loc_id in ("anchorage_ak", "alaska", "kenai"):
+        loc_id = "anchorage"
+    if loc_id in ("honolulu_hi", "hawaii", "oahu"):
+        loc_id = "honolulu"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]
@@ -208,5 +256,17 @@ __all__ = [
     "run_houston_pipeline",
     "build_houston_notebook",
     "run_los_angeles_pipeline",
-    "build_los_angeles_notebook"
+    "build_los_angeles_notebook",
+    "run_denver_pipeline",
+    "build_denver_notebook",
+    "run_new_york_pipeline",
+    "build_new_york_notebook",
+    "run_seattle_pipeline",
+    "build_seattle_notebook",
+    "run_phoenix_pipeline",
+    "build_phoenix_notebook",
+    "run_anchorage_pipeline",
+    "build_anchorage_notebook",
+    "run_honolulu_pipeline",
+    "build_honolulu_notebook"
 ]

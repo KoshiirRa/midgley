@@ -217,6 +217,62 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 258000,
         "padd": "PADD 1B",
         "primary_locales": ["New_York_NY"]
+    },
+    "BP_Cherry_Point": {
+        "name": "bp Cherry Point Refinery (Blaine, WA)",
+        "lat": 48.8625,
+        "lon": -122.7539,
+        "capacity_bpd": 242000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "Phillips66_Ferndale": {
+        "name": "Phillips 66 Ferndale Refinery (Ferndale, WA)",
+        "lat": 48.8239,
+        "lon": -122.7056,
+        "capacity_bpd": 105000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "Marathon_Anacortes": {
+        "name": "Marathon Anacortes Refinery (Anacortes, WA)",
+        "lat": 48.5089,
+        "lon": -122.5647,
+        "capacity_bpd": 120000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "HFSinclair_Puget_Sound": {
+        "name": "HF Sinclair Puget Sound Refinery (Anacortes, WA)",
+        "lat": 48.4908,
+        "lon": -122.5369,
+        "capacity_bpd": 149000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "KM_SFPP_Phoenix_Terminal": {
+        "name": "Kinder Morgan SFPP 51st Avenue Terminal (Phoenix, AZ)",
+        "lat": 33.4395,
+        "lon": -112.1691,
+        "capacity_bpd": 0,
+        "padd": "PADD 5",
+        "primary_locales": ["Phoenix_AZ"]
+    },
+    "Marathon_Kenai": {
+        "name": "Marathon Kenai Refinery (Nikiski, AK)",
+        "lat": 60.6783,
+        "lon": -151.3800,
+        "capacity_bpd": 68000,
+        "padd": "PADD 5",
+        "primary_locales": ["Anchorage_AK"]
+    },
+    "Par_Hawaii_Kapolei": {
+        "name": "Par Hawaii Kapolei Refinery (Kapolei, HI)",
+        "lat": 21.3114,
+        "lon": -158.1067,
+        "capacity_bpd": 94000,
+        "padd": "PADD 5",
+        "primary_locales": ["Honolulu_HI"]
     }
 }
 
@@ -305,6 +361,30 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 40.7128,
         "lon": -74.0060,
         "zip": "10001"
+    },
+    "Seattle_WA": {
+        "name": "Seattle-Tacoma & Puget Sound, WA",
+        "lat": 47.6062,
+        "lon": -122.3321,
+        "zip": "98101"
+    },
+    "Phoenix_AZ": {
+        "name": "Phoenix Metro & Desert Southwest, AZ",
+        "lat": 33.4484,
+        "lon": -112.0740,
+        "zip": "85001"
+    },
+    "Anchorage_AK": {
+        "name": "Anchorage & Southcentral Alaska Hub, AK",
+        "lat": 61.2181,
+        "lon": -149.9003,
+        "zip": "99501"
+    },
+    "Honolulu_HI": {
+        "name": "Honolulu & Oahu Island Hub, HI",
+        "lat": 21.3069,
+        "lon": -157.8583,
+        "zip": "96813"
     }
 }
 

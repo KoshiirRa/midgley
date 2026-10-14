@@ -581,6 +581,122 @@ def get_port_st_lucie_weather_dataset(include_live: bool = True) -> pd.DataFrame
     return df.sort_values('date').reset_index(drop=True)
 
 
+def get_seattle_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for Seattle-Tacoma & Puget Sound, WA (WAZ001 / Zip 98101):
+    - Atmospheric River Deluges & Windstorms impacting rail crude and Olympic pipeline corridors
+    - Pacific Northwest Arctic Outflow Freezes impacting Puget Sound refinery boilers
+    - Pacific Coastal Storms and Marine Gale Warnings across Puget Sound and Strait of Juan de Fuca.
+    - Actively queries live NOAA alerts (WA, WAZ001), SPC convective outlooks, and Open-Meteo degree days.
+    """
+    seattle_weather_events = [
+        {"date": "2021-11-14", "headline": "NOAA NWS Flood Watch: Historic Pacific atmospheric river dumps 4 inches of rain across Whatcom County, causing Nooksack River flooding near Ferndale refineries.", "zone": "WAZ001 (Whatcom / Puget Sound)", "weather_type": "Atmospheric River / River Flood"},
+        {"date": "2022-12-23", "headline": "NOAA NWS Ice Storm Warning: Severe freezing rain coats Puget Sound lowlands, causing tree damage and power outages near Renton pipeline junction.", "zone": "WAZ558 (Seattle Metro)", "weather_type": "Ice Storm / Grid Outage"},
+        {"date": "2023-01-09", "headline": "NOAA NWS High Wind Warning: Strong Pacific storm system generates 60 mph wind gusts across Puget Sound, halting marine oil tanker lightering.", "zone": "WAZ558 (Puget Sound Marine)", "weather_type": "High Wind / Marine Alert"},
+        {"date": "2024-01-12", "headline": "NOAA NWS Wind Chill Advisory: Fraser River Arctic outflow drops temperatures to 12°F with sub-zero wind chills across Bellingham and Anacortes.", "zone": "WAZ001 / WAZ506", "weather_type": "Arctic Outflow Freeze"},
+        {"date": "2024-11-19", "headline": "NOAA NWS High Wind Warning: Powerful Pacific bomb cyclone delivers 70 mph wind gusts to Western Washington, cutting power to 600,000 customers.", "zone": "WAZ558 (Seattle Metro)", "weather_type": "Bomb Cyclone / Windstorm"}
+    ]
+    events = list(seattle_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["WA", "WAZ001", "WAZ558"],
+            zip_code="98101",
+            hub_code="Seattle_WA",
+            region_label="Seattle / Puget Sound"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+def get_phoenix_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for Phoenix Metro & Desert Southwest, AZ (AZZ023 / Zip 85001):
+    - Extreme Summer Heatwave Alerts (>115°F) affecting bulk storage tank floating roofs and Reid Vapor Pressure volatility
+    - Summer Monsoon Severe Convective Dust Storms (Haboobs) and Flash Flooding affecting pipeline terminal operations
+    - Winter High Pressure Inversions and Dust/PM10 Advisories across Salt River Valley.
+    - Actively queries live NOAA alerts (AZ, AZZ023), SPC convective outlooks, and Open-Meteo degree days.
+    """
+    phoenix_weather_events = [
+        {"date": "2021-07-23", "headline": "NOAA NWS Flash Flood Warning: Severe desert monsoon brings torrential rainfall, swamping I-10 and distribution access roads to 51st Avenue terminals.", "zone": "AZZ023 (Maricopa AZ)", "weather_type": "Monsoon Flash Flood"},
+        {"date": "2022-07-11", "headline": "NOAA NWS Dust Storm Warning: 60 mph haboob sweeps across Phoenix metro, reducing visibility to zero and temporarily halting fuel transport dispatches.", "zone": "AZZ023 (Phoenix Metro)", "weather_type": "Severe Haboob / Dust Storm"},
+        {"date": "2023-07-18", "headline": "NOAA NWS Excessive Heat Warning: Historic 118°F heatwave grips Maricopa County, stressing power grids and testing bulk fuel terminal vapor recovery systems.", "zone": "AZZ023 (Maricopa AZ)", "weather_type": "Extreme Heatwave Emergency"},
+        {"date": "2024-06-25", "headline": "NOAA NWS Excessive Heat Warning: Early-season triple-digit heatwave triggers Maricopa County Ozone Action Day declarations.", "zone": "AZZ023 (Phoenix Valley)", "weather_type": "Excessive Heat / Ozone"},
+        {"date": "2024-08-22", "headline": "NOAA NWS Severe Thunderstorm Warning: Microburst with 70 mph winds causes power outages near Sky Harbor International Airport and nearby tank farms.", "zone": "AZZ023 (Phoenix Metro)", "weather_type": "Monsoon Microburst"}
+    ]
+    events = list(phoenix_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["AZ", "AZZ023"],
+            zip_code="85001",
+            hub_code="Phoenix_AZ",
+            region_label="Phoenix / Desert SW"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+def get_anchorage_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for Anchorage & Southcentral Alaska, AK (AKZ101 / Zip 99501):
+    - Sub-zero Arctic Freezes & Blizzard Warnings affecting Kenai refinery and Cook Inlet navigation
+    - Cook Inlet Marine Dynamic Ice Alerts and High Wind Warnings
+    - Heavy Snowfall and Mountain Pass Avalanches affecting Alaska Railroad and highway transit.
+    - Actively queries live NOAA alerts (AK, AKZ101), SPC outlooks, and Open-Meteo degree days.
+    """
+    anchorage_weather_events = [
+        {"date": "2021-12-26", "headline": "NOAA NWS Blizzard Warning: Massive winter storm dumps 20 inches of snow on Anchorage, closing schools and delaying tank truck deliveries.", "zone": "AKZ101 (Anchorage AK)", "weather_type": "Blizzard / Heavy Snow"},
+        {"date": "2022-11-28", "headline": "NOAA NWS Winter Storm Warning: Back-to-back snowstorms deposit 30 inches across Southcentral Alaska, slowing rail freight from Whittier and Seward.", "zone": "AKZ101 (Anchorage Bowl)", "weather_type": "Major Winter Storm"},
+        {"date": "2023-01-29", "headline": "NOAA NWS Wind Chill Warning: Arctic airmass drops temperatures to -20°F across Anchorage Bowl, necessitating strict sub-zero fuel volatility compliance.", "zone": "AKZ101 (Anchorage AK)", "weather_type": "Sub-Zero Arctic Freeze"},
+        {"date": "2023-11-09", "headline": "NOAA NWS Winter Storm Warning: Record November snowfall halts operations at Ted Stevens International Airport, straining aviation jet fuel distribution.", "zone": "AKZ101 (Anchorage Bowl)", "weather_type": "Record Snowfall"},
+        {"date": "2024-01-28", "headline": "NOAA NWS High Wind Warning: 75 mph Turnagain Arm winds create blowing snow and icy conditions along the Seward Highway fuel transit corridor.", "zone": "AKZ101 (Anchorage / Turnagain)", "weather_type": "High Wind / Blizzard"}
+    ]
+    events = list(anchorage_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["AK", "AKZ101"],
+            zip_code="99501",
+            hub_code="Anchorage_AK",
+            region_label="Anchorage / Southcentral AK"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
+def get_honolulu_weather_dataset(include_live: bool = True) -> pd.DataFrame:
+    """
+    Localized NOAA Weather Dataset for Honolulu & Oahu Island, HI (HIZ002 / Zip 96813):
+    - Central Pacific Hurricane & Tropical Storm Advisories affecting marine harbor conditions
+    - Winter Kona Storms bringing southwesterly gale winds and high surf to Barbers Point offshore buoy
+    - Flash Flood Watches across Oahu windward and leeward drainage basins.
+    - Actively queries live NOAA alerts (HI, HIZ002), SPC outlooks, and Open-Meteo degree days.
+    """
+    honolulu_weather_events = [
+        {"date": "2021-12-05", "headline": "NOAA NWS Flash Flood Emergency: Catastrophic Kona low storm drops 12 inches on Oahu, swamping roads and pausing fuel truck movements from Kapolei.", "zone": "HIZ002 (Honolulu / Oahu)", "weather_type": "Kona Low Deluge"},
+        {"date": "2022-07-24", "headline": "NOAA CPHC Tropical Storm Statement: Remnants of Tropical Storm Darby bring high surf and gale warnings to Hawaiian coastal marine waters.", "zone": "HIZ002 (Oahu Coastal)", "weather_type": "Tropical Storm / High Surf"},
+        {"date": "2023-08-08", "headline": "NOAA NWS High Wind Warning: Strong pressure gradient from Hurricane Dora produces 60 mph downslope winds across Hawaiian Islands.", "zone": "HIZ002 (Oahu / Leeward)", "weather_type": "High Wind Emergency"},
+        {"date": "2024-01-16", "headline": "NOAA NWS High Surf Warning: Massive North Shore winter swell with 35-foot faces generates rough marine channel conditions for inter-island tugs.", "zone": "HIZ002 (Oahu Waters)", "weather_type": "High Surf Marine Warning"},
+        {"date": "2024-08-23", "headline": "NOAA CPHC Tropical Storm Warning: Tropical Storm Hone approaches Hawaiian Islands, prompting US Coast Guard harbor safety advisories.", "zone": "HIZ002 (Honolulu Coastal)", "weather_type": "Tropical Cyclone Advisory"}
+    ]
+    events = list(honolulu_weather_events)
+    if include_live:
+        live = fetch_live_weather_events(
+            zones=["HI", "HIZ002"],
+            zip_code="96813",
+            hub_code="Honolulu_HI",
+            region_label="Honolulu / Oahu Island"
+        )
+        events.extend(live)
+    df = pd.DataFrame(events)
+    df['date'] = pd.to_datetime(df['date'])
+    return df.sort_values('date').reset_index(drop=True)
+
+
 # ==============================================================================
 # wxs.us Weather & SPC Convective Outlook Integration (Token-Efficient Ingestion)
 # ==============================================================================
@@ -608,7 +724,13 @@ METRO_ZIP_MAP = {
     "Port_St_Lucie_FL": "34952", # Port Everglades & Port Canaveral Marine Terminals
     "Chicago_IL": "60601",      # BP Whiting & Citgo Lemont Refining Corridor
     "Houston_TX": "77002",      # Houston Ship Channel & USGC Refining Corridor
-    "Los_Angeles_CA": "90012"   # Chevron El Segundo & South Bay Refining Complex
+    "Los_Angeles_CA": "90012",  # Chevron El Segundo & South Bay Refining Complex
+    "Denver_CO": "80202",       # Suncor Commerce City & Front Range Corridor
+    "New_York_NY": "10001",     # New York Harbor & Bayway Terminals
+    "Seattle_WA": "98101",      # Puget Sound Refining & Olympic Pipeline Hub
+    "Phoenix_AZ": "85001",      # Desert Southwest & Kinder Morgan SFPP Terminal
+    "Anchorage_AK": "99501",    # Port of Alaska & Cook Inlet Kenai Refinery
+    "Honolulu_HI": "96813"      # Par Hawaii Kapolei & Island Barge Hub
 }
 
 

@@ -85,6 +85,20 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "EMM_EPMR_PTE_SNY_DPG": "EMM_EPMR_PTE_SNY_DPG",
     "GASDESWNY": "EMD_EPD2D_PTE_SNY_DPG",
     "EMD_EPD2D_PTE_SNY_DPG": "EMD_EPD2D_PTE_SNY_DPG",
+    "GASREGWSEA": "EMM_EPMR_PTE_Y48SE_DPG",
+    "GASREGWWA": "EMM_EPMR_PTE_SWA_DPG",
+    "EMM_EPMR_PTE_Y48SE_DPG": "EMM_EPMR_PTE_Y48SE_DPG",
+    "EMM_EPMR_PTE_SWA_DPG": "EMM_EPMR_PTE_SWA_DPG",
+    "GASREGWAZ": "EMM_EPMR_PTE_SAZ_DPG",
+    "EMM_EPMR_PTE_SAZ_DPG": "EMM_EPMR_PTE_SAZ_DPG",
+    "GASREGWAK": "EMM_EPMR_PTE_SAK_DPG",
+    "EMM_EPMR_PTE_SAK_DPG": "EMM_EPMR_PTE_SAK_DPG",
+    "GASREGWHI": "EMM_EPMR_PTE_SHI_DPG",
+    "EMM_EPMR_PTE_SHI_DPG": "EMM_EPMR_PTE_SHI_DPG",
+    "GASREGW5XCA": "EMM_EPMR_PTE_R50XCA_DPG",
+    "EMM_EPMR_PTE_R50XCA_DPG": "EMM_EPMR_PTE_R50XCA_DPG",
+    "GASDESW5XCA": "EMD_EPD2D_PTE_R50XCA_DPG",
+    "EMD_EPD2D_PTE_R50XCA_DPG": "EMD_EPD2D_PTE_R50XCA_DPG",
 }
 
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
@@ -108,6 +122,10 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "SanFrancisco_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
     "SanJose_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
     "NorthBay_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "Seattle_WA": [("GASREGWSEA", "Seattle Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWWA", "Washington Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Phoenix_AZ": [("GASREGWAZ", "Arizona Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Anchorage_AK": [("GASREGWAK", "Alaska Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Honolulu_HI": [("GASREGWHI", "Hawaii Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
     "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
@@ -136,6 +154,14 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Oakland_CARB_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
     "Port_St_Lucie_ULSD": [("GASDESWFL", "Florida No 2 Diesel Retail Price"), ("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price")],
     "Port_St_Lucie_Diesel": [("GASDESWFL", "Florida No 2 Diesel Retail Price"), ("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price")],
+    "Seattle_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Seattle_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Phoenix_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Phoenix_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Anchorage_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Anchorage_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Honolulu_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Honolulu_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -189,7 +215,21 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "EMM_EPMR_PTE_Y35NY_DPG": 3.480,
     "EMM_EPMR_PTE_SNY_DPG": 3.420,
     "GASDESWNY": 4.150,
-    "EMD_EPD2D_PTE_SNY_DPG": 4.150
+    "EMD_EPD2D_PTE_SNY_DPG": 4.150,
+    "GASREGWSEA": 4.150,
+    "GASREGWWA": 4.100,
+    "EMM_EPMR_PTE_Y48SE_DPG": 4.150,
+    "EMM_EPMR_PTE_SWA_DPG": 4.100,
+    "GASREGWAZ": 3.250,
+    "EMM_EPMR_PTE_SAZ_DPG": 3.250,
+    "GASREGWAK": 3.850,
+    "EMM_EPMR_PTE_SAK_DPG": 3.850,
+    "GASREGWHI": 4.650,
+    "EMM_EPMR_PTE_SHI_DPG": 4.650,
+    "GASREGW5XCA": 3.950,
+    "EMM_EPMR_PTE_R50XCA_DPG": 3.950,
+    "GASDESW5XCA": 4.450,
+    "EMD_EPD2D_PTE_R50XCA_DPG": 4.450
 }
 
 

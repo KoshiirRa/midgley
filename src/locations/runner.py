@@ -59,6 +59,14 @@ REGION_MODULE_MAP = {
     "new_york": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
     "new_york_ny": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
     "nyc": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "seattle": ("src.locations.seattle.regional", "fetch_seattle_market_data", "get_seattle_regional_events", "Seattle_WA"),
+    "seattle_wa": ("src.locations.seattle.regional", "fetch_seattle_market_data", "get_seattle_regional_events", "Seattle_WA"),
+    "phoenix": ("src.locations.phoenix.regional", "fetch_phoenix_market_data", "get_phoenix_regional_events", "Phoenix_AZ"),
+    "phoenix_az": ("src.locations.phoenix.regional", "fetch_phoenix_market_data", "get_phoenix_regional_events", "Phoenix_AZ"),
+    "anchorage": ("src.locations.anchorage.regional", "fetch_anchorage_market_data", "get_anchorage_regional_events", "Anchorage_AK"),
+    "anchorage_ak": ("src.locations.anchorage.regional", "fetch_anchorage_market_data", "get_anchorage_regional_events", "Anchorage_AK"),
+    "honolulu": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
+    "honolulu_hi": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
 }
 
 
