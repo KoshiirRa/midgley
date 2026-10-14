@@ -3658,13 +3658,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-10-09T23:55:19.817621+00:00",
+    "timestamp": "2026-10-14T00:58:01.221162+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Exceeds $4 - Forbes",
+    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Crosses $4 - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -11983,5 +11983,41 @@
     "headline": "High gas prices continue to impact Tri-State drivers - KHQA",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizwFBVV95cUxPYTgwM0REN2w2bXJjWmZEN3h5Y2hYR3dPNy1VbkEyd0pBY3k3T1d2WmRJY0paanlkVnYxalpCYUFIaWZ5VS1PVzhxQmpCLUNUT2Q3T1E1Z3RxaEhFeDBvV056WHNWazJQcUhWZVRDeW11cEV6QnlxTzZlOGZobGE1VHhtQTVwdzhvWnhOYnhhVUxQUW9VUTVmQ050QWhOMmE4WGxTa3pQQlI2UjV3WGdkRHEtb3VyX3g1QlZ2N1FhU09IRHU1R0RGbjZWN19kNGM?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQWR5RUhKOUdfdlVMd3BIOWR0WEFXVVJXcW9KT1AyaElIa2NVYmNBNXFWVzhKdXhVemk1M29PMXNzSVRaSHVzR3RmamNXS1hIZzkxczRYcGtyUF8wdFdmQWRWMFg5U0c3elVQeWw2SWtjbWJjV2htWm1jcUFLR3JOSEN6NlUwTGZnMktkVGNEQUI5MGVCQTlWbWZfd0ZkOVhZQ3BMMVRNRkVmUHc?oc=5": {
+    "timestamp": "2026-10-14T00:57:50.572264+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQWR5RUhKOUdfdlVMd3BIOWR0WEFXVVJXcW9KT1AyaElIa2NVYmNBNXFWVzhKdXhVemk1M29PMXNzSVRaSHVzR3RmamNXS1hIZzkxczRYcGtyUF8wdFdmQWRWMFg5U0c3elVQeWw2SWtjbWJjV2htWm1jcUFLR3JOSEN6NlUwTGZnMktkVGNEQUI5MGVCQTlWbWZfd0ZkOVhZQ3BMMVRNRkVmUHc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQWR5RUhKOUdfdlVMd3BIOWR0WEFXVVJXcW9KT1AyaElIa2NVYmNBNXFWVzhKdXhVemk1M29PMXNzSVRaSHVzR3RmamNXS1hIZzkxczRYcGtyUF8wdFdmQWRWMFg5U0c3elVQeWw2SWtjbWJjV2htWm1jcUFLR3JOSEN6NlUwTGZnMktkVGNEQUI5MGVCQTlWbWZfd0ZkOVhZQ3BMMVRNRkVmUHc?oc=5",
+    "headline": "W.Va. Democratic, GOP leaders call for gas tax pause special session - The Dominion Post",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQWR5RUhKOUdfdlVMd3BIOWR0WEFXVVJXcW9KT1AyaElIa2NVYmNBNXFWVzhKdXhVemk1M29PMXNzSVRaSHVzR3RmamNXS1hIZzkxczRYcGtyUF8wdFdmQWRWMFg5U0c3elVQeWw2SWtjbWJjV2htWm1jcUFLR3JOSEN6NlUwTGZnMktkVGNEQUI5MGVCQTlWbWZfd0ZkOVhZQ3BMMVRNRkVmUHc?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMifkFVX3lxTE45TGpSNUZRNXFvVWF6czV4LWIwUVBXeW4yX2NfUG9lMW9xSEZRaWVjcmxnNVA2UXVwWU1NVTBsbEpJM2JsR25yOEJ1NHFrSlgxRmRwVzZGNUxWX2dqOWpfektkUnF2Y25nM3doZ1RhckZKUTFPenIwV21vRkJDdw?oc=5": {
+    "timestamp": "2026-10-14T00:58:11.786415+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE45TGpSNUZRNXFvVWF6czV4LWIwUVBXeW4yX2NfUG9lMW9xSEZRaWVjcmxnNVA2UXVwWU1NVTBsbEpJM2JsR25yOEJ1NHFrSlgxRmRwVzZGNUxWX2dqOWpfektkUnF2Y25nM3doZ1RhckZKUTFPenIwV21vRkJDdw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE45TGpSNUZRNXFvVWF6czV4LWIwUVBXeW4yX2NfUG9lMW9xSEZRaWVjcmxnNVA2UXVwWU1NVTBsbEpJM2JsR25yOEJ1NHFrSlgxRmRwVzZGNUxWX2dqOWpfektkUnF2Y25nM3doZ1RhckZKUTFPenIwV21vRkJDdw?oc=5",
+    "headline": "Gas prices are suddenly rising in several states. Here's where drivers are paying more. - Yahoo",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMifkFVX3lxTE45TGpSNUZRNXFvVWF6czV4LWIwUVBXeW4yX2NfUG9lMW9xSEZRaWVjcmxnNVA2UXVwWU1NVTBsbEpJM2JsR25yOEJ1NHFrSlgxRmRwVzZGNUxWX2dqOWpfektkUnF2Y25nM3doZ1RhckZKUTFPenIwV21vRkJDdw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMipgFBVV95cUxNUkVUajE3aEhvSVZxd05vcUR2R2Q5NTkwSE5HWkFnaEt1Y3hIeTdmcDA4NHpEY25fUFFBN0pRc3M4WEUwdEk2LWdJSkpLbGVKV1VTczdmSFY3cEd1aWRwWUo1VWdCelVfQ0o2QklxQ1pSTkxHMTVQY1hmM19USEdmNWhZQTg3dHMtZi1MQkM1bENLQXlTaDdMRmRhbjNqRlFyOHFZVVVR?oc=5": {
+    "timestamp": "2026-10-14T00:58:21.882677+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNUkVUajE3aEhvSVZxd05vcUR2R2Q5NTkwSE5HWkFnaEt1Y3hIeTdmcDA4NHpEY25fUFFBN0pRc3M4WEUwdEk2LWdJSkpLbGVKV1VTczdmSFY3cEd1aWRwWUo1VWdCelVfQ0o2QklxQ1pSTkxHMTVQY1hmM19USEdmNWhZQTg3dHMtZi1MQkM1bENLQXlTaDdMRmRhbjNqRlFyOHFZVVVR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNUkVUajE3aEhvSVZxd05vcUR2R2Q5NTkwSE5HWkFnaEt1Y3hIeTdmcDA4NHpEY25fUFFBN0pRc3M4WEUwdEk2LWdJSkpLbGVKV1VTczdmSFY3cEd1aWRwWUo1VWdCelVfQ0o2QklxQ1pSTkxHMTVQY1hmM19USEdmNWhZQTg3dHMtZi1MQkM1bENLQXlTaDdMRmRhbjNqRlFyOHFZVVVR?oc=5",
+    "headline": "UK Fuel Prices Rise: Petrol 175.28p, Diesel 200.04p per Litre - News and Statistics - IndexBox",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNUkVUajE3aEhvSVZxd05vcUR2R2Q5NTkwSE5HWkFnaEt1Y3hIeTdmcDA4NHpEY25fUFFBN0pRc3M4WEUwdEk2LWdJSkpLbGVKV1VTczdmSFY3cEd1aWRwWUo1VWdCelVfQ0o2QklxQ1pSTkxHMTVQY1hmM19USEdmNWhZQTg3dHMtZi1MQkM1bENLQXlTaDdMRmRhbjNqRlFyOHFZVVVR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5": {
+    "timestamp": "2026-10-14T00:58:49.162139+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "headline": "Valero Energy Corp Stock (VLO) Moved Up by 3.26% on Oct 13: Drivers Behind the Movement - TradingKey",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "error": "<urlopen error timed out>"
   }
 }

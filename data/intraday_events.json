@@ -5548,5 +5548,26 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T00:58:49.179678",
+    "headline": "Valero Energy Corp Stock (VLO) Moved Up by 3.26% on Oct 13: Drivers Behind the Movement - TradingKey",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.75
+    },
+    "discord_notified": true
   }
 ]

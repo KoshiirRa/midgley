@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-13T21:04:12.490193",
+  "timestamp": "2026-10-14T00:59:16.245511",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,17 +8,17 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.288,
-    "source": "EIA/yfinance RBOB Benchmark",
+    "current_price_per_gal": 4.341,
+    "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
-      "source": "EIA/yfinance RBOB Benchmark",
+      "source": "AAA Web Scraper (National Average, US)",
       "region_id": "National",
       "padd": "PADD 2",
       "requested_granularity": "NATIONAL",
-      "served_granularity": "NATIONAL",
-      "is_fallback_granularity": false,
+      "served_granularity": "METRO",
+      "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-13T21:04:12Z"
+      "timestamp": "2026-10-14T00:59:15Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-19",
-    "current_base_price": 4.288,
-    "predicted_price_per_gal": 4.173,
+    "current_base_price": 4.341,
+    "predicted_price_per_gal": 4.226,
     "expected_change_dollars": -0.115,
-    "expected_change_percent": -2.68,
+    "expected_change_percent": -2.65,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.984,
-    "prediction_upper_95ci": 4.362,
+    "prediction_lower_95ci": 4.037,
+    "prediction_upper_95ci": 4.415,
     "calibration_method": "conformal",
     "calibration_sample_size": 16,
     "directional_hit_rate_historical": 0.125,
     "historical_mae_dollars": 0.2188,
     "evaluation_sample_size": 16,
-    "day_1_price": 4.265,
-    "day_2_price": 4.214,
-    "day_3_price": 4.169,
-    "day_4_price": 4.173,
-    "day_5_price": 4.173,
+    "day_1_price": 4.318,
+    "day_2_price": 4.295,
+    "day_3_price": 4.222,
+    "day_4_price": 4.226,
+    "day_5_price": 4.226,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.115/gal (-2.68%): Driven primarily by Futures & Commodity Benchmark ($-0.052/gal), Refining Yield & Crack Spread ($-0.029/gal).",
+      "summary_text": "National forecast $-0.115/gal (-2.65%): Driven primarily by Futures & Commodity Benchmark ($-0.052/gal), Refining Yield & Crack Spread ($-0.029/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.052,
-          "impact_pct": -1.21,
+          "impact_pct": -1.2,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.029,
-          "impact_pct": -0.68,
+          "impact_pct": -0.67,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
           "impact_dollars": -0.017,
-          "impact_pct": -0.4,
+          "impact_pct": -0.39,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.052,
-      "impact_pct": -1.21,
+      "impact_pct": -1.2,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.029,
-      "impact_pct": -0.68,
+      "impact_pct": -0.67,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
       "impact_dollars": -0.017,
-      "impact_pct": -0.4,
+      "impact_pct": -0.39,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.115/gal (-2.68%): Driven primarily by Futures & Commodity Benchmark ($-0.052/gal), Refining Yield & Crack Spread ($-0.029/gal).",
+    "summary_text": "National forecast $-0.115/gal (-2.65%): Driven primarily by Futures & Commodity Benchmark ($-0.052/gal), Refining Yield & Crack Spread ($-0.029/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
