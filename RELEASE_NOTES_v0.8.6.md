@@ -57,7 +57,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **ZIP Geocoding Locality Identity Preservation**: Ensured `resolve_zip_code()` in [`src/zip_geocoding.py`](src/zip_geocoding.py) always populates `location_name` ("City, ST", "State, USA", or "US ZIP <zip>"), preventing `KeyError: 'location_name'` during Discord subscription dispatch and regional telemetry updates.
 - **Safe Edge Subscription Sync Testing**: Added `force: bool = False` to `sync_edge_subscriptions()` in [`src/discord_notifier.py`](src/discord_notifier.py) to allow test execution without disabling `TESTING="1"` process-wide.
 
-### 9. Google Gemini 3.8 Flash Migration & Thinking Level Configuration (Issue #616)
+### 9. Google Gemini 3.8 Flash Migration & Thinking Level Configuration (Issue #616, PR #638)
 - **Gemini 3.8 Flash Upgrade Ahead of Oct 20 Retirement**: Upgraded all runtime Gemini model identifiers from `gemini-2.5-flash` to `gemini-3.8-flash` across all operational pipelines:
   - Qualitative event shock feature extraction ([`src/event_analyzer.py`](src/event_analyzer.py), single & batch extractions).
   - Episodic memory post-mortem reflections ([`src/agent_memory.py`](src/agent_memory.py)).
@@ -89,7 +89,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#220** | `feat(regions): Implement Houston & USGC Metro Calibration Hub (PADD 3 / Houston Ship Channel Refineries)` | Locations / Regional Hubs |
 | **#221** | `feat(regions): Implement Los Angeles Basin Metro Calibration Hub (PADD 5 / CaRFG & El Segundo/Torrance)` | Locations / Regional Hubs |
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
-| **#616** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
+| **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
@@ -103,6 +103,10 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
 * **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`)
+* **LLM Engine & Deprecation Migration**:
+  - Runtime generative extractions and agent tasks migrated from deprecated `gemini-2.5-flash` to `gemini-3.8-flash`.
+  - Deprecated sampling parameters (`temperature`, `top_p`, `top_k`, `thinking_budget`) are completely removed; structured JSON extraction and evaluation tasks explicitly configure `thinking_level="low"`.
+  - Telemetry rates updated to $0.75 / 1M prompt and $3.75 / 1M output tokens while preserving legacy rates for historical accounting.
 * **Database Schema Additions**:
   - `discord_subscriptions` table (including `zip_codes TEXT NOT NULL DEFAULT '[]'`) and indexes (`idx_discord_subs_active`, `idx_discord_subs_webhook_hash`, `idx_discord_subs_user_id`) in `src/db/schema.sql` and `data/subscribers.sqlite`.
   - `unmapped_zip_telemetry` table and index (`idx_unmapped_zip_hits`) in `src/db/schema.sql` for persistent cross-run out-of-metro ZIP demand tracking.
@@ -121,6 +125,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 ### 3. Verification Commands
 ```bash
 python scripts/register_discord_commands.py --dry-run
+TESTING=1 pytest -v tests/test_docs_parity.py tests/test_event_analyzer.py tests/test_alpha_factor_miner.py tests/test_pasa_research_agent.py tests/test_weekly_issue_reporter.py tests/test_system_telemetry.py tests/test_tokentab_accounting.py tests/test_scenario_simulator.py tests/test_oilpriceapi_dynamic.py tests/test_oilpriceapi_ingestion.py
 TESTING=1 pytest -v tests/test_declarative_regions.py tests/test_locations.py tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_api_server.py tests/test_hierarchical_engine.py tests/test_zero_cost_fallbacks.py tests/test_hindsight_benchmark.py tests/test_open_source_ai_radar.py tests/test_system_telemetry.py tests/test_docs_links.py
 npx vitest run tests/workers.test.ts
 ```
