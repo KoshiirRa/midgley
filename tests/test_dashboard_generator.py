@@ -516,6 +516,42 @@ def test_scoreboard_section_in_index_html():
     assert "Recent Completed Forecast Evaluations" in html
 
 
+def test_hubs_map_section_in_index_html():
+    """Verify that index.html contains the interactive modeled price hubs map section (Issue #646)."""
+    from src.dashboard_generator import generate_public_dashboard, INDEX_PATH, build_hubs_map_data
+    from src.locations.specs import get_canonical_region_specs
+
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    # Verify Map Container and Accessibility attributes
+    assert 'id="hubsMap"' in html
+    assert 'role="region"' in html
+    assert 'aria-label="Modeled Fuel Price Hubs Geographic Map"' in html
+    assert 'Geographic Model Footprint &amp; Modeled Price Hubs' in html
+
+    # Verify Leaflet and Carto tile script/styles
+    assert 'leaflet@1.9.4/dist/leaflet.css' in html
+    assert 'leaflet@1.9.4/dist/leaflet.js' in html
+    assert 'basemaps.cartocdn.com/dark_all' in html
+
+    # Verify territory preset navigation buttons
+    assert 'btnViewConus' in html
+    assert 'btnViewPacific' in html
+    assert 'btnViewCaribbean' in html
+    assert 'btnViewAll' in html
+
+    # Verify data points contain all 18 canonical regions + National benchmark
+    specs = get_canonical_region_specs()
+    assert len(specs) == 18
+    for spec in specs:
+        assert f'"{spec.slug}"' in html, f"Missing slug {spec.slug} in map dataset"
+
+    assert '"national"' in html, "Missing national benchmark in map dataset"
+
+
 def test_get_release_badge_dynamic_version(monkeypatch):
     """Verify that get_release_badge dynamically uses package version and branch env vars."""
     from src.dashboard_generator import get_release_badge

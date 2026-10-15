@@ -36,6 +36,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Leaflet.js CSS & JS for Interactive Price Hubs Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
@@ -44,6 +48,21 @@
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 1px solid #1e293b !important;
+            border-radius: 1rem !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+        }
+        .leaflet-popup-content {
+            margin: 12px 14px !important;
+            line-height: 1.4 !important;
+        }
+        .leaflet-container a.leaflet-popup-close-button {
+            color: #94a3b8 !important;
+            padding: 8px !important;
+        }
         
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -201,6 +220,62 @@
         </div>
         
     </div>
+    
+
+        
+        <!-- 🗺️ INTERACTIVE GEOGRAPHIC PRICE HUBS MAP SECTION (Issue #646) -->
+        <section class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-6 card-glow" id="geographic-footprint">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl">
+                            <i class="fa-solid fa-map-location-dot text-base" aria-hidden="true"></i>
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                            Geographic Model Footprint &amp; Modeled Price Hubs
+                        </h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-3xl">
+                        Interactive geographic view of all 19 PADD 1–7 calibration hubs, offshore island districts, and wholesale commodity benchmarks modeled by Midgley's hierarchical quantitative and qualitative forecasting pipelines.
+                    </p>
+                </div>
+
+                <!-- Territory Preset Navigation Buttons -->
+                <div class="flex items-center gap-1.5 flex-wrap bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 text-xs font-medium">
+                    <button type="button" onclick="window.setHubsMapView('conus')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewConus">
+                        CONUS
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('pacific')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewPacific">
+                        Pacific &amp; Islands
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('caribbean')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewCaribbean">
+                        Caribbean
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('all')" class="px-3 py-1.5 rounded-xl bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold hover:bg-blue-600/50 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewAll">
+                        All PADDs 1–7
+                    </button>
+                </div>
+            </div>
+
+            <!-- Legend Bar -->
+            <div class="flex items-center gap-4 sm:gap-6 text-xs text-slate-400 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Active Dedicated Analytics Pages (11)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Modeled Regional Calibration Hubs (7)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Commodity Futures Benchmark (National)</span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div id="hubsMap" class="w-full h-[420px] sm:h-[500px] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10" role="region" aria-label="Modeled Fuel Price Hubs Geographic Map"></div>
+        </section>
     
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
@@ -1617,6 +1692,8 @@
         const rollingDates = ["2025-11-05", "2025-11-28", "2025-12-22", "2026-01-15", "2026-02-09", "2026-03-04", "2026-03-26", "2026-04-20", "2026-05-12", "2026-06-04", "2026-06-29", "2026-07-22", "2026-08-13", "2026-09-04", "2026-09-29"];
         const rollingMAEData = [0.0493, 0.0461, 0.0435, 0.0419, 0.042, 0.0514, 0.0799, 0.086, 0.1006, 0.1019, 0.0995, 0.1056, 0.1104, 0.1155, 0.1187];
         const rollingHitData = [41.77, 48.1, 54.27, 55.08, 55.53, 57.14, 52.52, 52.13, 50.0, 51.5, 51.9, 49.95, 50.75, 49.67, 48.7];
+        const hubPoints = [{"slug": "national", "name": "National Wholesale RBOB (NYMEX / Cushing)", "district": "Commodity Benchmark", "padd": "National Benchmark", "lat": 35.984, "lng": -96.767, "type": "national", "has_page": true, "url": "national.html", "base_price": 3.26, "pred_price": 3.262, "tax_rate": 0.184, "refinery": "U.S. Operable Refining Complex (~18.2M bpd)", "pipeline": "NYMEX RB=F Physically Deliverable Corridor", "sub_locales": []}, {"slug": "tulsa", "name": "Tulsa Metro, OK (PADD 2)", "district": "PADD 2", "padd": "PADD 2", "lat": 36.154, "lng": -95.9928, "type": "dedicated", "has_page": true, "url": "tulsa.html", "base_price": 3.961, "pred_price": 3.961, "tax_rate": 0.2, "refinery": "HF Sinclair Tulsa Refinery (125 kbpd)", "pipeline": "Magellan / Explorer Pipeline", "sub_locales": ["Broken Arrow", "Owasso", "Bixby"]}, {"slug": "newark", "name": "Newark Metro, DE (PADD 1B)", "district": "PADD 1B", "padd": "PADD 1B", "lat": 39.6837, "lng": -75.7497, "type": "dedicated", "has_page": true, "url": "newark.html", "base_price": 4.133, "pred_price": 4.149, "tax_rate": 0.23, "refinery": "PBF Delaware City Refinery (190 kbpd)", "pipeline": "Colonial Pipeline / Delaware River Barges", "sub_locales": ["Wilmington", "Dover"]}, {"slug": "cincinnati", "name": "Cincinnati Tri-State, OH/KY", "district": "PADD 2", "padd": "PADD 2", "lat": 39.1031, "lng": -84.512, "type": "dedicated", "has_page": true, "url": "cincinnati.html", "base_price": 3.99, "pred_price": 3.99, "tax_rate": 0.385, "refinery": "Marathon Catlettsburg Refinery (290 kbpd)", "pipeline": "Mid-Valley Pipeline / Ohio River Tows", "sub_locales": ["Cincinnati Oh", "Northern Kentucky Ky"]}, {"slug": "charlotte", "name": "Charlotte Metro & Carolinas Hub, NC (PADD 1C)", "district": "PADD 1C", "padd": "PADD 1C", "lat": 35.2271, "lng": -80.8431, "type": "dedicated", "has_page": true, "url": "charlotte.html", "base_price": 3.71, "pred_price": 3.709, "tax_rate": 0.41, "refinery": "Gulf Coast Refining Complex (PADD 3)", "pipeline": "Colonial Pipeline Paw Creek Junction & Selma Corridors", "sub_locales": ["Paw Creek", "Concord", "Gastonia", "Rock Hill Sc", "Greenville"]}, {"slug": "bay_area", "name": "SF Bay Area, CA (PADD 5)", "district": "PADD 5", "padd": "PADD 5", "lat": 37.8044, "lng": -122.2712, "type": "dedicated", "has_page": true, "url": "bayarea.html", "base_price": 6.343, "pred_price": 6.343, "tax_rate": 0.634, "refinery": "Chevron Richmond Refinery (245 kbpd)", "pipeline": "Kinder Morgan SFPP Pacific Northern", "sub_locales": ["Oakland", "San Francisco", "San Jose", "Berkeley", "Richmond"]}, {"slug": "port_st_lucie", "name": "Port St. Lucie Metro, FL (PADD 1C)", "district": "PADD 1C", "padd": "PADD 1C", "lat": 27.273, "lng": -80.3582, "type": "dedicated", "has_page": true, "url": "port_st_lucie.html", "base_price": 4.249, "pred_price": 4.226, "tax_rate": 0.352, "refinery": "Waterborne Jones Act Tankers from Houston/Pascagoula", "pipeline": "Port Everglades & Port Canaveral Waterborne Terminals", "sub_locales": ["Fort Pierce", "Stuart", "Vero Beach"]}, {"slug": "chicago", "name": "Greater Chicago Metro, IL & IN (PADD 2)", "district": "PADD 2", "padd": "PADD 2", "lat": 41.8781, "lng": -87.6298, "type": "dedicated", "has_page": true, "url": "chicago.html", "base_price": 4.845, "pred_price": 4.845, "tax_rate": 0.55, "refinery": "BP Whiting Refinery (435 kbpd) & CITGO Lemont (177 kbpd)", "pipeline": "Explorer / Wolverine / West Shore / Badger Pipelines", "sub_locales": ["Cook County", "Chicago City", "Dupage", "Will County", "Nw Indiana"]}, {"slug": "houston", "name": "Houston Metro, TX (PADD 3)", "district": "PADD 3", "padd": "PADD 3", "lat": 29.7604, "lng": -95.3698, "type": "dedicated", "has_page": true, "url": "houston.html", "base_price": 3.797, "pred_price": 3.797, "tax_rate": 0.2, "refinery": "ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd)", "pipeline": "Colonial Pipeline Lines 1 & 2 / Explorer Pipeline", "sub_locales": ["Houston City", "Galveston", "Baytown", "Pasadena", "Sugar Land"]}, {"slug": "los_angeles", "name": "Los Angeles Basin, CA (PADD 5)", "district": "PADD 5", "padd": "PADD 5", "lat": 34.0522, "lng": -118.2437, "type": "dedicated", "has_page": true, "url": "los_angeles.html", "base_price": 6.287, "pred_price": 6.287, "tax_rate": 0.953, "refinery": "Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd)", "pipeline": "Kinder Morgan SFPP West/South Lines & San Pedro Bay Marine Terminals", "sub_locales": ["Los Angeles City", "Westside Santa Monica", "South Bay Torrance", "Long Beach Harbor", "Orange County"]}, {"slug": "denver", "name": "Denver Metro & Rocky Mountain Hub, CO (PADD 4)", "district": "PADD 4", "padd": "PADD 4", "lat": 39.7392, "lng": -104.9903, "type": "dedicated", "has_page": true, "url": "denver.html", "base_price": 4.326, "pred_price": 4.326, "tax_rate": 0.28, "refinery": "Suncor Commerce City Refinery (103 kbpd)", "pipeline": "Rocky Mountain Refined Product Midstream / Magellan Corridor", "sub_locales": ["Denver City", "Aurora", "Lakewood", "Boulder", "Commerce City"]}, {"slug": "new_york", "name": "New York Harbor & NY State Hub, NY (PADD 1B)", "district": "PADD 1B", "padd": "PADD 1B", "lat": 40.7128, "lng": -74.006, "type": "dedicated", "has_page": true, "url": "new_york.html", "base_price": 4.441, "pred_price": 4.441, "tax_rate": 0.472, "refinery": "Phillips 66 Bayway Refinery (258 kbpd) & NY Harbor Barges", "pipeline": "Buckeye Pipeline System & Colonial Pipeline Terminus", "sub_locales": ["Nyc Manhattan", "Brooklyn Queens", "Long Island Nassau", "Westchester", "Albany Capital"]}, {"slug": "seattle", "name": "Seattle-Tacoma & Puget Sound, WA (PADD 5B)", "district": "PADD 5B", "padd": "PADD 5B", "lat": 47.6062, "lng": -122.3321, "type": "modeled", "has_page": false, "url": "", "base_price": 5.6, "pred_price": 5.6, "tax_rate": 0.494, "refinery": "bp Cherry Point (242 kbpd) & Phillips 66 Ferndale (105 kbpd)", "pipeline": "Olympic Pipeline System", "sub_locales": ["Seattle City", "Tacoma", "Bellevue", "Everett", "Olympia"]}, {"slug": "phoenix", "name": "Phoenix Metro & Desert Southwest, AZ (PADD 5C)", "district": "PADD 5C", "padd": "PADD 5C", "lat": 33.4484, "lng": -112.074, "type": "modeled", "has_page": false, "url": "", "base_price": 4.667, "pred_price": 4.667, "tax_rate": 0.18, "refinery": "Import Hub via Kinder Morgan SFPP West/East Lines", "pipeline": "Kinder Morgan SFPP West Line (LA) & East Line (El Paso)", "sub_locales": ["Phoenix City", "Scottsdale", "Mesa", "Chandler", "Glendale"]}, {"slug": "anchorage", "name": "Anchorage & Southcentral Alaska Hub, AK (PADD 5D)", "district": "PADD 5D", "padd": "PADD 5D", "lat": 61.2181, "lng": -149.9003, "type": "modeled", "has_page": false, "url": "", "base_price": 4.902, "pred_price": 4.902, "tax_rate": 0.0895, "refinery": "Marathon Kenai Refinery (68 kbpd)", "pipeline": "Cook Inlet Marine Barges & Alaska Railroad Tank Cars", "sub_locales": ["Anchorage Bowl", "Mat Su Valley", "Kenai Soldotna", "Fairbanks Interior", "Juneau Se"]}, {"slug": "honolulu", "name": "Honolulu & Oahu Island Hub, HI (PADD 5D)", "district": "PADD 5D", "padd": "PADD 5D", "lat": 21.3069, "lng": -157.8583, "type": "modeled", "has_page": false, "url": "", "base_price": 5.555, "pred_price": 5.555, "tax_rate": 0.33, "refinery": "Par Hawaii Kapolei Refinery (94 kbpd)", "pipeline": "Young Brothers Inter-Island Ocean Fuel Barges", "sub_locales": ["Honolulu Urban", "Waikiki", "Leeward Oahu", "Maui County", "Hawaii Island"]}, {"slug": "guam", "name": "Hag\u00e5t\u00f1a & Apra Harbor, Guam (PADD 7)", "district": "PADD 7", "padd": "PADD 7", "lat": 13.4786, "lng": 144.757, "type": "modeled", "has_page": false, "url": "", "base_price": 4.334, "pred_price": 4.334, "tax_rate": 0.19, "refinery": "Asia-Pacific Product Tanker Imports (Singapore / South Korea)", "pipeline": "Cabras Island Fuel Pier & Apra Harbor Marine Headers", "sub_locales": ["Hagatna", "Tamuning Tumon", "Dededo", "Yigo Andersen", "Santa Rita Apra"]}, {"slug": "san_juan", "name": "San Juan Metro & U.S. Caribbean Territories Hub, PR (PADD 6)", "district": "PADD 6", "padd": "PADD 6", "lat": 18.4655, "lng": -66.1057, "type": "modeled", "has_page": false, "url": "", "base_price": 4.334, "pred_price": 4.334, "tax_rate": 0.16, "refinery": "Waterborne Jones Act Tankers from Houston/Corpus Christi & USVI Terminals", "pipeline": "San Juan Harbor Deepwater Tanker Berths & Coastal Product Barges", "sub_locales": ["San Juan Metro", "Bayamon", "Carolina", "Ponce", "Mayaguez"]}, {"slug": "boston", "name": "Boston Metro & New England Hub, MA (PADD 1A)", "district": "PADD 1A", "padd": "PADD 1A", "lat": 42.3601, "lng": -71.0589, "type": "modeled", "has_page": false, "url": "", "base_price": 4.324, "pred_price": 4.324, "tax_rate": 0.24, "refinery": "Irving Oil Saint John Refinery (320 kbpd) & Waterborne Imports", "pipeline": "Colonial Pipeline Southern Terminus / NY Harbor Coastal Barges", "sub_locales": ["Boston City", "Cambridge", "Quincy", "Worcester", "Springfield"]}];
+        const cartoTileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_4iqf_1_7880b5cbe390b5b1835b1f06";
 
         window.addEventListener('DOMContentLoaded', () => {
             const ctxMAE = document.getElementById('maeTrendChart').getContext('2d');
@@ -1670,6 +1747,106 @@
                     }
                 }
             });
+
+            // -------------------------------------------------------------
+            // Leaflet Modeled Price Hubs Map Initialization (Issue #646)
+            // -------------------------------------------------------------
+            const hubsMapEl = document.getElementById('hubsMap');
+            if (hubsMapEl && typeof L !== 'undefined') {
+                const hubsMap = L.map('hubsMap', {
+                    scrollWheelZoom: false
+                }).setView([38.5000, -96.0000], 4);
+
+                L.tileLayer(cartoTileUrl, {
+                    attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    subdomains: 'abcd',
+                    maxZoom: 18
+                }).addTo(hubsMap);
+
+                const markersGroup = L.featureGroup();
+
+                hubPoints.forEach(function(pt) {
+                    const markerColor = pt.type === 'national' ? '#f59e0b' : (pt.has_page ? '#10b981' : '#06b6d4');
+                    const radius = pt.type === 'national' ? 10 : (pt.has_page ? 8 : 7);
+
+                    const marker = L.circleMarker([pt.lat, pt.lng], {
+                        radius: radius,
+                        fillColor: markerColor,
+                        color: '#ffffff',
+                        weight: 2,
+                        opacity: 0.9,
+                        fillOpacity: 0.85
+                    });
+
+                    let popupHtml = '<div class="p-2 space-y-2 text-slate-100 font-sans min-w-[240px]">' +
+                        '<div class="flex items-center justify-between border-b pb-1.5 border-slate-700">' +
+                            '<span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ' + (pt.has_page ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'bg-cyan-950 text-cyan-300 border border-cyan-500/30') + '">' + pt.district + '</span>' +
+                            '<span class="text-[10px] text-slate-400 font-mono">' + (pt.has_page ? 'Active Page' : 'Modeled Hub') + '</span>' +
+                        '</div>' +
+                        '<h4 class="font-bold text-sm text-white leading-tight">' + pt.name + '</h4>' +
+                        '<div class="grid grid-cols-2 gap-2 text-xs py-1.5 bg-slate-800/80 p-2 rounded-xl border border-slate-700/60">' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">' + (pt.type === 'national' ? 'Current Futures' : 'Live Pump Price') + '</span>' +
+                                '<strong class="text-sm font-black text-white">$' + pt.base_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">5-Day Projected</span>' +
+                                '<strong class="text-sm font-black text-blue-400">$' + pt.pred_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="text-[11px] text-slate-300 space-y-1">' +
+                            '<div><strong class="text-slate-400">Tax Stack:</strong> ' + (pt.tax_rate * 100).toFixed(1) + '¢/gal statutory base</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Refinery:</strong> ' + pt.refinery + '</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Midstream:</strong> ' + pt.pipeline + '</div>';
+
+                    if (pt.sub_locales && pt.sub_locales.length > 0) {
+                        popupHtml += '<div class="text-[10px] text-slate-400 pt-0.5"><strong class="text-slate-500">Sub-locales:</strong> ' + pt.sub_locales.join(', ') + '</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    if (pt.has_page && pt.url) {
+                        popupHtml += '<div class="pt-1.5"><a href="' + pt.url + '" class="block text-center w-full py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition shadow-sm">Explore ' + pt.slug.toUpperCase() + ' Analytics &rarr;</a></div>';
+                    } else {
+                        popupHtml += '<div class="pt-1 text-[10px] text-slate-400 italic text-center"><i class="fa-solid fa-check-circle text-cyan-400 mr-1"></i>Calibrated in Hierarchical Model &amp; Ledger</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    marker.bindPopup(popupHtml, { maxWidth: 320 });
+                    marker.addTo(hubsMap);
+                    markersGroup.addLayer(marker);
+                });
+
+                window.setHubsMapView = function(view) {
+                    const buttons = ['btnViewConus', 'btnViewPacific', 'btnViewCaribbean', 'btnViewAll'];
+                    buttons.forEach(id => {
+                        const btn = document.getElementById(id);
+                        if (btn) {
+                            btn.classList.remove('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                            btn.classList.add('text-slate-300');
+                        }
+                    });
+
+                    if (view === 'conus') {
+                        hubsMap.setView([38.5000, -96.0000], 4);
+                        const b = document.getElementById('btnViewConus');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'pacific') {
+                        hubsMap.setView([28.0000, -165.0000], 3);
+                        const b = document.getElementById('btnViewPacific');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'caribbean') {
+                        hubsMap.setView([18.4655, -66.1057], 7);
+                        const b = document.getElementById('btnViewCaribbean');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'all') {
+                        hubsMap.setView([26.0000, -120.0000], 3);
+                        const b = document.getElementById('btnViewAll');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    }
+                };
+            }
         });
     </script>
 </body>

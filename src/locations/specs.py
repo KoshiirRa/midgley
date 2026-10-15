@@ -25,6 +25,10 @@ class RegionSpec:
     sub_locales: Dict[str, float] = field(default_factory=dict)
     primary_refinery: str = "Regional Refining Complex"
     primary_pipeline: str = "Regional Midstream Corridor"
+    latitude: float = 0.0
+    longitude: float = 0.0
+    has_dedicated_page: bool = True
+    dedicated_page_url: str = ""
 
 
 REGIONAL_SPECS: Dict[str, RegionSpec] = {
@@ -39,7 +43,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         baseline_tax_rate=0.20,
         sub_locales={"broken_arrow": -0.02, "owasso": 0.01, "bixby": 0.02},
         primary_refinery="HF Sinclair Tulsa Refinery (125 kbpd)",
-        primary_pipeline="Magellan / Explorer Pipeline"
+        primary_pipeline="Magellan / Explorer Pipeline",
+        latitude=36.1540,
+        longitude=-95.9928,
+        has_dedicated_page=True,
+        dedicated_page_url="tulsa.html"
     ),
     "newark": RegionSpec(
         region_key="Newark_DE",
@@ -52,7 +60,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         baseline_tax_rate=0.23,
         sub_locales={"wilmington": 0.04, "dover": -0.03},
         primary_refinery="PBF Delaware City Refinery (190 kbpd)",
-        primary_pipeline="Colonial Pipeline / Delaware River Barges"
+        primary_pipeline="Colonial Pipeline / Delaware River Barges",
+        latitude=39.6837,
+        longitude=-75.7497,
+        has_dedicated_page=True,
+        dedicated_page_url="newark.html"
     ),
     "cincinnati": RegionSpec(
         region_key="Cincinnati_OH",
@@ -66,7 +78,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_edgeworth_cycles=True,
         sub_locales={"cincinnati_oh": 0.00, "northern_kentucky_ky": -0.12},
         primary_refinery="Marathon Catlettsburg Refinery (290 kbpd)",
-        primary_pipeline="Mid-Valley Pipeline / Ohio River Tows"
+        primary_pipeline="Mid-Valley Pipeline / Ohio River Tows",
+        latitude=39.1031,
+        longitude=-84.5120,
+        has_dedicated_page=True,
+        dedicated_page_url="cincinnati.html"
     ),
     "charlotte": RegionSpec(
         region_key="Charlotte_NC",
@@ -79,7 +95,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         baseline_tax_rate=0.410,
         sub_locales={"paw_creek": -0.03, "concord": 0.02, "gastonia": -0.01, "rock_hill_sc": -0.14, "greenville": 0.01, "selma": -0.04},
         primary_refinery="Gulf Coast Refining Complex (PADD 3)",
-        primary_pipeline="Colonial Pipeline Paw Creek Junction & Selma Corridors"
+        primary_pipeline="Colonial Pipeline Paw Creek Junction & Selma Corridors",
+        latitude=35.2271,
+        longitude=-80.8431,
+        has_dedicated_page=True,
+        dedicated_page_url="charlotte.html"
     ),
     "bay_area": RegionSpec(
         region_key="BayArea_CA",
@@ -93,7 +113,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=True,
         sub_locales={"oakland": 0.00, "san_francisco": 0.15, "san_jose": 0.08, "berkeley": 0.05, "richmond": -0.06},
         primary_refinery="Chevron Richmond Refinery (245 kbpd)",
-        primary_pipeline="Kinder Morgan SFPP Pacific Northern"
+        primary_pipeline="Kinder Morgan SFPP Pacific Northern",
+        latitude=37.8044,
+        longitude=-122.2712,
+        has_dedicated_page=True,
+        dedicated_page_url="bayarea.html"
     ),
     "port_st_lucie": RegionSpec(
         region_key="Port_St_Lucie_FL",
@@ -106,7 +130,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         baseline_tax_rate=0.352,
         sub_locales={"fort_pierce": -0.02, "stuart": 0.03, "vero_beach": 0.01},
         primary_refinery="Waterborne Jones Act Tankers from Houston/Pascagoula",
-        primary_pipeline="Port Everglades & Port Canaveral Waterborne Terminals"
+        primary_pipeline="Port Everglades & Port Canaveral Waterborne Terminals",
+        latitude=27.2730,
+        longitude=-80.3582,
+        has_dedicated_page=True,
+        dedicated_page_url="port_st_lucie.html"
     ),
     "chicago": RegionSpec(
         region_key="Chicago_IL",
@@ -120,7 +148,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_edgeworth_cycles=True,
         sub_locales={"cook_county": 0.08, "chicago_city": 0.15, "dupage": -0.04, "will_county": -0.06, "nw_indiana": -0.38},
         primary_refinery="BP Whiting Refinery (435 kbpd) & CITGO Lemont (177 kbpd)",
-        primary_pipeline="Explorer / Wolverine / West Shore / Badger Pipelines"
+        primary_pipeline="Explorer / Wolverine / West Shore / Badger Pipelines",
+        latitude=41.8781,
+        longitude=-87.6298,
+        has_dedicated_page=True,
+        dedicated_page_url="chicago.html"
     ),
     "houston": RegionSpec(
         region_key="Houston_TX",
@@ -134,7 +166,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_edgeworth_cycles=False,
         sub_locales={"houston_city": 0.00, "galveston": 0.04, "baytown": -0.03, "pasadena": -0.02, "sugar_land": 0.02, "the_woodlands": 0.03, "beaumont_port_arthur": -0.04},
         primary_refinery="ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd)",
-        primary_pipeline="Colonial Pipeline Lines 1 & 2 / Explorer Pipeline"
+        primary_pipeline="Colonial Pipeline Lines 1 & 2 / Explorer Pipeline",
+        latitude=29.7604,
+        longitude=-95.3698,
+        has_dedicated_page=True,
+        dedicated_page_url="houston.html"
     ),
     "los_angeles": RegionSpec(
         region_key="Los_Angeles_CA",
@@ -149,7 +185,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=True,
         sub_locales={"los_angeles_city": 0.04, "westside_santa_monica": 0.16, "south_bay_torrance": -0.05, "long_beach_harbor": -0.04, "orange_county": -0.06, "inland_empire": -0.10, "san_fernando_valley": 0.02},
         primary_refinery="Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd)",
-        primary_pipeline="Kinder Morgan SFPP West/South Lines & San Pedro Bay Marine Terminals"
+        primary_pipeline="Kinder Morgan SFPP West/South Lines & San Pedro Bay Marine Terminals",
+        latitude=34.0522,
+        longitude=-118.2437,
+        has_dedicated_page=True,
+        dedicated_page_url="los_angeles.html"
     ),
     "denver": RegionSpec(
         region_key="Denver_CO",
@@ -164,7 +204,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"denver_city": 0.00, "aurora": -0.02, "lakewood": 0.01, "boulder": 0.08, "commerce_city": -0.04, "fort_collins": -0.02, "colorado_springs": -0.03},
         primary_refinery="Suncor Commerce City Refinery (103 kbpd)",
-        primary_pipeline="Rocky Mountain Refined Product Midstream / Magellan Corridor"
+        primary_pipeline="Rocky Mountain Refined Product Midstream / Magellan Corridor",
+        latitude=39.7392,
+        longitude=-104.9903,
+        has_dedicated_page=True,
+        dedicated_page_url="denver.html"
     ),
     "new_york": RegionSpec(
         region_key="New_York_NY",
@@ -179,7 +223,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"nyc_manhattan": 0.14, "brooklyn_queens": 0.04, "long_island_nassau": 0.02, "westchester": 0.06, "albany_capital": -0.05, "buffalo_erie": -0.08, "adirondacks_essex": 0.18},
         primary_refinery="Phillips 66 Bayway Refinery (258 kbpd) & NY Harbor Barges",
-        primary_pipeline="Buckeye Pipeline System & Colonial Pipeline Terminus"
+        primary_pipeline="Buckeye Pipeline System & Colonial Pipeline Terminus",
+        latitude=40.7128,
+        longitude=-74.0060,
+        has_dedicated_page=True,
+        dedicated_page_url="new_york.html"
     ),
     "seattle": RegionSpec(
         region_key="Seattle_WA",
@@ -194,7 +242,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"seattle_city": 0.05, "tacoma": -0.04, "bellevue": 0.08, "everett": -0.02, "olympia": -0.01, "portland_or": -0.06},
         primary_refinery="bp Cherry Point (242 kbpd) & Phillips 66 Ferndale (105 kbpd)",
-        primary_pipeline="Olympic Pipeline System"
+        primary_pipeline="Olympic Pipeline System",
+        latitude=47.6062,
+        longitude=-122.3321,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     ),
     "phoenix": RegionSpec(
         region_key="Phoenix_AZ",
@@ -209,7 +261,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"phoenix_city": 0.02, "scottsdale": 0.09, "mesa": -0.03, "chandler": -0.01, "glendale": -0.02, "tucson": -0.08, "las_vegas_nv": 0.42},
         primary_refinery="Import Hub via Kinder Morgan SFPP West/East Lines",
-        primary_pipeline="Kinder Morgan SFPP West Line (LA) & East Line (El Paso)"
+        primary_pipeline="Kinder Morgan SFPP West Line (LA) & East Line (El Paso)",
+        latitude=33.4484,
+        longitude=-112.0740,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     ),
     "anchorage": RegionSpec(
         region_key="Anchorage_AK",
@@ -224,7 +280,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"anchorage_bowl": 0.00, "mat_su_valley": -0.05, "kenai_soldotna": -0.08, "fairbanks_interior": 0.28, "juneau_se": 0.35, "bush_villages": 1.75},
         primary_refinery="Marathon Kenai Refinery (68 kbpd)",
-        primary_pipeline="Cook Inlet Marine Barges & Alaska Railroad Tank Cars"
+        primary_pipeline="Cook Inlet Marine Barges & Alaska Railroad Tank Cars",
+        latitude=61.2181,
+        longitude=-149.9003,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     ),
     "honolulu": RegionSpec(
         region_key="Honolulu_HI",
@@ -239,7 +299,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"honolulu_urban": 0.00, "waikiki": 0.12, "leeward_oahu": -0.06, "maui_county": 0.45, "hawaii_island": 0.38, "kauai": 0.52},
         primary_refinery="Par Hawaii Kapolei Refinery (94 kbpd)",
-        primary_pipeline="Young Brothers Inter-Island Ocean Fuel Barges"
+        primary_pipeline="Young Brothers Inter-Island Ocean Fuel Barges",
+        latitude=21.3069,
+        longitude=-157.8583,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     ),
     "guam": RegionSpec(
         region_key="Guam_GU",
@@ -254,7 +318,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"hagatna": 0.00, "tamuning_tumon": 0.05, "dededo": -0.02, "yigo_andersen": -0.04, "santa_rita_apra": -0.03, "saipan_cnmi": 0.45, "pago_pago_as": 0.55},
         primary_refinery="Asia-Pacific Product Tanker Imports (Singapore / South Korea)",
-        primary_pipeline="Cabras Island Fuel Pier & Apra Harbor Marine Headers"
+        primary_pipeline="Cabras Island Fuel Pier & Apra Harbor Marine Headers",
+        latitude=13.4786,
+        longitude=144.7570,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     ),
     "san_juan": RegionSpec(
         region_key="San_Juan_PR",
@@ -269,7 +337,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"san_juan_metro": 0.00, "bayamon": -0.02, "carolina": 0.01, "ponce": -0.04, "mayaguez": -0.03, "caguas": 0.00, "arecibo": -0.02, "st_thomas_usvi": 0.45, "st_croix_usvi": 0.38},
         primary_refinery="Waterborne Jones Act Tankers from Houston/Corpus Christi & USVI Terminals",
-        primary_pipeline="San Juan Harbor Deepwater Tanker Berths & Coastal Product Barges"
+        primary_pipeline="San Juan Harbor Deepwater Tanker Berths & Coastal Product Barges",
+        latitude=18.4655,
+        longitude=-66.1057,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     ),
     "boston": RegionSpec(
         region_key="Boston_MA",
@@ -284,7 +356,11 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         has_carb_compliance=False,
         sub_locales={"boston_city": 0.04, "cambridge": 0.06, "quincy": -0.02, "worcester": -0.05, "springfield": -0.08, "providence_ri": 0.12, "manchester_nh": -0.03, "portland_me": 0.05},
         primary_refinery="Irving Oil Saint John Refinery (320 kbpd) & Waterborne Imports",
-        primary_pipeline="Colonial Pipeline Southern Terminus / NY Harbor Coastal Barges"
+        primary_pipeline="Colonial Pipeline Southern Terminus / NY Harbor Coastal Barges",
+        latitude=42.3601,
+        longitude=-71.0589,
+        has_dedicated_page=False,
+        dedicated_page_url=""
     )
 }
 
@@ -371,4 +447,15 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
         if spec.region_key.lower() == key or spec.slug.lower() == key:
             return spec
     return None
+
+
+def get_canonical_region_specs() -> List[RegionSpec]:
+    """Returns the list of all 18 canonical non-aliased RegionSpec objects."""
+    canonical_keys = [
+        "tulsa", "newark", "cincinnati", "charlotte", "bay_area",
+        "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york",
+        "seattle", "phoenix", "anchorage", "honolulu", "guam", "san_juan", "boston"
+    ]
+    return [REGIONAL_SPECS[k] for k in canonical_keys if k in REGIONAL_SPECS]
+
 

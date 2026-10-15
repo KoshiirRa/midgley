@@ -237,6 +237,41 @@ REGION_METADATA = {
         "static_anchor": 3.450,
         "name": "Boston, MA Metro Retail",
         "aaa_keywords": ["Boston", "Suffolk County", "Massachusetts", "State Average"]
+    },
+    "Seattle_WA": {
+        "zip": "98101",
+        "state": "WA",
+        "static_anchor": 4.250,
+        "name": "Seattle-Tacoma, WA Metro Retail",
+        "aaa_keywords": ["Seattle", "King County", "Washington", "State Average"]
+    },
+    "Phoenix_AZ": {
+        "zip": "85001",
+        "state": "AZ",
+        "static_anchor": 3.550,
+        "name": "Phoenix, AZ Metro Retail",
+        "aaa_keywords": ["Phoenix", "Maricopa County", "Arizona", "State Average"]
+    },
+    "Anchorage_AK": {
+        "zip": "99501",
+        "state": "AK",
+        "static_anchor": 3.750,
+        "name": "Anchorage, AK Metro Retail",
+        "aaa_keywords": ["Anchorage", "Alaska", "State Average"]
+    },
+    "Honolulu_HI": {
+        "zip": "96813",
+        "state": "HI",
+        "static_anchor": 4.650,
+        "name": "Honolulu, HI Metro Retail",
+        "aaa_keywords": ["Honolulu", "Oahu", "Hawaii", "State Average"]
+    },
+    "Guam_GU": {
+        "zip": "96910",
+        "state": "GU",
+        "static_anchor": 4.890,
+        "name": "Hagåtña, Guam Retail",
+        "aaa_keywords": ["Guam", "Hagatna", "Apra Harbor"]
     }
 }
 

@@ -2201,6 +2201,131 @@ $$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}
     logger.info(f"Successfully generated technical breakdown report files at {html_target} and {md_target}")
 
 
+def build_hubs_map_data(prices_map: dict) -> Tuple[List[dict], str]:
+    """
+    Constructs the list of modeled price hubs across PADDs 1-7 plus National Wholesale benchmark (Issue #646).
+    """
+    from src.locations.specs import get_canonical_region_specs
+
+    points = []
+
+    # 1. National Wholesale Commodity Benchmark (Cushing delivery hub / NYMEX RB=F)
+    nat_base = prices_map.get('National', {}).get('base', 4.316)
+    nat_pred = prices_map.get('National', {}).get('pred', 4.205)
+    points.append({
+        "slug": "national",
+        "name": "National Wholesale RBOB (NYMEX / Cushing)",
+        "district": "Commodity Benchmark",
+        "padd": "National Benchmark",
+        "lat": 35.9840,
+        "lng": -96.7670,
+        "type": "national",
+        "has_page": True,
+        "url": "national.html",
+        "base_price": float(nat_base),
+        "pred_price": float(nat_pred),
+        "tax_rate": 0.184,
+        "refinery": "U.S. Operable Refining Complex (~18.2M bpd)",
+        "pipeline": "NYMEX RB=F Physically Deliverable Corridor",
+        "sub_locales": []
+    })
+
+    # 2. All 18 Canonical Region Specs
+    specs = get_canonical_region_specs()
+    for spec in specs:
+        reg_info = prices_map.get(spec.region_key) or {}
+        base_val = reg_info.get('base')
+        pred_val = reg_info.get('pred')
+        if base_val is None:
+            base_val = 3.500
+            pred_val = 3.450
+
+        points.append({
+            "slug": spec.slug,
+            "name": spec.display_name,
+            "district": spec.padd,
+            "padd": spec.padd,
+            "lat": spec.latitude,
+            "lng": spec.longitude,
+            "type": "dedicated" if spec.has_dedicated_page else "modeled",
+            "has_page": spec.has_dedicated_page,
+            "url": spec.dedicated_page_url,
+            "base_price": round(float(base_val), 3),
+            "pred_price": round(float(pred_val), 3),
+            "tax_rate": float(spec.baseline_tax_rate),
+            "refinery": spec.primary_refinery,
+            "pipeline": spec.primary_pipeline,
+            "sub_locales": [s.replace("_", " ").title() for s in list(spec.sub_locales.keys())[:5]]
+        })
+
+    return points, json.dumps(points)
+
+
+def build_hubs_map_section_html(hub_points: list) -> str:
+    """
+    Renders the interactive Leaflet map container and territory filters for docs/index.html (Issue #646).
+    """
+    dedicated_count = sum(1 for pt in hub_points if pt['has_page'] and pt['slug'] != 'national')
+    modeled_count = sum(1 for pt in hub_points if not pt['has_page'])
+    total_hubs = len(hub_points)
+
+    return f"""
+        <!-- 🗺️ INTERACTIVE GEOGRAPHIC PRICE HUBS MAP SECTION (Issue #646) -->
+        <section class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-6 card-glow" id="geographic-footprint">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl">
+                            <i class="fa-solid fa-map-location-dot text-base" aria-hidden="true"></i>
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                            Geographic Model Footprint &amp; Modeled Price Hubs
+                        </h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-3xl">
+                        Interactive geographic view of all {total_hubs} PADD 1–7 calibration hubs, offshore island districts, and wholesale commodity benchmarks modeled by Midgley's hierarchical quantitative and qualitative forecasting pipelines.
+                    </p>
+                </div>
+
+                <!-- Territory Preset Navigation Buttons -->
+                <div class="flex items-center gap-1.5 flex-wrap bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 text-xs font-medium">
+                    <button type="button" onclick="window.setHubsMapView('conus')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewConus">
+                        CONUS
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('pacific')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewPacific">
+                        Pacific &amp; Islands
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('caribbean')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewCaribbean">
+                        Caribbean
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('all')" class="px-3 py-1.5 rounded-xl bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold hover:bg-blue-600/50 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewAll">
+                        All PADDs 1–7
+                    </button>
+                </div>
+            </div>
+
+            <!-- Legend Bar -->
+            <div class="flex items-center gap-4 sm:gap-6 text-xs text-slate-400 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Active Dedicated Analytics Pages ({dedicated_count})</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Modeled Regional Calibration Hubs ({modeled_count})</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Commodity Futures Benchmark (National)</span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div id="hubsMap" class="w-full h-[420px] sm:h-[500px] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10" role="region" aria-label="Modeled Fuel Price Hubs Geographic Map"></div>
+        </section>
+    """
+
+
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(os.path.join(DOCS_DIR, "assets"), exist_ok=True)
@@ -2280,7 +2405,14 @@ def generate_public_dashboard():
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
         'SanJose_CA': {'base': 5.990, 'pred': 5.280},
-        'NorthBay_CA': {'base': 5.950, 'pred': 5.240}
+        'NorthBay_CA': {'base': 5.950, 'pred': 5.240},
+        'Seattle_WA': {'base': 4.250, 'pred': 4.180},
+        'Phoenix_AZ': {'base': 3.550, 'pred': 3.490},
+        'Anchorage_AK': {'base': 3.750, 'pred': 3.690},
+        'Honolulu_HI': {'base': 4.650, 'pred': 4.580},
+        'Guam_GU': {'base': 4.890, 'pred': 4.810},
+        'San_Juan_PR': {'base': 3.490, 'pred': 3.440},
+        'Boston_MA': {'base': 3.450, 'pred': 3.390}
     }
     initial_deltas = {reg: prices_map[reg]['pred'] - prices_map[reg]['base'] for reg in prices_map}
 
@@ -2376,6 +2508,16 @@ def generate_public_dashboard():
     except Exception as stale_err:
         logger.debug(f"Staleness check notice: {stale_err}")
 
+    # Build Map Points and Map Section HTML for docs/index.html (Issue #646)
+    carto_api_key = (os.environ.get("CARTO_API_KEY") or "cb1_4iqf_1_7880b5cbe390b5b1835b1f06").strip()
+    carto_tile_url = (
+        f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
+        if carto_api_key
+        else "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    )
+    hub_points, hubs_points_json = build_hubs_map_data(prices_map)
+    hubs_map_html = build_hubs_map_section_html(hub_points)
+
     nav_overview = get_nav_header("overview")
     head_meta_index = get_head_meta_tags(
         title="Midgley - Multi-Agent Gas Price Forecasting Engine",
@@ -2396,6 +2538,10 @@ def generate_public_dashboard():
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Leaflet.js CSS & JS for Interactive Price Hubs Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
@@ -2404,6 +2550,21 @@ def generate_public_dashboard():
     <style>
         .gradient-bg {{ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }}
         .card-glow {{ box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }}
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {{
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 1px solid #1e293b !important;
+            border-radius: 1rem !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+        }}
+        .leaflet-popup-content {{
+            margin: 12px 14px !important;
+            line-height: 1.4 !important;
+        }}
+        .leaflet-container a.leaflet-popup-close-button {{
+            color: #94a3b8 !important;
+            padding: 8px !important;
+        }}
         {KATEX_MOBILE_CSS}
     </style>
 </head>
@@ -2432,6 +2593,8 @@ def generate_public_dashboard():
         </div>
 
         {build_macro_narrative_card_html(prices_map)}
+
+        {hubs_map_html}
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
         <section class="space-y-4">
@@ -3199,6 +3362,8 @@ def generate_public_dashboard():
         const rollingDates = """ + json_dates + """;
         const rollingMAEData = """ + json_mae + """;
         const rollingHitData = """ + json_hit + """;
+        const hubPoints = """ + hubs_points_json + """;
+        const cartoTileUrl = """ + json.dumps(carto_tile_url) + """;
 
         window.addEventListener('DOMContentLoaded', () => {
             const ctxMAE = document.getElementById('maeTrendChart').getContext('2d');
@@ -3252,6 +3417,106 @@ def generate_public_dashboard():
                     }
                 }
             });
+
+            // -------------------------------------------------------------
+            // Leaflet Modeled Price Hubs Map Initialization (Issue #646)
+            // -------------------------------------------------------------
+            const hubsMapEl = document.getElementById('hubsMap');
+            if (hubsMapEl && typeof L !== 'undefined') {
+                const hubsMap = L.map('hubsMap', {
+                    scrollWheelZoom: false
+                }).setView([38.5000, -96.0000], 4);
+
+                L.tileLayer(cartoTileUrl, {
+                    attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    subdomains: 'abcd',
+                    maxZoom: 18
+                }).addTo(hubsMap);
+
+                const markersGroup = L.featureGroup();
+
+                hubPoints.forEach(function(pt) {
+                    const markerColor = pt.type === 'national' ? '#f59e0b' : (pt.has_page ? '#10b981' : '#06b6d4');
+                    const radius = pt.type === 'national' ? 10 : (pt.has_page ? 8 : 7);
+
+                    const marker = L.circleMarker([pt.lat, pt.lng], {
+                        radius: radius,
+                        fillColor: markerColor,
+                        color: '#ffffff',
+                        weight: 2,
+                        opacity: 0.9,
+                        fillOpacity: 0.85
+                    });
+
+                    let popupHtml = '<div class="p-2 space-y-2 text-slate-100 font-sans min-w-[240px]">' +
+                        '<div class="flex items-center justify-between border-b pb-1.5 border-slate-700">' +
+                            '<span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ' + (pt.has_page ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'bg-cyan-950 text-cyan-300 border border-cyan-500/30') + '">' + pt.district + '</span>' +
+                            '<span class="text-[10px] text-slate-400 font-mono">' + (pt.has_page ? 'Active Page' : 'Modeled Hub') + '</span>' +
+                        '</div>' +
+                        '<h4 class="font-bold text-sm text-white leading-tight">' + pt.name + '</h4>' +
+                        '<div class="grid grid-cols-2 gap-2 text-xs py-1.5 bg-slate-800/80 p-2 rounded-xl border border-slate-700/60">' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">' + (pt.type === 'national' ? 'Current Futures' : 'Live Pump Price') + '</span>' +
+                                '<strong class="text-sm font-black text-white">$' + pt.base_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">5-Day Projected</span>' +
+                                '<strong class="text-sm font-black text-blue-400">$' + pt.pred_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="text-[11px] text-slate-300 space-y-1">' +
+                            '<div><strong class="text-slate-400">Tax Stack:</strong> ' + (pt.tax_rate * 100).toFixed(1) + '¢/gal statutory base</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Refinery:</strong> ' + pt.refinery + '</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Midstream:</strong> ' + pt.pipeline + '</div>';
+
+                    if (pt.sub_locales && pt.sub_locales.length > 0) {
+                        popupHtml += '<div class="text-[10px] text-slate-400 pt-0.5"><strong class="text-slate-500">Sub-locales:</strong> ' + pt.sub_locales.join(', ') + '</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    if (pt.has_page && pt.url) {
+                        popupHtml += '<div class="pt-1.5"><a href="' + pt.url + '" class="block text-center w-full py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition shadow-sm">Explore ' + pt.slug.toUpperCase() + ' Analytics &rarr;</a></div>';
+                    } else {
+                        popupHtml += '<div class="pt-1 text-[10px] text-slate-400 italic text-center"><i class="fa-solid fa-check-circle text-cyan-400 mr-1"></i>Calibrated in Hierarchical Model &amp; Ledger</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    marker.bindPopup(popupHtml, { maxWidth: 320 });
+                    marker.addTo(hubsMap);
+                    markersGroup.addLayer(marker);
+                });
+
+                window.setHubsMapView = function(view) {
+                    const buttons = ['btnViewConus', 'btnViewPacific', 'btnViewCaribbean', 'btnViewAll'];
+                    buttons.forEach(id => {
+                        const btn = document.getElementById(id);
+                        if (btn) {
+                            btn.classList.remove('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                            btn.classList.add('text-slate-300');
+                        }
+                    });
+
+                    if (view === 'conus') {
+                        hubsMap.setView([38.5000, -96.0000], 4);
+                        const b = document.getElementById('btnViewConus');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'pacific') {
+                        hubsMap.setView([28.0000, -165.0000], 3);
+                        const b = document.getElementById('btnViewPacific');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'caribbean') {
+                        hubsMap.setView([18.4655, -66.1057], 7);
+                        const b = document.getElementById('btnViewCaribbean');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'all') {
+                        hubsMap.setView([26.0000, -120.0000], 3);
+                        const b = document.getElementById('btnViewAll');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    }
+                };
+            }
         });
     </script>
 </body>

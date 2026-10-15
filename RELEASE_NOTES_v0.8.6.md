@@ -169,6 +169,17 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **3-Digit Prefix Centroid Resolution**: Introduced `KNOWN_PREFIX_COORDS` in [`src/zip_geocoding.py`](src/zip_geocoding.py) mapping 3-digit prefixes across New York State (Adirondacks `129`, Glens Falls `128`, Capital District `120`-`123`, Syracuse `132`, Buffalo `142`, Rochester `146`, Long Island `115`-`119`, NYC `100`-`114`) and major out-of-metro regions.
 - **Dynamic Leaflet Integration**: Added `resolve_zip_coordinates()` and updated [`src/dashboard_generator.py`](src/dashboard_generator.py) so the out-of-metro demand heatmap on [`docs/telemetry.html`](docs/telemetry.html) renders exact coordinates and human-readable locality labels for all queried ZIP codes.
 
+### 18. Interactive Modeled Price Hubs Map on Main Landing Page (Issue #646)
+- **Comprehensive 18-Hub & National Geographic Footprint**: Integrated an interactive Leaflet.js map component into the primary public dashboard landing page ([`docs/index.html`](docs/index.html)) displaying all 18 regional calibration hubs across PADDs 1 through 7, plus the National Wholesale commodity futures delivery benchmark (Cushing, OK / NYMEX RB=F).
+- **Inclusion of Non-Dedicated Modeled Hubs**: Modeled regions that do not yet have standalone detail pages (Seattle-Tacoma PADD 5B, Phoenix Desert Southwest PADD 5C, Anchorage PADD 5D, Honolulu Oahu PADD 5D, Guam PADD 7, San Juan PADD 6, and Boston PADD 1A) are fully represented with interactive circle markers, exposing their live/base pump price, 5-day projected targets, statutory tax burdens, primary refinery/pipeline corridors, and local sub-locales.
+- **Visual Marker Tiers & CARTO Dark Matter Basemap**:
+  - 🟢 **Active Dedicated Pages** (11 hubs): Glowing emerald markers with popups linking directly to dedicated detail analytics pages (`/chicago.html`, `/houston.html`, etc.).
+  - 🔵 **Modeled Calibration Hubs** (7 hubs): Cyan markers highlighting integration into Midgley's hierarchical MinT econometric model and historical prediction ledger.
+  - 🟡 **Commodity Futures Benchmark** (1 hub): Amber marker at the Cushing physical delivery hub.
+  - Dark Matter tiles authenticated via `CARTO_API_KEY` matching Midgley's Tailwind `slate-950` / `slate-900` dark theme.
+- **Territory Preset Navigation Tabs**: Included responsive quick-navigation buttons (`CONUS`, `Pacific & Islands`, `Caribbean`, `All PADDs 1–7`) enabling users to jump between geographic zones spanning 11 time zones without distortion.
+- **Declarative Coordinates & Canonical Helpers**: Added strongly-typed `latitude: float`, `longitude: float`, `has_dedicated_page: bool`, and `dedicated_page_url: str` fields to [`RegionSpec`](src/locations/specs.py), added `get_canonical_region_specs()`, and updated `REGION_METADATA` in [`src/live_fuel_feed.py`](src/live_fuel_feed.py).
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -186,6 +197,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
+| **#646** | `feat(dashboard): Interactive multi-region price hub map on main landing page` | Dashboard / UI / Locations |
 | **Commit `c7189715`** | `feat(mlops,cloud): Enforce local-only regional backfill policy and skip cloud runner backfilling` | MLOps / Workflows / Cloud |
 | **Commit `403946c7`** | `feat(architecture,regions): Consolidate Greenville into Charlotte Carolinas hub and update multi-agent architecture across PADDs 1-7` | Architecture / Locations / Diagrams |
 | **Commit `0c814a77`** | `fix(telemetry,geo): Resolve ZIP 12946 Lake Placid coordinates accurately in Adirondacks and correct NY state centroid` | Telemetry / Geocoding / Dashboard |

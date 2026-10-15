@@ -3,7 +3,7 @@ Unit Tests for Declarative RegionSpec & Universal Regional Runner (Issue #561)
 """
 
 import pytest
-from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec
+from src.locations.specs import get_region_spec, REGIONAL_SPECS, RegionSpec, get_canonical_region_specs
 
 
 def test_get_region_spec_all_metros():
@@ -245,4 +245,34 @@ def test_region_spec_microstructure_flags():
     assert boston.has_carb_compliance is False
     assert boston.baseline_tax_rate == 0.240
     assert boston.padd == "PADD 1A"
+
+
+def test_region_spec_coordinates_and_dedicated_page_metadata():
+    specs = get_canonical_region_specs()
+    assert len(specs) == 18
+    for spec in specs:
+        assert isinstance(spec.latitude, float)
+        assert isinstance(spec.longitude, float)
+        assert -90.0 <= spec.latitude <= 90.0
+        assert -180.0 <= spec.longitude <= 180.0
+        assert spec.latitude != 0.0 or spec.longitude != 0.0, f"{spec.slug} missing coordinates"
+        assert isinstance(spec.has_dedicated_page, bool)
+        if spec.has_dedicated_page:
+            assert len(spec.dedicated_page_url) > 0
+            assert spec.dedicated_page_url.endswith(".html")
+        else:
+            assert spec.dedicated_page_url == ""
+
+    # Verify dedicated vs non-dedicated split
+    dedicated_slugs = {s.slug for s in specs if s.has_dedicated_page}
+    modeled_slugs = {s.slug for s in specs if not s.has_dedicated_page}
+    assert "tulsa" in dedicated_slugs
+    assert "chicago" in dedicated_slugs
+    assert "houston" in dedicated_slugs
+    assert "seattle" in modeled_slugs
+    assert "phoenix" in modeled_slugs
+    assert "anchorage" in modeled_slugs
+    assert "guam" in modeled_slugs
+    assert "san_juan" in modeled_slugs
+
 
