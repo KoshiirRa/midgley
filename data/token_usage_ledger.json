@@ -6567,6 +6567,17 @@
       "total_tokens": 214,
       "cost_usd": 3.4e-05,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-10-15T09:00:48.314313+00:00",
+      "provider": "gemini-2.5-flash",
+      "model_name": "gemini-2.5-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 148,
+      "output_tokens": 80,
+      "total_tokens": 228,
+      "cost_usd": 3.5e-05,
+      "status": "success"
     }
   ]
 }
