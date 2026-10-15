@@ -128,7 +128,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Added San Juan centroid `(18.4655, -66.1057)` and ZIP prefixes `006`-`009` to `CALIBRATION_HUBS`, `ZIP_METRO_PREFIX_MAP`, and `STATE_PADD_MODEL_MAP` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
   - Updated API normalization in [`src/api_server.py`](src/api_server.py), Discord notifier in [`src/discord_notifier.py`](src/discord_notifier.py), and intraday trigger keywords in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py).
 
-### 13. Boston Metro & New England Regional Hub — PADD 1A (`Boston_MA`, Issue #619)
+### 13. Boston Metro & New England Regional Hub — PADD 1A (`Boston_MA`, Issue #619 / PR #639)
 - **100% Waterborne Import Reliance & International Supply Links**:
   - Implemented dedicated metropolitan forecasting and calibration hub for **Boston, Massachusetts (`Boston_MA`, `boston`)**, representing the **New England petroleum sub-district (`PADD 1A`)** encompassing MA, CT, RI, NH, VT, and ME.
   - Modeled 100% finished product import reliance (0 local refining capacity across all 6 New England states); anchored maritime imports via international supply links to the Irving Oil Saint John Refinery (320 kbpd, New Brunswick, Canada), coastal barge movements from New York Harbor, and Colonial Pipeline delivery terminating into Springfield, MA and Providence, RI.
@@ -155,7 +155,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
-| **#619** | `feat(regions): Implement Boston & New England Metro Calibration Hub (PADD 1A / Waterborne & Pipeline Terminals)` | Locations / Regional Hubs |
+| **#619 / #639** | `feat(regions): Implement Boston & New England Metro Calibration Hub (PADD 1A / Waterborne & Pipeline Terminals)` | Locations / Regional Hubs |
 | **#620** | `feat(regions): Implement San Juan & Caribbean Territories Calibration Hub (PADD 6 / DACO Price Regulation)` | Locations / Regional Hubs / PADD 6 |
 | **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
