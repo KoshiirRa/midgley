@@ -940,7 +940,7 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         // 74103 is a metro cluster hit so it must NOT appear in unmapped zips
         expect(telJson.top_unmapped_zips.some((item: any) => item.zip_code === "74103")).toBe(false);
 
-        // Subscribe to ZIP 12946 (Lake Placid, NY -> Significant Departure from Newark, DE)
+        // Subscribe to ZIP 12946 (Lake Placid, NY -> Native New York Metro Cluster Hit, Issue #635)
         const subNyReq = createSignedInteractionRequest({
           type: 2,
           member: { user: { id: "999888777666", username: "adk_skier" } },
@@ -963,10 +963,9 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         const subNyJson = (await subNyRes.json()) as any;
         expect(subNyJson.data.flags).toBe(64);
         expect(subNyJson.data.content).toContain("Lake Placid, NY");
-        expect(subNyJson.data.content).toContain("635"); // Tracking issue #635 for NY
+        expect(subNyJson.data.content).toContain("METRO_CLUSTER_HIT");
         expect(JSON.stringify(subNyJson.data.embeds)).toContain("Lake Placid, NY");
-        expect(JSON.stringify(subNyJson.data.embeds)).toContain("+$0.242/gal"); // Tax wedge
-        expect(JSON.stringify(subNyJson.data.embeds)).toContain("Regional Basis & Tax Departure");
+        expect(JSON.stringify(subNyJson.data.embeds)).toContain("New_York");
 
         // Forecast for ZIP 12946 (Lake Placid, NY)
         const fcNyReq = createSignedInteractionRequest({
@@ -990,9 +989,60 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         expect(fcNyRes.status).toBe(200);
         const fcNyJson = (await fcNyRes.json()) as any;
         expect(fcNyJson.data.embeds[0].title).toContain("Lake Placid, NY");
-        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("Statutory Tax Wedge");
-        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("+$0.242/gal");
-        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("Estimated Basis & Price Synthesis");
+        expect(JSON.stringify(fcNyJson.data.embeds[0])).toContain("Direct Metro Cluster Hit");
+
+        // Subscribe to ZIP 19104 (Philadelphia, PA -> Significant Departure from Newark, DE)
+        const subPaReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "444333222111", username: "philly_driver" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "subscribe",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "19104" },
+                  { name: "delivery", type: 3, value: "dm" }
+                ]
+              }
+            ]
+          }
+        });
+        const subPaRes = await handleDiscordInteraction(subPaReq, env, {});
+        expect(subPaRes.status).toBe(200);
+        const subPaJson = (await subPaRes.json()) as any;
+        expect(subPaJson.data.flags).toBe(64);
+        expect(subPaJson.data.content).toContain("Philadelphia, PA");
+        expect(subPaJson.data.content).toContain("STATE_PADD_FALLBACK");
+        expect(JSON.stringify(subPaJson.data.embeds)).toContain("Philadelphia, PA");
+        expect(JSON.stringify(subPaJson.data.embeds)).toContain("+$0.346/gal"); // Tax wedge
+        expect(JSON.stringify(subPaJson.data.embeds)).toContain("Regional Basis & Tax Departure");
+
+        // Forecast for ZIP 19104 (Philadelphia, PA)
+        const fcPaReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "444333222111", username: "philly_driver" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "19104" },
+                  { name: "horizon", type: 4, value: 3 }
+                ]
+              }
+            ]
+          }
+        });
+        const fcPaRes = await handleDiscordInteraction(fcPaReq, env, {});
+        expect(fcPaRes.status).toBe(200);
+        const fcPaJson = (await fcPaRes.json()) as any;
+        expect(fcPaJson.data.embeds[0].title).toContain("Philadelphia, PA");
+        expect(JSON.stringify(fcPaJson.data.embeds[0])).toContain("Statutory Tax Wedge");
+        expect(JSON.stringify(fcPaJson.data.embeds[0])).toContain("+$0.346/gal");
       } finally {
         globalThis.fetch = originalFetch;
       }

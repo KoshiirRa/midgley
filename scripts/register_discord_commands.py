@@ -28,6 +28,15 @@ LOCALE_CHOICES = [
     {"name": "Greater Chicago Metro, IL/IN (PADD 2)", "value": "Chicago"},
     {"name": "Houston Metro, TX (PADD 3)", "value": "Houston"},
     {"name": "Los Angeles Basin, CA (PADD 5)", "value": "Los_Angeles"},
+    {"name": "Denver Metro & Rocky Mountain, CO (PADD 4)", "value": "Denver"},
+    {"name": "New York Harbor & NY State, NY (PADD 1B)", "value": "New_York"},
+    {"name": "Boston Metro & New England, MA (PADD 1A)", "value": "Boston"},
+    {"name": "Seattle-Tacoma & Puget Sound, WA (PADD 5B)", "value": "Seattle"},
+    {"name": "Phoenix Metro & Desert Southwest, AZ (PADD 5C)", "value": "Phoenix"},
+    {"name": "Anchorage & Southcentral Alaska, AK (PADD 5D)", "value": "Anchorage"},
+    {"name": "Honolulu & Oahu Island System, HI (PADD 5D)", "value": "Honolulu"},
+    {"name": "San Juan Metro & Caribbean Territories, PR (PADD 6)", "value": "San_Juan"},
+    {"name": "Hagåtña & U.S. Pacific Territories, GU (PADD 7)", "value": "Guam"},
 ]
 
 

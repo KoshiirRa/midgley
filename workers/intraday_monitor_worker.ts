@@ -809,7 +809,16 @@ export const SUPPORTED_DISCORD_LOCALES = [
   { name: "Port St. Lucie Metro, FL (PADD 1C)", value: "Port_St_Lucie", slug: "port_st_lucie.html", padd: "PADD 1C South Atlantic" },
   { name: "Greater Chicago Metro, IL/IN (PADD 2)", value: "Chicago", slug: "chicago.html", padd: "PADD 2 Midwest" },
   { name: "Houston Metro, TX (PADD 3)", value: "Houston", slug: "houston.html", padd: "PADD 3 Gulf Coast" },
-  { name: "Los Angeles Basin, CA (PADD 5)", value: "Los_Angeles", slug: "los_angeles.html", padd: "PADD 5 West Coast" }
+  { name: "Los Angeles Basin, CA (PADD 5)", value: "Los_Angeles", slug: "los_angeles.html", padd: "PADD 5 West Coast" },
+  { name: "Denver Metro & Rocky Mountain, CO (PADD 4)", value: "Denver", slug: "denver.html", padd: "PADD 4 Rocky Mountain" },
+  { name: "New York Harbor & NY State, NY (PADD 1B)", value: "New_York", slug: "new_york.html", padd: "PADD 1B Central Atlantic" },
+  { name: "Boston Metro & New England, MA (PADD 1A)", value: "Boston", slug: "boston.html", padd: "PADD 1A New England" },
+  { name: "Seattle-Tacoma & Puget Sound, WA (PADD 5B)", value: "Seattle", slug: "seattle.html", padd: "PADD 5B Pacific Northwest" },
+  { name: "Phoenix Metro & Desert Southwest, AZ (PADD 5C)", value: "Phoenix", slug: "phoenix.html", padd: "PADD 5C Desert Southwest" },
+  { name: "Anchorage & Southcentral Alaska, AK (PADD 5D)", value: "Anchorage", slug: "anchorage.html", padd: "PADD 5D Alaska" },
+  { name: "Honolulu & Oahu Island System, HI (PADD 5D)", value: "Honolulu", slug: "honolulu.html", padd: "PADD 5D Hawaii" },
+  { name: "San Juan Metro & Caribbean Territories, PR (PADD 6)", value: "San_Juan", slug: "san_juan.html", padd: "PADD 6 Caribbean" },
+  { name: "Hagåtña & U.S. Pacific Territories, GU (PADD 7)", value: "Guam", slug: "guam.html", padd: "PADD 7 Pacific Islands" }
 ];
 
 export interface WorkerDMSubscriptionRecord {
@@ -904,6 +913,15 @@ export const WORKER_HUB_BASELINE_TAXES: Record<string, number> = {
   Houston: 0.200,
   Los_Angeles: 0.953,
   Oakland: 0.634,
+  Denver: 0.280,
+  New_York: 0.472,
+  Boston: 0.240,
+  Seattle: 0.494,
+  Phoenix: 0.180,
+  Anchorage: 0.0895,
+  Honolulu: 0.330,
+  San_Juan: 0.160,
+  Guam: 0.190,
   National: 0.184
 };
 
@@ -967,35 +985,60 @@ const WORKER_ZIP_METRO_PREFIX_MAP: Record<string, string> = {
   "900": "Los_Angeles", "901": "Los_Angeles", "902": "Los_Angeles", "903": "Los_Angeles", "904": "Los_Angeles",
   "905": "Los_Angeles", "906": "Los_Angeles", "907": "Los_Angeles", "908": "Los_Angeles", "910": "Los_Angeles",
   "911": "Los_Angeles", "912": "Los_Angeles", "913": "Los_Angeles", "914": "Los_Angeles", "915": "Los_Angeles",
-  "916": "Los_Angeles", "917": "Los_Angeles", "918": "Los_Angeles", "926": "Los_Angeles", "927": "Los_Angeles", "928": "Los_Angeles"
+  "916": "Los_Angeles", "917": "Los_Angeles", "918": "Los_Angeles", "926": "Los_Angeles", "927": "Los_Angeles", "928": "Los_Angeles",
+  "800": "Denver", "801": "Denver", "802": "Denver", "803": "Denver", "804": "Denver", "805": "Denver", "806": "Denver",
+  "021": "Boston", "022": "Boston", "024": "Boston",
+  "980": "Seattle", "981": "Seattle", "982": "Seattle", "983": "Seattle", "984": "Seattle", "985": "Seattle",
+  "850": "Phoenix", "851": "Phoenix", "852": "Phoenix", "853": "Phoenix", "890": "Phoenix", "891": "Phoenix",
+  "995": "Anchorage", "996": "Anchorage",
+  "967": "Honolulu", "968": "Honolulu",
+  "969": "Guam",
+  "006": "San_Juan", "007": "San_Juan", "008": "San_Juan", "009": "San_Juan"
 };
 
+// 100-149: New York Harbor & New York State Metro Calibration Hub (Issue #635)
+for (let i = 100; i < 150; i++) {
+  WORKER_ZIP_METRO_PREFIX_MAP[String(i)] = "New_York";
+}
+
 const WORKER_STATE_PADD_MAP: Record<string, { padd: string; paddName: string; hub: string; model: string; tax: number }> = {
-  CA: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.596 },
-  OR: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.400 },
-  WA: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.494 },
-  NV: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.505 },
-  AZ: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.180 },
-  AK: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.089 },
-  HI: { padd: "PADD 5", paddName: "West Coast", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.160 },
-  ME: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.300 },
-  NH: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.222 },
-  VT: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.310 },
-  MA: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.240 },
-  RI: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.370 },
-  CT: { padd: "PADD 1A", paddName: "New England", hub: "Newark", model: "Newark_DE (PADD 1B NY Harbor)", tax: 0.250 },
-  NY: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.472 },
+  // PADD 6 (U.S. Caribbean Territories - Issue #620)
+  PR: { padd: "PADD 6", paddName: "U.S. Caribbean Territories", hub: "San_Juan", model: "San_Juan_PR (PADD 6)", tax: 0.160 },
+  VI: { padd: "PADD 6", paddName: "U.S. Virgin Islands", hub: "San_Juan", model: "San_Juan_PR (PADD 6)", tax: 0.160 },
+  // PADD 7 (U.S. Pacific Island Territories - Issue #621)
+  GU: { padd: "PADD 7", paddName: "U.S. Pacific Island Territories", hub: "Guam", model: "Guam_GU (PADD 7)", tax: 0.190 },
+  MP: { padd: "PADD 7", paddName: "Northern Mariana Islands", hub: "Guam", model: "Guam_GU (PADD 7)", tax: 0.190 },
+  AS: { padd: "PADD 7", paddName: "American Samoa", hub: "Guam", model: "Guam_GU (PADD 7)", tax: 0.190 },
+  // PADD 5 (West Coast Sub-Districts - Issue #622 Decoupling)
+  CA: { padd: "PADD 5", paddName: "West Coast (California CARB)", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.596 },
+  OR: { padd: "PADD 5", paddName: "Pacific Northwest", hub: "Seattle", model: "Seattle_WA (PADD 5B PNW)", tax: 0.400 },
+  WA: { padd: "PADD 5", paddName: "Pacific Northwest", hub: "Seattle", model: "Seattle_WA (PADD 5B PNW)", tax: 0.494 },
+  NV: { padd: "PADD 5", paddName: "Desert Southwest", hub: "Phoenix", model: "Phoenix_AZ (PADD 5C Desert SW)", tax: 0.505 },
+  AZ: { padd: "PADD 5", paddName: "Desert Southwest", hub: "Phoenix", model: "Phoenix_AZ (PADD 5C Desert SW)", tax: 0.180 },
+  AK: { padd: "PADD 5", paddName: "Alaska", hub: "Anchorage", model: "Anchorage_AK (PADD 5D Alaska)", tax: 0.089 },
+  HI: { padd: "PADD 5", paddName: "Hawaii", hub: "Honolulu", model: "Honolulu_HI (PADD 5D Hawaii)", tax: 0.160 },
+  // PADD 1A (New England)
+  ME: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.300 },
+  NH: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.222 },
+  VT: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.310 },
+  MA: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.240 },
+  RI: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.370 },
+  CT: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.250 },
+  // PADD 1B (Central Atlantic)
+  NY: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "New_York", model: "New_York_NY (PADD 1B)", tax: 0.472 },
   NJ: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.423 },
   PA: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.576 },
   DE: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.230 },
   MD: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.470 },
   DC: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.348 },
+  // PADD 1C (Lower Atlantic)
   NC: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.404 },
   SC: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.280 },
   FL: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Port_St_Lucie", model: "Port_St_Lucie_FL (PADD 1C)", tax: 0.362 },
   GA: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.312 },
   VA: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.298 },
   WV: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.357 },
+  // PADD 2 (Midwest)
   OK: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.190 },
   OH: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.385 },
   IL: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.470 },
@@ -1011,22 +1054,25 @@ const WORKER_STATE_PADD_MAP: Record<string, { padd: string; paddName: string; hu
   SD: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.280 },
   KY: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.287 },
   TN: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.274 },
+  // PADD 3 (Gulf Coast)
   TX: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.200 },
   LA: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.200 },
   AR: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.248 },
   MS: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.184 },
   AL: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.290 },
   NM: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.189 },
-  CO: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Tulsa", model: "Tulsa_OK (PADD 2/4 Corridor)", tax: 0.220 },
-  UT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Oakland", model: "Oakland_CA (PADD 4/5 Corridor)", tax: 0.365 },
-  WY: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Tulsa", model: "Tulsa_OK (PADD 2/4 Corridor)", tax: 0.240 },
-  MT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Tulsa", model: "Tulsa_OK (PADD 2/4 Corridor)", tax: 0.330 },
-  ID: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Oakland", model: "Oakland_CA (PADD 4/5 Corridor)", tax: 0.320 }
+  // PADD 4 (Rocky Mountain)
+  CO: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.280 },
+  UT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.365 },
+  WY: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.240 },
+  MT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.330 },
+  ID: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.320 }
 };
 
 function resolveStateFromZipPrefix(prefix3: string): string {
   const p = parseInt(prefix3, 10);
   if (isNaN(p)) return "US";
+  if (p >= 6 && p <= 9) return p === 8 ? "VI" : "PR";
   if (p >= 10 && p <= 27) return "MA";
   if (p >= 28 && p <= 29) return "RI";
   if (p >= 30 && p <= 38) return "NH";
@@ -1075,6 +1121,7 @@ function resolveStateFromZipPrefix(prefix3: string): string {
   if (p >= 889 && p <= 898) return "NV";
   if (p >= 900 && p <= 961) return "CA";
   if (p >= 967 && p <= 968) return "HI";
+  if (p === 969) return "GU";
   if (p >= 970 && p <= 979) return "OR";
   if (p >= 980 && p <= 994) return "WA";
   if (p >= 995 && p <= 999) return "AK";
@@ -1153,28 +1200,14 @@ export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
   const fallbackHub = stateMeta.hub;
   const hubTax = WORKER_HUB_BASELINE_TAXES[fallbackHub] || 0.250;
   const taxDelta = Number((stateMeta.tax - hubTax).toFixed(3));
-  const isDeparture = (
-    Math.abs(taxDelta) >= 0.15
-    || stateMeta.padd === "PADD 1A"
-    || stateMeta.padd === "PADD 4"
-    || (stateCode === "NY" && fallbackHub === "Newark")
-  );
+  const isDeparture = Math.abs(taxDelta) >= 0.15;
 
   let departureReason = "";
   if (isDeparture) {
-    if (stateCode === "NY" && fallbackHub === "Newark") {
-      departureReason = `High statutory tax wedge (+${taxDelta.toFixed(3)}/gal vs DE) and Adirondack/Upstate logistics basis`;
-    } else if (stateMeta.padd === "PADD 1A") {
-      departureReason = `PADD 1A New England regional disconnect from coastal rack hub (${fallbackHub})`;
-    } else if (stateMeta.padd === "PADD 4") {
-      departureReason = `PADD 4 Rocky Mountain inter-PADD corridor fallback (${fallbackHub})`;
-    } else {
-      departureReason = `Statutory tax wedge of ${taxDelta >= 0 ? "+" : ""}${taxDelta.toFixed(3)}/gal vs hub baseline (${fallbackHub})`;
-    }
+    departureReason = `Statutory tax wedge of ${taxDelta >= 0 ? "+" : ""}${taxDelta.toFixed(3)}/gal vs hub baseline (${fallbackHub})`;
   }
 
-  const extraLogistics = (zipClean === "12946" || prefix3 === "129") ? 0.35 : (stateCode === "NY" ? 0.15 : 0.0);
-  const estBasis = Number((taxDelta + extraLogistics).toFixed(3));
+  const estBasis = Number(taxDelta.toFixed(3));
 
   return {
     status: "success",
@@ -1195,7 +1228,7 @@ export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
     is_significant_departure: isDeparture,
     departure_reason: departureReason,
     estimated_basis_delta: estBasis,
-    tracking_issue_number: stateCode === "NY" ? 635 : null
+    tracking_issue_number: null
   };
 }
 
@@ -1205,15 +1238,6 @@ export async function maybeTriggerHubDepartureIssue(
 ): Promise<{ triggered: boolean; issueNumber?: number; issueUrl?: string }> {
   if (!res.is_significant_departure || res.is_metro_cluster_hit) {
     return { triggered: false };
-  }
-
-  // New York already has active tracking issue #635
-  if (res.state === "NY") {
-    return {
-      triggered: true,
-      issueNumber: 635,
-      issueUrl: "https://github.com/KoshiirRa/midgley/issues/635"
-    };
   }
 
   const cacheKey = res.state;
@@ -1405,7 +1429,50 @@ export function normalizeWorkerLocale(rawLocale?: string): string {
     houston_tx: "Houston",
     los_angeles: "Los_Angeles",
     los_angeles_ca: "Los_Angeles",
-    la: "Los_Angeles"
+    la: "Los_Angeles",
+    denver: "Denver",
+    denver_co: "Denver",
+    rocky_mountain: "Denver",
+    padd4: "Denver",
+    padd_4: "Denver",
+    new_york: "New_York",
+    new_york_ny: "New_York",
+    nyc: "New_York",
+    ny: "New_York",
+    ny_harbor: "New_York",
+    ny_state: "New_York",
+    new_york_metro: "New_York",
+    boston: "Boston",
+    boston_ma: "Boston",
+    bos: "Boston",
+    new_england: "Boston",
+    padd1a: "Boston",
+    padd_1a: "Boston",
+    seattle: "Seattle",
+    seattle_wa: "Seattle",
+    puget_sound: "Seattle",
+    pnw: "Seattle",
+    phoenix: "Phoenix",
+    phoenix_az: "Phoenix",
+    desert_southwest: "Phoenix",
+    phx: "Phoenix",
+    anchorage: "Anchorage",
+    anchorage_ak: "Anchorage",
+    alaska: "Anchorage",
+    honolulu: "Honolulu",
+    honolulu_hi: "Honolulu",
+    hawaii: "Honolulu",
+    oahu: "Honolulu",
+    guam: "Guam",
+    guam_gu: "Guam",
+    padd7: "Guam",
+    padd_7: "Guam",
+    san_juan: "San_Juan",
+    san_juan_pr: "San_Juan",
+    puerto_rico: "San_Juan",
+    pr: "San_Juan",
+    padd6: "San_Juan",
+    padd_6: "San_Juan"
   };
   return aliases[clean] || SUPPORTED_DISCORD_LOCALES.find(l => l.value.toLowerCase() === clean)?.value || "National";
 }
