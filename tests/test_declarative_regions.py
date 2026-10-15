@@ -10,7 +10,7 @@ def test_get_region_spec_all_metros():
     expected_slugs = [
         "tulsa", "newark", "cincinnati", "greenville", "charlotte", "bay_area",
         "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york",
-        "seattle", "phoenix", "anchorage", "honolulu", "guam", "san_juan"
+        "seattle", "phoenix", "anchorage", "honolulu", "guam", "san_juan", "boston"
     ]
     for slug in expected_slugs:
         spec = get_region_spec(slug)
@@ -90,6 +90,12 @@ def test_get_region_spec_all_metros():
         assert sj_spec is not None
         assert sj_spec.slug == "san_juan"
 
+    # Ensure boston aliases resolve cleanly to boston spec
+    for bos_alias in ("boston_ma", "bos", "new_england", "padd1a", "padd_1a"):
+        bos_spec = get_region_spec(bos_alias)
+        assert bos_spec is not None
+        assert bos_spec.slug == "boston"
+
 
 def test_get_region_spec_by_region_key():
     spec = get_region_spec("Tulsa_OK")
@@ -164,6 +170,12 @@ def test_get_region_spec_by_region_key():
     assert sj_spec.slug == "san_juan"
     assert sj_spec.wholesale_spot_col == "spot_gulf_coast"
 
+    bos_spec = get_region_spec("Boston_MA")
+    assert bos_spec is not None
+    assert bos_spec.region_key == "Boston_MA"
+    assert bos_spec.slug == "boston"
+    assert bos_spec.wholesale_spot_col == "spot_ny_harbor"
+
 
 def test_region_spec_microstructure_flags():
     cincy = get_region_spec("cincinnati")
@@ -223,4 +235,9 @@ def test_region_spec_microstructure_flags():
     assert san_juan.has_carb_compliance is False
     assert san_juan.baseline_tax_rate == 0.160
     assert san_juan.padd == "PADD 6"
+
+    boston = get_region_spec("boston")
+    assert boston.has_carb_compliance is False
+    assert boston.baseline_tax_rate == 0.240
+    assert boston.padd == "PADD 1A"
 

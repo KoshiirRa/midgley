@@ -40,11 +40,13 @@ BOTTOM_LEVEL_METROS = [
     "Anchorage_AK",
     "Honolulu_HI",
     "Guam_GU",
-    "San_Juan_PR"
+    "San_Juan_PR",
+    "Boston_MA"
 ]
 
-# Intermediate PADD / Regional Clusters (k = 8)
+# Intermediate PADD / Regional Clusters (k = 9)
 PADD_CLUSTERS = {
+    "PADD_1A": ["Boston_MA"],
     "PADD_1B": ["Newark_DE", "New_York_NY"],
     "PADD_1C": ["Greenville_NC", "Charlotte_NC", "Port_St_Lucie_FL"],
     "PADD_2": ["Tulsa_OK", "Cincinnati_OH", "Cincinnati_KY", "Chicago_IL"],

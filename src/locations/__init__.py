@@ -26,6 +26,7 @@ from src.locations.anchorage import run_anchorage_pipeline, build_anchorage_note
 from src.locations.honolulu import run_honolulu_pipeline, build_honolulu_notebook
 from src.locations.guam import run_guam_pipeline, build_guam_notebook
 from src.locations.san_juan import run_san_juan_pipeline, build_san_juan_notebook
+from src.locations.boston import run_boston_pipeline, build_boston_notebook
 
 logger = logging.getLogger(__name__)
 
@@ -200,6 +201,15 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "run_pipeline": run_san_juan_pipeline,
         "build_notebook": build_san_juan_notebook,
         "notebook_filename": "san_juan_gas_price_llm_forecasting.ipynb"
+    },
+    "boston": {
+        "id": "boston",
+        "name": "Boston Metro & New England Hub, MA (PADD 1A)",
+        "type": "regional",
+        "module": "src.locations.boston",
+        "run_pipeline": run_boston_pipeline,
+        "build_notebook": build_boston_notebook,
+        "notebook_filename": "boston_gas_price_llm_forecasting.ipynb"
     }
 }
 
@@ -234,6 +244,8 @@ def get_location(loc_id: str) -> Dict[str, Any]:
         loc_id = "guam"
     if loc_id in ("san_juan_pr", "puerto_rico", "pr", "padd6", "padd_6", "sju", "caribbean"):
         loc_id = "san_juan"
+    if loc_id in ("boston_ma", "new_england", "bos", "padd1a", "padd_1a", "massachusetts"):
+        loc_id = "boston"
     if loc_id not in LOCATIONS:
         raise KeyError(f"Unknown location '{loc_id}'. Registered locations: {list_locations()}")
     return LOCATIONS[loc_id]
@@ -296,5 +308,7 @@ __all__ = [
     "run_guam_pipeline",
     "build_guam_notebook",
     "run_san_juan_pipeline",
-    "build_san_juan_notebook"
+    "build_san_juan_notebook",
+    "run_boston_pipeline",
+    "build_boston_notebook"
 ]

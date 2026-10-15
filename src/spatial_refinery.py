@@ -289,6 +289,22 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 0,
         "padd": "PADD 6",
         "primary_locales": ["San_Juan_PR"]
+    },
+    "Irving_Oil_Saint_John": {
+        "name": "Irving Oil Saint John Refinery (Saint John, NB)",
+        "lat": 45.2733,
+        "lon": -65.9967,
+        "capacity_bpd": 320000,
+        "padd": "PADD 1A / Canada Import",
+        "primary_locales": ["Boston_MA"]
+    },
+    "Boston_Harbor_Terminals": {
+        "name": "Boston Harbor Petroleum Marine Terminals (Chelsea River / Everett, MA)",
+        "lat": 42.3917,
+        "lon": -71.0333,
+        "capacity_bpd": 0,
+        "padd": "PADD 1A",
+        "primary_locales": ["Boston_MA"]
     }
 }
 
@@ -413,6 +429,12 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 18.4655,
         "lon": -66.1057,
         "zip": "00901"
+    },
+    "Boston_MA": {
+        "name": "Boston Metro & New England Hub, MA",
+        "lat": 42.3601,
+        "lon": -71.0589,
+        "zip": "02108"
     }
 }
 

@@ -99,6 +99,23 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "EMM_EPMR_PTE_R50XCA_DPG": "EMM_EPMR_PTE_R50XCA_DPG",
     "GASDESW5XCA": "EMD_EPD2D_PTE_R50XCA_DPG",
     "EMD_EPD2D_PTE_R50XCA_DPG": "EMD_EPD2D_PTE_R50XCA_DPG",
+    "GASREGWBOS": "EMM_EPMR_PTE_Y01BO_DPG",
+    "GASREGWMA": "EMM_EPMR_PTE_SMA_DPG",
+    "GASREGW01A": "EMM_EPMR_PTE_R1X_DPG",
+    "EMM_EPMR_PTE_Y01BO_DPG": "EMM_EPMR_PTE_Y01BO_DPG",
+    "EMM_EPMR_PTE_SMA_DPG": "EMM_EPMR_PTE_SMA_DPG",
+    "EMM_EPMR_PTE_R1X_DPG": "EMM_EPMR_PTE_R1X_DPG",
+    "GASDESW01A": "EMD_EPD2D_PTE_R1X_DPG",
+    "EMD_EPD2D_PTE_R1X_DPG": "EMD_EPD2D_PTE_R1X_DPG",
+    # Island Territorial Agency Series (Guam GEO & Puerto Rico DACO, Issues #620, #621)
+    "GEO_RETAIL_GUAM": "GEO_RETAIL_GUAM",
+    "GEODESWGUAM": "GEODESWGUAM",
+    "GASREGWGUAM": "GASREGWGUAM",
+    "GASDESWGUAM": "GASDESWGUAM",
+    "DACO_RETAIL_PR": "DACO_RETAIL_PR",
+    "DACODESWPR": "DACODESWPR",
+    "GASREGWPR": "GASREGWPR",
+    "GASDESWPR": "GASDESWPR",
 }
 
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
@@ -127,7 +144,8 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Anchorage_AK": [("GASREGWAK", "Alaska Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     "Honolulu_HI": [("GASREGWHI", "Hawaii Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
     "Guam_GU": [("GEO_RETAIL_GUAM", "Guam Energy Office Monthly Petroleum Monitor"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
-    "San_Juan_PR": [("DACO_RETAIL_PR", "Puerto Rico DACO Daily Fuel Price Survey"), ("GASREGW", "U.S. Regular Gasoline Retail Price")],
+    "San_Juan_PR": [("DACO_RETAIL_PR", "Puerto Rico DACO Daily Fuel Price Survey"), ("GASREGWGC", "PADD 3 Gulf Coast Regular Retail Price")],
+    "Boston_MA": [("GASREGWBOS", "Boston Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWMA", "Massachusetts Regular Conventional Retail Price"), ("GASREGW01A", "PADD 1A New England Regular Retail Price")],
     # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
     "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
@@ -166,8 +184,10 @@ REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "Honolulu_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
     "Guam_ULSD": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
     "Guam_Diesel": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
-    "San_Juan_ULSD": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "San_Juan_Diesel": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "San_Juan_ULSD": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price")],
+    "San_Juan_Diesel": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price")],
+    "Boston_ULSD": [("GASDESW01A", "PADD 1A New England No 2 Diesel Retail Price")],
+    "Boston_Diesel": [("GASDESW01A", "PADD 1A New England No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -243,7 +263,15 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "DACO_RETAIL_PR": 3.490,
     "DACODESWPR": 3.950,
     "GASREGWPR": 3.490,
-    "GASDESWPR": 3.950
+    "GASDESWPR": 3.950,
+    "GASREGWBOS": 3.450,
+    "GASREGWMA": 3.420,
+    "GASREGW01A": 3.450,
+    "EMM_EPMR_PTE_Y01BO_DPG": 3.450,
+    "EMM_EPMR_PTE_SMA_DPG": 3.420,
+    "EMM_EPMR_PTE_R1X_DPG": 3.450,
+    "GASDESW01A": 4.150,
+    "EMD_EPD2D_PTE_R1X_DPG": 4.150
 }
 
 

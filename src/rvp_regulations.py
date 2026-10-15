@@ -225,6 +225,15 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.00,
             "is_rfg": False,
             "is_carb": False
+        },
+        "Boston_MA": {
+            "name": "Boston Metro & Massachusetts (PADD 1A)",
+            "program": "EPA Reformulated Gasoline (RFG) Program",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.15,
+            "is_rfg": True,
+            "is_carb": False
         }
     },
     "emergency_waivers": []

@@ -74,6 +74,12 @@ REGION_ALIASES: Dict[str, str] = {
     "padd6": "san_juan_pr",
     "padd_6": "san_juan_pr",
     "caribbean": "san_juan_pr",
+    "boston": "boston_ma",
+    "boston_ma": "boston_ma",
+    "bos": "boston_ma",
+    "new_england": "boston_ma",
+    "padd1a": "boston_ma",
+    "padd_1a": "boston_ma",
 }
 
 

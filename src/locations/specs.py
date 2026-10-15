@@ -283,6 +283,21 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         sub_locales={"san_juan_metro": 0.00, "bayamon": -0.02, "carolina": 0.01, "ponce": -0.04, "mayaguez": -0.03, "caguas": 0.00, "arecibo": -0.02, "st_thomas_usvi": 0.45, "st_croix_usvi": 0.38},
         primary_refinery="Waterborne Jones Act Tankers from Houston/Corpus Christi & USVI Terminals",
         primary_pipeline="San Juan Harbor Deepwater Tanker Berths & Coastal Product Barges"
+    ),
+    "boston": RegionSpec(
+        region_key="Boston_MA",
+        slug="boston",
+        display_name="Boston Metro & New England Hub, MA (PADD 1A)",
+        padd="PADD 1A",
+        wholesale_spot_col="spot_ny_harbor",
+        eia_retail_series_id="EMM_EPMR_PTE_Y01BO_DPG",
+        diesel_series_id="GASDESW01A",
+        baseline_tax_rate=0.240,
+        has_edgeworth_cycles=False,
+        has_carb_compliance=False,
+        sub_locales={"boston_city": 0.04, "cambridge": 0.06, "quincy": -0.02, "worcester": -0.05, "springfield": -0.08, "providence_ri": 0.12, "manchester_nh": -0.03, "portland_me": 0.05},
+        primary_refinery="Irving Oil Saint John Refinery (320 kbpd) & Waterborne Imports",
+        primary_pipeline="Colonial Pipeline Southern Terminus / NY Harbor Coastal Barges"
     )
 }
 
@@ -319,6 +334,11 @@ REGIONAL_SPECS["padd6"] = REGIONAL_SPECS["san_juan"]
 REGIONAL_SPECS["padd_6"] = REGIONAL_SPECS["san_juan"]
 REGIONAL_SPECS["sju"] = REGIONAL_SPECS["san_juan"]
 REGIONAL_SPECS["caribbean"] = REGIONAL_SPECS["san_juan"]
+REGIONAL_SPECS["boston_ma"] = REGIONAL_SPECS["boston"]
+REGIONAL_SPECS["bos"] = REGIONAL_SPECS["boston"]
+REGIONAL_SPECS["new_england"] = REGIONAL_SPECS["boston"]
+REGIONAL_SPECS["padd1a"] = REGIONAL_SPECS["boston"]
+REGIONAL_SPECS["padd_1a"] = REGIONAL_SPECS["boston"]
 
 
 def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
@@ -350,6 +370,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
         return REGIONAL_SPECS["guam"]
     if key in ("san_juan", "san_juan_pr", "puerto_rico", "pr", "padd6", "padd_6", "sju", "caribbean", "daco"):
         return REGIONAL_SPECS["san_juan"]
+    if key in ("boston", "boston_ma", "bos", "new_england", "padd1a", "padd_1a", "massachusetts", "mass"):
+        return REGIONAL_SPECS["boston"]
     if key in REGIONAL_SPECS:
         return REGIONAL_SPECS[key]
     for spec in REGIONAL_SPECS.values():

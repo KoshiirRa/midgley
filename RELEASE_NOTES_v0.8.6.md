@@ -1,6 +1,6 @@
 # Release Notes - v0.8.6 (Draft)
 
-Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with eleven major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**, the PADD 6 Caribbean hub: **San Juan & U.S. Caribbean Territories**, and the PADD 7 trans-Pacific island hub: **Guam & U.S. Pacific Island Territories**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
+Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro calibration footprint with twelve major U.S. refining, pipeline, and island consumption corridors (**Greater Chicago**, **Houston & USGC**, **Los Angeles Basin**, **Denver & Rocky Mountain**, **New York Harbor & New York State**, **Boston & New England**, the decoupled PADD 5 sub-markets: **Seattle & Puget Sound**, **Phoenix & Desert Southwest**, **Anchorage & Cook Inlet**, and **Honolulu & Oahu Island System**, the PADD 6 Caribbean hub: **San Juan & U.S. Caribbean Territories**, and the PADD 7 trans-Pacific island hub: **Guam & U.S. Pacific Island Territories**) and introduces the **Multi-Subscriber Discord Webhook, Direct Message (`discord_dm`) & `/midgley` Slash Command Notification Gateway** so teams and individual server members can receive tailored, locale-filtered alerts without cluttering shared chat channels.
 
 ---
 
@@ -128,6 +128,21 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Added San Juan centroid `(18.4655, -66.1057)` and ZIP prefixes `006`-`009` to `CALIBRATION_HUBS`, `ZIP_METRO_PREFIX_MAP`, and `STATE_PADD_MODEL_MAP` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
   - Updated API normalization in [`src/api_server.py`](src/api_server.py), Discord notifier in [`src/discord_notifier.py`](src/discord_notifier.py), and intraday trigger keywords in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py).
 
+### 13. Boston Metro & New England Regional Hub — PADD 1A (`Boston_MA`, Issue #619 / PR #639)
+- **100% Waterborne Import Reliance & International Supply Links**:
+  - Implemented dedicated metropolitan forecasting and calibration hub for **Boston, Massachusetts (`Boston_MA`, `boston`)**, representing the **New England petroleum sub-district (`PADD 1A`)** encompassing MA, CT, RI, NH, VT, and ME.
+  - Modeled 100% finished product import reliance (0 local refining capacity across all 6 New England states); anchored maritime imports via international supply links to the Irving Oil Saint John Refinery (320 kbpd, New Brunswick, Canada), coastal barge movements from New York Harbor, and Colonial Pipeline delivery terminating into Springfield, MA and Providence, RI.
+  - Modeled marine terminal clusters in Boston Harbor, Chelsea River, Everett, and Revere with winter distillate and home heating oil competition during seasonal cold snaps.
+- **Tax Structure, Cross-Border Arbitrage & EPA RFG Standards**:
+  - Modeled Massachusetts statutory motor fuel excise tax ($0.240/gal state + $0.0028 UST fee, $0.424/gal composite with Federal excise) and cross-border arbitrage across New England (e.g. New Hampshire with lower excise rates).
+  - Modeled EPA Reformulated Gasoline (RFG) 7.4 psi summer standard across Eastern Massachusetts and Rhode Island in [`data/regulatory_rvp_rules.json`](data/regulatory_rvp_rules.json) and [`src/rvp_regulations.py`](src/rvp_regulations.py).
+- **Hierarchical MinT Coherence, Geocoding & Pipeline Integration**:
+  - Added `boston` [`RegionSpec`](src/locations/specs.py), created schema-valid [`data/regional_metadata/boston_ma.json`](data/regional_metadata/boston_ma.json), and built [`src/locations/boston/`](src/locations/boston/) sub-package (`main.py`, `regional.py`, `notebook_builder.py`).
+  - Decoupled New England states (`ME`, `NH`, `VT`, `MA`, `RI`, `CT`) from Newark DE (`PADD 1B`) to `boston` (`Boston_MA / PADD 1A`) in `STATE_PADD_MODEL_MAP` and mapped ZIP prefixes `021`, `022`, `024` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
+  - Integrated `Boston_MA` and intermediate cluster `PADD_1A` into [`src/hierarchical_engine.py`](src/hierarchical_engine.py) bottom-level reconciliation and aggregation matrices ($S$) with exact sum coherence.
+  - Mapped official EIA weekly retail series for Boston Metro (`GASREGWBOS`), Massachusetts State (`GASREGWMA`), New England PADD 1A (`GASREGW01A`), and Diesel (`GASDESW01A`) in [`src/eia_retail_feed.py`](src/eia_retail_feed.py) and [`src/diesel_regional.py`](src/diesel_regional.py).
+  - Registered Boston keywords and target resolution in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py), [`src/discord_notifier.py`](src/discord_notifier.py), and [`src/api_server.py`](src/api_server.py).
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -140,6 +155,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 5-digit ZIP routing` | API / Notifications / Edge / Telemetry |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
+| **#619 / #639** | `feat(regions): Implement Boston & New England Metro Calibration Hub (PADD 1A / Waterborne & Pipeline Terminals)` | Locations / Regional Hubs |
 | **#620** | `feat(regions): Implement San Juan & Caribbean Territories Calibration Hub (PADD 6 / DACO Price Regulation)` | Locations / Regional Hubs / PADD 6 |
 | **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
@@ -154,8 +170,11 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
-* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`), `San_Juan_PR` (`san_juan`)
+* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`), `San_Juan_PR` (`san_juan`), `Boston_MA` (`boston`)
 * **Hierarchical Engine & Regional Topology Additions**:
+  - Added `PADD_1A` cluster and `Boston_MA` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence ($S$ matrix reconciliation).
+  - Decoupled New England states (`ME`, `NH`, `VT`, `MA`, `RI`, `CT`) from Newark DE (`PADD 1B`) to `boston` (`Boston_MA / PADD 1A`) in `STATE_PADD_MODEL_MAP` and mapped ZIP prefixes `021`, `022`, `024` in [`src/zip_geocoding.py`](src/zip_geocoding.py).
+  - Mapped Massachusetts statutory motor fuel excise tax ($0.240/gal) in [`src/zip_geocoding.py`](src/zip_geocoding.py) and [`data/regional_metadata/boston_ma.json`](data/regional_metadata/boston_ma.json).
   - Added `PADD_6` cluster and `San_Juan_PR` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence ($S$ matrix reconciliation).
   - Added `PADD_7` cluster and `Guam_GU` bottom-level metro to [`src/hierarchical_engine.py`](src/hierarchical_engine.py) with exact sum aggregation coherence.
   - Modeled landed USGC conventional cargo benchmark with Jones Act clean tanker differential `spot_caribbean_waterborne = spot_gulf_coast + 0.145` and San Juan Bay terminal throughput charges.

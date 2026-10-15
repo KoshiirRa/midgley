@@ -230,6 +230,13 @@ REGION_METADATA = {
         "static_anchor": 3.490,
         "name": "San Juan, PR Metro Retail",
         "aaa_keywords": ["San Juan", "Puerto Rico", "DACO"]
+    },
+    "Boston_MA": {
+        "zip": "02108",
+        "state": "MA",
+        "static_anchor": 3.450,
+        "name": "Boston, MA Metro Retail",
+        "aaa_keywords": ["Boston", "Suffolk County", "Massachusetts", "State Average"]
     }
 }
 

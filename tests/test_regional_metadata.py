@@ -32,6 +32,7 @@ EXPECTED_REGIONS = [
     "honolulu_hi",
     "guam_gu",
     "san_juan_pr",
+    "boston_ma",
 ]
 
 
