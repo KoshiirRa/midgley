@@ -150,6 +150,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Charlotte's Paw Creek petroleum distribution terminal directly governs Colonial Pipeline cycle allocations and rack margins across both North and South Carolina.
   - Transparent routing in [`src/locations/__init__.py`](src/locations/__init__.py), [`src/locations/specs.py`](src/locations/specs.py), and [`src/locations/runner.py`](src/locations/runner.py) ensures any request or query for `"greenville"` or `"greenville_nc"` resolves seamlessly to the Charlotte hub.
 - **Zero-404 Legacy Redirect**: Transformed [`docs/greenville.html`](docs/greenville.html) into an instant client-side redirect (`<meta http-equiv="refresh" content="0; url=charlotte.html">`) with canonical link metadata to preserve search index rankings and prevent broken links.
+- **Test Suite Reconciliations**: Updated [`tests/test_dashboard_generator.py`](tests/test_dashboard_generator.py) to verify the legacy client redirect behavior on `greenville.html` (matching `oakland.html` -> `bayarea.html`) and remove decommissioned Greenville assertions from active regional driver card, feature attribution, trend badge, and WCAG landmark suites.
 - **Live Forecast Summary Table Consolidation**: Updated [`src/readme_updater.py`](src/readme_updater.py) to remove the standalone Greenville row and present Charlotte as `Charlotte, NC Metro Retail (Carolinas Hub)`.
 
 ### 15. Multi-Agent System Architecture Expansion & Vector Diagram Redesign (18 Regional Hubs across PADDs 1–7)

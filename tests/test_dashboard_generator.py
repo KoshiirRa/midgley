@@ -418,7 +418,6 @@ def test_all_regional_dashboard_pages_have_dedicated_driver_cards():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
         BAYAREA_PATH,
     ]
@@ -494,7 +493,7 @@ def test_feature_attribution_card_in_regional_pages():
     """Verify that all regional model pages contain the Component-Level Feature Attribution card."""
     generate_public_dashboard()
 
-    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, BAYAREA_PATH]
+    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, CHARLOTTE_PATH, BAYAREA_PATH]
 
     for p in pages:
         with open(p, "r", encoding="utf-8") as f:
@@ -552,7 +551,6 @@ def test_dynamic_trend_badges_rendering():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
         BAYAREA_PATH,
     ]
@@ -561,7 +559,6 @@ def test_dynamic_trend_badges_rendering():
         NATIONAL_PATH,
         TULSA_PATH,
         NEWARK_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
     ]
 
@@ -878,7 +875,6 @@ def test_dashboard_aria_accessibility_and_landmarks():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
         BAYAREA_PATH,
         MATH_PATH,
@@ -892,6 +888,10 @@ def test_dashboard_aria_accessibility_and_landmarks():
     assert os.path.exists(OAKLAND_PATH)
     with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
         assert "bayarea.html" in f.read()
+
+    assert os.path.exists(GREENVILLE_PATH)
+    with open(GREENVILLE_PATH, "r", encoding="utf-8") as f:
+        assert "charlotte.html" in f.read()
 
     for page_path in all_pages:
         assert os.path.exists(page_path), f"Page {page_path} was not generated"
