@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-14T23:07:18.198701",
+  "timestamp": "2026-10-15T00:49:34.806354",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-14T23:06:59Z"
+      "timestamp": "2026-10-15T00:45:05Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-20",
+    "target_date": "2026-10-21",
     "current_base_price": 6.318,
     "predicted_price_per_gal": 6.318,
     "expected_change_dollars": 0.0,
