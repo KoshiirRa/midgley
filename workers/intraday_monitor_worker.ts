@@ -7,6 +7,7 @@
  */
 
 import nacl from "tweetnacl";
+import { getEnverusDailyRigCount, MIDGLEY_AGENT_USER_AGENT as DEFAULT_MIDGLEY_AGENT_UA } from "./enverus_scraper";
 
 export interface Env {
   GH_PAT?: string;
@@ -16,6 +17,7 @@ export interface Env {
   AXIOM_TOKEN?: string;
   AXIOM_DATASET?: string;
   SEC_USER_AGENT?: string;
+  MIDGLEY_AGENT_USER_AGENT?: string;
   EDGAR_8K_TICKERS?: string;
   DISCORD_PUBLIC_KEY?: string;
   DISCORD_APP_ID?: string;
@@ -25,6 +27,7 @@ export interface Env {
   ADMIN_TOKEN?: string;
   FLAG_SIGNING_KEY?: string;
   DB?: any;
+  MYBROWSER?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
     sendBatch(messages: { body: any }[], options?: any): Promise<void>;
@@ -3139,6 +3142,19 @@ export default {
         );
       }
 
+      // Enverus / Drillinginfo Daily Rig Count Route (Issues #533, #640)
+      if (url.pathname === "/api/v1/energy/rig-count/enverus" || url.pathname === "/scraping/enverus-rig-count") {
+        const forceRefresh = url.searchParams.get("force_refresh") === "true";
+        const rigData = await getEnverusDailyRigCount(env, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(rigData, null, 2), {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Cache-Control": "public, max-age=3600"
+          }
+        });
+      }
+
       // Secure manual run & trigger endpoints (Fail-Closed, Issues #438, #574)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -3160,7 +3176,16 @@ export default {
           status: "active",
           service: "midgley-intraday-monitor",
           timestamp: new Date().toISOString(),
-          endpoints: ["/run", "/trigger", "/status", "/flag", "/discord/interactions", "/telemetry/unmapped-zips", "/discord/subscriptions"]
+          endpoints: [
+            "/run",
+            "/trigger",
+            "/status",
+            "/flag",
+            "/discord/interactions",
+            "/telemetry/unmapped-zips",
+            "/discord/subscriptions",
+            "/api/v1/energy/rig-count/enverus"
+          ]
         }, null, 2),
         { headers: { "Content-Type": "application/json" } }
       );

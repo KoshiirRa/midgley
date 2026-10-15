@@ -32,13 +32,23 @@ ALTERNATIVE_DATA_SOURCES = {
         }
     },
     "Baker_Hughes_Rig_Count": {
-        "agency": "Baker Hughes / Enverus",
+        "agency": "Baker Hughes",
         "frequency": "Weekly (Fridays 1:00 PM EST)",
         "key_metrics": ["Permian Basin Rig Count", "Eagle Ford Rig Count", "Total US Active Oil Rigs"],
         "predictive_power": "Medium-to-long term (3-6 month) domestic crude supply pipeline lead indicator.",
         "bitemporal_architecture": {
             "fields": ["valid_date", "as_of", "is_vintage_reconstructed"],
             "description": "Bitemporal vintage tracking eliminating lookahead bias in historical backtests (Issue #269)."
+        }
+    },
+    "Enverus_Daily_Rig_Count": {
+        "agency": "Enverus / Drillinginfo",
+        "frequency": "Daily (Monday-Friday)",
+        "key_metrics": ["Permian Basin Rig Count", "Gulf Coast / Eagle Ford Rig Count", "Total US Active Rigs"],
+        "predictive_power": "High-frequency daily upstream crude drilling telemetry and basin activity lead indicators (Issues #533, #640).",
+        "bitemporal_architecture": {
+            "fields": ["valid_date", "as_of", "is_vintage_reconstructed"],
+            "description": "Bitemporal vintage tracking eliminating lookahead bias in historical backtests."
         }
     },
     "FRED_Macro_USD_VMT": {
@@ -318,8 +328,29 @@ class BakerHughesDataConnector:
             df['baker_hughes_rig_delta_1w'] = df['baker_hughes_us_rig_count'].diff().fillna(0.0)
         if "baker_hughes_rig_delta_4w" not in df.columns:
             df['baker_hughes_rig_delta_4w'] = df['baker_hughes_us_rig_count'].diff(4).fillna(0.0)
+        # Integrate genuine Enverus Basin Rig Telemetry (Issues #533, #640)
+        enverus_permian = None
+        try:
+            from src.enverus_rig_feed import get_enverus_rig_feed
+            enverus_feed = get_enverus_rig_feed()
+            enverus_df = enverus_feed.get_basin_metrics_dataframe()
+            if not enverus_df.empty:
+                val = int(enverus_df.iloc[-1].get("enverus_permian_rigs", 0))
+                if val > 0:
+                    enverus_permian = val
+                    df["enverus_permian_rigs"] = val
+                    df["enverus_gulf_coast_rigs"] = int(enverus_df.iloc[-1].get("enverus_gulf_coast_rigs", 0))
+                    df["enverus_total_rigs"] = int(enverus_df.iloc[-1].get("enverus_total_rigs", 0))
+        except Exception as e:
+            logger.debug(f"Enverus basin integration in BakerHughesConnector skipped: {e}")
+
         if "permian_rigs" not in df.columns:
-            df['permian_rigs'] = (df['baker_hughes_oil_rigs'] * 0.62).astype(int)
+            if enverus_permian is not None:
+                # Use genuine Enverus Permian count for latest row, estimate history
+                df['permian_rigs'] = (df['baker_hughes_oil_rigs'] * 0.62).astype(int)
+                df.loc[df.index[-1], 'permian_rigs'] = enverus_permian
+            else:
+                df['permian_rigs'] = (df['baker_hughes_oil_rigs'] * 0.62).astype(int)
 
         # Persist to Centralized SQL Database (data_vintages table) via VintageStore
         try:

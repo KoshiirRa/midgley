@@ -26,6 +26,12 @@ DEFAULT_USER_AGENT = os.getenv(
     "Midgley-Energy-Analytics/0.8.5 (+https://github.com/KoshiirRa/midgley)"
 )
 
+# Standardized policy user agent linking to the production dashboard (Issues #533, #640)
+MIDGLEY_AGENT_USER_AGENT = os.getenv(
+    "MIDGLEY_AGENT_USER_AGENT",
+    "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+)
+
 DEFAULT_RETRY_STATUSES = (429, 500, 502, 503, 504)
 
 

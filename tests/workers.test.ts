@@ -1200,6 +1200,100 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
       }
     });
   });
+
+  describe("Enverus / Drillinginfo Daily Rig Count Scraper (Issues #533, #640)", () => {
+    const sampleMarkdown = `### U.S. drilling activity starts the year with a 15-rig drop
+
+The U.S. rig count reached 657 during the week ended Jan. 3, down 15 rigs from the previous week's high point, according to Enverus Foundations data. The count is down 18 rigs, or 3%, in the last month and down 204 rigs, or 24%, YOY. All numbers discussed are weekly peaks to avoid the sometimes wide variability of daily numbers.
+
+Most of the decrease in the last week came from drilling programs outside the major basins. Among the major basins, the Gulf Coast's two-rig drop was the largest, leaving it with 73 rigs running. Appalachia and the Permian dropped one rig each to 40 and 293. The Williston Basin added one rig to reach 35, while the Anadarko and DJ basins were flat at 52 and 15 rigs.
+
+Total Orientation PlayWeekMonthYear
+
+### Rig Count by Basin
+
+| Play | 10/07/26 | 10/08/26 | 10/09/26 | 10/10/26 | 10/11/26 | 10/12/26 | 10/13/26 | 10/14/26 | 1 Day Δ | % | 1 Month Δ | % | 1 Year Δ | % |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ANADARKO BASIN | 59 | 58 | 58 | 58 | 58 | 58 | 64 | 64 | 0 | 0 | -2 | -3 | 17 | 36.2 |
+| APPALACHIA | 35 | 33 | 34 | 34 | 34 | 35 | 34 | 33 | -1 | -2.9 | -1 | -2.9 | -5 | -13.2 |
+| DJ BASIN | 7 | 11 | 10 | 10 | 10 | 10 | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 0 |
+| GULF COAST BASIN (INCLUDING EAGLE FORD) | 69 | 69 | 68 | 68 | 67 | 68 | 71 | 72 | 1 | 1.4 | 2 | 2.9 | 10 | 16.1 |
+| PERMIAN | 252 | 248 | 251 | 254 | 255 | 255 | 251 | 254 | 3 | 1.2 | 3 | 1.2 | 24 | 10.4 |
+| WILLISTON BASIN | 38 | 38 | 38 | 38 | 38 | 38 | 36 | 36 | 0 | 0 | -1 | -2.7 | 4 | 12.5 |
+| OTHER | 199 | 201 | 200 | 200 | 200 | 202 | 190 | 187 | -3 | -1.6 | -6 | -3.1 | 36 | 23.8 |
+| Total | 659 | 658 | 659 | 662 | 662 | 666 | 656 | 656 | 0 | 0 | -5 | -0.8 | 86 | 15.1 |
+`;
+
+    it("parses Cloudflare Browser Rendering markdown table and analysis", async () => {
+      const { parseEnverusMarkdown } = await import("../workers/enverus_scraper");
+      const result = parseEnverusMarkdown(sampleMarkdown);
+
+      expect(result.total_rigs).toBe(656);
+      expect(result.as_of).toBe("2026-10-14");
+      expect(result.analysis_title).toBe("U.S. drilling activity starts the year with a 15-rig drop");
+      expect(result.analysis_text).toContain("Enverus Foundations data");
+      expect(result.basins?.length).toBe(8);
+
+      const permian = result.basins?.find(b => b.play === "PERMIAN");
+      expect(permian).toBeDefined();
+      expect(permian?.latest_count).toBe(254);
+      expect(permian?.day_delta).toBe(3);
+      expect(permian?.day_pct).toBe(1.2);
+      expect(permian?.year_delta).toBe(24);
+
+      const gulfCoast = result.basins?.find(b => b.play.includes("GULF COAST"));
+      expect(gulfCoast).toBeDefined();
+      expect(gulfCoast?.latest_count).toBe(72);
+      expect(gulfCoast?.day_delta).toBe(1);
+    });
+
+    it("fetches via Cloudflare browser quickAction when available", async () => {
+      const { getEnverusDailyRigCount, clearEnverusMemoryCacheForTesting } = await import("../workers/enverus_scraper");
+      clearEnverusMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(sampleMarkdown)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const result = await getEnverusDailyRigCount(env, { force_refresh: true });
+      expect(mockBrowser.quickAction).toHaveBeenCalledWith("markdown", expect.objectContaining({
+        url: "https://www.enverus.com/dailyrigcount/"
+      }));
+      expect(result.status).toBe("success");
+      expect(result.source).toBe("CLOUDFLARE_BROWSER_RENDERING");
+      expect(result.total_rigs).toBe(656);
+      expect(result.basins.length).toBe(8);
+    });
+
+    it("serves Enverus rig count over worker HTTP endpoint", async () => {
+      const { clearEnverusMemoryCacheForTesting } = await import("../workers/enverus_scraper");
+      clearEnverusMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(sampleMarkdown)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const req = new Request("https://worker.local/api/v1/energy/rig-count/enverus");
+      const res = await intradayWorker.fetch(req, env, {});
+
+      expect(res.status).toBe(200);
+      const json = (await res.json()) as any;
+      expect(json.status).toBe("success");
+      expect(json.total_rigs).toBe(656);
+      expect(json.basins).toBeDefined();
+      expect(json.basins.some((b: any) => b.play === "PERMIAN" && b.latest_count === 254)).toBe(true);
+    });
+  });
 });
 
 

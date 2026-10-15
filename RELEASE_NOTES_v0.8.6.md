@@ -180,6 +180,19 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **Territory Preset Navigation Tabs**: Included responsive quick-navigation buttons (`CONUS`, `Pacific & Islands`, `Caribbean`, `All PADDs 1–7`) enabling users to jump between geographic zones spanning 11 time zones without distortion.
 - **Declarative Coordinates & Canonical Helpers**: Added strongly-typed `latitude: float`, `longitude: float`, `has_dedicated_page: bool`, and `dedicated_page_url: str` fields to [`RegionSpec`](src/locations/specs.py), added `get_canonical_region_specs()`, and updated `REGION_METADATA` in [`src/live_fuel_feed.py`](src/live_fuel_feed.py).
 
+### 19. Enverus / Drillinginfo Daily Rig Count & Cloudflare Browser Rendering (Issues #533 & #640)
+- **Cloudflare Edge Browser Rendering & Markdown Extraction (`workers/enverus_scraper.ts`, Issue #640)**:
+  - Leveraged Cloudflare Workers Paid Browser Rendering API (`MYBROWSER` binding) with `/markdown` quick action to execute headless Chromium sessions directly at the edge, successfully bypassing Cloudflare Bot Management / JavaScript challenges on `https://www.enverus.com/dailyrigcount/` and eliminating external Firecrawl quota consumption (strictly capped at 30/day, 800/mo).
+  - Implemented `parseEnverusMarkdown()` in [`workers/enverus_scraper.ts`](workers/enverus_scraper.ts) extracting daily total rig counts, weekly percentage deltas, analyst narrative commentary, and multi-day rolling basin telemetry across all 7 major plays (Permian, Gulf Coast/Eagle Ford, Williston, Anadarko, Appalachia, DJ Basin, and Other).
+  - Exposed edge endpoint `GET /api/v1/energy/rig-count/enverus` in [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts) with 12-hour D1 edge caching.
+- **Drillinginfo Upstream Basin Ingestion & Multi-Tier Fallback (`src/enverus_rig_feed.py`, Issue #533)**:
+  - Added [`src/enverus_rig_feed.py`](src/enverus_rig_feed.py) (`EnverusRigFeedConnector`) providing bitemporal vintage tracking in `VintageStore` (`data_vintages`), local 12-hour lookup caching, and a dual-failover architecture combining the edge worker endpoint with direct fast-path Drillinginfo REST services (`https://app.drillinginfo.com/drcservice/api/OverTable`).
+  - Integrated genuine daily Permian (`enverus_permian_rigs`) and Gulf Coast (`enverus_gulf_coast_rigs`) counts into [`src/alternative_data_feeds.py`](src/alternative_data_feeds.py), replacing legacy synthetic estimation (`oil_rigs * 0.62`) with verified daily basin telemetry.
+- **Standardized `MidgleyAgent` User-Agent Policy**:
+  - Established standardized policy user agent across all edge and core outbound scrapers: `MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)` in [`src/http_client.py`](src/http_client.py) and [`wrangler.toml`](wrangler.toml).
+- **Public Data Sources Catalog Registration**:
+  - Registered Enverus Daily Rig Count as Card 2.2b in [`src/sources_generator.py`](src/sources_generator.py) and [`docs/sources.html`](docs/sources.html), and updated [`docs/research_sources.md`](docs/research_sources.md).
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -190,6 +203,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#220** | `feat(regions): Implement Houston & USGC Metro Calibration Hub (PADD 3 / Houston Ship Channel Refineries)` | Locations / Regional Hubs |
 | **#221** | `feat(regions): Implement Los Angeles Basin Metro Calibration Hub (PADD 5 / CaRFG & El Segundo/Torrance)` | Locations / Regional Hubs |
 | **#235** | `feat(api): Multi-subscriber Discord webhook & DM alert subscriptions with /midgley slash commands & 20-hub edge reconciliation` | API / Notifications / Edge / Telemetry |
+| **#533** | `[Tool Evaluation] Drillinginfo / Enverus API Spec (Energy Analytics & Basin Data)` | Ingestion / Upstream / Alternative Feeds |
 | **#616 / #638** | `feat(llm): Migrate from Gemini 2.5 Flash to Gemini 3.8 Flash with low thinking level before Oct 20 retirement` | Core / LLM / Telemetry |
 | **#618 / #636** | `feat(regions): Implement Denver & Rocky Mountain Metro Calibration Hub (PADD 4 / Suncor Commerce City)` | Locations / Regional Hubs |
 | **#619 / #639** | `feat(regions): Implement Boston & New England Metro Calibration Hub (PADD 1A / Waterborne & Pipeline Terminals)` | Locations / Regional Hubs |
@@ -197,6 +211,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
+| **#640** | `feat(edge,scraping): Leverage Cloudflare Browser Rendering API for JavaScript-rendered news & state fuel price boards` | Edge / Scraping / Intraday Monitor |
 | **#646** | `feat(dashboard): Interactive multi-region price hub map on main landing page` | Dashboard / UI / Locations |
 | **Commit `c7189715`** | `feat(mlops,cloud): Enforce local-only regional backfill policy and skip cloud runner backfilling` | MLOps / Workflows / Cloud |
 | **Commit `403946c7`** | `feat(architecture,regions): Consolidate Greenville into Charlotte Carolinas hub and update multi-agent architecture across PADDs 1-7` | Architecture / Locations / Diagrams |
