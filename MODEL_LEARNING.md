@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-10-05 18:33 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-10-15 17:32 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,11 +10,11 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 74 | `$0.1399/gal` | `$0.1124/gal` | `-24.54%` | **`43.24%`** | `32.4%` | ⚠️ Calibration Active |
-| **14-Day Window** | 99 | `$0.1426/gal` | `$0.1020/gal` | `-39.74%` | **`44.44%`** | `42.4%` | ⚠️ Calibration Active |
-| **30-Day Window** | 139 | `$0.1454/gal` | `$0.1065/gal` | `-36.55%` | **`38.13%`** | `54.7%` | ⚠️ Calibration Active |
-| **90-Day Window** | 355 | `$0.1673/gal` | `$0.1236/gal` | `-35.37%` | **`38.87%`** | `68.5%` | ⚠️ Calibration Active |
-| **All-Time Window** | 1226 | `$0.1204/gal` | `$0.1024/gal` | `-17.49%` | **`47.96%`** | `54.0%` | ⚠️ Calibration Active |
+| **7-Day Window** | 13 | `$0.0523/gal` | `$0.0387/gal` | `-35.02%` | **`69.23%`** | `23.1%` | ⚠️ Calibration Active |
+| **14-Day Window** | 64 | `$0.1274/gal` | `$0.0853/gal` | `-49.30%` | **`40.62%`** | `14.1%` | ⚠️ Calibration Active |
+| **30-Day Window** | 153 | `$0.1483/gal` | `$0.1054/gal` | `-40.77%` | **`39.22%`** | `39.9%` | ⚠️ Calibration Active |
+| **90-Day Window** | 353 | `$0.1624/gal` | `$0.1206/gal` | `-34.67%` | **`41.36%`** | `60.3%` | ⚠️ Calibration Active |
+| **All-Time Window** | 1260 | `$0.1209/gal` | `$0.1023/gal` | `-18.13%` | **`47.86%`** | `52.8%` | ⚠️ Calibration Active |
 
 ---
 
@@ -49,7 +49,7 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`7223`** | Total synthesized reflections: **`66`**
+Total indexed episodic memories in local store: **`5`** | Total synthesized reflections: **`33`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -62,50 +62,24 @@ _No anomalies logged in this category._
 #### 🏷️ Pipeline / Waterway Constraint (0 case studies)
 _No anomalies logged in this category._
 
-#### 🏷️ Geopolitical & OPEC Shock (8 case studies)
-- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
+#### 🏷️ Geopolitical & OPEC Shock (0 case studies)
+_No anomalies logged in this category._
 
-- **Newark_DE Price Discrepancy ($+0.7166/gal)** (`Newark_DE` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.7166/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-23 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-02`)
-  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-#### 🏷️ Price Discrepancy & General Outliers (4 case studies)
-- **National Price Discrepancy ($+0.6620/gal)** (`National` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.6620/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.
+#### 🏷️ Price Discrepancy & General Outliers (12 case studies)
+- **National Price Discrepancy ($+0.5980/gal)** (`National` | `2026-10-14`)
+  - **Root Cause:** Model underestimated price surge by -$0.5980/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-17 (National)'.
   - **Historical Analogy:** Similar to historical National turnaround shocks where market pricing normalized post-event.
   - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
 
-- **National Price Discrepancy ($+0.6620/gal)** (`National` | `2026-10-02`)
-  - **Root Cause:** Model underestimated price surge by -$0.6620/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.
+- **National Price Discrepancy ($+0.6179/gal)** (`National` | `2026-10-14`)
+  - **Root Cause:** Model underestimated price surge by -$0.6179/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-05 (National)'.
   - **Historical Analogy:** Similar to historical National turnaround shocks where market pricing normalized post-event.
   - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
 
-- **National Price Discrepancy ($+0.6620/gal)** (`National` | `2026-10-02`)
+- **National Price Discrepancy ($+0.6620/gal)** (`National` | `2026-10-14`)
   - **Root Cause:** Model underestimated price surge by -$0.6620/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-03-06 (National)'.
   - **Historical Analogy:** Similar to historical National turnaround shocks where market pricing normalized post-event.
   - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-#### 🏷️ Architectural Calibration & Data Source Grounding (October 2026 Handoff)
-- **EIA API v2 Ground Truth Transition (`All Locales` | `2026-10-06`)**
-  - **Root Cause & Learning:** Ground truth evaluation previously suffered from divergence between survey-derived retail aggregators and official historical series. Migrating to official EIA API v2 (`EMM_EPMR_PTE_*`) series provides an uncompromised, bitemporal weekly actuals ground truth for backfilling and multi-horizon residual validation.
-  - **Calibration Suggestion:** `Enforce point-in-time publication lag gating to prevent lookahead leakages while evaluating Friday-to-Monday retail price adjustments.`
-
-- **NYMEX Trading Calendar & RBOB Roll Straddle Gating (`National` | `2026-10-06`)**
-  - **Root Cause & Learning:** Forecast windows that span the monthly RBOB contract roll boundary (last business day of the month) introduce apparent price jumps attributable to prompt-to-second month roll yield ($M_1 - M_2$) rather than spot fundamentals.
-  - **Calibration Suggestion:** `Flag roll-straddling forecast horizons with roll_straddling=True and decompose the expected step-change using NYMEX calendar spreads.`
-
-- **Regional Metro Convergence: Oakland & Bay Area (`BayArea_CA` | `2026-10-06`)**
-  - **Root Cause & Learning:** Operating separate isolated targets for Oakland and SF Bay Area fragmented regional observation density and resulted in collinear feature competition under identical PADD 5 / CARB regulatory drivers.
-  - **Calibration Suggestion:** `Consolidate into canonical BayArea_CA target with county-level sub-indices while redirecting legacy routes.`
 
 ---
 

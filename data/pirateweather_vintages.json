@@ -313,5 +313,173 @@
       "source": "Pirate Weather Climatological Anchor Fallback",
       "is_reanalysis": false
     }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:26:19.654822",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085178,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.3,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.82,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:26:21.482679",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085180,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.3,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.82,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:26:49.808209",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085209,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.3,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.82,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:26:50.734305",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085210,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.3,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.82,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:28:24.685853",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085304,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.32,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.8,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:28:26.172751",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085305,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.32,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.8,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:31:54.144942",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085513,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.34,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.76,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
+  },
+  {
+    "hub_code": "custom",
+    "recorded_at": "2026-10-15T17:31:55.817131",
+    "data": {
+      "lat": 29.76,
+      "lon": -95.369,
+      "timestamp": 1792085515,
+      "date": "2026-10-15",
+      "temperature": 84.2,
+      "apparent_temperature": 102.34,
+      "dew_point": 73.94,
+      "humidity": 0.72,
+      "wind_speed": 2.01,
+      "wind_gust": 9.49,
+      "pressure": 1015.76,
+      "precip_accumulation": 0.0,
+      "precip_type": "none",
+      "source": "Pirate Weather NOAA HRRR / ERA5 Reanalysis",
+      "is_reanalysis": true
+    }
   }
 ]

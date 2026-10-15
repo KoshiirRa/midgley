@@ -1164,7 +1164,33 @@ def backfill_new_region_history(
         except Exception:
             model_version = "v1.6-Ipatieff"
 
-    # Fast skip if history has already been backfilled in ledger (Issue #591)
+    skip_backfill = os.environ.get("MIDGLEY_SKIP_BACKFILL") == "1" or (
+        os.environ.get("GITHUB_ACTIONS") == "true"
+        and os.environ.get("TESTING") != "1"
+        and os.environ.get("MIDGLEY_FORCE_BACKFILL") != "1"
+    )
+    if skip_backfill:
+        logger.info(
+            f"Skipping historical backfill for {region} ({forecast_horizon_days}d) - "
+            f"policy enforces offloading backfills to local dev environment."
+        )
+        return 0
+
+    # Fast skip if history has already been backfilled in database (Turso / SQLite)
+    try:
+        from src.db.client import get_db
+        db = get_db()
+        db_rows = db.execute(
+            "SELECT COUNT(*) as cnt FROM forecasts WHERE region = ? AND model_version = ? AND horizon = ?",
+            (region, model_version, forecast_horizon_days)
+        )
+        if db_rows and db_rows[0].get("cnt", 0) >= 30:
+            logger.debug(f"History already backfilled in database for {region} ({model_version}, {forecast_horizon_days}d). Skipping redundant backfill.")
+            return 0
+    except Exception as e:
+        logger.debug(f"Notice checking database history in backfill_new_region_history: {e}")
+
+    # Fast skip if history has already been backfilled in local CSV ledger (Issue #591)
     if os.path.exists(HISTORY_CSV_PATH):
         try:
             hist_df = read_prediction_history(HISTORY_CSV_PATH)

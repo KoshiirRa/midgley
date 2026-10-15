@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     dashboard_only = "--dashboard-only" in sys.argv
     use_api = "--use-llm-api" in sys.argv
+    if "--skip-backfills" in sys.argv:
+        os.environ["MIDGLEY_SKIP_BACKFILL"] = "1"
     model_choice = "ridge"
     for arg in sys.argv:
         if arg.startswith("--model="):

@@ -207,7 +207,16 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
   - `CARTO_API_KEY`: Optional CARTO Basemaps API key appended to Leaflet dark tile URLs on `docs/telemetry.html` (defaults to bundled public non-commercial key if unset or empty).
   - `MIDGLEY_SUBSCRIBERS_DB_PATH`: Optional override path for the SQLite subscriber registry (defaults to `data/subscribers.sqlite`).
 
-### 3. Verification Commands
+### 3. Edge & Cloudflare Workers Paid Architectural Roadmap (Issues #640–#645)
+* Opened comprehensive architectural tracking issues for upgrading Midgley's edge infrastructure under Cloudflare Workers Paid:
+  - **Issue #640**: [`feat(edge,scraping): Leverage Cloudflare Browser Rendering API for JavaScript-rendered news & state fuel price boards`](https://github.com/KoshiirRa/midgley/issues/640) — Conserves Firecrawl quota (800/mo) via edge headless Chromium.
+  - **Issue #641**: [`feat(edge,db): Direct database TCP connections from Workers via cloudflare:sockets`](https://github.com/KoshiirRa/midgley/issues/641) — Low-latency database connectivity and distributed rate-limit advisory locking.
+  - **Issue #642**: [`feat(edge,forecasting): Edge price & shock nowcasting with dynamic Asymmetric ECM evaluation`](https://github.com/KoshiirRa/midgley/issues/642) — Evaluates retail pass-through equations and tax wedges on-demand at the edge.
+  - **Issue #643**: [`refactor(edge,queues): Cloudflare Queue architecture hardening & extended CPU batch consumption`](https://github.com/KoshiirRa/midgley/issues/643) — Bulk D1 deduplication and Dead-Letter Queue management under 5-minute CPU runtime.
+  - **Issue #644**: [`feat(edge,monitoring): Expand intraday monitor feed coverage with Tier-1/Tier-2 refinery operator 8-Ks and regional midstream feeds`](https://github.com/KoshiirRa/midgley/issues/644) — Adds ExxonMobil, Chevron, Suncor, Par Pacific, and midstream operators.
+  - **Issue #645**: [`feat(edge,ai): Leverage Cloudflare Workers AI & Vectorize for edge event scoring, semantic deduplication, and brief synthesis`](https://github.com/KoshiirRa/midgley/issues/645) — Zero-shot SLM classification, Vectorize 384d semantic deduplication, and institutional Discord analyst briefs.
+
+### 4. Verification Commands
 ```bash
 python scripts/register_discord_commands.py --dry-run
 TESTING=1 pytest -v tests/test_docs_parity.py tests/test_event_analyzer.py tests/test_alpha_factor_miner.py tests/test_pasa_research_agent.py tests/test_weekly_issue_reporter.py tests/test_system_telemetry.py tests/test_tokentab_accounting.py tests/test_scenario_simulator.py tests/test_oilpriceapi_dynamic.py tests/test_oilpriceapi_ingestion.py

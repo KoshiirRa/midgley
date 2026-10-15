@@ -424,3 +424,31 @@ def test_scoreboard_retroactive_segregation(monkeypatch, tmp_path):
     assert metrics_all["mae_dollars"] == pytest.approx(0.035, rel=1e-2)
 
 
+def test_backfill_skip_policy_guards(monkeypatch, tmp_path):
+    from src.prediction_logger import backfill_new_region_history
+
+    dates = pd.date_range("2026-01-01", periods=10, freq="B")
+    base_prices = pd.Series([3.50] * 10, index=dates)
+    pred_prices = pd.Series([3.55] * 10, index=dates)
+
+    # 1. Test MIDGLEY_SKIP_BACKFILL=1 explicitly skips
+    monkeypatch.setenv("MIDGLEY_SKIP_BACKFILL", "1")
+    n = backfill_new_region_history(dates, base_prices, pred_prices, region="Test_Region", forecast_horizon_days=1)
+    assert n == 0
+    monkeypatch.delenv("MIDGLEY_SKIP_BACKFILL", raising=False)
+
+    # 2. Test GITHUB_ACTIONS=true policy guard (when not in TESTING mode)
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("TESTING", "0")
+    n_ci = backfill_new_region_history(dates, base_prices, pred_prices, region="Test_Region", forecast_horizon_days=1)
+    assert n_ci == 0
+
+    # 3. Test GITHUB_ACTIONS=true with MIDGLEY_FORCE_BACKFILL=1 override
+    monkeypatch.setenv("MIDGLEY_FORCE_BACKFILL", "1")
+    # Point db and csv to isolated tmp location
+    monkeypatch.setattr("src.prediction_logger.HISTORY_CSV_PATH", str(tmp_path / "test_history.csv"))
+    n_force = backfill_new_region_history(dates, base_prices, pred_prices, region="Test_Region", forecast_horizon_days=1)
+    assert n_force == 10
+
+
+

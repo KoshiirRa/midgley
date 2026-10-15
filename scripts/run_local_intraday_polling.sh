@@ -37,7 +37,7 @@ fi
 python -m src.intraday_event_monitor
 
 # Auto-commit updated history, intraday events & dashboard if on dev branch and working tree is dirty
-if [ -d ".git" ]; then
+if [ -e ".git" ]; then
     git add README.md docs/ data/prediction_history.csv data/intraday_events.json 2>/dev/null || true
     if ! git diff-index --quiet HEAD --; then
         git commit -m "chmod: Intraday event anomaly revision & public dashboard update [skip ci]" || true
