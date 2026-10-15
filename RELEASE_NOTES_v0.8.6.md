@@ -143,6 +143,29 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
   - Integrated `Boston_MA` and intermediate cluster `PADD_1A` into [`src/hierarchical_engine.py`](src/hierarchical_engine.py) bottom-level reconciliation and aggregation matrices ($S$) with exact sum coherence.
   - Mapped official EIA weekly retail series for Boston Metro (`GASREGWBOS`), Massachusetts State (`GASREGWMA`), New England PADD 1A (`GASREGW01A`), and Diesel (`GASDESW01A`) in [`src/eia_retail_feed.py`](src/eia_retail_feed.py) and [`src/diesel_regional.py`](src/diesel_regional.py).
   - Registered Boston keywords and target resolution in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py), [`src/discord_notifier.py`](src/discord_notifier.py), and [`src/api_server.py`](src/api_server.py).
+### 14. Greenville Model Decommissioning & Charlotte Carolinas Hub Consolidation
+- **Decommissioning from Active Daily Forecaster Loop**: Decommissioned the standalone Greenville, NC model from [`src/locations/__init__.py`](src/locations/__init__.py) (`LOCATIONS`), immediately reducing daily workflow execution time and cloud worker compute in [`run_all.py`](run_all.py).
+- **Consolidation into Charlotte Metro & Carolinas Hub (`Charlotte_NC`, PADD 1C)**:
+  - Updated [`src/locations/specs.py`](src/locations/specs.py) with `display_name="Charlotte Metro & Carolinas Hub, NC (PADD 1C)"` and registered `greenville: 0.01` and `selma: -0.04` in `sub_locales`.
+  - Charlotte's Paw Creek petroleum distribution terminal directly governs Colonial Pipeline cycle allocations and rack margins across both North and South Carolina.
+  - Transparent routing in [`src/locations/__init__.py`](src/locations/__init__.py), [`src/locations/specs.py`](src/locations/specs.py), and [`src/locations/runner.py`](src/locations/runner.py) ensures any request or query for `"greenville"` or `"greenville_nc"` resolves seamlessly to the Charlotte hub.
+- **Zero-404 Legacy Redirect**: Transformed [`docs/greenville.html`](docs/greenville.html) into an instant client-side redirect (`<meta http-equiv="refresh" content="0; url=charlotte.html">`) with canonical link metadata to preserve search index rankings and prevent broken links.
+- **Live Forecast Summary Table Consolidation**: Updated [`src/readme_updater.py`](src/readme_updater.py) to remove the standalone Greenville row and present Charlotte as `Charlotte, NC Metro Retail (Carolinas Hub)`.
+
+### 15. Multi-Agent System Architecture Expansion & Vector Diagram Redesign (18 Regional Hubs across PADDs 1–7)
+- **18-Hub Architecture Diagram Redesign**: Re-engineered Stage 4 in [`src/fireworks_tech_graph.py`](src/fireworks_tech_graph.py) and generated [`docs/assets/regional_metro_architecture.svg`](docs/assets/regional_metro_architecture.svg) into a comprehensive 18-hub regional layout covering PADDs 1A, 1B, 1C, 2, 3, 4, 5, 5B, 5C, 5D, 6, 7 + the ULSD Distillate Diesel Engine, strictly complying with `AGENTS.md` data integrity rules by avoiding stale hardcoded historical example prices.
+- **Pipeline Architecture Vector Graphic Update**: Updated [`docs/assets/multi_agent_architecture.svg`](docs/assets/multi_agent_architecture.svg) to document the multi-agent hierarchy connecting qualitative & physical feeds, the National Wholesale RBOB futures model, and all 18 localized regional calibration hubs.
+- **README & Public Dashboard Presentation**: Updated the Mermaid pipeline diagram (`subgraph METRO`) and system component breakdown in [`README.md`](README.md), and refreshed the landing page overview in [`docs/index.html`](docs/index.html).
+
+### 16. Local-Only Regional Backfill Policy (Cloud Runner Optimization)
+- **CI / GitHub Actions Worker Protection**: Established and enforced the operational policy that heavy, multi-year historical backfills for newly added regional models (`backfill_new_region_history`) are performed exclusively on the local Linux dev environment (`dev-vm`), safeguarding cloud runner execution limits and preventing GitHub Actions job timeouts.
+- **Execution Guard**: Ensured prospective daily forecasting runs (`run_all.py`) and cloud CI runners skip retroactive backfilling once baseline ledger presence is confirmed.
+
+### 17. Out-of-Metro Telemetry Map Geocoding & True NY State Centroid Correction
+- **True Geographic Centroid for New York State**: Corrected `STATE_CENTER_COORDS["NY"]` in [`src/zip_geocoding.py`](src/zip_geocoding.py) from Lower Manhattan / NYC City Hall `(40.7128, -74.0060)` to the authentic geographic centroid of New York State in Madison County `(42.9538, -75.5268)`.
+- **Exact Coordinates for Lake Placid, NY (12946)**: Added `KNOWN_ZIP_COORDS["12946"] = (44.2795, -73.9799, "Lake Placid, NY (Adirondacks / PADD 1B)")`, properly situating Lake Placid in the High Peaks region of Essex County in the Adirondacks (>240 miles north of NYC).
+- **3-Digit Prefix Centroid Resolution**: Introduced `KNOWN_PREFIX_COORDS` in [`src/zip_geocoding.py`](src/zip_geocoding.py) mapping 3-digit prefixes across New York State (Adirondacks `129`, Glens Falls `128`, Capital District `120`-`123`, Syracuse `132`, Buffalo `142`, Rochester `146`, Long Island `115`-`119`, NYC `100`-`114`) and major out-of-metro regions.
+- **Dynamic Leaflet Integration**: Added `resolve_zip_coordinates()` and updated [`src/dashboard_generator.py`](src/dashboard_generator.py) so the out-of-metro demand heatmap on [`docs/telemetry.html`](docs/telemetry.html) renders exact coordinates and human-readable locality labels for all queried ZIP codes.
 
 ---
 
@@ -161,6 +184,9 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **#621** | `feat(regions): Implement Guam & Pacific Island Territories Calibration Hub (PADD 7 / Trans-Pacific Import Logistics)` ([`6d1b77b`](https://github.com/KoshiirRa/midgley/commit/6d1b77b97)) | Locations / Regional Hubs / PADD 7 |
 | **#622** | `feat(regions): Decouple PADD 5 sub-markets (Seattle PNW, Phoenix Desert SW, Anchorage AK, Honolulu HI) from CA CARB` | Locations / Regional Hubs / Decoupling |
 | **#635 / #637** | `feat(regions): Implement New York Harbor & New York State Metro Calibration Hub (PADD 1B / NY Harbor Barges & Buckeye Pipeline)` | Locations / Regional Hubs / Issue Trigger |
+| **Commit `c7189715`** | `feat(mlops,cloud): Enforce local-only regional backfill policy and skip cloud runner backfilling` | MLOps / Workflows / Cloud |
+| **Commit `403946c7`** | `feat(architecture,regions): Consolidate Greenville into Charlotte Carolinas hub and update multi-agent architecture across PADDs 1-7` | Architecture / Locations / Diagrams |
+| **Commit `0c814a77`** | `fix(telemetry,geo): Resolve ZIP 12946 Lake Placid coordinates accurately in Adirondacks and correct NY state centroid` | Telemetry / Geocoding / Dashboard |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
 
 ---
@@ -171,9 +197,11 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 
 ### 1. Schema & Migration Summary
 * **Target Package Version**: `0.8.6` *(Draft — current package version remains `0.8.5` on `dev` until official release cut)*
-* **New Regional Metro Hubs**: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`), `San_Juan_PR` (`san_juan`), `Boston_MA` (`boston`)
+* **New Regional Metro Hubs & Topology Consolidation**:
+  - Added 12 new regional hubs: `Chicago_IL` (`chicago`), `Houston_TX` (`houston`), `Los_Angeles_CA` (`los_angeles`), `Denver_CO` (`denver`), `New_York_NY` (`new_york`), `Seattle_WA` (`seattle`), `Phoenix_AZ` (`phoenix`), `Anchorage_AK` (`anchorage`), `Honolulu_HI` (`honolulu`), `Guam_GU` (`guam`), `San_Juan_PR` (`san_juan`), `Boston_MA` (`boston`).
+  - Decommissioned standalone `greenville` model and consolidated it into `Charlotte Metro & Carolinas Hub, NC (PADD 1C)` (`charlotte`). `LOCATIONS` now maintains 19 canonical locations (1 national + 18 regional hubs), with transparent alias routing for `greenville` to `charlotte` and an instant redirect on `docs/greenville.html`.
 * **Edge Worker & Discord Slash Command Topology**:
-  - Reconciled [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts) and [`scripts/register_discord_commands.py`](scripts/register_discord_commands.py) to reflect all 20 canonical calibration hubs, statutory excise tax rates, and direct metro prefix clusters (`800`..`806` Denver, `100`..`149` New York, `021`/`022`/`024` Boston, `980`..`985` Seattle, `850`..`853`/`890`..`891` Phoenix, `995`..`996` Anchorage, `967`..`968` Honolulu, `006`..`009` San Juan, `969` Guam).
+  - Reconciled [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts) and [`scripts/register_discord_commands.py`](scripts/register_discord_commands.py) to reflect all canonical calibration hubs, statutory excise tax rates, and direct metro prefix clusters (`800`..`806` Denver, `100`..`149` New York, `021`/`022`/`024` Boston, `980`..`985` Seattle, `850`..`853`/`890`..`891` Phoenix, `995`..`996` Anchorage, `967`..`968` Honolulu, `006`..`009` San Juan, `969` Guam).
   - Added non-contiguous ZIP prefix resolution for Caribbean PADD 6 (`006`..`009` $\rightarrow$ `PR`/`VI`) and Pacific PADD 7 (`969` $\rightarrow$ `GU`).
   - Decoupled state PADD fallback corridors in the Cloudflare Worker from California CARB and legacy coastal hubs to their respective regional models.
 * **Hierarchical Engine & Regional Topology Additions**:
@@ -187,8 +215,13 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
   - Registered flat tropical 9.0 psi year-round RVP regulation standards in [`src/rvp_regulations.py`](src/rvp_regulations.py).
   - Mapped Puerto Rico Commonwealth gasoline arbitrio ($0.160/gal) in [`src/zip_geocoding.py`](src/zip_geocoding.py) and [`data/regional_metadata/san_juan_pr.json`](data/regional_metadata/san_juan_pr.json).
   - Mapped Guam Liquid Fuel Tax ($0.150/gal) + Mass Transit surcharge ($0.040/gal) = $0.190/gal local tax base in [`src/zip_geocoding.py`](src/zip_geocoding.py) and [`data/regional_metadata/guam_gu.json`](data/regional_metadata/guam_gu.json).
+* **Out-of-Metro Telemetry Geocoding & Coordinate Resolution**:
+  - Added `resolve_zip_coordinates()` in [`src/zip_geocoding.py`](src/zip_geocoding.py) checking exact 5-digit `KNOWN_ZIP_COORDS`, 3-digit prefix centroids `KNOWN_PREFIX_COORDS`, and state centroids `STATE_CENTER_COORDS`.
+  - Corrected `STATE_CENTER_COORDS["NY"]` from NYC `(40.7128, -74.0060)` to Madison County `(42.9538, -75.5268)`.
+  - Added exact coordinate mapping for Adirondacks Lake Placid, NY `12946` `(44.2795, -73.9799)`.
+* **Local Dev Environment Regional Backfill Policy**:
+  - Enforced operational policy directing multi-year regional historical backfilling (`backfill_new_region_history()`) to local dev environment (`dev-vm`), saving GitHub runner compute and avoiding cloud timeout bottlenecks.
 * **LLM Engine & Deprecation Migration**:
-
   - Runtime generative extractions and agent tasks migrated from deprecated `gemini-2.5-flash` to `gemini-3.8-flash`.
   - Deprecated sampling parameters (`temperature`, `top_p`, `top_k`, `thinking_budget`) are completely removed; structured JSON extraction and evaluation tasks explicitly configure `thinking_level="low"`.
   - Telemetry rates updated to $0.75 / 1M prompt and $3.75 / 1M output tokens while preserving legacy rates for historical accounting.
