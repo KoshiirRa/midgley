@@ -60,7 +60,7 @@ from src.locations.boston.regional import (
 def test_locations_registry_structure():
     """Verify that all expected locations are registered with required keys."""
     expected_locations = {
-        "national", "tulsa", "newark", "cincinnati", "greenville", "charlotte",
+        "national", "tulsa", "newark", "cincinnati", "charlotte",
         "oakland", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york",
         "seattle", "phoenix", "anchorage", "honolulu", "guam", "san_juan", "boston"
     }
@@ -74,6 +74,10 @@ def test_locations_registry_structure():
         assert callable(info["run_pipeline"])
         assert callable(info["build_notebook"])
         assert "notebook_filename" in info
+
+    # Ensure decommissioned greenville aliases cleanly to charlotte
+    grn_info = get_location("greenville")
+    assert grn_info["id"] == "charlotte"
 
 
 def test_tulsa_synthetic_market_data():

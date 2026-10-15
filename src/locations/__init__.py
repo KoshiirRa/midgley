@@ -67,18 +67,9 @@ LOCATIONS: Dict[str, Dict[str, Any]] = {
         "build_notebook": build_cincinnati_notebook,
         "notebook_filename": "cincinnati_gas_price_llm_forecasting.ipynb"
     },
-    "greenville": {
-        "id": "greenville",
-        "name": "Greenville Metro, NC (PADD 1C)",
-        "type": "regional",
-        "module": "src.locations.greenville",
-        "run_pipeline": run_greenville_pipeline,
-        "build_notebook": build_greenville_notebook,
-        "notebook_filename": "greenville_gas_price_llm_forecasting.ipynb"
-    },
     "charlotte": {
         "id": "charlotte",
-        "name": "Charlotte Metro, NC (PADD 1C)",
+        "name": "Charlotte Metro & Carolinas Hub, NC (PADD 1C)",
         "type": "regional",
         "module": "src.locations.charlotte",
         "run_pipeline": run_charlotte_pipeline,
@@ -220,6 +211,8 @@ def list_locations() -> List[str]:
 def get_location(loc_id: str) -> Dict[str, Any]:
     """Retrieves location metadata and execution handlers by location ID."""
     loc_id = loc_id.lower().strip()
+    if loc_id in ("greenville", "greenville_nc"):
+        loc_id = "charlotte"
     if loc_id in ("bay_area", "bayarea", "bayarea_ca", "oakland_ca"):
         loc_id = "oakland"
     if loc_id in ("chicago_il", "greater_chicago"):

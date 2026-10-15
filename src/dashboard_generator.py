@@ -538,11 +538,8 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         <a role="menuitem" href="{cin_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a role="menuitem" href="{grn_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
-                        </a>
                         <a role="menuitem" href="{clt_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte &amp; Carolinas Retail
                         </a>
                         <a role="menuitem" href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
@@ -2591,48 +2588,13 @@ def generate_public_dashboard():
                     </a>
                 </div>
 
-                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
+                <!-- Card 5: Charlotte Metro & Carolinas Retail (Paw Creek Distribution Hub) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C Carolinas Hub</span>
                             <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
-                            40.4¢ NC Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Greenville_NC']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-green-400 mt-1">${prices_map['Greenville_NC']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Greenville_NC')}</strong></span>
-                    </div>
-
-                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte &amp; Carolinas
                             </h4>
                         </div>
                         <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
@@ -2652,12 +2614,12 @@ def generate_public_dashboard():
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek &amp; Selma Hubs</span>
                         <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Charlotte_NC')}</strong></span>
                     </div>
 
                     <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
+                        Explore Charlotte &amp; Carolinas Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -3032,7 +2994,7 @@ def generate_public_dashboard():
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white">Multi-Agent System Architecture</h3>
-                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative & LLM Feeds &rarr; Main Wholesale Model &rarr; Localized Metro Area Models</p>
+                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative &amp; Physical Feeds &rarr; National Wholesale RBOB Model &rarr; 18 Localized Regional Calibration Hubs (PADDs 1&ndash;7)</p>
                     </div>
                 </div>
 
@@ -3100,15 +3062,15 @@ def generate_public_dashboard():
                         </p>
                     </div>
 
-                    <!-- Stage 4: Localized Metro Calibration (Fed by Main Model) -->
+                    <!-- Stage 4: Localized Regional Calibration Hubs (Fed by Main Model) -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-purple-500/40 shadow-lg shadow-purple-500/5 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-purple-400">
                             <span>Stage 4</span>
-                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Metro Calibration</span>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Regional Calibration</span>
                         </div>
-                        <h5 class="text-sm font-bold text-white">Localized Metro Models</h5>
+                        <h5 class="text-sm font-bold text-white">Localized Calibration Hubs</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK ($3.89/gal), Newark DE ($3.35/gal), and Cincinnati OH/KY ($3.45/gal) with local rack margins &amp; refinery dynamics.
+                            Ingests National Wholesale Base Forecast and dynamically calibrates for 18 regional hubs across all PADDs (PADD 1A Boston; PADD 1B New York &amp; Newark; PADD 1C Charlotte &amp; Port St. Lucie; PADD 2 Chicago, Tulsa &amp; Cincinnati; PADD 3 Houston; PADD 4 Denver; PADD 5 Los Angeles &amp; SF Bay Area; PADD 5B Seattle; PADD 5C Phoenix; PADD 5D Anchorage &amp; Honolulu; PADD 6 San Juan; PADD 7 Guam) using local rack margins, refinery dynamics, pipeline tariffs, and statutory tax structures. Charlotte serves as the Carolinas calibration hub (Greenville consolidated).
                         </p>
                     </div>
 
@@ -4116,130 +4078,37 @@ def generate_public_dashboard():
 
     # ---------------------------------------------------------------------------
     # 5. GREENVILLE METRO RETAIL GAS PAGE (docs/greenville.html & docs/greenville/index.html)
+    # Decommissioned in favor of Charlotte Metro & Carolinas Calibration Hub
     # ---------------------------------------------------------------------------
     def build_greenville_html(rel_prefix: str = "") -> str:
-        nav_greenville = get_nav_header("greenville", rel_prefix)
-        grn_base = prices_map['Greenville_NC']['base']
-        grn_pred = prices_map['Greenville_NC']['pred']
-        grn_delta = grn_pred - grn_base
-        grn_pct = (grn_delta / grn_base * 100.0) if grn_base > 0 else 0.0
-        grn_sign = "+" if grn_delta > 0 else ""
-        grn_color = "#10b981" if grn_pct < -0.2 else ("#ef4444" if grn_pct > 0.2 else "#0ea5e9")
-        grn_trend_text = f"{grn_sign}{grn_pct:.1f}% Projected Trend"
-        grn_trend_color = "text-emerald-300" if grn_pct < -0.2 else ("text-rose-300" if grn_pct > 0.2 else "text-green-300")
-        head_meta_greenville = get_head_meta_tags(
-            title=f"Greenville NC Retail Gas Forecast (${grn_base:.3f} → ${grn_pred:.3f} | {grn_sign}{grn_pct:.2f}%) - Midgley AI",
-            description=f"5-day retail gas price forecast for Greenville NC metro. Baseline ${grn_base:.3f}/gal, projected target ${grn_pred:.3f}/gal. Colonial Pipeline Selma hub & Tar River flooding model.",
-            canonical_path="greenville.html" if rel_prefix == "" else "greenville/index.html",
-            image_filename="greenville.png",
-            theme_color=grn_color
-        )
-        return r"""<!DOCTYPE html>
+        target_url = f"{rel_prefix}charlotte.html"
+        return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-{{ANALYTICS_SCRIPT}}
-{{HEAD_META}}
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url={target_url}">
+    <title>Greenville NC Retail Gas Forecast - Consolidated into Charlotte Hub - Midgley AI</title>
+    <link rel="canonical" href="https://koshiirra.github.io/midgley/charlotte.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenville, NC Retail Gas Forecast - Midgley</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- KaTeX for Math Rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
-
-    <style>
-        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
-        {{KATEX_MOBILE_CSS}}
-    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
-
-{{NAV_GREENVILLE}}
-
-    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
-        
-        <!-- Breadcrumb & Header -->
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div>
-                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
-                    <a href="PREFIXindex.html" class="hover:text-green-400">Home</a>
-                    <span>/</span>
-                    <span class="text-slate-200">Greenville Metro Retail</span>
-                </div>
-                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Metro Retail Gas Forecast
-                </h2>
-            </div>
-            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
-                PADD 1C South Atlantic Model
-            </span>
+<body class="bg-slate-950 text-slate-200 flex items-center justify-center min-h-screen p-6 font-sans">
+    <div class="max-w-md w-full p-6 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-4">
+        <div class="p-3 bg-cyan-500/20 text-cyan-400 rounded-full w-12 h-12 mx-auto flex items-center justify-center">
+            <i class="fa-solid fa-arrow-right"></i>
         </div>
-
-        <!-- Metric Hero Card -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Current Live Pump Base</span>
-                <p class="text-3xl font-extrabold text-white">${{GREENVILLE_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-green-400">${{GREENVILLE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs {{GREENVILLE_TREND_COLOR}} font-semibold">{{GREENVILLE_TREND_TEXT}}</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
-                <p class="text-3xl font-extrabold text-emerald-400">{{GREENVILLE_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: {{GREENVILLE_MAPE}} | RMSE: {{GREENVILLE_RMSE}}</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Directional Accuracy</span>
-                <p class="text-3xl font-extrabold text-emerald-400">{{GREENVILLE_HIT_RATE}}</p>
-                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
-            </div>
-        </div>
-
-        {{NARRATIVE_CARD}}
-        {{FEATURE_ATTRIBUTION_CARD}}
-        {{REGIONAL_CARDS}}
-
-        <!-- Counterfactual Shock Scenario Simulations -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-bolt text-green-400"></i> Greenville Regional Shock Scenario Simulations
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
-                    <h4 class="text-xs font-bold text-slate-200">Colonial Pipeline Mainline Outage</h4>
-                    <p class="text-xs text-slate-400">Line 1 emergency shutdown halts batch shipments into Selma NC breakout tank farms.</p>
-                    <div class="text-sm font-extrabold text-red-400">+ $0.245/gal (+7.54%)</div>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
-                    <h4 class="text-xs font-bold text-slate-200">Category 3 Atlantic Hurricane Landfall</h4>
-                    <p class="text-xs text-slate-400">Major Hurricane surge floods US-264 distribution highways & Tar River basin.</p>
-                    <div class="text-sm font-extrabold text-red-400">+ $0.215/gal (+6.62%)</div>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
-                    <h4 class="text-xs font-bold text-slate-200">Selma Hub Tank Farm Power Outage</h4>
-                    <p class="text-xs text-slate-400">Microburst knocks out Duke Energy substation at Selma hub, suspending rack loading.</p>
-                    <div class="text-sm font-extrabold text-red-400">+ $0.185/gal (+5.69%)</div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
-        Midgley Unleaded Gas Price Forecasting Engine &bull; Greenville, NC Metro Calibration Agent
-    </footer>
-
+        <h1 class="text-xl font-bold text-white">Greenville Calibration Consolidated</h1>
+        <p class="text-sm text-slate-400">
+            The Greenville, NC retail forecasting model has been decommissioned into the <strong>Charlotte Metro &amp; Carolinas Calibration Hub</strong>. Charlotte's Paw Creek terminal directly governs Colonial Pipeline allocation and rack margins across the Carolinas.
+        </p>
+        <a href="{target_url}" class="inline-block px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition">
+            Proceed to Charlotte &amp; Carolinas Hub &rarr;
+        </a>
+    </div>
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_MAPE}}", get_mape_display('greenville_nc')).replace("{{GREENVILLE_RMSE}}", get_rmse_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'], logistics_hub="Colonial Pipeline Selma Junction & NC 40.4¢ State Tax")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+"""
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))

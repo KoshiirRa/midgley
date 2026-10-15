@@ -68,31 +68,18 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
         primary_refinery="Marathon Catlettsburg Refinery (290 kbpd)",
         primary_pipeline="Mid-Valley Pipeline / Ohio River Tows"
     ),
-    "greenville": RegionSpec(
-        region_key="Greenville_NC",
-        slug="greenville",
-        display_name="Greenville Metro, NC (PADD 1C)",
-        padd="PADD 1C",
-        wholesale_spot_col="spot_gulf_coast",
-        eia_retail_series_id="EMM_EPMR_PTE_R1Z_DPG",
-        diesel_series_id="GASDESW",
-        baseline_tax_rate=0.410,
-        sub_locales={"selma_terminal": -0.04, "wilson": 0.01, "rocky_mount": 0.02},
-        primary_refinery="Gulf Coast Refining Complex (PADD 3)",
-        primary_pipeline="Colonial Pipeline Lines 1 & 2 / Plantation Pipeline"
-    ),
     "charlotte": RegionSpec(
         region_key="Charlotte_NC",
         slug="charlotte",
-        display_name="Charlotte Metro, NC (PADD 1C)",
+        display_name="Charlotte Metro & Carolinas Hub, NC (PADD 1C)",
         padd="PADD 1C",
         wholesale_spot_col="spot_gulf_coast",
         eia_retail_series_id="EMM_EPMR_PTE_R1Z_DPG",
         diesel_series_id="GASDESW",
         baseline_tax_rate=0.410,
-        sub_locales={"paw_creek": -0.03, "concord": 0.02, "gastonia": -0.01, "rock_hill_sc": -0.14},
+        sub_locales={"paw_creek": -0.03, "concord": 0.02, "gastonia": -0.01, "rock_hill_sc": -0.14, "greenville": 0.01, "selma": -0.04},
         primary_refinery="Gulf Coast Refining Complex (PADD 3)",
-        primary_pipeline="Colonial Pipeline Paw Creek Junction"
+        primary_pipeline="Colonial Pipeline Paw Creek Junction & Selma Corridors"
     ),
     "bay_area": RegionSpec(
         region_key="BayArea_CA",
@@ -303,6 +290,10 @@ REGIONAL_SPECS: Dict[str, RegionSpec] = {
 
 # Alias oakland to bay_area spec for seamless backward compatibility
 REGIONAL_SPECS["oakland"] = REGIONAL_SPECS["bay_area"]
+# Alias decommissioned greenville to charlotte (Carolinas calibration hub)
+REGIONAL_SPECS["greenville"] = REGIONAL_SPECS["charlotte"]
+REGIONAL_SPECS["greenville_nc"] = REGIONAL_SPECS["charlotte"]
+REGIONAL_SPECS["greenville_sc"] = REGIONAL_SPECS["charlotte"]
 REGIONAL_SPECS["chicago_il"] = REGIONAL_SPECS["chicago"]
 REGIONAL_SPECS["houston_tx"] = REGIONAL_SPECS["houston"]
 REGIONAL_SPECS["los_angeles_ca"] = REGIONAL_SPECS["los_angeles"]
@@ -346,6 +337,8 @@ def get_region_spec(region_id_or_slug: str) -> Optional[RegionSpec]:
     if not region_id_or_slug:
         return None
     key = region_id_or_slug.lower().strip()
+    if key in ("greenville", "greenville_nc", "greenville_sc"):
+        return REGIONAL_SPECS["charlotte"]
     if key in ("oakland", "oakland_ca", "bayarea", "bayarea_ca", "bay_area", "sf_bay_area"):
         return REGIONAL_SPECS["bay_area"]
     if key in ("chicago", "chicago_il", "greater_chicago"):

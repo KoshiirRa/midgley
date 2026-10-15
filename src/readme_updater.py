@@ -41,8 +41,6 @@ def update_readme_forecasts(
     cin_oh_dir = "DOWN 📉"
     cin_ky_price = 3.225
     cin_ky_dir = "DOWN 📉"
-    greenville_price = 3.150
-    greenville_dir = "DOWN 📉"
     charlotte_price = 3.210
     charlotte_dir = "DOWN 📉"
     psl_price = 3.320
@@ -58,7 +56,6 @@ def update_readme_forecasts(
     base_newark = 3.350
     base_cin_oh = 3.450
     base_cin_ky = 3.325
-    base_greenville = 3.250
     base_charlotte = 3.310
     base_psl = 3.420
     base_oakland = 5.550
@@ -69,7 +66,6 @@ def update_readme_forecasts(
     target_newark = "Next 5 Business Days"
     target_cin_oh = "Next 5 Business Days"
     target_cin_ky = "Next 5 Business Days"
-    target_greenville = "Next 5 Business Days"
     target_charlotte = "Next 5 Business Days"
     target_psl = "Next 5 Business Days"
     target_oakland = "Next 5 Business Days"
@@ -108,7 +104,6 @@ def update_readme_forecasts(
                 latest_newark = get_latest_valid_region_forecast(df, 'Newark_DE')
                 latest_cin_oh = get_latest_valid_region_forecast(df, 'Cincinnati_OH')
                 latest_cin_ky = get_latest_valid_region_forecast(df, 'Cincinnati_KY')
-                latest_greenville = get_latest_valid_region_forecast(df, 'Greenville_NC')
                 latest_charlotte = get_latest_valid_region_forecast(df, 'Charlotte_NC')
                 latest_psl = get_latest_valid_region_forecast(df, 'Port_St_Lucie_FL')
                 latest_oakland = get_latest_valid_region_forecast(df, 'Oakland_CA')
@@ -144,12 +139,6 @@ def update_readme_forecasts(
                     cin_ky_dir = "UP 📈" if cin_ky_price >= base_cin_ky else "DOWN 📉"
                     target_cin_ky = str(latest_cin_ky['forecast_target_date'])
 
-                if latest_greenville is not None:
-                    greenville_price = float(latest_greenville['predicted_5d_price'])
-                    base_greenville = float(latest_greenville['current_base_price'])
-                    greenville_dir = "UP 📈" if greenville_price >= base_greenville else "DOWN 📉"
-                    target_greenville = str(latest_greenville['forecast_target_date'])
-
                 if latest_charlotte is not None:
                     charlotte_price = float(latest_charlotte['predicted_5d_price'])
                     base_charlotte = float(latest_charlotte['current_base_price'])
@@ -182,7 +171,6 @@ def update_readme_forecasts(
     v_newark = resolve_model_tag("Newark", "Ridge")
     v_cin_oh = resolve_model_tag("Cincinnati_OH", "Ridge")
     v_cin_ky = resolve_model_tag("Cincinnati_KY", "Ridge")
-    v_greenville = resolve_model_tag("Greenville", "Ridge")
     v_charlotte = resolve_model_tag("Charlotte", "Ridge")
     v_psl = resolve_model_tag("Port_St_Lucie", "Ridge")
     v_oakland = resolve_model_tag("Oakland", "Ridge")
@@ -198,8 +186,7 @@ def update_readme_forecasts(
 | **Newark, DE Metro Retail** | `${base_newark:.3f}`/gal | **`${newark_price:.3f}`/gal** | **{newark_dir}** | `{target_newark}` | `{v_newark}` |
 | **Cincinnati, OH Retail** | `${base_cin_oh:.3f}`/gal | **`${cin_oh_price:.3f}`/gal** | **{cin_oh_dir}** | `{target_cin_oh}` | `{v_cin_oh}` |
 | **Northern Kentucky Retail** | `${base_cin_ky:.3f}`/gal | **`${cin_ky_price:.3f}`/gal** | **{cin_ky_dir}** | `{target_cin_ky}` | `{v_cin_ky}` |
-| **Greenville, NC Metro Retail** | `${base_greenville:.3f}`/gal | **`${greenville_price:.3f}`/gal** | **{greenville_dir}** | `{target_greenville}` | `{v_greenville}` |
-| **Charlotte, NC Metro Retail** | `${base_charlotte:.3f}`/gal | **`${charlotte_price:.3f}`/gal** | **{charlotte_dir}** | `{target_charlotte}` | `{v_charlotte}` |
+| **Charlotte, NC Metro Retail (Carolinas Hub)** | `${base_charlotte:.3f}`/gal | **`${charlotte_price:.3f}`/gal** | **{charlotte_dir}** | `{target_charlotte}` | `{v_charlotte}` |
 | **Port St. Lucie, FL Waterborne** | `${base_psl:.3f}`/gal | **`${psl_price:.3f}`/gal** | **{psl_dir}** | `{target_psl}` | `{v_psl}` |
 | **Oakland, CA Metro Retail** | `${base_oakland:.3f}`/gal | **`${oakland_price:.3f}`/gal** | **{oakland_dir}** | `{target_oakland}` | `{v_oakland}` |
 | **SF Bay Area 9-County Avg** | `${base_bayarea:.3f}`/gal | **`${bayarea_price:.3f}`/gal** | **{bayarea_dir}** | `{target_bayarea}` | `{v_bayarea}` |
