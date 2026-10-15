@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-15T18:47:28.499369",
+  "timestamp": "2026-10-15T19:27:06.770100",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-15T18:46:52Z"
+      "timestamp": "2026-10-15T19:24:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-21",
+    "target_date": "2026-10-22",
     "current_base_price": 3.71,
-    "predicted_price_per_gal": 3.709,
-    "expected_change_dollars": -0.001,
-    "expected_change_percent": -0.03,
-    "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.589,
-    "prediction_upper_95ci": 3.829,
+    "predicted_price_per_gal": 3.71,
+    "expected_change_dollars": 0.0,
+    "expected_change_percent": 0.0,
+    "projected_direction": "FLAT",
+    "prediction_lower_95ci": 3.59,
+    "prediction_upper_95ci": 3.83,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 3.71,
-    "day_2_price": 3.693,
-    "day_3_price": 3.694,
-    "day_4_price": 3.708,
-    "day_5_price": 3.709,
+    "day_2_price": 3.71,
+    "day_3_price": 3.71,
+    "day_4_price": 3.71,
+    "day_5_price": 3.71,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 40.0,
         "direction": "FLAT",
         "description": "Unrestricted terminal dispatch"
@@ -57,7 +57,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
         "direction": "FLAT",
         "description": "Stable energy commodity baseline"
@@ -65,7 +65,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 15.0,
         "direction": "FLAT",
         "description": "Steady refinery utilization"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 10.0,
         "direction": "FLAT",
         "description": "Neutral weather impact"
@@ -81,7 +81,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
         "direction": "FLAT",
         "description": "Neutral news sentiment"
@@ -89,60 +89,60 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "DOWN",
-        "description": "Tax relief or off-peak RVP specification"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast $-0.001/gal (-0.03%): Driven primarily by Tax & Regulatory Overhead ($-0.001/gal).",
+      "summary_text": "Charlotte NC forecast stable ($0.000/gal): Balanced supply/demand indicators.",
       "key_drivers": [
-        {
-          "category": "Tax & Regulatory Overhead",
-          "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.03,
-          "share_pct": 5.0,
-          "direction": "DOWN"
-        },
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Unrestricted terminal dispatch",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 40.0,
           "direction": "FLAT"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Stable energy commodity baseline",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 25.0,
           "direction": "FLAT"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Steady refinery utilization",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 15.0,
           "direction": "FLAT"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "Neutral weather impact",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 10.0,
           "direction": "FLAT"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Neutral news sentiment",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
+          "share_pct": 5.0,
+          "direction": "FLAT"
+        },
+        {
+          "category": "Tax & Regulatory Overhead",
+          "description": "Fixed statutory tax overhead",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 5.0,
           "direction": "FLAT"
         }
@@ -151,61 +151,61 @@
   },
   "key_drivers": [
     {
-      "category": "Tax & Regulatory Overhead",
-      "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.03,
-      "share_pct": 5.0,
-      "direction": "DOWN"
-    },
-    {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Unrestricted terminal dispatch",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 40.0,
       "direction": "FLAT"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Stable energy commodity baseline",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 25.0,
       "direction": "FLAT"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Steady refinery utilization",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 15.0,
       "direction": "FLAT"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "Neutral weather impact",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 10.0,
       "direction": "FLAT"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Neutral news sentiment",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
+      "share_pct": 5.0,
+      "direction": "FLAT"
+    },
+    {
+      "category": "Tax & Regulatory Overhead",
+      "description": "Fixed statutory tax overhead",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 5.0,
       "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast $-0.001/gal (-0.03%): Driven primarily by Tax & Regulatory Overhead ($-0.001/gal).",
+    "summary_text": "Charlotte NC forecast stable ($0.000/gal): Balanced supply/demand indicators.",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 40.0,
         "direction": "FLAT",
         "description": "Unrestricted terminal dispatch"
@@ -213,7 +213,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 25.0,
         "direction": "FLAT",
         "description": "Stable energy commodity baseline"
@@ -221,7 +221,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 15.0,
         "direction": "FLAT",
         "description": "Steady refinery utilization"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 10.0,
         "direction": "FLAT",
         "description": "Neutral weather impact"
@@ -237,7 +237,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.0,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
         "direction": "FLAT",
         "description": "Neutral news sentiment"
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.001,
+        "delta_dollars": 0.0,
         "share_pct": 5.0,
-        "direction": "DOWN",
-        "description": "Tax relief or off-peak RVP specification"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     }
   }
