@@ -7037,27 +7037,8 @@ def generate_telemetry_page():
                 <td class="py-2.5 px-3 text-right text-slate-300">{meta.get('avg_data_age_hours', 0.0):.2f} h</td>
             </tr>"""
 
-    # Dynamic Leaflet points
-    known_zip_coords = {
-        "90210": (34.0736, -118.4004, "Beverly Hills, CA (PADD 5)"),
-        "77002": (29.7604, -95.3698, "Houston, TX (PADD 3)"),
-        "10001": (40.7501, -73.9996, "New York, NY (PADD 1B)"),
-        "60601": (41.8781, -87.6298, "Chicago, IL (PADD 2)"),
-        "30301": (33.7490, -84.3880, "Atlanta, GA (PADD 1C)"),
-        "74101": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
-        "19711": (39.6837, -75.7497, "Newark, DE (PADD 1B)"),
-        "45202": (39.1031, -84.5120, "Cincinnati, OH (PADD 2)"),
-        "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
-        "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
-        "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
-        "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)"),
-        "64101": (39.0997, -94.5786, "Kansas City, MO (PADD 2)"),
-        "80202": (39.7392, -104.9903, "Denver, CO (PADD 4)"),
-        "98101": (47.6062, -122.3321, "Seattle, WA (PADD 5)"),
-        "02138": (42.3736, -71.1097, "Cambridge / Boston, MA (PADD 1A)"),
-    }
-    state_center_coords = dict(STATE_CENTER_COORDS)
-
+    # Dynamic Leaflet points using precise ZIP and 3-digit prefix geocoding
+    from src.zip_geocoding import resolve_zip_coordinates
     zip_records = tele_data.get('top_unmapped_zips', [])
     map_points = []
     if zip_records:
@@ -7065,13 +7046,9 @@ def generate_telemetry_page():
             z_code = str(zr.get('zip_code', ''))
             z_hits = zr.get('hit_count', 1)
             z_st = zr.get('state', 'US')
-            z_padd = zr.get('padd_region', 'PADD 2')
-            if z_code in known_zip_coords:
-                lat, lng, desc = known_zip_coords[z_code]
-                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {desc}", "hits": z_hits})
-            elif z_st in state_center_coords:
-                lat, lng = state_center_coords[z_st]
-                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {z_st} ({z_padd})", "hits": z_hits})
+            z_padd = zr.get('padd_region', '')
+            lat, lng, desc = resolve_zip_coordinates(z_code, state_code=z_st, padd_region=z_padd)
+            map_points.append({"lat": lat, "lng": lng, "name": desc, "hits": z_hits})
     if not map_points:
         map_points = []
     map_points_json = json.dumps(map_points)

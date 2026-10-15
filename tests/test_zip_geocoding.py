@@ -375,3 +375,30 @@ def test_api_server_coordinates_endpoints():
     assert data_fc["location_resolution"]["locale_code"] == "newark"
 
 
+def test_resolve_zip_coordinates_lake_placid_and_centroids():
+    """Verify that ZIP 12946 (Lake Placid) maps to the Adirondacks and not NYC."""
+    from src.zip_geocoding import resolve_zip_coordinates, STATE_CENTER_COORDS, haversine_distance_miles
+
+    # 1. Exact 12946 coordinates
+    lat, lon, label = resolve_zip_coordinates("12946", "NY", "PADD 1B")
+    assert pytest.approx(lat, abs=0.01) == 44.2795
+    assert pytest.approx(lon, abs=0.01) == -73.9799
+    assert "Lake Placid" in label
+    assert "Adirondacks" in label
+
+    # Distance to NYC (40.7128, -74.0060) must be > 200 miles
+    dist_to_nyc = haversine_distance_miles(lat, lon, 40.7128, -74.0060)
+    assert dist_to_nyc > 240.0, f"Lake Placid must not be located near NYC; was {dist_to_nyc:.1f} miles away"
+
+    # 2. True NY State centroid must be Central NY (Madison County), NOT NYC
+    ny_lat, ny_lon = STATE_CENTER_COORDS["NY"]
+    assert ny_lat > 42.5, "NY state centroid must be in Central New York, not NYC"
+    dist_centroid_to_nyc = haversine_distance_miles(ny_lat, ny_lon, 40.7128, -74.0060)
+    assert dist_centroid_to_nyc > 150.0
+
+    # 3. 3-digit prefix 129 (e.g. 12901 Plattsburgh) maps to Adirondacks / Plattsburgh
+    p_lat, p_lon, p_label = resolve_zip_coordinates("12901", "NY")
+    assert p_lat > 44.0
+    assert "Plattsburgh" in p_label or "Adirondacks" in p_label
+
+

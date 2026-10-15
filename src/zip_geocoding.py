@@ -204,7 +204,7 @@ STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
     "MA": (42.2302, -71.5301), "MI": (43.3266, -84.5361), "MN": (45.6945, -93.9002),
     "MS": (32.7416, -89.6787), "MO": (38.4561, -92.2884), "MT": (46.9219, -110.4544),
     "NE": (41.1254, -98.2681), "NV": (38.3135, -117.0554), "NH": (43.4525, -71.5639),
-    "NJ": (40.2989, -74.5210), "NM": (34.8405, -106.2485), "NY": (40.7128, -74.0060),
+    "NJ": (40.2989, -74.5210), "NM": (34.8405, -106.2485), "NY": (42.9538, -75.5268),
     "NC": (35.7596, -79.0193), "ND": (47.5289, -99.7840), "OH": (40.4173, -82.9071),
     "OK": (35.4676, -97.5164), "OR": (44.5720, -122.0709), "PA": (41.2033, -77.1945),
     "RI": (41.6809, -71.5118), "SC": (33.8569, -80.9450), "SD": (44.2998, -99.4388),
@@ -213,6 +213,111 @@ STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
     "WV": (38.4912, -80.9545), "WI": (44.2685, -89.6165), "WY": (42.7560, -107.3025),
     "GU": (13.4443, 144.7937), "MP": (15.1794, 145.7483), "AS": (-14.2710, -170.7020),
     "PR": (18.2208, -66.5901), "VI": (18.3358, -64.8963),
+}
+
+# Exact 5-digit ZIP coordinates (lat, lon, label) to prevent misplacement of out-of-metro regions
+KNOWN_ZIP_COORDS: Dict[str, tuple[float, float, str]] = {
+    "12946": (44.2795, -73.9799, "Lake Placid, NY (Adirondacks / PADD 1B)"),
+    "90210": (34.0736, -118.4004, "Beverly Hills, CA (PADD 5)"),
+    "77002": (29.7604, -95.3698, "Houston, TX (PADD 3)"),
+    "10001": (40.7501, -73.9996, "New York, NY (PADD 1B)"),
+    "60601": (41.8781, -87.6298, "Chicago, IL (PADD 2)"),
+    "30301": (33.7490, -84.3880, "Atlanta, GA (PADD 1C)"),
+    "74101": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
+    "74103": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
+    "19711": (39.6837, -75.7497, "Newark, DE (PADD 1B)"),
+    "45202": (39.1031, -84.5120, "Cincinnati, OH (PADD 2)"),
+    "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
+    "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
+    "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
+    "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)"),
+    "64101": (39.0997, -94.5786, "Kansas City, MO (PADD 2)"),
+    "80202": (39.7392, -104.9903, "Denver, CO (PADD 4)"),
+    "98101": (47.6062, -122.3321, "Seattle, WA (PADD 5)"),
+    "02138": (42.3736, -71.1097, "Cambridge / Boston, MA (PADD 1A)"),
+    "07001": (40.5843, -74.2765, "Avenel / Woodbridge, NJ (PADD 1B)"),
+    "85001": (33.4484, -112.0740, "Phoenix, AZ (PADD 5)"),
+    "99501": (61.2181, -149.9003, "Anchorage, AK (PADD 5)"),
+    "96813": (21.3069, -157.8583, "Honolulu, HI (PADD 5)"),
+    "96910": (13.4756, 144.7503, "Hagåtña, GU (PADD 7)"),
+    "00901": (18.4655, -66.1057, "San Juan, PR (PADD 6)"),
+    "00801": (18.3358, -64.8963, "St. Thomas, VI (PADD 6)"),
+    "84101": (40.7608, -111.8910, "Salt Lake City, UT (PADD 4)"),
+    "89101": (36.1699, -115.1398, "Las Vegas, NV (PADD 5)"),
+    "48201": (42.3314, -83.0458, "Detroit, MI (PADD 2)"),
+    "55401": (44.9778, -93.2650, "Minneapolis, MN (PADD 2)"),
+}
+
+# 3-digit ZIP prefix centroids (lat, lon, label) for regional accuracy
+KNOWN_PREFIX_COORDS: Dict[str, tuple[float, float, str]] = {
+    # New York State Regions (Preserving Adirondacks, Upstate, Western NY, Long Island & NYC)
+    "129": (44.4000, -74.0000, "Adirondacks / Plattsburgh, NY (PADD 1B)"),
+    "128": (43.3095, -73.6440, "Glens Falls / Southern Adirondacks, NY (PADD 1B)"),
+    "120": (42.7500, -73.8000, "Capital District, NY (PADD 1B)"),
+    "121": (42.7000, -73.7000, "Capital District, NY (PADD 1B)"),
+    "122": (42.6526, -73.7562, "Albany, NY (PADD 1B)"),
+    "123": (42.8142, -73.9396, "Schenectady, NY (PADD 1B)"),
+    "124": (42.0000, -74.2000, "Catskills / Kingston, NY (PADD 1B)"),
+    "125": (41.6000, -73.8000, "Hudson Valley / Poughkeepsie, NY (PADD 1B)"),
+    "126": (41.7000, -73.9000, "Poughkeepsie, NY (PADD 1B)"),
+    "127": (41.7000, -74.7000, "Monticello / Sullivan County, NY (PADD 1B)"),
+    "130": (43.0000, -76.3000, "Central NY / Cortland, NY (PADD 1B)"),
+    "131": (43.1000, -76.2000, "Central NY / Oswego, NY (PADD 1B)"),
+    "132": (43.0481, -76.1474, "Syracuse, NY (PADD 1B)"),
+    "133": (43.1000, -75.2000, "Utica / Mohawk Valley, NY (PADD 1B)"),
+    "134": (43.2000, -75.3000, "Utica / Rome, NY (PADD 1B)"),
+    "135": (43.1009, -75.2327, "Utica, NY (PADD 1B)"),
+    "136": (44.5000, -75.2000, "North Country / Watertown, NY (PADD 1B)"),
+    "137": (42.1000, -75.6000, "Binghamton Area, NY (PADD 1B)"),
+    "138": (42.2000, -75.4000, "Southern Tier, NY (PADD 1B)"),
+    "139": (42.0987, -75.9180, "Binghamton, NY (PADD 1B)"),
+    "140": (42.8000, -78.6000, "Western NY / Buffalo Metro, NY (PADD 1B)"),
+    "141": (43.0000, -78.8000, "Niagara / Western NY, NY (PADD 1B)"),
+    "142": (42.8864, -78.8784, "Buffalo, NY (PADD 1B)"),
+    "143": (43.0962, -79.0377, "Niagara Falls, NY (PADD 1B)"),
+    "144": (42.9000, -77.4000, "Finger Lakes, NY (PADD 1B)"),
+    "145": (43.0000, -77.6000, "Rochester Metro, NY (PADD 1B)"),
+    "146": (43.1566, -77.6088, "Rochester, NY (PADD 1B)"),
+    "147": (42.1000, -79.2000, "Jamestown / Chautauqua, NY (PADD 1B)"),
+    "148": (42.3000, -77.2000, "Elmira / Corning, NY (PADD 1B)"),
+    "149": (42.0898, -76.8077, "Elmira, NY (PADD 1B)"),
+    "100": (40.7831, -73.9712, "Manhattan, NYC (PADD 1B)"),
+    "101": (40.7505, -73.9934, "Manhattan Midtown, NYC (PADD 1B)"),
+    "102": (40.7130, -74.0130, "Manhattan Financial District, NYC (PADD 1B)"),
+    "103": (40.5795, -74.1502, "Staten Island, NYC (PADD 1B)"),
+    "104": (40.8448, -73.8648, "Bronx, NYC (PADD 1B)"),
+    "105": (41.1000, -73.7500, "Westchester County, NY (PADD 1B)"),
+    "106": (41.0340, -73.7629, "White Plains, NY (PADD 1B)"),
+    "107": (40.9312, -73.8987, "Yonkers, NY (PADD 1B)"),
+    "108": (40.9115, -73.7824, "New Rochelle, NY (PADD 1B)"),
+    "109": (41.1500, -74.0000, "Rockland County, NY (PADD 1B)"),
+    "110": (40.7500, -73.7000, "Queens / Nassau Border, NY (PADD 1B)"),
+    "111": (40.7500, -73.9200, "Long Island City / Queens, NYC (PADD 1B)"),
+    "112": (40.6782, -73.9442, "Brooklyn, NYC (PADD 1B)"),
+    "113": (40.7498, -73.8378, "Flushing / Queens, NYC (PADD 1B)"),
+    "114": (40.7027, -73.7890, "Jamaica / Queens, NYC (PADD 1B)"),
+    "115": (40.7300, -73.6000, "Nassau County, Long Island (PADD 1B)"),
+    "117": (40.8200, -73.1500, "Suffolk County, Long Island (PADD 1B)"),
+    "118": (40.7800, -73.5000, "Mid-Nassau County, Long Island (PADD 1B)"),
+    "119": (40.9000, -72.3500, "Hamptons / East Long Island (PADD 1B)"),
+    # Additional Key Regional Hubs & Out-of-Metro Clusters
+    "191": (39.9526, -75.1652, "Philadelphia, PA (PADD 1B)"),
+    "152": (40.4406, -79.9959, "Pittsburgh, PA (PADD 1B)"),
+    "021": (42.3601, -71.0589, "Boston, MA (PADD 1A)"),
+    "022": (42.3500, -71.0700, "Boston Metro, MA (PADD 1A)"),
+    "029": (41.8240, -71.4128, "Providence, RI (PADD 1A)"),
+    "061": (41.7658, -72.6734, "Hartford, CT (PADD 1A)"),
+    "031": (42.9956, -71.4548, "Manchester, NH (PADD 1A)"),
+    "054": (44.4759, -73.2121, "Burlington, VT (PADD 1A)"),
+    "041": (43.6591, -70.2568, "Portland, ME (PADD 1A)"),
+    "802": (39.7392, -104.9903, "Denver, CO (PADD 4)"),
+    "841": (40.7608, -111.8910, "Salt Lake City, UT (PADD 4)"),
+    "820": (41.1400, -104.8202, "Cheyenne, WY (PADD 4)"),
+    "591": (45.7833, -108.5007, "Billings, MT (PADD 4)"),
+    "837": (43.6150, -116.2023, "Boise, ID (PADD 4)"),
+    "009": (18.4655, -66.1057, "San Juan, PR (PADD 6)"),
+    "008": (18.3358, -64.8963, "US Virgin Islands (PADD 6)"),
+    "969": (13.4443, 144.7937, "Guam / Marianas (PADD 7)"),
 }
 
 
@@ -300,6 +405,33 @@ def resolve_location_name(zip_code: str, prefix_3: str, state_code: str) -> str:
     if prefix_3 in KNOWN_ZIP_LOCALITIES:
         return KNOWN_ZIP_LOCALITIES[prefix_3]
     return f"ZIP {zip_code} ({state_code})"
+
+
+def resolve_zip_coordinates(zip_code: str, state_code: str = "US", padd_region: str = "") -> tuple[float, float, str]:
+    """
+    Resolves geographic (lat, lon, label) for a given 5-digit ZIP code.
+    1. Checks exact 5-digit KNOWN_ZIP_COORDS.
+    2. Checks 3-digit prefix KNOWN_PREFIX_COORDS.
+    3. Falls back to true geographic state centroid STATE_CENTER_COORDS.
+    4. Ultimate fallback to US centroid (39.8283, -98.5795).
+    """
+    z_clean = str(zip_code or "").strip().split("-")[0].strip().zfill(5)[:5]
+    if z_clean in KNOWN_ZIP_COORDS:
+        lat, lon, desc = KNOWN_ZIP_COORDS[z_clean]
+        return lat, lon, f"{z_clean} - {desc}"
+
+    p3 = z_clean[:3]
+    if p3 in KNOWN_PREFIX_COORDS:
+        lat, lon, desc = KNOWN_PREFIX_COORDS[p3]
+        return lat, lon, f"{z_clean} - {desc}"
+
+    st = state_code.upper() if state_code and state_code.upper() != "US" else ZIP_PREFIX_STATE_MAP.get(p3, "US")
+    padd_str = f" ({padd_region})" if padd_region else ""
+    if st in STATE_CENTER_COORDS:
+        lat, lon = STATE_CENTER_COORDS[st]
+        return lat, lon, f"{z_clean} - {st}{padd_str}"
+
+    return 39.8283, -98.5795, f"{z_clean} - US{padd_str}"
 
 
 def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
