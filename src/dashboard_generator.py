@@ -4089,6 +4089,12 @@ def generate_public_dashboard():
     <meta http-equiv="refresh" content="0; url={target_url}">
     <title>Greenville NC Retail Gas Forecast - Consolidated into Charlotte Hub - Midgley AI</title>
     <link rel="canonical" href="https://koshiirra.github.io/midgley/charlotte.html" />
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:title" content="Greenville NC Retail Gas Forecast - Consolidated into Charlotte Hub - Midgley AI">
+    <meta property="og:description" content="Greenville NC retail gas forecasting model has been decommissioned into Charlotte Metro &amp; Carolinas Calibration Hub.">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#020617">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
