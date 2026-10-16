@@ -5783,5 +5783,26 @@
     "matched_entity": "Valero",
     "similarity": 0.58,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-10-16T08:52:09.158569",
+    "headline": "\u201cInflation Driven by Oil and Tariff Shocks Shouldn\u2019t Be Dismissed as \u2018Transitory\u2019\u201d - \uc870\uc120\uc77c\ubcf4",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOejBFWnZfcTVuaXhDQ001UDFkc2cxUzY3VVpGWVVEUjFkdW5TUHV3N2tURnJULS0wV1p2bWdGaWlYZlp0YzlMUjhjZlBDV08tcmZVNEVCTHZ1TWF5TzRvSTV0elotLUY2SFI2aGdlejU3S1RmaUo5Mmt6X1o3UnFHZlNBRndIUVFyRjdTM0NR?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOejBFWnZfcTVuaXhDQ001UDFkc2cxUzY3VVpGWVVEUjFkdW5TUHV3N2tURnJULS0wV1p2bWdGaWlYZlp0YzlMUjhjZlBDV08tcmZVNEVCTHZ1TWF5TzRvSTV0elotLUY2SFI2aGdlejU3S1RmaUo5Mmt6X1o3UnFHZlNBRndIUVFyRjdTM0NR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxOejBFWnZfcTVuaXhDQ001UDFkc2cxUzY3VVpGWVVEUjFkdW5TUHV3N2tURnJULS0wV1p2bWdGaWlYZlp0YzlMUjhjZlBDV08tcmZVNEVCTHZ1TWF5TzRvSTV0elotLUY2SFI2aGdlejU3S1RmaUo5Mmt6X1o3UnFHZlNBRndIUVFyRjdTM0NR?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.3,
+      "supply_disruption": 0.4,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.5
+    },
+    "discord_notified": true
   }
 ]

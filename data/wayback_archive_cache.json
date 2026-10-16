@@ -916,13 +916,14 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5": {
-    "timestamp": "2026-10-14T07:17:39.273129+00:00",
+    "timestamp": "2026-10-16T08:51:43.897684+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMib0FVX3lxTE1YSnN3Sjd3ei04TUhDMUstTWhfWGR0R19aR0Y1SWJxWlZSenNpR0NzYko5bmhqbEQ4amd5M1RtVkFvRldNbjNzOGJxOXdTaGRGRGRxUXd5OHFfaXFyZnhNSUQ1TUJHZlpZb2hnaTdaNA?oc=5": {
     "timestamp": "2026-09-06T04:45:22.815148",
@@ -12769,5 +12770,32 @@
     "headline": "Valero Energy Corp Stock (VLO) Closed Down by 3.41% on Oct 15: Drivers Behind the Movement - TradingKey",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxNT1NoUlFFdHBhNkg3ZWR0NG1feDB1RUkxdEJubk9ibGVQTHZTYm9MWTZRLUVaemlaa0lKVVpFb1pNZ3o0clkxMUxzcmxNbWNXOTA3X3FmVHZPdS1LaWxpSUZqTWtibnVkSDQxbEl1d1FQSzdsWVNpSE00OXlfUUpqUkI2M3Jwb3ktNlE?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOdk93MTRjTm9oeWc0OS1lZl93a3VnbnFQT0JLZ1dpZlR3eFNGVEduQVhxejhOSHVnbjZRbFpfeEs4a1dDaXlMbFV6SmwxbE5IXzJCaDFxNWdOOUNTdjVYUXFKYmlMNlU3b2J2Wk9weW5kZWNUaDB5Y28wM3Q0SlRhN2hCdmQ1d1lHckx6UE9NSk5DdXR0bEt1SEN4b3Y0RDE3bG1pTlhfa05pckZoZEwwZTVib1E1Ni0xb3JTaUJRYTBaRXFEaEljREhSbFVNT3ZCLWpr?oc=5": {
+    "timestamp": "2026-10-16T08:51:21.465506+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOdk93MTRjTm9oeWc0OS1lZl93a3VnbnFQT0JLZ1dpZlR3eFNGVEduQVhxejhOSHVnbjZRbFpfeEs4a1dDaXlMbFV6SmwxbE5IXzJCaDFxNWdOOUNTdjVYUXFKYmlMNlU3b2J2Wk9weW5kZWNUaDB5Y28wM3Q0SlRhN2hCdmQ1d1lHckx6UE9NSk5DdXR0bEt1SEN4b3Y0RDE3bG1pTlhfa05pckZoZEwwZTVib1E1Ni0xb3JTaUJRYTBaRXFEaEljREhSbFVNT3ZCLWpr?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOdk93MTRjTm9oeWc0OS1lZl93a3VnbnFQT0JLZ1dpZlR3eFNGVEduQVhxejhOSHVnbjZRbFpfeEs4a1dDaXlMbFV6SmwxbE5IXzJCaDFxNWdOOUNTdjVYUXFKYmlMNlU3b2J2Wk9weW5kZWNUaDB5Y28wM3Q0SlRhN2hCdmQ1d1lHckx6UE9NSk5DdXR0bEt1SEN4b3Y0RDE3bG1pTlhfa05pckZoZEwwZTVib1E1Ni0xb3JTaUJRYTBaRXFEaEljREhSbFVNT3ZCLWpr?oc=5",
+    "headline": "Ohio's gas tax holiday isn't just about saving at the pump | Opinion - Cincinnati Enquirer",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi0wFBVV95cUxOdk93MTRjTm9oeWc0OS1lZl93a3VnbnFQT0JLZ1dpZlR3eFNGVEduQVhxejhOSHVnbjZRbFpfeEs4a1dDaXlMbFV6SmwxbE5IXzJCaDFxNWdOOUNTdjVYUXFKYmlMNlU3b2J2Wk9weW5kZWNUaDB5Y28wM3Q0SlRhN2hCdmQ1d1lHckx6UE9NSk5DdXR0bEt1SEN4b3Y0RDE3bG1pTlhfa05pckZoZEwwZTVib1E1Ni0xb3JTaUJRYTBaRXFEaEljREhSbFVNT3ZCLWpr?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMihAFBVV95cUxOS3Y1ck1fWERmWG8zZXltdmNWZXpDZkR6TThuWThJenViTDhoMmpMVzB3aDd5U0ptWV85TkQyZUVvLTBDTlYzeVd4YzdYMzNnaDRiTW8yR0kzMjNzbWg5WVJWU0U2SGlTZVcyZ1ZuWHdFaVh3Wm5vVFZkRDNBbGZtY2ZzYnU?oc=5": {
+    "timestamp": "2026-10-16T08:51:28.532042+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOS3Y1ck1fWERmWG8zZXltdmNWZXpDZkR6TThuWThJenViTDhoMmpMVzB3aDd5U0ptWV85TkQyZUVvLTBDTlYzeVd4YzdYMzNnaDRiTW8yR0kzMjNzbWg5WVJWU0U2SGlTZVcyZ1ZuWHdFaVh3Wm5vVFZkRDNBbGZtY2ZzYnU?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOS3Y1ck1fWERmWG8zZXltdmNWZXpDZkR6TThuWThJenViTDhoMmpMVzB3aDd5U0ptWV85TkQyZUVvLTBDTlYzeVd4YzdYMzNnaDRiTW8yR0kzMjNzbWg5WVJWU0U2SGlTZVcyZ1ZuWHdFaVh3Wm5vVFZkRDNBbGZtY2ZzYnU?oc=5",
+    "headline": "Gas Prices Holding Near Steady as Crude Oil Remains High - WGMD – The Talk of Delmarva",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxOS3Y1ck1fWERmWG8zZXltdmNWZXpDZkR6TThuWThJenViTDhoMmpMVzB3aDd5U0ptWV85TkQyZUVvLTBDTlYzeVd4YzdYMzNnaDRiTW8yR0kzMjNzbWg5WVJWU0U2SGlTZVcyZ1ZuWHdFaVh3Wm5vVFZkRDNBbGZtY2ZzYnU?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPekQzVzRnTFlhSWxIdTF2UWhHTm9EZ0RTVkpkVEUzSmRXSk1rV0VSclJHSlhuNm4xSnZqTURVVjdvN1pBb0VuLUxIMlhKUWtLelpvSC04c2Q4bVgycDEyaG1nM1p2enRXYklVYm9hWVVEdVQwSHdVQm5zWWR3b0h2SFJyQkRuTXVrNFFsN2lpdnRrQm4zeEZPNHhQamM0c0drcDRtamFfZVI?oc=5": {
+    "timestamp": "2026-10-16T08:51:39.187140+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPekQzVzRnTFlhSWxIdTF2UWhHTm9EZ0RTVkpkVEUzSmRXSk1rV0VSclJHSlhuNm4xSnZqTURVVjdvN1pBb0VuLUxIMlhKUWtLelpvSC04c2Q4bVgycDEyaG1nM1p2enRXYklVYm9hWVVEdVQwSHdVQm5zWWR3b0h2SFJyQkRuTXVrNFFsN2lpdnRrQm4zeEZPNHhQamM0c0drcDRtamFfZVI?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPekQzVzRnTFlhSWxIdTF2UWhHTm9EZ0RTVkpkVEUzSmRXSk1rV0VSclJHSlhuNm4xSnZqTURVVjdvN1pBb0VuLUxIMlhKUWtLelpvSC04c2Q4bVgycDEyaG1nM1p2enRXYklVYm9hWVVEdVQwSHdVQm5zWWR3b0h2SFJyQkRuTXVrNFFsN2lpdnRrQm4zeEZPNHhQamM0c0drcDRtamFfZVI?oc=5",
+    "headline": "Ukraine resumes refinery strikes as Zelenskyy’s anger at Trump mounts - KFOX",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxPekQzVzRnTFlhSWxIdTF2UWhHTm9EZ0RTVkpkVEUzSmRXSk1rV0VSclJHSlhuNm4xSnZqTURVVjdvN1pBb0VuLUxIMlhKUWtLelpvSC04c2Q4bVgycDEyaG1nM1p2enRXYklVYm9hWVVEdVQwSHdVQm5zWWR3b0h2SFJyQkRuTXVrNFFsN2lpdnRrQm4zeEZPNHhQamM0c0drcDRtamFfZVI?oc=5",
+    "error": "The read operation timed out"
   }
 }
