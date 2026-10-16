@@ -24,7 +24,7 @@ The forecasting engine continuously ingests both quantitative time-series data a
                         ▼                               ▼                               ▼
          ┌──────────────────────────────┐┌──────────────────────────────┐┌──────────────────────────────┐
          │ 10 Curated Developer Indexes ││  arXiv API (q-fin, econ, cs) ││  CORE API v3 Open-Access     │
-         │ Gemini 2.5 Flash Score ≥ 7.0 ││ 7-Day Rolling Paper Filter   ││ 7-Day Energy Search & Filter │
+         │ Gemini 3.8 Flash Score ≥ 7.0 ││ 7-Day Rolling Paper Filter   ││ 7-Day Energy Search & Filter │
          └──────────────┬───────────────┘└──────────────┬───────────────┘└──────────────┬───────────────┘
                         │                               │                               │
                         └───────────────────────────────┴───────────────────────────────┘
@@ -59,7 +59,7 @@ The Developer Catalog Monitor ([`src/catalog_monitor.py`](src/catalog_monitor.py
 
 ### Evaluation & Operational Policies
 * **State File Tracking:** Scanned link history is stored in [`data/catalog_monitors_state.json`](data/catalog_monitors_state.json) to diff newly added links between runs.
-* **LLM Evaluation Threshold:** New items are scored by Gemini 2.5 Flash for modeling relevance. Items scoring $\ge 7.0/10.0$ trigger automated creation of a GitHub Feature Request issue on `KoshiirRa/midgley`.
+* **LLM Evaluation Threshold:** New items are scored by Gemini 3.8 Flash for modeling relevance. Items scoring $\ge 7.0/10.0$ trigger automated creation of a GitHub Feature Request issue on `KoshiirRa/midgley`.
 * **Domain Taxonomy Labeling:** All auto-generated issues receive appropriate domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`, `token-efficiency`).
 * **Apify Tools Barred Policy:** All catalog monitors and LLM prompts explicitly ignore and discard tools hosted on or referencing Apify (`apify.com`) due to paid subscription and compute unit cost constraints. All ingested resources must be 100% zero-cost.
 

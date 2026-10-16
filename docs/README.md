@@ -85,7 +85,7 @@ flowchart TD
     end
 
     subgraph EXTRACTOR["1. Event, Weather & Physical Extraction Agent"]
-        E1["Google Gemini 2.5 Flash / Domain NLP Lexicon"]
+        E1["Google Gemini 3.8 Flash / Domain NLP Lexicon"]
         E2["intraday_event_monitor.py, finlight_feed.py & firecrawl_scraper.py"]
         E3["noaa_weather.py (Token-Efficient Ingestion & SPC Mapping)"]
         E4["pasa_research_agent.py (PaSa Crawler-Selector Multi-Hop Loop)"]
@@ -182,7 +182,7 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
 9. **MLOps Prediction Tracker, Ground-Truth Backfilling & Cloud DB Sync (`src/prediction_logger.py`, Issue #82):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv`, backfills actual historical market prices from `yfinance` as target dates arrive, automatically backfills test split history for newly added regions (`backfill_new_region_history`), and synchronizes forecast records to cloud relational stores (Turso Edge SQLite, Cloudflare D1 Edge Workers, Neon Postgres) via REST API endpoints (`POST /api/v1/forecast/cloud-sync` & `GET /api/v1/forecast/cloud-status`) with 100% local CSV offline fallback.
 10. **Fireworks Tech Graph Automated Architecture Diagram Generator (`src/fireworks_tech_graph.py`, Issue #191):** Synthesizes self-contained, validated SVG vector diagrams outputting to `docs/assets/multi_agent_architecture.svg` and `docs/assets/regional_metro_architecture.svg` visualizing the 8-stage multi-agent execution pipeline and 18 regional calibration hubs across PADDs 1–7, with visual embeds in `AGENTS.md` and the public web app landing page (`docs/index.html`).
-11. **Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`):** Evaluates rolling MAE/RMSE/Hit Rate metrics across all active regions and performs an automated self-review of all open GitHub repository issues using Gemini 2.5 Flash to identify and rank the issue providing the highest potential modeling improvement.
+11. **Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`):** Evaluates rolling MAE/RMSE/Hit Rate metrics across all active regions and performs an automated self-review of all open GitHub repository issues using Gemini 3.8 Flash to identify and rank the issue providing the highest potential modeling improvement.
 12. **Local Dev Environment, Web Server & Systemd Timers (`dev-vm` Port 8080 & 8000):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm`, with systemd user timers (`midgley-daily-forecast.timer` and `midgley-weekly-review.timer`) running daily forecasts and weekly issue audits 24/7.
 13. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).
 14. **3-Tier Multi-Tier Cache Gateway & Quota Sync (`src/lookup_cache.py`):** High-availability cascading cache (Turso Edge SQLite -> Cloudflare D1 Worker -> Local SQLite `data/lookup_cache.sqlite`) with SHA-256 headline deduplication ($0 token cost on repeated headlines) and cross-runner API quota ledger sync (`quota:finlight:current`).
@@ -277,7 +277,7 @@ Key guide coverage includes:
 
 | Region / Target | Ground Truth Basis | Model Algorithm | MAE ($/gal) | RMSE ($/gal) | MAPE (%) | Directional Hit Rate | 95% CI Coverage |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **National Wholesale (RBOB)** | NYMEX `RB=F` Settlement | Ridge (α=10.0) + Gemini 2.5 Flash | **$0.1069** | **$0.1490** | **4.76%** | **60.79%** (+4.40% boost) | **92.4%** |
+| **National Wholesale (RBOB)** | NYMEX `RB=F` Settlement | Ridge (α=10.0) + Gemini 3.8 Flash | **$0.1069** | **$0.1490** | **4.76%** | **60.79%** (+4.40% boost) | **92.4%** |
 | **Tulsa, OK Metro Retail** | EIA PADD 2 & GasBuddy | Ridge (α=10.0) + Localized NOAA | **$0.1331** | **$0.1880** | **4.83%** | **58.15%** | **91.8%** |
 | **Newark, DE Metro Retail** | EIA PADD 1B & Delmarva | Ridge (α=10.0) + Delaware Logistics | **$0.1285** | **$0.1764** | **4.52%** | **59.30%** | **93.1%** |
 | **Cincinnati, OH Metro Retail** | EIA PADD 2 & USACE Locks | Ridge (α=10.0) + River Tow Dynamics | **$0.1340** | **$0.1820** | **4.78%** | **58.70%** | **91.5%** |
@@ -290,7 +290,7 @@ Key guide coverage includes:
 ## 🤖 AI Use & Assistance Disclosure
 
 In commitment to transparency, engineering integrity, and clear attribution:
-* **Code Authoring & Development:** Assisted by **Google Gemini** (Gemini 3.7 Flash / Gemini 2.5 Flash / Gemini Pro via Antigravity Agentic Assistant).
+* **Code Authoring & Development:** Assisted by **Google Gemini** (Gemini 3.8 Flash / Gemini 3.7 Flash / Gemini Pro via Antigravity Agentic Assistant).
 * **Code Review & Quality Assurance:** Multi-pass pull request reviews and architectural audits utilizing **Anthropic Claude** (Claude Opus 5.5 / Claude 3.7 Sonnet) and **OpenAI ChatGPT** (ChatGPT 6 Astra / GPT-4o / o-series).
 * **Runtime Pipeline & In-Engine Event Extraction:** Live unstructured event extraction, NOAA alert parsing, and weekly issue triage powered strictly by **Google Gemini** (`gemini-3.8-flash` / `gemini-2.5-flash` legacy) with deterministic rule lexicons for fail-safe offline execution.
 * **Quantitative Commodity Estimator:** Price forecasts are generated by regularized statistical models (**Standardized Ridge Regression** $\alpha=10.0$ and **XGBoost Regressors**) on numerical feature matrices, not generative text models.

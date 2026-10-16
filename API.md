@@ -64,7 +64,7 @@ Callers can authenticate using any of the following methods:
 Master environment key `MIDGLEY_API_KEY` operates seamlessly alongside SQLite provisioned user keys (`data/security.db`) across all header and query parameter formats. Key verification and rate limiting use non-blocking asynchronous threads (`verify_key_async`, `check_rate_limit_async`) to prevent event-loop latency.
 
 ### Key Access Tiers
-* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 2.5 Flash event analysis, MiroFish multi-agent cohort simulation, custom headline scenario shocks, knowledge graph ingestion, and headline arena benchmark submission).
+* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 3.8 Flash event analysis, MiroFish multi-agent cohort simulation, custom headline scenario shocks, knowledge graph ingestion, and headline arena benchmark submission).
 * 🛡️ **`basic` tier**: Standard forecasts and catalog shocks. Routes event scoring to zero-cost fallback providers (Tier 3 Rule-Based Lexicon, SPC weather mapping, cached news vectors, standard linear Ridge baseline) to conserve Gemini tokens and Finlight API quotas. Calling privileged-only endpoints returns `HTTP 403 Forbidden` (`Privileged API key tier required`).
 
 ### Key Provisioning Methods

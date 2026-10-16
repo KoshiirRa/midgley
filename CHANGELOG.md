@@ -37,9 +37,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-subscriber Discord Webhook & Direct Message (`discord_dm`) subscription registry (`DiscordSubscriptionRegistry` in `src/discord_notifier.py`, `discord_subscriptions` table in `src/db/schema.sql`) with Fernet/HMAC encryption at rest, locale/threshold/direction/catalyst filtering, and automatic dead-webhook (`HTTP 404/410`) and blocked-DM (`HTTP 403 / 50007`) circuit breaking (#235).
 - REST API Discord subscription & diagnostic endpoints (`POST /api/v1/notifications/discord/subscribe`, `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`, `GET /api/v1/notifications/discord/subscriptions/status`, `POST /api/v1/notifications/discord/test`) protected by IPASIS IP reputation checks in `src/api_server.py` (#235).
 - Interactive `/midgley` Discord Application Slash Commands (`subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`) and locale autocomplete on `/discord/interactions` in `workers/intraday_monitor_worker.ts` with ephemeral (`flags: 64`) in-channel responses, private Direct Message delivery (`DISCORD_BOT_TOKEN`), and `scripts/register_discord_commands.py` (#235).
+- Boston Metro & New England Hub (`Boston_MA`, PADD 1A) calibrated to Irving Oil Saint John (320 kbpd) waterborne imports, Massachusetts excise tax ($0.240/gal), and EPA 7.4 psi summer RFG (#619, #639).
+- San Juan Metro & U.S. Caribbean Territories Hub (`San_Juan_PR`, PADD 6) modeling 100% waterborne tanker imports, Jones Act marine freight differentials, DACO daily price surveys, and Puerto Rico arbitrio ($0.160/gal) (#620).
+- Guam & U.S. Pacific Island Territories Hub (`Guam_GU`, PADD 7) modeling Asian MR product tanker imports, Mean of Platts Singapore (MOPS) 92 RON Mogas benchmark, Cabras Island fuel pier headers, and Guam Liquid Fuel Tax ($0.190/gal) (#621).
+- Decoupled PADD 5 sub-markets from California CARB into 4 distinct regional calibration hubs: Seattle & Puget Sound (`Seattle_WA`, PADD 5B), Phoenix & Desert Southwest (`Phoenix_AZ`, PADD 5C), Anchorage & Cook Inlet (`Anchorage_AK`, PADD 5D), and Honolulu & Oahu (`Honolulu_HI`, PADD 5D) (#622).
+- Google Gemini 3.8 Flash model migration across event analysis, episodic memory, PaSa research, factor mining, and weekly issue self-reviews, configuring `thinking_level="low"` and eliminating deprecated sampling parameters (#616, #638).
+- Consolidated standalone Greenville model into Charlotte Metro & Carolinas Hub (`Charlotte_NC`, PADD 1C) with legacy client-side redirects on `docs/greenville.html` and deterministic Knowledge Graph sorting.
+- Interactive 18-hub price map on main dashboard landing page (`docs/index.html`) featuring CARTO Dark Matter Leaflet tiles and territory preset navigation (#646).
+- Enverus / Drillinginfo daily rig count feed (`src/enverus_rig_feed.py`, Card 2.2b) powered by Cloudflare Browser Rendering API (`workers/enverus_scraper.ts`) bypassing bot challenges with zero Firecrawl quota spend (#533, #640).
+- Out-of-metro telemetry map geocoding & true NY state centroid correction in Madison County, with High Peaks coordinates for Lake Placid NY 12946 (#635).
+- Local-only regional backfill policy enforcing heavy multi-year backfills on local dev environment (`dev-vm`) to protect cloud CI runners from execution timeouts.
 
 ### Fixed
 - Initialized `dynamic_fetches_succeeded` counter and guarded test-mode persistence in `src/alternative_data_feeds.py`.
+- Modernized core modules by replacing deprecated `datetime.utcnow()` with timezone-aware `datetime.now(timezone.utc)` ahead of Python 3.14 removal.
+- Standardized `boston` mapping in `DIESEL_REGION_LOG_KEYS` in `src/diesel_regional.py`.
+- Hardened telemetry basemap key resolution against empty or whitespace environment variable fallbacks.
 
 ## [0.8.5] - 2026-10-06
 
