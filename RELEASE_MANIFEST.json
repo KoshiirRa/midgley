@@ -2,7 +2,7 @@
   "version": "0.8.5",
   "model_version": "v1.6 Ipatieff",
   "schema_version": 3,
-  "release_date": "2026-10-05",
+  "release_date": "2026-10-16",
   "compatibility": {
     "minimum_compatible_client": "0.5.0",
     "breaking_changes": false,
@@ -21,6 +21,36 @@
         "default": "",
         "required": false,
         "description": "Remote Vectorize Hindsight / Supabase pgvector episodic memory endpoint."
+      },
+      {
+        "name": "DISCORD_BOT_TOKEN",
+        "default": "",
+        "required": false,
+        "description": "Discord Bot token for delivering private Direct Message alerts and opening DM channels."
+      },
+      {
+        "name": "DISCORD_APP_ID",
+        "default": "",
+        "required": false,
+        "description": "Discord Application ID for registering /midgley slash commands."
+      },
+      {
+        "name": "DISCORD_PUBLIC_KEY",
+        "default": "",
+        "required": false,
+        "description": "Ed25519 public key for verifying incoming Discord interaction payloads."
+      },
+      {
+        "name": "CARTO_API_KEY",
+        "default": "",
+        "required": false,
+        "description": "Optional CARTO Basemaps API key for authenticated Leaflet dark tiles on telemetry dashboards."
+      },
+      {
+        "name": "MIDGLEY_SUBSCRIBERS_DB_PATH",
+        "default": "data/subscribers.sqlite",
+        "required": false,
+        "description": "Optional override path for the SQLite subscriber database."
       }
     ],
     "deprecated": []
@@ -33,11 +63,15 @@
       "noaa_spc_risk",
       "ovx_implied_vol",
       "usgs_gauge_stage",
-      "weekend_gap_shock"
+      "weekend_gap_shock",
+      "enverus_permian_rigs",
+      "enverus_gulf_coast_rigs"
     ],
     "added_features": [
       "usgs_gauge_stage",
-      "weekend_gap_shock"
+      "weekend_gap_shock",
+      "enverus_permian_rigs",
+      "enverus_gulf_coast_rigs"
     ],
     "retrain_action": "retrain_regional_models",
     "retrain_command": "python scripts/manage_regions.py retrain --all"
@@ -51,6 +85,16 @@
     {
       "id": "20260918_add_reachability_telemetry",
       "description": "Adds multi-protocol reachability tracking columns",
+      "automatic": true
+    },
+    {
+      "id": "20261010_add_discord_subscriptions",
+      "description": "Adds multi-subscriber Discord webhook and direct message subscription registry table and indexes",
+      "automatic": true
+    },
+    {
+      "id": "20261012_add_unmapped_zip_telemetry",
+      "description": "Adds persistent cross-run out-of-metro ZIP code query demand tracking table",
       "automatic": true
     }
   ],
