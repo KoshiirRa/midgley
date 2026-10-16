@@ -338,21 +338,24 @@ Midgley integrates **GeoPandas** (`geopandas`) and **Shapely** (`shapely`) in `s
         print("  [Updated] Data-Ingestion-and-APIs.md")
 
     # -------------------------------------------------------------
-    # 5. Update Agent-Architecture.md
+    # 5. Update Agent-Architecture.md and all other wiki pages
     # -------------------------------------------------------------
-    aa_path = os.path.join(wiki_dir, "Agent-Architecture.md")
-    if os.path.exists(aa_path):
-        with open(aa_path, "r", encoding="utf-8") as f:
-            aa_text = f.read()
-
-        aa_text = aa_text.replace("Gemini 2.5 Flash", "Gemini 3.8 Flash")
-        aa_text = aa_text.replace("gemini-2.5-flash", "gemini-3.8-flash")
-        aa_text = aa_text.replace("8 regional hubs", "18 regional calibration hubs")
-        aa_text = aa_text.replace("8 metro hubs", "18 metro calibration hubs")
-
-        with open(aa_path, "w", encoding="utf-8") as f:
-            f.write(aa_text)
-        print("  [Updated] Agent-Architecture.md")
+    for fname in os.listdir(wiki_dir):
+        if not fname.endswith(".md") or fname.startswith("RELEASE_NOTES_v0.8.4") or fname.startswith("RELEASE_NOTES_v0.8.5"):
+            continue
+        fpath = os.path.join(wiki_dir, fname)
+        with open(fpath, "r", encoding="utf-8") as f:
+            content = f.read()
+        orig = content
+        content = content.replace("Gemini 2.5 Flash", "Gemini 3.8 Flash")
+        content = content.replace("`gemini-2.5-flash`", "`gemini-3.8-flash`")
+        if fname == "Agent-Architecture.md":
+            content = content.replace("8 regional hubs", "18 regional calibration hubs")
+            content = content.replace("8 metro hubs", "18 metro calibration hubs")
+        if content != orig:
+            with open(fpath, "w", encoding="utf-8") as f:
+                f.write(content)
+            print(f"  [Replaced Gemini 3.8 Flash] {fname}")
 
     print("Wiki synchronization completed successfully.")
 
