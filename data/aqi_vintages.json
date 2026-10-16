@@ -4293,7 +4293,7 @@
     }
   },
   {
-    "as_of": "2026-10-16T00:28:55.620576+00:00",
+    "as_of": "2026-10-16T20:05:53.001892+00:00",
     "valid_date": "2026-10-16",
     "entity_key": "74101",
     "zip_code": "74101",
@@ -4313,11 +4313,11 @@
       "pm25_aqi": 35,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-10-16T00:28:55.620576+00:00"
+      "as_of": "2026-10-16T20:05:53.001892+00:00"
     }
   },
   {
-    "as_of": "2026-10-16T00:29:18.592885+00:00",
+    "as_of": "2026-10-16T20:06:19.117859+00:00",
     "valid_date": "2026-10-16",
     "entity_key": "19711",
     "zip_code": "19711",
@@ -4337,11 +4337,11 @@
       "pm25_aqi": 40,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-10-16T00:29:18.592885+00:00"
+      "as_of": "2026-10-16T20:06:19.117859+00:00"
     }
   },
   {
-    "as_of": "2026-10-16T00:29:48.012175+00:00",
+    "as_of": "2026-10-16T20:06:53.006109+00:00",
     "valid_date": "2026-10-16",
     "entity_key": "45202",
     "zip_code": "45202",
@@ -4361,11 +4361,11 @@
       "pm25_aqi": 42,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-10-16T00:29:48.012175+00:00"
+      "as_of": "2026-10-16T20:06:53.006109+00:00"
     }
   },
   {
-    "as_of": "2026-10-16T00:31:47.343761+00:00",
+    "as_of": "2026-10-16T20:08:57.955558+00:00",
     "valid_date": "2026-10-16",
     "entity_key": "94612",
     "zip_code": "94612",
@@ -4385,11 +4385,83 @@
       "pm25_aqi": 38,
       "pm10_aqi": 22,
       "is_ozone_action_day": false,
-      "as_of": "2026-10-16T00:31:47.343761+00:00"
+      "as_of": "2026-10-16T20:08:57.955558+00:00"
     }
   },
   {
-    "as_of": "2026-10-16T00:31:47.475890+00:00",
+    "as_of": "2026-10-16T20:10:52.007905+00:00",
+    "valid_date": "2026-10-16",
+    "entity_key": "60601",
+    "zip_code": "60601",
+    "corridor": null,
+    "aqi": 38,
+    "category": "Good",
+    "is_unplanned_outage": false,
+    "data": {
+      "source": "DETERMINISTIC_BASELINE",
+      "zip_code": "60601",
+      "reporting_area": "Chicago-Naperville-Elgin, IL-IN-WI",
+      "state_code": "IL",
+      "aqi": 38,
+      "category": "Good",
+      "primary_parameter": "PM2.5",
+      "ozone_aqi": 28,
+      "pm25_aqi": 38,
+      "pm10_aqi": 22,
+      "is_ozone_action_day": false,
+      "as_of": "2026-10-16T20:10:52.007905+00:00"
+    }
+  },
+  {
+    "as_of": "2026-10-16T20:11:43.565564+00:00",
+    "valid_date": "2026-10-16",
+    "entity_key": "77002",
+    "zip_code": "77002",
+    "corridor": null,
+    "aqi": 38,
+    "category": "Good",
+    "is_unplanned_outage": false,
+    "data": {
+      "source": "DETERMINISTIC_BASELINE",
+      "zip_code": "77002",
+      "reporting_area": "Houston-Galveston-Brazoria, TX",
+      "state_code": "TX",
+      "aqi": 38,
+      "category": "Good",
+      "primary_parameter": "PM2.5",
+      "ozone_aqi": 34,
+      "pm25_aqi": 38,
+      "pm10_aqi": 22,
+      "is_ozone_action_day": false,
+      "as_of": "2026-10-16T20:11:43.565564+00:00"
+    }
+  },
+  {
+    "as_of": "2026-10-16T20:12:30.327882+00:00",
+    "valid_date": "2026-10-16",
+    "entity_key": "90012",
+    "zip_code": "90012",
+    "corridor": null,
+    "aqi": 44,
+    "category": "Good",
+    "is_unplanned_outage": false,
+    "data": {
+      "source": "DETERMINISTIC_BASELINE",
+      "zip_code": "90012",
+      "reporting_area": "Los Angeles-Long Beach-Anaheim, CA",
+      "state_code": "CA",
+      "aqi": 44,
+      "category": "Good",
+      "primary_parameter": "PM2.5",
+      "ozone_aqi": 38,
+      "pm25_aqi": 44,
+      "pm10_aqi": 22,
+      "is_ozone_action_day": false,
+      "as_of": "2026-10-16T20:12:30.327882+00:00"
+    }
+  },
+  {
+    "as_of": "2026-10-16T20:12:30.446978+00:00",
     "valid_date": "2026-10-16",
     "entity_key": "macro_composite",
     "zip_code": null,
@@ -4399,7 +4471,7 @@
     "is_unplanned_outage": false,
     "data": {
       "status": "SUCCESS",
-      "as_of": "2026-10-16T00:31:47.475890+00:00",
+      "as_of": "2026-10-16T20:12:30.446978+00:00",
       "indices": {
         "bay_area_outage_risk_index": 0.0,
         "tulsa_outage_risk_index": 0.0,
@@ -4415,16 +4487,16 @@
         "max_rvp_compliance_surcharge_per_gal": 0.0
       },
       "corridors": {
-        "bay_area": {
-          "corridor": "bay_area",
-          "name": "SF Bay Area Refining Corridor (PADD 5)",
-          "monitored_assets": 3,
-          "primary_zip": "94612",
-          "observed_pm25": 9.83,
-          "observed_so2": 1.93,
-          "observed_ozone_aqi": 32,
-          "baseline_pm25": 9.83,
-          "baseline_so2": 1.93,
+        "socal": {
+          "corridor": "socal",
+          "name": "Los Angeles Basin & South Bay Refining Corridor (PADD 5)",
+          "monitored_assets": 4,
+          "primary_zip": "90012",
+          "observed_pm25": 11.73,
+          "observed_so2": 2.3,
+          "observed_ozone_aqi": 38,
+          "baseline_pm25": 11.73,
+          "baseline_so2": 2.3,
           "z_score_pm25": 0.0,
           "z_score_so2": 0.0,
           "is_unplanned_outage": false,
