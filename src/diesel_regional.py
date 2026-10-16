@@ -403,7 +403,8 @@ DIESEL_REGION_LOG_KEYS = {
     "anchorage": "Anchorage_ULSD",
     "honolulu": "Honolulu_ULSD",
     "guam": "Guam_ULSD",
-    "san_juan": "San_Juan_ULSD"
+    "san_juan": "San_Juan_ULSD",
+    "boston": "Boston_ULSD"
 }
 
 

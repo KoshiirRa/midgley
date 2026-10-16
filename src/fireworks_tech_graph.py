@@ -55,7 +55,7 @@ def generate_multi_agent_pipeline_svg() -> str:
     
     <rect x="14" y="76" width="232" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
     <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Event &amp; Weather NLP</text>
-    <text x="34" y="114" fill="#94a3b8" font-size="11">Google Gemini 2.5 Flash</text>
+    <text x="34" y="114" fill="#94a3b8" font-size="11">Google Gemini 3.8 Flash</text>
     <text x="34" y="130" fill="#94a3b8" font-size="11">Finlight &amp; Firecrawl Markdown</text>
     
     <text x="24" y="156" fill="#e2e8f0" font-size="12" font-weight="600">• Physical &amp; Hydrology Feeds</text>

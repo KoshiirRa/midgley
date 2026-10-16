@@ -5,7 +5,7 @@ Reference: arXiv:2609.02093v1 (KAIST OTSF Framework)
 Implements:
 1. Discrete Fourier Transform (DFT) Spectral Basis Decomposition (dominant cycles, low-frequency trend power, spectral entropy).
 2. Discrete Wavelet Transform (DWT) Localized Detail Decomposition (Level 1/2 micro-noise vs structural shock isolation).
-3. Natural Language Spectral Prompt Context Generator for Gemini 2.5 Flash event analysis.
+3. Natural Language Spectral Prompt Context Generator for Gemini 3.8 Flash event analysis.
 4. Online Linear Projection Head Adapter with Geometric Loss Decay (delta = 0.90).
 """
 

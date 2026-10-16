@@ -17,7 +17,7 @@ import time
 import re
 import logging
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Tuple, Optional, Any
 
 # Ensure project root is in sys.path when executed directly
@@ -704,7 +704,7 @@ class IntradayEventMonitor:
                     db = get_db()
                     
                     # Record the anomaly event in intraday_events table
-                    evt_id = hashlib.sha256(f"{headline}_{source}_{datetime.utcnow().isoformat()}".encode("utf-8")).hexdigest()[:32]
+                    evt_id = hashlib.sha256(f"{headline}_{source}_{datetime.now(timezone.utc).isoformat()}".encode("utf-8")).hexdigest()[:32]
                     evt_sql = """
                     INSERT INTO intraday_events (
                         event_id, headline, source, url, published_at,
@@ -713,7 +713,7 @@ class IntradayEventMonitor:
                     ON CONFLICT(event_id) DO NOTHING;
                     """
                     db.execute(evt_sql, (
-                        evt_id, headline, source, url or "", datetime.utcnow().isoformat() + "Z",
+                        evt_id, headline, source, url or "", datetime.now(timezone.utc).isoformat(),
                         scores.get("geopolitical_risk", 0.0), scores.get("supply_disruption", 0.0),
                         scores.get("demand_sentiment", 0.0), scores.get("opec_action", 0.0)
                     ))
@@ -735,7 +735,7 @@ class IntradayEventMonitor:
                         pressure = scores.get("overall_price_pressure", 0.0)
                         delta_p = round(base_p * pressure * 0.04, 4)
                         revised_p = round(base_p + delta_p, 4)
-                        rev_id = hashlib.sha256(f"{parent_f_id}_{evt_id}_{datetime.utcnow().isoformat()}".encode("utf-8")).hexdigest()[:32]
+                        rev_id = hashlib.sha256(f"{parent_f_id}_{evt_id}_{datetime.now(timezone.utc).isoformat()}".encode("utf-8")).hexdigest()[:32]
 
                         rev_sql = """
                         INSERT INTO intraday_revisions (

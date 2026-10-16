@@ -642,7 +642,7 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
 def evaluate_open_issues_for_modelling(issues: list, nat_mae: float = 0.1069, tulsa_mae: float = 0.5611, api_key: str = None) -> dict:
     """
     Evaluates open GitHub issues to determine which issue yields the single biggest improvement to price forecasting.
-    Uses Google Gemini 2.5 Flash if GEMINI_API_KEY is available, with deterministic domain heuristic fallback.
+    Uses Google Gemini 3.8 Flash if GEMINI_API_KEY is available, with deterministic domain heuristic fallback.
     """
     if not issues:
         return {
@@ -783,7 +783,7 @@ def get_current_git_branch() -> str:
 REGION_METADATA = {
     "National": {
         "display_name": "National Wholesale (RBOB)",
-        "architecture": "Ridge ($\\alpha=10.0$) + Gemini 2.5 Flash + Physics Feeds"
+        "architecture": "Ridge ($\\alpha=10.0$) + Gemini 3.8 Flash + Physics Feeds"
     },
     "Tulsa_OK": {
         "display_name": "Tulsa, OK Metro Retail",

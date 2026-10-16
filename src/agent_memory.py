@@ -6,7 +6,7 @@ Issue #230: [Weekly Review 2.0] Qualitative Anomaly Post-Mortems
 Architecture:
 - Primary Engine: Vectorize Hindsight API on Google Cloud Run (Scale-to-Zero) backed by Supabase pgvector.
 - Zero-Cost Fallback: Local SQLite FTS5 Memory Store (data/agent_memory.sqlite) with BM25 indexing.
-- Synthesis: Gemini 2.5 Flash LLM reflection pass with deterministic rule-based fallback.
+- Synthesis: Gemini 3.8 Flash LLM reflection pass with deterministic rule-based fallback.
 """
 
 import os
@@ -609,7 +609,7 @@ class AgentMemoryManager:
                 log_agent_memory_op(operation="reflect", backend="hindsight_cloud", status="success")
                 return cloud_ref["reflections"]
 
-        # 2. Try Gemini 2.5 Flash reflection
+        # 2. Try Gemini 3.8 Flash reflection
         if api_key is None:
             api_key = os.environ.get("GEMINI_API_KEY")
 

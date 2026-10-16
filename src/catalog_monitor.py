@@ -2,7 +2,7 @@
 Catalog Monitor Engine (src/catalog_monitor.py)
 Monitors curated developer catalog indexes (public-apis, free-for-dev, freestuff.dev,
 free-for-life, awesome, awesome-selfhosted) for newly added entries.
-Evaluates modeling relevance using Gemini 2.5 Flash (with a deterministic heuristic fallback)
+Evaluates modeling relevance using Gemini 3.8 Flash (with a deterministic heuristic fallback)
 and automatically opens GitHub Feature Request issues on KoshiirRa/midgley for worthwhile additions.
 """
 

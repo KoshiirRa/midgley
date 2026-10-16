@@ -302,7 +302,7 @@ def get_all_quota_statuses() -> Dict[str, Any]:
     ledger = _load_telemetry_ledger()
     totals = ledger.get("llm_totals", {})
     quotas["gemini_llm"] = {
-        "service": "Google Gemini 2.5 Flash",
+        "service": "Google Gemini 3.8 Flash",
         "total_tokens_consumed": totals.get("total_tokens", 0),
         "estimated_cost_usd": totals.get("estimated_cost_usd", 0.0),
         "fallback_activations": totals.get("fallback_activations", 0)

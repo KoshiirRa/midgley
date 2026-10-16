@@ -2588,7 +2588,7 @@ def generate_public_dashboard():
                 Quantitative & LLM-Augmented Energy Price Forecasting
             </h2>
             <p class="text-slate-300 text-base leading-relaxed max-w-4xl">
-                Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 2.5 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
+                Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 3.8 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
             </p>
         </div>
 
@@ -3209,7 +3209,7 @@ def generate_public_dashboard():
                         </div>
                         <h5 class="text-sm font-bold text-white">Extraction &amp; Memory Fusion</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \\(t_{{1/2}} = 4.0\\text{{--}}5.0\\) days.
+                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 3.8 Flash. Decays shocks with \\(t_{{1/2}} = 4.0\\text{{--}}5.0\\) days.
                         </p>
                     </div>
 
@@ -3276,7 +3276,7 @@ def generate_public_dashboard():
                     <!-- Pillar 2 -->
                     <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                         <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                            <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
+                            <i class="fa-solid fa-robot"></i> 2. Gemini 3.8 Flash News
                         </h4>
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
@@ -3672,7 +3672,7 @@ def generate_public_dashboard():
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
                     <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Primary Feature Signals</h4>
-                    <p>3-2-1 Crack Spread, Finlight.me REST API news vectors (Gemini 2.5 Flash factor extraction), Cboe OVX Volatility (^OVX), and Baker Hughes Permian/Bakken drilling rig counts.</p>
+                    <p>3-2-1 Crack Spread, Finlight.me REST API news vectors (Gemini 3.8 Flash factor extraction), Cboe OVX Volatility (^OVX), and Baker Hughes Permian/Bakken drilling rig counts.</p>
                 </div>
             </div>
         </div>
@@ -6122,9 +6122,9 @@ def generate_public_dashboard():
                 </div>
                 <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold pt-2">Equation 3.2: Multi-Provider LLM &amp; Deterministic Lexicon Failover Engine (Issue #196)</h4>
                 <div class="text-center text-sm sm:text-base font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-purple-200 overflow-x-auto">
-                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
+                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini3.8Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
                     $$\mathcal{M}_{\text{LLM}}(\text{payload}) = \begin{cases} 
-                    \text{Gemini 2.5 Flash} & (\text{Tier 1: Privileged Key}) \\ 
+                    \text{Gemini 3.8 Flash} & (\text{Tier 1: Privileged Key}) \\
                     \text{ZeroCostProviderHook} & (\text{Tier 1.5: Kaggle/OSS GPU}) \\ 
                     \text{GPT-4o-mini / Claude Haiku} & (\text{Tier 2: Soft Failover}) \\ 
                     \text{Deterministic Rule-Based Lexicon} & (\text{Tier 3: 100\% Offline Fallback}) 

@@ -19,7 +19,7 @@ from html.parser import HTMLParser
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ class EDGAR8KMonitor:
             title = title_el.text.strip() if title_el is not None and title_el.text else ""
             link = link_el.get("href", "") if link_el is not None else ""
             accession_id = id_el.text.strip() if id_el is not None and id_el.text else ""
-            filed_at = updated_el.text.strip() if updated_el is not None and updated_el.text else datetime.utcnow().isoformat()
+            filed_at = updated_el.text.strip() if updated_el is not None and updated_el.text else datetime.now(timezone.utc).isoformat()
 
             if accession_id and title:
                 entries.append({

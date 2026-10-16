@@ -193,6 +193,11 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 - **Public Data Sources Catalog Registration**:
   - Registered Enverus Daily Rig Count as Card 2.2b in [`src/sources_generator.py`](src/sources_generator.py) and [`docs/sources.html`](docs/sources.html), and updated [`docs/research_sources.md`](docs/research_sources.md).
 
+### 20. Python 3.12+ Modernization, Model Name Alignment & Code Quality Polish
+- **`datetime.utcnow()` Deprecation Elimination**: Replaced all deprecated `datetime.utcnow()` invocations across [`src/carb_compliance.py`](src/carb_compliance.py), [`src/edgar_8k_monitor.py`](src/edgar_8k_monitor.py), [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py), and [`src/portwatch_connector.py`](src/portwatch_connector.py) with timezone-aware `datetime.now(timezone.utc)`, eliminating runtime `DeprecationWarning`s ahead of Python 3.14 removal.
+- **Gemini 3.8 Flash Docstring & UI Synchronization**: Updated docstrings, module headers, telemetry quota labels, KaTeX formulations, and Fireworks Tech Graph SVG diagrams across [`src/agent_memory.py`](src/agent_memory.py), [`src/alpha_factor_miner.py`](src/alpha_factor_miner.py), [`src/catalog_monitor.py`](src/catalog_monitor.py), [`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), [`src/event_analyzer.py`](src/event_analyzer.py), [`src/telemetry.py`](src/telemetry.py), [`src/weekly_issue_reporter.py`](src/weekly_issue_reporter.py), [`src/dashboard_generator.py`](src/dashboard_generator.py), and [`src/fireworks_tech_graph.py`](src/fireworks_tech_graph.py) to reflect the active migration to `gemini-3.8-flash`.
+- **Regional Diesel Key Resolution Completeness**: Explicitly mapped `"boston": "Boston_ULSD"` in `DIESEL_REGION_LOG_KEYS` in [`src/diesel_regional.py`](src/diesel_regional.py), ensuring uniform dictionary coverage across all 18 regional hubs.
+
 ---
 
 ## 📦 Issues & Pull Requests Completed in v0.8.6 (To Date)
@@ -216,6 +221,7 @@ Midgley **v0.8.6** *(In-Progress Draft on `dev`)* expands the regional metro cal
 | **Commit `c7189715`** | `feat(mlops,cloud): Enforce local-only regional backfill policy and skip cloud runner backfilling` | MLOps / Workflows / Cloud |
 | **Commit `403946c7`** | `feat(architecture,regions): Consolidate Greenville into Charlotte Carolinas hub and update multi-agent architecture across PADDs 1-7` | Architecture / Locations / Diagrams |
 | **Commit `0c814a77`** | `fix(telemetry,geo): Resolve ZIP 12946 Lake Placid coordinates accurately in Adirondacks and correct NY state centroid` | Telemetry / Geocoding / Dashboard |
+| **Code Review Polish** | `refactor(core): Replace deprecated datetime.utcnow with timezone.utc, align docstrings to Gemini 3.8 Flash, and map Boston ULSD` | Core / Maintenance / LLM / Diesel |
 | **CI / Isolation** | `fix(ci,isolation): Hermetic vintage isolation, zero-cost telemetry deepcopy, radar cache protection & reflection timing bound` | Core / Testing / Ingestion / CI |
 
 ---
@@ -260,6 +266,9 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 * **Testing & Point-in-Time Isolation**:
   - All connector vintage persistence routines now require runtime default argument binding (`filepath: Optional[str] = None`) to ensure testing monkeypatches redirect writes cleanly.
   - Production paths in `data/*.json` are guarded against modification under `TESTING=1`.
+* **Python 3.12+ Timezone Standardization & Diesel Key Completeness**:
+  - Phased out deprecated `datetime.utcnow()` across all core modules in favor of timezone-aware `datetime.now(timezone.utc)`.
+  - Added explicit `"boston": "Boston_ULSD"` mapping to `DIESEL_REGION_LOG_KEYS` in [`src/diesel_regional.py`](src/diesel_regional.py).
 
 ### 2. Environment Variables & Credentials
 * **Added / Optional**:
