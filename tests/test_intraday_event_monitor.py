@@ -130,6 +130,18 @@ class TestIntradayEventMonitor(unittest.TestCase):
         t_oakland = self.monitor.resolve_target_locales("Chevron Richmond Refinery Flaring Triggers CARB Compliance Warning")
         self.assertEqual(t_oakland, ["Oakland"])
 
+        # Test Chicago locale routing
+        t_chicago = self.monitor.resolve_target_locales("BP Whiting Refinery reports flaring incident in Northwest Indiana")
+        self.assertEqual(t_chicago, ["Chicago"])
+
+        # Test Houston locale routing
+        t_houston = self.monitor.resolve_target_locales("ExxonMobil Baytown Refinery reports flaring shut-in along Houston Ship Channel")
+        self.assertEqual(t_houston, ["Houston"])
+
+        # Test Los Angeles locale routing
+        t_la = self.monitor.resolve_target_locales("Chevron El Segundo Refinery reports FCC trip triggering SCAQMD flaring alert in Los Angeles")
+        self.assertEqual(t_la, ["Los_Angeles"])
+
         # Test Default National routing
         t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
         self.assertEqual(t_nat, ["National"])
@@ -415,7 +427,7 @@ class TestIntradayEventMonitor(unittest.TestCase):
     def test_resolve_target_locales_joliet_and_midcontinent(self):
         """Verifies Joliet (Chicago spot benchmark) and Midcontinent map to regional hubs."""
         locs_joliet = self.monitor.resolve_target_locales("Total power outage forces emergency shutdown of Joliet refinery")
-        self.assertIn("Cincinnati", locs_joliet)
+        self.assertIn("Chicago", locs_joliet)
 
         locs_midcont = self.monitor.resolve_target_locales("Midcontinent refinery outage threatens regional fuel stocks")
         self.assertIn("Cincinnati", locs_midcont)
@@ -531,6 +543,24 @@ class TestIntradayEventMonitor(unittest.TestCase):
             self.assertTrue(res["is_anomaly"])
             self.assertFalse(res.get("pending_review", False))
             mock_retain.assert_called_once_with(res)
+
+    def test_resolve_target_locales_denver(self):
+        h1 = "Suncor Commerce City Refinery suffers unplanned FCC freeze outage in Colorado"
+        locales1 = self.monitor.resolve_target_locales(h1)
+        self.assertIn("Denver", locales1)
+
+        h2 = "Denver rack fuel supplies tighten following Rocky Mountain pipeline disruption"
+        locales2 = self.monitor.resolve_target_locales(h2)
+        self.assertIn("Denver", locales2)
+
+    def test_resolve_target_locales_new_york(self):
+        h1 = "Phillips 66 Bayway Refinery initiates unplanned FCCU turnaround in New Jersey"
+        locales1 = self.monitor.resolve_target_locales(h1)
+        self.assertIn("New_York", locales1)
+
+        h2 = "Buckeye Pipeline Linden terminal suffers power outage cutting New York fuel deliveries"
+        locales2 = self.monitor.resolve_target_locales(h2)
+        self.assertIn("New_York", locales2)
 
 
 if __name__ == "__main__":

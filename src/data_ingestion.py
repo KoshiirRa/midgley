@@ -466,6 +466,8 @@ FRED_VINTAGE_FILE = os.path.join("data", "fred_vintages.json")
 def save_fred_vintage_record(record: dict, filepath: str = FRED_VINTAGE_FILE) -> None:
     """Appends a FRED observation vintage record to persistent JSON storage. (Issue #287)"""
     fp = filepath or FRED_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "fred_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     os.makedirs(os.path.dirname(fp), exist_ok=True)
     vintages = []
     if os.path.exists(fp):
@@ -793,6 +795,8 @@ class EIA930GridMonitorConnector:
         """
         Saves or appends a bitemporal EIA-930 observation snapshot to persistent vintage storage (Issue #272).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia930_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -945,6 +949,8 @@ class USDABiofuelConnector:
         """
         Saves or appends a bitemporal USDA biofuel observation snapshot to persistent vintage storage (Issue #273).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "usda_biofuel_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -1411,6 +1417,8 @@ class NYMEXForwardCurveConnector:
     @staticmethod
     def save_nymex_forward_vintage_record(record: dict, filepath: str = os.path.join("data", "nymex_forward_vintages.json")) -> None:
         """Saves bitemporal NYMEX forward curve snapshot."""
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "nymex_forward_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -1691,6 +1699,8 @@ class NOAACOOPSConnector:
     @staticmethod
     def save_noaa_coops_vintage_record(record: dict, filepath: str = os.path.join("data", "noaa_coops_vintages.json")) -> None:
         """Saves bitemporal NOAA CO-OPS observation snapshot."""
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "noaa_coops_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -2503,6 +2513,8 @@ OILPRICEAPI_MAX_DAILY_CALLS = 25
 
 def save_oilpriceapi_vintage_record(record: dict, filepath: str = OILPRICEAPI_VINTAGE_FILE) -> None:
     """Persists a bitemporal point-in-time OilpriceAPI observation (Issue #284)."""
+    if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "oilpriceapi_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -2642,6 +2654,14 @@ class OilPriceAPIDataConnector:
         data["daily_calls"][day_key] = today_calls + 1
         data["last_call"] = now.isoformat()
 
+        if os.environ.get("TESTING") == "1" and os.path.abspath(OILPRICEAPI_QUOTA_FILE) == os.path.abspath(os.path.join("data", "oilpriceapi_quota.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return True, {
+                "allowed": True,
+                "today_calls": today_calls + 1,
+                "max_daily_calls": self.max_daily_calls,
+                "safety_valve_active": False
+            }
+
         try:
             with open(OILPRICEAPI_QUOTA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
@@ -2700,6 +2720,9 @@ class OilPriceAPIDataConnector:
             global_cache.set(f"oilpriceapi_{cache_key}", payload, ttl_seconds=86400)
         except Exception:
             pass
+
+        if os.environ.get("TESTING") == "1" and os.path.abspath(OILPRICEAPI_CACHE_FILE) == os.path.abspath(os.path.join("data", "oilpriceapi_cache.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
 
         # Write to local JSON disk response cache file
         os.makedirs("data", exist_ok=True)
@@ -2912,8 +2935,11 @@ CFTC_VINTAGE_FILE = os.path.join("data", "cftc_vintages.json")
 
 def save_cftc_vintage_record(record: dict, filepath: str = CFTC_VINTAGE_FILE) -> None:
     """Appends a point-in-time CFTC COT positioning vintage record."""
+    fp = filepath or CFTC_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "cftc_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:
@@ -3144,6 +3170,8 @@ class FERCDataConnector:
         """
         Saves or appends a bitemporal FERC observation snapshot to persistent vintage storage (Issue #275).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "ferc_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -3207,8 +3235,11 @@ RADAR_VINTAGE_FILE = os.path.join("data", "radar_vintages.json")
 
 def save_radar_vintage_record(models: list, filepath: str = RADAR_VINTAGE_FILE, as_of: str = None) -> None:
     """Persists a bitemporal point-in-time Open Source AI Radar models snapshot (Issue #289)."""
+    fp = filepath or RADAR_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "radar_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:
@@ -3379,7 +3410,7 @@ class OpenSourceAIRadarConnector:
 
     def _save_disk_cache(self, models: List[Dict[str, Any]]):
         """Saves radar records to data/radar_cache.json."""
-        if os.environ.get("TESTING") == "1":
+        if os.environ.get("TESTING") == "1" and os.path.abspath(self.CACHE_FILE) == os.path.abspath(os.path.join("data", "radar_cache.json")):
             return
         try:
             os.makedirs(os.path.dirname(self.CACHE_FILE), exist_ok=True)

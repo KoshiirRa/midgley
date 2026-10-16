@@ -247,7 +247,7 @@ def record_submitted_challenge(
         "response": response
     }
 
-    if os.environ.get("TESTING") == "1" and filepath is None:
+    if (os.environ.get("TESTING") == "1" or os.environ.get("PYTEST_CURRENT_TEST")) and (filepath is None or os.path.abspath(filepath) == os.path.abspath(SUBMITTED_LEDGER_FILE)) and os.environ.get("TEST_PERSIST_RECORD") != "1":
         if not hasattr(load_submitted_ledger, "_test_mock_ledger"):
             load_submitted_ledger._test_mock_ledger = {"submitted_challenges": {}}
         load_submitted_ledger._test_mock_ledger["submitted_challenges"][str(challenge_id)] = entry
@@ -796,7 +796,7 @@ class HeadlineArenaConnector:
         name: str = "Midgley-Energy-Agent",
         description: str = "Multi-agent RBOB wholesale gasoline and Cushing WTI crude forecasting engine",
         model_provider: str = "google",
-        model_name: str = "gemini-2.5-flash",
+        model_name: str = "gemini-3.8-flash",
         scopes: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
@@ -1175,7 +1175,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=f"HTTP {e.code}: {err_msg[:100]}"
             )
-            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg, "asset": asset, "challenge_id": challenge_id}
+            return {"status": "HTTP_ERROR", "code": e.code, "error": f"HTTP {e.code}", "asset": asset, "challenge_id": challenge_id}
         except Exception as e:
             latency = (time.time() - start_time) * 1000.0
             log_connector_event(
@@ -1185,7 +1185,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=str(e)[:100]
             )
-            return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
+            return {"status": "NETWORK_ERROR", "error": "Headline Arena network error", "asset": asset, "challenge_id": challenge_id}
 
     def submit_forecast(
         self,
@@ -1407,7 +1407,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=f"HTTP {e.code}: {err_msg[:100]}"
             )
-            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg, "asset": asset, "challenge_id": challenge_id}
+            return {"status": "HTTP_ERROR", "code": e.code, "error": f"HTTP {e.code}", "asset": asset, "challenge_id": challenge_id}
         except Exception as e:
             latency = (time.time() - start_time) * 1000.0
             logger.error(f"Headline Arena submission network error for {asset} (challenge {challenge_id}): {e}")
@@ -1418,7 +1418,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=str(e)[:100]
             )
-            return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
+            return {"status": "NETWORK_ERROR", "error": "Headline Arena submission network error", "asset": asset, "challenge_id": challenge_id}
 
     def dispatch_pending_forecasts(
         self,
@@ -1663,7 +1663,7 @@ def main():
     parser.add_argument("--name", type=str, default="Midgley-Energy-Agent", help="Agent name for registration")
     parser.add_argument("--description", type=str, default="Probabilistic multi-agent RBOB gasoline and WTI crude forecaster", help="Agent description")
     parser.add_argument("--model-provider", type=str, default="google", help="Underlying model provider (default: google)")
-    parser.add_argument("--model-name", type=str, default="gemini-2.5-flash", help="Underlying model name (default: gemini-2.5-flash)")
+    parser.add_argument("--model-name", type=str, default="gemini-3.8-flash", help="Underlying model name (default: gemini-3.8-flash)")
     parser.add_argument("--sync", action="store_true", help="Dispatch pending cached forecasts against active challenges")
     parser.add_argument("--submit-test", action="store_true", help="Perform a test prediction submission")
     parser.add_argument("--live", action="store_true", help="Enable live submission in dev environment (tags as [DEV-TEST])")
@@ -1686,13 +1686,16 @@ def main():
             model_provider=args.model_provider,
             model_name=args.model_name
         )
+        sanitized = dict(res)
+        if "client_secret" in sanitized:
+            sanitized["client_secret"] = "***REDACTED***"
         print("\nRegistration Result:")
-        print(json.dumps(res, indent=2))
-        if "client_id" in res and "client_secret" in res:
+        print(json.dumps(sanitized, indent=2))
+        if "client_id" in res:
             print("\n" + "=" * 70)
             print("  SUCCESS! Set the following environment variables in .env or GitHub Secrets:")
-            print(f"  HEADLINE_ARENA_CLIENT_ID={res['client_id']}")
-            print(f"  HEADLINE_ARENA_CLIENT_SECRET={res['client_secret']}")
+            print(f"  HEADLINE_ARENA_CLIENT_ID={res.get('client_id')}")
+            print("  HEADLINE_ARENA_CLIENT_SECRET=<redacted_from_terminal_output>")
             print("=" * 70)
         return
 

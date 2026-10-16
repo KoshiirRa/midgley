@@ -21,14 +21,17 @@ USER_AGENT = "(MidgleyGasPriceForecaster, contact@example.com)"
 NHC_VINTAGE_FILE = os.path.join("data", "nhc_hurricane_vintages.json")
 
 
-def save_nhc_vintage_record(record: dict, filepath: str = NHC_VINTAGE_FILE) -> None:
+def save_nhc_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Appends a point-in-time NOAA NHC hurricane threat vintage record."""
+    fp = filepath or NHC_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "nhc_hurricane_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
-        if os.path.exists(filepath):
+        if os.path.exists(fp):
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
+                with open(fp, "r", encoding="utf-8") as f:
                     vintages = json.load(f)
             except Exception:
                 vintages = []
@@ -38,7 +41,7 @@ def save_nhc_vintage_record(record: dict, filepath: str = NHC_VINTAGE_FILE) -> N
             "data": record
         }
         vintages.append(vintage_entry)
-        with open(filepath, "w", encoding="utf-8") as f:
+        with open(fp, "w", encoding="utf-8") as f:
             json.dump(vintages, f, indent=2)
     except Exception as e:
         logger.debug(f"Failed to persist NHC vintage record: {e}")

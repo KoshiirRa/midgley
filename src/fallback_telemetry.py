@@ -39,6 +39,12 @@ INITIAL_TELEMETRY_STRUCTURE = {
 }
 
 
+def get_initial_telemetry_structure() -> Dict[str, Any]:
+    """Returns an isolated deep copy of the baseline telemetry schema."""
+    import copy
+    return copy.deepcopy(INITIAL_TELEMETRY_STRUCTURE)
+
+
 class FallbackTelemetryLogger:
     def __init__(self, filepath: str = TELEMETRY_FILE):
         self.filepath = filepath
@@ -48,7 +54,7 @@ class FallbackTelemetryLogger:
         """Creates the data directory and telemetry JSON file if not present."""
         os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
         if not os.path.exists(self.filepath):
-            self.save_telemetry(copy.deepcopy(INITIAL_TELEMETRY_STRUCTURE))
+            self.save_telemetry(get_initial_telemetry_structure())
 
     def load_telemetry(self) -> Dict[str, Any]:
         """Loads telemetry record from disk safely."""
@@ -57,17 +63,20 @@ class FallbackTelemetryLogger:
                 with open(self.filepath, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     # Backfill missing keys if schema expanded
-                    for k, v in INITIAL_TELEMETRY_STRUCTURE.items():
+                    initial = get_initial_telemetry_structure()
+                    for k, v in initial.items():
                         if k not in data:
                             data[k] = copy.deepcopy(v)
                     return data
         except Exception as e:
             logger.warning(f"Failed to load fallback telemetry from {self.filepath}: {e}")
-        return copy.deepcopy(INITIAL_TELEMETRY_STRUCTURE)
+        return get_initial_telemetry_structure()
 
     def save_telemetry(self, data: Dict[str, Any]) -> bool:
         """Saves telemetry data to disk atomically."""
         try:
+            import copy
+            data = copy.deepcopy(data)
             data["last_updated"] = datetime.now(timezone.utc).isoformat()
             atomic_write_json(self.filepath, data, indent=2)
             return True

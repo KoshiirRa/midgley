@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "phoenix_az",
+  "logger_region_key": "Phoenix_AZ",
+  "display_name": "Phoenix Metro & Desert Southwest, AZ",
+  "padd_region": "PADD 5C Desert Southwest",
+  "primary_city": "Phoenix, AZ",
+  "counties": [
+    "Maricopa",
+    "Pinal",
+    "Pima"
+  ],
+  "baseline_price": 3.25,
+  "icon_class": "fa-sun",
+  "theme_color": "orange",
+  "econometric_drivers": {
+    "title": "Zero Refining Footprint & Dual-Corridor Pipeline Arbitrage",
+    "description": "Arizona and Nevada operate with zero crude oil refineries, functioning entirely as refined product import sinks. Phoenix is served exclusively via the Kinder Morgan SFPP pipeline network from two competing supply basins: the West Line from Los Angeles Basin refineries and the East Line from El Paso, Texas (Gulf Coast refining complex). When California refineries experience outages, arbitrage flows shift toward Texas barrels, isolating Arizona from full CARBOB spikes."
+  },
+  "refining_logistics": {
+    "title": "Kinder Morgan SFPP East & West Line Ingress Hub",
+    "description": "All finished fuel consumed in Greater Phoenix enters via Kinder Morgan SFPP terminals at 51st Avenue. Phoenix requires statutory EPA-approved Arizona Cleaner Burning Gasoline (CBG) in Maricopa County, formulated and batched by both California and Gulf Coast merchant refiners.",
+    "primary_refinery": "Import Terminal Hub via Kinder Morgan SFPP West/East Lines",
+    "capacity_bpd": 0,
+    "pipelines": [
+      "Kinder Morgan SFPP West Line (LA to Phoenix)",
+      "Kinder Morgan SFPP East Line (El Paso to Phoenix)",
+      "Kinder Morgan SFPP South Line (LA to Las Vegas)"
+    ]
+  },
+  "tax_structure": {
+    "title": "Arizona Low Statutory Motor Fuel Excise Tax Burden",
+    "description": "Arizona enforces a state motor fuel excise tax of only $0.180/gal, among the lowest in the United States and 41.6 cents per gallon below California. Combined with Federal excise ($0.184/gal), the statutory baseline burden is $0.364/gal with no carbon allowance fees.",
+    "state_tax_per_gal": 0.180,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.364,
+    "notes": "Statutory baseline excise tax of $0.364/gal; low-tax environment with Maricopa County CBG summer RVP blend requirements."
+  },
+  "infrastructure_delivery": {
+    "title": "Phoenix 51st Avenue Pipeline Rack Margin & Dual Sourcing",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Phoenix}} = P_{\\text{Phoenix Retail}} - P_{\\text{Pipeline Ingress}} = \\$3.250 - \\$2.450 = \\$0.800/\\text{gal}",
+    "description": "Phoenix retail margins reflect pipeline tariff rates from El Paso and Los Angeles plus terminal rack fees at the 51st Avenue petroleum distribution complex.",
+    "hub_distance_miles": 6,
+    "hub_name": "Kinder Morgan SFPP 51st Avenue Petroleum Terminal"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Kinder Morgan East Line Pumping Station Outage",
+      "subtitle": "Texas to Arizona Mainline Pipeline Throughput Curtailment",
+      "price_impact_per_gal": 0.340,
+      "pct_impact": 10.46,
+      "description": "Electrical substation failure halts throughput on the East Line from El Paso, forcing emergency reallocation to premium West Line barrels from California."
+    },
+    {
+      "name": "Maricopa County Arizona CBG Summer Blend Transition",
+      "subtitle": "EPA Nonattainment Seasonal Low-RVP Fuel Switch",
+      "price_impact_per_gal": 0.165,
+      "pct_impact": 5.08,
+      "description": "Annual transition to strict 7.0 psi Arizona CBG fuel in Maricopa County increases refinery blending and segregated batching costs."
+    },
+    {
+      "name": "Permian / Gulf Coast Wholesale Egress Discount",
+      "subtitle": "Surplus USGC Refined Products Depressing East Line Racks",
+      "price_impact_per_gal": -0.095,
+      "pct_impact": -2.92,
+      "description": "High Gulf Coast refinery utilization pushes cheap excess product westward through El Paso, softening Phoenix terminal rack prices."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 1820000,
+    "zero_vehicle_pct": 5.6,
+    "vehicles_per_household": 1.85,
+    "drive_alone_share": 0.748,
+    "carpool_share": 0.098,
+    "public_transit_share": 0.022,
+    "work_from_home_share": 0.132,
+    "mean_commute_minutes": 27.2,
+    "vehicle_dependency_ratio": 0.846,
+    "transit_alternative_index": 0.045,
+    "inelastic_demand_score": 0.835
+  }
+}

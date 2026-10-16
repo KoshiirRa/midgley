@@ -78,7 +78,7 @@ def log_connector_event(
     ledger["events"].append(event_record)
     _save_telemetry_ledger(ledger)
 
-    logger.debug(f"Logged connector telemetry for {connector_name} ({target}): {status}")
+    logger.debug("Logged connector telemetry event")
     return event_record
 
 

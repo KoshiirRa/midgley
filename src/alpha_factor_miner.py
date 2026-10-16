@@ -1,6 +1,6 @@
 """
 Autonomous LLM Alpha Factor Miner (RD-Agent Pattern)
-Uses Gemini 2.5 Flash to formulate economic hypotheses, generate Qlib symbolic factor formulas,
+Uses Gemini 3.8 Flash to formulate economic hypotheses, generate Qlib symbolic factor formulas,
 evaluates Information Coefficient (IC, Rank IC, IC_IR), prunes collinear features, and persists top factors.
 Inspired by Microsoft Research RD-Agent architecture.
 """
@@ -141,7 +141,7 @@ class AlphaFactorMiner:
 
     def generate_llm_hypotheses(self, available_columns: List[str], count: int = 5) -> List[Dict[str, str]]:
         """
-        Uses Gemini 2.5 Flash to formulate economic hypotheses and Qlib symbolic expressions.
+        Uses Gemini 3.8 Flash to formulate economic hypotheses and Qlib symbolic expressions.
         """
         if not self.api_key:
             logger.info("GEMINI_API_KEY absent. Using RD-Agent default seed factors.")
@@ -168,9 +168,9 @@ class AlphaFactorMiner:
                 from google import genai
                 client = genai.Client(api_key=self.api_key)
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.8-flash",
                     contents=prompt,
-                    config={"temperature": 0.2, "response_mime_type": "application/json"}
+                    config={"response_mime_type": "application/json", "thinking_config": {"thinking_level": "low"}}
                 )
                 text_out = response.text.strip()
             except Exception as e_modern:

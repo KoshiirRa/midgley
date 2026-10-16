@@ -28,7 +28,7 @@ For lightweight client applications (such as mobile apps, automotive head units,
 | `https://koshiirra.github.io/midgley/api/v1/combined/{locale}.json` | `GET` | Sub-directory route alias for REST path compatibility |
 
 ### Available Locales for Static API
-`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `bayarea`
+`national`, `tulsa`, `oakland`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `bayarea`
 
 ### Example Request
 ```bash
@@ -64,7 +64,7 @@ Callers can authenticate using any of the following methods:
 Master environment key `MIDGLEY_API_KEY` operates seamlessly alongside SQLite provisioned user keys (`data/security.db`) across all header and query parameter formats. Key verification and rate limiting use non-blocking asynchronous threads (`verify_key_async`, `check_rate_limit_async`) to prevent event-loop latency.
 
 ### Key Access Tiers
-* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 2.5 Flash event analysis, MiroFish multi-agent cohort simulation, custom headline scenario shocks, knowledge graph ingestion, and headline arena benchmark submission).
+* 👑 **`privileged` tier**: Full multi-agent LLM inference (Google Gemini 3.8 Flash event analysis, MiroFish multi-agent cohort simulation, custom headline scenario shocks, knowledge graph ingestion, and headline arena benchmark submission).
 * 🛡️ **`basic` tier**: Standard forecasts and catalog shocks. Routes event scoring to zero-cost fallback providers (Tier 3 Rule-Based Lexicon, SPC weather mapping, cached news vectors, standard linear Ridge baseline) to conserve Gemini tokens and Finlight API quotas. Calling privileged-only endpoints returns `HTTP 403 Forbidden` (`Privileged API key tier required`).
 
 ### Key Provisioning Methods
@@ -114,7 +114,7 @@ curl -X DELETE "http://localhost:8000/api/v1/admin/keys/mg_prod_a1b2c3d4" \
 Fetches real-time unleaded gas price data using the multi-tiered fallback chain (GasBuddy GraphQL -> AAA Web Scraper -> EIA/yfinance Benchmark -> Prediction History -> Static Anchor) with 15-minute response caching.
 
 **Query Parameters:**
-* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `oakland`, `bayarea`. Default: `national`.
+* `locale` (optional, string): `national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `oakland`, `bayarea`. Default: `national`.
 * `zip_code` (optional, string): 5-digit US zip code for station-level GasBuddy search.
 
 **Example Request:**
@@ -129,7 +129,7 @@ curl -X GET "http://localhost:8000/api/v1/prices/live?locale=oakland" \
 Generates 1-to-5 day out-of-time discrete quantitative price predictions, expected dollar delta, projected direction (UP/DOWN/FLAT), component-level feature attributions (XAI), and natural language driver summary text.
 
 **Query Parameters:**
-* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `oakland`, `bayarea`).
+* `locale` (optional, string): Target locale code (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `oakland`, `bayarea`).
 * `days` (optional, integer): Forecast horizon in days (1 to 30). Default: `5`.
 
 **Example Request:**
@@ -186,7 +186,7 @@ curl -X POST "http://localhost:8000/api/v1/combined/batch" \
 Returns continuous out-of-time MLOps model accuracy metrics (MAE, RMSE, MAPE, Directional Hit Rate %, Naive Persistence MAE, and Model MAE Uplift %) evaluated against actual ground-truth market prices.
 
 **Query Parameters:**
-* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `bayarea`, `all`). Default: `all`.
+* `locale` (optional, string): Filter by locale (`national`, `tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `port_st_lucie`, `chicago`, `houston`, `los_angeles`, `denver`, `new_york`, `oakland`, `bayarea`, `all`). Default: `all`.
 * `window` (optional, string): Rolling evaluation window in days (`30`, `60`, `90`, `all`). Default: `30`.
 * `horizon` (optional, string): Filter by forecast target horizon in days (`1`, `2`, `3`, `4`, `5`, `all`). Default: `all`.
 * `include_retroactive` (optional, boolean): Restrict strictly to forward out-of-time predictions (`false`). Default: `false`.
@@ -346,6 +346,31 @@ Provides arbitrary nationwide location resolution (via 5-digit US ZIP code or GP
   - **Development (`MIDGLEY_ENV=dev` / `TESTING=1`):** Permits unauthenticated pushes when `MIDGLEY_WEBHOOK_SECRET` is unset for local testing convenience.
 
 For provider integration recipes (Google Alerts, Zapier, IFTTT, TradingView), security matrix, and copy-pasteable HMAC signature snippets, see **[WEBHOOK_FORMATTING_GUIDE.md](docs/WEBHOOK_FORMATTING_GUIDE.md)**.
+
+---
+
+## 💬 Multi-Subscriber Discord Webhooks, Direct Message (DM) Alerts & `/midgley` Slash Commands (Issue #235)
+
+Allows external fleet operators, regional traders, and individual members sharing a Discord server to subscribe to locale-filtered intraday shock revisions via either **Channel Incoming Webhooks (`delivery_type: "webhook"`)** or **Private Direct Messages (`delivery_type: "discord_dm"`)**, and interact with the Midgley Bot via `/midgley` slash commands without spamming server chat channels.
+
+### 1. REST Subscription Endpoints (`src/api_server.py`)
+* `POST /api/v1/notifications/discord/subscribe`: Registers a channel webhook or personal Discord User ID (`discord_user_id`) for locale-filtered alerts (`target_locales`, `minimum_shock_threshold`, `direction_filter`: `all_shocks` | `spikes_only` | `drops_only`). Encrypted at rest and protected by IPASIS IP reputation checks. Returns `subscription_id` and `manage_token`.
+* `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`: Unsubscribes a webhook or DM subscription using `?manage_token=...` or `X-Manage-Token` header.
+* `GET /api/v1/notifications/discord/subscriptions/status`: *(Requires API Key)* Returns active subscriber counts grouped by metro hub and delivery type (`webhook` vs `discord_dm`).
+* `POST /api/v1/notifications/discord/test`: Sends an immediate dry-run diagnostic embed to a Discord channel webhook or user DM.
+
+### 2. Interactive `/midgley` Discord Slash Commands (`POST /discord/interactions`)
+Handled on the Cloudflare Edge Worker (`workers/intraday_monitor_worker.ts`) with Ed25519 signature verification (`X-Signature-Ed25519`) and ephemeral in-channel acknowledgments (`flags: 64`) paired with Direct Message delivery (`DISCORD_BOT_TOKEN`):
+* `/midgley subscribe locale:<hub> [min_shock:0.25] [direction:all_shocks|spikes_only|drops_only] [delivery:dm|channel_ephemeral]`
+* `/midgley unsubscribe [locale:<hub>|all]`
+* `/midgley status`
+* `/midgley forecast locale:<hub> [horizon:1..5]`
+* `/midgley test-alert [locale:<hub>]`
+
+Register or update the global/guild command manifest via:
+```bash
+python scripts/register_discord_commands.py --dry-run
+```
 
 ---
 

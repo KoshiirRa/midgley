@@ -46,11 +46,11 @@
       "is_carb": false
     },
     "Houston_TX": {
-      "name": "Houston-Galveston-Brazoria",
-      "program": "EPA Non-Attainment / RFG Adjacent Area",
+      "name": "Houston-Galveston-Brazoria (PADD 3)",
+      "program": "EPA Low-RVP Area / Texas Low Emission Diesel",
       "summer_rvp_psi": 7.8,
-      "winter_rvp_psi": 13.5,
-      "summer_compliance_premium_per_gal": 0.14,
+      "winter_rvp_psi": 13.0,
+      "summer_compliance_premium_per_gal": 0.08,
       "is_rfg": false,
       "is_carb": false
     },
@@ -106,6 +106,51 @@
       "winter_rvp_psi": 13.5,
       "summer_compliance_premium_per_gal": 0.1,
       "is_rfg": false,
+      "is_carb": false
+    },
+    "Chicago_IL": {
+      "name": "Greater Chicago Metro (PADD 2)",
+      "program": "EPA Reformulated Gasoline (RFG)",
+      "summer_rvp_psi": 7.4,
+      "winter_rvp_psi": 13.0,
+      "summer_compliance_premium_per_gal": 0.18,
+      "is_rfg": true,
+      "is_carb": false
+    },
+    "Los_Angeles_CA": {
+      "name": "Los Angeles Basin & South Coast (PADD 5)",
+      "program": "CARB Phase 3 CaRFG",
+      "summer_rvp_psi": 6.99,
+      "winter_rvp_psi": 9.0,
+      "summer_compliance_premium_per_gal": 0.28,
+      "is_rfg": false,
+      "is_carb": true
+    },
+    "Denver_CO": {
+      "name": "Denver Metro & Front Range (PADD 4)",
+      "program": "EPA Front Range Ozone Nonattainment / High-Altitude RVP",
+      "summer_rvp_psi": 7.8,
+      "winter_rvp_psi": 13.5,
+      "summer_compliance_premium_per_gal": 0.16,
+      "is_rfg": true,
+      "is_carb": false
+    },
+    "New_York_NY": {
+      "name": "New York Harbor & NYC Metro (PADD 1B)",
+      "program": "EPA Reformulated Gasoline (RFG) & NY Low RVP Program",
+      "summer_rvp_psi": 7.4,
+      "winter_rvp_psi": 13.0,
+      "summer_compliance_premium_per_gal": 0.16,
+      "is_rfg": true,
+      "is_carb": false
+    },
+    "Boston_MA": {
+      "name": "Boston Metro & Massachusetts (PADD 1A)",
+      "program": "EPA Reformulated Gasoline (RFG) Program",
+      "summer_rvp_psi": 7.4,
+      "winter_rvp_psi": 13.0,
+      "summer_compliance_premium_per_gal": 0.15,
+      "is_rfg": true,
       "is_carb": false
     }
   },

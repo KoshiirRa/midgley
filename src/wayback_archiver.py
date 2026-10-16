@@ -55,25 +55,36 @@ def _save_wayback_cache(cache: dict) -> None:
 
 def is_google_news_redirect(url: str) -> bool:
     """Checks if a given URL is a Google News redirect wrapper."""
-    if not url:
+    if not url or not isinstance(url, str):
         return False
-    lower = url.lower()
-    return (
-        "news.google.com/rss/articles/" in lower
-        or "news.google.com/articles/" in lower
-        or "news.google.com/__i/rss/rd/articles/" in lower
-    )
+    try:
+        parsed = urllib.parse.urlparse(url.strip())
+        if parsed.scheme not in ("http", "https"):
+            return False
+        hostname = (parsed.hostname or "").lower()
+        if hostname not in ("news.google.com", "www.google.com"):
+            return False
+        path = parsed.path.lower()
+        return (
+            path.startswith("/rss/articles/")
+            or path.startswith("/articles/")
+            or path.startswith("/__i/rss/rd/articles/")
+        )
+    except Exception:
+        return False
 
 
 def resolve_canonical_url(url: str, timeout: float = 5.0) -> str:
     """
     Resolves redirect wrapper URLs to canonical source publisher URLs.
     """
-    if not url or not url.startswith(("http://", "https://")):
-        return url
-
     if not is_google_news_redirect(url):
         return url
+
+    parsed = urllib.parse.urlparse(url.strip())
+    if parsed.scheme not in ("http", "https") or (parsed.hostname or "").lower() not in ("news.google.com", "www.google.com"):
+        return url
+    safe_url = urllib.parse.urlunparse(parsed)
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -82,10 +93,10 @@ def resolve_canonical_url(url: str, timeout: float = 5.0) -> str:
     }
 
     try:
-        resp = requests.head(url, headers=headers, allow_redirects=True, timeout=timeout)
+        resp = requests.head(safe_url, headers=headers, allow_redirects=True, timeout=timeout)
         resolved = resp.url
         if resp.status_code in [405, 403, 400] or is_google_news_redirect(resolved):
-            resp_get = requests.get(url, headers=headers, allow_redirects=True, stream=True, timeout=timeout)
+            resp_get = requests.get(safe_url, headers=headers, allow_redirects=True, stream=True, timeout=timeout)
             resolved = resp_get.url
             resp_get.close()
 
@@ -229,7 +240,7 @@ def archive_url_to_wayback(url: str, headline: str = "") -> Dict[str, Any]:
             status_code = response.getcode()
             archive_url = response.headers.get("Content-Location") or response.geturl()
 
-            if not archive_url.startswith("https://web.archive.org"):
+            if not archive_url.startswith("https://web.archive.org/"):
                 archive_url = f"https://web.archive.org/web/*/{target_url}"
 
             record = {

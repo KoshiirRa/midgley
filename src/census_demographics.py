@@ -28,10 +28,13 @@ CENSUS_CACHE_FILE = os.path.join(PROJECT_ROOT, "data", "census_demographics_cach
 CENSUS_VINTAGE_FILE = os.path.join(PROJECT_ROOT, "data", "census_demographics_vintages.json")
 
 
-def save_census_vintage_record(record: dict, filepath: str = CENSUS_VINTAGE_FILE) -> None:
+def save_census_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time Census ACS demographics observation (Issue #290)."""
+    fp = filepath or CENSUS_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join(PROJECT_ROOT, "data", "census_demographics_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:
@@ -374,6 +377,8 @@ class CensusDemographicsConnector:
         return {}
 
     def _save_disk_cache(self):
+        if os.environ.get("TESTING") == "1" and os.path.abspath(CENSUS_CACHE_FILE) == os.path.abspath(os.path.join(PROJECT_ROOT, "data", "census_demographics_cache.json")):
+            return
         try:
             os.makedirs(os.path.dirname(CENSUS_CACHE_FILE), exist_ok=True)
             with open(CENSUS_CACHE_FILE, "w", encoding="utf-8") as f:
@@ -405,7 +410,8 @@ class CensusDemographicsConnector:
             f"https://api.census.gov/data/{target_vintage}/acs/acs5?get={var_str}&for=county:{county_fips}&in=state:{state_fips}"
         ]
 
-        for url in endpoints:
+        for endpoint in endpoints:
+            url = endpoint
             if self.api_key:
                 url += f"&key={self.api_key}"
             try:
@@ -426,7 +432,7 @@ class CensusDemographicsConnector:
                             return parsed
             except urllib.error.HTTPError as he:
                 if he.code == 404:
-                    logger.debug(f"Census ACS {target_vintage} endpoint not yet released or 404: {url}")
+                    logger.debug(f"Census ACS {target_vintage} endpoint not yet released or 404: {endpoint}")
                 else:
                     logger.debug(f"Census API HTTP error {he.code}: {he}")
             except Exception as ex:

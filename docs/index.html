@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1ae2ce4322b14229bad5f1c4bf222a01"}'></script>
+
     <!-- Open Graph / Discord Social Embed Metadata -->
     <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
     <meta property="og:type" content="website">
@@ -37,6 +36,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Leaflet.js CSS & JS for Interactive Price Hubs Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
@@ -45,6 +48,21 @@
     <style>
         .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
         .card-glow { box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 1px solid #1e293b !important;
+            border-radius: 1rem !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+        }
+        .leaflet-popup-content {
+            margin: 12px 14px !important;
+            line-height: 1.4 !important;
+        }
+        .leaflet-container a.leaflet-popup-close-button {
+            color: #94a3b8 !important;
+            padding: 8px !important;
+        }
         
         /* Mobile-Responsive KaTeX Math Equation Styles */
         .katex-display {
@@ -86,7 +104,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.5</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-normal">Dev Branch v0.8.6-dev</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -115,14 +133,26 @@
                         <a role="menuitem" href="cincinnati.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a role="menuitem" href="greenville.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
-                        </a>
                         <a role="menuitem" href="charlotte.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte &amp; Carolinas Retail
                         </a>
                         <a role="menuitem" href="port_st_lucie.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a role="menuitem" href="chicago.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-sky-400" aria-hidden="true"></i> Chicago, IL/IN Retail
+                        </a>
+                        <a role="menuitem" href="houston.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-industry text-amber-400" aria-hidden="true"></i> Houston, TX Retail
+                        </a>
+                        <a role="menuitem" href="los_angeles.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-sun text-amber-400" aria-hidden="true"></i> Los Angeles, CA Retail
+                        </a>
+                        <a role="menuitem" href="denver.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-mountain text-amber-400" aria-hidden="true"></i> Denver, CO Retail
+                        </a>
+                        <a role="menuitem" href="new_york.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-ship text-sky-400" aria-hidden="true"></i> New York, NY Retail
                         </a>
                         <a role="menuitem" href="bayarea.html" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -165,13 +195,13 @@
                     <i class="fa-solid fa-network-wired mr-1"></i> Multi-Agent Forecasting Engine
                 </span>
                 <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-circle-check mr-1"></i>Forecast Fresh (&lt;36h)</span>
-                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: 2026-10-16 14:42 UTC</a></span>
+                <span class="text-xs text-slate-400">Daily Forecast Batch Execution &bull; <a href="#last-run-audit" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-blue-500/40 underline-offset-2 transition"><i class="fa-solid fa-microchip mr-1"></i>Last Run: 2026-10-16 19:16 UTC</a></span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Quantitative & LLM-Augmented Energy Price Forecasting
             </h2>
             <p class="text-slate-300 text-base leading-relaxed max-w-4xl">
-                Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 2.5 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
+                Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 3.8 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
             </p>
         </div>
 
@@ -186,10 +216,66 @@
         </div>
         <div>
             <h4 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Macro Energy Synthesis: Executive Multi-Market Synthesis & Logistics Overview</h4>
-            <p class="text-sm text-slate-300 leading-relaxed mt-2">The Midgley forecasting engine detects distinctive geographic dynamics over the prospective 5-day horizon. While benchmark NYMEX RBOB futures ($2.450/gal) and WTI Crude ($75.00/bbl) exhibit baseline momentum, retail price trajectories diverge across regional logistics hubs. Coastal and inland waterway markets (Oakland, Newark, Cincinnati) reflect maritime tanker freight, Mississippi/Ohio River barge draft factors, and seasonal CARB/RVP regulatory requirements. Mid-Continent refinery hubs (Port St Lucie FL (-2.0%), Charlotte NC (-2.1%)) display price stabilization backed by nominal refinery operations and Cushing inventory parity.</p>
+            <p class="text-sm text-slate-300 leading-relaxed mt-2">The Midgley forecasting engine detects distinctive geographic dynamics over the prospective 5-day horizon. While benchmark NYMEX RBOB futures ($2.450/gal) and WTI Crude ($75.00/bbl) exhibit baseline momentum, retail price trajectories diverge across regional logistics hubs. Coastal and inland waterway markets (Oakland, Newark, Cincinnati) reflect maritime tanker freight, Mississippi/Ohio River barge draft factors, and seasonal CARB/RVP regulatory requirements. Mid-Continent refinery hubs (Los Angeles CA (-1.8%), Port St Lucie FL (-2.0%)) display price stabilization backed by nominal refinery operations and Cushing inventory parity.</p>
         </div>
         
     </div>
+    
+
+        
+        <!-- 🗺️ INTERACTIVE GEOGRAPHIC PRICE HUBS MAP SECTION (Issue #646) -->
+        <section class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-6 card-glow" id="geographic-footprint">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl">
+                            <i class="fa-solid fa-map-location-dot text-base" aria-hidden="true"></i>
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                            Geographic Model Footprint &amp; Modeled Price Hubs
+                        </h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-3xl">
+                        Interactive geographic view of all 19 PADD 1–7 calibration hubs, offshore island districts, and wholesale commodity benchmarks modeled by Midgley's hierarchical quantitative and qualitative forecasting pipelines.
+                    </p>
+                </div>
+
+                <!-- Territory Preset Navigation Buttons -->
+                <div class="flex items-center gap-1.5 flex-wrap bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 text-xs font-medium">
+                    <button type="button" onclick="window.setHubsMapView('conus')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewConus">
+                        CONUS
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('pacific')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewPacific">
+                        Pacific &amp; Islands
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('caribbean')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewCaribbean">
+                        Caribbean
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('all')" class="px-3 py-1.5 rounded-xl bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold hover:bg-blue-600/50 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewAll">
+                        All PADDs 1–7
+                    </button>
+                </div>
+            </div>
+
+            <!-- Legend Bar -->
+            <div class="flex items-center gap-4 sm:gap-6 text-xs text-slate-400 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Active Dedicated Analytics Pages (11)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Modeled Regional Calibration Hubs (7)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Commodity Futures Benchmark (National)</span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div id="hubsMap" class="w-full h-[420px] sm:h-[500px] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10" role="region" aria-label="Modeled Fuel Price Hubs Geographic Map"></div>
+        </section>
     
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
@@ -201,7 +287,7 @@
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">11 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
@@ -347,48 +433,13 @@
                     </a>
                 </div>
 
-                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
+                <!-- Card 5: Charlotte Metro & Carolinas Retail (Paw Creek Distribution Hub) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C Carolinas Hub</span>
                             <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
-                            40.4¢ NC Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">$3.672<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-green-400 mt-1">$3.609<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
-                    </div>
-
-                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte &amp; Carolinas
                             </h4>
                         </div>
                         <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
@@ -408,12 +459,12 @@
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek &amp; Selma Hubs</span>
                         <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
                     </div>
 
                     <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
+                        Explore Charlotte &amp; Carolinas Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -452,7 +503,182 @@
                     </a>
                 </div>
 
-                <!-- Card 5: SF Bay Area 9-County Region (incl. Oakland) -->
+                <!-- Card 8: Greater Chicago, IL/IN Retail (BP Whiting & CITGO Lemont Refining Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-semibold">PADD 2 Great Lakes Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-city text-sky-400"></i> Greater Chicago, IL/IN
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            80.5¢ Base Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$4.869<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-sky-400 mt-1">$4.784<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> BP Whiting & Lemont</span>
+                        <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
+                    </div>
+
+                    <a href="chicago.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Chicago Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 9: Houston, TX Retail (PADD 3 USGC Refining Epicenter) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 3 USGC Epicenter</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-industry text-amber-400"></i> Houston, TX
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            38.4¢ Base Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$3.788<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$3.723<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> Baytown & Port Arthur</span>
+                        <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
+                    </div>
+
+                    <a href="houston.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Houston Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 10: Los Angeles, CA Retail (PADD 5 SoCal Refining Cluster) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 SoCal Basin Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-sun text-amber-400"></i> Los Angeles, CA
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            95.3¢ CARB Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$6.270<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$6.160<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> El Segundo &amp; Torrance</span>
+                        <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
+                    </div>
+
+                    <a href="los_angeles.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Los Angeles Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 11: Denver, CO Retail (PADD 4 Rocky Mountain Refining Island) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 4 Rocky Mountain Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-mountain text-amber-400"></i> Denver, CO
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            28.0¢ CO Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$4.292<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$4.237<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-mountain mr-1 text-slate-500"></i> Suncor Commerce City</span>
+                        <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
+                    </div>
+
+                    <a href="denver.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Denver Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 12: New York, NY Retail (PADD 1B Central Atlantic / NY Harbor Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-semibold">PADD 1B Central Atlantic Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-ship text-sky-400"></i> New York, NY
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            47.2¢ NY Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">$4.434<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">$4.379<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Phillips 66 Bayway / Buckeye</span>
+                        <span>Hit Rate: <strong class="text-slate-200">47.46%</strong></span>
+                    </div>
+
+                    <a href="new_york.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore New York Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 13: SF Bay Area 9-County Region (incl. Oakland) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
@@ -678,6 +904,41 @@
                             <div class="text-right font-mono text-xs font-semibold text-rose-400 flex items-center justify-end gap-0.5">
                                 <span>+$0.022/gal (+0.52%)</span>
                                 <i class="fa-solid fa-arrow-up text-rose-400 ml-1 font-bold"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">Chicago, IL/IN Retail</span>
+                            <div class="text-right font-mono text-xs font-semibold text-emerald-400 flex items-center justify-end gap-0.5">
+                                <span>$-0.085/gal (-2.21%)</span>
+                                <i class="fa-solid fa-arrow-down text-emerald-400 ml-1 font-bold"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">Houston, TX Retail</span>
+                            <div class="text-right font-mono text-xs font-semibold text-emerald-400 flex items-center justify-end gap-0.5">
+                                <span>$-0.065/gal (-2.28%)</span>
+                                <i class="fa-solid fa-arrow-down text-emerald-400 ml-1 font-bold"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">Los Angeles, CA Retail</span>
+                            <div class="text-right font-mono text-xs font-semibold text-emerald-400 flex items-center justify-end gap-0.5">
+                                <span>$-0.110/gal (-2.25%)</span>
+                                <i class="fa-solid fa-arrow-down text-emerald-400 ml-1 font-bold"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">Denver, CO Retail</span>
+                            <div class="text-right font-mono text-xs font-semibold text-emerald-400 flex items-center justify-end gap-0.5">
+                                <span>$-0.055/gal (-1.75%)</span>
+                                <i class="fa-solid fa-arrow-down text-emerald-400 ml-1 font-bold"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
+                            <span class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-[150px]">New York, NY Retail</span>
+                            <div class="text-right font-mono text-xs font-semibold text-emerald-400 flex items-center justify-end gap-0.5">
+                                <span>$-0.055/gal (-1.58%)</span>
+                                <i class="fa-solid fa-arrow-down text-emerald-400 ml-1 font-bold"></i>
                             </div>
                         </div>
                         <div class="flex justify-between items-center text-xs py-1 border-b border-slate-800/40 last:border-0">
@@ -1226,7 +1487,7 @@
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white">Multi-Agent System Architecture</h3>
-                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative & LLM Feeds &rarr; Main Wholesale Model &rarr; Localized Metro Area Models</p>
+                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative &amp; Physical Feeds &rarr; National Wholesale RBOB Model &rarr; 18 Localized Regional Calibration Hubs (PADDs 1&ndash;7)</p>
                     </div>
                 </div>
 
@@ -1278,7 +1539,7 @@
                         </div>
                         <h5 class="text-sm font-bold text-white">Extraction &amp; Memory Fusion</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \(t_{1/2} = 4.0\text{--}5.0\) days.
+                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 3.8 Flash. Decays shocks with \(t_{1/2} = 4.0\text{--}5.0\) days.
                         </p>
                     </div>
 
@@ -1294,15 +1555,15 @@
                         </p>
                     </div>
 
-                    <!-- Stage 4: Localized Metro Calibration (Fed by Main Model) -->
+                    <!-- Stage 4: Localized Regional Calibration Hubs (Fed by Main Model) -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-purple-500/40 shadow-lg shadow-purple-500/5 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-purple-400">
                             <span>Stage 4</span>
-                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Metro Calibration</span>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Regional Calibration</span>
                         </div>
-                        <h5 class="text-sm font-bold text-white">Localized Metro Models</h5>
+                        <h5 class="text-sm font-bold text-white">Localized Calibration Hubs</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK ($3.89/gal), Newark DE ($3.35/gal), and Cincinnati OH/KY ($3.45/gal) with local rack margins &amp; refinery dynamics.
+                            Ingests National Wholesale Base Forecast and dynamically calibrates for 18 regional hubs across all PADDs (PADD 1A Boston; PADD 1B New York &amp; Newark; PADD 1C Charlotte &amp; Port St. Lucie; PADD 2 Chicago, Tulsa &amp; Cincinnati; PADD 3 Houston; PADD 4 Denver; PADD 5 Los Angeles &amp; SF Bay Area; PADD 5B Seattle; PADD 5C Phoenix; PADD 5D Anchorage &amp; Honolulu; PADD 6 San Juan; PADD 7 Guam) using local rack margins, refinery dynamics, pipeline tariffs, and statutory tax structures. Charlotte serves as the Carolinas calibration hub (Greenville consolidated).
                         </p>
                     </div>
 
@@ -1345,7 +1606,7 @@
                     <!-- Pillar 2 -->
                     <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                         <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                            <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
+                            <i class="fa-solid fa-robot"></i> 2. Gemini 3.8 Flash News
                         </h4>
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
@@ -1431,6 +1692,8 @@
         const rollingDates = ["2025-11-05", "2025-11-28", "2025-12-22", "2026-01-15", "2026-02-09", "2026-03-04", "2026-03-26", "2026-04-20", "2026-05-12", "2026-06-04", "2026-06-29", "2026-07-22", "2026-08-13", "2026-09-04", "2026-09-29"];
         const rollingMAEData = [0.0493, 0.0461, 0.0435, 0.0419, 0.042, 0.0514, 0.0799, 0.086, 0.1006, 0.1019, 0.0995, 0.1056, 0.1104, 0.1155, 0.1187];
         const rollingHitData = [41.77, 48.1, 54.27, 55.08, 55.53, 57.14, 52.52, 52.13, 50.0, 51.5, 51.9, 49.95, 50.75, 49.67, 48.7];
+        const hubPoints = [{"slug": "national", "name": "National Wholesale RBOB (NYMEX / Cushing)", "district": "Commodity Benchmark", "padd": "National Benchmark", "lat": 35.984, "lng": -96.767, "type": "national", "has_page": true, "url": "national.html", "base_price": 3.05, "pred_price": 2.998, "tax_rate": 0.184, "refinery": "U.S. Operable Refining Complex (~18.2M bpd)", "pipeline": "NYMEX RB=F Physically Deliverable Corridor", "sub_locales": []}, {"slug": "tulsa", "name": "Tulsa Metro, OK (PADD 2)", "district": "PADD 2", "padd": "PADD 2", "lat": 36.154, "lng": -95.9928, "type": "dedicated", "has_page": true, "url": "tulsa.html", "base_price": 3.954, "pred_price": 3.954, "tax_rate": 0.2, "refinery": "HF Sinclair Tulsa Refinery (125 kbpd)", "pipeline": "Magellan / Explorer Pipeline", "sub_locales": ["Broken Arrow", "Owasso", "Bixby"]}, {"slug": "newark", "name": "Newark Metro, DE (PADD 1B)", "district": "PADD 1B", "padd": "PADD 1B", "lat": 39.6837, "lng": -75.7497, "type": "dedicated", "has_page": true, "url": "newark.html", "base_price": 4.087, "pred_price": 4.017, "tax_rate": 0.23, "refinery": "PBF Delaware City Refinery (190 kbpd)", "pipeline": "Colonial Pipeline / Delaware River Barges", "sub_locales": ["Wilmington", "Dover"]}, {"slug": "cincinnati", "name": "Cincinnati Tri-State, OH/KY", "district": "PADD 2", "padd": "PADD 2", "lat": 39.1031, "lng": -84.512, "type": "dedicated", "has_page": true, "url": "cincinnati.html", "base_price": 4.048, "pred_price": 4.048, "tax_rate": 0.385, "refinery": "Marathon Catlettsburg Refinery (290 kbpd)", "pipeline": "Mid-Valley Pipeline / Ohio River Tows", "sub_locales": ["Cincinnati Oh", "Northern Kentucky Ky"]}, {"slug": "charlotte", "name": "Charlotte Metro & Carolinas Hub, NC (PADD 1C)", "district": "PADD 1C", "padd": "PADD 1C", "lat": 35.2271, "lng": -80.8431, "type": "dedicated", "has_page": true, "url": "charlotte.html", "base_price": 3.683, "pred_price": 3.604, "tax_rate": 0.41, "refinery": "Gulf Coast Refining Complex (PADD 3)", "pipeline": "Colonial Pipeline Paw Creek Junction & Selma Corridors", "sub_locales": ["Paw Creek", "Concord", "Gastonia", "Rock Hill Sc", "Greenville"]}, {"slug": "bay_area", "name": "SF Bay Area, CA (PADD 5)", "district": "PADD 5", "padd": "PADD 5", "lat": 37.8044, "lng": -122.2712, "type": "dedicated", "has_page": true, "url": "bayarea.html", "base_price": 6.319, "pred_price": 6.319, "tax_rate": 0.634, "refinery": "Chevron Richmond Refinery (245 kbpd)", "pipeline": "Kinder Morgan SFPP Pacific Northern", "sub_locales": ["Oakland", "San Francisco", "San Jose", "Berkeley", "Richmond"]}, {"slug": "port_st_lucie", "name": "Port St. Lucie Metro, FL (PADD 1C)", "district": "PADD 1C", "padd": "PADD 1C", "lat": 27.273, "lng": -80.3582, "type": "dedicated", "has_page": true, "url": "port_st_lucie.html", "base_price": 4.218, "pred_price": 4.133, "tax_rate": 0.352, "refinery": "Waterborne Jones Act Tankers from Houston/Pascagoula", "pipeline": "Port Everglades & Port Canaveral Waterborne Terminals", "sub_locales": ["Fort Pierce", "Stuart", "Vero Beach"]}, {"slug": "chicago", "name": "Greater Chicago Metro, IL & IN (PADD 2)", "district": "PADD 2", "padd": "PADD 2", "lat": 41.8781, "lng": -87.6298, "type": "dedicated", "has_page": true, "url": "chicago.html", "base_price": 4.869, "pred_price": 4.784, "tax_rate": 0.55, "refinery": "BP Whiting Refinery (435 kbpd) & CITGO Lemont (177 kbpd)", "pipeline": "Explorer / Wolverine / West Shore / Badger Pipelines", "sub_locales": ["Cook County", "Chicago City", "Dupage", "Will County", "Nw Indiana"]}, {"slug": "houston", "name": "Houston Metro, TX (PADD 3)", "district": "PADD 3", "padd": "PADD 3", "lat": 29.7604, "lng": -95.3698, "type": "dedicated", "has_page": true, "url": "houston.html", "base_price": 3.788, "pred_price": 3.723, "tax_rate": 0.2, "refinery": "ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd)", "pipeline": "Colonial Pipeline Lines 1 & 2 / Explorer Pipeline", "sub_locales": ["Houston City", "Galveston", "Baytown", "Pasadena", "Sugar Land"]}, {"slug": "los_angeles", "name": "Los Angeles Basin, CA (PADD 5)", "district": "PADD 5", "padd": "PADD 5", "lat": 34.0522, "lng": -118.2437, "type": "dedicated", "has_page": true, "url": "los_angeles.html", "base_price": 6.27, "pred_price": 6.16, "tax_rate": 0.953, "refinery": "Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd)", "pipeline": "Kinder Morgan SFPP West/South Lines & San Pedro Bay Marine Terminals", "sub_locales": ["Los Angeles City", "Westside Santa Monica", "South Bay Torrance", "Long Beach Harbor", "Orange County"]}, {"slug": "denver", "name": "Denver Metro & Rocky Mountain Hub, CO (PADD 4)", "district": "PADD 4", "padd": "PADD 4", "lat": 39.7392, "lng": -104.9903, "type": "dedicated", "has_page": true, "url": "denver.html", "base_price": 4.292, "pred_price": 4.237, "tax_rate": 0.28, "refinery": "Suncor Commerce City Refinery (103 kbpd)", "pipeline": "Rocky Mountain Refined Product Midstream / Magellan Corridor", "sub_locales": ["Denver City", "Aurora", "Lakewood", "Boulder", "Commerce City"]}, {"slug": "new_york", "name": "New York Harbor & NY State Hub, NY (PADD 1B)", "district": "PADD 1B", "padd": "PADD 1B", "lat": 40.7128, "lng": -74.006, "type": "dedicated", "has_page": true, "url": "new_york.html", "base_price": 4.434, "pred_price": 4.379, "tax_rate": 0.472, "refinery": "Phillips 66 Bayway Refinery (258 kbpd) & NY Harbor Barges", "pipeline": "Buckeye Pipeline System & Colonial Pipeline Terminus", "sub_locales": ["Nyc Manhattan", "Brooklyn Queens", "Long Island Nassau", "Westchester", "Albany Capital"]}, {"slug": "seattle", "name": "Seattle-Tacoma & Puget Sound, WA (PADD 5B)", "district": "PADD 5B", "padd": "PADD 5B", "lat": 47.6062, "lng": -122.3321, "type": "modeled", "has_page": false, "url": "", "base_price": 5.589, "pred_price": 5.519, "tax_rate": 0.494, "refinery": "bp Cherry Point (242 kbpd) & Phillips 66 Ferndale (105 kbpd)", "pipeline": "Olympic Pipeline System", "sub_locales": ["Seattle City", "Tacoma", "Bellevue", "Everett", "Olympia"]}, {"slug": "phoenix", "name": "Phoenix Metro & Desert Southwest, AZ (PADD 5C)", "district": "PADD 5C", "padd": "PADD 5C", "lat": 33.4484, "lng": -112.074, "type": "modeled", "has_page": false, "url": "", "base_price": 4.65, "pred_price": 4.59, "tax_rate": 0.18, "refinery": "Import Hub via Kinder Morgan SFPP West/East Lines", "pipeline": "Kinder Morgan SFPP West Line (LA) & East Line (El Paso)", "sub_locales": ["Phoenix City", "Scottsdale", "Mesa", "Chandler", "Glendale"]}, {"slug": "anchorage", "name": "Anchorage & Southcentral Alaska Hub, AK (PADD 5D)", "district": "PADD 5D", "padd": "PADD 5D", "lat": 61.2181, "lng": -149.9003, "type": "modeled", "has_page": false, "url": "", "base_price": 4.849, "pred_price": 4.789, "tax_rate": 0.0895, "refinery": "Marathon Kenai Refinery (68 kbpd)", "pipeline": "Cook Inlet Marine Barges & Alaska Railroad Tank Cars", "sub_locales": ["Anchorage Bowl", "Mat Su Valley", "Kenai Soldotna", "Fairbanks Interior", "Juneau Se"]}, {"slug": "honolulu", "name": "Honolulu & Oahu Island Hub, HI (PADD 5D)", "district": "PADD 5D", "padd": "PADD 5D", "lat": 21.3069, "lng": -157.8583, "type": "modeled", "has_page": false, "url": "", "base_price": 5.569, "pred_price": 5.499, "tax_rate": 0.33, "refinery": "Par Hawaii Kapolei Refinery (94 kbpd)", "pipeline": "Young Brothers Inter-Island Ocean Fuel Barges", "sub_locales": ["Honolulu Urban", "Waikiki", "Leeward Oahu", "Maui County", "Hawaii Island"]}, {"slug": "guam", "name": "Hag\u00e5t\u00f1a & Apra Harbor, Guam (PADD 7)", "district": "PADD 7", "padd": "PADD 7", "lat": 13.4786, "lng": 144.757, "type": "modeled", "has_page": false, "url": "", "base_price": 4.327, "pred_price": 4.247, "tax_rate": 0.19, "refinery": "Asia-Pacific Product Tanker Imports (Singapore / South Korea)", "pipeline": "Cabras Island Fuel Pier & Apra Harbor Marine Headers", "sub_locales": ["Hagatna", "Tamuning Tumon", "Dededo", "Yigo Andersen", "Santa Rita Apra"]}, {"slug": "san_juan", "name": "San Juan Metro & U.S. Caribbean Territories Hub, PR (PADD 6)", "district": "PADD 6", "padd": "PADD 6", "lat": 18.4655, "lng": -66.1057, "type": "modeled", "has_page": false, "url": "", "base_price": 4.327, "pred_price": 4.277, "tax_rate": 0.16, "refinery": "Waterborne Jones Act Tankers from Houston/Corpus Christi & USVI Terminals", "pipeline": "San Juan Harbor Deepwater Tanker Berths & Coastal Product Barges", "sub_locales": ["San Juan Metro", "Bayamon", "Carolina", "Ponce", "Mayaguez"]}, {"slug": "boston", "name": "Boston Metro & New England Hub, MA (PADD 1A)", "district": "PADD 1A", "padd": "PADD 1A", "lat": 42.3601, "lng": -71.0589, "type": "modeled", "has_page": false, "url": "", "base_price": 4.31, "pred_price": 4.25, "tax_rate": 0.24, "refinery": "Irving Oil Saint John Refinery (320 kbpd) & Waterborne Imports", "pipeline": "Colonial Pipeline Southern Terminus / NY Harbor Coastal Barges", "sub_locales": ["Boston City", "Cambridge", "Quincy", "Worcester", "Springfield"]}];
+        const cartoTileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
 
         window.addEventListener('DOMContentLoaded', () => {
             const ctxMAE = document.getElementById('maeTrendChart').getContext('2d');
@@ -1484,6 +1747,106 @@
                     }
                 }
             });
+
+            // -------------------------------------------------------------
+            // Leaflet Modeled Price Hubs Map Initialization (Issue #646)
+            // -------------------------------------------------------------
+            const hubsMapEl = document.getElementById('hubsMap');
+            if (hubsMapEl && typeof L !== 'undefined') {
+                const hubsMap = L.map('hubsMap', {
+                    scrollWheelZoom: false
+                }).setView([38.5000, -96.0000], 4);
+
+                L.tileLayer(cartoTileUrl, {
+                    attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    subdomains: 'abcd',
+                    maxZoom: 18
+                }).addTo(hubsMap);
+
+                const markersGroup = L.featureGroup();
+
+                hubPoints.forEach(function(pt) {
+                    const markerColor = pt.type === 'national' ? '#f59e0b' : (pt.has_page ? '#10b981' : '#06b6d4');
+                    const radius = pt.type === 'national' ? 10 : (pt.has_page ? 8 : 7);
+
+                    const marker = L.circleMarker([pt.lat, pt.lng], {
+                        radius: radius,
+                        fillColor: markerColor,
+                        color: '#ffffff',
+                        weight: 2,
+                        opacity: 0.9,
+                        fillOpacity: 0.85
+                    });
+
+                    let popupHtml = '<div class="p-2 space-y-2 text-slate-100 font-sans min-w-[240px]">' +
+                        '<div class="flex items-center justify-between border-b pb-1.5 border-slate-700">' +
+                            '<span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ' + (pt.has_page ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'bg-cyan-950 text-cyan-300 border border-cyan-500/30') + '">' + pt.district + '</span>' +
+                            '<span class="text-[10px] text-slate-400 font-mono">' + (pt.has_page ? 'Active Page' : 'Modeled Hub') + '</span>' +
+                        '</div>' +
+                        '<h4 class="font-bold text-sm text-white leading-tight">' + pt.name + '</h4>' +
+                        '<div class="grid grid-cols-2 gap-2 text-xs py-1.5 bg-slate-800/80 p-2 rounded-xl border border-slate-700/60">' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">' + (pt.type === 'national' ? 'Current Futures' : 'Live Pump Price') + '</span>' +
+                                '<strong class="text-sm font-black text-white">$' + pt.base_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">5-Day Projected</span>' +
+                                '<strong class="text-sm font-black text-blue-400">$' + pt.pred_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="text-[11px] text-slate-300 space-y-1">' +
+                            '<div><strong class="text-slate-400">Tax Stack:</strong> ' + (pt.tax_rate * 100).toFixed(1) + '¢/gal statutory base</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Refinery:</strong> ' + pt.refinery + '</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Midstream:</strong> ' + pt.pipeline + '</div>';
+
+                    if (pt.sub_locales && pt.sub_locales.length > 0) {
+                        popupHtml += '<div class="text-[10px] text-slate-400 pt-0.5"><strong class="text-slate-500">Sub-locales:</strong> ' + pt.sub_locales.join(', ') + '</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    if (pt.has_page && pt.url) {
+                        popupHtml += '<div class="pt-1.5"><a href="' + pt.url + '" class="block text-center w-full py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition shadow-sm">Explore ' + pt.slug.toUpperCase() + ' Analytics &rarr;</a></div>';
+                    } else {
+                        popupHtml += '<div class="pt-1 text-[10px] text-slate-400 italic text-center"><i class="fa-solid fa-check-circle text-cyan-400 mr-1"></i>Calibrated in Hierarchical Model &amp; Ledger</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    marker.bindPopup(popupHtml, { maxWidth: 320 });
+                    marker.addTo(hubsMap);
+                    markersGroup.addLayer(marker);
+                });
+
+                window.setHubsMapView = function(view) {
+                    const buttons = ['btnViewConus', 'btnViewPacific', 'btnViewCaribbean', 'btnViewAll'];
+                    buttons.forEach(id => {
+                        const btn = document.getElementById(id);
+                        if (btn) {
+                            btn.classList.remove('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                            btn.classList.add('text-slate-300');
+                        }
+                    });
+
+                    if (view === 'conus') {
+                        hubsMap.setView([38.5000, -96.0000], 4);
+                        const b = document.getElementById('btnViewConus');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'pacific') {
+                        hubsMap.setView([28.0000, -165.0000], 3);
+                        const b = document.getElementById('btnViewPacific');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'caribbean') {
+                        hubsMap.setView([18.4655, -66.1057], 7);
+                        const b = document.getElementById('btnViewCaribbean');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'all') {
+                        hubsMap.setView([26.0000, -120.0000], 3);
+                        const b = document.getElementById('btnViewAll');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    }
+                };
+            }
         });
     </script>
 </body>

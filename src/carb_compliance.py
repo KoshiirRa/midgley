@@ -9,7 +9,7 @@ import os
 import json
 import logging
 import urllib.request
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, Optional, Tuple
 import numpy as np
 import pandas as pd
@@ -138,7 +138,7 @@ class CARBComplianceConnector:
         total_burden = CA_STATE_EXCISE_TAX + cap_trade_fee + lcfs_fee + CA_LOCAL_SALES_UST_FEE
 
         result = {
-            "as_of_date": as_of_date or datetime.utcnow().strftime("%Y-%m-%d"),
+            "as_of_date": as_of_date or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
             "lcfs_credit_price_mt": round(lcfs_price, 2),
             "cap_trade_allowance_price_mt": round(cap_trade_price, 2),
             "carb_state_excise_tax": CA_STATE_EXCISE_TAX,
@@ -154,7 +154,7 @@ class CARBComplianceConnector:
         return result
 
     def _persist_vintage(self, result: Dict[str, Any]) -> None:
-        if os.environ.get("TESTING") == "1" and os.path.abspath(self.vintage_file) == os.path.abspath(CARB_VINTAGE_FILE):
+        if os.environ.get("TESTING") == "1" and os.path.abspath(self.vintage_file) == os.path.abspath(CARB_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
             return
         try:
             with open(self.vintage_file, "r", encoding="utf-8") as f:
@@ -162,12 +162,12 @@ class CARBComplianceConnector:
         except Exception:
             data = {"vintages": {}, "last_updated": None}
 
-        as_of = result.get("as_of_date", datetime.utcnow().strftime("%Y-%m-%d"))
+        as_of = result.get("as_of_date", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
         data["vintages"][as_of] = {
-            "recorded_at": datetime.utcnow().isoformat(),
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
             **result
         }
-        data["last_updated"] = datetime.utcnow().isoformat()
+        data["last_updated"] = datetime.now(timezone.utc).isoformat()
 
         try:
             with open(self.vintage_file, "w", encoding="utf-8") as f:

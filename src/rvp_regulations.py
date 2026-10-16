@@ -65,11 +65,11 @@ DEFAULT_RVP_RULES = {
             "is_carb": False
         },
         "Houston_TX": {
-            "name": "Houston-Galveston-Brazoria",
-            "program": "EPA Non-Attainment / RFG Adjacent Area",
+            "name": "Houston-Galveston-Brazoria (PADD 3)",
+            "program": "EPA Low-RVP Area / Texas Low Emission Diesel",
             "summer_rvp_psi": 7.8,
-            "winter_rvp_psi": 13.5,
-            "summer_compliance_premium_per_gal": 0.14,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.08,
             "is_rfg": False,
             "is_carb": False
         },
@@ -135,6 +135,105 @@ DEFAULT_RVP_RULES = {
             "summer_compliance_premium_per_gal": 0.10,
             "is_rfg": False,
             "is_carb": False
+        },
+        "Chicago_IL": {
+            "name": "Greater Chicago Metro (PADD 2)",
+            "program": "EPA Reformulated Gasoline (RFG)",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.18,
+            "is_rfg": True,
+            "is_carb": False
+        },
+        "Los_Angeles_CA": {
+            "name": "Los Angeles Basin & South Coast (PADD 5)",
+            "program": "CARB Phase 3 CaRFG",
+            "summer_rvp_psi": 6.99,
+            "winter_rvp_psi": 9.0,
+            "summer_compliance_premium_per_gal": 0.28,
+            "is_rfg": False,
+            "is_carb": True
+        },
+        "Denver_CO": {
+            "name": "Denver Metro & Front Range (PADD 4)",
+            "program": "EPA Front Range Ozone Nonattainment / High-Altitude RVP",
+            "summer_rvp_psi": 7.8,
+            "winter_rvp_psi": 13.5,
+            "summer_compliance_premium_per_gal": 0.16,
+            "is_rfg": True,
+            "is_carb": False
+        },
+        "New_York_NY": {
+            "name": "New York Harbor & NYC Metro (PADD 1B)",
+            "program": "EPA Reformulated Gasoline (RFG) & NY Low RVP Program",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.16,
+            "is_rfg": True,
+            "is_carb": False
+        },
+        "Seattle_WA": {
+            "name": "Seattle-Tacoma & Puget Sound (PADD 5B)",
+            "program": "EPA Conventional / WA Clean Fuel Standard",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 13.5,
+            "summer_compliance_premium_per_gal": 0.10,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Phoenix_AZ": {
+            "name": "Phoenix Metro & Desert Southwest (PADD 5C)",
+            "program": "Arizona Cleaner Burning Gasoline (CBG) / Maricopa County",
+            "summer_rvp_psi": 7.0,
+            "winter_rvp_psi": 13.5,
+            "summer_compliance_premium_per_gal": 0.18,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Anchorage_AK": {
+            "name": "Anchorage & Southcentral Alaska Hub (PADD 5D)",
+            "program": "Alaska Sub-Arctic Extreme Winter RVP Specification",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 15.0,
+            "summer_compliance_premium_per_gal": 0.05,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Honolulu_HI": {
+            "name": "Honolulu & Oahu Island Hub (PADD 5D)",
+            "program": "Hawaii Tropical Island Conventional Baseline",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 11.5,
+            "summer_compliance_premium_per_gal": 0.04,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Guam_GU": {
+            "name": "Hagåtña & Apra Harbor Hub (PADD 7)",
+            "program": "Tropical Western Pacific Flat RVP Specification",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 9.0,
+            "summer_compliance_premium_per_gal": 0.00,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "San_Juan_PR": {
+            "name": "San Juan Metro & Caribbean Hub (PADD 6)",
+            "program": "Tropical Caribbean Maritime Flat RVP Specification",
+            "summer_rvp_psi": 9.0,
+            "winter_rvp_psi": 9.0,
+            "summer_compliance_premium_per_gal": 0.00,
+            "is_rfg": False,
+            "is_carb": False
+        },
+        "Boston_MA": {
+            "name": "Boston Metro & Massachusetts (PADD 1A)",
+            "program": "EPA Reformulated Gasoline (RFG) Program",
+            "summer_rvp_psi": 7.4,
+            "winter_rvp_psi": 13.0,
+            "summer_compliance_premium_per_gal": 0.15,
+            "is_rfg": True,
+            "is_carb": False
         }
     },
     "emergency_waivers": []
@@ -189,13 +288,24 @@ class RVPRegulatoryEngine:
                 "Cincinnati": "Cincinnati_OH",
                 "Dallas": "Dallas_TX",
                 "Houston": "Houston_TX",
+                "houston": "Houston_TX",
+                "houston_tx": "Houston_TX",
                 "Newark": "Newark_DE",
                 "Newark_DE": "Newark_DE",
                 "Newark_NJ": "Newark_NJ",
                 "Oakland": "Oakland_CA",
+                "Los_Angeles": "Los_Angeles_CA",
+                "los_angeles": "Los_Angeles_CA",
+                "los_angeles_ca": "Los_Angeles_CA",
+                "la": "Los_Angeles_CA",
+                "la_basin": "Los_Angeles_CA",
+                "socal": "Los_Angeles_CA",
                 "Greenville": "Greenville_NC",
                 "Charlotte": "Charlotte_NC",
                 "Port_St_Lucie": "Port_St_Lucie_FL",
+                "Chicago": "Chicago_IL",
+                "chicago": "Chicago_IL",
+                "chicago_il": "Chicago_IL",
                 "PADD1B": "Newark_NJ",
                 "PADD5": "Oakland_CA",
                 "PADD2": "Tulsa_OK",

@@ -110,6 +110,36 @@ def generate_metro_narrative(
                 ("Port Everglades Terminal Throughput Spread", "TERMINAL_LOGISTICS"),
                 ("Southeast Atlantic Clean Product Inventory Buffer", "REGIONAL_BUFFER"),
             ]
+        elif "chicago" in reg_str:
+            factors = [
+                ("BP Whiting & Lemont Great Lakes Refining Complex", "REFINING_SUPPLY"),
+                ("Cook County / Northwest Indiana Tax Differential Arbitrage", "TAX_ARBITRAGE"),
+                ("Chicago CBOB Wholesale Spot Rack Basis", "SPOT_BASIS"),
+            ]
+        elif "houston" in reg_str:
+            factors = [
+                ("USGC Mega-Refinery Runs & Baytown/Port Arthur Capacity", "REFINING_SUPPLY"),
+                ("Colonial Pipeline Line 1 Inbound Terminal Clearing", "PIPELINE_OUTFLOW"),
+                ("Houston Ship Channel Spot-to-Rack Compression", "GATE_PRICING"),
+            ]
+        elif "los_angeles" in reg_str or "los angeles" in reg_str:
+            factors = [
+                ("South Bay / Harbor Refining Complex (Carson, El Segundo, Torrance)", "REFINING_SUPPLY"),
+                ("Los Angeles CARBOB Spot Basis & SCAQMD Summer RVP", "SPOT_BASIS"),
+                ("CARB LCFS, Cap-and-Trade & Statutory Tax Overhead", "CARBON_COMPLIANCE"),
+            ]
+        elif "denver" in reg_str:
+            factors = [
+                ("Suncor Commerce City Operable Run Rate & Rack Supply", "REFINING_SUPPLY"),
+                ("Front Range Summer Ozone Nonattainment RVP Blending Premium", "ENVIRONMENTAL_RVP"),
+                ("Rockies Isolated Product Logistics & DJ Basin Sweet Differentials", "ISOLATED_LOGISTICS"),
+            ]
+        elif "new_york" in reg_str or "new york" in reg_str:
+            factors = [
+                ("NY Harbor RBOB Spot Parity & Barge Lightering Logistics", "SPOT_BASIS"),
+                ("New York State Statutory Fuel Tax & PBT Burden", "TAX_REGULATORY"),
+                ("Buckeye Pipeline & Midstream Rack Distribution", "REGIONAL_LOGISTICS"),
+            ]
         else:
             factors = [
                 ("Wholesale RBOB Benchmark Movement", "COMMODITY_BASE"),
@@ -305,6 +335,134 @@ def generate_metro_narrative(
             detailed_prose = (
                 f"Port St. Lucie & Treasure Coast retail prices are projected to remain steady{hub_info}, with consistent waterborne "
                 f"tanker discharge volumes at Port Everglades matching regional retail demand."
+            )
+
+    elif "chicago" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["Great Lakes Refining Cushion", "Chicago CBOB Basis Softening", "Cook/IN Border Tax Arbitrage"]
+            headline_summary = f"Chicagoland retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Chicagoland retail gasoline pricing is anchored to the Great Lakes refining complex{hub_info}, "
+                f"where robust runs at BP Whiting (435 kbpd) and CITGO Lemont (177 kbpd) support wholesale CBOB supplies. "
+                f"Persistent $0.35–$0.55/gal cross-state retail differentials along the Cook County/Northwest Indiana border "
+                f"incentivize commuter arbitrage, while wholesale basis normalization facilitates downward pump adjustments."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Great Lakes Refining Tightness", "Chicago CBOB Rack Premium", "Multi-Tier Tax Load Exposure"]
+            headline_summary = f"Chicagoland retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Chicagoland retail pricing reflects localized refining and pipeline confluence across northern Illinois and Indiana{hub_info}. "
+                f"Wholesale Chicago CBOB rack premiums and summer RFG 7.4 psi volatility constraints amplify upward price pass-through, "
+                f"while the heavy statutory tax load (Illinois, Cook County, City of Chicago) compounds wholesale cost increases at local retail pumps."
+            )
+        else:
+            badges = ["Midwest Refining Balance", "Chicago CBOB Parity"]
+            headline_summary = f"Chicagoland retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Chicagoland retail gasoline prices are projected to hold steady{hub_info}, as balanced throughput from BP Whiting "
+                f"and CITGO Lemont matches metropolitan commuter demand across Cook County and Northwest Indiana."
+            )
+
+    elif "houston" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["USGC Refining Surplus", "Baytown/Port Arthur Runs", "Refinery Gate Margin Compression"]
+            headline_summary = f"Houston & Gulf Coast retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Houston retail gasoline pricing is anchored to the world's densest refining cluster{hub_info}, "
+                f"where immense operable throughput across ExxonMobil Baytown (560 kbpd) and Motiva Port Arthur (630 kbpd) "
+                f"supplies abundant prompt wholesale product. Direct gate delivery minimizes distribution freight, "
+                f"while stable Texas motor fuel taxes ($0.200/gal) allow prompt downward wholesale cost pass-through to retail pumps."
+            )
+        elif calc_delta > 0.005:
+            badges = ["USGC Refining Outage", "Tropical Disturbance Risk", "Waterborne Cargo Arbitrage"]
+            headline_summary = f"Houston & Gulf Coast retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Houston retail fuel pricing reflects localized refining dynamics and waterborne vessel logistics{hub_info}. "
+                f"Tightening prompt Gulf Coast conventional spot basis, offshore storm precautionary shut-ins, or Colonial Pipeline "
+                f"origin terminal constraints create temporary upward price pressure at local retail dispensers."
+            )
+        else:
+            badges = ["USGC Refining Equilibrium", "Ship Channel Clearing Parity"]
+            headline_summary = f"Houston & Gulf Coast retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Houston retail prices are projected to hold steady{hub_info}, as balanced throughput from Baytown, Deer Park, "
+                f"and Port Arthur refineries matches metropolitan commuter demand and outbound pipeline nominations."
+            )
+
+    elif "los_angeles" in region_lower or "los angeles" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["South Bay Refining Stability", "LA CARBOB Spot Easing", "San Pedro Bay Marine Supply"]
+            headline_summary = f"Los Angeles Basin & Southern California prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Los Angeles Basin retail prices are projected to moderate lower{hub_info}, as high operable throughput "
+                f"across Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd), and PBF Torrance (166 kbpd) "
+                f"compresses prompt Los Angeles CARBOB wholesale spot basis across Kinder Morgan Watson Station racks."
+            )
+        elif calc_delta > 0.005:
+            badges = ["LA CARBOB Basis Spike", "South Bay FCCU/Alky Tightness", "CARB CaRFG Compliance Burden"]
+            headline_summary = f"Los Angeles Basin & Southern California prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Los Angeles Basin retail pricing reflects Southern California's isolated PADD 5 refining island{hub_info}. "
+                f"Tightening Los Angeles CARBOB wholesale spot basis, South Coast AQMD 6.99 psi summer volatility compliance, "
+                f"and California's statutory environmental tax burden ($0.953/gal CARB/excise overhead) drive upward pump pass-through."
+            )
+        else:
+            badges = ["SoCal Refining Equilibrium", "Watson Hub Rack Parity"]
+            headline_summary = f"Los Angeles Basin & Southern California prices are projected to remain stable."
+            detailed_prose = (
+                f"Los Angeles Basin retail prices are projected to hold steady{hub_info}, as balanced CARBOB production across "
+                f"Carson, Wilmington, El Segundo, and Torrance matches commuter demand across the South Coast Air Basin."
+            )
+
+    elif "denver" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["Rocky Mountain Refining Stability", "Commerce City High Runs", "Denver Rack Easing"]
+            headline_summary = f"Denver & Rocky Mountain retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"Denver metropolitan retail prices are projected to ease lower{hub_info}, as high operable throughput "
+                f"at Suncor Commerce City (103 kbpd) satisfies regional Front Range wholesale rack demand. Isolated regional midstream "
+                f"logistics and steady Colorado motor fuel excise taxes ($0.280/gal) facilitate prompt downward pass-through to retail dispensers."
+            )
+        elif calc_delta > 0.005:
+            badges = ["Suncor Outage Risk", "Isolated PADD 4 Decoupling", "Front Range Ozone RVP Premium"]
+            headline_summary = f"Denver & Rocky Mountain retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"Denver metropolitan retail fuel pricing reflects PADD 4's isolated high-altitude refining island{hub_info}. "
+                f"With virtually zero refined product pipeline ingress from the Gulf Coast, unplanned disruptions at Suncor Commerce City, "
+                f"DJ Basin feedstock bottlenecks, or Front Range severe ozone nonattainment reformulated summer blending rules drive localized retail price decoupling from national benchmarks."
+            )
+        else:
+            badges = ["Front Range Refining Equilibrium", "Denver Rack Clearing Parity"]
+            headline_summary = f"Denver & Rocky Mountain retail prices are projected to remain stable."
+            detailed_prose = (
+                f"Denver metropolitan retail prices are projected to hold steady{hub_info}, as balanced throughput from Suncor Commerce City "
+                f"matches Front Range commuter demand across Adams, Arapahoe, Jefferson, and Denver counties."
+            )
+
+    elif "new_york" in region_lower or "new york" in region_lower:
+        if calc_delta < -0.005:
+            badges = ["NY Harbor Spot Easing", "Buckeye Midstream Stability", "Bayway FCCU Run-Rate Cushion"]
+            headline_summary = f"New York Harbor & NY State retail prices are projected to decline {delta_str}."
+            detailed_prose = (
+                f"New York metropolitan and state retail prices are projected to ease lower{hub_info}, as high operable throughput "
+                f"at Phillips 66 Bayway (258 kbpd) and stable Buckeye Pipeline terminal deliveries compress prompt New York Harbor "
+                f"barge spot basis. While New York's heavy statutory baseline tax burden ($0.472/gal) sets a firm floor, softening "
+                f"wholesale spot prices are translating into downward pump relief."
+            )
+        elif calc_delta > 0.005:
+            badges = ["NY Harbor Spot Tightness", "Buckeye Pipeline Allocations", "Statutory Tax Load Exposure"]
+            headline_summary = f"New York Harbor & NY State retail prices are projected to increase {delta_str}."
+            detailed_prose = (
+                f"New York metropolitan and statewide fuel pricing reflects New York Harbor's physical clearing hub{hub_info}. "
+                f"Prompt NYMEX RBOB barge basis premiums, Buckeye Pipeline Linden terminal allocations to Upstate New York, and "
+                f"New York's statutory state fuel taxes ($0.472/gal baseline plus county sales surcharges) amplify upward wholesale cost pass-through to retail dispensers."
+            )
+        else:
+            badges = ["New York Harbor Barge Parity", "Buckeye Midstream Parity"]
+            headline_summary = f"New York Harbor & NY State retail prices are projected to remain stable."
+            detailed_prose = (
+                f"New York retail prices are projected to hold steady{hub_info}, as balanced throughput from Bayway and coastal "
+                f"waterborne receipts matches regional commuter and transport demand across New York City, Long Island, and Upstate corridors."
             )
 
     else:

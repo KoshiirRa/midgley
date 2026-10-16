@@ -52,5 +52,7 @@ jobs:
           python -c "import run_all, src.intraday_event_monitor, src.api_server, src.event_analyzer, src.models, src.model_evaluation, src.headline_arena_connector"
 
       - name: Run Pytest Regression Suite
+        env:
+          TESTING: "1"
         run: |
           pytest -v tests/

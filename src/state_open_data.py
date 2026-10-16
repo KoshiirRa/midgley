@@ -174,14 +174,17 @@ class UniversalStateOpenDataConnector:
 STATE_SURVEYS_VINTAGE_FILE = os.path.join("data", "state_surveys_vintages.json")
 
 
-def save_state_surveys_vintage_record(survey_type: str, record: dict, filepath: str = STATE_SURVEYS_VINTAGE_FILE) -> None:
+def save_state_surveys_vintage_record(survey_type: str, record: dict, filepath: Optional[str] = None) -> None:
     """Appends a point-in-time state energy agency survey vintage record."""
+    fp = filepath or STATE_SURVEYS_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "state_surveys_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
-        if os.path.exists(filepath):
+        if os.path.exists(fp):
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
+                with open(fp, "r", encoding="utf-8") as f:
                     vintages = json.load(f)
             except Exception:
                 vintages = []

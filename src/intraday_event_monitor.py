@@ -17,7 +17,7 @@ import time
 import re
 import logging
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Tuple, Optional, Any
 
 # Ensure project root is in sys.path when executed directly
@@ -88,16 +88,46 @@ TRIGGER_KEYWORDS = [
     "executive order", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
     # Logistics & Infrastructure Hubs
     "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
-    "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
+    "catlettsburg", "delaware city", "west tulsa", "richmond refinery", "bp whiting", "citgo lemont", "whiting refinery", "lemont refinery",
     # Refinery Operator 8-K Signals (Issue #129 — EDGAR 8-K Monitor)
-    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66", "bp plc", "citgo",
     "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
     "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
-    "sweeny refinery", "bayway refinery",
+    "sweeny refinery", "bayway refinery", "chicago cbob", "chicago spot",
+    "baytown", "port arthur", "deer park", "texas city", "houston ship channel", "galveston bay", "motiva",
+    "el segundo", "torrance refinery", "carson refinery", "wilmington refinery", "la carbob", "watson station", "san pedro bay",
+    "suncor", "commerce city", "suncor refinery", "denver rack", "rocky mountain refining", "dj basin",
+    # PADD 5 Sub-Market Refining & Distribution (Issue #622)
+    "puget sound", "olympic pipeline", "cherry point", "ferndale refinery", "anacortes refinery",
+    "kinder morgan sfpp", "sfpp pipeline", "maricopa cbg", "phoenix rack",
+    "kenai refinery", "cook inlet", "trans-alaska pipeline", "taps",
+    "kapolei refinery", "par hawaii", "young brothers", "inter-island barge",
+    # PADD 7 Pacific Island Territories Refining & Distribution (Issue #621)
+    "apra harbor", "guam energy office", "mops 92", "mops mogas", "mobil oil guam",
+    "ip&e guam", "shell guam", "sppc 76", "cabras island", "port of guam",
+    # PADD 6 Caribbean Territories Logistics & DACO Regulation (Issue #620)
+    "san juan", "daco", "puerto rico", "capeco", "jones act tanker", "luma energy",
+    "san juan harbor", "puerto nuevo terminal", "puma energy caribe",
+    # PADD 1A New England Refining & Waterborne Supply (Issue #619)
+    "irving oil", "saint john refinery", "boston harbor", "chelsea river",
+    "everett terminal", "padd 1a", "new england gasoline", "massachusetts fuel tax",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
 EVALUATED_CACHE_FILE = os.path.join("data", "evaluated_headlines.json")
+
+
+def _strip_trailing_publisher(headline: str) -> str:
+    """Safely strips trailing publisher attribution without regex backtracking."""
+    s = (headline or "").strip()
+    last_idx = -1
+    for sep in (" - ", " – ", " — ", " | "):
+        idx = s.rfind(sep)
+        if idx > last_idx:
+            last_idx = idx
+    if last_idx > 0:
+        return s[:last_idx].strip()
+    return s
 
 
 def normalize_headline(headline: str) -> str:
@@ -110,11 +140,11 @@ def normalize_headline(headline: str) -> str:
         return ""
     import re
     # Strip trailing publisher tag: " - Publisher Name" or " | Publisher Name" or " — Publisher Name"
-    cleaned = re.sub(r'\s+[-–—|]\s+[^-–—|]+$', '', headline.strip())
+    cleaned = _strip_trailing_publisher(headline)
     # Lowercase and collapse whitespace
     cleaned = re.sub(r'\s+', ' ', cleaned.lower()).strip()
-    # Strip surrounding quotes or brackets
-    cleaned = re.sub(r'^[\'"“‘\[\(]+|[\'"”’\]\)]+$', '', cleaned).strip()
+    # Strip surrounding quotes or brackets safely without regex
+    cleaned = cleaned.strip("'\"“‘[]()”’")
     return cleaned
 
 
@@ -366,7 +396,7 @@ class IntradayEventMonitor:
             return {"discovered_articles": [], "enriched_context": ""}
 
         import urllib.parse
-        clean_hl = re.sub(r"\s+[-–—|]\s+[^-–—|]+$", "", headline.strip())
+        clean_hl = _strip_trailing_publisher(headline)
         tokens = [w for w in clean_hl.split() if w.lower() not in {"adds", "pressure", "to", "regional", "fuel", "prices", "the", "in", "a"}]
         query_str = " ".join(tokens[:5])
         if not query_str:
@@ -408,12 +438,18 @@ class IntradayEventMonitor:
         if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b"]):
             targets.add("Newark")
 
-        # Cincinnati / Catlettsburg / Ohio River / Chicago Spot / Joliet (PADD 2 Midwest)
+        # Cincinnati / Catlettsburg / Ohio River (PADD 2 Ohio Valley)
         if any(k in text for k in [
-            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock",
-            "joliet", "chicago", "will county"
+            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock", "hamilton county", "kenton county"
         ]):
             targets.add("Cincinnati")
+
+        # Chicago / Whiting / Lemont / Joliet / Des Plaines (PADD 2 Great Lakes)
+        if any(k in text for k in [
+            "chicago", "whiting", "lemont", "joliet", "will county", "cook county",
+            "bp whiting", "citgo lemont", "exxonmobil joliet", "illinois waterway", "chicago cbob", "chicago spot"
+        ]):
+            targets.add("Chicago")
 
         # Midcontinent / Group 3 Refining Corridor
         if any(k in text for k in ["midcontinent", "mid-continent", "group 3"]):
@@ -429,9 +465,24 @@ class IntradayEventMonitor:
         if any(k in text for k in ["oakland", "sf bay", "san francisco", "richmond refinery", "carb", "california"]):
             targets.add("Oakland")
 
+        # Los Angeles Basin / South Bay Refining Hub (El Segundo, Torrance, Carson, Wilmington)
+        if any(k in text for k in [
+            "los angeles", "el segundo", "torrance", "carson refinery", "wilmington refinery",
+            "san pedro bay", "port of long beach", "watson station", "la carbob", "south coast aqmd",
+            "scaqmd", "palos verdes", "newport-inglewood"
+        ]):
+            targets.add("Los_Angeles")
+
         # Port St. Lucie / Florida / Waterborne Freight
         if any(k in text for k in ["port st. lucie", "port st lucie", "florida", "waterborne freight"]):
             targets.add("Port_St_Lucie")
+
+        # Houston / USGC Refining Complex / Baytown / Port Arthur / Deer Park / Texas City
+        if any(k in text for k in [
+            "houston", "baytown", "port arthur", "deer park", "texas city", "houston ship channel",
+            "galveston bay", "harris county", "padd 3", "padd3", "motiva"
+        ]):
+            targets.add("Houston")
 
         # Refinery Operator 8-K Locale Routing (Issue #129 — EDGAR 8-K Monitor)
         # PBF Energy → Newark (Delaware City Refinery, PADD 1B)
@@ -446,8 +497,88 @@ class IntradayEventMonitor:
         if any(k in text for k in ["marathon petroleum", "marathon 8-k"]):
             targets.add("Cincinnati")
 
+        # BP / Citgo → Chicago (Whiting & Lemont Refineries, PADD 2 Great Lakes)
+        if any(k in text for k in ["bp whiting", "citgo lemont", "whiting refinery", "lemont refinery"]):
+            targets.add("Chicago")
+
+        # Motiva / Baytown / Port Arthur → Houston (USGC Refining Hub)
+        if any(k in text for k in ["motiva", "baytown refinery", "port arthur refinery"]):
+            targets.add("Houston")
+
+        # Denver / Suncor Commerce City / Rocky Mountain (PADD 4)
+        if any(k in text for k in [
+            "denver", "commerce city", "suncor", "suncor refinery", "padd 4", "padd4",
+            "rocky mountain", "rockies", "front range", "dj basin"
+        ]):
+            targets.add("Denver")
+
+        # New York Harbor & New York State / Bayway Refinery / Buckeye Pipeline (PADD 1B)
+        if any(k in text for k in [
+            "new york", "ny harbor", "new york harbor", "buckeye pipeline", "bayway refinery", "long island",
+            "hudson river", "arthur kill", "albany rack", "buffalo rack"
+        ]):
+            targets.add("New_York")
+
+        # Seattle / Puget Sound / PNW / Olympic Pipeline (PADD 5 Northwest)
+        if any(k in text for k in [
+            "seattle", "puget sound", "olympic pipeline", "cherry point", "ferndale",
+            "anacortes", "washington state", "pnw", "bp cherry point", "phillips 66 ferndale",
+            "hf sinclair puget sound"
+        ]):
+            targets.add("Seattle")
+
+        # Phoenix / Desert Southwest / SFPP Pipeline / Maricopa CBG (PADD 5 Southwest)
+        if any(k in text for k in [
+            "phoenix", "desert southwest", "sfpp", "kinder morgan sfpp", "east line", "west line",
+            "maricopa county", "maricopa cbg", "arizona fuel"
+        ]):
+            targets.add("Phoenix")
+
+        # Anchorage / Cook Inlet / Kenai / TAPS / Alaska (PADD 5 Alaska)
+        if any(k in text for k in [
+            "anchorage", "cook inlet", "kenai", "kenai refinery", "trans-alaska pipeline",
+            "taps", "ans crude", "alaska north slope", "alaska railbelt"
+        ]):
+            targets.add("Anchorage")
+
+        # Honolulu / Oahu / Kapolei / Par Hawaii / Inter-Island Barge (PADD 5 Hawaii)
+        if any(k in text for k in [
+            "honolulu", "kapolei", "par hawaii", "oahu", "young brothers", "inter-island barge",
+            "hawaiian islands", "barbers point", "par pacific"
+        ]):
+            targets.add("Honolulu")
+
+        # Guam / Hagåtña / Apra Harbor / Marianas / MOPS / Trans-Pacific (PADD 7 Pacific Territories)
+        if any(k in text for k in [
+            "guam", "hagatna", "apra harbor", "cabras island", "marianas", "mops 92",
+            "mobil oil guam", "ip&e guam", "shell guam", "sppc", "guam energy office", "port of guam"
+        ]):
+            targets.add("Guam")
+
+        # San Juan / Puerto Rico / DACO / Caribbean / PADD 6 (Issue #620)
+        if any(k in text for k in [
+            "san juan", "puerto rico", "daco", "capeco", "luma energy", "san juan harbor",
+            "puerto nuevo", "puma energy caribe", "caribbean petroleum", "caribbean territories"
+        ]):
+            targets.add("San_Juan")
+
+        # Boston / New England / Irving Oil / PADD 1A (Issue #619)
+        if any(k in text for k in [
+            "boston", "new england", "irving oil", "saint john refinery", "chelsea river",
+            "everett terminal", "padd 1a", "massachusetts gasoline", "boston harbor"
+        ]):
+            targets.add("Boston")
+
+        # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
+        if any(k in text for k in ["suncor 8-k", "suncor energy"]):
+            targets.add("Denver")
+
+        # Par Pacific → Honolulu (Kapolei Refinery, PADD 5 Hawaii)
+        if any(k in text for k in ["par pacific", "par pacific 8-k", "par hawaii"]):
+            targets.add("Honolulu")
+
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
-        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery", "bayway refinery"]):
+        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery"]):
             targets.add("National")
 
         if not targets:
@@ -586,7 +717,7 @@ class IntradayEventMonitor:
                     db = get_db()
                     
                     # Record the anomaly event in intraday_events table
-                    evt_id = hashlib.sha256(f"{headline}_{source}_{datetime.utcnow().isoformat()}".encode("utf-8")).hexdigest()[:32]
+                    evt_id = hashlib.sha256(f"{headline}_{source}_{datetime.now(timezone.utc).isoformat()}".encode("utf-8")).hexdigest()[:32]
                     evt_sql = """
                     INSERT INTO intraday_events (
                         event_id, headline, source, url, published_at,
@@ -595,7 +726,7 @@ class IntradayEventMonitor:
                     ON CONFLICT(event_id) DO NOTHING;
                     """
                     db.execute(evt_sql, (
-                        evt_id, headline, source, url or "", datetime.utcnow().isoformat() + "Z",
+                        evt_id, headline, source, url or "", datetime.now(timezone.utc).isoformat(),
                         scores.get("geopolitical_risk", 0.0), scores.get("supply_disruption", 0.0),
                         scores.get("demand_sentiment", 0.0), scores.get("opec_action", 0.0)
                     ))
@@ -617,7 +748,7 @@ class IntradayEventMonitor:
                         pressure = scores.get("overall_price_pressure", 0.0)
                         delta_p = round(base_p * pressure * 0.04, 4)
                         revised_p = round(base_p + delta_p, 4)
-                        rev_id = hashlib.sha256(f"{parent_f_id}_{evt_id}_{datetime.utcnow().isoformat()}".encode("utf-8")).hexdigest()[:32]
+                        rev_id = hashlib.sha256(f"{parent_f_id}_{evt_id}_{datetime.now(timezone.utc).isoformat()}".encode("utf-8")).hexdigest()[:32]
 
                         rev_sql = """
                         INSERT INTO intraday_revisions (

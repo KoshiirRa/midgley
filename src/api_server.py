@@ -221,7 +221,59 @@ LOCALE_MAP = {
     "clt": "Charlotte_NC",
     "port_st_lucie": "Port_St_Lucie_FL",
     "port_st_lucie_fl": "Port_St_Lucie_FL",
-    "psl": "Port_St_Lucie_FL"
+    "psl": "Port_St_Lucie_FL",
+    "chicago": "Chicago_IL",
+    "chicago_il": "Chicago_IL",
+    "chi": "Chicago_IL",
+    "houston": "Houston_TX",
+    "houston_tx": "Houston_TX",
+    "hou": "Houston_TX",
+    "los_angeles": "Los_Angeles_CA",
+    "los_angeles_ca": "Los_Angeles_CA",
+    "la": "Los_Angeles_CA",
+    "la_basin": "Los_Angeles_CA",
+    "socal": "Los_Angeles_CA",
+    "denver": "Denver_CO",
+    "denver_co": "Denver_CO",
+    "den": "Denver_CO",
+    "new_york": "New_York_NY",
+    "new_york_ny": "New_York_NY",
+    "nyc": "New_York_NY",
+    "ny": "New_York_NY",
+    "seattle": "Seattle_WA",
+    "seattle_wa": "Seattle_WA",
+    "puget_sound": "Seattle_WA",
+    "pnw": "Seattle_WA",
+    "sea": "Seattle_WA",
+    "phoenix": "Phoenix_AZ",
+    "phoenix_az": "Phoenix_AZ",
+    "phx": "Phoenix_AZ",
+    "desert_southwest": "Phoenix_AZ",
+    "anchorage": "Anchorage_AK",
+    "anchorage_ak": "Anchorage_AK",
+    "anc": "Anchorage_AK",
+    "alaska": "Anchorage_AK",
+    "honolulu": "Honolulu_HI",
+    "honolulu_hi": "Honolulu_HI",
+    "hnl": "Honolulu_HI",
+    "hawaii": "Honolulu_HI",
+    "oahu": "Honolulu_HI",
+    "guam": "Guam_GU",
+    "guam_gu": "Guam_GU",
+    "gu": "Guam_GU",
+    "hagatna": "Guam_GU",
+    "apra_harbor": "Guam_GU",
+    "san_juan": "San_Juan_PR",
+    "san_juan_pr": "San_Juan_PR",
+    "puerto_rico": "San_Juan_PR",
+    "pr": "San_Juan_PR",
+    "sju": "San_Juan_PR",
+    "boston": "Boston_MA",
+    "boston_ma": "Boston_MA",
+    "bos": "Boston_MA",
+    "new_england": "Boston_MA",
+    "padd1a": "Boston_MA",
+    "padd_1a": "Boston_MA"
 }
 
 # Regional PADD metadata
@@ -234,11 +286,23 @@ PADD_METADATA = {
     "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
+    "Chicago_IL": {"name": "Greater Chicago Metro Area, IL/IN", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
+    "Houston_TX": {"name": "Houston & USGC Refining Corridor, TX", "padd": "PADD 3 Gulf Coast", "carb_tax": 0.0},
+    "Los_Angeles_CA": {"name": "Los Angeles Basin & South Coast, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "Denver_CO": {"name": "Denver Metro Area & Rocky Mountain Hub, CO", "padd": "PADD 4 Rocky Mountain", "carb_tax": 0.0},
+    "New_York_NY": {"name": "New York Harbor & NY State Hub, NY", "padd": "PADD 1B Central Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanJose_CA": {"name": "San Jose / Silicon Valley, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
-    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953}
+    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "Seattle_WA": {"name": "Seattle & Puget Sound Refining Corridor, WA", "padd": "PADD 5 West Coast (PNW)", "carb_tax": 0.0},
+    "Phoenix_AZ": {"name": "Phoenix Metro & Desert Southwest Corridor, AZ", "padd": "PADD 5 West Coast (Southwest)", "carb_tax": 0.0},
+    "Anchorage_AK": {"name": "Anchorage Metro & Cook Inlet Corridor, AK", "padd": "PADD 5 West Coast (Alaska)", "carb_tax": 0.0},
+    "Honolulu_HI": {"name": "Honolulu Metro & Oahu Island Supply System, HI", "padd": "PADD 5 West Coast (Hawaii)", "carb_tax": 0.0},
+    "Guam_GU": {"name": "Hagåtña & Apra Harbor, Guam", "padd": "PADD 7 Pacific Territories", "carb_tax": 0.0},
+    "San_Juan_PR": {"name": "San Juan Metro & U.S. Caribbean Territories Hub, PR", "padd": "PADD 6 Caribbean Territories", "carb_tax": 0.0},
+    "Boston_MA": {"name": "Boston Metro Area & New England Hub, MA", "padd": "PADD 1A New England", "carb_tax": 0.0}
 }
 
 # Scenario Simulator Catalog
@@ -288,6 +352,87 @@ SCENARIOS_CATALOG = {
         "telemetry_hook": "evergreen",
         "locales": ["cincinnati", "national"]
     },
+    "whiting_refinery_outage": {
+        "name": "BP Whiting IN Refinery Electrical Substation Outage & Unit Trip",
+        "headline": "Plant-wide power failure forces emergency shutdown of BP Whiting 435,000 bpd refinery, triggering Midwest supply spike.",
+        "shock_pct": 0.0740,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["chicago", "national"]
+    },
+    "lemont_des_plaines_lockout": {
+        "name": "CITGO Lemont Des Plaines Barge Canal Lockout",
+        "headline": "Illinois Waterway lock maintenance and barge groundings restrict marine fuel transfers from CITGO Lemont.",
+        "shock_pct": 0.0325,
+        "category": "hydrological",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_flow",
+        "locales": ["chicago", "national"]
+    },
+    "great_lakes_polar_vortex": {
+        "name": "Great Lakes Polar Vortex Freeze-Off & Terminal Disruption",
+        "headline": "Sub-zero Arctic blast and Lake Michigan freeze halts terminal rack loading and refinery cooling water loops across Chicagoland.",
+        "shock_pct": 0.0428,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Mar 15",
+        "telemetry_hook": "openmeteo_freeze",
+        "locales": ["chicago", "national"]
+    },
+    "gulf_hurricane_shut_in": {
+        "name": "Category 4 Gulf Hurricane Landfall (Houston Ship Channel Surge)",
+        "headline": "Severe hurricane forces storm surge closures and emergency flaring across Baytown, Galveston Bay, and Port Arthur refineries.",
+        "shock_pct": 0.1228,
+        "category": "meteorological_tropical",
+        "season_window": "Jun 01 – Nov 30",
+        "telemetry_hook": "noaa_nhc",
+        "locales": ["houston", "national"]
+    },
+    "colonial_line1_origin_trip": {
+        "name": "Colonial Pipeline Line 1 Origin Metering Trip",
+        "headline": "Pasadena breakout station electrical failure halts outbound shipments on Colonial Line 1, trapping supply in USGC storage.",
+        "shock_pct": -0.0333,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["houston", "national"]
+    },
+    "gulf_hard_freeze": {
+        "name": "Severe Gulf Coast Hard Freeze (Winter Storm Uri Repeat)",
+        "headline": "Deep Arctic freeze drops Upper Texas Coast below 15°F, freezing uninsulated boiler lines and taking 1.5M bpd capacity offline.",
+        "shock_pct": 0.0860,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Mar 01",
+        "telemetry_hook": "openmeteo_freeze",
+        "locales": ["houston", "national"]
+    },
+    "socal_refinery_fccu_outage": {
+        "name": "El Segundo / Torrance FCCU & Alkylation Unit Unplanned Trip",
+        "headline": "Emergency electrostatic precipitator and FCCU trip at PBF Torrance or Chevron El Segundo triggers acute LA CARBOB spot shortage.",
+        "shock_pct": 0.0859,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["los_angeles", "national"]
+    },
+    "usgs_newport_inglewood_quake": {
+        "name": "USGS Newport-Inglewood / Palos Verdes Fault Seismic Trip (M>=5.5)",
+        "headline": "Magnitude 5.8 earthquake along Newport-Inglewood fault forces automatic safety shut-ins across Wilmington and Carson refining complexes.",
+        "shock_pct": 0.1125,
+        "category": "geophysical",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_seismic",
+        "locales": ["los_angeles", "national"]
+    },
+    "santa_ana_psps_shutoff": {
+        "name": "Santa Ana Red Flag Wildfire & SCE/LADWP Grid PSPS Curtailment",
+        "headline": "Severe offshore Santa Ana windstorm triggers SCE Public Safety Power Shutoffs and pipeline pump station curtailments across LA Basin.",
+        "shock_pct": 0.0491,
+        "category": "meteorological_fire",
+        "season_window": "Sep 01 – Dec 15",
+        "telemetry_hook": "noaa_spc_fire",
+        "locales": ["los_angeles", "national"]
+    },
     "mississippi_low_water": {
         "name": "Lower Mississippi & Ohio River Low-Water Barge Bottleneck",
         "headline": "Severe drought restricts barge draft levels on Mississippi and Ohio rivers, raising Midwest rack freight.",
@@ -331,7 +476,7 @@ SCENARIOS_CATALOG = {
         "category": "regulatory_spec",
         "season_window": "Feb 15 – May 01",
         "telemetry_hook": "spec_calendar",
-        "locales": ["oakland", "national"]
+        "locales": ["oakland", "los_angeles", "national"]
     },
     "colonial_outage": {
         "name": "Colonial Pipeline Mainline Outage / Cyberattack Shock",
@@ -422,6 +567,42 @@ SCENARIOS_CATALOG = {
         "season_window": "Dec 01 – Feb 28",
         "telemetry_hook": "noaa_freeze",
         "locales": ["tulsa", "cincinnati", "national"]
+    },
+    "suncor_commerce_city_freeze_outage": {
+        "name": "Suncor Commerce City Total Freeze / Outage",
+        "headline": "Severe Arctic cold front causes equipment freeze damage and fires at Suncor Commerce City, forcing total shutdown of Colorado's sole 103 kbpd refinery.",
+        "shock_pct": 0.1220,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["denver", "national"]
+    },
+    "front_range_ozone_rfg_transition": {
+        "name": "Front Range Severe Ozone Nonattainment Summer RFG Transition",
+        "headline": "Statutory EPA Severe Ozone nonattainment mandate cuts over to 7.8 psi summer blend, driving Denver rack supply tightness.",
+        "shock_pct": 0.0570,
+        "category": "regulatory_spec",
+        "season_window": "May 01 – Sep 15",
+        "telemetry_hook": "spec_calendar",
+        "locales": ["denver", "national"]
+    },
+    "buckeye_pipeline_linden_disruption": {
+        "name": "Buckeye Pipeline Linden Terminal Disruption",
+        "headline": "Midstream valve and pumping failure at Buckeye Pipeline Linden hub curtails refined product deliveries across Long Island and Upstate NY.",
+        "shock_pct": 0.0819,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["new_york", "national"]
+    },
+    "ny_harbor_barge_freeze_halt": {
+        "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+        "headline": "Severe Arctic cold freeze creates thick ice floes along the Hudson River, halting coastal fuel barges into Upstate NY terminal racks.",
+        "shock_pct": 0.0560,
+        "category": "weather",
+        "season_window": "Dec 01 – Feb 28",
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["new_york", "national"]
     }
 }
 
@@ -957,9 +1138,10 @@ def get_system_radar_catalog(
             "models": models
         }
     except Exception as e:
+        logger.error(f"Error fetching radar models: {e}")
         return {
             "status": "error",
-            "message": str(e),
+            "message": "Failed to retrieve open source AI radar catalog",
             "timestamp": datetime.now().isoformat(),
             "models": []
         }
@@ -1946,6 +2128,205 @@ def get_ipasis_security_telemetry():
         "timestamp": datetime.now().isoformat(),
         "ipasis_telemetry": get_ipasis_telemetry()
     }
+
+
+class DiscordSubscribeRequest(BaseModel):
+    delivery_type: Optional[str] = Field("webhook", description="Delivery target type: 'webhook' or 'discord_dm'")
+    webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL (required when delivery_type='webhook')")
+    discord_user_id: Optional[str] = Field(None, description="Discord User Snowflake ID (required when delivery_type='discord_dm')")
+    dm_channel_id: Optional[str] = Field(None, description="Optional pre-resolved Discord DM channel ID")
+    target_locales: Optional[List[str]] = Field(None, description="Target metro hubs, 'National', or 5-digit US ZIP codes")
+    zip_codes: Optional[List[str]] = Field(None, description="Optional list of 5-digit US ZIP codes to subscribe to")
+    zip_code: Optional[str] = Field(None, description="Optional single 5-digit US ZIP code to subscribe to")
+    minimum_shock_threshold: float = Field(0.25, ge=0.0, le=5.0, description="Minimum |ΔP| shock threshold in $/gal")
+    direction_filter: Optional[str] = Field("all_shocks", description="Directional bias: 'all_shocks', 'spikes_only', or 'drops_only'")
+    catalyst_domains: Optional[List[str]] = Field(None, description="Optional catalyst domains filter")
+    delivery_mode: Optional[str] = Field("realtime", description="Delivery cadence: 'realtime' or 'daily_digest'")
+    role_mention: Optional[str] = Field(None, description="Optional role/user mention for high-severity shocks")
+    client_label: Optional[str] = Field(None, description="Optional human-readable subscriber label")
+    verify_handshake: bool = Field(True, description="Whether to dispatch an immediate verification handshake embed")
+
+
+class DiscordTestNotificationRequest(BaseModel):
+    delivery_type: Optional[str] = Field("webhook", description="Target type: 'webhook' or 'discord_dm'")
+    webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL to test")
+    discord_user_id: Optional[str] = Field(None, description="Discord User ID to test DM reachability")
+    dm_channel_id: Optional[str] = Field(None, description="Optional DM channel ID")
+    target_locales: Optional[List[str]] = Field(default_factory=lambda: ["National"], description="Sample locales for test embed")
+
+
+@app.post("/api/v1/notifications/discord/subscribe", summary="Register Discord Webhook or Direct Message Alert Subscription", tags=["Notifications & Alerts"])
+async def subscribe_discord_notifications(request: Request, req: DiscordSubscribeRequest):
+    """
+    Issue #235: Registers a multi-subscriber Discord channel webhook (`delivery_type='webhook'`)
+    or personal Direct Message (`delivery_type='discord_dm'`) alert subscription with locale,
+    5-digit US ZIP code resolution, shock magnitude, and directional filtering.
+    Out-of-metro ZIP codes automatically update the unmapped ZIP query heatmap.
+    Protected by IPASIS IP reputation check.
+    """
+    client_ip = (
+        request.headers.get("cf-connecting-ip")
+        or request.headers.get("x-forwarded-for")
+        or request.headers.get("x-real-ip")
+        or (request.client.host if request.client else "127.0.0.1")
+    )
+    from src.ipasis_security import IPASISSecurityVerifier
+    verifier = IPASISSecurityVerifier()
+    ip_status = verifier.check_ip_reputation(client_ip)
+    if ip_status.get("is_blocked", False) and os.environ.get("IPASIS_BLOCK_HIGH_RISK", "1") != "0":
+        raise HTTPException(
+            status_code=403,
+            detail=f"Forbidden: Request origin IP '{client_ip}' flagged as high-risk by IPASIS security filter."
+        )
+
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+
+    merged_zips: List[str] = []
+    if req.zip_codes:
+        merged_zips.extend(req.zip_codes)
+    if req.zip_code:
+        merged_zips.append(req.zip_code)
+
+    dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
+    try:
+        sub_record = registry.register_subscription(
+            target_locales=req.target_locales,
+            zip_codes=merged_zips if merged_zips else None,
+            minimum_shock_threshold=req.minimum_shock_threshold,
+            delivery_type=dtype,
+            webhook_url=req.webhook_url,
+            discord_user_id=req.discord_user_id,
+            dm_channel_id=req.dm_channel_id,
+            direction_filter=req.direction_filter or "all_shocks",
+            catalyst_domains=req.catalyst_domains,
+            delivery_mode=req.delivery_mode or "realtime",
+            role_mention=req.role_mention,
+            client_label=req.client_label,
+            verify_handshake=req.verify_handshake
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=422, detail=str(ve))
+    except RuntimeError as re_err:
+        raise HTTPException(status_code=502, detail=str(re_err))
+
+    return {
+        "status": "subscribed",
+        "subscription": sub_record,
+        "ip_security": ip_status
+    }
+
+
+
+@app.delete("/api/v1/notifications/discord/subscriptions/{subscription_id}", summary="Unsubscribe a Discord Webhook or DM Alert Subscription", tags=["Notifications & Alerts"])
+async def unsubscribe_discord_notification(
+    subscription_id: str,
+    manage_token: Optional[str] = Query(None, description="Subscription manage_token returned upon registration"),
+    x_manage_token: Optional[str] = Header(None, alias="X-Manage-Token"),
+    x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
+):
+    """
+    Issue #235: Unsubscribes a registered Discord webhook or DM alert subscription using its `manage_token`
+    (passed via query param `?manage_token=...` or `X-Manage-Token` header) or administrative secret.
+    """
+    token = manage_token or x_manage_token
+    expected_admin = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    is_admin = bool(
+        expected_admin
+        and x_admin_secret
+        and hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_admin.encode("utf-8"))
+    )
+    if not token and not is_admin:
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized: Missing manage_token (supply via ?manage_token= or X-Manage-Token header)."
+        )
+
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+    removed = registry.unsubscribe(subscription_id=subscription_id, manage_token=token, is_admin=is_admin)
+    if not removed:
+        raise HTTPException(
+            status_code=404,
+            detail="Subscription not found or invalid manage_token."
+        )
+    return {
+        "status": "unsubscribed",
+        "subscription_id": subscription_id,
+        "removed_at": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@app.get("/api/v1/notifications/discord/subscriptions/status", dependencies=[Depends(get_api_key_user)], summary="Get Active Discord Subscription Counts by Metro Hub & Delivery Mode", tags=["Notifications & Alerts"])
+async def get_discord_subscriptions_status():
+    """
+    Issue #235: Returns active subscription counts grouped by regional metro hub and delivery type (`webhook` vs `discord_dm`).
+    Requires valid API key authentication.
+    """
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+    return {
+        "status": "success",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "summary": registry.get_status_summary()
+    }
+
+
+@app.post("/api/v1/notifications/discord/test", summary="Send Dry-Run Test Alert to Discord Webhook or User DM", tags=["Notifications & Alerts"])
+async def test_discord_notification_delivery(req: DiscordTestNotificationRequest):
+    """
+    Issue #235: Self-service health diagnostic endpoint allowing subscribers to send an immediate
+    synthetic dry-run alert embed to their Discord channel webhook or personal DM.
+    """
+    from src.discord_notifier import (
+        validate_discord_webhook_url,
+        normalize_locale_list,
+        format_welcome_verification_payload,
+        _post_webhook_payload,
+        send_discord_dm_payload
+    )
+
+    locales = normalize_locale_list(req.target_locales)
+    dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
+    payload = format_welcome_verification_payload(
+        target_locales=locales,
+        min_shock_threshold=0.25,
+        direction_filter="all_shocks",
+        delivery_type=dtype,
+        client_label="Dry-Run Diagnostic Test",
+        subscription_id="dry-run-test"
+    )
+
+    if dtype == "discord_dm":
+        if not req.discord_user_id or not str(req.discord_user_id).strip().isdigit():
+            raise HTTPException(status_code=422, detail="Valid numeric discord_user_id is required for discord_dm test.")
+        ok, ch_id, status, err = send_discord_dm_payload(
+            payload,
+            discord_user_id=str(req.discord_user_id).strip(),
+            dm_channel_id=req.dm_channel_id
+        )
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Discord DM test delivery failed: {err or f'HTTP {status}'}")
+        return {
+            "status": "delivered",
+            "delivery_type": "discord_dm",
+            "discord_user_id": str(req.discord_user_id).strip(),
+            "dm_channel_id": ch_id,
+            "target_locales": locales
+        }
+    else:
+        if not validate_discord_webhook_url(req.webhook_url):
+            raise HTTPException(status_code=422, detail="Invalid Discord webhook URL.")
+        ok, status, err = _post_webhook_payload(req.webhook_url.strip(), payload)
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Discord webhook test delivery failed: {err or f'HTTP {status}'}")
+        return {
+            "status": "delivered",
+            "delivery_type": "webhook",
+            "http_status": status,
+            "target_locales": locales
+        }
+
 
 
 @app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")

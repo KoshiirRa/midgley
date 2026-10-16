@@ -215,7 +215,7 @@ The empirical 95% CI coverage rate is tracked and exposed in rolling scoreboard 
 
 The weekly model performance review runs automatically on Saturday mornings (08:00 AM Central / 13:00 UTC) via GitHub Actions cloud runners and local `dev-vm` systemd user timers (`midgley-weekly-review.timer`). Its primary purpose is to calculate rolling multi-region error metrics, self-review all open GitHub repository issues, and operate an automated feedback loop back into the forecasting pipeline:
 
-* **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley`, evaluates each issue's modeling impact using Google Gemini 2.5 Flash (with a domain-specific keyword heuristic fallback), ranks issues, and selects the top issue offering the largest potential reduction to model loss.
+* **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley`, evaluates each issue's modeling impact using Google Gemini 3.8 Flash (with a domain-specific keyword heuristic fallback), ranks issues, and selects the top issue offering the largest potential reduction to model loss.
 * **Branch-Flagged Reporting:** Automatically flags issue titles with the source git branch (e.g. `[dev] 📊 Weekly Model Review Report...`).
 * **Mean Absolute Error (MAE):**
   \[
@@ -469,7 +469,7 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
 
 1. **`01` Commodity Futures & 3-2-1 Crack Spread:** NYMEX RBOB ($P_{\text{RBOB}}$), WTI ($P_{\text{WTI}}$), ULSD Heating Oil ($P_{\text{ULSD}}$), and standard 3-2-1 crack spread $\text{Crack}_{321} = \frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{ULSD}} - 3 \cdot (P_{\text{WTI}} / 42)}{3}$.
 2. **`02` Alternative Physical Feeds & Positioning:** 7 quantitative macro and positioning feeds: Cboe OVX, Baker Hughes Rig Counts, 10-Year Treasury Yields, 10-Year TIPS Breakevens, CFTC COT Managed Money Net Longs, FERC Natural Gas / LNG Spark Spreads, and USDA/EIA Ethanol/RIN blendstock margins.
-3. **`03` Live News Streams, Web Scraping & Multi-Tiered LLM Extraction:** Finlight financial news stream (150/mo cap), Firecrawl JavaScript web scraper (800/mo cap & 24h caching), zero-cost RSS polling ($<24\text{h}$ filter), webhook push with IPASIS security verification, and 3-tier LLM failover (Gemini 2.5 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
+3. **`03` Live News Streams, Web Scraping & Multi-Tiered LLM Extraction:** Finlight financial news stream (150/mo cap), Firecrawl JavaScript web scraper (800/mo cap & 24h caching), zero-cost RSS polling ($<24\text{h}$ filter), webhook push with IPASIS security verification, and 3-tier LLM failover (Gemini 3.8 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
 4. **`04` Executive Social Media & Weekend Gap Dynamics:** Social shock vector $\mathbf{V}_{\text{social}, t}$ with empirical regression weights ($\beta_{\text{OPEC}} = -1.85\%$, $\beta_{\text{tariff}} = +2.10\%$) and the $1.42\times$ weekend market close multiplier applied on Monday open reopening.
 5. **`05` Multi-Tiered NOAA Weather Risk:** 2-tiered weather ingestion via `t.wxs.us` lightweight terminal endpoints with deterministic SPC convective risk mapping ($90\%-95\%$ token reduction).
 6. **`06` Maritime Chokepoints & Inland Waterways:** Hormuz, Suez, Bab el-Mandeb, Delmarva detour, and Mississippi/Ohio River tow draft restrictions.
@@ -487,7 +487,7 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
 
 ## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215, #230 & #421)
 
-* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
+* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 3.8 Flash prompts, eliminating LLM numerical blindness during breaking market events.
 * **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](src/agent_memory.py) & [`src/hindsight_client.py`](src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Vectorize Hindsight-Hosted SaaS (Issue #421), local Dev-VM Docker container, and local SQLite FTS5 fallback.
   - **Zero-Cold-Start Hosted Gateway:** Connects to `https://api.hindsight.vectorize.io` with Bearer auth, eliminating the compute cost and 75-second cold boot latencies associated with serverless Cloud Run containers.
   - **Standardized Bank Mission & Reasoning Profiles (`Midgley`):**

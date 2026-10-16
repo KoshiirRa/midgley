@@ -38,8 +38,10 @@ CACHE_TTL_AIRNOW = 3600      # 1 hour for official EPA AirNow observations
 AQI_VINTAGE_FILE = os.path.join("data", "aqi_vintages.json")
 
 
-def save_aqi_vintage_record(record: dict, filepath: str = AQI_VINTAGE_FILE) -> None:
+def save_aqi_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time AQI and emissions observation (Issue #291)."""
+    if filepath is None:
+        filepath = AQI_VINTAGE_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -75,8 +77,10 @@ def save_aqi_vintage_record(record: dict, filepath: str = AQI_VINTAGE_FILE) -> N
         logger.debug(f"Could not persist AQI vintage record: {e}")
 
 
-def get_aqi_vintages_as_of(as_of_date: str, corridor: str = None, zip_code: str = None, filepath: str = AQI_VINTAGE_FILE) -> list:
+def get_aqi_vintages_as_of(as_of_date: str, corridor: str = None, zip_code: str = None, filepath: Optional[str] = None) -> list:
     """Retrieves all AQI vintage records available as of a given cutoff date. (Issue #291)"""
+    if filepath is None:
+        filepath = AQI_VINTAGE_FILE
     if not os.path.exists(filepath):
         return []
     try:
@@ -109,6 +113,17 @@ METRO_ZIP_MAP: Dict[str, str] = {
     "carolinas_piedmont": "28202",
     "port_st_lucie": "34984",
     "south_florida": "34984",
+    "chicago": "60601",
+    "chicago_il": "60601",
+    "great_lakes": "60601",
+    "houston": "77002",
+    "houston_tx": "77002",
+    "usgc": "77002",
+    "los_angeles": "90012",
+    "los_angeles_ca": "90012",
+    "la": "90012",
+    "la_basin": "90012",
+    "socal": "90012",
 }
 
 # Refining Hub Coordinates, EPA Sites, Statutory RVP Limits & Fence-Line Sensor Profiles
@@ -362,6 +377,166 @@ AQI_CORRIDORS: Dict[str, Dict[str, Any]] = {
             "openaq_stations": ["FLDEP-StLucie", "FLDEP-Broward"],
             "airnow_site": "12-111-0012"
         }
+    },
+    "chicago": {
+        "name": "Greater Chicago & Northwest Indiana Refining Corridor (PADD 2)",
+        "center": {"lat": 41.6784, "lon": -87.4981},
+        "bbox": {
+            "minlatitude": 41.40,
+            "maxlatitude": 42.10,
+            "minlongitude": -88.30,
+            "maxlongitude": -87.30
+        },
+        "primary_zip": "60601",
+        "statutory_rvp_psi": 7.4,  # Clean Air Act Section 211(k) RFG 7.4 psi summer standard
+        "base_summer_rvp_surcharge": 0.180,
+        "assets": {
+            "bp_whiting": {
+                "name": "BP Whiting Refinery",
+                "lat": 41.6784,
+                "lon": -87.4981,
+                "capacity_bpd": 435000,
+                "criticality": 1.0,
+                "baseline_pm25": 11.2,
+                "baseline_so2": 2.5,
+                "rack_margin_shock": 0.35
+            },
+            "citgo_lemont": {
+                "name": "CITGO Lemont Refinery",
+                "lat": 41.6702,
+                "lon": -88.0553,
+                "capacity_bpd": 177000,
+                "criticality": 0.85,
+                "baseline_pm25": 9.5,
+                "baseline_so2": 1.8,
+                "rack_margin_shock": 0.20
+            },
+            "exxonmobil_joliet": {
+                "name": "ExxonMobil Joliet Refinery",
+                "lat": 41.4392,
+                "lon": -88.1633,
+                "capacity_bpd": 251000,
+                "criticality": 0.90,
+                "baseline_pm25": 10.0,
+                "baseline_so2": 2.0,
+                "rack_margin_shock": 0.25
+            }
+        },
+        "monitors": {
+            "purpleair_group": "chicago_industrial_corridor",
+            "openaq_stations": ["IDEM-Whiting", "IEPA-Cook-Alsip"],
+            "airnow_site": "17-031-0001"
+        }
+    },
+    "houston": {
+        "name": "Houston Ship Channel & USGC Refining Corridor (PADD 3)",
+        "center": {"lat": 29.7400, "lon": -95.1200},
+        "bbox": {
+            "minlatitude": 29.30,
+            "maxlatitude": 30.05,
+            "minlongitude": -95.55,
+            "maxlongitude": -94.85
+        },
+        "primary_zip": "77002",
+        "statutory_rvp_psi": 7.8,  # EPA Low-RVP Control Area 7.8 psi summer specification
+        "base_summer_rvp_surcharge": 0.080,
+        "assets": {
+            "exxonmobil_baytown": {
+                "name": "ExxonMobil Baytown Refinery",
+                "lat": 29.7460,
+                "lon": -95.0110,
+                "capacity_bpd": 564000,
+                "criticality": 1.0,
+                "baseline_pm25": 11.5,
+                "baseline_so2": 2.6,
+                "rack_margin_shock": 0.22
+            },
+            "marathon_galveston_bay": {
+                "name": "Marathon Galveston Bay Refinery",
+                "lat": 29.3760,
+                "lon": -94.9220,
+                "capacity_bpd": 593000,
+                "criticality": 1.0,
+                "baseline_pm25": 11.0,
+                "baseline_so2": 2.4,
+                "rack_margin_shock": 0.22
+            },
+            "lyondellbasell_houston": {
+                "name": "LyondellBasell Houston Refinery",
+                "lat": 29.7130,
+                "lon": -95.2350,
+                "capacity_bpd": 263776,
+                "criticality": 0.85,
+                "baseline_pm25": 11.8,
+                "baseline_so2": 2.7,
+                "rack_margin_shock": 0.16
+            }
+        },
+        "monitors": {
+            "purpleair_group": "houston_ship_channel_fenceline",
+            "openaq_stations": ["TCEQ-Clinton-Drive", "TCEQ-Deer-Park", "TCEQ-Baytown"],
+            "airnow_site": "48-201-1035"
+        }
+    },
+    "socal": {
+        "name": "Los Angeles Basin & South Bay Refining Corridor (PADD 5)",
+        "center": {"lat": 33.8358, "lon": -118.2850},
+        "bbox": {
+            "minlatitude": 33.70,
+            "maxlatitude": 34.10,
+            "minlongitude": -118.48,
+            "maxlongitude": -118.10
+        },
+        "primary_zip": "90012",
+        "statutory_rvp_psi": 7.0,  # California CARB Phase 3 CaRFG summer specification (6.99 psi)
+        "base_summer_rvp_surcharge": 0.220,
+        "assets": {
+            "marathon_carson_wilmington": {
+                "name": "Marathon Los Angeles Refinery (Carson/Wilmington)",
+                "lat": 33.8065,
+                "lon": -118.2412,
+                "capacity_bpd": 363000,
+                "criticality": 1.0,
+                "baseline_pm25": 12.2,
+                "baseline_so2": 2.5,
+                "rack_margin_shock": 0.35
+            },
+            "chevron_el_segundo": {
+                "name": "Chevron El Segundo Refinery",
+                "lat": 33.9089,
+                "lon": -118.4144,
+                "capacity_bpd": 269000,
+                "criticality": 0.95,
+                "baseline_pm25": 11.4,
+                "baseline_so2": 2.2,
+                "rack_margin_shock": 0.30
+            },
+            "pbf_torrance": {
+                "name": "PBF Torrance Refinery",
+                "lat": 33.8511,
+                "lon": -118.3314,
+                "capacity_bpd": 166000,
+                "criticality": 0.90,
+                "baseline_pm25": 11.8,
+                "baseline_so2": 2.4,
+                "rack_margin_shock": 0.25
+            },
+            "phillips66_wilmington": {
+                "name": "Phillips 66 Los Angeles Refinery (Wilmington/Carson)",
+                "lat": 33.7820,
+                "lon": -118.2890,
+                "capacity_bpd": 139000,
+                "criticality": 0.85,
+                "baseline_pm25": 11.5,
+                "baseline_so2": 2.1,
+                "rack_margin_shock": 0.20
+            }
+        },
+        "monitors": {
+            "purpleair_group": "socal_south_bay_fenceline",
+            "openaq_stations": ["SCAQMD-Wilmington", "SCAQMD-Carson", "SCAQMD-LAX"],
+            "airnow_site": "06-037-1103"
+        }
     }
 }
 
@@ -551,7 +726,7 @@ class AQIFeedConnector:
                             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_AIRNOW)
                         return result
             except Exception as e:
-                logger.warning(f"EPA AirNow API request for ZIP {zip_code} encountered error: {e}. Falling back to baseline.")
+                logger.warning(f"EPA AirNow API request encountered error: {e}. Falling back to baseline.")
 
         # Fallback / Offline Model: Geographic & Seasonal Deterministic Baseline
         now = datetime.now()
@@ -594,6 +769,21 @@ class AQIFeedConnector:
             base_pm = 30 if is_summer else 26
             area_name = "Port St. Lucie, FL"
             state = "FL"
+        elif zip_code in ["60601", "17-031-0001", "46394"]:  # Chicago / Whiting Corridor
+            base_o3 = 62 if is_summer else 28
+            base_pm = 46 if is_summer else 38
+            area_name = "Chicago-Naperville-Elgin, IL-IN-WI"
+            state = "IL"
+        elif zip_code in ["77002", "48-201-1035", "77506", "77520"]:  # Houston Ship Channel
+            base_o3 = 64 if is_summer else 34
+            base_pm = 44 if is_summer else 38
+            area_name = "Houston-Galveston-Brazoria, TX"
+            state = "TX"
+        elif zip_code in ["90012", "06-037-1103", "90245", "90501", "90744", "90745"]:  # Los Angeles Basin
+            base_o3 = 72 if is_summer else 38
+            base_pm = 52 if is_summer else 44
+            area_name = "Los Angeles-Long Beach-Anaheim, CA"
+            state = "CA"
         else:
             base_o3 = 45 if is_summer else 30
             base_pm = 40 if is_summer else 35

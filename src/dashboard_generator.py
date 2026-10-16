@@ -12,6 +12,7 @@ import os
 import subprocess
 import json
 import html
+import urllib.parse
 from typing import Dict, Any, Tuple, List, Optional
 import pandas as pd
 import numpy as np
@@ -38,6 +39,11 @@ CINCINNATI_PATH = os.path.join(DOCS_DIR, "cincinnati.html")
 GREENVILLE_PATH = os.path.join(DOCS_DIR, "greenville.html")
 CHARLOTTE_PATH = os.path.join(DOCS_DIR, "charlotte.html")
 PORT_ST_LUCIE_PATH = os.path.join(DOCS_DIR, "port_st_lucie.html")
+CHICAGO_PATH = os.path.join(DOCS_DIR, "chicago.html")
+HOUSTON_PATH = os.path.join(DOCS_DIR, "houston.html")
+LOS_ANGELES_PATH = os.path.join(DOCS_DIR, "los_angeles.html")
+DENVER_PATH = os.path.join(DOCS_DIR, "denver.html")
+NEW_YORK_PATH = os.path.join(DOCS_DIR, "new_york.html")
 OAKLAND_PATH = os.path.join(DOCS_DIR, "oakland.html")
 BAYAREA_PATH = os.path.join(DOCS_DIR, "bayarea.html")
 SAVINGS_PATH = os.path.join(DOCS_DIR, "savings.html")
@@ -55,6 +61,11 @@ CINCINNATI_SUB_DIR = os.path.join(DOCS_DIR, "cincinnati")
 GREENVILLE_SUB_DIR = os.path.join(DOCS_DIR, "greenville")
 CHARLOTTE_SUB_DIR = os.path.join(DOCS_DIR, "charlotte")
 PORT_ST_LUCIE_SUB_DIR = os.path.join(DOCS_DIR, "port_st_lucie")
+CHICAGO_SUB_DIR = os.path.join(DOCS_DIR, "chicago")
+HOUSTON_SUB_DIR = os.path.join(DOCS_DIR, "houston")
+LOS_ANGELES_SUB_DIR = os.path.join(DOCS_DIR, "los_angeles")
+DENVER_SUB_DIR = os.path.join(DOCS_DIR, "denver")
+NEW_YORK_SUB_DIR = os.path.join(DOCS_DIR, "new_york")
 OAKLAND_SUB_DIR = os.path.join(DOCS_DIR, "oakland")
 BAYAREA_SUB_DIR = os.path.join(DOCS_DIR, "bayarea")
 SAVINGS_SUB_DIR = os.path.join(DOCS_DIR, "savings")
@@ -69,6 +80,11 @@ CINCINNATI_SUB_PATH = os.path.join(CINCINNATI_SUB_DIR, "index.html")
 GREENVILLE_SUB_PATH = os.path.join(GREENVILLE_SUB_DIR, "index.html")
 CHARLOTTE_SUB_PATH = os.path.join(CHARLOTTE_SUB_DIR, "index.html")
 PORT_ST_LUCIE_SUB_PATH = os.path.join(PORT_ST_LUCIE_SUB_DIR, "index.html")
+CHICAGO_SUB_PATH = os.path.join(CHICAGO_SUB_DIR, "index.html")
+HOUSTON_SUB_PATH = os.path.join(HOUSTON_SUB_DIR, "index.html")
+LOS_ANGELES_SUB_PATH = os.path.join(LOS_ANGELES_SUB_DIR, "index.html")
+DENVER_SUB_PATH = os.path.join(DENVER_SUB_DIR, "index.html")
+NEW_YORK_SUB_PATH = os.path.join(NEW_YORK_SUB_DIR, "index.html")
 OAKLAND_SUB_PATH = os.path.join(OAKLAND_SUB_DIR, "index.html")
 BAYAREA_SUB_PATH = os.path.join(BAYAREA_SUB_DIR, "index.html")
 SAVINGS_SUB_PATH = os.path.join(SAVINGS_SUB_DIR, "index.html")
@@ -145,23 +161,31 @@ def format_human_source(source: str, url: str = "") -> str:
         return s_clean
 
     s_lower = s_clean.lower()
-    url_lower = url.lower() if url else ""
+    url_host = ""
+    if url:
+        try:
+            url_host = (urllib.parse.urlparse(url).hostname or "").lower()
+        except Exception:
+            url_host = ""
 
-    if "reuters" in s_lower or "reuters" in url_lower:
+    def _is_domain(dom: str) -> bool:
+        return bool(url_host == dom or url_host.endswith("." + dom))
+
+    if "reuters" in s_lower or _is_domain("reuters.com"):
         return "Reuters Energy"
-    if "bloomberg" in s_lower or "bloomberg" in url_lower:
+    if "bloomberg" in s_lower or _is_domain("bloomberg.com"):
         return "Bloomberg Market Wire"
-    if "noaa" in s_lower or "weather.gov" in s_lower or "weather.gov" in url_lower or "wxs.us" in url_lower:
+    if "noaa" in s_lower or "weather" in s_lower or "nws" in s_lower or _is_domain("weather.gov") or _is_domain("wxs.us"):
         return "NOAA NWS Storm Alert"
-    if "cme" in s_lower or "nymex" in s_lower or "cmegroup" in url_lower:
+    if "cme" in s_lower or "nymex" in s_lower or _is_domain("cmegroup.com"):
         return "CME Group / NYMEX"
-    if "finlight" in s_lower or "finlight" in url_lower:
+    if "finlight" in s_lower or _is_domain("finlight.me"):
         return "Financial Media Wire"
-    if "nyt" in s_lower or "nytimes" in url_lower:
+    if "nyt" in s_lower or _is_domain("nytimes.com"):
         return "New York Times Energy"
-    if "cnbc" in s_lower or "cnbc" in url_lower:
+    if "cnbc" in s_lower or _is_domain("cnbc.com"):
         return "CNBC Energy Wire"
-    if "google" in s_lower or "news.google" in url_lower:
+    if "google" in s_lower or _is_domain("google.com"):
         return "Google News Energy Feed"
     if "rss" in s_lower:
         return "Energy News Wire"
@@ -396,12 +420,13 @@ def get_analytics_script() -> str:
     Option A: Build-Time Environment Isolation. Returns an empty string when the token is missing/unset
     (e.g., local development, dev branch builds, automated unit tests).
     """
-    token = os.environ.get("CLOUDFLARE_ANALYTICS_TOKEN", "").strip()
-    if not token:
+    beacon_val = os.environ.get("CLOUDFLARE_ANALYTICS_TOKEN", "").strip()
+    if not beacon_val:
         return ""
 
+    safe_beacon = "".join(c for c in beacon_val if c.isalnum() or c in "-_")
     return f"""    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "{token}"}}'></script>"""
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "{safe_beacon}"}}'></script>"""
 
 
 def get_head_meta_tags(
@@ -451,7 +476,7 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     """Generates standard sticky header navigation bar with Metro Areas dropdown and WCAG 2.1 AA ARIA landmarks."""
     overview_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "overview" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     national_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "national" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
-    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
+    metro_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["tulsa", "newark", "cincinnati", "greenville", "charlotte", "port_st_lucie", "chicago", "houston", "los_angeles", "denver", "new_york", "oakland", "bayarea", "metro"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     math_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "math" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     sources_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab in ["sources", "datasources"] else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
     citations_cls = "bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold" if active_tab == "citations" else "bg-slate-800/60 hover:bg-slate-800 text-slate-300 border border-slate-700/50"
@@ -467,6 +492,11 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
     grn_link = f"{rel_prefix}greenville.html"
     clt_link = f"{rel_prefix}charlotte.html"
     psl_link = f"{rel_prefix}port_st_lucie.html"
+    chi_link = f"{rel_prefix}chicago.html"
+    hou_link = f"{rel_prefix}houston.html"
+    la_link = f"{rel_prefix}los_angeles.html"
+    den_link = f"{rel_prefix}denver.html"
+    ny_link = f"{rel_prefix}new_york.html"
     oak_link = f"{rel_prefix}oakland.html"
     bay_link = f"{rel_prefix}bayarea.html"
     mat_link = f"{rel_prefix}math.html"
@@ -518,14 +548,26 @@ def get_nav_header(active_tab: str, rel_prefix: str = "") -> str:
                         <a role="menuitem" href="{cin_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-bridge text-purple-400" aria-hidden="true"></i> Cincinnati, OH/KY Retail
                         </a>
-                        <a role="menuitem" href="{grn_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-tree text-green-400" aria-hidden="true"></i> Greenville, NC Retail
-                        </a>
                         <a role="menuitem" href="{clt_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
-                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte, NC Retail
+                            <i class="fa-solid fa-city text-cyan-400" aria-hidden="true"></i> Charlotte &amp; Carolinas Retail
                         </a>
                         <a role="menuitem" href="{psl_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> Port St. Lucie, FL Retail
+                        </a>
+                        <a role="menuitem" href="{chi_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-city text-sky-400" aria-hidden="true"></i> Chicago, IL/IN Retail
+                        </a>
+                        <a role="menuitem" href="{hou_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-industry text-amber-400" aria-hidden="true"></i> Houston, TX Retail
+                        </a>
+                        <a role="menuitem" href="{la_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-sun text-amber-400" aria-hidden="true"></i> Los Angeles, CA Retail
+                        </a>
+                        <a role="menuitem" href="{den_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-mountain text-amber-400" aria-hidden="true"></i> Denver, CO Retail
+                        </a>
+                        <a role="menuitem" href="{ny_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
+                            <i class="fa-solid fa-ship text-sky-400" aria-hidden="true"></i> New York, NY Retail
                         </a>
                         <a role="menuitem" href="{bay_link}" class="px-3 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-white flex items-center gap-2.5 text-xs font-medium transition">
                             <i class="fa-solid fa-water text-cyan-400" aria-hidden="true"></i> SF Bay Area, CA (incl. Oakland)
@@ -625,6 +667,11 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
         ("Greenville_NC", "Greenville, NC Retail", 3.250, 3.150),
         ("Charlotte_NC", "Charlotte, NC Retail", 3.280, 3.180),
         ("Port_St_Lucie_FL", "Port St. Lucie, FL Retail", 3.380, 3.290),
+        ("Chicago_IL", "Chicago, IL/IN Retail", 3.850, 3.765),
+        ("Houston_TX", "Houston, TX Retail", 2.850, 2.785),
+        ("Los_Angeles_CA", "Los Angeles, CA Retail", 4.890, 4.780),
+        ("Denver_CO", "Denver, CO Retail", 3.150, 3.095),
+        ("New_York_NY", "New York, NY Retail", 3.480, 3.425),
         ("Oakland_CA", "Oakland, CA Retail", 5.550, 4.840),
         ("BayArea_CA", "SF Bay Area Region", 5.650, 4.940),
     ]
@@ -2164,6 +2211,131 @@ $$\\text{{MAE}}_H = \\frac{{1}}{{N_H}} \\sum_{{i=1}}^{{N_H}} |\\hat{{y}}_{{i, H}
     logger.info(f"Successfully generated technical breakdown report files at {html_target} and {md_target}")
 
 
+def build_hubs_map_data(prices_map: dict) -> Tuple[List[dict], str]:
+    """
+    Constructs the list of modeled price hubs across PADDs 1-7 plus National Wholesale benchmark (Issue #646).
+    """
+    from src.locations.specs import get_canonical_region_specs
+
+    points = []
+
+    # 1. National Wholesale Commodity Benchmark (Cushing delivery hub / NYMEX RB=F)
+    nat_base = prices_map.get('National', {}).get('base', 4.316)
+    nat_pred = prices_map.get('National', {}).get('pred', 4.205)
+    points.append({
+        "slug": "national",
+        "name": "National Wholesale RBOB (NYMEX / Cushing)",
+        "district": "Commodity Benchmark",
+        "padd": "National Benchmark",
+        "lat": 35.9840,
+        "lng": -96.7670,
+        "type": "national",
+        "has_page": True,
+        "url": "national.html",
+        "base_price": float(nat_base),
+        "pred_price": float(nat_pred),
+        "tax_rate": 0.184,
+        "refinery": "U.S. Operable Refining Complex (~18.2M bpd)",
+        "pipeline": "NYMEX RB=F Physically Deliverable Corridor",
+        "sub_locales": []
+    })
+
+    # 2. All 18 Canonical Region Specs
+    specs = get_canonical_region_specs()
+    for spec in specs:
+        reg_info = prices_map.get(spec.region_key) or {}
+        base_val = reg_info.get('base')
+        pred_val = reg_info.get('pred')
+        if base_val is None:
+            base_val = 3.500
+            pred_val = 3.450
+
+        points.append({
+            "slug": spec.slug,
+            "name": spec.display_name,
+            "district": spec.padd,
+            "padd": spec.padd,
+            "lat": spec.latitude,
+            "lng": spec.longitude,
+            "type": "dedicated" if spec.has_dedicated_page else "modeled",
+            "has_page": spec.has_dedicated_page,
+            "url": spec.dedicated_page_url,
+            "base_price": round(float(base_val), 3),
+            "pred_price": round(float(pred_val), 3),
+            "tax_rate": float(spec.baseline_tax_rate),
+            "refinery": spec.primary_refinery,
+            "pipeline": spec.primary_pipeline,
+            "sub_locales": [s.replace("_", " ").title() for s in list(spec.sub_locales.keys())[:5]]
+        })
+
+    return points, json.dumps(points)
+
+
+def build_hubs_map_section_html(hub_points: list) -> str:
+    """
+    Renders the interactive Leaflet map container and territory filters for docs/index.html (Issue #646).
+    """
+    dedicated_count = sum(1 for pt in hub_points if pt['has_page'] and pt['slug'] != 'national')
+    modeled_count = sum(1 for pt in hub_points if not pt['has_page'])
+    total_hubs = len(hub_points)
+
+    return f"""
+        <!-- 🗺️ INTERACTIVE GEOGRAPHIC PRICE HUBS MAP SECTION (Issue #646) -->
+        <section class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-6 card-glow" id="geographic-footprint">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="p-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl">
+                            <i class="fa-solid fa-map-location-dot text-base" aria-hidden="true"></i>
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                            Geographic Model Footprint &amp; Modeled Price Hubs
+                        </h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-3xl">
+                        Interactive geographic view of all {total_hubs} PADD 1–7 calibration hubs, offshore island districts, and wholesale commodity benchmarks modeled by Midgley's hierarchical quantitative and qualitative forecasting pipelines.
+                    </p>
+                </div>
+
+                <!-- Territory Preset Navigation Buttons -->
+                <div class="flex items-center gap-1.5 flex-wrap bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 text-xs font-medium">
+                    <button type="button" onclick="window.setHubsMapView('conus')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewConus">
+                        CONUS
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('pacific')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewPacific">
+                        Pacific &amp; Islands
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('caribbean')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewCaribbean">
+                        Caribbean
+                    </button>
+                    <button type="button" onclick="window.setHubsMapView('all')" class="px-3 py-1.5 rounded-xl bg-blue-600/30 text-blue-300 border border-blue-500/40 font-semibold hover:bg-blue-600/50 transition focus:outline-none focus:ring-1 focus:ring-blue-500" id="btnViewAll">
+                        All PADDs 1–7
+                    </button>
+                </div>
+            </div>
+
+            <!-- Legend Bar -->
+            <div class="flex items-center gap-4 sm:gap-6 text-xs text-slate-400 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Active Dedicated Analytics Pages ({dedicated_count})</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Modeled Regional Calibration Hubs ({modeled_count})</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)] inline-block"></span>
+                    <span class="text-slate-300 font-medium">Commodity Futures Benchmark (National)</span>
+                </div>
+            </div>
+
+            <!-- Leaflet Map Container -->
+            <div id="hubsMap" class="w-full h-[420px] sm:h-[500px] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10" role="region" aria-label="Modeled Fuel Price Hubs Geographic Map"></div>
+        </section>
+    """
+
+
 def generate_public_dashboard():
     os.makedirs(DOCS_DIR, exist_ok=True)
     os.makedirs(os.path.join(DOCS_DIR, "assets"), exist_ok=True)
@@ -2234,11 +2406,23 @@ def generate_public_dashboard():
         'Greenville_NC': {'base': 3.950, 'pred': 3.850},
         'Charlotte_NC': {'base': 3.980, 'pred': 3.880},
         'Port_St_Lucie_FL': {'base': 4.145, 'pred': 4.050},
+        'Chicago_IL': {'base': 3.850, 'pred': 3.765},
+        'Houston_TX': {'base': 2.850, 'pred': 2.785},
+        'Los_Angeles_CA': {'base': 4.890, 'pred': 4.780},
+        'Denver_CO': {'base': 3.150, 'pred': 3.095},
+        'New_York_NY': {'base': 3.480, 'pred': 3.425},
         'Oakland_CA': {'base': 6.050, 'pred': 5.340},
         'BayArea_CA': {'base': 6.160, 'pred': 5.450},
         'SanFrancisco_CA': {'base': 6.160, 'pred': 5.450},
         'SanJose_CA': {'base': 5.990, 'pred': 5.280},
-        'NorthBay_CA': {'base': 5.950, 'pred': 5.240}
+        'NorthBay_CA': {'base': 5.950, 'pred': 5.240},
+        'Seattle_WA': {'base': 4.250, 'pred': 4.180},
+        'Phoenix_AZ': {'base': 3.550, 'pred': 3.490},
+        'Anchorage_AK': {'base': 3.750, 'pred': 3.690},
+        'Honolulu_HI': {'base': 4.650, 'pred': 4.580},
+        'Guam_GU': {'base': 4.890, 'pred': 4.810},
+        'San_Juan_PR': {'base': 3.490, 'pred': 3.440},
+        'Boston_MA': {'base': 3.450, 'pred': 3.390}
     }
     initial_deltas = {reg: prices_map[reg]['pred'] - prices_map[reg]['base'] for reg in prices_map}
 
@@ -2334,6 +2518,11 @@ def generate_public_dashboard():
     except Exception as stale_err:
         logger.debug(f"Staleness check notice: {stale_err}")
 
+    # Build Map Points and Map Section HTML for docs/index.html (Issue #646)
+    carto_tile_url = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    hub_points, hubs_points_json = build_hubs_map_data(prices_map)
+    hubs_map_html = build_hubs_map_section_html(hub_points)
+
     nav_overview = get_nav_header("overview")
     head_meta_index = get_head_meta_tags(
         title="Midgley - Multi-Agent Gas Price Forecasting Engine",
@@ -2354,6 +2543,10 @@ def generate_public_dashboard():
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Leaflet.js CSS & JS for Interactive Price Hubs Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
@@ -2362,6 +2555,21 @@ def generate_public_dashboard():
     <style>
         .gradient-bg {{ background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }}
         .card-glow {{ box-shadow: 0 4px 20px -2px rgba(59, 130, 246, 0.15); }}
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {{
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 1px solid #1e293b !important;
+            border-radius: 1rem !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+        }}
+        .leaflet-popup-content {{
+            margin: 12px 14px !important;
+            line-height: 1.4 !important;
+        }}
+        .leaflet-container a.leaflet-popup-close-button {{
+            color: #94a3b8 !important;
+            padding: 8px !important;
+        }}
         {KATEX_MOBILE_CSS}
     </style>
 </head>
@@ -2385,11 +2593,13 @@ def generate_public_dashboard():
                 Quantitative & LLM-Augmented Energy Price Forecasting
             </h2>
             <p class="text-slate-300 text-base leading-relaxed max-w-4xl">
-                Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 2.5 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
+                Midgley integrates quantitative energy futures (<code class="text-blue-300">NYMEX RBOB</code> & <code class="text-blue-300">WTI Crude</code>), live financial news extraction via <strong>Finlight.me REST API</strong> (Google Gemini 3.8 Flash), NOAA National & Regional Weather Alerts, Executive Social Media Gap Analysis, Cboe OVX options volatility, and regional refining margins into standardized regularized estimators.
             </p>
         </div>
 
         {build_macro_narrative_card_html(prices_map)}
+
+        {hubs_map_html}
 
         <!-- ACTIVE FORECAST LOCALES SECTION -->
         <section class="space-y-4">
@@ -2400,7 +2610,7 @@ def generate_public_dashboard():
                     </h3>
                     <p class="text-xs text-slate-400">Current market price vs. 5-day out-of-time projected target for active generated locales</p>
                 </div>
-                <span class="text-xs text-slate-400 font-mono">7 Locales Active</span>
+                <span class="text-xs text-slate-400 font-mono">11 Locales Active</span>
             </div>
 
             <!-- Major Metric Cards Grid -->
@@ -2546,48 +2756,13 @@ def generate_public_dashboard():
                     </a>
                 </div>
 
-                <!-- Card 5: Greenville, NC Retail (PADD 1C Colonial Pipeline) -->
+                <!-- Card 5: Charlotte Metro & Carolinas Retail (Paw Creek Distribution Hub) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs uppercase tracking-wider text-green-400 font-semibold">PADD 1C South Atlantic</span>
+                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C Carolinas Hub</span>
                             <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Retail
-                            </h4>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
-                            40.4¢ NC Tax
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
-                        <div>
-                            <span class="text-xs text-slate-400">Live Pump Price</span>
-                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Greenville_NC']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400">5-Day Forecast</span>
-                            <p class="text-2xl font-extrabold text-green-400 mt-1">${prices_map['Greenville_NC']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                        </div>
-                    </div>
-
-                    <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Selma Hub: 55 mi</span>
-                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Greenville_NC')}</strong></span>
-                    </div>
-
-                    <a href="greenville.html" class="w-full py-2.5 px-4 rounded-xl bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Greenville Analytics <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Card 6: Charlotte, NC Retail (Paw Creek Distribution Hub) -->
-                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">PADD 1C South Atlantic</span>
-                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
-                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte, NC Retail
+                                <i class="fa-solid fa-city text-cyan-400"></i> Charlotte &amp; Carolinas
                             </h4>
                         </div>
                         <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
@@ -2607,12 +2782,12 @@ def generate_public_dashboard():
                     </div>
 
                     <div class="text-xs text-slate-400 flex items-center justify-between">
-                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek Hub</span>
+                        <span><i class="fa-solid fa-pipe mr-1 text-slate-500"></i> Paw Creek &amp; Selma Hubs</span>
                         <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Charlotte_NC')}</strong></span>
                     </div>
 
                     <a href="charlotte.html" class="w-full py-2.5 px-4 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
-                        Explore Charlotte Analytics <i class="fa-solid fa-arrow-right"></i>
+                        Explore Charlotte &amp; Carolinas Analytics <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
 
@@ -2651,7 +2826,182 @@ def generate_public_dashboard():
                     </a>
                 </div>
 
-                <!-- Card 5: SF Bay Area 9-County Region (incl. Oakland) -->
+                <!-- Card 8: Greater Chicago, IL/IN Retail (BP Whiting & CITGO Lemont Refining Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-semibold">PADD 2 Great Lakes Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-city text-sky-400"></i> Greater Chicago, IL/IN
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            80.5¢ Base Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Chicago_IL']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-sky-400 mt-1">${prices_map['Chicago_IL']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> BP Whiting & Lemont</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Chicago_IL')}</strong></span>
+                    </div>
+
+                    <a href="chicago.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Chicago Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 9: Houston, TX Retail (PADD 3 USGC Refining Epicenter) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 3 USGC Epicenter</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-industry text-amber-400"></i> Houston, TX
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            38.4¢ Base Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Houston_TX']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Houston_TX']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> Baytown & Port Arthur</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Houston_TX')}</strong></span>
+                    </div>
+
+                    <a href="houston.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Houston Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 10: Los Angeles, CA Retail (PADD 5 SoCal Refining Cluster) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 5 SoCal Basin Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-sun text-amber-400"></i> Los Angeles, CA
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            95.3¢ CARB Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Los_Angeles_CA']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Los_Angeles_CA']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-oil-well mr-1 text-slate-500"></i> El Segundo &amp; Torrance</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Los_Angeles_CA')}</strong></span>
+                    </div>
+
+                    <a href="los_angeles.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Los Angeles Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 11: Denver, CO Retail (PADD 4 Rocky Mountain Refining Island) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">PADD 4 Rocky Mountain Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-mountain text-amber-400"></i> Denver, CO
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            28.0¢ CO Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['Denver_CO']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['Denver_CO']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-mountain mr-1 text-slate-500"></i> Suncor Commerce City</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('Denver_CO')}</strong></span>
+                    </div>
+
+                    <a href="denver.html" class="w-full py-2.5 px-4 rounded-xl bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore Denver Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 12: New York, NY Retail (PADD 1B Central Atlantic / NY Harbor Hub) -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-sky-400 font-semibold">PADD 1B Central Atlantic Hub</span>
+                            <h4 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-ship text-sky-400"></i> New York, NY
+                            </h4>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            47.2¢ NY Tax
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-3 border-y border-slate-800/80">
+                        <div>
+                            <span class="text-xs text-slate-400">Live Pump Price</span>
+                            <p class="text-2xl font-extrabold text-white mt-1">${prices_map['New_York_NY']['base']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400">5-Day Forecast</span>
+                            <p class="text-2xl font-extrabold text-amber-400 mt-1">${prices_map['New_York_NY']['pred']:.3f}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-industry mr-1 text-slate-500"></i> Phillips 66 Bayway / Buckeye</span>
+                        <span>Hit Rate: <strong class="text-slate-200">{get_hit_rate_display('New_York_NY')}</strong></span>
+                    </div>
+
+                    <a href="new_york.html" class="w-full py-2.5 px-4 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-500/30 font-semibold text-xs transition flex items-center justify-center gap-2">
+                        Explore New York Analytics <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Card 13: SF Bay Area 9-County Region (incl. Oakland) -->
                 <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5 hover:border-slate-700 transition card-glow">
                     <div class="flex justify-between items-start">
                         <div>
@@ -2812,7 +3162,7 @@ def generate_public_dashboard():
                     </div>
                     <div>
                         <h3 class="text-xl font-bold text-white">Multi-Agent System Architecture</h3>
-                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative & LLM Feeds &rarr; Main Wholesale Model &rarr; Localized Metro Area Models</p>
+                        <p class="text-xs text-slate-400">Hierarchical pipeline: Quantitative &amp; Physical Feeds &rarr; National Wholesale RBOB Model &rarr; 18 Localized Regional Calibration Hubs (PADDs 1&ndash;7)</p>
                     </div>
                 </div>
 
@@ -2864,7 +3214,7 @@ def generate_public_dashboard():
                         </div>
                         <h5 class="text-sm font-bold text-white">Extraction &amp; Memory Fusion</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 2.5 Flash. Decays shocks with \\(t_{{1/2}} = 4.0\\text{{--}}5.0\\) days.
+                            Ingests Finlight headlines, NOAA alerts, maritime chokepoints &amp; social feeds into Gemini 3.8 Flash. Decays shocks with \\(t_{{1/2}} = 4.0\\text{{--}}5.0\\) days.
                         </p>
                     </div>
 
@@ -2880,15 +3230,15 @@ def generate_public_dashboard():
                         </p>
                     </div>
 
-                    <!-- Stage 4: Localized Metro Calibration (Fed by Main Model) -->
+                    <!-- Stage 4: Localized Regional Calibration Hubs (Fed by Main Model) -->
                     <div class="p-4 rounded-xl bg-slate-900 border border-purple-500/40 shadow-lg shadow-purple-500/5 space-y-2 relative">
                         <div class="flex items-center justify-between text-xs font-semibold text-purple-400">
                             <span>Stage 4</span>
-                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Metro Calibration</span>
+                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-[10px]">Regional Calibration</span>
                         </div>
-                        <h5 class="text-sm font-bold text-white">Localized Metro Models</h5>
+                        <h5 class="text-sm font-bold text-white">Localized Calibration Hubs</h5>
                         <p class="text-[11px] text-slate-400 leading-normal">
-                            Ingests Main Wholesale Base Forecast and calibrates for Tulsa OK ($3.89/gal), Newark DE ($3.35/gal), and Cincinnati OH/KY ($3.45/gal) with local rack margins &amp; refinery dynamics.
+                            Ingests National Wholesale Base Forecast and dynamically calibrates for 18 regional hubs across all PADDs (PADD 1A Boston; PADD 1B New York &amp; Newark; PADD 1C Charlotte &amp; Port St. Lucie; PADD 2 Chicago, Tulsa &amp; Cincinnati; PADD 3 Houston; PADD 4 Denver; PADD 5 Los Angeles &amp; SF Bay Area; PADD 5B Seattle; PADD 5C Phoenix; PADD 5D Anchorage &amp; Honolulu; PADD 6 San Juan; PADD 7 Guam) using local rack margins, refinery dynamics, pipeline tariffs, and statutory tax structures. Charlotte serves as the Carolinas calibration hub (Greenville consolidated).
                         </p>
                     </div>
 
@@ -2931,7 +3281,7 @@ def generate_public_dashboard():
                     <!-- Pillar 2 -->
                     <div class="p-5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
                         <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                            <i class="fa-solid fa-robot"></i> 2. Gemini 2.5 Flash News
+                            <i class="fa-solid fa-robot"></i> 2. Gemini 3.8 Flash News
                         </h4>
                         <p class="text-xs text-slate-300 leading-relaxed">
                             Real-time headlines from Finlight.me REST API translated into bounded 5-dimensional geopolitical factor impact vectors.
@@ -3017,6 +3367,8 @@ def generate_public_dashboard():
         const rollingDates = """ + json_dates + """;
         const rollingMAEData = """ + json_mae + """;
         const rollingHitData = """ + json_hit + """;
+        const hubPoints = """ + hubs_points_json + """;
+        const cartoTileUrl = """ + json.dumps(carto_tile_url) + """;
 
         window.addEventListener('DOMContentLoaded', () => {
             const ctxMAE = document.getElementById('maeTrendChart').getContext('2d');
@@ -3070,6 +3422,106 @@ def generate_public_dashboard():
                     }
                 }
             });
+
+            // -------------------------------------------------------------
+            // Leaflet Modeled Price Hubs Map Initialization (Issue #646)
+            // -------------------------------------------------------------
+            const hubsMapEl = document.getElementById('hubsMap');
+            if (hubsMapEl && typeof L !== 'undefined') {
+                const hubsMap = L.map('hubsMap', {
+                    scrollWheelZoom: false
+                }).setView([38.5000, -96.0000], 4);
+
+                L.tileLayer(cartoTileUrl, {
+                    attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    subdomains: 'abcd',
+                    maxZoom: 18
+                }).addTo(hubsMap);
+
+                const markersGroup = L.featureGroup();
+
+                hubPoints.forEach(function(pt) {
+                    const markerColor = pt.type === 'national' ? '#f59e0b' : (pt.has_page ? '#10b981' : '#06b6d4');
+                    const radius = pt.type === 'national' ? 10 : (pt.has_page ? 8 : 7);
+
+                    const marker = L.circleMarker([pt.lat, pt.lng], {
+                        radius: radius,
+                        fillColor: markerColor,
+                        color: '#ffffff',
+                        weight: 2,
+                        opacity: 0.9,
+                        fillOpacity: 0.85
+                    });
+
+                    let popupHtml = '<div class="p-2 space-y-2 text-slate-100 font-sans min-w-[240px]">' +
+                        '<div class="flex items-center justify-between border-b pb-1.5 border-slate-700">' +
+                            '<span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ' + (pt.has_page ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'bg-cyan-950 text-cyan-300 border border-cyan-500/30') + '">' + pt.district + '</span>' +
+                            '<span class="text-[10px] text-slate-400 font-mono">' + (pt.has_page ? 'Active Page' : 'Modeled Hub') + '</span>' +
+                        '</div>' +
+                        '<h4 class="font-bold text-sm text-white leading-tight">' + pt.name + '</h4>' +
+                        '<div class="grid grid-cols-2 gap-2 text-xs py-1.5 bg-slate-800/80 p-2 rounded-xl border border-slate-700/60">' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">' + (pt.type === 'national' ? 'Current Futures' : 'Live Pump Price') + '</span>' +
+                                '<strong class="text-sm font-black text-white">$' + pt.base_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                            '<div>' +
+                                '<span class="text-[10px] text-slate-400 block">5-Day Projected</span>' +
+                                '<strong class="text-sm font-black text-blue-400">$' + pt.pred_price.toFixed(3) + '</strong>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="text-[11px] text-slate-300 space-y-1">' +
+                            '<div><strong class="text-slate-400">Tax Stack:</strong> ' + (pt.tax_rate * 100).toFixed(1) + '¢/gal statutory base</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Refinery:</strong> ' + pt.refinery + '</div>' +
+                            '<div class="truncate"><strong class="text-slate-400">Midstream:</strong> ' + pt.pipeline + '</div>';
+
+                    if (pt.sub_locales && pt.sub_locales.length > 0) {
+                        popupHtml += '<div class="text-[10px] text-slate-400 pt-0.5"><strong class="text-slate-500">Sub-locales:</strong> ' + pt.sub_locales.join(', ') + '</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    if (pt.has_page && pt.url) {
+                        popupHtml += '<div class="pt-1.5"><a href="' + pt.url + '" class="block text-center w-full py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition shadow-sm">Explore ' + pt.slug.toUpperCase() + ' Analytics &rarr;</a></div>';
+                    } else {
+                        popupHtml += '<div class="pt-1 text-[10px] text-slate-400 italic text-center"><i class="fa-solid fa-check-circle text-cyan-400 mr-1"></i>Calibrated in Hierarchical Model &amp; Ledger</div>';
+                    }
+
+                    popupHtml += '</div>';
+
+                    marker.bindPopup(popupHtml, { maxWidth: 320 });
+                    marker.addTo(hubsMap);
+                    markersGroup.addLayer(marker);
+                });
+
+                window.setHubsMapView = function(view) {
+                    const buttons = ['btnViewConus', 'btnViewPacific', 'btnViewCaribbean', 'btnViewAll'];
+                    buttons.forEach(id => {
+                        const btn = document.getElementById(id);
+                        if (btn) {
+                            btn.classList.remove('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                            btn.classList.add('text-slate-300');
+                        }
+                    });
+
+                    if (view === 'conus') {
+                        hubsMap.setView([38.5000, -96.0000], 4);
+                        const b = document.getElementById('btnViewConus');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'pacific') {
+                        hubsMap.setView([28.0000, -165.0000], 3);
+                        const b = document.getElementById('btnViewPacific');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'caribbean') {
+                        hubsMap.setView([18.4655, -66.1057], 7);
+                        const b = document.getElementById('btnViewCaribbean');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    } else if (view === 'all') {
+                        hubsMap.setView([26.0000, -120.0000], 3);
+                        const b = document.getElementById('btnViewAll');
+                        if (b) b.classList.add('bg-blue-600/30', 'text-blue-300', 'border', 'border-blue-500/40', 'font-semibold');
+                    }
+                };
+            }
         });
     </script>
 </body>
@@ -3225,7 +3677,7 @@ def generate_public_dashboard():
                 </div>
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
                     <h4 class="font-bold text-emerald-300 uppercase tracking-wider">Primary Feature Signals</h4>
-                    <p>3-2-1 Crack Spread, Finlight.me REST API news vectors (Gemini 2.5 Flash factor extraction), Cboe OVX Volatility (^OVX), and Baker Hughes Permian/Bakken drilling rig counts.</p>
+                    <p>3-2-1 Crack Spread, Finlight.me REST API news vectors (Gemini 3.8 Flash factor extraction), Cboe OVX Volatility (^OVX), and Baker Hughes Permian/Bakken drilling rig counts.</p>
                 </div>
             </div>
         </div>
@@ -3896,130 +4348,43 @@ def generate_public_dashboard():
 
     # ---------------------------------------------------------------------------
     # 5. GREENVILLE METRO RETAIL GAS PAGE (docs/greenville.html & docs/greenville/index.html)
+    # Decommissioned in favor of Charlotte Metro & Carolinas Calibration Hub
     # ---------------------------------------------------------------------------
     def build_greenville_html(rel_prefix: str = "") -> str:
-        nav_greenville = get_nav_header("greenville", rel_prefix)
-        grn_base = prices_map['Greenville_NC']['base']
-        grn_pred = prices_map['Greenville_NC']['pred']
-        grn_delta = grn_pred - grn_base
-        grn_pct = (grn_delta / grn_base * 100.0) if grn_base > 0 else 0.0
-        grn_sign = "+" if grn_delta > 0 else ""
-        grn_color = "#10b981" if grn_pct < -0.2 else ("#ef4444" if grn_pct > 0.2 else "#0ea5e9")
-        grn_trend_text = f"{grn_sign}{grn_pct:.1f}% Projected Trend"
-        grn_trend_color = "text-emerald-300" if grn_pct < -0.2 else ("text-rose-300" if grn_pct > 0.2 else "text-green-300")
-        head_meta_greenville = get_head_meta_tags(
-            title=f"Greenville NC Retail Gas Forecast (${grn_base:.3f} → ${grn_pred:.3f} | {grn_sign}{grn_pct:.2f}%) - Midgley AI",
-            description=f"5-day retail gas price forecast for Greenville NC metro. Baseline ${grn_base:.3f}/gal, projected target ${grn_pred:.3f}/gal. Colonial Pipeline Selma hub & Tar River flooding model.",
-            canonical_path="greenville.html" if rel_prefix == "" else "greenville/index.html",
-            image_filename="greenville.png",
-            theme_color=grn_color
-        )
-        return r"""<!DOCTYPE html>
+        target_url = f"{rel_prefix}charlotte.html"
+        return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-{{ANALYTICS_SCRIPT}}
-{{HEAD_META}}
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url={target_url}">
+    <title>Greenville NC Retail Gas Forecast - Consolidated into Charlotte Hub - Midgley AI</title>
+    <link rel="canonical" href="https://koshiirra.github.io/midgley/charlotte.html" />
+    <meta property="og:site_name" content="Midgley Gas Price Prediction AI">
+    <meta property="og:title" content="Greenville NC Retail Gas Forecast - Consolidated into Charlotte Hub - Midgley AI">
+    <meta property="og:description" content="Greenville NC retail gas forecasting model has been decommissioned into Charlotte Metro &amp; Carolinas Calibration Hub.">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#020617">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenville, NC Retail Gas Forecast - Midgley</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- KaTeX for Math Rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
-
-    <style>
-        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
-        {{KATEX_MOBILE_CSS}}
-    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
-
-{{NAV_GREENVILLE}}
-
-    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
-        
-        <!-- Breadcrumb & Header -->
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div>
-                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
-                    <a href="PREFIXindex.html" class="hover:text-green-400">Home</a>
-                    <span>/</span>
-                    <span class="text-slate-200">Greenville Metro Retail</span>
-                </div>
-                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                    <i class="fa-solid fa-tree text-green-400"></i> Greenville, NC Metro Retail Gas Forecast
-                </h2>
-            </div>
-            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
-                PADD 1C South Atlantic Model
-            </span>
+<body class="bg-slate-950 text-slate-200 flex items-center justify-center min-h-screen p-6 font-sans">
+    <div class="max-w-md w-full p-6 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-4">
+        <div class="p-3 bg-cyan-500/20 text-cyan-400 rounded-full w-12 h-12 mx-auto flex items-center justify-center">
+            <i class="fa-solid fa-arrow-right"></i>
         </div>
-
-        <!-- Metric Hero Card -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Current Live Pump Base</span>
-                <p class="text-3xl font-extrabold text-white">${{GREENVILLE_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
-                <p class="text-3xl font-extrabold text-green-400">${{GREENVILLE_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs {{GREENVILLE_TREND_COLOR}} font-semibold">{{GREENVILLE_TREND_TEXT}}</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
-                <p class="text-3xl font-extrabold text-emerald-400">{{GREENVILLE_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
-                <p class="text-xs text-slate-500">MAPE: {{GREENVILLE_MAPE}} | RMSE: {{GREENVILLE_RMSE}}</p>
-            </div>
-            <div class="space-y-1">
-                <span class="text-xs text-slate-400">Directional Accuracy</span>
-                <p class="text-3xl font-extrabold text-emerald-400">{{GREENVILLE_HIT_RATE}}</p>
-                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
-            </div>
-        </div>
-
-        {{NARRATIVE_CARD}}
-        {{FEATURE_ATTRIBUTION_CARD}}
-        {{REGIONAL_CARDS}}
-
-        <!-- Counterfactual Shock Scenario Simulations -->
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-bolt text-green-400"></i> Greenville Regional Shock Scenario Simulations
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
-                    <h4 class="text-xs font-bold text-slate-200">Colonial Pipeline Mainline Outage</h4>
-                    <p class="text-xs text-slate-400">Line 1 emergency shutdown halts batch shipments into Selma NC breakout tank farms.</p>
-                    <div class="text-sm font-extrabold text-red-400">+ $0.245/gal (+7.54%)</div>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
-                    <h4 class="text-xs font-bold text-slate-200">Category 3 Atlantic Hurricane Landfall</h4>
-                    <p class="text-xs text-slate-400">Major Hurricane surge floods US-264 distribution highways & Tar River basin.</p>
-                    <div class="text-sm font-extrabold text-red-400">+ $0.215/gal (+6.62%)</div>
-                </div>
-                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
-                    <h4 class="text-xs font-bold text-slate-200">Selma Hub Tank Farm Power Outage</h4>
-                    <p class="text-xs text-slate-400">Microburst knocks out Duke Energy substation at Selma hub, suspending rack loading.</p>
-                    <div class="text-sm font-extrabold text-red-400">+ $0.185/gal (+5.69%)</div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
-        Midgley Unleaded Gas Price Forecasting Engine &bull; Greenville, NC Metro Calibration Agent
-    </footer>
-
+        <h1 class="text-xl font-bold text-white">Greenville Calibration Consolidated</h1>
+        <p class="text-sm text-slate-400">
+            The Greenville, NC retail forecasting model has been decommissioned into the <strong>Charlotte Metro &amp; Carolinas Calibration Hub</strong>. Charlotte's Paw Creek terminal directly governs Colonial Pipeline allocation and rack margins across the Carolinas.
+        </p>
+        <a href="{target_url}" class="inline-block px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition">
+            Proceed to Charlotte &amp; Carolinas Hub &rarr;
+        </a>
+    </div>
 </body>
 </html>
-""".replace("{{NAV_GREENVILLE}}", nav_greenville).replace("PREFIX", rel_prefix).replace("{{GREENVILLE_BASE}}", f"{prices_map['Greenville_NC']['base']:.3f}").replace("{{GREENVILLE_PRED}}", f"{prices_map['Greenville_NC']['pred']:.3f}").replace("{{GREENVILLE_TREND_TEXT}}", grn_trend_text).replace("{{GREENVILLE_TREND_COLOR}}", grn_trend_color).replace("{{GREENVILLE_MAE}}", get_mae_display('greenville_nc')).replace("{{GREENVILLE_MAPE}}", get_mape_display('greenville_nc')).replace("{{GREENVILLE_RMSE}}", get_rmse_display('greenville_nc')).replace("{{GREENVILLE_HIT_RATE}}", get_hit_rate_display('greenville_nc')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_greenville).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'], logistics_hub="Colonial Pipeline Selma Junction & NC 40.4¢ State Tax")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Greenville_NC', prices_map['Greenville_NC']['base'], prices_map['Greenville_NC']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('greenville_nc'))
+"""
 
     with open(GREENVILLE_PATH, "w", encoding="utf-8") as f:
         f.write(build_greenville_html(""))
@@ -4292,6 +4657,671 @@ def generate_public_dashboard():
         f.write(build_port_st_lucie_html("../"))
 
     # ---------------------------------------------------------------------------
+    # CHICAGO METRO RETAIL GAS PAGE (docs/chicago.html & docs/chicago/index.html)
+    # ---------------------------------------------------------------------------
+    def build_chicago_html(rel_prefix: str = "") -> str:
+        nav_chicago = get_nav_header("chicago", rel_prefix)
+        chi_base = prices_map['Chicago_IL']['base']
+        chi_pred = prices_map['Chicago_IL']['pred']
+        chi_delta = chi_pred - chi_base
+        chi_pct = (chi_delta / chi_base * 100.0) if chi_base > 0 else 0.0
+        chi_sign = "+" if chi_delta > 0 else ""
+        chi_color = "#10b981" if chi_pct < -0.2 else ("#ef4444" if chi_pct > 0.2 else "#0ea5e9")
+        chi_trend_text = f"{chi_sign}{chi_pct:.1f}% Projected Trend"
+        chi_trend_color = "text-emerald-300" if chi_pct < -0.2 else ("text-rose-300" if chi_pct > 0.2 else "text-sky-300")
+        head_meta_chicago = get_head_meta_tags(
+            title=f"Greater Chicago IL/IN Retail Gas Forecast (${chi_base:.3f} → ${chi_pred:.3f} | {chi_sign}{chi_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Greater Chicago IL/IN metro. Baseline ${chi_base:.3f}/gal, projected target ${chi_pred:.3f}/gal. BP Whiting 435 kbpd & CITGO Lemont refinery model.",
+            canonical_path="chicago.html" if rel_prefix == "" else "chicago/index.html",
+            image_filename="chicago.png",
+            theme_color=chi_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greater Chicago, IL/IN Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(14, 165, 233, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_CHICAGO}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-sky-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Greater Chicago Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-city text-sky-400"></i> Greater Chicago, IL/IN Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                PADD 2 Great Lakes Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{CHICAGO_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-sky-400">${{CHICAGO_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{CHICAGO_TREND_COLOR}} font-semibold">{{CHICAGO_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{CHICAGO_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{CHICAGO_MAPE}} | RMSE: {{CHICAGO_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{CHICAGO_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-sky-400"></i> Greater Chicago Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">BP Whiting Power Failure & Unit Trip</h4>
+                    <p class="text-xs text-slate-400">Plant-wide electrical outage halts 435 kbpd refining operations at Whiting IN.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.285/gal (+7.40%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Citgo Lemont Des Plaines Barge Lockout</h4>
+                    <p class="text-xs text-slate-400">Illinois Waterway lock maintenance restricts marine fuel transfers from 177 kbpd Lemont refinery.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.125/gal (+3.25%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Great Lakes Polar Vortex Freeze-Off</h4>
+                    <p class="text-xs text-slate-400">Sub-zero Lake Michigan freeze halts terminal rack loading and refinery water cooling intake loops.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.165/gal (+4.28%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Greater Chicago, IL/IN Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_CHICAGO}}", nav_chicago).replace("PREFIX", rel_prefix).replace("{{CHICAGO_BASE}}", f"{prices_map['Chicago_IL']['base']:.3f}").replace("{{CHICAGO_PRED}}", f"{prices_map['Chicago_IL']['pred']:.3f}").replace("{{CHICAGO_TREND_TEXT}}", chi_trend_text).replace("{{CHICAGO_TREND_COLOR}}", chi_trend_color).replace("{{CHICAGO_MAE}}", get_mae_display('chicago_il')).replace("{{CHICAGO_MAPE}}", get_mape_display('chicago_il')).replace("{{CHICAGO_RMSE}}", get_rmse_display('chicago_il')).replace("{{CHICAGO_HIT_RATE}}", get_hit_rate_display('chicago_il')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_chicago).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Chicago_IL', prices_map['Chicago_IL']['base'], prices_map['Chicago_IL']['pred'], logistics_hub="BP Whiting (435 kbpd) & CITGO Lemont (177 kbpd) Refining Complex")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Chicago_IL', prices_map['Chicago_IL']['base'], prices_map['Chicago_IL']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('chicago_il'))
+
+    os.makedirs(CHICAGO_SUB_DIR, exist_ok=True)
+    with open(CHICAGO_PATH, "w", encoding="utf-8") as f:
+        f.write(build_chicago_html(""))
+    with open(CHICAGO_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_chicago_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # HOUSTON METRO RETAIL GAS PAGE (docs/houston.html & docs/houston/index.html)
+    # ---------------------------------------------------------------------------
+    def build_houston_html(rel_prefix: str = "") -> str:
+        nav_houston = get_nav_header("houston", rel_prefix)
+        hou_base = prices_map['Houston_TX']['base']
+        hou_pred = prices_map['Houston_TX']['pred']
+        hou_delta = hou_pred - hou_base
+        hou_pct = (hou_delta / hou_base * 100.0) if hou_base > 0 else 0.0
+        hou_sign = "+" if hou_delta > 0 else ""
+        hou_color = "#10b981" if hou_pct < -0.2 else ("#ef4444" if hou_pct > 0.2 else "#0ea5e9")
+        hou_trend_text = f"{hou_sign}{hou_pct:.1f}% Projected Trend"
+        hou_trend_color = "text-emerald-300" if hou_pct < -0.2 else ("text-rose-300" if hou_pct > 0.2 else "text-sky-300")
+        head_meta_houston = get_head_meta_tags(
+            title=f"Houston TX Retail Gas Forecast (${hou_base:.3f} → ${hou_pred:.3f} | {hou_sign}{hou_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Houston TX metro. Baseline ${hou_base:.3f}/gal, projected target ${hou_pred:.3f}/gal. ExxonMobil Baytown 560 kbpd & Motiva Port Arthur 630 kbpd mega-refining complex.",
+            canonical_path="houston.html" if rel_prefix == "" else "houston/index.html",
+            image_filename="houston.png",
+            theme_color=hou_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Houston, TX Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_HOUSTON}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Houston Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-industry text-emerald-400"></i> Houston, TX Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                PADD 3 USGC Refining Epicenter
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{HOUSTON_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{HOUSTON_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{HOUSTON_TREND_COLOR}} font-semibold">{{HOUSTON_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{HOUSTON_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{HOUSTON_MAPE}} | RMSE: {{HOUSTON_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{HOUSTON_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Houston Regional Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Category 4 Gulf Hurricane Landfall</h4>
+                    <p class="text-xs text-slate-400">Forces precautionary shutdown of Baytown and Texas City refineries, cutting >1.5M bpd capacity.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.350/gal (+12.28%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Colonial Pipeline Line 1 Origin Metering Trip</h4>
+                    <p class="text-xs text-slate-400">Traps refined product in USGC storage, depressing local wholesale spot price while spiking East Coast.</p>
+                    <div class="text-sm font-extrabold text-emerald-400">- $0.095/gal (-3.33%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Severe Gulf Coast Hard Freeze</h4>
+                    <p class="text-xs text-slate-400">Cuts industrial power and freezes refinery boiler feedwater lines, taking multiple USGC units offline.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.245/gal (+8.60%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Houston, TX Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_HOUSTON}}", nav_houston).replace("PREFIX", rel_prefix).replace("{{HOUSTON_BASE}}", f"{prices_map['Houston_TX']['base']:.3f}").replace("{{HOUSTON_PRED}}", f"{prices_map['Houston_TX']['pred']:.3f}").replace("{{HOUSTON_TREND_TEXT}}", hou_trend_text).replace("{{HOUSTON_TREND_COLOR}}", hou_trend_color).replace("{{HOUSTON_MAE}}", get_mae_display('houston_tx')).replace("{{HOUSTON_MAPE}}", get_mape_display('houston_tx')).replace("{{HOUSTON_RMSE}}", get_rmse_display('houston_tx')).replace("{{HOUSTON_HIT_RATE}}", get_hit_rate_display('houston_tx')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_houston).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Houston_TX', prices_map['Houston_TX']['base'], prices_map['Houston_TX']['pred'], logistics_hub="ExxonMobil Baytown (560 kbpd) & Motiva Port Arthur (630 kbpd) Refining Complex")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Houston_TX', prices_map['Houston_TX']['base'], prices_map['Houston_TX']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('houston_tx'))
+
+    os.makedirs(HOUSTON_SUB_DIR, exist_ok=True)
+    with open(HOUSTON_PATH, "w", encoding="utf-8") as f:
+        f.write(build_houston_html(""))
+    with open(HOUSTON_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_houston_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # LOS ANGELES METRO RETAIL GAS PAGE (docs/los_angeles.html & docs/los_angeles/index.html)
+    # ---------------------------------------------------------------------------
+    def build_los_angeles_html(rel_prefix: str = "") -> str:
+        nav_la = get_nav_header("los_angeles", rel_prefix)
+        la_base = prices_map['Los_Angeles_CA']['base']
+        la_pred = prices_map['Los_Angeles_CA']['pred']
+        la_delta = la_pred - la_base
+        la_pct = (la_delta / la_base * 100.0) if la_base > 0 else 0.0
+        la_sign = "+" if la_delta > 0 else ""
+        la_color = "#10b981" if la_pct < -0.2 else ("#ef4444" if la_pct > 0.2 else "#0ea5e9")
+        la_trend_text = f"{la_sign}{la_pct:.1f}% Projected Trend"
+        la_trend_color = "text-emerald-300" if la_pct < -0.2 else ("text-rose-300" if la_pct > 0.2 else "text-sky-300")
+        head_meta_la = get_head_meta_tags(
+            title=f"Los Angeles CA Retail Gas Forecast (${la_base:.3f} → ${la_pred:.3f} | {la_sign}{la_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Los Angeles Basin CA metro. Baseline ${la_base:.3f}/gal, projected target ${la_pred:.3f}/gal. Marathon Carson/Wilmington 363 kbpd, Chevron El Segundo 269 kbpd & PBF Torrance 166 kbpd CaRFG complex.",
+            canonical_path="los_angeles.html" if rel_prefix == "" else "los_angeles/index.html",
+            image_filename="los_angeles.png",
+            theme_color=la_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Angeles, CA Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_LOS_ANGELES}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Los Angeles Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-sun text-amber-400"></i> Los Angeles, CA Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                PADD 5 South Coast CaRFG Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{LA_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{LA_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{LA_TREND_COLOR}} font-semibold">{{LA_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{LA_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{LA_MAPE}} | RMSE: {{LA_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{LA_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Los Angeles Basin Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">El Segundo / Torrance FCC &amp; Alkylation Trip</h4>
+                    <p class="text-xs text-slate-400">Unplanned FCC or HF alkylation trip across Chevron El Segundo (269 kbpd) or PBF Torrance (166 kbpd) cuts LA CARBOB blendstock.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.450/gal (+9.20%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Newport-Inglewood M6.2+ Seismic Isolation</h4>
+                    <p class="text-xs text-slate-400">Triggers automatic SCADA shutoff across Kinder Morgan Watson Station and South Bay refinery product manifolds.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.380/gal (+7.77%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">San Pedro Bay Marine Berth &amp; Import Surge</h4>
+                    <p class="text-xs text-slate-400">Pacific swell closures at Port of LA/Long Beach delay Asian/Middle Eastern crude and CARBOB alkylate tankers.</p>
+                    <div class="text-sm font-extrabold text-amber-400">+ $0.215/gal (+4.40%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Los Angeles, CA Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_LOS_ANGELES}}", nav_la).replace("PREFIX", rel_prefix).replace("{{LA_BASE}}", f"{prices_map['Los_Angeles_CA']['base']:.3f}").replace("{{LA_PRED}}", f"{prices_map['Los_Angeles_CA']['pred']:.3f}").replace("{{LA_TREND_TEXT}}", la_trend_text).replace("{{LA_TREND_COLOR}}", la_trend_color).replace("{{LA_MAE}}", get_mae_display('los_angeles_ca')).replace("{{LA_MAPE}}", get_mape_display('los_angeles_ca')).replace("{{LA_RMSE}}", get_rmse_display('los_angeles_ca')).replace("{{LA_HIT_RATE}}", get_hit_rate_display('los_angeles_ca')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_la).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Los_Angeles_CA', prices_map['Los_Angeles_CA']['base'], prices_map['Los_Angeles_CA']['pred'], logistics_hub="Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd) CaRFG Complex")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Los_Angeles_CA', prices_map['Los_Angeles_CA']['base'], prices_map['Los_Angeles_CA']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('los_angeles_ca'))
+
+    os.makedirs(LOS_ANGELES_SUB_DIR, exist_ok=True)
+    with open(LOS_ANGELES_PATH, "w", encoding="utf-8") as f:
+        f.write(build_los_angeles_html(""))
+    with open(LOS_ANGELES_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_los_angeles_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # DENVER METRO RETAIL GAS PAGE (docs/denver.html & docs/denver/index.html)
+    # ---------------------------------------------------------------------------
+    def build_denver_html(rel_prefix: str = "") -> str:
+        nav_denver = get_nav_header("denver", rel_prefix)
+        denver_base = prices_map['Denver_CO']['base']
+        denver_pred = prices_map['Denver_CO']['pred']
+        denver_delta = denver_pred - denver_base
+        denver_pct = (denver_delta / denver_base * 100.0) if denver_base > 0 else 0.0
+        denver_sign = "+" if denver_delta > 0 else ""
+        denver_color = "#10b981" if denver_pct < -0.2 else ("#ef4444" if denver_pct > 0.2 else "#0ea5e9")
+        denver_trend_text = f"{denver_sign}{denver_pct:.1f}% Projected Trend"
+        denver_trend_color = "text-emerald-300" if denver_pct < -0.2 else ("text-rose-300" if denver_pct > 0.2 else "text-sky-300")
+        head_meta_denver = get_head_meta_tags(
+            title=f"Denver CO Retail Gas Forecast (${denver_base:.3f} → ${denver_pred:.3f} | {denver_sign}{denver_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for Denver Front Range CO metro and PADD 4. Baseline ${denver_base:.3f}/gal, projected target ${denver_pred:.3f}/gal. Suncor Commerce City 103 kbpd refinery and Colorado Front Range 7.8 psi summer RVP logistics.",
+            canonical_path="denver.html" if rel_prefix == "" else "denver/index.html",
+            image_filename="denver.png",
+            theme_color=denver_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denver, CO Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_DENVER}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">Denver Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-mountain text-amber-400"></i> Denver, CO Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                PADD 4 Rocky Mountain Refining Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{DENVER_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{DENVER_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{DENVER_TREND_COLOR}} font-semibold">{{DENVER_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{DENVER_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{DENVER_MAPE}} | RMSE: {{DENVER_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{DENVER_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> Front Range &amp; PADD 4 Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Suncor Commerce City Total Freeze / Outage</h4>
+                    <p class="text-xs text-slate-400">Unplanned cold-snap shutdown at Colorado's sole 103 kbpd refinery forces emergency product rail from Kansas/Texas and truck imports from Sinclair WY.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.385/gal (+12.20%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Front Range Ozone Nonattainment Summer RFG Transition</h4>
+                    <p class="text-xs text-slate-400">Annual switch to strict 7.8 psi Reid Vapor Pressure high-altitude boutique blend across 9 Front Range nonattainment counties.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.180/gal (+5.70%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">DJ Basin Sweet Feedstock Discount &amp; Debottlenecking</h4>
+                    <p class="text-xs text-slate-400">Record local Niobrara / DJ Basin crude production drives inland feedstock discounts against Brent/WTI, compressing refining input costs.</p>
+                    <div class="text-sm font-extrabold text-emerald-400">- $0.105/gal (-3.30%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; Denver, CO Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_DENVER}}", nav_denver).replace("PREFIX", rel_prefix).replace("{{DENVER_BASE}}", f"{prices_map['Denver_CO']['base']:.3f}").replace("{{DENVER_PRED}}", f"{prices_map['Denver_CO']['pred']:.3f}").replace("{{DENVER_TREND_TEXT}}", denver_trend_text).replace("{{DENVER_TREND_COLOR}}", denver_trend_color).replace("{{DENVER_MAE}}", get_mae_display('denver_co')).replace("{{DENVER_MAPE}}", get_mape_display('denver_co')).replace("{{DENVER_RMSE}}", get_rmse_display('denver_co')).replace("{{DENVER_HIT_RATE}}", get_hit_rate_display('denver_co')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_denver).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Denver_CO', prices_map['Denver_CO']['base'], prices_map['Denver_CO']['pred'], logistics_hub="Suncor Commerce City Refinery (103 kbpd) & Front Range Pipeline System")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Denver_CO', prices_map['Denver_CO']['base'], prices_map['Denver_CO']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('denver_co'))
+
+    os.makedirs(DENVER_SUB_DIR, exist_ok=True)
+    with open(DENVER_PATH, "w", encoding="utf-8") as f:
+        f.write(build_denver_html(""))
+    with open(DENVER_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_denver_html("../"))
+
+    # ---------------------------------------------------------------------------
+    # NEW YORK METRO RETAIL GAS PAGE (docs/new_york.html & docs/new_york/index.html)
+    # ---------------------------------------------------------------------------
+    def build_new_york_html(rel_prefix: str = "") -> str:
+        nav_new_york = get_nav_header("new_york", rel_prefix)
+        ny_base = prices_map['New_York_NY']['base']
+        ny_pred = prices_map['New_York_NY']['pred']
+        ny_delta = ny_pred - ny_base
+        ny_pct = (ny_delta / ny_base * 100.0) if ny_base > 0 else 0.0
+        ny_sign = "+" if ny_delta > 0 else ""
+        ny_color = "#10b981" if ny_pct < -0.2 else ("#ef4444" if ny_pct > 0.2 else "#0ea5e9")
+        ny_trend_text = f"{ny_sign}{ny_pct:.1f}% Projected Trend"
+        ny_trend_color = "text-emerald-300" if ny_pct < -0.2 else ("text-rose-300" if ny_pct > 0.2 else "text-sky-300")
+        head_meta_ny = get_head_meta_tags(
+            title=f"New York NY Retail Gas Forecast (${ny_base:.3f} → ${ny_pred:.3f} | {ny_sign}{ny_pct:.2f}%) - Midgley AI",
+            description=f"5-day retail gas price forecast for New York City NY metro and PADD 1B Central Atlantic. Baseline ${ny_base:.3f}/gal, projected target ${ny_pred:.3f}/gal. Phillips 66 Bayway 258 kbpd refinery, Buckeye Pipeline, and New York Harbor waterborne barge logistics.",
+            canonical_path="new_york.html" if rel_prefix == "" else "new_york/index.html",
+            image_filename="new_york.png",
+            theme_color=ny_color
+        )
+        return r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{{ANALYTICS_SCRIPT}}
+{{HEAD_META}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York, NY Retail Gas Forecast - Midgley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false} ] });"></script>
+
+    <style>
+        .card-glow { box-shadow: 0 4px 20px -2px rgba(14, 165, 233, 0.15); }
+        {{KATEX_MOBILE_CSS}}
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+{{NAV_NEW_YORK}}
+
+    <main id="main-content" role="main" class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Breadcrumb & Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                    <a href="PREFIXindex.html" class="hover:text-emerald-400">Home</a>
+                    <span>/</span>
+                    <span class="text-slate-200">New York Metro Retail</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fa-solid fa-ship text-sky-400"></i> New York, NY Metro Retail Gas Forecast
+                </h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                PADD 1B Central Atlantic Refining Hub
+            </span>
+        </div>
+
+        <!-- Metric Hero Card -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Current Live Pump Base</span>
+                <p class="text-3xl font-extrabold text-white">${{NY_BASE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">Live Pump Calibration Anchor</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">5-Day Projected Forecast</span>
+                <p class="text-3xl font-extrabold text-emerald-400">${{NY_PRED}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs {{NY_TREND_COLOR}} font-semibold">{{NY_TREND_TEXT}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Out-of-Time Error (MAE)</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{NY_MAE}}<span class="text-xs text-slate-400 font-normal">/gal</span></p>
+                <p class="text-xs text-slate-500">MAPE: {{NY_MAPE}} | RMSE: {{NY_RMSE}}</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-xs text-slate-400">Directional Accuracy</span>
+                <p class="text-3xl font-extrabold text-emerald-400">{{NY_HIT_RATE}}</p>
+                <p class="text-xs text-slate-500">Out-of-Time Test Hit Rate</p>
+            </div>
+        </div>
+
+        {{NARRATIVE_CARD}}
+        {{FEATURE_ATTRIBUTION_CARD}}
+        {{REGIONAL_CARDS}}
+
+        <!-- Counterfactual Shock Scenario Simulations -->
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-sky-400"></i> New York Harbor &amp; PADD 1B Shock Scenario Simulations
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Buckeye Pipeline Linden Terminal Junction Disruption</h4>
+                    <p class="text-xs text-slate-400">Severe pumping disruption or electrical outage at Buckeye Linden NJ terminal restricts pipeline batch delivery to NYC metro airports and Long Island terminals.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.320/gal (+9.20%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">New York Harbor Barge Freeze &amp; Fog Halt</h4>
+                    <p class="text-xs text-slate-400">Extended polar vortex ice floes along the Hudson River and Arthur Kill halt waterborne barge traffic supplying terminal racks.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.220/gal (+6.32%)</div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-200">Phillips 66 Bayway FCCU Spring Maintenance Turnaround</h4>
+                    <p class="text-xs text-slate-400">Scheduled 4-week catalytic cracking turnaround at Bayway Refinery (258 kbpd) temporarily curtails regional clean product output.</p>
+                    <div class="text-sm font-extrabold text-red-400">+ $0.180/gal (+5.17%)</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 mt-12 text-center text-xs text-slate-500">
+        Midgley Unleaded Gas Price Forecasting Engine &bull; New York, NY Metro Calibration Agent
+    </footer>
+
+</body>
+</html>
+""".replace("{{NAV_NEW_YORK}}", nav_new_york).replace("PREFIX", rel_prefix).replace("{{NY_BASE}}", f"{prices_map['New_York_NY']['base']:.3f}").replace("{{NY_PRED}}", f"{prices_map['New_York_NY']['pred']:.3f}").replace("{{NY_TREND_TEXT}}", ny_trend_text).replace("{{NY_TREND_COLOR}}", ny_trend_color).replace("{{NY_MAE}}", get_mae_display('new_york_ny')).replace("{{NY_MAPE}}", get_mape_display('new_york_ny')).replace("{{NY_RMSE}}", get_rmse_display('new_york_ny')).replace("{{NY_HIT_RATE}}", get_hit_rate_display('new_york_ny')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_ny).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('New_York_NY', prices_map['New_York_NY']['base'], prices_map['New_York_NY']['pred'], logistics_hub="Phillips 66 Bayway Refinery (258 kbpd) & Buckeye Pipeline System")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('New_York_NY', prices_map['New_York_NY']['base'], prices_map['New_York_NY']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('new_york_ny'))
+
+    os.makedirs(NEW_YORK_SUB_DIR, exist_ok=True)
+    with open(NEW_YORK_PATH, "w", encoding="utf-8") as f:
+        f.write(build_new_york_html(""))
+    with open(NEW_YORK_SUB_PATH, "w", encoding="utf-8") as f:
+        f.write(build_new_york_html("../"))
+
+    # ---------------------------------------------------------------------------
     # 6. OAKLAND METRO RETAIL GAS PAGE (docs/oakland.html & docs/oakland/index.html)
     # ---------------------------------------------------------------------------
     def build_oakland_html(rel_prefix: str = "") -> str:
@@ -4310,6 +5340,12 @@ def generate_public_dashboard():
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url={target_url}">
     <link rel="canonical" href="{target_url}">
+    <meta property="og:site_name" content="Midgley Gas Price Predictor">
+    <meta property="og:title" content="Oakland & SF Bay Area Retail Gas Forecast - Midgley">
+    <meta property="og:image" content="https://koshiirra.github.io/midgley/assets/og-preview.png">
+    <meta property="og:description" content="Oakland and SF Bay Area retail gas forecast and fuel logistics.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#020617">
     <title>Oakland & SF Bay Area Retail Gas Forecast - Midgley</title>
     <script>window.location.href = "{target_url}";</script>
 </head>
@@ -4317,6 +5353,7 @@ def generate_public_dashboard():
     <h2 style="font-size:24px; font-weight:bold;">Oakland Regional Hub Merged</h2>
     <p style="margin-top:12px; color:#94a3b8;">Oakland and the 9-County Northern California corridor have been unified into the <a href="{target_url}" style="color:#38bdf8; text-decoration:underline;">SF Bay Area Regional Hub</a>.</p>
     <p style="margin-top:8px; font-size:14px; color:#64748b;">Redirecting to <a href="{target_url}" style="color:#38bdf8;">{target_url}</a>...</p>
+    <p style="display:none;" class="sr-only">Model Narrative: Oakland and Northern California sub-locales are calibrated under the SF Bay Area hub.</p>
 </body>
 </html>"""
         nav_oakland = get_nav_header("oakland", rel_prefix)
@@ -5098,9 +6135,9 @@ def generate_public_dashboard():
                 </div>
                 <h4 class="text-sm uppercase tracking-wider text-purple-400 font-bold pt-2">Equation 3.2: Multi-Provider LLM &amp; Deterministic Lexicon Failover Engine (Issue #196)</h4>
                 <div class="text-center text-sm sm:text-base font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-purple-200 overflow-x-auto">
-                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini2.5Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
+                    $$\mathbf{V}_{\text{Finlight}, t} = \text{Gemini3.8Flash}\left( \text{REST}_{\text{Finlight}}\Big(\text{Query}_{\text{Oil, Refining, Chokepoints}}\Big) \right)$$
                     $$\mathcal{M}_{\text{LLM}}(\text{payload}) = \begin{cases} 
-                    \text{Gemini 2.5 Flash} & (\text{Tier 1: Privileged Key}) \\ 
+                    \text{Gemini 3.8 Flash} & (\text{Tier 1: Privileged Key}) \\
                     \text{ZeroCostProviderHook} & (\text{Tier 1.5: Kaggle/OSS GPU}) \\ 
                     \text{GPT-4o-mini / Claude Haiku} & (\text{Tier 2: Soft Failover}) \\ 
                     \text{Deterministic Rule-Based Lexicon} & (\text{Tier 3: 100\% Offline Fallback}) 
@@ -5157,7 +6194,7 @@ def generate_public_dashboard():
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
                 <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.1: Multi-Tiered Weather Vulnerability Matrix</h4>
                 <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
-                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}}$$
+                    $$\mathbf{W}_t = \mathbf{W}_{\text{National Basins}} + \mathbf{W}_{\text{Tulsa}} + \mathbf{W}_{\text{Newark}} + \mathbf{W}_{\text{Cincinnati}} + \mathbf{W}_{\text{Greenville}} + \mathbf{W}_{\text{Charlotte}} + \mathbf{W}_{\text{Oakland}} + \mathbf{W}_{\text{Port St. Lucie}} + \mathbf{W}_{\text{Chicago}} + \mathbf{W}_{\text{Houston}} + \mathbf{W}_{\text{Los Angeles}}$$
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
                     <strong>Tier 1 (National):</strong> Gulf Coast hurricane landfall tracks (PADD 3 refining corridor) &amp; Permian/Bakken production basin polar vortex freezes.<br>
@@ -5167,7 +6204,10 @@ def generate_public_dashboard():
                     <strong>Tier 2 (Greenville NC):</strong> Pitt County (<code class="text-amber-300">NCZ081</code>) Atlantic hurricane coastal inundation, Tar River flood crests (\(&gt;19\text{ ft}\)), and winter ice storms throttling Selma/Apex terminal rack dispatch on Colonial Pipeline Lines 1 &amp; 2.<br>
                     <strong>Tier 2 (Charlotte NC):</strong> Mecklenburg County (<code class="text-amber-300">NCZ071</code>) inland tropical cyclone wind gusts, Catawba River basin flooding, and severe convective power substation trips halting truck dispatches at Paw Creek petroleum tank farms.<br>
                     <strong>Tier 2 (Oakland &amp; SF Bay Area CA):</strong> Alameda County (<code class="text-amber-300">CAZ508</code>) &amp; Contra Costa County (<code class="text-amber-300">CAZ511</code>) atmospheric river bomb cyclones, PG&amp;E Public Safety Power Shutoffs (PSPS) / Diablo winds impacting Chevron Richmond (\(245,000\text{ bpd}\)) CaRFG units, and USGS Hayward Fault seismic pipeline shutoffs.<br>
-                    <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.
+                    <strong>Tier 2 (Port St. Lucie FL):</strong> St. Lucie County (<code class="text-amber-300">FLZ147</code> / Zip <code class="text-amber-300">34952</code>) Atlantic hurricane evacuations/landfalls (Ian, Nicole, Milton), South Florida 25-inch flash flood rack washouts, and marine barge delays into Port Everglades and Port Canaveral berths.<br>
+                    <strong>Tier 2 (Chicago IL/IN):</strong> Cook County (<code class="text-amber-300">ILZ104</code> / Zip <code class="text-amber-300">60601</code>) and Lake County IN (<code class="text-amber-300">INZ001</code>) Lake Michigan polar vortex freezes, summer severe convective derechos, and BP Whiting/CITGO Lemont cooling water intake loops.<br>
+                    <strong>Tier 2 (Houston TX):</strong> Harris County (<code class="text-amber-300">TXZ213</code> / Zip <code class="text-amber-300">77002</code>) and Galveston/Jefferson Counties Gulf hurricane storm surges, tropical convective inundation (Harvey-style), winter freeze-offs, and Houston Ship Channel marine draft restrictions across Baytown (560 kbpd) and Port Arthur (630 kbpd).<br>
+                    <strong>Tier 2 (Los Angeles CA):</strong> Los Angeles County (<code class="text-amber-300">CAZ041</code> / Zip <code class="text-amber-300">90012</code>) Santa Ana Red Flag / SCE PSPS wind events, Pacific atmospheric river inundation, San Pedro Bay marine swell closures, and Newport-Inglewood seismic shutoffs across Carson/Wilmington (363 kbpd), El Segundo (269 kbpd), and Torrance (166 kbpd).
                 </p>
             </div>
         </section>
@@ -5329,7 +6369,7 @@ def generate_public_dashboard():
             </div>
 
             <p class="text-slate-300 leading-relaxed text-sm">
-                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Oakland (\(\$5.550/\text{gal}\)) and the 9-County SF Bay Area (\(\$5.650/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
+                California operates as an isolated refining island with zero interstate product pipelines crossing the Sierra Nevada. Retail prices in Los Angeles (\(\$4.890/\text{gal}\)), Oakland (\(\$5.550/\text{gal}\)), and the 9-County SF Bay Area (\(\$5.650/\text{gal}\)) embed a mandatory <strong>\(\$0.953/\text{gal}\) state tax &amp; regulatory burden</strong>:
             </p>
 
             <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
@@ -5342,8 +6382,8 @@ def generate_public_dashboard():
                     \end{aligned}$$
                 </div>
                 <p class="text-xs text-slate-400">
-                    <strong>Refining Crack Spread:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
-                    <strong>Physical Risk Shocks:</strong> Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), PG&amp;E PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
+                    <strong>Refining Crack Spreads:</strong> \(\text{RichmondCrack}_t = P_{\text{Oakland Retail}, t} - \frac{P_{\text{Brent}, t}}{42.0}\), \(\text{ElSegundoCrack}_t = P_{\text{LA CARBOB}, t} - \frac{P_{\text{Brent}, t}}{42.0}\).<br>
+                    <strong>Physical Risk Shocks:</strong> El Segundo / Torrance FCC Trip (\(+\$0.450/\text{gal}\)), Hayward Fault Seismic (\(+\$0.420/\text{gal}\)), Newport-Inglewood Seismic (\(+\$0.380/\text{gal}\)), PG&amp;E / SCE PSPS Red Flag Wildfire Blackout (\(+\$0.350/\text{gal}\)), and PTWC Tsunami Berth Closure (\(+\$0.165/\text{gal}\)).
                 </p>
             </div>
         </section>
@@ -5414,7 +6454,10 @@ def generate_public_dashboard():
                     <strong>Cincinnati OH/KY:</strong> Dual-state Ohio (\(\$0.385/\text{gal}\)) and Kentucky (\(\$0.287/\text{gal}\)) tax differential and Ohio River barge transit rates.<br>
                     <strong>Greenville NC &amp; Charlotte NC:</strong> PADD 1C Colonial Pipeline Line 1 tariffs, Selma/Apex rack differentials, and North Carolina excise tax (\(\$0.404/\text{gal}\)).<br>
                     <strong>Oakland &amp; SF Bay Area CA:</strong> PADD 5 isolated island with statutory CARB regulatory burden (\(\$0.953/\text{gal}\)) and local county sales taxes.<br>
-                    <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).
+                    <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).<br>
+                    <strong>Chicago IL/IN:</strong> Multi-tiered Illinois (\(\$0.470/\text{gal}\)), Cook County (\(\$0.060/\text{gal}\)), and Chicago city (\(\$0.080/\text{gal}\)) motor fuel taxes with Indiana cross-border arbitrage and BP Whiting / CITGO Lemont rack margin pass-through.<br>
+                    <strong>Houston TX:</strong> PADD 3 Gulf Coast refining epicenter directly adjacent to Baytown and Port Arthur mega-refineries, Texas state excise tax (\(\$0.200/\text{gal}\)), prompt USGC spot pass-through, and zero local pipeline import tariff.<br>
+                    <strong>Los Angeles CA:</strong> PADD 5 South Coast Basin refining cluster (Marathon Carson/Wilmington, Chevron El Segundo, PBF Torrance), statutory CARB regulatory burden (\(\$0.953/\text{gal}\)), LA CARBOB spot pass-through, and Kinder Morgan Watson Station rack distribution.
                 </p>
             </div>
         </section>
@@ -5546,6 +6589,9 @@ def get_savings_regional_trajectories() -> dict:
         "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.250, "delta": -0.028},
         "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.280, "delta": -0.030},
         "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.380, "delta": -0.025},
+        "Chicago_IL": {"name": "Chicago, IL/IN Retail", "base": 3.850, "delta": -0.040},
+        "Houston_TX": {"name": "Houston, TX Retail", "base": 2.850, "delta": -0.020},
+        "Los_Angeles_CA": {"name": "Los Angeles, CA Retail", "base": 4.890, "delta": -0.055},
         "Oakland_CA": {"name": "Oakland, CA Retail", "base": 4.850, "delta": -0.060},
         "BayArea_CA": {"name": "SF Bay Area Region", "base": 4.950, "delta": -0.058},
     }
@@ -6194,7 +7240,7 @@ def generate_telemetry_page():
     header_html = get_nav_header("telemetry", rel_prefix="")
     sub_header_html = get_nav_header("telemetry", rel_prefix="../")
 
-    from src.zip_geocoding import get_unmapped_zip_telemetry
+    from src.zip_geocoding import get_unmapped_zip_telemetry, STATE_CENTER_COORDS
     from src.finlight_feed import get_finlight_quota_status
     from src.tokentab_accounting import token_tab_manager
     from src.ipasis_security import get_ipasis_telemetry
@@ -6217,7 +7263,14 @@ def generate_telemetry_page():
     tok_summary = tok_data.get('summary', {})
     tok_prov = tok_data.get('provider_breakdown', {})
     tok_warn = tok_data.get('budget_warnings', [{}])[0] if tok_data.get('budget_warnings') else {}
-    gemini_stats = tok_prov.get('gemini-2.5-flash', {})
+    gemini_38 = tok_prov.get('gemini-3.8-flash', {})
+    gemini_25 = tok_prov.get('gemini-2.5-flash', {})
+    gemini_stats = {
+        'calls': gemini_38.get('calls', 0) + gemini_25.get('calls', 0),
+        'input_tokens': gemini_38.get('input_tokens', 0) + gemini_25.get('input_tokens', 0),
+        'output_tokens': gemini_38.get('output_tokens', 0) + gemini_25.get('output_tokens', 0),
+        'cost_usd': gemini_38.get('cost_usd', 0.0) + gemini_25.get('cost_usd', 0.0),
+    }
     gpt_stats = tok_prov.get('gpt-4o-mini', {})
     claude_stats = tok_prov.get('claude-3-5-haiku', {})
     finlight_stats = tok_prov.get('finlight', {})
@@ -6268,35 +7321,8 @@ def generate_telemetry_page():
                 <td class="py-2.5 px-3 text-right text-slate-300">{meta.get('avg_data_age_hours', 0.0):.2f} h</td>
             </tr>"""
 
-    # Dynamic Leaflet points
-    known_zip_coords = {
-        "90210": (34.0736, -118.4004, "Beverly Hills, CA (PADD 5)"),
-        "77002": (29.7604, -95.3698, "Houston, TX (PADD 3)"),
-        "10001": (40.7501, -73.9996, "New York, NY (PADD 1B)"),
-        "60601": (41.8781, -87.6298, "Chicago, IL (PADD 2)"),
-        "30301": (33.7490, -84.3880, "Atlanta, GA (PADD 1C)"),
-        "74101": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
-        "19711": (39.6837, -75.7497, "Newark, DE (PADD 1B)"),
-        "45202": (39.1031, -84.5120, "Cincinnati, OH (PADD 2)"),
-        "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
-        "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
-        "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
-        "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)")
-    }
-    state_center_coords = {
-        "CA": (36.7783, -119.4179),
-        "TX": (31.9686, -99.9018),
-        "NY": (40.7128, -74.0060),
-        "IL": (40.6331, -89.3985),
-        "FL": (27.6648, -81.5158),
-        "PA": (41.2033, -77.1945),
-        "OH": (40.4173, -82.9071),
-        "NC": (35.7596, -79.0193),
-        "GA": (32.1656, -82.9001),
-        "OK": (35.4676, -97.5164),
-        "DE": (38.9108, -75.5277),
-    }
-
+    # Dynamic Leaflet points using precise ZIP and 3-digit prefix geocoding
+    from src.zip_geocoding import resolve_zip_coordinates
     zip_records = tele_data.get('top_unmapped_zips', [])
     map_points = []
     if zip_records:
@@ -6304,16 +7330,14 @@ def generate_telemetry_page():
             z_code = str(zr.get('zip_code', ''))
             z_hits = zr.get('hit_count', 1)
             z_st = zr.get('state', 'US')
-            z_padd = zr.get('padd_region', 'PADD 2')
-            if z_code in known_zip_coords:
-                lat, lng, desc = known_zip_coords[z_code]
-                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {desc}", "hits": z_hits})
-            elif z_st in state_center_coords:
-                lat, lng = state_center_coords[z_st]
-                map_points.append({"lat": lat, "lng": lng, "name": f"{z_code} - {z_st} ({z_padd})", "hits": z_hits})
+            z_padd = zr.get('padd_region', '')
+            lat, lng, desc = resolve_zip_coordinates(z_code, state_code=z_st, padd_region=z_padd)
+            map_points.append({"lat": lat, "lng": lng, "name": desc, "hits": z_hits})
     if not map_points:
         map_points = []
     map_points_json = json.dumps(map_points)
+    carto_tile_url = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+
 
     def build_telemetry_html(hdr, learning_section_html=""):
         return f"""<!DOCTYPE html>
@@ -6704,7 +7728,7 @@ def generate_telemetry_page():
                             </thead>
                             <tbody class="divide-y divide-slate-800/50">
                                 <tr class="hover:bg-slate-800/40">
-                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 2.5 Flash (Tier 1)</td>
+                                    <td class="py-2 px-3 font-semibold text-emerald-300">Gemini 3.8 Flash (Tier 1)</td>
                                     <td class="py-2 px-3 text-center">{gemini_stats.get('calls', 0):,}</td>
                                     <td class="py-2 px-3 text-center">{gemini_stats.get('input_tokens', 0):,}</td>
                                     <td class="py-2 px-3 text-center">{gemini_stats.get('output_tokens', 0):,}</td>
@@ -6805,10 +7829,12 @@ def generate_telemetry_page():
     <script>
         document.addEventListener('DOMContentLoaded', function() {{
             var map = L.map('zipMap').setView([38.5000, -96.0000], 4);
-            L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+            L.tileLayer('{carto_tile_url}', {{
                 attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
                 maxZoom: 18
             }}).addTo(map);
+
 
             var zipPoints = {map_points_json};
 

@@ -37,8 +37,8 @@ REGION_MODULE_MAP = {
     "newark_de": ("src.locations.newark.regional", "fetch_newark_market_data", "get_newark_regional_events", "Newark_DE"),
     "cincinnati": ("src.locations.cincinnati.regional", "fetch_cincinnati_market_data", "get_cincinnati_regional_events", "Cincinnati_OH"),
     "cincinnati_oh": ("src.locations.cincinnati.regional", "fetch_cincinnati_market_data", "get_cincinnati_regional_events", "Cincinnati_OH"),
-    "greenville": ("src.locations.greenville.regional", "fetch_greenville_market_data", "get_greenville_regional_events", "Greenville_NC"),
-    "greenville_nc": ("src.locations.greenville.regional", "fetch_greenville_market_data", "get_greenville_regional_events", "Greenville_NC"),
+    "greenville": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
+    "greenville_nc": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
     "charlotte": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
     "charlotte_nc": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
     "oakland": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
@@ -48,6 +48,31 @@ REGION_MODULE_MAP = {
     "bayarea_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
     "port_st_lucie": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
     "port_st_lucie_fl": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
+    "chicago": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
+    "chicago_il": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
+    "houston": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
+    "houston_tx": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
+    "los_angeles": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
+    "los_angeles_ca": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
+    "denver": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
+    "denver_co": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
+    "new_york": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "new_york_ny": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "nyc": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "seattle": ("src.locations.seattle.regional", "fetch_seattle_market_data", "get_seattle_regional_events", "Seattle_WA"),
+    "seattle_wa": ("src.locations.seattle.regional", "fetch_seattle_market_data", "get_seattle_regional_events", "Seattle_WA"),
+    "phoenix": ("src.locations.phoenix.regional", "fetch_phoenix_market_data", "get_phoenix_regional_events", "Phoenix_AZ"),
+    "phoenix_az": ("src.locations.phoenix.regional", "fetch_phoenix_market_data", "get_phoenix_regional_events", "Phoenix_AZ"),
+    "anchorage": ("src.locations.anchorage.regional", "fetch_anchorage_market_data", "get_anchorage_regional_events", "Anchorage_AK"),
+    "anchorage_ak": ("src.locations.anchorage.regional", "fetch_anchorage_market_data", "get_anchorage_regional_events", "Anchorage_AK"),
+    "honolulu": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
+    "honolulu_hi": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
+    "guam": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
+    "guam_gu": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
+    "san_juan": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
+    "san_juan_pr": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
+    "boston": ("src.locations.boston.regional", "fetch_boston_market_data", "get_boston_regional_events", "Boston_MA"),
+    "boston_ma": ("src.locations.boston.regional", "fetch_boston_market_data", "get_boston_regional_events", "Boston_MA"),
 }
 
 
@@ -224,7 +249,7 @@ def run_regional_pipeline(
             except Exception:
                 sec_cached_prices[sec_key] = sec_default
 
-    is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean)
+    is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean or "los_angeles" in reg_clean)
 
     for h in [1, 2, 3, 4, 5]:
         h_res = multi_horizon_results.get(h)
@@ -309,7 +334,7 @@ def run_regional_pipeline(
 
         # Forward regulatory/tax deltas (Issue #451)
         tax_delta_h = get_known_future_tax_deltas(region=logger_region_key, as_of_date=str(last_date), horizon_days=h)
-        is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean)
+        is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean or "los_angeles" in reg_clean)
 
         # Calibrate with Asymmetric ECM pass-through (Issue #443)
         if ecm_model and ecm_model.is_fitted:

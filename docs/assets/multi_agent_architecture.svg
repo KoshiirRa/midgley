@@ -41,7 +41,7 @@
     
     <rect x="14" y="76" width="232" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
     <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• Event &amp; Weather NLP</text>
-    <text x="34" y="114" fill="#94a3b8" font-size="11">Google Gemini 2.5 Flash</text>
+    <text x="34" y="114" fill="#94a3b8" font-size="11">Google Gemini 3.8 Flash</text>
     <text x="34" y="130" fill="#94a3b8" font-size="11">Finlight &amp; Firecrawl Markdown</text>
     
     <text x="24" y="156" fill="#e2e8f0" font-size="12" font-weight="600">• Physical &amp; Hydrology Feeds</text>
@@ -86,13 +86,13 @@
     <text x="14" y="62" fill="#f8fafc" font-size="15" font-weight="700">Metro Calibration</text>
     
     <rect x="14" y="76" width="232" height="186" rx="8" fill="#0f172a" fill-opacity="0.6"/>
-    <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• 8 Regional Hubs</text>
-    <text x="34" y="114" fill="#a78bfa" font-size="11">Tulsa, OK (Cushing WTI)</text>
-    <text x="34" y="130" fill="#a78bfa" font-size="11">Newark, DE (Delaware City)</text>
-    <text x="34" y="146" fill="#a78bfa" font-size="11">Cincinnati, OH/KY (Ohio River)</text>
-    <text x="34" y="162" fill="#a78bfa" font-size="11">Greenville &amp; Charlotte, NC</text>
-    <text x="34" y="178" fill="#a78bfa" font-size="11">Oakland &amp; SF Bay Area, CA</text>
-    <text x="34" y="194" fill="#a78bfa" font-size="11">Port St. Lucie, FL (Waterborne)</text>
+    <text x="24" y="96" fill="#e2e8f0" font-size="12" font-weight="600">• 18 Regional Hubs (PADD 1–7)</text>
+    <text x="34" y="114" fill="#a78bfa" font-size="11">PADD 1: NY, Boston, CLT, NWK, PSL</text>
+    <text x="34" y="130" fill="#a78bfa" font-size="11">PADD 2: Chicago, Tulsa, Cincinnati</text>
+    <text x="34" y="146" fill="#a78bfa" font-size="11">PADD 3 &amp; 4: Houston, Denver</text>
+    <text x="34" y="162" fill="#a78bfa" font-size="11">PADD 5: LA, Bay Area, SEA, PHX</text>
+    <text x="34" y="178" fill="#a78bfa" font-size="11">Offshore: ANC, HNL, GUM, SJU</text>
+    <text x="34" y="194" fill="#a78bfa" font-size="11">Paw Creek Hub (CLT &amp; Carolinas)</text>
 
     <text x="24" y="222" fill="#e2e8f0" font-size="12" font-weight="600">• ULSD Distillate Engine</text>
     <text x="34" y="240" fill="#94a3b8" font-size="11">HO=F &amp; 3-2-1 Crack Margin</text>

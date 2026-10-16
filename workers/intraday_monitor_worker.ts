@@ -7,6 +7,7 @@
  */
 
 import nacl from "tweetnacl";
+import { getEnverusDailyRigCount, MIDGLEY_AGENT_USER_AGENT as DEFAULT_MIDGLEY_AGENT_UA } from "./enverus_scraper";
 
 export interface Env {
   GH_PAT?: string;
@@ -16,14 +17,17 @@ export interface Env {
   AXIOM_TOKEN?: string;
   AXIOM_DATASET?: string;
   SEC_USER_AGENT?: string;
+  MIDGLEY_AGENT_USER_AGENT?: string;
   EDGAR_8K_TICKERS?: string;
   DISCORD_PUBLIC_KEY?: string;
   DISCORD_APP_ID?: string;
+  DISCORD_BOT_TOKEN?: string;
   PROJECT_V2_ID?: string;
   CLOUDFLARE_AUTH_TOKEN?: string;
   ADMIN_TOKEN?: string;
   FLAG_SIGNING_KEY?: string;
   DB?: any;
+  MYBROWSER?: any;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
     sendBatch(messages: { body: any }[], options?: any): Promise<void>;
@@ -303,7 +307,16 @@ function parseRSSItems(xmlText: string): RSSItem[] {
 export function normalizeHeadline(title: string): string {
   if (!title) return "";
   // Strip trailing publisher attribution tag: " - Publisher", " | Publisher", " — Publisher"
-  let cleaned = title.replace(/\s+[-–—|]\s+[^-–—|]+$/, "").trim();
+  let cleaned = title.trim();
+  const sepIdx = Math.max(
+    cleaned.lastIndexOf(" - "),
+    cleaned.lastIndexOf(" – "),
+    cleaned.lastIndexOf(" — "),
+    cleaned.lastIndexOf(" | ")
+  );
+  if (sepIdx > 0) {
+    cleaned = cleaned.slice(0, sepIdx).trim();
+  }
   // Lowercase and strip non-alphanumeric for clean hashing key
   return cleaned.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
 }
@@ -797,6 +810,870 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
 const DEFAULT_DISCORD_PUBLIC_KEY = "23fd56cafbd2e02e99e228ef545bb7a350719b086537410ba5ce092170e56e9b";
 const DEFAULT_PROJECT_V2_ID = "PVT_kwHOAVnZGM4BhxKn";
 
+export const SUPPORTED_DISCORD_LOCALES = [
+  { name: "National (US Wholesale & Retail Benchmark)", value: "National", slug: "index.html", padd: "US National" },
+  { name: "Tulsa Metro, OK (PADD 2)", value: "Tulsa", slug: "tulsa.html", padd: "PADD 2 Midwest" },
+  { name: "Newark Metro, DE (PADD 1B)", value: "Newark", slug: "newark.html", padd: "PADD 1B Central Atlantic" },
+  { name: "Cincinnati Tri-State, OH/KY (PADD 2)", value: "Cincinnati", slug: "cincinnati.html", padd: "PADD 2 Midwest" },
+  { name: "Greenville Metro, NC (PADD 1C)", value: "Greenville", slug: "greenville.html", padd: "PADD 1C South Atlantic" },
+  { name: "Charlotte Metro, NC (PADD 1C)", value: "Charlotte", slug: "charlotte.html", padd: "PADD 1C South Atlantic" },
+  { name: "SF Bay Area / Oakland, CA (PADD 5)", value: "Oakland", slug: "bay_area.html", padd: "PADD 5 West Coast" },
+  { name: "Port St. Lucie Metro, FL (PADD 1C)", value: "Port_St_Lucie", slug: "port_st_lucie.html", padd: "PADD 1C South Atlantic" },
+  { name: "Greater Chicago Metro, IL/IN (PADD 2)", value: "Chicago", slug: "chicago.html", padd: "PADD 2 Midwest" },
+  { name: "Houston Metro, TX (PADD 3)", value: "Houston", slug: "houston.html", padd: "PADD 3 Gulf Coast" },
+  { name: "Los Angeles Basin, CA (PADD 5)", value: "Los_Angeles", slug: "los_angeles.html", padd: "PADD 5 West Coast" },
+  { name: "Denver Metro & Rocky Mountain, CO (PADD 4)", value: "Denver", slug: "denver.html", padd: "PADD 4 Rocky Mountain" },
+  { name: "New York Harbor & NY State, NY (PADD 1B)", value: "New_York", slug: "new_york.html", padd: "PADD 1B Central Atlantic" },
+  { name: "Boston Metro & New England, MA (PADD 1A)", value: "Boston", slug: "boston.html", padd: "PADD 1A New England" },
+  { name: "Seattle-Tacoma & Puget Sound, WA (PADD 5B)", value: "Seattle", slug: "seattle.html", padd: "PADD 5B Pacific Northwest" },
+  { name: "Phoenix Metro & Desert Southwest, AZ (PADD 5C)", value: "Phoenix", slug: "phoenix.html", padd: "PADD 5C Desert Southwest" },
+  { name: "Anchorage & Southcentral Alaska, AK (PADD 5D)", value: "Anchorage", slug: "anchorage.html", padd: "PADD 5D Alaska" },
+  { name: "Honolulu & Oahu Island System, HI (PADD 5D)", value: "Honolulu", slug: "honolulu.html", padd: "PADD 5D Hawaii" },
+  { name: "San Juan Metro & Caribbean Territories, PR (PADD 6)", value: "San_Juan", slug: "san_juan.html", padd: "PADD 6 Caribbean" },
+  { name: "Hagåtña & U.S. Pacific Territories, GU (PADD 7)", value: "Guam", slug: "guam.html", padd: "PADD 7 Pacific Islands" }
+];
+
+export interface WorkerDMSubscriptionRecord {
+  subscription_id: string;
+  discord_user_id: string;
+  dm_channel_id?: string | null;
+  target_locales: string[];
+  zip_codes?: string[];
+  min_shock_threshold: number;
+  direction_filter: string;
+  delivery_mode: string;
+  is_active: boolean;
+  muted_until?: string | null;
+  created_at: string;
+}
+
+export interface WorkerZipResolution {
+  status: "success" | "fallback";
+  zip_code: string;
+  prefix_3: string;
+  resolution_tier: "METRO_CLUSTER_HIT" | "STATE_PADD_FALLBACK" | "INVALID_INPUT_FALLBACK";
+  is_metro_cluster_hit: boolean;
+  locale_code: string;
+  canonical_hub: string;
+  location_name: string;
+  state: string;
+  padd_region: string;
+  padd_name: string;
+  calibrated_model_used: string;
+  state_tax_rate_per_gal: number;
+  hub_baseline_tax_rate: number;
+  tax_delta_per_gal: number;
+  is_significant_departure: boolean;
+  departure_reason: string;
+  estimated_basis_delta: number;
+  tracking_issue_number?: number | null;
+}
+
+export interface WorkerUnmappedZipTelemetryRecord {
+  zip_code: string;
+  state: string;
+  padd_region: string;
+  calibrated_model_used: string;
+  hit_count: number;
+  first_searched_at: string;
+  last_searched_at: string;
+}
+
+const WORKER_DM_SUBSCRIPTIONS = new Map<string, WorkerDMSubscriptionRecord>();
+const WORKER_UNMAPPED_ZIPS = new Map<string, WorkerUnmappedZipTelemetryRecord>();
+const WORKER_DEPARTURE_ISSUES_CACHE = new Map<string, { issueNumber: number; issueUrl: string }>();
+
+let flagReplaySchemaInitialized = false;
+
+export function clearWorkerSubscriptionsMemoryForTesting(): void {
+  WORKER_DM_SUBSCRIPTIONS.clear();
+  flagReplaySchemaInitialized = false;
+}
+
+export async function ensureFlagReplaySchema(env: Env): Promise<void> {
+  if (!env.DB || flagReplaySchemaInitialized) return;
+  try {
+    await env.DB.prepare(
+      "CREATE TABLE IF NOT EXISTS flag_replay_tokens (clean_key TEXT PRIMARY KEY, value TEXT, used_at TEXT NOT NULL DEFAULT (datetime('now')))"
+    ).run();
+
+    try {
+      const tableInfo = await env.DB.prepare("PRAGMA table_info(flag_replay_tokens)").all();
+      const cols = new Set(((tableInfo && tableInfo.results) || []).map((c: any) => c.name));
+      if (cols.size > 0 && !cols.has("value")) {
+        await env.DB.prepare("ALTER TABLE flag_replay_tokens ADD COLUMN value TEXT").run();
+      }
+    } catch {
+      // PRAGMA table_info might fail in certain environments or mocks
+    }
+
+    flagReplaySchemaInitialized = true;
+  } catch (err: any) {
+    console.warn(`[D1 Schema Init Notice] ensureFlagReplaySchema: ${err?.message || String(err)}`);
+  }
+}
+
+// Baseline statutory motor fuel excise taxes ($/gal) for calibrated reference hubs
+export const WORKER_HUB_BASELINE_TAXES: Record<string, number> = {
+  Newark: 0.230,
+  Tulsa: 0.190,
+  Cincinnati: 0.385,
+  Greenville: 0.404,
+  Charlotte: 0.404,
+  Port_St_Lucie: 0.362,
+  Chicago: 0.550,
+  Houston: 0.200,
+  Los_Angeles: 0.953,
+  Oakland: 0.634,
+  Denver: 0.280,
+  New_York: 0.472,
+  Boston: 0.240,
+  Seattle: 0.494,
+  Phoenix: 0.180,
+  Anchorage: 0.0895,
+  Honolulu: 0.330,
+  San_Juan: 0.160,
+  Guam: 0.190,
+  National: 0.184
+};
+
+// Known regional locality names to preserve true human-readable geographic identity
+export const WORKER_KNOWN_ZIP_LOCALITIES: Record<string, string> = {
+  "12946": "Lake Placid, NY",
+  "129": "Adirondacks / Plattsburgh, NY",
+  "100": "Manhattan, NYC",
+  "101": "Manhattan, NYC",
+  "102": "Manhattan, NYC",
+  "103": "Staten Island, NYC",
+  "104": "Bronx, NYC",
+  "112": "Brooklyn, NYC",
+  "111": "Queens, NYC",
+  "113": "Queens, NYC",
+  "114": "Queens, NYC",
+  "115": "Nassau County, Long Island",
+  "117": "Suffolk County, Long Island",
+  "119": "Hamptons, Long Island",
+  "120": "Capital District, NY",
+  "122": "Albany, NY",
+  "128": "Glens Falls / Adirondacks, NY",
+  "132": "Syracuse, NY",
+  "142": "Buffalo, NY",
+  "146": "Rochester, NY",
+  "191": "Philadelphia, PA",
+  "152": "Pittsburgh, PA",
+  "021": "Boston, MA",
+  "029": "Providence, RI",
+  "061": "Hartford, CT",
+  "031": "Manchester, NH",
+  "054": "Burlington, VT",
+  "041": "Portland, ME",
+  "802": "Denver, CO",
+  "841": "Salt Lake City, UT",
+  "820": "Cheyenne, WY",
+  "591": "Billings, MT",
+  "837": "Boise, ID",
+  "74103": "Tulsa Metro, OK",
+  "64101": "Kansas City, MO",
+};
+
+export function resolveWorkerLocationName(zipCode: string, prefix3: string, state: string): string {
+  if (WORKER_KNOWN_ZIP_LOCALITIES[zipCode]) return WORKER_KNOWN_ZIP_LOCALITIES[zipCode];
+  if (WORKER_KNOWN_ZIP_LOCALITIES[prefix3]) return WORKER_KNOWN_ZIP_LOCALITIES[prefix3];
+  return `ZIP ${zipCode} (${state})`;
+}
+
+const WORKER_ZIP_METRO_PREFIX_MAP: Record<string, string> = {
+  "740": "Tulsa", "741": "Tulsa", "742": "Tulsa", "743": "Tulsa",
+  "197": "Newark", "198": "Newark", "199": "Newark",
+  "450": "Cincinnati", "451": "Cincinnati", "452": "Cincinnati",
+  "278": "Greenville", "279": "Greenville",
+  "280": "Charlotte", "281": "Charlotte", "282": "Charlotte",
+  "940": "Oakland", "941": "Oakland", "942": "Oakland", "943": "Oakland", "944": "Oakland",
+  "945": "Oakland", "946": "Oakland",
+  "349": "Port_St_Lucie",
+  "600": "Chicago", "601": "Chicago", "602": "Chicago", "603": "Chicago", "604": "Chicago",
+  "605": "Chicago", "606": "Chicago", "607": "Chicago", "608": "Chicago", "463": "Chicago", "464": "Chicago",
+  "770": "Houston", "772": "Houston", "773": "Houston", "774": "Houston", "775": "Houston", "776": "Houston", "777": "Houston",
+  "900": "Los_Angeles", "901": "Los_Angeles", "902": "Los_Angeles", "903": "Los_Angeles", "904": "Los_Angeles",
+  "905": "Los_Angeles", "906": "Los_Angeles", "907": "Los_Angeles", "908": "Los_Angeles", "910": "Los_Angeles",
+  "911": "Los_Angeles", "912": "Los_Angeles", "913": "Los_Angeles", "914": "Los_Angeles", "915": "Los_Angeles",
+  "916": "Los_Angeles", "917": "Los_Angeles", "918": "Los_Angeles", "926": "Los_Angeles", "927": "Los_Angeles", "928": "Los_Angeles",
+  "800": "Denver", "801": "Denver", "802": "Denver", "803": "Denver", "804": "Denver", "805": "Denver", "806": "Denver",
+  "021": "Boston", "022": "Boston", "024": "Boston",
+  "980": "Seattle", "981": "Seattle", "982": "Seattle", "983": "Seattle", "984": "Seattle", "985": "Seattle",
+  "850": "Phoenix", "851": "Phoenix", "852": "Phoenix", "853": "Phoenix", "890": "Phoenix", "891": "Phoenix",
+  "995": "Anchorage", "996": "Anchorage",
+  "967": "Honolulu", "968": "Honolulu",
+  "969": "Guam",
+  "006": "San_Juan", "007": "San_Juan", "008": "San_Juan", "009": "San_Juan"
+};
+
+// 100-149: New York Harbor & New York State Metro Calibration Hub (Issue #635)
+for (let i = 100; i < 150; i++) {
+  WORKER_ZIP_METRO_PREFIX_MAP[String(i)] = "New_York";
+}
+
+const WORKER_STATE_PADD_MAP: Record<string, { padd: string; paddName: string; hub: string; model: string; tax: number }> = {
+  // PADD 6 (U.S. Caribbean Territories - Issue #620)
+  PR: { padd: "PADD 6", paddName: "U.S. Caribbean Territories", hub: "San_Juan", model: "San_Juan_PR (PADD 6)", tax: 0.160 },
+  VI: { padd: "PADD 6", paddName: "U.S. Virgin Islands", hub: "San_Juan", model: "San_Juan_PR (PADD 6)", tax: 0.160 },
+  // PADD 7 (U.S. Pacific Island Territories - Issue #621)
+  GU: { padd: "PADD 7", paddName: "U.S. Pacific Island Territories", hub: "Guam", model: "Guam_GU (PADD 7)", tax: 0.190 },
+  MP: { padd: "PADD 7", paddName: "Northern Mariana Islands", hub: "Guam", model: "Guam_GU (PADD 7)", tax: 0.190 },
+  AS: { padd: "PADD 7", paddName: "American Samoa", hub: "Guam", model: "Guam_GU (PADD 7)", tax: 0.190 },
+  // PADD 5 (West Coast Sub-Districts - Issue #622 Decoupling)
+  CA: { padd: "PADD 5", paddName: "West Coast (California CARB)", hub: "Oakland", model: "Oakland_CA (PADD 5 CARB)", tax: 0.596 },
+  OR: { padd: "PADD 5", paddName: "Pacific Northwest", hub: "Seattle", model: "Seattle_WA (PADD 5B PNW)", tax: 0.400 },
+  WA: { padd: "PADD 5", paddName: "Pacific Northwest", hub: "Seattle", model: "Seattle_WA (PADD 5B PNW)", tax: 0.494 },
+  NV: { padd: "PADD 5", paddName: "Desert Southwest", hub: "Phoenix", model: "Phoenix_AZ (PADD 5C Desert SW)", tax: 0.505 },
+  AZ: { padd: "PADD 5", paddName: "Desert Southwest", hub: "Phoenix", model: "Phoenix_AZ (PADD 5C Desert SW)", tax: 0.180 },
+  AK: { padd: "PADD 5", paddName: "Alaska", hub: "Anchorage", model: "Anchorage_AK (PADD 5D Alaska)", tax: 0.089 },
+  HI: { padd: "PADD 5", paddName: "Hawaii", hub: "Honolulu", model: "Honolulu_HI (PADD 5D Hawaii)", tax: 0.160 },
+  // PADD 1A (New England)
+  ME: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.300 },
+  NH: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.222 },
+  VT: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.310 },
+  MA: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.240 },
+  RI: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.370 },
+  CT: { padd: "PADD 1A", paddName: "New England", hub: "Boston", model: "Boston_MA (PADD 1A)", tax: 0.250 },
+  // PADD 1B (Central Atlantic)
+  NY: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "New_York", model: "New_York_NY (PADD 1B)", tax: 0.472 },
+  NJ: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.423 },
+  PA: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.576 },
+  DE: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.230 },
+  MD: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.470 },
+  DC: { padd: "PADD 1B", paddName: "Central Atlantic", hub: "Newark", model: "Newark_DE (PADD 1B)", tax: 0.348 },
+  // PADD 1C (Lower Atlantic)
+  NC: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.404 },
+  SC: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.280 },
+  FL: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Port_St_Lucie", model: "Port_St_Lucie_FL (PADD 1C)", tax: 0.362 },
+  GA: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.312 },
+  VA: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.298 },
+  WV: { padd: "PADD 1C", paddName: "Lower Atlantic", hub: "Charlotte", model: "Charlotte_NC (PADD 1C)", tax: 0.357 },
+  // PADD 2 (Midwest)
+  OK: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.190 },
+  OH: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.385 },
+  IL: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.470 },
+  IN: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.350 },
+  MI: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.300 },
+  WI: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.309 },
+  MN: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.285 },
+  IA: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.300 },
+  MO: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.245 },
+  KS: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.240 },
+  NE: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.296 },
+  ND: { padd: "PADD 2", paddName: "Midwest", hub: "Chicago", model: "Chicago_IL (PADD 2)", tax: 0.230 },
+  SD: { padd: "PADD 2", paddName: "Midwest", hub: "Tulsa", model: "Tulsa_OK (PADD 2)", tax: 0.280 },
+  KY: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.287 },
+  TN: { padd: "PADD 2", paddName: "Midwest", hub: "Cincinnati", model: "Cincinnati_OH (PADD 2)", tax: 0.274 },
+  // PADD 3 (Gulf Coast)
+  TX: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.200 },
+  LA: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.200 },
+  AR: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.248 },
+  MS: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.184 },
+  AL: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.290 },
+  NM: { padd: "PADD 3", paddName: "Gulf Coast", hub: "Houston", model: "Houston_TX (PADD 3)", tax: 0.189 },
+  // PADD 4 (Rocky Mountain)
+  CO: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.280 },
+  UT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.365 },
+  WY: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.240 },
+  MT: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.330 },
+  ID: { padd: "PADD 4", paddName: "Rocky Mountain", hub: "Denver", model: "Denver_CO (PADD 4)", tax: 0.320 }
+};
+
+function resolveStateFromZipPrefix(prefix3: string): string {
+  const p = parseInt(prefix3, 10);
+  if (isNaN(p)) return "US";
+  if (p >= 6 && p <= 9) return p === 8 ? "VI" : "PR";
+  if (p >= 10 && p <= 27) return "MA";
+  if (p >= 28 && p <= 29) return "RI";
+  if (p >= 30 && p <= 38) return "NH";
+  if (p >= 39 && p <= 49) return "ME";
+  if (p >= 50 && p <= 59) return "VT";
+  if (p >= 60 && p <= 69) return "CT";
+  if (p >= 70 && p <= 89) return "NJ";
+  if (p >= 100 && p <= 149) return "NY";
+  if (p >= 150 && p <= 196) return "PA";
+  if (p >= 197 && p <= 199) return "DE";
+  if (p >= 200 && p <= 205) return "DC";
+  if (p >= 206 && p <= 219) return "MD";
+  if (p >= 220 && p <= 246) return "VA";
+  if (p >= 247 && p <= 268) return "WV";
+  if (p >= 270 && p <= 289) return "NC";
+  if (p >= 290 && p <= 299) return "SC";
+  if (p >= 300 && p <= 319 || p === 398 || p === 399) return "GA";
+  if (p >= 320 && p <= 349) return "FL";
+  if (p >= 350 && p <= 369) return "AL";
+  if (p >= 370 && p <= 385) return "TN";
+  if (p >= 386 && p <= 397) return "MS";
+  if (p >= 400 && p <= 427) return "KY";
+  if (p >= 430 && p <= 458) return "OH";
+  if (p >= 460 && p <= 479) return "IN";
+  if (p >= 480 && p <= 499) return "MI";
+  if (p >= 500 && p <= 528) return "IA";
+  if (p >= 530 && p <= 549) return "WI";
+  if (p >= 550 && p <= 567) return "MN";
+  if (p >= 570 && p <= 577) return "SD";
+  if (p >= 580 && p <= 588) return "ND";
+  if (p >= 590 && p <= 599) return "MT";
+  if (p >= 600 && p <= 629) return "IL";
+  if (p >= 630 && p <= 658) return "MO";
+  if (p >= 660 && p <= 679) return "KS";
+  if (p >= 680 && p <= 693) return "NE";
+  if (p >= 700 && p <= 714) return "LA";
+  if (p >= 716 && p <= 729) return "AR";
+  if (p >= 730 && p <= 749) return "OK";
+  if (p >= 750 && p <= 799) return "TX";
+  if (p >= 800 && p <= 816) return "CO";
+  if (p >= 820 && p <= 831) return "WY";
+  if (p >= 832 && p <= 838) return "ID";
+  if (p >= 840 && p <= 847) return "UT";
+  if (p >= 850 && p <= 865) return "AZ";
+  if (p >= 870 && p <= 884) return "NM";
+  if (p >= 889 && p <= 898) return "NV";
+  if (p >= 900 && p <= 961) return "CA";
+  if (p >= 967 && p <= 968) return "HI";
+  if (p === 969) return "GU";
+  if (p >= 970 && p <= 979) return "OR";
+  if (p >= 980 && p <= 994) return "WA";
+  if (p >= 995 && p <= 999) return "AK";
+  return "US";
+}
+
+export function looksLikeZipCode(rawInput?: string): boolean {
+  if (!rawInput) return false;
+  const base = String(rawInput).trim().split("-")[0].trim();
+  return /^\d{3,5}$/.test(base);
+}
+
+export function resolveWorkerZipCode(rawZip: string): WorkerZipResolution {
+  const base = String(rawZip || "").trim().split("-")[0].trim();
+  if (!/^\d{3,5}$/.test(base)) {
+    return {
+      status: "fallback",
+      zip_code: base.slice(0, 5),
+      prefix_3: "",
+      resolution_tier: "INVALID_INPUT_FALLBACK",
+      is_metro_cluster_hit: false,
+      locale_code: "national",
+      canonical_hub: "National",
+      location_name: `ZIP ${base.slice(0, 5)} (US)`,
+      state: "US",
+      padd_region: "PADD 2",
+      padd_name: "Midwest",
+      calibrated_model_used: "National Wholesale",
+      state_tax_rate_per_gal: 0.184,
+      hub_baseline_tax_rate: 0.184,
+      tax_delta_per_gal: 0.0,
+      is_significant_departure: false,
+      departure_reason: "",
+      estimated_basis_delta: 0.0
+    };
+  }
+
+  const zipClean = base.padStart(5, "0").slice(0, 5);
+  const prefix3 = zipClean.slice(0, 3);
+  const stateCode = resolveStateFromZipPrefix(prefix3);
+  const stateMeta = WORKER_STATE_PADD_MAP[stateCode] || {
+    padd: "PADD 2",
+    paddName: "Midwest",
+    hub: "National",
+    model: "National Wholesale",
+    tax: 0.250
+  };
+
+  const locName = resolveWorkerLocationName(zipClean, prefix3, stateCode);
+
+  if (prefix3 in WORKER_ZIP_METRO_PREFIX_MAP) {
+    const metroHub = WORKER_ZIP_METRO_PREFIX_MAP[prefix3];
+    const hubTax = WORKER_HUB_BASELINE_TAXES[metroHub] || 0.250;
+    return {
+      status: "success",
+      zip_code: zipClean,
+      prefix_3: prefix3,
+      resolution_tier: "METRO_CLUSTER_HIT",
+      is_metro_cluster_hit: true,
+      locale_code: metroHub.toLowerCase(),
+      canonical_hub: metroHub,
+      location_name: locName,
+      state: stateCode,
+      padd_region: stateMeta.padd,
+      padd_name: stateMeta.paddName,
+      calibrated_model_used: `${metroHub} (Direct Metro Cluster)`,
+      state_tax_rate_per_gal: stateMeta.tax,
+      hub_baseline_tax_rate: hubTax,
+      tax_delta_per_gal: 0.0,
+      is_significant_departure: false,
+      departure_reason: "",
+      estimated_basis_delta: 0.0
+    };
+  }
+
+  const fallbackHub = stateMeta.hub;
+  const hubTax = WORKER_HUB_BASELINE_TAXES[fallbackHub] || 0.250;
+  const taxDelta = Number((stateMeta.tax - hubTax).toFixed(3));
+  const isDeparture = Math.abs(taxDelta) >= 0.15;
+
+  let departureReason = "";
+  if (isDeparture) {
+    departureReason = `Statutory tax wedge of ${taxDelta >= 0 ? "+" : ""}${taxDelta.toFixed(3)}/gal vs hub baseline (${fallbackHub})`;
+  }
+
+  const estBasis = Number(taxDelta.toFixed(3));
+
+  return {
+    status: "success",
+    zip_code: zipClean,
+    prefix_3: prefix3,
+    resolution_tier: "STATE_PADD_FALLBACK",
+    is_metro_cluster_hit: false,
+    locale_code: fallbackHub.toLowerCase(),
+    canonical_hub: fallbackHub,
+    location_name: locName,
+    state: stateCode,
+    padd_region: stateMeta.padd,
+    padd_name: stateMeta.paddName,
+    calibrated_model_used: stateMeta.model,
+    state_tax_rate_per_gal: stateMeta.tax,
+    hub_baseline_tax_rate: hubTax,
+    tax_delta_per_gal: taxDelta,
+    is_significant_departure: isDeparture,
+    departure_reason: departureReason,
+    estimated_basis_delta: estBasis,
+    tracking_issue_number: null
+  };
+}
+
+export async function maybeTriggerHubDepartureIssue(
+  res: WorkerZipResolution,
+  env: Env
+): Promise<{ triggered: boolean; issueNumber?: number; issueUrl?: string }> {
+  if (!res.is_significant_departure || res.is_metro_cluster_hit) {
+    return { triggered: false };
+  }
+
+  const cacheKey = res.state;
+  const cached = WORKER_DEPARTURE_ISSUES_CACHE.get(cacheKey);
+  if (cached) {
+    return { triggered: true, issueNumber: cached.issueNumber, issueUrl: cached.issueUrl };
+  }
+
+  const d1Key = `departure_issue:${res.state}`;
+  if (env.DB) {
+    try {
+      await ensureFlagReplaySchema(env);
+      const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(d1Key).first();
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value) as { issue_number: number; issue_url: string };
+        WORKER_DEPARTURE_ISSUES_CACHE.set(cacheKey, { issueNumber: parsed.issue_number, issueUrl: parsed.issue_url });
+        return { triggered: true, issueNumber: parsed.issue_number, issueUrl: parsed.issue_url };
+      }
+    } catch (e) {
+      console.warn("[Departure Issue D1 Query Error]", e);
+    }
+  }
+
+  const token = (env as any).GH_PAT || (env as any).GITHUB_PAT || (env as any).GITHUB_TOKEN;
+  if (!token) {
+    return { triggered: false };
+  }
+
+  const owner = "KoshiirRa";
+  const repo = "midgley";
+  const title = `feat(regions): Implement ${res.state} Regional Calibration Hub (Triggered by Out-of-Metro Demand for ZIP ${res.zip_code})`;
+  const body = `### 📮 Automated Region Departure Trigger\n` +
+    `A subscriber requested shock notifications for **ZIP ${res.zip_code} (${res.location_name})**, which departs significantly from its current PADD calibration hub (**${res.calibrated_model_used}**).\n\n` +
+    `### 📊 Calibration Gap Diagnostics\n` +
+    `- **Requested Location:** \`${res.location_name}\` (ZIP \`${res.zip_code}\`, \`${res.state}\`)\n` +
+    `- **Assigned Fallback Hub:** \`${res.canonical_hub}\` (\`${res.calibrated_model_used}\`)\n` +
+    `- **State Statutory Tax:** \`$${res.state_tax_rate_per_gal.toFixed(3)}/gal\`\n` +
+    `- **Hub Baseline Tax:** \`$${res.hub_baseline_tax_rate.toFixed(3)}/gal\`\n` +
+    `- **Statutory Tax Wedge (Δτ):** \`${res.tax_delta_per_gal >= 0 ? "+" : ""}$${res.tax_delta_per_gal.toFixed(3)}/gal\`\n` +
+    `- **Estimated Basis Spread:** \`${res.estimated_basis_delta >= 0 ? "+" : ""}$${res.estimated_basis_delta.toFixed(2)}/gal\` over rack\n` +
+    `- **Departure Reason:** ${res.departure_reason}\n\n` +
+    `### 🎯 Action Item\n` +
+    `Evaluate adding a native regional calibration hub for **${res.state}** (or incorporating a sub-PADD basis adjustment model) to prevent pricing distortion when serving out-of-metro subscribers.`;
+
+  try {
+    const postRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "User-Agent": "Midgley-Discord-Worker",
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        labels: ["enhancement", "modeling", "regions"]
+      })
+    });
+
+    if (postRes.ok) {
+      const issueData: any = await postRes.json();
+      const issueNumber = issueData.number as number;
+      const issueUrl = issueData.html_url as string;
+
+      WORKER_DEPARTURE_ISSUES_CACHE.set(cacheKey, { issueNumber, issueUrl });
+      if (env.DB) {
+        try {
+          await ensureFlagReplaySchema(env);
+          await env.DB.prepare("INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value")
+            .bind(d1Key, JSON.stringify({ issue_number: issueNumber, issue_url: issueUrl, created_at: new Date().toISOString() }))
+            .run();
+        } catch (dbErr) {
+          console.warn("[Departure Issue D1 Store Error]", dbErr);
+        }
+      }
+      return { triggered: true, issueNumber, issueUrl };
+    }
+  } catch (err) {
+    console.warn("[Departure Issue Creation Error]", err);
+  }
+
+  return { triggered: false };
+}
+
+export async function recordWorkerUnmappedZip(res: WorkerZipResolution, env: Env): Promise<void> {
+  if (res.is_metro_cluster_hit || res.resolution_tier === "INVALID_INPUT_FALLBACK") {
+    return;
+  }
+  const nowIso = new Date().toISOString();
+  const zKey = res.zip_code;
+  const existingMem = WORKER_UNMAPPED_ZIPS.get(zKey);
+
+  let record: WorkerUnmappedZipTelemetryRecord = existingMem
+    ? {
+        ...existingMem,
+        hit_count: existingMem.hit_count + 1,
+        last_searched_at: nowIso
+      }
+    : {
+        zip_code: zKey,
+        state: res.state,
+        padd_region: res.padd_region,
+        calibrated_model_used: res.calibrated_model_used,
+        hit_count: 1,
+        first_searched_at: nowIso,
+        last_searched_at: nowIso
+      };
+
+  if (env.DB) {
+    try {
+      await ensureFlagReplaySchema(env);
+      const dbKey = `unmapped_zip:${zKey}`;
+      const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(dbKey).first();
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value) as WorkerUnmappedZipTelemetryRecord;
+        record = {
+          ...parsed,
+          hit_count: (parsed.hit_count || 0) + 1,
+          last_searched_at: nowIso
+        };
+      }
+      await env.DB.prepare(
+        "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
+      )
+        .bind(dbKey, JSON.stringify(record))
+        .run();
+    } catch (d1Err: any) {
+      console.warn(`[D1 RecordUnmappedZip Notice] ${d1Err?.message || String(d1Err)}`);
+    }
+  }
+  WORKER_UNMAPPED_ZIPS.set(zKey, record);
+}
+
+export async function getWorkerUnmappedZips(env: Env): Promise<WorkerUnmappedZipTelemetryRecord[]> {
+  const merged = new Map<string, WorkerUnmappedZipTelemetryRecord>(WORKER_UNMAPPED_ZIPS);
+  if (env.DB) {
+    try {
+      await ensureFlagReplaySchema(env);
+      const res = await env.DB.prepare(
+        "SELECT value FROM flag_replay_tokens WHERE clean_key LIKE 'unmapped_zip:%'"
+      ).all();
+      const rows = (res?.results || []) as Array<{ value?: string }>;
+      for (const r of rows) {
+        if (!r.value) continue;
+        const parsed = JSON.parse(r.value) as WorkerUnmappedZipTelemetryRecord;
+        if (parsed && parsed.zip_code) {
+          merged.set(parsed.zip_code, parsed);
+        }
+      }
+    } catch (d1Err: any) {
+      console.warn(`[D1 GetUnmappedZips Notice] ${d1Err?.message || String(d1Err)}`);
+    }
+  }
+  return Array.from(merged.values()).sort((a, b) => b.hit_count - a.hit_count);
+}
+
+export function normalizeWorkerLocale(rawLocale?: string): string {
+  if (!rawLocale) return "National";
+  if (looksLikeZipCode(rawLocale)) {
+    return resolveWorkerZipCode(rawLocale).canonical_hub;
+  }
+  const clean = rawLocale.trim().toLowerCase().replace(/[\s.-]+/g, "_");
+  const aliases: Record<string, string> = {
+    national: "National",
+    us: "National",
+    tulsa: "Tulsa",
+    tulsa_ok: "Tulsa",
+    newark: "Newark",
+    newark_de: "Newark",
+    cincinnati: "Cincinnati",
+    cincinnati_oh: "Cincinnati",
+    cincinnati_ky: "Cincinnati",
+    greenville: "Greenville",
+    greenville_nc: "Greenville",
+    charlotte: "Charlotte",
+    charlotte_nc: "Charlotte",
+    oakland: "Oakland",
+    oakland_ca: "Oakland",
+    bay_area: "Oakland",
+    bayarea: "Oakland",
+    sf: "Oakland",
+    port_st_lucie: "Port_St_Lucie",
+    port_st_lucie_fl: "Port_St_Lucie",
+    psl: "Port_St_Lucie",
+    chicago: "Chicago",
+    chicago_il: "Chicago",
+    houston: "Houston",
+    houston_tx: "Houston",
+    los_angeles: "Los_Angeles",
+    los_angeles_ca: "Los_Angeles",
+    la: "Los_Angeles",
+    denver: "Denver",
+    denver_co: "Denver",
+    rocky_mountain: "Denver",
+    padd4: "Denver",
+    padd_4: "Denver",
+    new_york: "New_York",
+    new_york_ny: "New_York",
+    nyc: "New_York",
+    ny: "New_York",
+    ny_harbor: "New_York",
+    ny_state: "New_York",
+    new_york_metro: "New_York",
+    boston: "Boston",
+    boston_ma: "Boston",
+    bos: "Boston",
+    new_england: "Boston",
+    padd1a: "Boston",
+    padd_1a: "Boston",
+    seattle: "Seattle",
+    seattle_wa: "Seattle",
+    puget_sound: "Seattle",
+    pnw: "Seattle",
+    phoenix: "Phoenix",
+    phoenix_az: "Phoenix",
+    desert_southwest: "Phoenix",
+    phx: "Phoenix",
+    anchorage: "Anchorage",
+    anchorage_ak: "Anchorage",
+    alaska: "Anchorage",
+    honolulu: "Honolulu",
+    honolulu_hi: "Honolulu",
+    hawaii: "Honolulu",
+    oahu: "Honolulu",
+    guam: "Guam",
+    guam_gu: "Guam",
+    padd7: "Guam",
+    padd_7: "Guam",
+    san_juan: "San_Juan",
+    san_juan_pr: "San_Juan",
+    puerto_rico: "San_Juan",
+    pr: "San_Juan",
+    padd6: "San_Juan",
+    padd_6: "San_Juan"
+  };
+  return aliases[clean] || SUPPORTED_DISCORD_LOCALES.find(l => l.value.toLowerCase() === clean)?.value || "National";
+}
+
+export async function getWorkerUserSubscription(userId: string, env: Env): Promise<WorkerDMSubscriptionRecord | null> {
+  if (WORKER_DM_SUBSCRIPTIONS.has(userId)) {
+    return WORKER_DM_SUBSCRIPTIONS.get(userId) || null;
+  }
+  if (env.DB) {
+    const key = `discord_sub:${userId}`;
+    try {
+      await ensureFlagReplaySchema(env);
+      const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(key).first();
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value) as WorkerDMSubscriptionRecord;
+        WORKER_DM_SUBSCRIPTIONS.set(userId, parsed);
+        return parsed;
+      }
+    } catch (d1Err: any) {
+      console.warn(`[D1 Subscription Get Retry] ${d1Err?.message || String(d1Err)}`);
+      try {
+        flagReplaySchemaInitialized = false;
+        await ensureFlagReplaySchema(env);
+        const row = await env.DB.prepare("SELECT value FROM flag_replay_tokens WHERE clean_key = ?").bind(key).first();
+        if (row && (row as any).value) {
+          const parsed = JSON.parse((row as any).value) as WorkerDMSubscriptionRecord;
+          WORKER_DM_SUBSCRIPTIONS.set(userId, parsed);
+          return parsed;
+        }
+      } catch (retryErr: any) {
+        console.error(`[D1 Subscription Get Failed] ${retryErr?.message || String(retryErr)}`);
+      }
+    }
+  }
+  return null;
+}
+
+export async function getAllWorkerSubscriptions(env: Env): Promise<WorkerDMSubscriptionRecord[]> {
+  const merged = new Map<string, WorkerDMSubscriptionRecord>(WORKER_DM_SUBSCRIPTIONS);
+  if (env.DB) {
+    try {
+      await ensureFlagReplaySchema(env);
+      const res = await env.DB.prepare(
+        "SELECT value FROM flag_replay_tokens WHERE clean_key LIKE 'discord_sub:%'"
+      ).all();
+      const rows = (res?.results || []) as Array<{ value?: string }>;
+      for (const r of rows) {
+        if (!r.value) continue;
+        const parsed = JSON.parse(r.value) as WorkerDMSubscriptionRecord;
+        if (parsed && parsed.discord_user_id) {
+          merged.set(parsed.discord_user_id, parsed);
+        }
+      }
+    } catch (d1Err: any) {
+      console.warn(`[D1 GetAllSubscriptions Notice] ${d1Err?.message || String(d1Err)}`);
+    }
+  }
+  return Array.from(merged.values());
+}
+
+export async function saveWorkerUserSubscription(record: WorkerDMSubscriptionRecord, env: Env): Promise<void> {
+  WORKER_DM_SUBSCRIPTIONS.set(record.discord_user_id, record);
+  if (env.DB) {
+    const key = `discord_sub:${record.discord_user_id}`;
+    const valueJson = JSON.stringify(record);
+    try {
+      await ensureFlagReplaySchema(env);
+      await env.DB.prepare(
+        "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
+      )
+        .bind(key, valueJson)
+        .run();
+    } catch (d1Err: any) {
+      console.warn(`[D1 Subscription Save Retry] ${d1Err?.message || String(d1Err)}`);
+      try {
+        flagReplaySchemaInitialized = false;
+        await ensureFlagReplaySchema(env);
+        await env.DB.prepare(
+          "INSERT INTO flag_replay_tokens (clean_key, value, used_at) VALUES (?, ?, datetime('now')) ON CONFLICT(clean_key) DO UPDATE SET value = excluded.value"
+        )
+          .bind(key, valueJson)
+          .run();
+      } catch (retryErr: any) {
+        console.error(`[D1 Subscription Save Failed] ${retryErr?.message || String(retryErr)}`);
+      }
+    }
+  }
+}
+
+export async function deleteWorkerUserSubscription(userId: string, env: Env): Promise<void> {
+  WORKER_DM_SUBSCRIPTIONS.delete(userId);
+  if (env.DB) {
+    try {
+      await ensureFlagReplaySchema(env);
+      const key = `discord_sub:${userId}`;
+      await env.DB.prepare("DELETE FROM flag_replay_tokens WHERE clean_key = ?").bind(key).run();
+    } catch (d1Err: any) {
+      console.warn(`[D1 DeleteSubscription Notice] ${d1Err?.message || String(d1Err)}`);
+    }
+  }
+}
+
+
+export async function sendDiscordDirectMessage(
+  userId: string,
+  payload: Record<string, any>,
+  env: Env,
+  existingChannelId?: string | null
+): Promise<{ sent: boolean; dmChannelId?: string | null; blockedByPrivacy?: boolean; error?: string }> {
+  const botToken = (env.DISCORD_BOT_TOKEN || "").trim();
+  if (!botToken) {
+    return { sent: false, dmChannelId: existingChannelId, error: "DISCORD_BOT_TOKEN unconfigured" };
+  }
+
+  let dmChannelId = existingChannelId || null;
+  try {
+    if (!dmChannelId) {
+      const createRes = await fetch("https://discord.com/api/v10/users/@me/channels", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bot ${botToken}`,
+          "Content-Type": "application/json",
+          "User-Agent": "Midgley-Discord-Worker/1.0"
+        },
+        body: JSON.stringify({ recipient_id: userId })
+      });
+      if (!createRes.ok) {
+        const errText = await createRes.text();
+        const isPrivacyBlock = createRes.status === 403 || errText.includes("50007");
+        return {
+          sent: false,
+          blockedByPrivacy: isPrivacyBlock,
+          error: `DM channel open HTTP ${createRes.status}: ${errText}`
+        };
+      }
+      const chData: any = await createRes.json();
+      dmChannelId = chData.id || null;
+    }
+
+    if (!dmChannelId) {
+      return { sent: false, error: "Could not resolve Discord DM channel ID" };
+    }
+
+    const msgRes = await fetch(`https://discord.com/api/v10/channels/${dmChannelId}/messages`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bot ${botToken}`,
+        "Content-Type": "application/json",
+        "User-Agent": "Midgley-Discord-Worker/1.0"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!msgRes.ok) {
+      const errText = await msgRes.text();
+      const isPrivacyBlock = msgRes.status === 403 || errText.includes("50007");
+      return {
+        sent: false,
+        dmChannelId,
+        blockedByPrivacy: isPrivacyBlock,
+        error: `DM message HTTP ${msgRes.status}: ${errText}`
+      };
+    }
+
+    return { sent: true, dmChannelId };
+  } catch (err: any) {
+    return { sent: false, dmChannelId, error: err?.message || String(err) };
+  }
+}
+
+function extractCommandOptions(interaction: any): { subcommand: string; options: Record<string, any> } {
+  const rawOptions = interaction.data?.options || [];
+  const opts: Record<string, any> = {};
+  let subcommand = "";
+
+  if (rawOptions.length > 0 && rawOptions[0].type === 1) {
+    subcommand = rawOptions[0].name;
+    for (const subOpt of rawOptions[0].options || []) {
+      opts[subOpt.name] = subOpt.value;
+    }
+  } else {
+    subcommand = interaction.data?.name || "";
+    for (const opt of rawOptions) {
+      opts[opt.name] = opt.value;
+    }
+  }
+  return { subcommand: subcommand.toLowerCase(), options: opts };
+}
+
 export function hexToUint8Array(hex: string): Uint8Array {
   const match = hex.match(/.{1,2}/g);
   return new Uint8Array(match ? match.map(byte => parseInt(byte, 16)) : []);
@@ -856,9 +1733,454 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     });
   }
 
-  // Type 3: MESSAGE_COMPONENT (User clicked "🚩 Flag False Positive" button)
+  // Type 4: APPLICATION_COMMAND_AUTOCOMPLETE (Autocomplete for `locale` or `zip_code` parameter)
+  if (interaction.type === 4) {
+    const { options } = extractCommandOptions(interaction);
+    const rawQuery = String(options.locale || options.zip_code || "").trim();
+    const query = rawQuery.toLowerCase();
+    const choices: Array<{ name: string; value: string }> = [];
+
+    if (looksLikeZipCode(rawQuery)) {
+      const zRes = resolveWorkerZipCode(rawQuery);
+      const tierLabel = zRes.is_metro_cluster_hit
+        ? `Direct Metro Cluster → ${zRes.canonical_hub}`
+        : `${zRes.padd_region} ${zRes.padd_name} Corridor → via ${zRes.canonical_hub}`;
+      choices.push({
+        name: `📮 ZIP ${zRes.zip_code} (${zRes.state} • ${tierLabel})`,
+        value: zRes.zip_code
+      });
+    }
+
+    const localeChoices = SUPPORTED_DISCORD_LOCALES.filter(
+      l => !query || l.name.toLowerCase().includes(query) || l.value.toLowerCase().includes(query)
+    )
+      .slice(0, 25 - choices.length)
+      .map(l => ({ name: l.name, value: l.value }));
+
+    choices.push(...localeChoices);
+    return new Response(JSON.stringify({ type: 8, data: { choices } }), {
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  // Type 2: APPLICATION_COMMAND (`/midgley subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`)
+  if (interaction.type === 2) {
+    const userObj = interaction.member?.user || interaction.user || {};
+    const userId = String(userObj.id || "anonymous_user");
+    const username = String(userObj.username || "Discord User");
+    const { subcommand, options } = extractCommandOptions(interaction);
+
+    if (subcommand === "subscribe") {
+      const rawInput = String(options.zip_code || options.locale || "National").trim();
+      const isZip = looksLikeZipCode(rawInput);
+      const zipRes = isZip ? resolveWorkerZipCode(rawInput) : null;
+      if (zipRes) {
+        await recordWorkerUnmappedZip(zipRes, env);
+      }
+
+      const locale = zipRes ? zipRes.canonical_hub : normalizeWorkerLocale(rawInput);
+      const minShock = typeof options.min_shock === "number" ? Math.max(0, Math.min(5, options.min_shock)) : 0.25;
+      const direction = String(options.direction || "all_shocks").toLowerCase();
+      const delivery = String(options.delivery || "dm").toLowerCase();
+
+      const depIssue = zipRes ? await maybeTriggerHubDepartureIssue(zipRes, env) : null;
+
+      const existing = await getWorkerUserSubscription(userId, env);
+      const mergedLocales = existing?.target_locales ? Array.from(new Set([...existing.target_locales, locale])) : [locale];
+      const mergedZips = existing?.zip_codes ? [...existing.zip_codes] : [];
+      if (zipRes && !mergedZips.includes(zipRes.zip_code)) {
+        mergedZips.push(zipRes.zip_code);
+      }
+      const subId = existing?.subscription_id || `sub_dm_${userId.slice(-8)}`;
+
+      const targetDisplayName = zipRes ? zipRes.location_name : mergedLocales.join(", ");
+
+      const embedFields: Array<{ name: string; value: string; inline: boolean }> = [
+        { name: "📍 Subscribed Location", value: `\`${targetDisplayName}\``, inline: true },
+        { name: "🛢️ Wholesale Supply Corridor", value: `\`${zipRes ? `${zipRes.padd_region} (${zipRes.padd_name})` : mergedLocales.join(", ")}\``, inline: true },
+        { name: "⚡ Min Shock (|ΔP|)", value: `\`>= $${minShock.toFixed(2)}/gal\``, inline: true },
+        { name: "🧭 Direction Bias", value: `\`${direction}\``, inline: true },
+        { name: "📬 Delivery Channel", value: delivery === "dm" ? "`Private Direct Message (DM)`" : "`Ephemeral Server Reply`", inline: true }
+      ];
+
+      if (zipRes) {
+        const tierBadge = zipRes.is_metro_cluster_hit
+          ? `Direct Metro Cluster Hit (\`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`
+          : `${zipRes.padd_region} ${zipRes.padd_name} Corridor Fallback (routed via \`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`;
+        const taxDetails = zipRes.tax_delta_per_gal !== 0
+          ? `State Tax: \`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\` (Coastal Base: \`$${zipRes.hub_baseline_tax_rate.toFixed(3)}/gal\` • Wedge: \`${zipRes.tax_delta_per_gal >= 0 ? "+" : ""}$${zipRes.tax_delta_per_gal.toFixed(3)}/gal\`)`
+          : `State Tax: \`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\``;
+
+        embedFields.push({
+          name: "📮 Subscribed ZIP Code Routing",
+          value: `\`${zipRes.location_name}\` (ZIP \`${zipRes.zip_code}\`, ${zipRes.state}) • ${tierBadge}\n${taxDetails}`,
+          inline: false
+        });
+
+        if (zipRes.is_significant_departure) {
+          const wedgeSign = zipRes.tax_delta_per_gal >= 0 ? "+" : "";
+          const basisSign = zipRes.estimated_basis_delta >= 0 ? "+" : "";
+          embedFields.push({
+            name: "⚠️ Regional Basis & Tax Departure",
+            value: `State fuel taxes in **${zipRes.state}** (\`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\`) depart from the \`${zipRes.canonical_hub}\` coastal rack baseline (\`$${zipRes.hub_baseline_tax_rate.toFixed(3)}/gal\`) by \`${wedgeSign}$${zipRes.tax_delta_per_gal.toFixed(3)}/gal\`. Local pump prices trade at an estimated \`${basisSign}$${zipRes.estimated_basis_delta.toFixed(2)}/gal\` basis spread over coastal rack benchmarks. Shock alerts (|ΔP|) will track wholesale transmission from **${zipRes.padd_name}** wholesale racks.`,
+            inline: false
+          });
+
+          if (depIssue?.issueNumber) {
+            embedFields.push({
+              name: "🏛️ Regional Calibration Hub Tracking",
+              value: `A dedicated calibration hub tracking issue is open on the Midgley repository: [#${depIssue.issueNumber}](${depIssue.issueUrl || `https://github.com/KoshiirRa/midgley/issues/${depIssue.issueNumber}`})`,
+              inline: false
+            });
+          }
+        }
+      } else if (mergedZips.length > 0) {
+        embedFields.push({
+          name: "📮 Active ZIP Codes",
+          value: `\`${mergedZips.join(", ")}\``,
+          inline: true
+        });
+      }
+
+      const embed = {
+        title: zipRes ? `✅ Midgley Alert Subscription Active — ${zipRes.location_name}` : "✅ Midgley Direct Message Alert Subscription Active",
+        description: `Subscribed **@${username}** to real-time intraday gasoline shock alerts without cluttering shared server chat.`,
+        url: "https://koshiirRa.github.io/midgley/",
+        color: 3066993,
+        fields: embedFields,
+        footer: { text: `Midgley Notification Gateway • Subscription ID: ${subId}` },
+        timestamp: new Date().toISOString()
+      };
+
+      let dmResult: { sent: boolean; dmChannelId?: string | null; blockedByPrivacy?: boolean; error?: string } = {
+        sent: false
+      };
+      if (delivery === "dm") {
+        dmResult = await sendDiscordDirectMessage(userId, { embeds: [embed] }, env, existing?.dm_channel_id);
+      }
+
+      const subRecord: WorkerDMSubscriptionRecord = {
+        subscription_id: subId,
+        discord_user_id: userId,
+        dm_channel_id: dmResult.dmChannelId || existing?.dm_channel_id || null,
+        target_locales: mergedLocales,
+        zip_codes: mergedZips,
+        min_shock_threshold: minShock,
+        direction_filter: direction,
+        delivery_mode: "realtime",
+        is_active: true,
+        muted_until: null,
+        created_at: existing?.created_at || new Date().toISOString()
+      };
+      await saveWorkerUserSubscription(subRecord, env);
+
+      const privacyNotice = dmResult.blockedByPrivacy
+        ? "\n⚠️ **Note:** Could not open a Direct Message because your Discord privacy settings block DMs from server members (`Error 50007`). Please enable **Allow Direct Messages from server members** in this server's Privacy Settings so background alerts can reach your inbox."
+        : dmResult.sent
+        ? "\n📬 *A confirmation card has been delivered to your Direct Messages.*"
+        : "";
+
+      const zipSummary = zipRes
+        ? ` (ZIP \`${zipRes.zip_code}\` → \`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`${zipRes.is_metro_cluster_hit ? "" : " • logged to Out-of-Metro Demand Heatmap"})`
+        : "";
+      const issueNote = depIssue?.issueNumber ? ` • [Hub Issue #${depIssue.issueNumber}]` : "";
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64, // Ephemeral: only visible to the command caller
+            content: `✅ **Subscription updated for \`${targetDisplayName}\`${zipSummary}** (|ΔP| >= $${minShock.toFixed(2)}/gal, \`${direction}\`)${issueNote}.${privacyNotice}`,
+            embeds: [embed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "unsubscribe") {
+      const rawLocale = options.zip_code ? String(options.zip_code).trim() : options.locale ? String(options.locale).trim() : "all";
+      const existing = await getWorkerUserSubscription(userId, env);
+      if (!existing || !existing.is_active) {
+        return new Response(
+          JSON.stringify({
+            type: 4,
+            data: {
+              flags: 64,
+              content: "ℹ️ You do not currently have any active Midgley Direct Message alert subscriptions."
+            }
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (rawLocale.toLowerCase() === "all") {
+        await deleteWorkerUserSubscription(userId, env);
+        return new Response(
+          JSON.stringify({
+            type: 4,
+            data: {
+              flags: 64,
+              content: "🗑️ **Unsubscribed** from all Midgley Direct Message intraday shock alerts."
+            }
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (looksLikeZipCode(rawLocale) && existing.zip_codes && existing.zip_codes.length > 0) {
+        const zClean = resolveWorkerZipCode(rawLocale).zip_code;
+        if (existing.zip_codes.includes(zClean)) {
+          existing.zip_codes = existing.zip_codes.filter(z => z !== zClean);
+          await saveWorkerUserSubscription(existing, env);
+          return new Response(
+            JSON.stringify({
+              type: 4,
+              data: {
+                flags: 64,
+                content: `✅ Removed ZIP \`${zClean}\` from your subscription. Active hubs: \`${existing.target_locales.join(", ")}\`.`
+              }
+            }),
+            { headers: { "Content-Type": "application/json" } }
+          );
+        }
+      }
+
+      const targetLoc = normalizeWorkerLocale(rawLocale);
+      const remaining = existing.target_locales.filter(l => l !== targetLoc);
+      if (remaining.length === 0) {
+        await deleteWorkerUserSubscription(userId, env);
+      } else {
+        existing.target_locales = remaining;
+        await saveWorkerUserSubscription(existing, env);
+      }
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content:
+              remaining.length > 0
+                ? `✅ Removed \`${targetLoc}\` from your DM alerts. Remaining subscribed hubs: \`${remaining.join(", ")}\`.`
+                : `🗑️ Removed \`${targetLoc}\`. You have no remaining active DM subscriptions.`
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "status") {
+      const existing = await getWorkerUserSubscription(userId, env);
+      const statusFields =
+        existing && existing.is_active
+          ? [
+              { name: "🆔 Subscription ID", value: `\`${existing.subscription_id}\``, inline: true },
+              { name: "📍 Subscribed Hubs", value: `\`${existing.target_locales.join(", ")}\``, inline: true },
+              ...(existing.zip_codes && existing.zip_codes.length > 0
+                ? [{ name: "📮 Subscribed ZIPs", value: `\`${existing.zip_codes.join(", ")}\``, inline: true }]
+                : []),
+              { name: "⚡ Shock Threshold", value: `\`>= $${existing.min_shock_threshold.toFixed(2)}/gal\``, inline: true },
+              { name: "🧭 Direction Filter", value: `\`${existing.direction_filter}\``, inline: true },
+              { name: "🔕 Mute Status", value: existing.muted_until ? `\`Muted until ${existing.muted_until}\`` : "`Active (Unmuted)`", inline: true }
+            ]
+          : [
+              {
+                name: "💡 Quick Start",
+                value: "Run `/midgley subscribe locale:Tulsa min_shock:0.25` or `/midgley subscribe locale:74103` to receive private DM alerts.",
+                inline: false
+              }
+            ];
+
+      const statusEmbed = {
+        title: "📊 Midgley Discord Alert Subscription Status",
+        description: existing && existing.is_active
+          ? `Active Direct Message alert profile for **@${username}**:`
+          : `No active Direct Message subscriptions found for **@${username}**. Use \`/midgley subscribe\` to register.`,
+        url: "https://koshiirRa.github.io/midgley/",
+        color: existing && existing.is_active ? 3447003 : 9807270,
+        fields: statusFields,
+        timestamp: new Date().toISOString()
+      };
+
+      const dmRes = await sendDiscordDirectMessage(userId, { embeds: [statusEmbed] }, env, existing?.dm_channel_id);
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: dmRes.sent ? "📬 Sent your subscription status card via Direct Message." : undefined,
+            embeds: [statusEmbed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (subcommand === "forecast") {
+      const rawInput = String(options.zip_code || options.locale || "National").trim();
+      const isZip = looksLikeZipCode(rawInput);
+      const zipRes = isZip ? resolveWorkerZipCode(rawInput) : null;
+      if (zipRes) {
+        await recordWorkerUnmappedZip(zipRes, env);
+      }
+
+      const locale = zipRes ? zipRes.canonical_hub : normalizeWorkerLocale(rawInput);
+      const horizon = Number(options.horizon || 5);
+      const localeMeta = SUPPORTED_DISCORD_LOCALES.find(l => l.value === locale) || SUPPORTED_DISCORD_LOCALES[0];
+      const dashboardUrl = `https://koshiirRa.github.io/midgley/${localeMeta.slug}`;
+      const targetDisplayName = zipRes ? zipRes.location_name : locale.replace(/_/g, " ");
+
+      const forecastFields: Array<{ name: string; value: string; inline: boolean }> = [
+        { name: "📍 Target Location", value: `\`${targetDisplayName}\``, inline: true },
+        { name: "🛢️ PADD Supply Corridor", value: `\`${zipRes ? `${zipRes.padd_region} (${zipRes.padd_name})` : localeMeta.padd}\``, inline: true },
+        { name: "📅 Forecast Horizon", value: `\`1D – ${horizon}D Out-of-Time\``, inline: true }
+      ];
+
+      if (zipRes) {
+        const tierDesc = zipRes.is_metro_cluster_hit
+          ? `Direct Metro Cluster Hit (\`${zipRes.canonical_hub}\` • \`${zipRes.resolution_tier}\`)`
+          : `State/PADD Supply Corridor Fallback (\`${zipRes.calibrated_model_used}\` • \`${zipRes.resolution_tier}\`)`;
+        forecastFields.push(
+          { name: "📮 Regional Supply Routing", value: `\`${zipRes.location_name}\` (ZIP \`${zipRes.zip_code}\`, ${zipRes.state}) — ${tierDesc}`, inline: false },
+          { name: "🏛️ State Statutory Fuel Tax", value: `\`$${zipRes.state_tax_rate_per_gal.toFixed(3)}/gal\` (${zipRes.state})`, inline: true }
+        );
+
+        if (zipRes.is_significant_departure) {
+          const wedgeSign = zipRes.tax_delta_per_gal >= 0 ? "+" : "";
+          const basisSign = zipRes.estimated_basis_delta >= 0 ? "+" : "";
+          forecastFields.push(
+            { name: "⚖️ Statutory Tax Wedge", value: `\`${wedgeSign}$${zipRes.tax_delta_per_gal.toFixed(3)}/gal\` vs ${zipRes.canonical_hub} rack baseline (\`$${zipRes.hub_baseline_tax_rate.toFixed(3)}/gal\`)`, inline: true },
+            {
+              name: "🏷️ Estimated Basis & Price Synthesis",
+              value: `Local pump prices in **${zipRes.state}** trade at an estimated **${basisSign}$${zipRes.estimated_basis_delta.toFixed(2)}/gal** basis differential over ${zipRes.canonical_hub} coastal rack benchmarks due to state tax differentials and regional/mountain distribution logistics. Point-in-time quantitative shocks (|ΔP|) track wholesale transmission down the **${zipRes.padd_name}** corridor.`,
+              inline: false
+            }
+          );
+        }
+      }
+
+      forecastFields.push({
+        name: "🔗 Live Interactive Views",
+        value: `[📊 Regional Dashboard](${dashboardUrl}) • [📈 Technical Attribution](https://koshiirRa.github.io/midgley/technical_breakdown.html) • [🗺️ ZIP Demand Heatmap](https://koshiirRa.github.io/midgley/telemetry.html)`,
+        inline: false
+      });
+
+      const forecastEmbed = {
+        title: `⛽ Midgley ${horizon}D Forecast — ${targetDisplayName}${zipRes && !targetDisplayName.includes(zipRes.zip_code) ? ` (ZIP ${zipRes.zip_code})` : ""}`,
+        description: `Point-in-time quantitative regime & shock attribution summary for **${targetDisplayName}** (${zipRes ? `${zipRes.padd_region} corridor` : localeMeta.name}).`,
+        url: dashboardUrl,
+        color: 3447003,
+        fields: forecastFields,
+        footer: { text: "Midgley Energy Complex Forecasting • Delivered Privately via Slash Command" },
+        timestamp: new Date().toISOString()
+      };
+
+      const existing = await getWorkerUserSubscription(userId, env);
+      const dmRes = await sendDiscordDirectMessage(userId, { embeds: [forecastEmbed] }, env, existing?.dm_channel_id);
+      const dmNote = dmRes.sent
+        ? "📬 **Forecast brief delivered to your Direct Messages** (and shown ephemerally below)."
+        : dmRes.blockedByPrivacy
+        ? "⚠️ **DMs are blocked by your server privacy settings (`50007`)** — displaying your forecast ephemerally below instead:"
+        : "📊 **Displaying your forecast ephemerally below** (invisible to the rest of the server):";
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: dmNote,
+            embeds: [forecastEmbed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+
+    if (subcommand === "test-alert") {
+      const locale = normalizeWorkerLocale(options.locale);
+      const testEmbed = {
+        title: "🧪 [DRY-RUN TEST] Midgley Direct Message Intraday Shock Alert",
+        description: "**Trigger Catalyst (Synthetic Diagnostic):**\n> *\"Unplanned FCC unit outage reported at regional refining complex\"*",
+        url: "https://koshiirRa.github.io/midgley/",
+        color: 15105570,
+        fields: [
+          { name: "📍 Target Metro Hubs", value: `\`${locale}\``, inline: true },
+          { name: "📊 Price Pressure (ΔP)", value: "`+0.35/gal`", inline: true },
+          { name: "🛢️ Supply Disruption (S)", value: "`0.65`", inline: true }
+        ],
+        footer: { text: "Midgley Self-Service DM Reachability Diagnostic" },
+        timestamp: new Date().toISOString()
+      };
+
+      const existing = await getWorkerUserSubscription(userId, env);
+      const dmRes = await sendDiscordDirectMessage(userId, { embeds: [testEmbed] }, env, existing?.dm_channel_id);
+      if (dmRes.sent) {
+        return new Response(
+          JSON.stringify({
+            type: 4,
+            data: {
+              flags: 64,
+              content: `✅ **Direct Message test succeeded!** Check your Discord DMs for the synthetic \`${locale}\` alert card.`
+            }
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      const reason = dmRes.blockedByPrivacy
+        ? "Discord rejected the DM (`Error 50007: Cannot send messages to this user`). Please enable **Allow Direct Messages from server members** in your server Privacy Settings."
+        : `DM dispatch could not be completed (${dmRes.error || "DISCORD_BOT_TOKEN not configured"}). Showing preview ephemerally below:`;
+
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: `⚠️ ${reason}`,
+            embeds: [testEmbed]
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({
+        type: 4,
+        data: {
+          flags: 64,
+          content: "ℹ️ Unknown `/midgley` command. Available subcommands: `subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`."
+        }
+      }),
+      { headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  // Type 3: MESSAGE_COMPONENT (User clicked "🚩 Flag False Positive" or "🔕 Mute This Hub (24h)" button)
   if (interaction.type === 3) {
     const customId = interaction.data?.custom_id || "";
+    if (customId.startsWith("mute_hub:")) {
+      const userObj = interaction.member?.user || interaction.user || {};
+      const userId = String(userObj.id || "");
+      const existing = userId ? await getWorkerUserSubscription(userId, env) : null;
+      const mutedUntil = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
+      if (existing) {
+        existing.muted_until = mutedUntil;
+        await saveWorkerUserSubscription(existing, env);
+      }
+      return new Response(
+        JSON.stringify({
+          type: 4,
+          data: {
+            flags: 64,
+            content: `🔕 **Alerts snoozed for 24 hours** (until \`${mutedUntil}\`). Run \`/midgley subscribe\` at any time to unmute early.`
+          }
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+    }
     if (customId.startsWith("flag_fp:")) {
       const eventHash = customId.replace("flag_fp:", "");
 
@@ -937,7 +2259,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
 
       if (embed) {
         if (embed.description) {
-          const match = embed.description.match(/> \*"(.*?)"\*/s) || embed.description.match(/> (.*?)$/m);
+          const match = embed.description.match(/> \*"([^"\r\n]+)"\*/) || embed.description.match(/> ([^\r\n]+)/);
           if (match) headline = match[1].trim();
         }
         for (const field of embed.fields || []) {
@@ -948,7 +2270,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
           if (fName.includes("Supply Disruption")) supplyDisruption = fVal;
           if (fName.includes("Geopolitical Risk")) geopoliticalRisk = fVal;
           if (fName.includes("Intelligence Sources")) {
-            const urlMatch = field.value.match(/\[Original Article\]\((.*?)\)/);
+            const urlMatch = field.value.match(/\[Original Article\]\(([^)\s]+)\)/);
             if (urlMatch) originalUrl = urlMatch[1].trim();
           }
         }
@@ -1142,6 +2464,7 @@ export async function isTokenUsed(tokenKey: string, env: Env): Promise<boolean> 
   if (USED_TOKENS_CACHE.has(tokenKey)) return true;
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       const row = await env.DB.prepare("SELECT clean_key FROM flag_replay_tokens WHERE clean_key = ?").bind(tokenKey).first();
       if (row) return true;
     } catch {
@@ -1155,6 +2478,7 @@ export async function markTokenUsed(tokenKey: string, env: Env): Promise<void> {
   USED_TOKENS_CACHE.add(tokenKey);
   if (env.DB) {
     try {
+      await ensureFlagReplaySchema(env);
       await env.DB.prepare("INSERT INTO flag_replay_tokens (clean_key, used_at) VALUES (?, datetime('now')) ON CONFLICT(clean_key) DO NOTHING").bind(tokenKey).run();
     } catch {
       // D1 schema table may not exist
@@ -1790,6 +3114,56 @@ export default {
         return await handleDiscordInteraction(request, env, ctx);
       }
 
+      // Edge Unmapped ZIP Demand Telemetry Sync Route (Issue #50, #195, #235)
+      if (url.pathname === "/telemetry/unmapped-zips") {
+        const topUnmapped = await getWorkerUnmappedZips(env);
+        return new Response(
+          JSON.stringify({
+            status: "success",
+            timestamp: new Date().toISOString(),
+            unique_unmapped_zips: topUnmapped.length,
+            total_unmapped_queries: topUnmapped.reduce((acc, r) => acc + (r.hit_count || 1), 0),
+            top_unmapped_zips: topUnmapped
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      // Authenticated Edge Discord Subscriptions Sync Route (Issue #235)
+      if (url.pathname === "/discord/subscriptions") {
+        const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim() || "";
+        const adminOk = Boolean(env.ADMIN_TOKEN && authHeader && timingSafeEqual(authHeader, env.ADMIN_TOKEN));
+        const botOk = Boolean(env.DISCORD_BOT_TOKEN && authHeader && timingSafeEqual(authHeader, env.DISCORD_BOT_TOKEN));
+        if (!adminOk && !botOk) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+        const subs = await getAllWorkerSubscriptions(env);
+        return new Response(
+          JSON.stringify({
+            status: "success",
+            timestamp: new Date().toISOString(),
+            subscriptions: subs
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      // Enverus / Drillinginfo Daily Rig Count Route (Issues #533, #640)
+      if (url.pathname === "/api/v1/energy/rig-count/enverus" || url.pathname === "/scraping/enverus-rig-count") {
+        const forceRefresh = url.searchParams.get("force_refresh") === "true";
+        const rigData = await getEnverusDailyRigCount(env, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(rigData, null, 2), {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Cache-Control": "public, max-age=3600"
+          }
+        });
+      }
+
       // Secure manual run & trigger endpoints (Fail-Closed, Issues #438, #574)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -1811,10 +3185,20 @@ export default {
           status: "active",
           service: "midgley-intraday-monitor",
           timestamp: new Date().toISOString(),
-          endpoints: ["/run", "/trigger", "/status", "/flag", "/discord/interactions"]
+          endpoints: [
+            "/run",
+            "/trigger",
+            "/status",
+            "/flag",
+            "/discord/interactions",
+            "/telemetry/unmapped-zips",
+            "/discord/subscriptions",
+            "/api/v1/energy/rig-count/enverus"
+          ]
         }, null, 2),
         { headers: { "Content-Type": "application/json" } }
       );
+
     } catch (err: any) {
       console.error(`[Fetch Exception] ${err.message || String(err)}`);
       await captureSentryException(env, ctx, err, { pathname: url.pathname });

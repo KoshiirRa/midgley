@@ -46,27 +46,133 @@ def test_metro_cluster_zip_resolution():
     assert res_bayarea["locale_code"] == "bayarea"
     assert res_bayarea["state"] == "CA"
 
+    res_houston = resolve_zip_code("77002")
+    assert res_houston["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_houston["is_metro_cluster_hit"] is True
+    assert res_houston["locale_code"] == "houston"
+    assert res_houston["state"] == "TX"
+
+    res_la = resolve_zip_code("90012")
+    assert res_la["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_la["is_metro_cluster_hit"] is True
+    assert res_la["locale_code"] == "los_angeles"
+    assert res_la["state"] == "CA"
+
+    res_beverly = resolve_zip_code("90210")
+    assert res_beverly["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_beverly["is_metro_cluster_hit"] is True
+    assert res_beverly["locale_code"] == "los_angeles"
+    assert res_beverly["state"] == "CA"
+
+    res_denver = resolve_zip_code("80202")
+    assert res_denver["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_denver["is_metro_cluster_hit"] is True
+    assert res_denver["locale_code"] == "denver"
+    assert res_denver["state"] == "CO"
+
+    res_nyc = resolve_zip_code("10001")
+    assert res_nyc["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_nyc["is_metro_cluster_hit"] is True
+    assert res_nyc["locale_code"] == "new_york"
+    assert res_nyc["state"] == "NY"
+    assert res_nyc["hub_baseline_tax_rate"] == 0.472
+
+    res_lake_placid = resolve_zip_code("12946")
+    assert res_lake_placid["locale_code"] == "new_york"
+    assert res_lake_placid["state"] == "NY"
+    assert res_lake_placid["hub_baseline_tax_rate"] == 0.472
+
+    res_seattle = resolve_zip_code("98101")
+    assert res_seattle["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_seattle["is_metro_cluster_hit"] is True
+    assert res_seattle["locale_code"] == "seattle"
+    assert res_seattle["state"] == "WA"
+
+    res_phoenix = resolve_zip_code("85001")
+    assert res_phoenix["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_phoenix["is_metro_cluster_hit"] is True
+    assert res_phoenix["locale_code"] == "phoenix"
+    assert res_phoenix["state"] == "AZ"
+
+    res_anchorage = resolve_zip_code("99501")
+    assert res_anchorage["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_anchorage["is_metro_cluster_hit"] is True
+    assert res_anchorage["locale_code"] == "anchorage"
+    assert res_anchorage["state"] == "AK"
+
+    res_honolulu = resolve_zip_code("96813")
+    assert res_honolulu["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_honolulu["is_metro_cluster_hit"] is True
+    assert res_honolulu["locale_code"] == "honolulu"
+    assert res_honolulu["state"] == "HI"
+
+    res_guam = resolve_zip_code("96910")
+    assert res_guam["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_guam["is_metro_cluster_hit"] is True
+    assert res_guam["locale_code"] == "guam"
+    assert res_guam["state"] == "GU"
+    assert res_guam["padd_region"] == "PADD 7"
+    assert res_guam["hub_baseline_tax_rate"] == 0.190
+
+    res_sj = resolve_zip_code("00901")
+    assert res_sj["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_sj["is_metro_cluster_hit"] is True
+    assert res_sj["locale_code"] == "san_juan"
+    assert res_sj["state"] == "PR"
+    assert res_sj["padd_region"] == "PADD 6"
+    assert res_sj["hub_baseline_tax_rate"] == 0.160
+
+    res_bos = resolve_zip_code("02108")
+    assert res_bos["resolution_tier"] == "METRO_CLUSTER_HIT"
+    assert res_bos["is_metro_cluster_hit"] is True
+    assert res_bos["locale_code"] == "boston"
+    assert res_bos["state"] == "MA"
+    assert res_bos["padd_region"] == "PADD 1A"
+    assert res_bos["hub_baseline_tax_rate"] == 0.240
+
 
 def test_out_of_metro_zip_resolution_and_telemetry():
     """Verifies non-cluster ZIP codes resolve via State/PADD fallback and trigger telemetry logging."""
-    res_la = resolve_zip_code("90210")
-    assert res_la["status"] == "success"
-    assert res_la["resolution_tier"] == "STATE_PADD_FALLBACK"
-    assert res_la["is_metro_cluster_hit"] is False
-    assert res_la["state"] == "CA"
-    assert res_la["padd_region"] == "PADD 5"
-    assert res_la["locale_code"] == "oakland"
-    assert res_la["state_tax_rate_per_gal"] == 0.596
+    res_sac = resolve_zip_code("95814")
+    assert res_sac["status"] == "success"
+    assert res_sac["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_sac["is_metro_cluster_hit"] is False
+    assert res_sac["state"] == "CA"
+    assert res_sac["padd_region"] == "PADD 5"
+    assert res_sac["locale_code"] == "oakland"
+    assert res_sac["state_tax_rate_per_gal"] == 0.596
 
-    res_houston = resolve_zip_code("77002")
-    assert res_houston["resolution_tier"] == "STATE_PADD_FALLBACK"
-    assert res_houston["state"] == "TX"
-    assert res_houston["padd_region"] == "PADD 3"
+    res_dallas = resolve_zip_code("75201")
+    assert res_dallas["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_dallas["state"] == "TX"
+    assert res_dallas["padd_region"] == "PADD 3"
 
-    res_nyc = resolve_zip_code("10001")
-    assert res_nyc["state"] == "NY"
-    assert res_nyc["padd_region"] == "PADD 1B"
-    assert res_nyc["locale_code"] == "newark"
+    res_pa = resolve_zip_code("15201")
+    assert res_pa["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_pa["state"] == "PA"
+    assert res_pa["padd_region"] == "PADD 1B"
+    assert res_pa["locale_code"] == "newark"
+
+    # Oregon out-of-cluster resolves to Seattle / PNW hub in PADD 5
+    res_or = resolve_zip_code("97201")
+    assert res_or["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_or["state"] == "OR"
+    assert res_or["padd_region"] == "PADD 5"
+    assert res_or["locale_code"] == "seattle"
+
+    # Nevada out-of-cluster resolves to Phoenix / Desert Southwest hub in PADD 5
+    res_nv = resolve_zip_code("89403")
+    assert res_nv["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_nv["state"] == "NV"
+    assert res_nv["padd_region"] == "PADD 5"
+    assert res_nv["locale_code"] == "phoenix"
+
+    # New Hampshire out-of-cluster resolves to Boston / New England hub in PADD 1A
+    res_nh = resolve_zip_code("03301")
+    assert res_nh["resolution_tier"] == "STATE_PADD_FALLBACK"
+    assert res_nh["state"] == "NH"
+    assert res_nh["padd_region"] == "PADD 1A"
+    assert res_nh["locale_code"] == "boston"
 
 
 def test_unmapped_telemetry_aggregation():
@@ -143,6 +249,7 @@ def test_leading_zero_zip_resolution():
     assert res_ma_int["zip_code"] == "02138"
     assert res_ma_int["state"] == "MA"
     assert res_ma_int["prefix_3"] == "021"
+    assert res_ma_int["locale_code"] == "boston"
 
     # 3. ZIP+4 with leading zero
     res_nj_plus4 = resolve_zip_code("07001-1234")
@@ -181,16 +288,47 @@ def test_coordinate_resolution_metro_hit():
     assert res_newark["locale_code"] == "newark"
     assert res_newark["state"] == "NJ"
 
+    # 4. Denver Downtown coordinates (39.7392, -104.9903)
+    res_den = resolve_coordinates(39.7392, -104.9903)
+    assert res_den["status"] == "success"
+    assert res_den["is_metro_cluster_hit"] is True
+    assert res_den["locale_code"] == "denver"
+    assert res_den["state"] == "CO"
+    assert res_den["distance_to_hub_miles"] < 5.0
+
+    # 5. Hagåtña / Apra Harbor, Guam coordinates (13.4443, 144.7937)
+    res_guam_coord = resolve_coordinates(13.4443, 144.7937)
+    assert res_guam_coord["status"] == "success"
+    assert res_guam_coord["is_metro_cluster_hit"] is True
+    assert res_guam_coord["locale_code"] == "guam"
+    assert res_guam_coord["state"] == "GU"
+    assert res_guam_coord["distance_to_hub_miles"] < 5.0
+
+    # 6. San Juan, Puerto Rico coordinates (18.4655, -66.1057)
+    res_sj_coord = resolve_coordinates(18.4655, -66.1057)
+    assert res_sj_coord["status"] == "success"
+    assert res_sj_coord["is_metro_cluster_hit"] is True
+    assert res_sj_coord["locale_code"] == "san_juan"
+    assert res_sj_coord["state"] == "PR"
+    assert res_sj_coord["distance_to_hub_miles"] < 5.0
+
+    # 7. Boston Downtown coordinates (42.3601, -71.0589)
+    res_bos_coord = resolve_coordinates(42.3601, -71.0589)
+    assert res_bos_coord["status"] == "success"
+    assert res_bos_coord["is_metro_cluster_hit"] is True
+    assert res_bos_coord["locale_code"] == "boston"
+    assert res_bos_coord["state"] == "MA"
+    assert res_bos_coord["distance_to_hub_miles"] < 5.0
+
 
 def test_coordinate_resolution_spatial_fallback():
     """Verifies out-of-metro GPS coordinates fall back gracefully to nearest regional model."""
-    # Denver, CO coordinates (39.7392, -104.9903) - outside 150mi of Tulsa
-    res_denver = resolve_coordinates(39.7392, -104.9903)
-    assert res_denver["status"] == "success"
-    assert res_denver["is_metro_cluster_hit"] is False
-    assert res_denver["resolution_tier"] == "SPATIAL_PROXIMITY_FALLBACK"
-    assert res_denver["nearest_hub"] == "tulsa"
-    assert res_denver["distance_to_hub_miles"] > 400.0
+    # Fargo, ND coordinates (46.8772, -96.7898) - outside 150mi of calibration hubs
+    res_fargo = resolve_coordinates(46.8772, -96.7898)
+    assert res_fargo["status"] == "success"
+    assert res_fargo["is_metro_cluster_hit"] is False
+    assert res_fargo["resolution_tier"] == "SPATIAL_PROXIMITY_FALLBACK"
+    assert res_fargo["distance_to_hub_miles"] > 300.0
 
 
 def test_unified_location_resolver():
@@ -203,7 +341,7 @@ def test_unified_location_resolver():
     # ZIP fallback when no coordinates
     res_zip = resolve_location(zip_code="10001")
     assert res_zip["query_type"] == "zip" if "query_type" in res_zip else True
-    assert res_zip["locale_code"] == "newark"
+    assert res_zip["locale_code"] == "new_york"
 
     # Default national when neither provided
     res_default = resolve_location()
@@ -235,5 +373,32 @@ def test_api_server_coordinates_endpoints():
     assert data_fc["status"] == "success"
     assert "location_resolution" in data_fc
     assert data_fc["location_resolution"]["locale_code"] == "newark"
+
+
+def test_resolve_zip_coordinates_lake_placid_and_centroids():
+    """Verify that ZIP 12946 (Lake Placid) maps to the Adirondacks and not NYC."""
+    from src.zip_geocoding import resolve_zip_coordinates, STATE_CENTER_COORDS, haversine_distance_miles
+
+    # 1. Exact 12946 coordinates
+    lat, lon, label = resolve_zip_coordinates("12946", "NY", "PADD 1B")
+    assert pytest.approx(lat, abs=0.01) == 44.2795
+    assert pytest.approx(lon, abs=0.01) == -73.9799
+    assert "Lake Placid" in label
+    assert "Adirondacks" in label
+
+    # Distance to NYC (40.7128, -74.0060) must be > 200 miles
+    dist_to_nyc = haversine_distance_miles(lat, lon, 40.7128, -74.0060)
+    assert dist_to_nyc > 240.0, f"Lake Placid must not be located near NYC; was {dist_to_nyc:.1f} miles away"
+
+    # 2. True NY State centroid must be Central NY (Madison County), NOT NYC
+    ny_lat, ny_lon = STATE_CENTER_COORDS["NY"]
+    assert ny_lat > 42.5, "NY state centroid must be in Central New York, not NYC"
+    dist_centroid_to_nyc = haversine_distance_miles(ny_lat, ny_lon, 40.7128, -74.0060)
+    assert dist_centroid_to_nyc > 150.0
+
+    # 3. 3-digit prefix 129 (e.g. 12901 Plattsburgh) maps to Adirondacks / Plattsburgh
+    p_lat, p_lon, p_label = resolve_zip_coordinates("12901", "NY")
+    assert p_lat > 44.0
+    assert "Plattsburgh" in p_label or "Adirondacks" in p_label
 
 

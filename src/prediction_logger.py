@@ -171,7 +171,7 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
             df = read_prediction_history(HISTORY_CSV_PATH)
         except Exception as e:
             logger.warning(f"Could not read prediction history CSV for cloud sync: {e}")
-            return {"status": "offline_fallback", "synced_rows": 0, "provider": "local_csv", "reason": str(e)}
+            return {"status": "offline_fallback", "synced_rows": 0, "provider": "local_csv", "reason": "Failed to read prediction history CSV"}
 
     if df is None or df.empty:
         return {"status": "synced", "synced_rows": 0, "provider": "local_csv"}
@@ -294,11 +294,11 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 err_body = ""
             err_msg = f"Turso prediction cloud sync failed with HTTP {e.code}: {e.reason} - {err_body}"
             logger.error(err_msg)
-            return {"status": "error", "reason": err_msg, "provider": "turso_edge"}
+            return {"status": "error", "reason": f"Turso prediction cloud sync failed with HTTP {e.code}", "provider": "turso_edge"}
         except Exception as e:
             err_msg = f"Turso prediction cloud sync exception: {e}"
             logger.error(err_msg)
-            return {"status": "error", "reason": err_msg, "provider": "turso_edge"}
+            return {"status": "error", "reason": "Turso prediction cloud sync failed", "provider": "turso_edge"}
 
     # 2. Attempt Cloudflare D1 / Edge Worker sync if credentials present
     if cf_url:
@@ -325,11 +325,11 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 err_body = ""
             err_msg = f"Cloudflare D1 prediction sync failed with HTTP Error {e.code}: {e.reason} - {err_body}"
             logger.error(err_msg)
-            return {"status": "offline_fallback", "reason": err_msg, "provider": "local_csv", "synced_rows": len(df)}
+            return {"status": "offline_fallback", "reason": f"Cloudflare D1 prediction sync failed with HTTP {e.code}", "provider": "local_csv", "synced_rows": len(df)}
         except Exception as e:
             err_msg = f"Cloudflare D1 prediction sync exception: {e}"
             logger.error(err_msg)
-            return {"status": "error", "reason": err_msg, "provider": "cloudflare_d1"}
+            return {"status": "error", "reason": "Cloudflare D1 prediction sync failed", "provider": "cloudflare_d1"}
 
     return {"status": "offline_fallback", "synced_rows": len(df), "provider": "local_csv"}
 
@@ -1164,7 +1164,33 @@ def backfill_new_region_history(
         except Exception:
             model_version = "v1.6-Ipatieff"
 
-    # Fast skip if history has already been backfilled in ledger (Issue #591)
+    skip_backfill = os.environ.get("MIDGLEY_SKIP_BACKFILL") == "1" or (
+        os.environ.get("GITHUB_ACTIONS") == "true"
+        and os.environ.get("TESTING") != "1"
+        and os.environ.get("MIDGLEY_FORCE_BACKFILL") != "1"
+    )
+    if skip_backfill:
+        logger.info(
+            f"Skipping historical backfill for {region} ({forecast_horizon_days}d) - "
+            f"policy enforces offloading backfills to local dev environment."
+        )
+        return 0
+
+    # Fast skip if history has already been backfilled in database (Turso / SQLite)
+    try:
+        from src.db.client import get_db
+        db = get_db()
+        db_rows = db.execute(
+            "SELECT COUNT(*) as cnt FROM forecasts WHERE region = ? AND model_version = ? AND horizon = ?",
+            (region, model_version, forecast_horizon_days)
+        )
+        if db_rows and db_rows[0].get("cnt", 0) >= 30:
+            logger.debug(f"History already backfilled in database for {region} ({model_version}, {forecast_horizon_days}d). Skipping redundant backfill.")
+            return 0
+    except Exception as e:
+        logger.debug(f"Notice checking database history in backfill_new_region_history: {e}")
+
+    # Fast skip if history has already been backfilled in local CSV ledger (Issue #591)
     if os.path.exists(HISTORY_CSV_PATH):
         try:
             hist_df = read_prediction_history(HISTORY_CSV_PATH)

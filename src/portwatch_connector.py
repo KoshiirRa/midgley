@@ -11,7 +11,7 @@ import json
 import logging
 import urllib.request
 import urllib.parse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, List, Optional
 import numpy as np
 import pandas as pd
@@ -108,6 +108,8 @@ class IMFPortWatchConnector:
             return {"vintages": {}, "last_updated": None}
 
     def _save_vintages(self, data: Dict[str, Any]) -> None:
+        if os.environ.get("TESTING") == "1" and os.path.abspath(self.vintage_file) == os.path.abspath(os.path.join("data", "imf_portwatch_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             with open(self.vintage_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
@@ -192,10 +194,10 @@ class IMFPortWatchConnector:
             last_row = df.iloc[-1].to_dict()
             vintages["vintages"][entity_key] = {
                 "latest_observation_date": last_dt,
-                "recorded_at": datetime.utcnow().isoformat(),
+                "recorded_at": datetime.now(timezone.utc).isoformat(),
                 "metrics": {k: float(v) if isinstance(v, (int, float, np.floating, np.integer)) else str(v) for k, v in last_row.items()}
             }
-            vintages["last_updated"] = datetime.utcnow().isoformat()
+            vintages["last_updated"] = datetime.now(timezone.utc).isoformat()
             self._save_vintages(vintages)
 
     def _generate_mock_series(
@@ -236,7 +238,7 @@ class IMFPortWatchConnector:
         Returns an aggregated summary of active disruption risk indices across all 4 monitored chokepoints.
         """
         summary = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "chokepoints": {}
         }
         for key in CHOKEPOINTS:

@@ -24,7 +24,7 @@ The forecasting engine continuously ingests both quantitative time-series data a
                         ▼                               ▼                               ▼
          ┌──────────────────────────────┐┌──────────────────────────────┐┌──────────────────────────────┐
          │ 10 Curated Developer Indexes ││  arXiv API (q-fin, econ, cs) ││  CORE API v3 Open-Access     │
-         │ Gemini 2.5 Flash Score ≥ 7.0 ││ 7-Day Rolling Paper Filter   ││ 7-Day Energy Search & Filter │
+         │ Gemini 3.8 Flash Score ≥ 7.0 ││ 7-Day Rolling Paper Filter   ││ 7-Day Energy Search & Filter │
          └──────────────┬───────────────┘└──────────────┬───────────────┘└──────────────┬───────────────┘
                         │                               │                               │
                         └───────────────────────────────┴───────────────────────────────┘
@@ -59,7 +59,7 @@ The Developer Catalog Monitor ([`src/catalog_monitor.py`](src/catalog_monitor.py
 
 ### Evaluation & Operational Policies
 * **State File Tracking:** Scanned link history is stored in [`data/catalog_monitors_state.json`](data/catalog_monitors_state.json) to diff newly added links between runs.
-* **LLM Evaluation Threshold:** New items are scored by Gemini 2.5 Flash for modeling relevance. Items scoring $\ge 7.0/10.0$ trigger automated creation of a GitHub Feature Request issue on `KoshiirRa/midgley`.
+* **LLM Evaluation Threshold:** New items are scored by Gemini 3.8 Flash for modeling relevance. Items scoring $\ge 7.0/10.0$ trigger automated creation of a GitHub Feature Request issue on `KoshiirRa/midgley`.
 * **Domain Taxonomy Labeling:** All auto-generated issues receive appropriate domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`, `token-efficiency`).
 * **Apify Tools Barred Policy:** All catalog monitors and LLM prompts explicitly ignore and discard tools hosted on or referencing Apify (`apify.com`) due to paid subscription and compute unit cost constraints. All ingested resources must be 100% zero-cost.
 
@@ -122,6 +122,7 @@ In addition to developer catalogs and academic preprint servers, the system inge
 * **USGS Earthquake Web Service Telemetry ([`src/usgs_seismic.py`](src/usgs_seismic.py)):** Live earthquake GeoJSON feeds (`earthquake.usgs.gov`) across 5 critical refining and storage corridors (`bay_area`, `cushing_ok`, `socal`, `mid_atlantic`, `new_madrid`) with 3D hypocentral distance-decay ground shaking proxies and pipeline shutoff risk indices (Issue #55).
 * **Multi-Feed Air Quality (AQI) & EPA AirNow Ozone Alerts ([`src/aqi_feed.py`](src/aqi_feed.py)):** Fine particulate ($\text{PM}_{2.5}$) and chemical gas ($\text{SO}_2, \text{O}_3$) metrics from PurpleAir, OpenAQ, and EPA AirNow (`airnowapi.org`) across 15 km refining fence-line polygons to detect emergency catalytic cracker outages and model statutory seasonal Reid Vapor Pressure (RVP) summer-blend compliance (Issues #54 & #73).
 * **Alternative Physical Feeds ([`src/alternative_data_feeds.py`](src/alternative_data_feeds.py)):** Cboe OVX crude oil options volatility index and Baker Hughes North American drilling rig counts.
+* **Enverus / Drillinginfo Daily Basin Rig Telemetry ([`src/enverus_rig_feed.py`](src/enverus_rig_feed.py) & [`workers/enverus_scraper.ts`](workers/enverus_scraper.ts)):** GPS-tracked daily active rig counts and week/month deltas across major North American basins (Permian, Gulf Coast/Eagle Ford, Williston, Anadarko, Appalachia, DJ Basin). Captured at the edge via Cloudflare Browser Rendering API (`@cloudflare/puppeteer` / `/markdown` Quick Action) with zero Firecrawl quota consumption, direct Drillinginfo REST failover, and policy User-Agent `MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)` (Issues #533, #640).
 
 ### Qualitative Intelligence, Web Scraping & Operator Disclosures
 * **SEC EDGAR Official 8-K Outage Filings ([`src/edgar_8k_monitor.py`](src/edgar_8k_monitor.py)):** Real-time SEC EDGAR ATOM RSS feeds for major refinery operators (PBF, HF Sinclair, Marathon, Valero, Phillips 66) with a 22-keyword operational relevance gate and Cloudflare Edge polling (Issues #69 & #129).

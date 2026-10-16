@@ -4,6 +4,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.6] - 2026-10-16
+
+### Added
+- Greater Chicago Metro Calibration Hub (`Chicago_IL`, PADD 2) covering BP Whiting (435 kbpd), CITGO Lemont (177 kbpd), and ExxonMobil Joliet (251 kbpd) refineries (#219).
+- Point-in-time regional metadata `data/regional_metadata/chicago_il.json` with Cook County/Chicago tax structure ($0.805/gal statutory base), Indiana cross-border arbitrage, EPA RFG 7.4 psi RVP limits, and shock scenarios (#219).
+- Subpackage implementation `src/locations/chicago/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#219).
+- Public dashboard page `docs/chicago.html` with multi-agent architecture, Leaflet refinery delivery corridor maps, and live weather telemetry (#219).
+- EPA RVP Reformulated Gasoline (RFG) rules (7.4 psi summer, 13.0 psi winter) for Greater Chicago in `data/regulatory_rvp_rules.json` and `src/rvp_regulations.py` (#219).
+- Houston & USGC Metro Calibration Hub (`Houston_TX`, PADD 3) anchoring the US Gulf Coast refining epicenter (>52% US operable refining capacity: Baytown, Port Arthur, Galveston Bay, Deer Park, Pasadena) (#220).
+- Point-in-time regional metadata `data/regional_metadata/houston_tx.json` with Texas motor fuel tax structure ($0.200/gal statutory fixed excise, $0.384/gal total baseline with federal), Houston Ship Channel spot pass-through, EPA Low-RVP Area standard (7.8 psi summer), and hurricane/freeze shock scenarios (#220).
+- Subpackage implementation `src/locations/houston/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#220).
+- Public dashboard page `docs/houston.html` with USGC refining corridor shock simulations, plain-English automated narrative synthesis, and live weather telemetry (#220).
+- EIA API v2 retail gasoline series mappings (`EMM_EPMR_PTE_Y44HO_DPG` for Houston, `EMM_EPMR_PTE_STX_DPG` for Texas, `EMM_EPMR_PTE_R30_DPG` for PADD 3 Gulf Coast) in `src/eia_retail_feed.py` (#220).
+- Los Angeles Basin Metro Calibration Hub (`Los_Angeles_CA`, PADD 5) anchoring Southern California's CaRFG refining complex (Marathon Carson/Wilmington 363 kbpd, Chevron El Segundo 269 kbpd, PBF Torrance 166 kbpd, Phillips 66 Wilmington 139 kbpd, Valero Wilmington 85 kbpd) (#221).
+- Point-in-time regional metadata `data/regional_metadata/los_angeles_ca.json` with CARB regulatory burden ($0.953/gal statutory base, $1.407/gal total with local sales tax), LA CARBOB spot pass-through (`EER_EPMRU_PF4_RLA_DPG`), CARB Phase 3 RVP standard (7.0 psi March 1–October 31), and El Segundo/Torrance/Newport-Inglewood shock scenarios (#221).
+- Subpackage implementation `src/locations/los_angeles/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#221).
+- Public dashboard page `docs/los_angeles.html` with South Coast Basin refining shock simulations, plain-English automated narrative synthesis, and live weather/AQI telemetry (#221).
+- EIA API v2 retail gasoline series mapping (`GASREGWLA` -> `EMM_EPMR_PTE_Y05LA_DPG` for Los Angeles-Long Beach-Anaheim MSA) in `src/eia_retail_feed.py` (#221).
+- Denver & Rocky Mountain Metro Calibration Hub (`Denver_CO`, PADD 4) anchoring Colorado's Front Range refining hub and Rocky Mountain distribution network (Suncor Commerce City 103 kbpd refinery) (#618).
+- Point-in-time regional metadata `data/regional_metadata/denver_co.json` with Colorado statutory motor fuel tax structure ($0.280/gal statutory base, $0.464/gal baseline with federal), Denver rack spot pass-through, EPA Front Range 7.8 psi summer RVP standard, and Suncor outage / ozone nonattainment shock scenarios (#618).
+- Subpackage implementation `src/locations/denver/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#618).
+- Public dashboard page `docs/denver.html` with Front Range / PADD 4 shock scenario simulations, plain-English automated narrative synthesis, and live weather telemetry (#618).
+- EIA API v2 retail gasoline & diesel series mappings (`GASREGWDEN`, `GASREGWCO`, `GASREGWRM`, `GASDESWRM`) in `src/eia_retail_feed.py` (#618).
+- New York Harbor & New York State Metro Calibration Hub (`New_York_NY`, PADD 1B) anchoring Central Atlantic fuel distribution, Phillips 66 Bayway (258 kbpd) refining, Buckeye pipeline corridor, and NY Harbor waterborne barge transit (#635).
+- Point-in-time regional metadata `data/regional_metadata/new_york_ny.json` with New York State motor fuel tax structure ($0.472/gal statutory base, $0.656/gal baseline with federal), downstate NYC/suburban county sales tax compounding (+14.0¢/gal), Upstate Adirondacks transport basis spread (+18.0¢/gal), downstate EPA RFG 7.4 psi vs Upstate 9.0 psi summer RVP standards, and Buckeye pipeline / barge freeze shock scenarios (#635).
+- Subpackage implementation `src/locations/new_york/` (`main.py`, `regional.py`, `notebook_builder.py`) registered in location specs and multi-metro runner (#635).
+- Public dashboard page `docs/new_york.html` with New York Harbor / PADD 1B shock scenario simulations, plain-English automated narrative synthesis, and live weather telemetry (#635).
+- EIA API v2 retail gasoline & diesel series mappings (`GASREGWNYC`, `GASREGWNY`, `GASDESWNY`) in `src/eia_retail_feed.py` (#635).
+- MinT Hierarchical Engine integration in `src/hierarchical_engine.py` incorporating `New_York_NY` into PADD 1B cluster (`Newark_DE` and `New_York_NY`) with exact aggregation coherence (#635).
+- ZIP prefix routing for NY ZIPs (`100`..`149`) resolving to `new_york` hub in `src/zip_geocoding.py`, resolving out-of-metro departure wedge against Delaware baseline (#635).
+- Multi-subscriber Discord Webhook & Direct Message (`discord_dm`) subscription registry (`DiscordSubscriptionRegistry` in `src/discord_notifier.py`, `discord_subscriptions` table in `src/db/schema.sql`) with Fernet/HMAC encryption at rest, locale/threshold/direction/catalyst filtering, and automatic dead-webhook (`HTTP 404/410`) and blocked-DM (`HTTP 403 / 50007`) circuit breaking (#235).
+- REST API Discord subscription & diagnostic endpoints (`POST /api/v1/notifications/discord/subscribe`, `DELETE /api/v1/notifications/discord/subscriptions/{subscription_id}`, `GET /api/v1/notifications/discord/subscriptions/status`, `POST /api/v1/notifications/discord/test`) protected by IPASIS IP reputation checks in `src/api_server.py` (#235).
+- Interactive `/midgley` Discord Application Slash Commands (`subscribe`, `unsubscribe`, `status`, `forecast`, `test-alert`) and locale autocomplete on `/discord/interactions` in `workers/intraday_monitor_worker.ts` with ephemeral (`flags: 64`) in-channel responses, private Direct Message delivery (`DISCORD_BOT_TOKEN`), and `scripts/register_discord_commands.py` (#235).
+- Boston Metro & New England Hub (`Boston_MA`, PADD 1A) calibrated to Irving Oil Saint John (320 kbpd) waterborne imports, Massachusetts excise tax ($0.240/gal), and EPA 7.4 psi summer RFG (#619, #639).
+- San Juan Metro & U.S. Caribbean Territories Hub (`San_Juan_PR`, PADD 6) modeling 100% waterborne tanker imports, Jones Act marine freight differentials, DACO daily price surveys, and Puerto Rico arbitrio ($0.160/gal) (#620).
+- Guam & U.S. Pacific Island Territories Hub (`Guam_GU`, PADD 7) modeling Asian MR product tanker imports, Mean of Platts Singapore (MOPS) 92 RON Mogas benchmark, Cabras Island fuel pier headers, and Guam Liquid Fuel Tax ($0.190/gal) (#621).
+- Decoupled PADD 5 sub-markets from California CARB into 4 distinct regional calibration hubs: Seattle & Puget Sound (`Seattle_WA`, PADD 5B), Phoenix & Desert Southwest (`Phoenix_AZ`, PADD 5C), Anchorage & Cook Inlet (`Anchorage_AK`, PADD 5D), and Honolulu & Oahu (`Honolulu_HI`, PADD 5D) (#622).
+- Google Gemini 3.8 Flash model migration across event analysis, episodic memory, PaSa research, factor mining, and weekly issue self-reviews, configuring `thinking_level="low"` and eliminating deprecated sampling parameters (#616, #638).
+- Consolidated standalone Greenville model into Charlotte Metro & Carolinas Hub (`Charlotte_NC`, PADD 1C) with legacy client-side redirects on `docs/greenville.html` and deterministic Knowledge Graph sorting.
+- Interactive 18-hub price map on main dashboard landing page (`docs/index.html`) featuring CARTO Dark Matter Leaflet tiles and territory preset navigation (#646).
+- Enverus / Drillinginfo daily rig count feed (`src/enverus_rig_feed.py`, Card 2.2b) powered by Cloudflare Browser Rendering API (`workers/enverus_scraper.ts`) bypassing bot challenges with zero Firecrawl quota spend (#533, #640).
+- Out-of-metro telemetry map geocoding & true NY state centroid correction in Madison County, with High Peaks coordinates for Lake Placid NY 12946 (#635).
+- Local-only regional backfill policy enforcing heavy multi-year backfills on local dev environment (`dev-vm`) to protect cloud CI runners from execution timeouts.
+
+### Fixed
+- Initialized `dynamic_fetches_succeeded` counter and guarded test-mode persistence in `src/alternative_data_feeds.py`.
+- Modernized core modules by replacing deprecated `datetime.utcnow()` with timezone-aware `datetime.now(timezone.utc)` ahead of Python 3.14 removal.
+- Standardized `boston` mapping in `DIESEL_REGION_LOG_KEYS` in `src/diesel_regional.py`.
+- Hardened telemetry basemap key resolution against empty or whitespace environment variable fallbacks.
+
 ## [0.8.5] - 2026-10-06
 
 ### Added

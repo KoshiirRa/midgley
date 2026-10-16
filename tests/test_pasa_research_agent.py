@@ -186,6 +186,25 @@ def test_selector_llm_evaluation_mock():
         assert "pipeline_basis_premium" in params
         assert params["pipeline_basis_premium"]["value"] == 0.12
 
+        call_kwargs = mock_client.models.generate_content.call_args[1]
+        assert call_kwargs["model"] == "gemini-3.8-flash"
+        config = call_kwargs["config"]
+        if isinstance(config, MagicMock):
+            from google.genai import types
+            if hasattr(types.GenerateContentConfig, "call_args") and types.GenerateContentConfig.call_args:
+                cfg_kwargs = types.GenerateContentConfig.call_args.kwargs
+                assert "temperature" not in cfg_kwargs
+                assert "top_p" not in cfg_kwargs
+                assert "top_k" not in cfg_kwargs
+                assert "thinking_budget" not in cfg_kwargs
+                assert "thinking_config" in cfg_kwargs
+        else:
+            assert getattr(config, "temperature", None) is None
+            assert getattr(config, "top_p", None) is None
+            assert getattr(config, "top_k", None) is None
+            assert getattr(config, "thinking_budget", None) is None
+            assert "low" in str(config.thinking_config.thinking_level).lower()
+
 
 def test_pasa_multi_hop_investigation_loop():
     """Verifies multi-hop execution flow and result assembly in testing mode."""

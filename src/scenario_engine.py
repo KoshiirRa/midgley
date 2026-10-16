@@ -61,7 +61,7 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "active_window": (2, 15, 5, 1),        # Feb 15 - May 01
         "peak_window": (3, 1, 4, 15),          # Mar 01 - Apr 15
         "telemetry_hook": "spec_calendar",
-        "locales": ["oakland", "national"],
+        "locales": ["oakland", "los_angeles", "national"],
         "season_label": "Statutory CARB RVP Summer-Blend Switchover (Feb 15 – May 01)",
         "peak_label": "Peak Spec Transition Squeeze (Mar 01 – Apr 15)"
     },
@@ -74,6 +74,16 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "locales": ["oakland", "national"],
         "season_label": "California Diablo/Santa Ana Offshore Wind Fire Season (Jul 01 – Nov 15)",
         "peak_label": "Peak Autumn Red Flag Fire Weather (Sep 01 – Oct 31)"
+    },
+    "santa_ana_psps_shutoff": {
+        "name": "Santa Ana Red Flag Wildfire & SCE/LADWP Grid PSPS Curtailment",
+        "category": "meteorological_fire",
+        "active_window": (9, 1, 12, 15),       # Sep 01 - Dec 15
+        "peak_window": (10, 1, 11, 30),        # Oct 01 - Nov 30
+        "telemetry_hook": "noaa_spc_fire",
+        "locales": ["los_angeles", "national"],
+        "season_label": "Southern California Santa Ana Offshore Wind Fire Season (Sep 01 – Dec 15)",
+        "peak_label": "Peak Santa Ana Red Flag Fire Weather (Oct 01 – Nov 30)"
     },
     "carquinez_atmospheric_river": {
         "name": "Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt",
@@ -131,7 +141,7 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "active_window": (5, 1, 10, 31),       # May 01 - Oct 31
         "peak_window": (6, 1, 9, 30),          # Jun 01 - Sep 30
         "telemetry_hook": "usgs_flow",
-        "locales": ["national", "tulsa"],
+        "locales": ["national", "tulsa", "houston"],
         "season_label": "Gulf Coast Tropical Runoff & Heavy Rain Season (May 01 – Oct 31)",
         "peak_label": "Peak Marine Berthing Disruption Window (Jun 01 – Sep 30)"
     },
@@ -196,6 +206,16 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "season_label": "Evergreen Year-Round Refinery Unit Trip Risk",
         "peak_label": None
     },
+    "socal_refinery_fccu_outage": {
+        "name": "El Segundo / Torrance FCCU & Alkylation Unit Unplanned Trip",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["los_angeles", "national"],
+        "season_label": "Evergreen Year-Round Refinery Unit Trip Risk",
+        "peak_label": None
+    },
     "hayward_quake": {
         "name": "USGS Hayward Fault M>=6.0 Seismic Quake & Pipeline Shutoff",
         "category": "geophysical",
@@ -203,6 +223,16 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "peak_window": None,
         "telemetry_hook": "usgs_seismic",
         "locales": ["oakland", "national"],
+        "season_label": "Evergreen Year-Round Seismic Hazard",
+        "peak_label": None
+    },
+    "usgs_newport_inglewood_quake": {
+        "name": "USGS Newport-Inglewood / Palos Verdes Fault Seismic Trip (M>=5.5)",
+        "category": "geophysical",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "usgs_seismic",
+        "locales": ["los_angeles", "national"],
         "season_label": "Evergreen Year-Round Seismic Hazard",
         "peak_label": None
     },
@@ -225,6 +255,46 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "locales": ["national"],
         "season_label": "Evergreen Year-Round Trade Policy Shock",
         "peak_label": None
+    },
+    "suncor_commerce_city_freeze_outage": {
+        "name": "Suncor Commerce City Total Freeze / Outage",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["denver", "national"],
+        "season_label": "Evergreen Year-Round Refinery Outage Risk",
+        "peak_label": None
+    },
+    "front_range_ozone_rfg_transition": {
+        "name": "Front Range Severe Ozone Nonattainment Summer RFG Transition",
+        "category": "regulatory_spec",
+        "active_window": (5, 1, 9, 15),
+        "peak_window": (5, 15, 6, 15),
+        "telemetry_hook": "spec_calendar",
+        "locales": ["denver", "national"],
+        "season_label": "Front Range 7.8 psi Summer RVP Transition Window (May 01 – Sep 15)",
+        "peak_label": "Peak Summer Spec Transition Squeeze (May 15 – Jun 15)"
+    },
+    "buckeye_pipeline_linden_disruption": {
+        "name": "Buckeye Pipeline Linden Terminal Disruption",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["new_york", "national"],
+        "season_label": "Evergreen Year-Round Midstream Pipeline Disruption",
+        "peak_label": None
+    },
+    "ny_harbor_barge_freeze_halt": {
+        "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+        "category": "weather",
+        "active_window": (12, 1, 2, 28),
+        "peak_window": (1, 1, 1, 31),
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["new_york", "national"],
+        "season_label": "Winter Marine Barge Freeze-Up Risk (Dec 01 – Feb 28)",
+        "peak_label": "Peak Ice Jam Squeeze (Jan 01 – Jan 31)"
     }
 }
 

@@ -17,7 +17,7 @@ def verify_data_directory_unpolluted():
     """
     dirs_to_guard = [Path("data")]
     initial_hashes = {}
-    ignored_suffixes = {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock", ".db"}
+    ignored_suffixes = {".tmp", ".sqlite", ".sqlite-shm", ".sqlite-wal", ".sqlite-journal", ".lock", ".csv.lock", ".db", ".db-wal", ".db-journal"}
 
     for d in dirs_to_guard:
         if d.exists():
@@ -82,6 +82,22 @@ def isolate_test_environment(tmp_path, monkeypatch):
         monkeypatch.setattr(db_client, "DEFAULT_SQLITE_PATH", test_midgley_db)
         if hasattr(db_client, "_global_db_client"):
             monkeypatch.setattr(db_client, "_global_db_client", None)
+    except (ImportError, AttributeError):
+        pass
+
+
+
+    try:
+        import src.connector_telemetry as ct
+        monkeypatch.setattr(ct, "TELEMETRY_FILE_PATH", str(tmp_path / "connector_telemetry.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.ipasis_security as isec
+        monkeypatch.setattr(isec, "TELEMETRY_FILE", str(tmp_path / "ipasis_telemetry.json"))
+        if hasattr(isec, "ipasis_service") and hasattr(isec.ipasis_service, "telemetry_file"):
+            monkeypatch.setattr(isec.ipasis_service, "telemetry_file", str(tmp_path / "ipasis_telemetry.json"))
     except (ImportError, AttributeError):
         pass
 
@@ -168,12 +184,23 @@ def isolate_test_environment(tmp_path, monkeypatch):
     try:
         import src.carb_compliance as carb_comp
         monkeypatch.setattr(carb_comp, "CARB_VINTAGE_FILE", str(tmp_path / "carb_compliance_vintages.json"))
+        if hasattr(carb_comp, "carb_connector"):
+            monkeypatch.setattr(carb_comp.carb_connector, "vintage_file", str(tmp_path / "carb_compliance_vintages.json"))
+            monkeypatch.setattr(carb_comp.carb_connector, "history_csv", str(tmp_path / "carb_history.csv"))
     except (ImportError, AttributeError):
         pass
 
     try:
         import src.noaa_weather as noaa_w
         monkeypatch.setattr(noaa_w, "PIRATEWEATHER_VINTAGES_FILE", str(tmp_path / "pirateweather_vintages.json"))
+        monkeypatch.setattr(noaa_w, "DEGREE_DAYS_VINTAGE_FILE", str(tmp_path / "degree_days_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.bts_transportation as bts_t
+        monkeypatch.setattr(bts_t, "BTS_VINTAGE_FILE", str(tmp_path / "bts_vintages.json"))
+        monkeypatch.setattr(bts_t, "FHWA_VINTAGE_FILE", str(tmp_path / "fhwa_vmt_vintages.json"))
     except (ImportError, AttributeError):
         pass
 
@@ -223,6 +250,97 @@ def isolate_test_environment(tmp_path, monkeypatch):
     try:
         import src.key_movers_feed as kmf
         monkeypatch.setattr(kmf, "DEFAULT_KEY_MOVERS_VINTAGE_FILE", str(tmp_path / "key_movers_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.aqi_feed as aqi
+        monkeypatch.setattr(aqi, "AQI_VINTAGE_FILE", str(tmp_path / "aqi_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.noaa_weather as nw
+        monkeypatch.setattr(nw, "DEGREE_DAYS_VINTAGE_FILE", str(tmp_path / "degree_days_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.portwatch_connector as pwc
+        monkeypatch.setattr(pwc, "PORTWATCH_VINTAGE_FILE", str(tmp_path / "imf_portwatch_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.census_demographics as cd
+        monkeypatch.setattr(cd, "CENSUS_VINTAGE_FILE", str(tmp_path / "census_demographics_vintages.json"))
+        monkeypatch.setattr(cd, "CENSUS_CACHE_FILE", str(tmp_path / "census_demographics_cache.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.firms_satellite_feed as fsf
+        monkeypatch.setattr(fsf, "FIRMS_VINTAGES_FILE", str(tmp_path / "firms_satellite_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.state_open_data as sod
+        monkeypatch.setattr(sod, "STATE_SURVEYS_VINTAGE_FILE", str(tmp_path / "state_surveys_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.bsee_shutins as bss
+        monkeypatch.setattr(bss, "BSEE_VINTAGE_FILE", str(tmp_path / "bsee_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.nhc_hurricane as nhc
+        monkeypatch.setattr(nhc, "NHC_VINTAGE_FILE", str(tmp_path / "nhc_hurricane_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.energy_equities_feed as eef
+        monkeypatch.setattr(eef, "ENERGY_EQUITIES_VINTAGE_FILE", str(tmp_path / "energy_equities_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.headline_arena_connector as hac
+        monkeypatch.setattr(hac, "SUBMITTED_LEDGER_FILE", str(tmp_path / "headline_arena_submitted_ledger.json"))
+        monkeypatch.setattr(hac, "PENDING_FORECASTS_FILE", str(tmp_path / "headline_arena_pending_forecasts.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.catalog_monitor as cm
+        monkeypatch.setattr(cm, "STATE_FILE", str(tmp_path / "catalog_monitors_state.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.treasury_yield_feed as tyf
+        monkeypatch.setattr(tyf, "TREASURY_VINTAGE_FILE", str(tmp_path / "treasury_vintages.json"))
+        monkeypatch.setattr(tyf, "TREASURY_CACHE_PATH", str(tmp_path / "treasury_cache.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.diesel_regional as dr
+        monkeypatch.setattr(dr, "DIESEL_VINTAGE_FILE", str(tmp_path / "diesel_vintages.json"))
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        import src.data_ingestion as di
+        monkeypatch.setattr(di, "FRED_VINTAGE_FILE", str(tmp_path / "fred_vintages.json"))
+        monkeypatch.setattr(di, "RADAR_VINTAGE_FILE", str(tmp_path / "radar_vintages.json"))
+        monkeypatch.setattr(di, "CFTC_VINTAGE_FILE", str(tmp_path / "cftc_vintages.json"))
+        if hasattr(di, "OpenSourceAIRadarConnector"):
+            monkeypatch.setattr(di.OpenSourceAIRadarConnector, "CACHE_FILE", str(tmp_path / "radar_cache.json"))
     except (ImportError, AttributeError):
         pass
 

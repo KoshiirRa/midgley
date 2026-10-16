@@ -398,12 +398,17 @@ class KnowledgeGraphEngine:
         if not valid_roots:
             return GraphContextSchema(focus_entities=[], nodes=[], edges=[])
 
-        subgraph_nodes = set(valid_roots)
+        # Collect nodes by minimum hop distance from any valid root
+        node_distances: Dict[str, int] = {}
         for root in valid_roots:
             lengths = nx.single_source_shortest_path_length(self.graph.to_undirected(), root, cutoff=depth)
-            subgraph_nodes.update(lengths.keys())
+            for node, dist in lengths.items():
+                if node not in node_distances or dist < node_distances[node]:
+                    node_distances[node] = dist
 
-        selected_nodes = list(subgraph_nodes)[:max_nodes]
+        # Prioritize valid_roots (dist=0) first, then nearest neighbors, deterministically sorted by node_id
+        sorted_nodes = sorted(node_distances.keys(), key=lambda n: (node_distances[n], n))
+        selected_nodes = sorted_nodes[:max_nodes]
         sub_g = self.graph.subgraph(selected_nodes)
 
         nodes_list = []

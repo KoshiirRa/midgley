@@ -41,7 +41,7 @@ This document provides a comprehensive guide for self-hosting custom instances o
 
 ## 2. Environment Configuration & API Keys
 
-Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys. 
+Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 3.8 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys.
 
 All core mathematical transformations — including **CoSPOT Compositional Spectral & Wavelet Feature Prompting** (`src/cospot_spectral_engine.py`, Issue #215, arXiv:2609.02093), Purged Cross-Validation (`src/models.py`), Dynamic Volatility-Gated Persistence Blending (`src/dynamic_region.py`), dynamic **Baker Hughes Rig Count Ingestion** (`src/alternative_data_feeds.py`, Issue #269), **Executive Social Media Live Polling & Weekend Gap Classification** (`src/executive_social_feed.py`, Issue #268), **Key Market Movers Statement Feed** (`src/key_movers_feed.py`, Issue #270), **EIA PADD Inventory & Refinery Utilization** (`src/data_ingestion.py`, Issue #271), **EIA-930 Grid Stress Modeling** (`src/data_ingestion.py`, Issue #272), **USDA Biofuel & Ethanol Rack/RIN Feeds** (`src/data_ingestion.py`, Issue #273), **EIA State & Metro Surveys** (`src/data_ingestion.py`, Issue #274), **FERC Form 6 Pipeline Tariffs** (`src/data_ingestion.py`, Issue #275), **USACE Lock Delays & Hydrology** (`src/usace_locks.py`, Issue #276), and Qlib Symbolic Alpha mining (`src/qlib_symbolic_engine.py`) — run natively on standard Python libraries (`numpy`, `pandas`, `scipy`) without requiring extra cloud subscriptions or heavy GPU accelerators. Point-in-time publication snapshots are automatically tracked across bitemporal ledgers (`data/*_vintages.json`) and cached in `data/lookup_cache.sqlite`.
 
@@ -116,9 +116,12 @@ WANDB_API_KEY="wandb_v1_..."
 WANDB_PROJECT="midgley-gas-forecasting"
 WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
 
-# Discord Webhook Notification Gateway (Intraday Forecast Revisions, Issue #234)
-# Dispatches real-time alerts on intraday price shocks with environment tagging ([PRODUCTION] vs [DEVELOPMENT])
+# Discord Webhook & Direct Message (DM) Notification Gateway (Issues #234, #235)
+# Dispatches real-time alerts on intraday price shocks to channel webhooks and individual DM subscribers
 DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+DISCORD_APP_ID="your_discord_application_id"
+DISCORD_PUBLIC_KEY="your_discord_ed25519_public_key"
+DISCORD_BOT_TOKEN="your_discord_bot_token_for_dm_alerts"
 
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
@@ -329,7 +332,7 @@ To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
      -e HINDSIGHT_API_PORT="8888" \
      -e DATABASE_URL="$SUPABASE_DATABASE_URL" \
      -e HINDSIGHT_API_LLM_PROVIDER="gemini" \
-     -e HINDSIGHT_API_LLM_MODEL="gemini-2.5-flash" \
+     -e HINDSIGHT_API_LLM_MODEL="gemini-3.8-flash" \
      -e HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY" \
      ghcr.io/vectorize-io/hindsight:latest
    ```
@@ -339,7 +342,7 @@ To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
 If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
 * **Zero external services or cloud accounts required.**
 * Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.
-* Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
+* Generates structured post-mortems and parameter calibration recommendations via Gemini 3.8 Flash (or the Tier 3 Offline Rule-Based Lexicon).
 * **Region-Scoped Memory Retention (Issue #326):** Memory shock ingestion is scoped specifically to the regional hub being evaluated (`backfill_actual_prices_and_evaluate(target_region=...)`), eliminating redundant global tail re-evaluations and protecting cloud API quotas.
 
 ### 3.5.1. Historical Memory Reconciliation & Catch-Up Engine (Issue #557)
@@ -427,7 +430,7 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - FINLIGHT_API_KEY=${FINLIGHT_API_KEY}
       - MIDGLEY_ADMIN_SECRET=${MIDGLEY_ADMIN_SECRET}
-      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie
+      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie,chicago,houston
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -544,7 +547,7 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, regional diesel engines, and generates the public web dashboard):
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, Chicago, Houston, Los Angeles, regional diesel engines, and generates the public web dashboard):
 ```bash
 python3 run_all.py --use-llm-api
 ```
@@ -1164,7 +1167,7 @@ pytest tests/test_dashboard_generator.py -v
 
 ---
 
-*Midgley Version: `v0.8.3` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.8.6` | Engine: Gemini 3.8 Flash + Ridge (α=10.0) | License: Apache 2.0*
 
 
 

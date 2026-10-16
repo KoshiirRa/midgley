@@ -1,7 +1,7 @@
 """
 LLM Event Analyzer Module
 Extracts structured numerical factor scores from unstructured text headlines and news reports.
-Supports ultra-fast Single-Batch LLM invocation (Google Gemini 2.5 Flash) with in-memory caching
+Supports ultra-fast Single-Batch LLM invocation (Google Gemini 3.8 Flash) with in-memory caching
 and a robust deterministic rule-based fallback.
 """
 
@@ -239,7 +239,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     provider_used = "offline_lexicon"
     scores = None
 
-    # Tier 1: Gemini 2.5 Flash
+    # Tier 1: Gemini 3.8 Flash
     if api_key:
         try:
             prompt_str = LLM_SINGLE_PROMPT.format(
@@ -252,9 +252,9 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 from google import genai
                 from google.genai import types
                 client = genai.Client(api_key=api_key)
-                config = types.GenerateContentConfig(temperature=0.1)
+                config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model='gemini-3.8-flash',
                     contents=prompt_str,
                     config=config
                 )
@@ -279,9 +279,9 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 "opec_action": float(parsed.get("opec_action", 0.0)),
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
             }
-            provider_used = "gemini-2.5-flash"
-            log_llm_usage("google", "gemini-2.5-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
-            token_tab_manager.record_usage("gemini-2.5-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
+            provider_used = "gemini-3.8-flash"
+            log_llm_usage("google", "gemini-3.8-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
+            token_tab_manager.record_usage("gemini-3.8-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
         except Exception as e:
             logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
 
@@ -330,7 +330,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
 
 def extract_batch_event_features_llm(headlines: list, api_key: str = None, spectral_context: str = "") -> list:
     """
-    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 2.5 Flash API call,
+    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 3.8 Flash API call,
     leveraging multi-tier lookup caching with SHA-256 digests.
     """
     # Check in-memory and multi-tier lookup cache first
@@ -352,7 +352,7 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
             
         if api_key:
             try:
-                logger.info(f"⚡ Launching Single-Batch Gemini 2.5 Flash LLM call for {len(uncached)} headlines...")
+                logger.info(f"⚡ Launching Single-Batch Gemini 3.8 Flash LLM call for {len(uncached)} headlines...")
                 input_json_str = json.dumps([{"id": i, "headline": h} for i, h in enumerate(uncached)], indent=2)
                 
                 # Retrieve collective hindsight context for catalyst headlines in batch (Issue #586 N-4)
@@ -382,9 +382,9 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
                     from google import genai
                     from google.genai import types
                     client = genai.Client(api_key=api_key)
-                    config = types.GenerateContentConfig(temperature=0.1)
+                    config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                     response = client.models.generate_content(
-                        model='gemini-2.5-flash',
+                        model='gemini-3.8-flash',
                         contents=prompt,
                         config=config
                     )

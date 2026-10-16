@@ -90,14 +90,17 @@ FIRMS_REFINING_BBOXES: Dict[str, Dict[str, Any]] = {
 }
 
 
-def save_firms_vintage_record(record: dict, filepath: str = FIRMS_VINTAGES_FILE) -> None:
+def save_firms_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time NASA FIRMS observation (Issue #453)."""
+    fp = filepath or FIRMS_VINTAGES_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join(DATA_DIR, "firms_satellite_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
-        if os.path.exists(filepath):
+        if os.path.exists(fp):
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
+                with open(fp, "r", encoding="utf-8") as f:
                     vintages = json.load(f)
             except Exception:
                 vintages = []

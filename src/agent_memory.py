@@ -6,7 +6,7 @@ Issue #230: [Weekly Review 2.0] Qualitative Anomaly Post-Mortems
 Architecture:
 - Primary Engine: Vectorize Hindsight API on Google Cloud Run (Scale-to-Zero) backed by Supabase pgvector.
 - Zero-Cost Fallback: Local SQLite FTS5 Memory Store (data/agent_memory.sqlite) with BM25 indexing.
-- Synthesis: Gemini 2.5 Flash LLM reflection pass with deterministic rule-based fallback.
+- Synthesis: Gemini 3.8 Flash LLM reflection pass with deterministic rule-based fallback.
 """
 
 import os
@@ -342,6 +342,8 @@ class AgentMemoryManager:
         Persists authoritative memory bank counts to data/agent_memory_vintages.json
         for resilient fallback in ephemeral CI environments and offline runs.
         """
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return False
         if not inventory or (inventory.get("memories_count", 0) == 0 and inventory.get("reflections_count", 0) == 0):
             return False
         try:
@@ -607,7 +609,7 @@ class AgentMemoryManager:
                 log_agent_memory_op(operation="reflect", backend="hindsight_cloud", status="success")
                 return cloud_ref["reflections"]
 
-        # 2. Try Gemini 2.5 Flash reflection
+        # 2. Try Gemini 3.8 Flash reflection
         if api_key is None:
             api_key = os.environ.get("GEMINI_API_KEY")
 
@@ -774,9 +776,9 @@ JSON Output:
             from google import genai
             from google.genai import types
             client = genai.Client(api_key=api_key)
-            config = types.GenerateContentConfig(temperature=0.1)
+            config = types.GenerateContentConfig()
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-3.8-flash',
                 contents=prompt,
                 config=config
             )

@@ -29,10 +29,12 @@ DEFAULT_TIMEOUT = 5.0
 USGS_WATER_VINTAGE_FILE = os.path.join("data", "usgs_water_vintages.json")
 
 
-def save_water_vintage_record(record: dict, filepath: str = USGS_WATER_VINTAGE_FILE) -> None:
+def save_water_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time USGS water telemetry observation (Issue #293)."""
-    if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(USGS_WATER_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+    fp = filepath or USGS_WATER_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(USGS_WATER_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
         return
+    filepath = fp
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -65,8 +67,10 @@ def save_water_vintage_record(record: dict, filepath: str = USGS_WATER_VINTAGE_F
         logger.debug(f"Could not persist USGS water vintage record: {e}")
 
 
-def get_water_vintages_as_of(as_of_date: str, cluster: Optional[str] = None, filepath: str = USGS_WATER_VINTAGE_FILE) -> list:
+def get_water_vintages_as_of(as_of_date: str, cluster: Optional[str] = None, filepath: Optional[str] = None) -> list:
     """Retrieves all USGS water vintage records available as of a given cutoff date (Issue #293)."""
+    if filepath is None:
+        filepath = USGS_WATER_VINTAGE_FILE
     if not os.path.exists(filepath):
         return []
     try:
