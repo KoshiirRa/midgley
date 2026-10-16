@@ -12,14 +12,138 @@ import urllib.parse
 import defusedxml.ElementTree as ET
 import pandas as pd
 from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 import logging
 from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
 
-USER_AGENT = "(MidgleyGasPriceForecaster, contact@example.com)"
+from src.http_client import http_get, DEFAULT_USER_AGENT
+
+USER_AGENT = DEFAULT_USER_AGENT
 GEOPOLITICAL_VINTAGE_FILE = os.path.join("data", "geopolitical_vintages.json")
+
+TRACKING_QUERY_PARAMS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "gclid", "fbclid", "ref", "source", "ncid", "ocid", "ved", "usqp"
+}
+
+
+def normalize_url(url: Any) -> str:
+    """Strips query tracking parameters, anchors, and normalizes URL safely handling NaN/null inputs."""
+    if url is None:
+        return ""
+    if not isinstance(url, str):
+        # Handle pandas / numpy NaN
+        if str(url).lower() == "nan" or (isinstance(url, float) and url != url):
+            return ""
+        url = str(url)
+    url_str = url.strip()
+    if not url_str or url_str.lower() in ("nan", "none"):
+        return ""
+    try:
+        parsed = urllib.parse.urlparse(url_str)
+        if not parsed.scheme or not parsed.netloc:
+            return url_str
+        query_pairs = urllib.parse.parse_qsl(parsed.query)
+        filtered_pairs = [(k, v) for k, v in query_pairs if k.lower() not in TRACKING_QUERY_PARAMS]
+        new_query = urllib.parse.urlencode(filtered_pairs)
+        normalized = urllib.parse.urlunparse((
+            parsed.scheme.lower(),
+            parsed.netloc.lower(),
+            parsed.path.rstrip('/'),
+            "",
+            new_query,
+            ""
+        ))
+        return normalized
+    except Exception:
+        return url_str
+
+
+def normalize_headline(headline: str) -> str:
+    """
+    Normalizes headline text by removing publisher suffixes and special characters.
+    Preserves intra-word hyphens (e.g., 'Iran-backed Houthis' -> 'iran-backed houthis').
+    """
+    if not headline:
+        return ""
+    # Strip trailing publisher attributions (preceded by whitespace and hyphen/pipe)
+    text = re.sub(r"\s+-\s+[^-\n]+$", "", headline).strip()
+    text = re.sub(r"\s+\|\s+[^|\n]+$", "", text).strip()
+    # Preserve intra-word hyphens: keep alphanumeric, whitespace, and hyphens
+    text = re.sub(r"[^\w\s-]", "", text).lower()
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def compute_headline_similarity(h1: str, h2: str) -> float:
+    """Computes word-token Jaccard similarity between two headlines."""
+    tokens1 = set(normalize_headline(h1).split())
+    tokens2 = set(normalize_headline(h2).split())
+    if not tokens1 or not tokens2:
+        return 0.0
+    intersection = len(tokens1 & tokens2)
+    union = len(tokens1 | tokens2)
+    return float(intersection) / float(union) if union > 0 else 0.0
+
+
+def deduplicate_events(events: List[Dict[str, Any]], similarity_threshold: float = 0.85) -> List[Dict[str, Any]]:
+    """
+    Deduplicates a list of event dictionaries across rolling dates (+/- 1 day)
+    using canonical URLs and pre-tokenized Jaccard similarity.
+    """
+    unique_events: List[Dict[str, Any]] = []
+    seen_urls: set = set()
+    tokenized_by_date: Dict[str, List[Tuple[set, str]]] = {}
+
+    for ev in events:
+        if not isinstance(ev, dict):
+            continue
+
+        raw_url = ev.get("url")
+        canon_url = normalize_url(raw_url)
+        if canon_url and canon_url in seen_urls:
+            continue
+
+        headline = str(ev.get("headline") or ev.get("title") or ev.get("chokepoint") or ev.get("event") or "")
+        norm_h = normalize_headline(headline) if headline else ""
+        tokens = set(norm_h.split()) if norm_h else set(f"{k}:{v}" for k, v in ev.items() if k != "url")
+        if not tokens:
+            tokens = {"event"}
+
+        dt_str = str(ev.get("date", ""))[:10]
+        candidate_dates = [dt_str]
+        try:
+            base_dt = datetime.strptime(dt_str, "%Y-%m-%d").date()
+            candidate_dates.append((base_dt - timedelta(days=1)).strftime("%Y-%m-%d"))
+            candidate_dates.append((base_dt + timedelta(days=1)).strftime("%Y-%m-%d"))
+        except Exception:
+            pass
+
+        is_duplicate = False
+        for c_dt in candidate_dates:
+            if c_dt in tokenized_by_date:
+                for seen_tokens, _ in tokenized_by_date[c_dt]:
+                    intersection = len(tokens & seen_tokens)
+                    union = len(tokens | seen_tokens)
+                    sim = float(intersection) / float(union) if union > 0 else 0.0
+                    if sim >= similarity_threshold:
+                        is_duplicate = True
+                        break
+            if is_duplicate:
+                break
+
+        if not is_duplicate:
+            if canon_url:
+                seen_urls.add(canon_url)
+                ev["url"] = canon_url
+            if dt_str not in tokenized_by_date:
+                tokenized_by_date[dt_str] = []
+            tokenized_by_date[dt_str].append((tokens, norm_h))
+            unique_events.append(ev)
+
+    return unique_events
+
 
 # Key Chokepoint Definitions & Risk Weighting
 CHOKEPOINTS = {
@@ -127,8 +251,12 @@ HISTORICAL_GEOPOLITICAL_EVENTS = [
 ]
 
 
-def save_geopolitical_vintage_record(records: list, filepath: str = GEOPOLITICAL_VINTAGE_FILE) -> None:
-    """Appends a point-in-time geopolitical event observation vintage record."""
+def save_geopolitical_vintage_record(records: list, filepath: Optional[str] = None) -> None:
+    """Appends a point-in-time geopolitical event observation vintage record with deduplication."""
+    if os.environ.get("TESTING") == "1" and filepath is None:
+        return
+    if filepath is None:
+        filepath = GEOPOLITICAL_VINTAGE_FILE
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -139,20 +267,29 @@ def save_geopolitical_vintage_record(records: list, filepath: str = GEOPOLITICAL
             except Exception:
                 vintages = []
 
+        deduped = deduplicate_events(records)
+        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         vintage_entry = {
-            "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "events_count": len(records),
-            "events": records
+            "as_of": now_str,
+            "events_count": len(deduped),
+            "events": deduped
         }
-        vintages.append(vintage_entry)
+        # Update or append cleanly
+        if vintages and vintages[-1].get("as_of", "")[:10] == now_str[:10]:
+            vintages[-1] = vintage_entry
+        else:
+            vintages.append(vintage_entry)
+            
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(vintages, f, indent=2)
     except Exception as e:
         logger.debug(f"Failed to persist geopolitical vintage record: {e}")
 
 
-def get_geopolitical_vintages_as_of(as_of_date: str, filepath: str = GEOPOLITICAL_VINTAGE_FILE) -> Optional[List[dict]]:
+def get_geopolitical_vintages_as_of(as_of_date: str, filepath: Optional[str] = None) -> Optional[List[dict]]:
     """Retrieves geopolitical events recorded on or before as_of_date."""
+    if filepath is None:
+        filepath = GEOPOLITICAL_VINTAGE_FILE
     if not os.path.exists(filepath):
         return None
     try:
@@ -175,15 +312,16 @@ class GeopoliticalFeedConnector:
         self.is_free_alternative = True
         self.cost_per_query = 0.0
 
-    def fetch_geopolitical_headlines(self) -> List[Dict[str, Any]]:
+    def fetch_geopolitical_headlines(self, force_refresh: bool = False) -> List[Dict[str, Any]]:
         """
         Fetches live breaking maritime and geopolitical headlines with 15-minute lookup caching.
         """
         minute_bucket = datetime.now().strftime("%Y-%m-%d-%H")
         cache_key = f"geopolitical_headlines:{minute_bucket}"
-        cached = global_cache.get(cache_key)
-        if cached and isinstance(cached, dict) and "headlines" in cached:
-            return cached["headlines"]
+        if not force_refresh:
+            cached = global_cache.get(cache_key)
+            if cached and isinstance(cached, dict) and "headlines" in cached:
+                return cached["headlines"]
 
         queries = [
             ("Strait_of_Hormuz", "Iran+tanker+OR+Strait+of+Hormuz+when:2d"),
@@ -195,31 +333,29 @@ class GeopoliticalFeedConnector:
         for chokepoint, q in queries:
             url = f"https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
             try:
-                req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-                with urllib.request.urlopen(req, timeout=5) as resp:
-                    if resp.status == 200:
-                        root = ET.fromstring(resp.read())
-                        for item in root.findall(".//item")[:5]:
-                            title = item.findtext("title", "")
-                            pub_date = item.findtext("pubDate", "")
-                            link = item.findtext("link", "")
-                            
-                            # Clean title attribution
-                            clean_title = re.sub(r"\s*-\s*[^-]+$", "", title).strip()
-                            dt_str = datetime.now().strftime("%Y-%m-%d")
-                            if pub_date:
-                                try:
-                                    dt_str = pd.to_datetime(pub_date).strftime("%Y-%m-%d")
-                                except Exception:
-                                    pass
+                resp = http_get(url, timeout=5)
+                if resp.status_code == 200:
+                    root = ET.fromstring(resp.content)
+                    for item in root.findall(".//item")[:5]:
+                        title = item.findtext("title", "")
+                        pub_date = item.findtext("pubDate", "")
+                        link = item.findtext("link", "")
+                        
+                        clean_title = re.sub(r"\s*-\s*[^-]+$", "", title).strip()
+                        dt_str = datetime.now().strftime("%Y-%m-%d")
+                        if pub_date:
+                            try:
+                                dt_str = pd.to_datetime(pub_date).strftime("%Y-%m-%d")
+                            except Exception:
+                                pass
 
-                            live_events.append({
-                                "date": dt_str,
-                                "headline": clean_title,
-                                "category": f"Geopolitical_{chokepoint}",
-                                "chokepoint": chokepoint,
-                                "url": link
-                            })
+                        live_events.append({
+                            "date": dt_str,
+                            "headline": clean_title,
+                            "category": f"Geopolitical_{chokepoint}",
+                            "chokepoint": chokepoint,
+                            "url": normalize_url(link)
+                        })
             except Exception as e:
                 logger.debug(f"Geopolitical query failed for {chokepoint}: {e}")
 
@@ -236,10 +372,12 @@ class GeopoliticalFeedConnector:
                             "headline": item["text"],
                             "category": f"Geopolitical_{chokepoint}",
                             "chokepoint": chokepoint,
-                            "url": item.get("url", "")
+                            "url": normalize_url(item.get("url", ""))
                         })
             except Exception as e:
                 logger.debug(f"Geopolitical reachability cascade skipped: {e}")
+
+        live_events = deduplicate_events(live_events)
 
         if live_events:
             save_geopolitical_vintage_record(live_events)
@@ -251,7 +389,7 @@ class GeopoliticalFeedConnector:
 def get_geopolitical_maritime_events() -> pd.DataFrame:
     """
     Returns structured historical and real-time event feeds for Iran/Hormuz, Suez/Red Sea, and Venezuela.
-    Dynamically fetched via public RSS endpoints and finlight.me when available.
+    Dynamically fetched via public RSS endpoints and finlight.me when available, with strict deduplication.
     """
     base_events = None
     try:
@@ -265,23 +403,15 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
     if base_events is None:
         base_events = list(HISTORICAL_GEOPOLITICAL_EVENTS)
 
-    df = pd.DataFrame(base_events)
-    df['date'] = pd.to_datetime(df['date'])
+    all_records = list(base_events)
 
     # 1. Dynamically augment with live RSS feed
     try:
         connector = GeopoliticalFeedConnector()
         live_headlines = connector.fetch_geopolitical_headlines()
         if live_headlines:
-            live_df = pd.DataFrame(live_headlines)
-            live_df['date'] = pd.to_datetime(live_df['date'])
-            df = pd.concat([df, live_df], ignore_index=True)
+            all_records.extend(live_headlines)
             logger.info(f"Augmented geopolitical feed with {len(live_headlines)} live RSS events.")
-            try:
-                from src.benchmark_updater import save_historical_benchmark
-                save_historical_benchmark("geopolitical", df.to_dict(orient="records"))
-            except Exception:
-                pass
     except Exception as e:
         logger.debug(f"Live RSS geopolitical augmentation notice: {e}")
 
@@ -307,18 +437,31 @@ def get_geopolitical_maritime_events() -> pd.DataFrame:
             if chokepoint:
                 dt_str = pd.to_datetime(a.get("publishDate")).strftime("%Y-%m-%d") if a.get("publishDate") else datetime.now().strftime("%Y-%m-%d")
                 fin_events.append({
-                    "date": pd.to_datetime(dt_str),
+                    "date": dt_str,
                     "headline": a.get("title", ""),
                     "category": category,
-                    "chokepoint": chokepoint
+                    "chokepoint": chokepoint,
+                    "url": normalize_url(a.get("url", ""))
                 })
         if fin_events:
-            fin_df = pd.DataFrame(fin_events)
-            df = pd.concat([df, fin_df], ignore_index=True)
+            all_records.extend(fin_events)
             logger.info(f"Augmented geopolitical feed with {len(fin_events)} live finlight.me events.")
     except Exception as e:
         logger.debug(f"Finlight geopolitical augmentation notice: {e}")
 
+    # Deduplicate all records to prevent self-appending duplicate growth (Issue #566)
+    deduped_records = deduplicate_events(all_records)
+    
+    # Save deduplicated benchmark if changed
+    try:
+        from src.benchmark_updater import save_historical_benchmark
+        if len(deduped_records) != len(base_events) or deduped_records != base_events:
+            save_historical_benchmark("geopolitical", deduped_records)
+    except Exception:
+        pass
+
+    df = pd.DataFrame(deduped_records)
+    df['date'] = pd.to_datetime(df['date'], format='mixed')
     return df.sort_values('date').reset_index(drop=True)
 
 

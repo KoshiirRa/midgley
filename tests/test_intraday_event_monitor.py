@@ -11,6 +11,7 @@ from src.event_analyzer import extract_event_features_llm
 
 
 import os
+import json
 
 class TestIntradayEventMonitor(unittest.TestCase):
     def setUp(self):
@@ -27,6 +28,18 @@ class TestIntradayEventMonitor(unittest.TestCase):
         is_anomaly, scores = self.monitor.evaluate_headline_anomaly(headline)
         self.assertTrue(is_anomaly)
         self.assertGreaterEqual(abs(scores["overall_price_pressure"]), 0.40)
+
+    def test_evaluate_headline_edible_oil_suppression(self):
+        """Verifies that agricultural and edible cooking oils (Issue #617) are suppressed as false positives."""
+        rice_bran_headline = "Supreme Court Dismisses Appeal on Classification of Hydrogenated Rice Bran Oil Due to Retention of Essential Characteristics. Classified under Tariff Item 12 as Vegetable Non-Essential Oil"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(rice_bran_headline)
+        self.assertFalse(is_anomaly)
+        self.assertEqual(scores.get("overall_price_pressure", 0.0), 0.0)
+
+        palm_oil_headline = "Tariff values raised for edible oil and palm oil imports"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(palm_oil_headline)
+        self.assertFalse(is_anomaly)
+        self.assertEqual(scores.get("overall_price_pressure", 0.0), 0.0)
 
     def test_process_incoming_headline_structure(self):
         headline = "Houthi Missile Strike Halts Tanker Traffic in Strait of Hormuz"
@@ -116,6 +129,18 @@ class TestIntradayEventMonitor(unittest.TestCase):
         # Test Oakland locale routing
         t_oakland = self.monitor.resolve_target_locales("Chevron Richmond Refinery Flaring Triggers CARB Compliance Warning")
         self.assertEqual(t_oakland, ["Oakland"])
+
+        # Test Chicago locale routing
+        t_chicago = self.monitor.resolve_target_locales("BP Whiting Refinery reports flaring incident in Northwest Indiana")
+        self.assertEqual(t_chicago, ["Chicago"])
+
+        # Test Houston locale routing
+        t_houston = self.monitor.resolve_target_locales("ExxonMobil Baytown Refinery reports flaring shut-in along Houston Ship Channel")
+        self.assertEqual(t_houston, ["Houston"])
+
+        # Test Los Angeles locale routing
+        t_la = self.monitor.resolve_target_locales("Chevron El Segundo Refinery reports FCC trip triggering SCAQMD flaring alert in Los Angeles")
+        self.assertEqual(t_la, ["Los_Angeles"])
 
         # Test Default National routing
         t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
@@ -225,13 +250,17 @@ class TestIntradayEventMonitor(unittest.TestCase):
     def test_evaluate_headline_energy_tariff_inclusion(self):
         # Energy-specific tariff headlines must still trigger Stage 1 evaluation
         h1 = "Trump threatens 25% tariff on Canadian crude oil imports"
-        is_anomaly1, scores1 = self.monitor.evaluate_headline_anomaly(h1)
-        self.assertTrue(is_anomaly1)
-        self.assertGreaterEqual(abs(scores1["overall_price_pressure"]), 0.40)
+        with patch("src.intraday_event_monitor.extract_event_features_llm", return_value={"overall_price_pressure": 0.50, "supply_disruption": 0.60}) as mock_llm1:
+            is_anomaly1, scores1 = self.monitor.evaluate_headline_anomaly(h1)
+            mock_llm1.assert_called_once()
+            self.assertTrue(is_anomaly1)
+            self.assertGreaterEqual(abs(scores1["overall_price_pressure"]), 0.40)
 
         h2 = "OPEC warns retaliatory energy tariff on crude blendstocks will disrupt refining"
-        is_anomaly2, scores2 = self.monitor.evaluate_headline_anomaly(h2)
-        self.assertTrue(is_anomaly2)
+        with patch("src.intraday_event_monitor.extract_event_features_llm", return_value={"overall_price_pressure": 0.50, "supply_disruption": 0.60}) as mock_llm2:
+            is_anomaly2, scores2 = self.monitor.evaluate_headline_anomaly(h2)
+            mock_llm2.assert_called_once()
+            self.assertTrue(is_anomaly2)
 
     def test_evaluated_cache_deduplication_negative_anomaly(self):
         import tempfile
@@ -240,7 +269,9 @@ class TestIntradayEventMonitor(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmpdir:
             temp_eval_file = os.path.join(tmpdir, "evaluated_headlines.json")
-            with patch.dict(os.environ, {"TESTING": ""}), patch.object(iem, "EVALUATED_CACHE_FILE", temp_eval_file):
+            with patch.dict(os.environ, {"TESTING": ""}), \
+                 patch.object(iem, "EVALUATED_CACHE_FILE", temp_eval_file), \
+                 patch("src.wayback_archiver.archive_url_to_wayback", return_value={"archive_url": "", "canonical_url": ""}):
                 monitor = IntradayEventMonitor()
                 headline = "Routine quarterly corporate update on retail logistics"
                 url = "https://example.com/routine_news_1"
@@ -358,6 +389,178 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertIn("spectral_context", kwargs)
         self.assertTrue(len(kwargs["spectral_context"]) > 0)
         self.assertIn("Spectral Regime:", kwargs["spectral_context"])
+
+
+    def test_false_positive_suppression_sanctions_macro_rhetoric(self):
+        """Verifies macro sanctions headlines without petroleum tokens are suppressed (Issues #312, #318)."""
+        h_reuters = "Russia sanctions bill gives Trump sweeping new tariff powers - Reuters"
+        is_anomaly_reuters, scores_reuters = self.monitor.evaluate_headline_anomaly(h_reuters)
+        self.assertFalse(is_anomaly_reuters)
+        self.assertEqual(scores_reuters.get("overall_price_pressure", 0.0), 0.0)
+
+        h_cbs = "Trump signs Russia sanctions bill championed by Lindsey Graham - CBS News"
+        is_anomaly_cbs, scores_cbs = self.monitor.evaluate_headline_anomaly(h_cbs)
+        self.assertFalse(is_anomaly_cbs)
+        self.assertEqual(scores_cbs.get("overall_price_pressure", 0.0), 0.0)
+
+        # Petroleum energy sanctions must still be evaluated
+        h_crude = "US announces emergency sanctions on Iranian crude oil tanker fleet"
+        with patch("src.intraday_event_monitor.extract_event_features_llm", return_value={"overall_price_pressure": 0.50, "supply_disruption": 0.60}) as mock_llm:
+            is_anomaly_crude, scores_crude = self.monitor.evaluate_headline_anomaly(h_crude)
+            mock_llm.assert_called_once()
+            self.assertTrue(is_anomaly_crude)
+
+    def test_false_positive_suppression_local_data_center_spill(self):
+        """Verifies minor localized data center / generator spills are suppressed (Issue #317)."""
+        headline = "Data Center’s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(headline)
+        self.assertFalse(is_anomaly)
+        self.assertEqual(scores.get("overall_price_pressure", 0.0), 0.0)
+
+        # Commercial midstream / pipeline spills must still evaluate
+        h_pipeline = "Major pipeline rupture spills 10,000 barrels of diesel in Colonial main line"
+        with patch("src.intraday_event_monitor.extract_event_features_llm", return_value={"overall_price_pressure": 0.50, "supply_disruption": 0.60}) as mock_pipe_llm:
+            is_anomaly_pipe, _ = self.monitor.evaluate_headline_anomaly(h_pipeline)
+            mock_pipe_llm.assert_called_once()
+            self.assertTrue(is_anomaly_pipe)
+
+    def test_resolve_target_locales_joliet_and_midcontinent(self):
+        """Verifies Joliet (Chicago spot benchmark) and Midcontinent map to regional hubs."""
+        locs_joliet = self.monitor.resolve_target_locales("Total power outage forces emergency shutdown of Joliet refinery")
+        self.assertIn("Chicago", locs_joliet)
+
+        locs_midcont = self.monitor.resolve_target_locales("Midcontinent refinery outage threatens regional fuel stocks")
+        self.assertIn("Cincinnati", locs_midcont)
+        self.assertIn("Tulsa", locs_midcont)
+
+    @patch("src.intraday_event_monitor.send_duplicate_review_discord_notification")
+    def test_duplicate_holding_for_operator_review(self, mock_discord_review):
+        """Verifies potential duplicate events sharing the same facility are held for review."""
+        from datetime import timezone
+        mock_discord_review.return_value = True
+
+        # Pre-seed a prior active event in deduplicator
+        prior_event = {
+            "headline": "Exxon Joliet refinery outage shuts down capacity",
+            "url": "https://example.com/exxon1",
+            "hash": "abc12345",
+            "is_anomaly": True,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        with patch.object(self.monitor.deduplicator, "get_recent_active_events", return_value=[prior_event]), \
+             patch.object(self.monitor, "evaluate_headline_anomaly", return_value=(True, {"overall_price_pressure": 0.50, "supply_disruption": 0.60})), \
+             patch("src.wayback_archiver.archive_url_to_wayback", return_value={"archive_url": "", "canonical_url": ""}):
+            incoming = "Exxon Joliet refinery outage continues as units remain offline"
+            res = self.monitor.process_incoming_headline(incoming, source="Feed_Poller", url="https://example.com/exxon2")
+
+            self.assertTrue(res.get("pending_review"))
+            self.assertEqual(res.get("matched_entity"), "Joliet")
+            self.assertEqual(res.get("duplicate_candidate_of"), "abc12345")
+            mock_discord_review.assert_called_once()
+
+    def test_hindsight_saas_retention_and_recall_integration(self):
+        """Verifies Hindsight SaaS retention, recall, and deduplication logic with mocked network."""
+        dedup = self.monitor.deduplicator
+        event = {
+            "headline": "Fire at Baytown refinery forces unit shutdown",
+            "source": "Reuters",
+            "url": "https://example.com/baytown_fire",
+            "hash": "baytown123",
+            "is_anomaly": True,
+            "target_locales": ["Houston"]
+        }
+
+        # 1. By default under TESTING=1, retention and recall skip remote network
+        with patch.dict(os.environ, {"TESTING": "1", "FORCE_HINDSIGHT_SYNC": ""}):
+            self.assertFalse(dedup.retain_event_in_hindsight(event))
+            self.assertEqual(dedup.query_hindsight_candidates("Baytown fire"), [])
+
+        # 2. When FORCE_HINDSIGHT_SYNC is active, retention posts memory payload to SaaS bank
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_resp.__enter__.return_value = mock_resp
+
+        with patch.dict(os.environ, {"TESTING": "1", "FORCE_HINDSIGHT_SYNC": "1", "HINDSIGHT_API_TOKEN": "mock_token"}), \
+             patch("urllib.request.urlopen", return_value=mock_resp) as mock_urlopen:
+            success = dedup.retain_event_in_hindsight(event)
+            self.assertTrue(success)
+            mock_urlopen.assert_called_once()
+            req = mock_urlopen.call_args[0][0]
+            self.assertIn("midgley-event-dedupe/memories", req.full_url)
+            self.assertEqual(req.get_header("Authorization"), "Bearer mock_token")
+
+        # 3. Recall queries Hindsight SaaS and extracts candidate results
+        mock_recall_data = {
+            "results": [
+                {
+                    "text": "Baytown refinery unit shuts down after major fire incident",
+                    "entities": ["Baytown"],
+                    "document_id": "baytown_cloud_doc",
+                    "metadata": {"url": "https://bloomberg.com/baytown_fire_syndicated"}
+                }
+            ]
+        }
+        mock_recall_resp = MagicMock()
+        mock_recall_resp.status = 200
+        mock_recall_resp.read.return_value = json.dumps(mock_recall_data).encode("utf-8")
+        mock_recall_resp.__enter__.return_value = mock_recall_resp
+
+        with patch.dict(os.environ, {"TESTING": "1", "FORCE_HINDSIGHT_SYNC": "1", "HINDSIGHT_API_TOKEN": "mock_token"}), \
+             patch("urllib.request.urlopen", return_value=mock_recall_resp):
+            candidates = dedup.query_hindsight_candidates("Baytown refinery fire")
+            self.assertEqual(len(candidates), 1)
+            self.assertEqual(candidates[0]["document_id"], "baytown_cloud_doc")
+
+        # 4. Check potential duplicate identifies candidate via Hindsight SaaS fallback
+        with patch.object(dedup, "get_recent_active_events", return_value=[]), \
+             patch.object(dedup, "query_hindsight_candidates", return_value=mock_recall_data["results"]):
+            match = dedup.check_potential_duplicate(
+                "Baytown refinery unit shuts down after major fire incident",
+                source="Bloomberg",
+                url="https://other.com/baytown_incident"
+            )
+            self.assertIsNotNone(match)
+            self.assertTrue(match["is_potential_duplicate"])
+            self.assertTrue(match.get("hindsight_saas_matched"))
+            self.assertEqual(match["matched_entity"], "Baytown")
+
+    @patch("src.intraday_event_monitor.send_intraday_discord_notification")
+    def test_process_incoming_headline_retains_to_hindsight(self, mock_discord):
+        """Verifies confirmed non-duplicate anomaly calls retain_event_in_hindsight."""
+        mock_discord.return_value = True
+        headline = "Emergency shutdown at Baytown refinery after explosion"
+
+        with patch.dict(os.environ, {"TESTING": "0"}), \
+             patch.object(self.monitor, "evaluate_headline_anomaly", return_value=(True, {"overall_price_pressure": 0.60, "supply_disruption": 0.70})), \
+             patch.object(self.monitor.deduplicator, "check_potential_duplicate", return_value=None), \
+             patch.object(self.monitor.deduplicator, "retain_event_in_hindsight") as mock_retain, \
+             patch.object(self.monitor, "_save_anomaly_record"), \
+             patch.object(self.monitor, "_save_evaluated_record"), \
+             patch("src.intraday_event_monitor.clear_lookup_cache"), \
+             patch("src.dashboard_generator.generate_public_dashboard"), \
+             patch("src.wayback_archiver.archive_url_to_wayback", return_value={"archive_url": "", "canonical_url": ""}):
+            res = self.monitor.process_incoming_headline(headline, source="Feed_Poller", url="https://example.com/baytown_new")
+            self.assertTrue(res["is_anomaly"])
+            self.assertFalse(res.get("pending_review", False))
+            mock_retain.assert_called_once_with(res)
+
+    def test_resolve_target_locales_denver(self):
+        h1 = "Suncor Commerce City Refinery suffers unplanned FCC freeze outage in Colorado"
+        locales1 = self.monitor.resolve_target_locales(h1)
+        self.assertIn("Denver", locales1)
+
+        h2 = "Denver rack fuel supplies tighten following Rocky Mountain pipeline disruption"
+        locales2 = self.monitor.resolve_target_locales(h2)
+        self.assertIn("Denver", locales2)
+
+    def test_resolve_target_locales_new_york(self):
+        h1 = "Phillips 66 Bayway Refinery initiates unplanned FCCU turnaround in New Jersey"
+        locales1 = self.monitor.resolve_target_locales(h1)
+        self.assertIn("New_York", locales1)
+
+        h2 = "Buckeye Pipeline Linden terminal suffers power outage cutting New York fuel deliveries"
+        locales2 = self.monitor.resolve_target_locales(h2)
+        self.assertIn("New_York", locales2)
 
 
 if __name__ == "__main__":

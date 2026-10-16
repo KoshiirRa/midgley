@@ -15,6 +15,7 @@ import argparse
 import logging
 import urllib.request
 import urllib.error
+import urllib.parse
 from typing import Dict, Any, List, Optional
 
 # Ensure UTF-8 stdout encoding across all platforms
@@ -51,7 +52,8 @@ BROAD_POLICY_KEYWORDS = [
 
 AGRICULTURAL_OIL_TOKENS = [
     "cooking oil", "palm oil", "olive oil", "soybean oil", "canola",
-    "vegetable oil", "sunflower oil", "food supply"
+    "vegetable oil", "sunflower oil", "food supply", "rice bran", "rice bran oil",
+    "corn oil", "peanut oil", "sesame oil", "edible oil", "hydrogenated oil"
 ]
 
 
@@ -80,10 +82,18 @@ def analyze_headline_triggers(headline: str, category: str = "", notes: str = ""
     has_energy_context = len(matched_energy_tokens) > 0
     is_macro_policy = len(matched_policy) > 0 or any(kw in matched_triggers for kw in ["tariff", "retaliat", "trade war", "sanction", "executive order"])
 
+    LOCAL_FACILITY_SPILL_TOKENS = ["data center", "data centre", "backup generator", "generator spill", "building spill"]
+    matched_local_spill = [kw for kw in LOCAL_FACILITY_SPILL_TOKENS if kw in norm_headline]
+
     if matched_ag or "cooking oil" in norm_headline:
         diagnosis = (
             f"Tripped oil/commodity keyword on agricultural or edible oils ({matched_ag}) "
             f"rather than petroleum hydrocarbons."
+        )
+    elif matched_local_spill:
+        diagnosis = (
+            f"Tripped trigger keyword(s) ['spill'] on minor localized facility/generator spill ({matched_local_spill}) "
+            f"rather than commercial refining, midstream, or pipeline disruption."
         )
     elif not has_energy_context and is_macro_policy:
         triggers_list = matched_triggers if matched_triggers else matched_policy
@@ -261,6 +271,16 @@ def parse_headline_from_issue_body(body: str) -> str:
     """Extracts the catalyst headline from an issue body."""
     if not body:
         return ""
+    # Check if body contains a flag URL with a headline query parameter
+    flag_url_match = re.search(r'https?://[^\s/]+/flag\?[^\s)]+', body)
+    if flag_url_match:
+        try:
+            parsed_url = urllib.parse.urlparse(flag_url_match.group(0))
+            qs = urllib.parse.parse_qs(parsed_url.query)
+            if "headline" in qs and qs["headline"][0]:
+                return qs["headline"][0].strip()
+        except Exception:
+            pass
     match = re.search(r'### 🚨 Trigger Catalyst\s*>\s*\*?"?([^\n"\*]+)"?\*?', body)
     if match:
         return match.group(1).strip()

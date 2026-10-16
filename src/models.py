@@ -12,6 +12,7 @@ import os
 from typing import Any, Optional, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
+from scipy import stats
 from sklearn.linear_model import Ridge, RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 try:
@@ -53,7 +54,44 @@ except ImportError:
         finish_wandb_run = lambda *args, **kwargs: None
         is_wandb_enabled = lambda *args, **kwargs: False
 
+try:
+    from src.market_calendar import get_trading_calendar
+except ImportError:
+    try:
+        from market_calendar import get_trading_calendar
+    except ImportError:
+        get_trading_calendar = None
+
 logger = logging.getLogger(__name__)
+
+
+def _compute_forecast_target_date(origin_date: Any, horizon: int) -> Optional[str]:
+    """Computes target date strictly using exchange trading calendar (Finding A-5)."""
+    if origin_date is None:
+        return None
+    if get_trading_calendar is not None:
+        try:
+            return get_trading_calendar().get_target_date_for_horizon(origin_date, horizon)
+        except Exception:
+            pass
+    try:
+        return pd.bdate_range(start=pd.to_datetime(origin_date), periods=horizon + 1)[-1].strftime('%Y-%m-%d')
+    except Exception:
+        return None
+
+
+def _check_roll_straddling(origin_date: Any, target_date: Optional[str]) -> Tuple[bool, Optional[str]]:
+    """Checks whether forecast window crosses NYMEX RBOB contract roll expiry (Finding A-8)."""
+    if origin_date is None or target_date is None:
+        return False, None
+    if get_trading_calendar is not None:
+        try:
+            is_straddle, expiry_dt = get_trading_calendar().is_roll_straddling(origin_date, target_date)
+            expiry_str = expiry_dt.strftime('%Y-%m-%d') if expiry_dt else None
+            return is_straddle, expiry_str
+        except Exception:
+            pass
+    return False, None
 
 def evaluate_predictions(y_true: pd.Series, y_pred: np.ndarray, y_current: pd.Series = None) -> dict:
     """
@@ -311,6 +349,30 @@ LOCALE_COMPONENT_WEIGHTS = {
     "Greenville_NC": {"regional_logistics": 0.40, "futures_commodity": 0.25, "refining_crack_margin": 0.15, "weather_environmental": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
     "Charlotte_NC": {"regional_logistics": 0.40, "futures_commodity": 0.25, "refining_crack_margin": 0.15, "weather_environmental": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
     "Port_St_Lucie_FL": {"regional_logistics": 0.35, "futures_commodity": 0.25, "weather_environmental": 0.15, "tax_regulatory": 0.12, "refining_crack_margin": 0.08, "unstructured_sentiment": 0.05},
+    "Chicago_IL": {"tax_regulatory": 0.30, "refining_crack_margin": 0.25, "regional_logistics": 0.20, "futures_commodity": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Chicago": {"tax_regulatory": 0.30, "refining_crack_margin": 0.25, "regional_logistics": 0.20, "futures_commodity": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Houston_TX": {"refining_crack_margin": 0.35, "futures_commodity": 0.25, "weather_environmental": 0.20, "regional_logistics": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
+    "Houston": {"refining_crack_margin": 0.35, "futures_commodity": 0.25, "weather_environmental": 0.20, "regional_logistics": 0.10, "unstructured_sentiment": 0.05, "tax_regulatory": 0.05},
+    "Los_Angeles_CA": {"tax_regulatory": 0.35, "refining_crack_margin": 0.30, "futures_commodity": 0.15, "regional_logistics": 0.10, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "Los_Angeles": {"tax_regulatory": 0.35, "refining_crack_margin": 0.30, "futures_commodity": 0.15, "regional_logistics": 0.10, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "Denver_CO": {"refining_crack_margin": 0.35, "regional_logistics": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.05, "unstructured_sentiment": 0.05},
+    "Denver": {"refining_crack_margin": 0.35, "regional_logistics": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.05, "unstructured_sentiment": 0.05},
+    "New_York_NY": {"refining_crack_margin": 0.30, "futures_commodity": 0.25, "tax_regulatory": 0.20, "regional_logistics": 0.15, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "New_York": {"refining_crack_margin": 0.30, "futures_commodity": 0.25, "tax_regulatory": 0.20, "regional_logistics": 0.15, "weather_environmental": 0.05, "unstructured_sentiment": 0.05},
+    "Seattle_WA": {"refining_crack_margin": 0.30, "tax_regulatory": 0.25, "futures_commodity": 0.20, "regional_logistics": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Seattle": {"refining_crack_margin": 0.30, "tax_regulatory": 0.25, "futures_commodity": 0.20, "regional_logistics": 0.15, "unstructured_sentiment": 0.05, "weather_environmental": 0.05},
+    "Phoenix_AZ": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.07, "unstructured_sentiment": 0.05, "tax_regulatory": 0.03},
+    "Phoenix": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.07, "unstructured_sentiment": 0.05, "tax_regulatory": 0.03},
+    "Anchorage_AK": {"regional_logistics": 0.45, "weather_environmental": 0.25, "refining_crack_margin": 0.15, "futures_commodity": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Anchorage": {"regional_logistics": 0.45, "weather_environmental": 0.25, "refining_crack_margin": 0.15, "futures_commodity": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Honolulu_HI": {"regional_logistics": 0.45, "refining_crack_margin": 0.20, "futures_commodity": 0.20, "weather_environmental": 0.08, "tax_regulatory": 0.05, "unstructured_sentiment": 0.02},
+    "Honolulu": {"regional_logistics": 0.45, "refining_crack_margin": 0.20, "futures_commodity": 0.20, "weather_environmental": 0.08, "tax_regulatory": 0.05, "unstructured_sentiment": 0.02},
+    "Guam_GU": {"regional_logistics": 0.50, "futures_commodity": 0.20, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "Guam": {"regional_logistics": 0.50, "futures_commodity": 0.20, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "unstructured_sentiment": 0.03, "tax_regulatory": 0.02},
+    "San_Juan_PR": {"regional_logistics": 0.45, "futures_commodity": 0.25, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
+    "San_Juan": {"regional_logistics": 0.45, "futures_commodity": 0.25, "weather_environmental": 0.15, "refining_crack_margin": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
+    "Boston_MA": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
+    "Boston": {"regional_logistics": 0.40, "refining_crack_margin": 0.25, "futures_commodity": 0.20, "weather_environmental": 0.10, "tax_regulatory": 0.03, "unstructured_sentiment": 0.02},
     "National": {"futures_commodity": 0.45, "refining_crack_margin": 0.25, "unstructured_sentiment": 0.15, "weather_environmental": 0.075, "regional_logistics": 0.05, "tax_regulatory": 0.025}
 }
 
@@ -567,6 +629,56 @@ def enforce_forecast_plausibility_gate(
     return round(float(clamped_price), 4), gated, reason_str
 
 
+def fit_prospective_model(
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    X_test: Optional[pd.DataFrame] = None,
+    y_test: Optional[pd.Series] = None,
+    model_type: str = "ridge",
+    base_model: Optional[Any] = None,
+    alpha: float = 10.0
+) -> Any:
+    """
+    Fits the prospective forecasting model on 100% of historical data
+    (combining train and validation/test splits) prior to generating live forward projections (Issue #559 Phase 4 / A-1, Issue #575 N-3).
+    Ensures live predictions use the most recent information without data staleness, cloning the evaluated pipeline architecture.
+    """
+    if X_test is not None and y_test is not None and not X_test.empty and not y_test.empty:
+        X_tr = pd.DataFrame(X_train.values, columns=X_train.columns)
+        X_te = pd.DataFrame(X_test.values, columns=X_test.columns)
+        X_full = pd.concat([X_tr, X_te], axis=0, ignore_index=True)
+        y_full = pd.concat([pd.Series(y_train.values), pd.Series(y_test.values)], axis=0, ignore_index=True)
+    else:
+        X_full = X_train
+        y_full = y_train
+
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.base import clone
+
+    if base_model is not None:
+        try:
+            model = clone(base_model)
+        except Exception as e:
+            logger.warning(f"Could not clone base_model ({e}), falling back to pipeline creation for {model_type}")
+            model = None
+    else:
+        model = None
+
+    if model is None:
+        if model_type == "stacking":
+            model = build_stacking_ensemble_pipeline()
+        elif model_type == "xgboost" and HAS_XGBOOST:
+            model = XGBRegressor(n_estimators=100, max_depth=3, learning_rate=0.03, random_state=42)
+        elif model_type == "rf":
+            model = RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42)
+        else:
+            model = make_pipeline(StandardScaler(), Ridge(alpha=alpha))
+
+    model.fit(X_full, y_full)
+    return model
+
+
 def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wandb: bool = False, wandb_run: Any = None) -> dict:
 
     """
@@ -635,6 +747,24 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     # 2. Fit Hybrid Model (Quantitative + LLM Unstructured Event Features)
     model_hybrid.fit(X_train_hybrid, y_train)
     raw_pred_hybrid = model_hybrid.predict(X_test_hybrid)
+
+    # 3. Fit Prospective Models on 100% History for Live Forecasts (Issue #559 Phase 4 / A-1, Issue #575 N-3)
+    prospective_model_quant = fit_prospective_model(
+        X_train=X_train_quant,
+        y_train=y_train,
+        X_test=X_test_quant,
+        y_test=y_test,
+        model_type=model_type,
+        base_model=model_quant
+    )
+    prospective_model_hybrid = fit_prospective_model(
+        X_train=X_train_hybrid,
+        y_train=y_train,
+        X_test=X_test_hybrid,
+        y_test=y_test,
+        model_type=model_type,
+        base_model=model_hybrid
+    )
     
     # Reconstruct price levels if trained on percentage returns (Issue #397)
     y_curr_arr = np.array(y_current)
@@ -723,19 +853,19 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         except Exception as e:
             logger.debug(f"Notice logging to W&B: {e}")
 
-    # Live inference evaluation using unlabelled contemporary features (t=0) (Issue #353)
+    # Live inference evaluation using prospective models fit on 100% historical data (Issue #559 Phase 4 / A-1)
     X_live_hybrid = split_data.get('X_live_hybrid', X_test_hybrid.iloc[-1:] if len(X_test_hybrid) > 0 else pd.DataFrame())
     X_live_quant = split_data.get('X_live_quant', X_test_quant.iloc[-1:] if len(X_test_quant) > 0 else pd.DataFrame())
     live_base = float(split_data.get('live_current_price', y_current.iloc[-1] if len(y_current) > 0 else 1.0))
     live_origin_date = split_data.get('live_feature_origin_date', str(test_df['date'].iloc[-1]) if 'date' in test_df.columns and len(test_df) > 0 else None)
 
     if len(X_live_hybrid) > 0:
-        raw_live_pred = float(model_hybrid.predict(X_live_hybrid)[0])
+        raw_live_pred = float(prospective_model_hybrid.predict(X_live_hybrid)[0])
     else:
         raw_live_pred = float(pred_hybrid[-1]) if len(pred_hybrid) > 0 else 0.0
 
     if len(X_live_quant) > 0:
-        raw_live_pred_quant = float(model_quant.predict(X_live_quant)[0])
+        raw_live_pred_quant = float(prospective_model_quant.predict(X_live_quant)[0])
     else:
         raw_live_pred_quant = float(pred_quant[-1]) if len(pred_quant) > 0 else 0.0
 
@@ -765,6 +895,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
     return {
         "model_quant": model_quant,
         "model_hybrid": model_hybrid,
+        "prospective_model_quant": prospective_model_quant,
+        "prospective_model_hybrid": prospective_model_hybrid,
         "metrics_quant": metrics_quant,
         "metrics_hybrid": metrics_hybrid,
         "metrics_quant_return": metrics_quant_return,
@@ -801,10 +933,13 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "feature_cutoff_date": str(live_origin_date) if live_origin_date is not None else None,
         "plausibility_gated": is_gated,
         "plausibility_reason": gate_reason,
-        "forecast_target_date": (
-            pd.bdate_range(start=pd.to_datetime(live_origin_date), periods=int(split_data.get('forecast_horizon', 5)) + 1)[-1].strftime('%Y-%m-%d')
-            if live_origin_date is not None else None
+        "forecast_target_date": _compute_forecast_target_date(
+            live_origin_date, int(split_data.get('forecast_horizon', 5))
         ),
+        "is_roll_straddling": _check_roll_straddling(
+            live_origin_date,
+            _compute_forecast_target_date(live_origin_date, int(split_data.get('forecast_horizon', 5)))
+        )[0],
     }
 
 
@@ -842,14 +977,41 @@ def train_multi_horizon_models(
         from feature_engineering import create_feature_matrix, prepare_chronological_splits
 
     multi_results = {}
+    base_full_matrix = None
+    base_attrs = {}
+
     for h in horizons:
-        feature_df = create_feature_matrix(
-            market_df, 
-            events_df, 
-            forecast_horizon=h, 
-            decay_half_life_days=decay_half_life_days,
-            region=region
-        )
+        if base_full_matrix is None:
+            feature_df = create_feature_matrix(
+                market_df, 
+                events_df, 
+                forecast_horizon=h, 
+                decay_half_life_days=decay_half_life_days,
+                region=region
+            )
+            if hasattr(feature_df, 'attrs') and 'full_feature_matrix' in feature_df.attrs:
+                base_full_matrix = feature_df.attrs['full_feature_matrix'].copy()
+                base_attrs = feature_df.attrs.copy()
+        elif base_full_matrix is not None:
+            # Efficiently reuse the pre-engineered exogenous feature matrix (Issue #591)
+            full_df = base_full_matrix.copy()
+            full_df[f'target_price_{h}d'] = full_df['gasoline_rbob'].shift(-h)
+            full_df[f'target_return_{h}d'] = (full_df[f'target_price_{h}d'] - full_df['gasoline_rbob']) / full_df['gasoline_rbob']
+            feature_df = full_df.dropna(subset=[f'target_price_{h}d']).reset_index(drop=True)
+            feature_df.attrs = base_attrs.copy()
+            feature_df.attrs['forecast_horizon'] = h
+            feature_df.attrs['unlabelled_inference_frame'] = full_df.iloc[-h:].copy().reset_index(drop=True)
+            feature_df.attrs['latest_inference_row'] = full_df.iloc[-1:].copy().reset_index(drop=True)
+            feature_df.attrs['full_feature_matrix'] = full_df.copy()
+        else:
+            feature_df = create_feature_matrix(
+                market_df, 
+                events_df, 
+                forecast_horizon=h, 
+                decay_half_life_days=decay_half_life_days,
+                region=region
+            )
+
         splits = prepare_chronological_splits(
             feature_df, 
             train_ratio=train_ratio, 
@@ -859,14 +1021,16 @@ def train_multi_horizon_models(
         res['splits'] = splits
         res['forecast_horizon'] = h
         
-        # Ensure latest live base, hybrid, and pure quantitative forecast prices use t=0 features
+        # Ensure latest live base, hybrid, and pure quantitative forecast prices use t=0 features and prospective models (A-1)
         last_row_hybrid = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])
         last_row_quant = splits.get('X_live_quant', splits['X_test_quant'].iloc[-1:])
         live_base = float(splits.get('live_current_price', splits['test_df']['gasoline_rbob'].iloc[-1]))
         live_origin_date = splits.get('live_feature_origin_date', str(splits['test_df']['date'].iloc[-1]) if 'date' in splits['test_df'].columns else None)
 
-        raw_live_pred = float(res['model_hybrid'].predict(last_row_hybrid)[0])
-        raw_live_pred_quant = float(res['model_quant'].predict(last_row_quant)[0])
+        p_hybrid = res.get('prospective_model_hybrid', res['model_hybrid'])
+        p_quant = res.get('prospective_model_quant', res['model_quant'])
+        raw_live_pred = float(p_hybrid.predict(last_row_hybrid)[0])
+        raw_live_pred_quant = float(p_quant.predict(last_row_quant)[0])
         
         if res.get('is_return_target', False) or splits.get('predict_returns', False):
             bounded_live_pred = float(np.clip(raw_live_pred, -0.25, 0.25))
@@ -899,14 +1063,30 @@ def train_multi_horizon_models(
         res['forecast_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
         res['feature_cutoff_date'] = str(live_origin_date) if live_origin_date is not None else None
         if live_origin_date is not None:
-            try:
-                origin_dt = pd.to_datetime(live_origin_date)
-                target_dt = pd.bdate_range(start=origin_dt, periods=h+1)[-1]
-                res['forecast_target_date'] = target_dt.strftime('%Y-%m-%d')
-            except Exception:
-                res['forecast_target_date'] = None
+            tgt_date = _compute_forecast_target_date(live_origin_date, h)
+            res['forecast_target_date'] = tgt_date
+            is_straddle, roll_expiry = _check_roll_straddling(live_origin_date, tgt_date)
+            res['is_roll_straddling'] = is_straddle
+            if is_straddle:
+                res['contract_roll_expiry'] = roll_expiry
+                logger.warning(
+                    f"[MarketCalendar] Multi-horizon model h={h} from origin {live_origin_date} to {tgt_date} "
+                    f"straddles NYMEX RBOB contract roll expiry on {roll_expiry}."
+                )
         else:
             res['forecast_target_date'] = None
+            res['is_roll_straddling'] = False
+
+        # Calibrate wholesale predictive density cone (Issue #448, #611)
+        if 'gasoline_rbob' in market_df.columns:
+            try:
+                from src.volatility_engine import WholesaleVolatilityEngine
+                v_engine = WholesaleVolatilityEngine()
+                v_engine.calibrate(market_df['gasoline_rbob'])
+                v_term = v_engine.forecast_volatility_term_structure(live_base, max_horizon=h)
+                res['volatility_density'] = v_term['horizons'].get(f'horizon_{h}d', {})
+            except Exception as e:
+                logger.debug(f"Wholesale volatility calculation skipped for h={h}: {e}")
 
         multi_results[h] = res
 
@@ -1329,16 +1509,19 @@ def compute_conformal_prediction_intervals(
     Returns (lower_bounds, upper_bounds) around point predictions y_pred.
     """
     residuals = np.abs(np.asarray(calibration_residuals, dtype=float))
+    residuals = residuals[np.isfinite(residuals)]
     n = len(residuals)
     if n == 0:
-        # Fallback to standard 1.96 * 0.0612 heuristic if no calibration residuals
+        # Fallback to standard baseline heuristic if no calibration residuals
         q = 1.96 * 0.0612
-    elif n < min_calibration_samples:
-        std_est = float(np.std(residuals, ddof=1)) if n > 1 else float(np.mean(residuals))
-        q = max(float(np.quantile(residuals, 1.0 - alpha)), 1.96 * std_est)
     else:
-        quantile_level = min(1.0, math.ceil((n + 1) * (1.0 - alpha)) / n)
-        q = float(np.quantile(residuals, quantile_level))
+        # Exact finite-sample conformal order statistic: ceil((n + 1) * (1 - alpha))
+        k = math.ceil((n + 1) * (1.0 - alpha))
+        sorted_residuals = np.sort(residuals)
+        if k <= n:
+            q = float(sorted_residuals[k - 1])
+        else:
+            q = float(sorted_residuals[-1])
 
     preds = np.asarray(y_pred, dtype=float)
     lower_bounds = np.round(preds - q, 4)
@@ -1394,6 +1577,86 @@ def evaluate_prediction_interval_quality(
         "sample_size": n,
         "status": "VALID"
     }
+
+
+class AdaptiveConformalInference:
+    """
+    Adaptive Conformal Inference (ACI) Engine (Gibbs & Candès 2021) (Issue #449).
+    Dynamically tracks prediction interval coverage under distribution shift / non-stationary regimes.
+
+    Formula:
+        alpha_{t+1} = alpha_t + gamma * (alpha^* - miss_t)
+        where miss_t = 1 if y_t not in [y_low_t, y_high_t] else 0
+        and alpha^* is target nominal miscoverage level (e.g. 0.05 for 95% CI).
+    """
+
+    def __init__(
+        self,
+        target_alpha: float = 0.05,
+        gamma: float = 0.01,
+        initial_alpha: Optional[float] = None
+    ):
+        self.target_alpha = target_alpha
+        self.gamma = gamma
+        self.current_alpha = initial_alpha if initial_alpha is not None else target_alpha
+        self.history = []
+
+    def update(
+        self,
+        y_true: float,
+        lower_bound: float,
+        upper_bound: float
+    ) -> float:
+        """Updates effective alpha based on realization miss/hit."""
+        miss = 1.0 if (y_true < lower_bound or y_true > upper_bound) else 0.0
+        self.current_alpha = float(np.clip(
+            self.current_alpha + self.gamma * (self.target_alpha - miss),
+            0.001,
+            0.50
+        ))
+        self.history.append({
+            "target_alpha": self.target_alpha,
+            "miss": miss,
+            "new_alpha": self.current_alpha
+        })
+        return self.current_alpha
+
+    def compute_interval(
+        self,
+        y_pred: Union[float, np.ndarray, List[float]],
+        calibration_residuals: Union[np.ndarray, List[float]]
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """Computes prediction interval using current adapted alpha."""
+        return compute_conformal_prediction_intervals(
+            y_pred=y_pred,
+            calibration_residuals=calibration_residuals,
+            alpha=self.current_alpha
+        )
+
+
+def compute_calibrated_quantiles(
+    y_pred: Union[float, np.ndarray, List[float]],
+    residuals: Union[np.ndarray, List[float]],
+    quantiles: List[float] = [0.10, 0.50, 0.90],
+    nu: float = 5.0
+) -> Dict[float, np.ndarray]:
+    """
+    Computes exact calibrated distribution quantiles (P10, P50, P90, P2.5, P97.5) for probabilistic forecasting (Issue #449).
+    Uses Student-t predictive distribution with nu degrees-of-freedom for tail calibration.
+    """
+    preds = np.asarray(y_pred, dtype=float)
+    res = np.abs(np.asarray(residuals, dtype=float))
+
+    scale_est = float(np.std(res, ddof=1)) if len(res) > 1 else (float(np.mean(res)) if len(res) == 1 else 0.0612)
+    scale_est = max(0.01, scale_est)
+
+    result_quantiles = {}
+    for q in quantiles:
+        t_offset = float(stats.t.ppf(q, df=nu)) * scale_est
+        result_quantiles[q] = np.round(preds + t_offset, 4)
+
+    return result_quantiles
+
 
 
 def train_models_with_feast_point_in_time(

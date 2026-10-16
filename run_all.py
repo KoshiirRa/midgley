@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     dashboard_only = "--dashboard-only" in sys.argv
     use_api = "--use-llm-api" in sys.argv
+    if "--skip-backfills" in sys.argv:
+        os.environ["MIDGLEY_SKIP_BACKFILL"] = "1"
     model_choice = "ridge"
     for arg in sys.argv:
         if arg.startswith("--model="):
@@ -28,21 +30,9 @@ if __name__ == "__main__":
     print("      MIDGLEY MASTER FORECASTING ENGINE - ALL LOCATIONS PIPELINE")
     print("=" * 80)
 
-    # Step 0: Non-blocking proactive warmup for Hindsight scale-to-zero memory service
-    try:
-        hindsight = HindsightClient()
-        if hindsight.is_configured:
-            warmup_timeout = float(os.environ.get("HINDSIGHT_WARMUP_TIMEOUT", "75.0"))
-            print(f"  [STEP 0] Triggering proactive Hindsight Cloud Run memory service warmup (max_wait={warmup_timeout:.0f}s)...")
-            warmup_thread = threading.Thread(
-                target=lambda: hindsight.warmup(max_wait_seconds=warmup_timeout, retry_interval=2.0),
-                name="hindsight-warmup",
-                daemon=True
-            )
-            warmup_thread.start()
-    except Exception as e:
-        logger.debug(f"Notice initiating Hindsight warmup: {e}")
-    
+    from src.healthcheck_monitor import ping_healthcheck_start, ping_healthcheck_success, ping_healthcheck_failure
+    ping_healthcheck_start(log_message=f"Starting master forecasting pipeline execution (model={model_choice})")
+
     step_num = 1
     total_steps = len(LOCATIONS) + 1
     
@@ -61,6 +51,31 @@ if __name__ == "__main__":
     else:
         print("\n  [INFO] Running in --dashboard-only mode: skipping individual location training pipelines.")
 
+    exporter_failures = []
+
+    # Issue #483, #606: Evaluate regional failure gate and ensure healthy forecasts are preserved
+    if failed_locations:
+        # Sync healthy regional forecasts logged so far to cloud prior to halting
+        try:
+            from src.prediction_logger import sync_predictions_to_cloud
+            sync_predictions_to_cloud()
+        except Exception as e:
+            logger.debug(f"Cloud sync notice on partial failure: {e}")
+
+        ping_healthcheck_failure(log_message=f"Pipeline regional failures: {failed_locations}")
+        allow_partial = "--allow-partial" in sys.argv
+        print("\n" + "!" * 80)
+        print(f"  ERROR: {len(failed_locations)} location pipeline(s) failed during execution:")
+        for loc_id, err in failed_locations:
+            print(f"    - {loc_id}: {err}")
+        print("!" * 80)
+        if not allow_partial:
+            print("  [STRICT GATING] Halting with non-zero exit code prior to artifact generation due to failed location pipeline(s).")
+            print("  Use --allow-partial to force artifact generation with available regional models.")
+            sys.exit(1)
+        else:
+            print("  [WARNING] Proceeding with artifact generation in --allow-partial mode.")
+
     print("\n" + "=" * 80)
     print(f"  STEP {total_steps}/{total_steps}: UPDATING LIVE README TABLE & PUBLIC WEB DASHBOARD (docs/)...")
     print("=" * 80)
@@ -68,15 +83,26 @@ if __name__ == "__main__":
         update_readme_forecasts()
     except Exception as e:
         logger.error(f"Error updating README forecasts: {e}", exc_info=True)
+        exporter_failures.append(("update_readme_forecasts", str(e)))
     try:
         generate_public_dashboard()
     except Exception as e:
         logger.error(f"Error generating public dashboard: {e}", exc_info=True)
+        exporter_failures.append(("generate_public_dashboard", str(e)))
+
+    # Final Pipeline Cloud Database Sync (Turso / Cloudflare D1 - Issues #498, #606)
     try:
-        from src.static_api_exporter import export_all_static_api_endpoints
-        export_all_static_api_endpoints()
+        from src.prediction_logger import sync_predictions_to_cloud
+        print("\n  [CLOUD SYNC] Synchronizing finalized prediction ledger to Cloud DB...")
+        sync_res = sync_predictions_to_cloud()
+        print(f"  -> Cloud Sync Result: {sync_res}")
+        if sync_res.get("status") == "error":
+            err_msg = sync_res.get("reason", "Unknown cloud sync failure")
+            logger.error(f"Cloud sync failed: {err_msg}")
+            exporter_failures.append(("sync_predictions_to_cloud", err_msg))
     except Exception as e:
-        logger.error(f"Error exporting static API endpoints: {e}", exc_info=True)
+        logger.error(f"Error during final cloud database sync: {e}", exc_info=True)
+        exporter_failures.append(("sync_predictions_to_cloud", str(e)))
 
     # Optional Headline Arena Independent CRPS/Brier Benchmark Submission (Issue #182)
     submit_ha = "--submit-headline-arena" in sys.argv
@@ -91,8 +117,9 @@ if __name__ == "__main__":
             print("=" * 80)
             m_df = fetch_market_data(start_date="2024-01-01")
             if not m_df.empty:
+                cl_col = 'wti_crude' if 'wti_crude' in m_df.columns else ('crude_wti' if 'crude_wti' in m_df.columns else None)
                 rb_open = float(m_df['gasoline_rbob'].iloc[-1])
-                cl_open = float(m_df['crude_wti'].iloc[-1]) if 'crude_wti' in m_df.columns else 75.0
+                cl_open = float(m_df[cl_col].iloc[-1]) if cl_col else 75.0
                 rb_p50 = rb_open
                 rb_p10 = None
                 rb_p90 = None
@@ -114,10 +141,12 @@ if __name__ == "__main__":
                         if not nat_rows.empty:
                             latest_nat = nat_rows.iloc[-1]
                             rb_p50 = float(latest_nat['predicted_5d_price'])
-                            if pd.notna(latest_nat.get('prediction_lower_95ci')):
-                                rb_p10 = float(latest_nat['prediction_lower_95ci'])
-                            if pd.notna(latest_nat.get('prediction_upper_95ci')):
-                                rb_p90 = float(latest_nat['prediction_upper_95ci'])
+                            low_95 = float(latest_nat['prediction_lower_95ci']) if pd.notna(latest_nat.get('prediction_lower_95ci')) else None
+                            high_95 = float(latest_nat['prediction_upper_95ci']) if pd.notna(latest_nat.get('prediction_upper_95ci')) else None
+                            if low_95 is not None and high_95 is not None and high_95 > low_95:
+                                rb_res_std = (high_95 - low_95) / 3.92
+                                rb_p10 = round(rb_p50 - (1.28155 * rb_res_std), 4)
+                                rb_p90 = round(rb_p50 + (1.28155 * rb_res_std), 4)
                             qualitative_catalysts["overall_price_pressure"] = float(latest_nat.get('llm_price_pressure', 0.0))
                             qualitative_catalysts["supply_disruption"] = float(latest_nat.get('llm_supply_disruption', 0.0))
                 except Exception as e:
@@ -125,8 +154,8 @@ if __name__ == "__main__":
 
                 # 2. Derive multi-factor Crude Oil WTI forecast from market momentum & crack spreads
                 try:
-                    if len(m_df) >= 6 and 'crude_wti' in m_df.columns:
-                        wti_series = m_df['crude_wti'].dropna()
+                    if cl_col and len(m_df) >= 6:
+                        wti_series = m_df[cl_col].dropna()
                         if len(wti_series) >= 6:
                             cl_return_5d = (wti_series.iloc[-1] - wti_series.iloc[-6]) / wti_series.iloc[-6]
                             rb_expected_return = (rb_p50 - rb_open) / rb_open if rb_open > 0 else 0.0
@@ -134,8 +163,8 @@ if __name__ == "__main__":
                             wti_expected_return = (0.40 * cl_return_5d) + (0.60 * rb_expected_return)
                             cl_p50 = round(cl_open * (1.0 + wti_expected_return), 2)
                             cl_res_std = round(0.02 * cl_open, 2)
-                            cl_p10 = round(cl_p50 - (1.28 * cl_res_std), 2)
-                            cl_p90 = round(cl_p50 + (1.28 * cl_res_std), 2)
+                            cl_p10 = round(cl_p50 - (1.28155 * cl_res_std), 2)
+                            cl_p90 = round(cl_p50 + (1.28155 * cl_res_std), 2)
                 except Exception as e:
                     logger.debug(f"Notice deriving WTI Crude forecast for Headline Arena: {e}")
 
@@ -184,16 +213,18 @@ if __name__ == "__main__":
     except Exception as e:
         logger.debug(f"Notice during Headline Arena execution: {e}")
     
-    if failed_locations:
-        allow_partial = "--allow-partial" in sys.argv
+    if exporter_failures:
         print("\n" + "!" * 80)
-        print(f"  ERROR: {len(failed_locations)} location(s) encountered errors during execution:")
-        for loc_id, err in failed_locations:
-            print(f"    - {loc_id}: {err}")
+        print(f"  ERROR: {len(exporter_failures)} exporter/artifact task(s) failed during execution:")
+        for task_name, err in exporter_failures:
+            print(f"    - {task_name}: {err}")
         print("!" * 80)
-        if not allow_partial:
-            print("  [STRICT GATING] Halting with non-zero exit code due to failed location pipeline(s). Use --allow-partial to bypass.")
-            sys.exit(1)
+        ping_healthcheck_failure(log_message=f"Pipeline exporter failures: {exporter_failures}")
+        print("  [EXPORTER GATING] Halting with non-zero exit code due to exporter failure(s).")
+        sys.exit(1)
+
+    if not failed_locations:
+        ping_healthcheck_success(log_message=f"All locations pipeline completed successfully ({len(LOCATIONS)} locations)")
 
     print("\n" + "=" * 80)
     print("                      ALL LOCATIONS EXECUTION COMPLETE")

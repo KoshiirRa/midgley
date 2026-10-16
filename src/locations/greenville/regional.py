@@ -34,33 +34,12 @@ def fetch_greenville_market_data(
 
     logger.info(f"Fetching market data for Greenville, NC region (Live Pump Price Anchor: ${live_current_price:.2f}/gal)...")
     
-    tickers = {
-        "gasoline_rbob": "RB=F",
-        "wti_crude": "CL=F",
-        "brent_crude": "BZ=F"
-    }
-    
-    dfs = []
-    for name, ticker in tickers.items():
-        try:
-            data = yf.download(ticker, start=start_date, end=end_date, progress=False)
-            if data is None or data.empty:
-                continue
-            close_series = data['Close'][ticker] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-            if close_series.dropna().empty:
-                continue
-            df_item = pd.DataFrame({'date': pd.to_datetime(close_series.index).tz_localize(None), name: close_series.values})
-            dfs.append(df_item.set_index('date'))
-        except Exception as e:
-            logger.warning(f"Could not download ticker {ticker}: {e}")
-            
-    if not dfs or all(df.empty for df in dfs):
+    from src.data_ingestion import fetch_market_data
+    base_df = fetch_market_data(start_date=start_date, end_date=end_date)
+    if base_df is None or base_df.empty or 'gasoline_rbob' not in base_df.columns:
         return _generate_synthetic_greenville_data(start_date, end_date, live_current_price)
         
-    market_df = pd.concat(dfs, axis=1).sort_index().ffill().bfill().reset_index()
-    if market_df.empty or 'gasoline_rbob' not in market_df.columns or len(market_df) == 0:
-        return _generate_synthetic_greenville_data(start_date, end_date, live_current_price)
-    
+    market_df = base_df.copy()
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
     dynamic_margin = live_current_price - latest_rbob
     

@@ -65,9 +65,11 @@ Midgley enforces a strict **$0 ongoing infrastructure cost** mandate. All agent 
   - `/api/v1/{locale}.json` & `/api/v1/combined/{locale}.json` — Compatibility route aliases.
 * **Characteristics:** 100% SLA uptime, 0 maintenance, served directly by GitHub Pages CDN cache. Ideal for mobile and in-dash head units.
 
-### Tier 2: Cloudflare Edge Cache & Queue Gateway
+### Tier 2: Cloudflare Edge Cache & Cloud Database Gateway
 * **Workers:** `workers/cache_worker.ts` and `workers/intraday_monitor_worker.ts`.
-* **Database:** Cloudflare D1 (`midgley-cache-d1`).
+* **Database & Direct Cloud Engine (`src/db/client.py`):** Direct HTTP REST connectivity to Turso libSQL (pipeline v2) and Cloudflare D1 (`midgley-cache-d1`) over wire without local synchronization drift.
+* **Bitemporal Vintage Store (`src/vintage_store.py`):** Unified `data_vintages` table tracking observation dates, publication timestamps, and data quality tiers (`LIVE`, `CACHED`, `BENCHMARK`, `STALE`, `SYNTHETIC`) for point-in-time querying.
+* **Deduplicated Predictions Ledger:** Collapses redundant backtest runs using deterministic SHA-256 primary keys (`forecast_id`) to maintain optimal database performance and prevent ledger bloat.
 * **Queue:** `intraday-event-queue` with dead-letter queue `intraday-event-dlq`.
 * **Security & Staging Isolation (Issue #438):**
   - `workers/cache_worker.ts` enforces fail-closed Bearer token verification against `CLOUDFLARE_AUTH_TOKEN`.
@@ -230,4 +232,81 @@ Whenever new features, regional models, data feeds, or API endpoints are added:
 4. **Active API Forecast Serving (Issue #474):** The API server (`src/api_server.py`) must filter out expired forecast records (`forecast_target_date <= today`). Stale forecasts must never be assigned fabricated future target maturities without re-running model inference.
 5. **Signed Feature Attribution (Issue #476):** Feature decomposition in `src/models.py` must preserve signed impact deltas ($\Delta_i$) and provide safe fallback descriptions for arbitrary feature names to prevent `KeyError`.
 
+---
 
+## 🧠 12. Hindsight Episodic Context, Prompt Grounding & Anomaly Reflection (Issue #559 Phase 3)
+
+1. **Episodic Precedent Injection (`src/hindsight_context.py`):**
+   - Whenever qualitative news headlines or counterfactual scenario prompts contain physical disruption keywords (refinery outages, FCC trips, flaring, pipeline halts, river navigation closures, hurricane threats, RVP compliance transitions), invoke `inject_hindsight_context()` or `enrich_scenario_with_episodic_memory()`.
+   - The formatted prompt block `[HISTORICAL EPISODIC MEMORY PRECEDENT & REALIZED ANALOGS]` anchors qualitative impact scores to empirical historical outage durations, pass-through lags, and realized price reaction bounds, preventing LLM hallucination and uncalibrated shock estimates.
+2. **Post-Settlement Causal Reflection:**
+   - In weekly review and post-settlement evaluation passes, scan resolved forecast records using `evaluate_and_reflect_settled_anomalies()`.
+   - Forecast errors exceeding $2\sigma$ ($|\Delta| \ge \$0.20/\text{gal}$) or exhibiting directional flips on significant price swings are classified (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`) and recorded back into the Vectorize Hindsight memory bank (`Midgley`) and local SQLite FTS5 store.
+3. **Relational Telemetry Auditing:**
+   - All recall, reflect, and retain interactions must log telemetry records to the `hindsight_telemetry` table in the configured database (`src/db/schema.sql`).
+
+---
+
+## 📈 13. Model Refit, Stationary Transforms & Ground Truth Invariants (Issue #559 Phase 4)
+
+1. **Full-Sample Prospective Model Refit (`fit_prospective_model` in `src/models.py`):**
+   - Prior to generating live out-of-time prospective projections ($t+1 \dots t+5$), refit the chosen model architecture on 100% of historical observations (combining train and validation splits).
+   - This ensures live prospective forecasts incorporate the most recent information without data staleness.
+2. **Stationary Targets & Price Reconstruction Bounds:**
+   - Ensure all price models use stationary transformations (log-returns $r_{t+h} = \ln(P_{t+h}/P_t)$, differences $\Delta P_{t+h}$, or persistence residuals).
+   - Exponential price level reconstruction must enforce physical bounds ($\hat{P} \ge \$0.20/\text{gal}$) and plausibility gating.
+3. **Authentic Ground Truth & Zero Cross-Regional Fallbacks:**
+   - Regional evaluation ground truth must be resolved strictly from the matching EIA/FRED series (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWCA`, `GASREGWFL`).
+   - If ground truth is absent for an unmapped region or unmatured target date (`target_date > today`), record `actual_price = NaN` and exclude from evaluation scoring rather than falling back to the National average.
+
+---
+
+## ♿ 14. Zero Hardcoded Presentation Fallbacks & WCAG 2.1 AA ARIA Accessibility Standards (Issue #569)
+
+1. **Zero Synthetic Presentation Fallbacks:**
+   - Dashboard generators (`src/dashboard_generator.py`, `src/sources_generator.py`) must never inject mock/synthetic records, hardcoded performance arrays, or fake geographic points when live/database telemetry is absent.
+   - When database records or telemetry points are empty, generators must render honest empty state representations (`map_points = []`) or display explicit `"Insufficient Data (N < 30)"` / `"N/A"` indicators rather than synthetic fixtures.
+2. **WCAG 2.1 AA Landmark Structure:**
+   - Every generated HTML dashboard view must structure content using standard HTML5 and ARIA landmark roles: `<header role="banner">`, `<nav aria-label="Main Navigation">`, and `<main id="main-content" role="main">`.
+   - The top header must include a keyboard-accessible skip-to-content link targeting the primary main landmark: `<a href="#main-content" class="sr-only focus:not-sr-only ...">Skip to main content</a>`.
+3. **Interactive & Menu Accessibility:**
+   - Navigation dropdown buttons must define `id="metro-menu-btn"`, `aria-haspopup="true"`, `aria-expanded="false"`, `aria-controls="metro-dropdown-menu"`, and descriptive `aria-label="Metro Areas Selection Menu"`.
+   - Dropdown containers must specify `role="menu"`, with interactive child links tagged as `role="menuitem"`.
+   - Category filter buttons must specify `type="button"`, `aria-label="..."`, and `aria-pressed="true|false"` toggle state.
+4. **Data Visualizations & Interactive Maps:**
+   - All `<canvas>` elements hosting Chart.js charts must specify `role="img"` and descriptive `aria-label` attributes summarizing the series and metrics presented.
+   - Interactive map containers (e.g. `#zipMap`) must specify `role="region"` and descriptive `aria-label="Geographic Out-of-Metro ZIP Code Demand Heatmap"`.
+5. **Tabular Data Semantics:**
+   - All data tables must include an accessible screen-reader caption `<caption class="sr-only">...</caption>` and column header scope attributes (`<th scope="col">...</th>`).
+6. **Form Controls & Formatting Hygiene:**
+   - All form inputs, selects, and range controls (such as the Fill-Up Timing & Estimated Savings Advisor in `docs/savings.html`) must define explicit `<label for="...">` associations and descriptive `aria-label` attributes.
+   - Template variable substitutions must avoid redundant symbol prefixing (e.g., preventing double dollar artefacts like `$$0.1100`).
+---
+
+## 🛡️ 15. v0.8.5 Resilience, Deduplication & Econometric Grounding Directives (Issues #601–#608)
+
+1. **Canonical Forecast Primary Key Invariants (Issue #602):**
+   - Primary keys for forecast records across all storage tiers (`prediction_history.csv`, Turso libSQL, Cloudflare D1) must be computed with the canonical SHA-256 hash:
+     $$\text{forecast\_id} = \text{SHA256}(\text{target\_date} : \text{region} : \text{model\_version} : \text{horizon\_days}\text{d} : \text{run\_date})[:16]$$
+   - Any migration or logger modification must preserve this exact formula to prevent duplicate entries and broken foreign-key relationships.
+
+2. **Authentic Regional Ground Truth & Zero Fallback Rule (Issue #608):**
+   - Never substitute the national average (`GASREGW`) when evaluating regional predictions.
+   - Mappings in `src/eia_retail_feed.py` are authoritative (`GASREGWOK`, `GASREGW01B`, `GASREGWOH`, `GASREGWKY`, `GASREGWNC`, `GASREGWFL`, `GASREGWCA`). Missing regional actuals must produce `NaN` and trigger alerting rather than silent fallback.
+
+3. **Asymmetric ECM Cointegration Integrity (Issue #607):**
+   - Regional cointegration equilibrium and dynamic regressions in `AsymmetricECM` must be trained on authentic regional retail price histories via `get_regional_retail_history()`. Synthetic markups or crude approximations are prohibited.
+   - Model version string is dynamically tagged as `v2.1.0-asym-ecm`.
+
+4. **Narrative Attribution Mathematical Consistency (Issue #604):**
+   - Attribution drivers displayed on public narrative cards must be dynamically calculated and satisfy:
+     $$\sum_{i=1}^3 d_i = \Delta_{\text{forecast}}, \quad \operatorname{sgn}(d_i) \cdot \operatorname{sgn}(\Delta_{\text{forecast}}) \ge 0$$
+   - Never present positive driver dollar amounts when forecasting a retail price drop, and vice versa.
+   - Accuracy metrics (MAE, RMSE, MAPE) in HTML cards must be dynamically populated from `compute_dynamic_accuracy_stats()`.
+
+5. **GitHub Actions Workflow Dirty-Tree Guard (Issue #606):**
+   - In CI workflows, stage newly generated artifacts (`git add -A` or path lists) before executing `git status --porcelain`. Checking porcelain status with untracked files risks false-positive dirty tree skips or uncommitted data loss.
+   - Keep Headline Arena synchronization in an isolated job to prevent rate limits or sync issues from failing the primary forecast commit.
+
+6. **Cloudflare Edge Single-Use Token Invalidation (Issue #605):**
+   - Link-level HMAC review and flag URLs must be validated against the `intraday_flag_tokens` table in Cloudflare D1. Tokens must be atomically marked as consumed (`is_consumed = 1`) upon first access to prevent replay attacks.

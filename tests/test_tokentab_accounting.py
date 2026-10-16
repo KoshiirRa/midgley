@@ -32,9 +32,13 @@ class TestTokenTabAccounting(unittest.TestCase):
 
     def test_calculate_cost(self):
         """Verify provider rate card cost calculation math."""
-        # Gemini 2.5 Flash: $0.075 / 1M input, $0.300 / 1M output
-        cost_gemini = self.manager.calculate_cost("gemini-2.5-flash", input_tokens=1_000_000, output_tokens=1_000_000)
-        self.assertAlmostEqual(cost_gemini, 0.375, places=4)
+        # Gemini 3.8 Flash: $0.750 / 1M input, $3.750 / 1M output
+        cost_gemini_38 = self.manager.calculate_cost("gemini-3.8-flash", input_tokens=1_000_000, output_tokens=1_000_000)
+        self.assertAlmostEqual(cost_gemini_38, 4.500, places=4)
+
+        # Gemini 2.5 Flash (Legacy): $0.075 / 1M input, $0.300 / 1M output
+        cost_gemini_legacy = self.manager.calculate_cost("gemini-2.5-flash", input_tokens=1_000_000, output_tokens=1_000_000)
+        self.assertAlmostEqual(cost_gemini_legacy, 0.375, places=4)
 
         # GPT-4o-mini: $0.150 / 1M input, $0.600 / 1M output
         cost_gpt = self.manager.calculate_cost("gpt-4o-mini", input_tokens=1_000_000, output_tokens=1_000_000)
@@ -53,13 +57,13 @@ class TestTokenTabAccounting(unittest.TestCase):
     def test_record_usage_and_persistence(self):
         """Verify usage recording appends records to persistent JSON file."""
         rec1 = self.manager.record_usage(
-            provider="gemini-2.5-flash",
+            provider="gemini-3.8-flash",
             call_type="event_extraction",
             input_tokens=150,
             output_tokens=80,
             status="success"
         )
-        self.assertEqual(rec1["provider"], "gemini-2.5-flash")
+        self.assertEqual(rec1["provider"], "gemini-3.8-flash")
         self.assertEqual(rec1["total_tokens"], 230)
         self.assertGreater(rec1["cost_usd"], 0.0)
 
@@ -74,13 +78,13 @@ class TestTokenTabAccounting(unittest.TestCase):
 
         ledger = self.manager.get_ledger()
         self.assertEqual(len(ledger), 2)
-        self.assertEqual(ledger[0]["provider"], "gemini-2.5-flash")
+        self.assertEqual(ledger[0]["provider"], "gemini-3.8-flash")
         self.assertEqual(ledger[1]["provider"], "offline_lexicon")
 
     def test_budget_warnings(self):
         """Verify budget warning evaluation for normal, warning, and critical spend."""
         # Low usage: Normal status
-        self.manager.record_usage("gemini-2.5-flash", "event_extraction", 100, 50)
+        self.manager.record_usage("gemini-3.8-flash", "event_extraction", 100, 50)
         warnings_ok = self.manager.check_budget_warnings(monthly_cost_limit_usd=10.0, daily_token_limit=100000)
         self.assertEqual(warnings_ok[0]["level"], "ok")
 
@@ -93,7 +97,7 @@ class TestTokenTabAccounting(unittest.TestCase):
 
     def test_get_accounting_summary(self):
         """Verify complete summary aggregation logic."""
-        self.manager.record_usage("gemini-2.5-flash", "event_extraction", 1000, 500)
+        self.manager.record_usage("gemini-3.8-flash", "event_extraction", 1000, 500)
         self.manager.record_usage("gpt-4o-mini", "event_extraction", 2000, 1000)
         self.manager.record_usage("finlight", "finlight_feed", 0, 0)
 
@@ -105,7 +109,7 @@ class TestTokenTabAccounting(unittest.TestCase):
         self.assertEqual(summary["summary"]["total_tokens"], 4500)
 
         breakdown = summary["provider_breakdown"]
-        self.assertIn("gemini-2.5-flash", breakdown)
+        self.assertIn("gemini-3.8-flash", breakdown)
         self.assertIn("gpt-4o-mini", breakdown)
         self.assertIn("finlight", breakdown)
 

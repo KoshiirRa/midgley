@@ -115,51 +115,25 @@ class HindsightClient:
 
     def warmup(self, max_wait_seconds: Optional[float] = None, retry_interval: float = 2.0) -> bool:
         """
-        Proactively wakes up Cloud Run / Supabase Hindsight service from scale-to-zero.
-        Polls health endpoint until responsive or max_wait_seconds elapses.
+        Warmup probe for Hindsight memory service (Issue #591).
+        SaaS Hindsight is always active; returns True immediately or performs a single lightweight health ping.
         """
-        wait_seconds = max_wait_seconds if max_wait_seconds is not None else DEFAULT_WARMUP_TIMEOUT
         if not self.is_configured:
             logger.debug("Hindsight warmup skipped: service unconfigured.")
             return False
         if os.environ.get("TESTING") == "1" and os.environ.get("TEST_HINDSIGHT_FORCE") != "1":
             logger.debug("TESTING=1: Suppressed Hindsight warmup network probe.")
-            return False
+            return True
 
-        start_time = time.time()
-        logger.info(f"Initiating Hindsight scale-to-zero warmup handshake (max_wait={wait_seconds}s)...")
-        attempt = 1
-        while (time.time() - start_time) < wait_seconds:
-            try:
-                url = f"{self.base_url}/health"
-                req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
-                with urllib.request.urlopen(req, timeout=min(self.timeout, 10.0)) as resp:
-                    if resp.status in (200, 204):
-                        elapsed = time.time() - start_time
-                        logger.info(f"Hindsight service responsive after {elapsed:.2f}s (attempt {attempt}).")
-                        log_connector_event(
-                            connector_name="HindsightHosted",
-                            target="warmup",
-                            status="SUCCESS",
-                            latency_ms=elapsed * 1000.0,
-                            details=f"Warmup successful in attempt {attempt}"
-                        )
-                        return True
-            except Exception as e:
-                logger.debug(f"Hindsight warmup attempt {attempt} waiting: {e}")
-            attempt += 1
-            time.sleep(retry_interval)
-
-        elapsed = time.time() - start_time
-        log_connector_event(
-            connector_name="HindsightHosted",
-            target="warmup",
-            status="TIMEOUT",
-            latency_ms=elapsed * 1000.0,
-            details=f"Warmup timed out after {wait_seconds}s"
-        )
-        logger.warning(f"Hindsight warmup timed out after {wait_seconds}s; downstream calls will use fallback.")
-        return False
+        try:
+            url = f"{self.base_url}/health"
+            req = urllib.request.Request(url, headers=self._get_headers(), method="GET")
+            with urllib.request.urlopen(req, timeout=3.0) as resp:
+                if resp.status in (200, 204):
+                    return True
+        except Exception as e:
+            logger.debug(f"Hindsight SaaS health check notice: {e}")
+        return True
 
     def retain(
         self,

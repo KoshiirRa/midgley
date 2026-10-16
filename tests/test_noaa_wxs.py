@@ -92,3 +92,233 @@ def test_fetch_live_noaa_alerts_caching(mock_urlopen):
     noaa_calls2 = [c for c in mock_urlopen.call_args_list if c.args and hasattr(c.args[0], "full_url") and urlparse(c.args[0].full_url).hostname == "api.weather.gov"]
     assert len(noaa_calls2) == 1
 
+
+@patch("src.noaa_weather.urllib.request.urlopen")
+def test_fetch_live_noaa_alerts_zone_and_area_routing(mock_urlopen):
+    from src.noaa_weather import fetch_live_noaa_alerts
+    from src.lookup_cache import global_cache
+
+    global_cache.clear()
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.read.return_value = b'{"features": []}'
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    # Test state area routing: "IL" -> /alerts/active/area/IL
+    fetch_live_noaa_alerts(["IL"])
+    call_url_il = mock_urlopen.call_args_list[-1].args[0].full_url
+    assert "/alerts/active/area/IL" in call_url_il
+
+    # Test NWS zone routing: "ILZ104" -> /alerts/active/zone/ILZ104
+    fetch_live_noaa_alerts(["ILZ104"])
+    call_url_zone = mock_urlopen.call_args_list[-1].args[0].full_url
+    assert "/alerts/active/zone/ILZ104" in call_url_zone
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_chicago_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_chicago_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-123",
+            "area": "ILZ104",
+            "event": "Lake Michigan Blizzard Warning",
+            "headline": "NOAA NWS Blizzard Warning for Central Cook County IL",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Tornado Watch"],
+        "convective_risk_score": 0.80,
+        "categorical_risk": "MDT",
+        "tornado_risk_score": 0.80,
+        "hail_risk_score": 0.60,
+        "wind_risk_score": 0.80
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Chicago_IL",
+        "min_temp_f": 18.0,
+        "max_temp_f": 30.0,
+        "heating_degree_days_hdd": 41.0,
+        "freeze_warning": True,
+        "extreme_heat_warning": False
+    }
+
+    df = get_chicago_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Blizzard Warning" in h for h in headlines)
+    assert any("Freeze Warning" in h for h in headlines)
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_houston_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_houston_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-456",
+            "area": "TXZ213",
+            "event": "Gulf Hurricane Warning",
+            "headline": "NOAA NWS Hurricane Warning for Harris County and Upper Texas Coast",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Severe Convective Surge"],
+        "convective_risk_score": 0.85,
+        "categorical_risk": "MDT",
+        "tornado_risk_score": 0.50,
+        "hail_risk_score": 0.60,
+        "wind_risk_score": 0.90
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Houston_TX",
+        "min_temp_f": 72.0,
+        "max_temp_f": 92.0,
+        "heating_degree_days_hdd": 0.0,
+        "cooling_degree_days_cdd": 22.0,
+        "freeze_warning": False,
+        "extreme_heat_warning": True
+    }
+
+    df = get_houston_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Hurricane Warning" in h for h in headlines)
+    assert any("Excessive Heat Warning" in h for h in headlines)
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_los_angeles_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_los_angeles_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-789",
+            "area": "CAZ041",
+            "event": "Red Flag Warning",
+            "headline": "NOAA NWS Red Flag Warning for Los Angeles County Coast and Basin",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["High Wind Watch"],
+        "convective_risk_score": 0.70,
+        "categorical_risk": "ENH",
+        "tornado_risk_score": 0.10,
+        "hail_risk_score": 0.20,
+        "wind_risk_score": 0.85
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Los_Angeles_CA",
+        "min_temp_f": 68.0,
+        "max_temp_f": 96.0,
+        "heating_degree_days_hdd": 0.0,
+        "cooling_degree_days_cdd": 17.0,
+        "freeze_warning": False,
+        "extreme_heat_warning": True
+    }
+
+    df = get_los_angeles_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Red Flag Warning" in h for h in headlines)
+    assert any("Excessive Heat Warning" in h for h in headlines)
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_denver_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_denver_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-den-123",
+            "area": "COZ040",
+            "event": "Blizzard Warning",
+            "headline": "NOAA NWS Blizzard Warning for Denver Metro and Front Range",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Severe Thunderstorm Watch"],
+        "convective_risk_score": 0.60,
+        "categorical_risk": "SLGT",
+        "tornado_risk_score": 0.20,
+        "hail_risk_score": 0.60,
+        "wind_risk_score": 0.40
+    }
+    mock_meteo.return_value = {
+        "hub_code": "Denver_CO",
+        "min_temp_f": 5.0,
+        "max_temp_f": 25.0,
+        "heating_degree_days_hdd": 50.0,
+        "cooling_degree_days_cdd": 0.0,
+        "freeze_warning": True,
+        "extreme_heat_warning": False
+    }
+
+    df = get_denver_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Blizzard Warning" in h for h in headlines)
+    assert any("Freeze Warning" in h for h in headlines)
+
+
+@patch("src.noaa_weather.fetch_live_noaa_alerts")
+@patch("src.noaa_weather.extract_spc_convective_risk")
+@patch("src.noaa_weather.OpenMeteoDegreeDaysConnector.fetch_hub_degree_days")
+def test_get_new_york_weather_dataset_live_merge(mock_meteo, mock_spc, mock_noaa):
+    from src.noaa_weather import get_new_york_weather_dataset
+
+    mock_noaa.return_value = [
+        {
+            "id": "alert-ny-123",
+            "area": "NYZ072",
+            "event": "Coastal Flood Warning",
+            "headline": "NOAA NWS Coastal Flood Warning for New York Harbor and Hudson River",
+            "effective": "2026-10-12T10:00:00Z"
+        }
+    ]
+    mock_spc.return_value = {
+        "active_alerts": ["Severe Thunderstorm Watch"],
+        "convective_risk_score": 0.40,
+        "categorical_risk": "MRGL",
+        "tornado_risk_score": 0.10,
+        "hail_risk_score": 0.30,
+        "wind_risk_score": 0.50
+    }
+    mock_meteo.return_value = {
+        "hub_code": "New_York_NY",
+        "min_temp_f": 18.0,
+        "max_temp_f": 32.0,
+        "heating_degree_days_hdd": 40.0,
+        "cooling_degree_days_cdd": 0.0,
+        "freeze_warning": True,
+        "extreme_heat_warning": False
+    }
+
+    df = get_new_york_weather_dataset(include_live=True)
+    assert not df.empty
+    assert len(df) > 8  # 8 historical + live alerts
+
+    headlines = df["headline"].tolist()
+    assert any("Coastal Flood Warning" in h for h in headlines)
+    assert any("Freeze Warning" in h for h in headlines)

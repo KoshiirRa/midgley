@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "honolulu_hi",
+  "logger_region_key": "Honolulu_HI",
+  "display_name": "Honolulu & Oahu Island Hub, HI",
+  "padd_region": "PADD 5D Hawaii",
+  "primary_city": "Honolulu, HI",
+  "counties": [
+    "Honolulu",
+    "Maui",
+    "Hawaii",
+    "Kauai"
+  ],
+  "baseline_price": 4.65,
+  "icon_class": "fa-umbrella-beach",
+  "theme_color": "teal",
+  "econometric_drivers": {
+    "title": "Kapolei Refinery, Global Waterborne Imports & Inter-Island Barging",
+    "description": "Hawaii is an isolated island economy dependent on maritime crude imports. The Par Hawaii Refinery at Kapolei on Oahu (94 kbpd) supplies the entire state. Refined product is distributed from Oahu across the island archipelago (Maui, Kauai, Molokai, Big Island) via specialized ocean tugs and barges (Young Brothers). The island market faces substantial marine freight demurrage, flat year-round tropical RVP volatility, and steep county/GET tax burdens."
+  },
+  "refining_logistics": {
+    "title": "Par Hawaii Kapolei Refinery & Barbers Point Harbor",
+    "description": "Refining operations are concentrated at Kapolei on the southwest shore of Oahu. Waterborne tankers offload imported crudes at offshore single point moorings (SPM) at Barbers Point, with products distributed to local Oahu distribution racks and inter-island barge berths at Honolulu Harbor.",
+    "primary_refinery": "Par Hawaii Kapolei Refinery (94 kbpd)",
+    "capacity_bpd": 94000,
+    "pipelines": [
+      "Barbers Point Offshore SPM Buoy Line",
+      "Honolulu Harbor Marine Tug & Barge Corridors",
+      "Kapolei Pipeline Network"
+    ]
+  },
+  "tax_structure": {
+    "title": "Hawaii State, County Option & General Excise Tax (GET) Burden",
+    "description": "Hawaii gasoline taxes combine state excise ($0.160/gal), county fuel taxes ($0.165/gal in Honolulu, up to $0.23/gal in Maui), General Excise Tax (GET ~4.5%), and the environmental response tax, yielding a composite tax burden of ~$0.33 to $0.51/gal across islands, plus Federal excise ($0.184/gal).",
+    "state_tax_per_gal": 0.330,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.514,
+    "notes": "Composite tax baseline of $0.514/gal including Honolulu county fuel tax and General Excise Tax (GET)."
+  },
+  "infrastructure_delivery": {
+    "title": "Barbers Point Offshore Rack & Inter-Island Marine Freight Surcharge",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Honolulu}} = P_{\\text{Honolulu Retail}} - P_{\\text{Kapolei Rack}} = \\$4.650 - \\$3.250 = \\$1.400/\\text{gal}",
+    "description": "Wholesale prices reflect waterborne crude import premiums and ocean barge freight handling across Hawaiian Island harbors (Kahului, Hilo, Nawiliwili).",
+    "hub_distance_miles": 18,
+    "hub_name": "Barbers Point Offshore Marine Terminal & Honolulu Harbor Berths"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Par Hawaii Kapolei Crude Distillation Unit Trip",
+      "subtitle": "Island Single-Refinery Production Stoppage",
+      "price_impact_per_gal": 0.480,
+      "pct_impact": 10.32,
+      "description": "Crude distillation unit trip at Kapolei halts in-state refined product production, necessitating emergency trans-Pacific finished product imports from US West Coast or Asia."
+    },
+    {
+      "name": "Central Pacific Severe Hurricane Marine Port Lockdown",
+      "subtitle": "Category 4 Hurricane Shuts Barbers Point and Honolulu Harbor",
+      "price_impact_per_gal": 0.350,
+      "pct_impact": 7.53,
+      "description": "Harbor closures prevent ocean fuel barges from departing Oahu, creating immediate fuel delivery crunches on Maui, Kauai, and Hawaii Island."
+    },
+    {
+      "name": "Asia-Pacific Waterborne Crude Freight Discount",
+      "subtitle": "Regional Tanker Rate Softening Lowering Kapolei Input Costs",
+      "price_impact_per_gal": -0.140,
+      "pct_impact": -3.01,
+      "description": "Favorable trans-Pacific tanker shipping rates reduce crude feedstock landed costs at the Barbers Point SPM offshore buoy."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 340000,
+    "zero_vehicle_pct": 7.1,
+    "vehicles_per_household": 1.78,
+    "drive_alone_share": 0.672,
+    "carpool_share": 0.128,
+    "public_transit_share": 0.058,
+    "work_from_home_share": 0.115,
+    "mean_commute_minutes": 28.6,
+    "vehicle_dependency_ratio": 0.800,
+    "transit_alternative_index": 0.110,
+    "inelastic_demand_score": 0.810
+  }
+}

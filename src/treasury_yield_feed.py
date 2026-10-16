@@ -32,14 +32,17 @@ TREASURY_CACHE_PATH = os.path.join("data", "treasury_cache.json")
 TREASURY_VINTAGE_FILE = os.path.join("data", "treasury_vintages.json")
 
 
-def save_treasury_vintage_record(record: dict, filepath: str = TREASURY_VINTAGE_FILE) -> None:
+def save_treasury_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time U.S. Treasury yield observation (Issue #294)."""
+    fp = filepath or TREASURY_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "treasury_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
-        if os.path.exists(filepath):
+        if os.path.exists(fp):
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
+                with open(fp, "r", encoding="utf-8") as f:
                     vintages = json.load(f)
             except Exception:
                 vintages = []

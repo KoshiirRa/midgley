@@ -92,6 +92,19 @@ export async function captureSentryException(env: Env, ctx: any, error: any, ext
   }
 }
 
+export function timingSafeEqual(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const enc = new TextEncoder();
+  const aBuf = enc.encode(a);
+  const bBuf = enc.encode(b);
+  if (aBuf.byteLength !== bBuf.byteLength) return false;
+  let mismatch = 0;
+  for (let i = 0; i < aBuf.byteLength; i++) {
+    mismatch |= aBuf[i] ^ bBuf[i];
+  }
+  return mismatch === 0;
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
     const url = new URL(request.url);
@@ -107,7 +120,7 @@ export default {
         );
       }
 
-      // Fail-Closed Bearer Authentication check (Issue #438)
+      // Fail-Closed Bearer Authentication check (Issue #438, #559 Phase 5)
       const expectedToken = env.CLOUDFLARE_AUTH_TOKEN;
       if (!expectedToken) {
         console.warn(`[Cache Auth Error] CLOUDFLARE_AUTH_TOKEN is not configured on worker; rejecting request in fail-closed mode.`);
@@ -119,7 +132,7 @@ export default {
       }
 
       const token = authHeader?.replace("Bearer ", "").trim();
-      if (!token || token !== expectedToken) {
+      if (!token || !timingSafeEqual(token, expectedToken)) {
         console.warn(`[Cache Auth Warning] Unauthorized request from ${request.headers.get("CF-Connecting-IP") || "unknown"}`);
         await logToAxiom(env, ctx, { event: "cache_auth_unauthorized", ip: request.headers.get("CF-Connecting-IP") });
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -283,7 +296,7 @@ export default {
         } catch (err: any) {
           console.error(`[Cache Worker Error] Prediction sync failed: ${err.message || String(err)}`);
           await captureSentryException(env, ctx, err, { action: "SYNC_PREDICTIONS" });
-          return new Response(JSON.stringify({ error: "Prediction sync failed", details: err.message || String(err) }), {
+          return new Response(JSON.stringify({ error: "Prediction sync failed" }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });
@@ -325,7 +338,7 @@ export default {
         } catch (err: any) {
           console.error(`[Cache Worker Error] STORE for key "${key}" failed: ${err.message || String(err)}`);
           await captureSentryException(env, ctx, err, { action: "STORE", key });
-          return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message || String(err) }), {
+          return new Response(JSON.stringify({ error: "Internal Server Error" }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });
@@ -343,7 +356,7 @@ export default {
           });
         } catch (err: any) {
           console.error(`[Cache Worker Error] DELETE cache failed: ${err.message || String(err)}`);
-          return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message || String(err) }), {
+          return new Response(JSON.stringify({ error: "Internal Server Error" }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });

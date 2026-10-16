@@ -46,8 +46,8 @@ echo "Region:       $REGION"
 echo "Image:        $IMAGE"
 echo "Scale Policy: Min Instances = 0 (Scale-to-Zero for $0 Idle Cost)"
 
-# Default LLM model for Hindsight fact extraction & reasoning (gemini-2.5-flash for token-efficient low cost)
-HINDSIGHT_LLM_MODEL="${HINDSIGHT_LLM_MODEL:-gemini-2.5-flash}"
+# Default LLM model for Hindsight fact extraction & reasoning (gemini-3.8-flash for token-efficient low cost)
+HINDSIGHT_LLM_MODEL="${HINDSIGHT_LLM_MODEL:-gemini-3.8-flash}"
 
 # 2. Execute gcloud deployment using Secret Manager or secure env
 SECRETS_FLAG=""

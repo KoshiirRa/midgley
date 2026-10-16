@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "new_york_ny",
+  "logger_region_key": "New_York_NY",
+  "display_name": "New York Harbor & NY State Hub, NY",
+  "padd_region": "PADD 1B Central Atlantic",
+  "primary_city": "New York, NY",
+  "counties": [
+    "New York",
+    "Kings",
+    "Queens",
+    "Bronx",
+    "Richmond",
+    "Nassau",
+    "Suffolk",
+    "Westchester",
+    "Albany",
+    "Erie",
+    "Essex"
+  ],
+  "baseline_price": 3.48,
+  "icon_class": "fa-anchor",
+  "theme_color": "sky",
+  "econometric_drivers": {
+    "title": "New York Harbor Pricing Epicenter, High Statutory Tax Burden & Upstate Logistics Wedge",
+    "description": "New York Harbor serves as the primary physical benchmark for NYMEX RBOB gasoline futures and Atlantic coast waterborne trading. Retail pricing across New York State reflects a complex synthesis of coastal barge economics, Phillips 66 Bayway refinery output, a heavy statutory state tax burden ($0.472/gal baseline before county sales surcharges), EPA summer RFG specifications across NYC and Long Island, and regional midstream trucking premiums across Upstate New York and the Adirondacks."
+  },
+  "refining_logistics": {
+    "title": "Bayway Refining Anchor, Buckeye Pipeline Corridors & Waterborne Barging",
+    "description": "Regional product supply is anchored by Phillips 66 Bayway Refinery in Linden, NJ (258 kbpd), the largest refinery on the East Coast. Refined products move throughout New York via the Buckeye Pipeline system (supplying NYC airports, Long Island, Albany, and Rochester), Colonial Pipeline Line 1 terminus, and coastal barge lightering through the Arthur Kill, Hudson River, and Long Island Sound.",
+    "primary_refinery": "Phillips 66 Bayway Refinery (258 kbpd)",
+    "capacity_bpd": 258000,
+    "pipelines": [
+      "Buckeye Pipeline NY Long Island & Upstate System",
+      "Colonial Pipeline Line 1 Terminus (Linden, NJ)",
+      "Sunoco Logistics Harbor Pipeline",
+      "Hudson River Barge Marine Delivery Network"
+    ]
+  },
+  "tax_structure": {
+    "title": "New York State Statutory Fuel Excise, Petroleum Business Tax & Sales Tax Structure",
+    "description": "New York State imposes an aggregate statutory baseline motor fuel tax of $0.472/gal, comprising the state motor fuel excise tax ($0.0805/gal), Petroleum Business Tax (PBT, $0.1915/gal), state sales tax equivalent ($0.160/gal statutory baseline capped), and spill tax ($0.003/gal). Local county and municipal sales taxes add an additional $0.08 to $0.16/gal depending on jurisdiction, bringing combined state and local taxes to over $0.55/gal. Combined with the Federal excise tax ($0.184/gal), the statutory baseline tax burden is $0.656/gal.",
+    "state_tax_per_gal": 0.472,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.656,
+    "notes": "Statutory baseline motor fuel tax of $0.472/gal ($0.656/gal including federal excise), compounding with local county sales taxes across NYC, Long Island, and Upstate jurisdictions"
+  },
+  "infrastructure_delivery": {
+    "title": "New York Harbor Rack Parity, Midstream Tariffs & North Country Transport Freight",
+    "equation_latex": "\\text{Rack Margin}_{\\text{NY}} = P_{\\text{NY Retail}} - P_{\\text{NY Harbor Wholesale Spot}} = \\$3.480 - \\$2.300 = \\$1.180/\\text{gal}",
+    "description": "Wholesale transactions clear at the New York Harbor barge complex and Linden rack terminals. Transportation tariffs along the Buckeye Pipeline add midstream transit costs to Albany and Western NY, while rural trucking into North Country and resort destinations (e.g. Lake Placid ZIP 12946) commands an additional logistics basis premium of +15¢ to +35¢/gal over harbor rack parity.",
+    "hub_distance_miles": 12,
+    "hub_name": "New York Harbor Barge Terminals & Buckeye Linden Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Buckeye Pipeline Linden Terminal Distribution Outage",
+      "subtitle": "Critical Midstream Pipeline Delivery Disruption",
+      "price_impact_per_gal": 0.285,
+      "pct_impact": 8.19,
+      "description": "Midstream valve or electrical outage at Buckeye Linden terminus curtails refined product batches to Long Island and Upstate terminals, forcing emergency waterborne barge redeployment and high-cost tanker trucking"
+    },
+    {
+      "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+      "subtitle": "Severe Marine Transport Weather Disruption",
+      "price_impact_per_gal": 0.195,
+      "pct_impact": 5.60,
+      "description": "Prolonged Arctic deep freeze causes thick river ice formation on the upper Hudson River, stranding petroleum tug-barges en route to Albany and regional terminal racks"
+    },
+    {
+      "name": "Downstate Reformulated Summer Gasoline Blend Squeeze",
+      "subtitle": "EPA Clean Air Act Low-RVP Summer Transition",
+      "price_impact_per_gal": 0.140,
+      "pct_impact": 4.02,
+      "description": "Mandatory cutover to 7.4 psi Reid Vapor Pressure (RVP) reformulated summer blend across NYC and Long Island strains Atlantic basin blending components"
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 7600000,
+    "zero_vehicle_pct": 29.4,
+    "vehicles_per_household": 1.28,
+    "drive_alone_share": 0.528,
+    "carpool_share": 0.076,
+    "public_transit_share": 0.282,
+    "work_from_home_share": 0.114,
+    "mean_commute_minutes": 33.5,
+    "vehicle_dependency_ratio": 0.604,
+    "transit_alternative_index": 0.396,
+    "inelastic_demand_score": 0.710
+  }
+}

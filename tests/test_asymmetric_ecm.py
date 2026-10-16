@@ -149,3 +149,69 @@ def test_asymmetric_ecm_lag_recurrence_and_warm_start(synthetic_pass_through_dat
     # Retail should decrease gradually
     assert preds_drop[0] <= synthetic_pass_through_data["retail_price"].iloc[-1] + 0.05
     assert preds_drop[-1] <= preds_drop[0]
+
+
+def test_refuse_synthetic_constant_margin_series():
+    """Assert AsymmetricECM raises ValueError when fitted on constant-margin synthetic series (Issue #607, T-1)."""
+    n = 100
+    wholesale = pd.Series(np.linspace(2.0, 3.0, n))
+    constant_retail = wholesale + 0.65  # Variance of spread is exactly 0.0
+    
+    ecm = AsymmetricECM()
+    with pytest.raises(ValueError, match="Cannot fit AsymmetricECM on synthetic constant-margin series"):
+        ecm.fit(retail_data=constant_retail, wholesale_series=wholesale)
+
+
+def test_engle_granger_cointegration_and_hac_standard_errors(synthetic_pass_through_data):
+    """Assert Engle-Granger ADF cointegration test and HAC standard errors are computed (Issue #607, T-7)."""
+    ecm = AsymmetricECM(wholesale_lags=2, retail_lags=1)
+    ecm.fit(synthetic_pass_through_data, wholesale_col="wholesale_price", retail_col="retail_price")
+    
+    diag = ecm.get_asymmetry_diagnostics()
+    assert "adf_stat" in diag
+    assert "is_cointegrated" in diag
+    assert "mac_kinnon_critical_values" in diag
+    assert "gamma_pos_coefs" in diag
+    assert "gamma_neg_coefs" in diag
+    assert "hac_se" in diag
+    assert "hac_t_stats" in diag
+    
+    assert len(diag["gamma_pos_coefs"]) == 3  # lag 0, 1, 2
+    assert len(diag["gamma_neg_coefs"]) == 3
+    assert len(diag["hac_se"]) > 0
+    assert all(s > 0 for s in diag["hac_se"])
+
+
+def test_california_sales_tax_scaling_on_wholesale_pass_through(synthetic_pass_through_data):
+    """Verify California sales tax scaling applies to wholesale pass-through at 2.25% + district tax (Issue #607, T-8)."""
+    ecm = AsymmetricECM(wholesale_lags=2, retail_lags=1)
+    ecm.fit(synthetic_pass_through_data, wholesale_col="wholesale_price", retail_col="retail_price")
+    
+    current_ret = 5.00
+    current_whl = 3.00
+    whl_delta = 0.50
+    
+    # Non-California forecast
+    pred_standard = ecm.forecast_horizon(
+        current_retail=current_ret,
+        current_wholesale=current_whl,
+        future_wholesale_deltas=[whl_delta],
+        horizon_days=5,
+        is_california=False
+    )
+    
+    # California forecast with 2.25% + 1.0% = 3.25% sales tax rate
+    pred_ca = ecm.forecast_horizon(
+        current_retail=current_ret,
+        current_wholesale=current_whl,
+        future_wholesale_deltas=[whl_delta],
+        horizon_days=5,
+        is_california=True,
+        sales_tax_rate=0.0325
+    )
+    
+    # CA prediction should be higher due to wholesale pass-through sales tax scaling
+    expected_extra_tax = whl_delta * ecm.beta * 0.0325
+    assert pred_ca > pred_standard
+    assert abs((pred_ca - pred_standard) - expected_extra_tax) < 0.005
+

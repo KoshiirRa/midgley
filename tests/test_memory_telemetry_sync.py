@@ -80,3 +80,68 @@ def test_agent_memory_manager_get_bank_inventory_local_fallback(tmp_path):
     assert inventory["memories_count"] == 2
     assert inventory["reflections_count"] == 1
     assert "Local SQLite" in inventory["backend"]
+
+
+def test_agent_memory_manager_get_bank_inventory_vintage_snapshot_fallback(tmp_path):
+    sqlite_db = str(tmp_path / "empty_agent_memory.sqlite")
+    vintages_file = str(tmp_path / "test_vintages.json")
+    with open(vintages_file, "w", encoding="utf-8") as f:
+        json.dump({
+            "bank_id": "Midgley",
+            "source": "local_sqlite",
+            "backend": "Local SQLite FTS5 (Snapshot)",
+            "memories_count": 2102,
+            "observations_count": 0,
+            "reflections_count": 149,
+            "pending_reconciliation_count": 751
+        }, f)
+
+    manager = AgentMemoryManager(
+        hindsight_url="",
+        sqlite_path=sqlite_db,
+        vintages_path=vintages_file
+    )
+
+    inventory = manager.get_bank_inventory()
+    assert inventory["memories_count"] == 2102
+    assert inventory["reflections_count"] == 149
+    assert "Snapshot" in inventory["backend"]
+
+
+def test_agent_memory_manager_get_bank_inventory_telemetry_ledger_fallback(tmp_path):
+    sqlite_db = str(tmp_path / "empty_agent_memory.sqlite")
+    vintages_file = str(tmp_path / "nonexistent_vintages.json")
+    ledger_file = str(tmp_path / "test_ledger.json")
+
+    with open(ledger_file, "w", encoding="utf-8") as f:
+        json.dump({
+            "memory_totals": {
+                "retain_count": 18749,
+                "reflect_count": 6
+            }
+        }, f)
+
+    manager = AgentMemoryManager(
+        hindsight_url="",
+        sqlite_path=sqlite_db,
+        vintages_path=vintages_file,
+        ledger_path=ledger_file
+    )
+
+    inventory = manager.get_bank_inventory()
+    assert inventory["memories_count"] == 18749
+    assert inventory["reflections_count"] == 6
+    assert "Telemetry Ledger" in inventory["backend"]
+
+
+def test_dashboard_generator_telemetry_page_renders_memory_inventory(tmp_path):
+    from src.dashboard_generator import generate_telemetry_page
+    # Ensure telemetry page builds cleanly without crashing
+    generate_telemetry_page()
+    with open("docs/telemetry.html", "r", encoding="utf-8") as f:
+        html = f.read()
+    assert "Active Memory Bank" in html
+    assert "Midgley" in html
+    assert "Experiences" in html
+    assert "Observations" in html
+    assert "Reflections" in html

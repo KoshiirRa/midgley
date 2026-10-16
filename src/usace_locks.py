@@ -28,7 +28,24 @@ class USACELockConnector:
         self.cost_per_query = 0.0
 
     def _fetch_usgs_river_stage(self, site_id: str) -> Optional[float]:
-        """Queries USGS Water Services for river stage at Ohio River monitoring sites."""
+        """Queries USGS Water Data OGC API (api.waterdata.usgs.gov) for river stage."""
+        # 1. Primary: Modern USGS OGC API (api.waterdata.usgs.gov, retiring waterservices.usgs.gov by Nov 2026)
+        try:
+            clean_id = site_id.replace("USGS-", "")
+            url = f"https://api.waterdata.usgs.gov/ogcapi/v1/collections/continuous/items?monitoring_location_number={clean_id}&parameter_code=00065&f=json&limit=1"
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                if resp.status == 200:
+                    payload = json.loads(resp.read().decode('utf-8'))
+                    feats = payload.get("features", [])
+                    if feats:
+                        val_str = feats[0].get("properties", {}).get("value")
+                        if val_str is not None and str(val_str) not in ("-999999", "-999999.0", "None"):
+                            return float(val_str)
+        except Exception:
+            pass
+
+        # 2. Fallback to legacy waterservices endpoint before Nov 2026 sunset
         try:
             url = f"https://waterservices.usgs.gov/nwis/iv/?format=json&sites={site_id}&parameterCd=00065&siteStatus=all"
             req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
@@ -40,7 +57,7 @@ class USACELockConnector:
                         values = ts_list[0].get("values", [{}])[0].get("value", [])
                         if values:
                             val_str = values[-1].get("value")
-                            if val_str and val_str != "-999999":
+                            if val_str and val_str not in ("-999999", "-999999.0"):
                                 return float(val_str)
         except Exception:
             pass
@@ -110,10 +127,11 @@ class USACELockConnector:
             "status": "SUCCESS"
         }
 
-        try:
-            self.save_usace_lock_vintage_record(result)
-        except Exception:
-            pass
+        if os.environ.get("TESTING") != "1" or os.environ.get("TEST_PERSIST_RECORD") == "1":
+            try:
+                self.save_usace_lock_vintage_record(result)
+            except Exception:
+                pass
 
         global_cache.set(cache_key, result, ttl_seconds=21600)
         return result

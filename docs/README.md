@@ -1,11 +1,11 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.6.8 / v0.7.0-dev)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.8.6 / v0.8.6-dev)
 
-[![Release: v0.7.0](https://img.shields.io/badge/Release-v0.7.0-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.7.0)
-[![Development: v0.7.0-dev](https://img.shields.io/badge/Dev-v0.7.0--dev-blue.svg)](https://github.com/KoshiirRa/midgley/tree/dev)
+[![Release: v0.8.6](https://img.shields.io/badge/Release-v0.8.6-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.8.6)
+[![Development: v0.8.6-dev](https://img.shields.io/badge/Dev-v0.8.6--dev-blue.svg)](https://github.com/KoshiirRa/midgley/tree/dev)
 [![GHCR Docker](https://img.shields.io/badge/GHCR-midgley%3Aself--hosted-blue.svg?logo=docker)](https://github.com/KoshiirRa/midgley/pkgs/container/midgley)
-[![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
-[![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
-[![Automated Nightly Dev Release](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml/badge.svg)](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml)
+[![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg?branch=main)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
+[![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg?branch=main)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
+[![Automated Nightly Dev Release](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml/badge.svg?branch=dev)](https://github.com/KoshiirRa/midgley/actions/workflows/nightly_dev_release.yml)
 
 [![Public Dashboard](https://img.shields.io/badge/Public_Dashboard-koshiirra.github.io%2Fmidgley-blue.svg)](https://koshiirra.github.io/midgley/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -15,20 +15,19 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-09-26 00:12 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-16 07:16 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **National Wholesale (RBOB)** | `$3.197`/gal | **`$3.362`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-National-Ridge` |
-| **Tulsa, OK Metro Retail** | `$4.114`/gal | **`$4.031`/gal** | **DOWN 📉** | `2026-10-02` | `v1.6-Ipatieff-Tulsa-Ridge` |
-| **Newark, DE Metro Retail** | `$4.492`/gal | **`$4.790`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-Newark-Ridge` |
-| **Cincinnati, OH Retail** | `$4.359`/gal | **`$4.604`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
-| **Northern Kentucky Retail** | `$4.429`/gal | **`$4.677`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
-| **Greenville, NC Metro Retail** | `$4.168`/gal | **`$4.307`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-Greenville-Ridge` |
-| **Charlotte, NC Metro Retail** | `$4.205`/gal | **`$4.274`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-Charlotte-Ridge` |
-| **Port St. Lucie, FL Waterborne** | `$4.470`/gal | **`$4.585`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-PortStLucie-Ridge` |
-| **Oakland, CA Metro Retail** | `$6.354`/gal | **`$6.572`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-Oakland-Ridge` |
-| **SF Bay Area 9-County Avg** | `$6.477`/gal | **`$6.699`/gal** | **UP 📈** | `2026-10-02` | `v1.6-Ipatieff-BayArea-Ridge` |
+| **National Wholesale (RBOB)** | `$3.180`/gal | **`$3.046`/gal** | **DOWN 📉** | `2026-10-22` | `v1.6-Ipatieff-National-Ridge` |
+| **Tulsa, OK Metro Retail** | `$3.962`/gal | **`$3.962`/gal** | **UP 📈** | `2026-10-22` | `v1.6-Ipatieff-Tulsa-Ridge` |
+| **Newark, DE Metro Retail** | `$4.134`/gal | **`$3.958`/gal** | **DOWN 📉** | `2026-10-22` | `v1.6-Ipatieff-Newark-Ridge` |
+| **Cincinnati, OH Retail** | `$3.991`/gal | **`$3.991`/gal** | **UP 📈** | `2026-10-22` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
+| **Northern Kentucky Retail** | `$4.066`/gal | **`$3.889`/gal** | **DOWN 📉** | `2026-10-22` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
+| **Charlotte, NC Metro Retail (Carolinas Hub)** | `$3.711`/gal | **`$3.550`/gal** | **DOWN 📉** | `2026-10-22` | `v1.6-Ipatieff-Charlotte-Ridge` |
+| **Port St. Lucie, FL Waterborne** | `$4.250`/gal | **`$4.073`/gal** | **DOWN 📉** | `2026-10-22` | `v1.6-Ipatieff-PortStLucie-Ridge` |
+| **Oakland, CA Metro Retail** | `$6.287`/gal | **`$6.287`/gal** | **UP 📈** | `2026-10-22` | `v1.6-Ipatieff-Oakland-Ridge` |
+| **SF Bay Area 9-County Avg** | `$6.343`/gal | **`$6.077`/gal** | **DOWN 📉** | `2026-10-22` | `v1.6-Ipatieff-BayArea-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
@@ -54,11 +53,11 @@ A live multi-page public web dashboard is automatically updated and deployed on 
 - **`/tulsa` (Tulsa Retail Gas)**: Dedicated Tulsa metro retail gas forecast & regional refinery shock simulator, accessible via the top nav **`Metro Areas`** dropdown menu.
 - **`/newark` (Newark DE Retail)**: Dedicated Newark, DE (PADD 1B Central Atlantic) metro retail gas forecast featuring Delaware City Refinery turnaround dynamics, C&D Canal maritime detours, and DE state fuel tax ($0.230/gal).
 - **`/cincinnati` (Cincinnati OH/KY Cross-River Retail)**: Dedicated Cincinnati OH/KY metro retail gas forecast featuring dual-state fuel tax differential display (OH $3.45 vs NKY $3.325), live USGS river stage telemetry, and Mississippi/Ohio River low-water barge bottleneck simulator.
-- **`/greenville` (Greenville NC Retail)**: Dedicated Greenville, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Selma/Apex breakout hub dynamics, NC state gas tax ($0.404/gal), and NOAA Pitt County (NCZ081) Tar River flood / hurricane alerts.
-- **`/charlotte` (Charlotte NC Retail)**: Dedicated Charlotte, NC (PADD 1C South Atlantic) metro retail gas forecast featuring Colonial Pipeline Paw Creek breakout hub dynamics, NC/SC cross-border tax differential ($0.404/gal NC vs $0.288/gal SC), and NOAA Mecklenburg County (NCZ071) Catawba River flood / winter ice storm alerts.
+- **`/greenville` (Greenville NC Retail)**: Seamless client-side redirect to the consolidated Carolinas hub at **`/charlotte`**.
+- **`/charlotte` (Charlotte & Carolinas Hub Retail)**: Dedicated Charlotte metro & Carolinas regional gas forecast featuring Colonial Pipeline Paw Creek & Selma/Apex breakout hubs, NC/SC cross-border tax differential ($0.404/gal NC vs $0.288/gal SC), and NOAA Mecklenburg County (NCZ071) Catawba River flood / winter ice storm alerts.
 - **`/port_st_lucie` (Port St. Lucie FL Retail)**: Dedicated Port St. Lucie, FL (PADD 1C South Atlantic) metro retail gas forecast featuring Florida >95% waterborne marine barge offloading dependency, upstream USGS Gulf Coast departure tracking, Port Everglades & Port Canaveral marine terminals, FL state fuel tax ($0.384/gal), and NOAA St. Lucie County (FLZ147) Atlantic hurricane alerts.
-- **`/oakland` (Oakland CA Retail)**: Dedicated Oakland / East Bay retail gas forecast featuring CARB regulatory breakdown ($0.953/gal tax burden), USGS Carquinez Strait runoff & berthing telemetry, and physical hazard risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
-- **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85).
+- **`/oakland` (Oakland CA Retail)**: Seamless client-side redirect to the unified **`/bayarea`** dashboard.
+- **`/bayarea` (SF Bay Area 9-County Region)**: Dedicated 9-county NorCal regional gas forecast featuring multi-county price matrix (San Francisco $5.12, San Jose $4.98, Oakland $4.95, North Bay $4.85), CARB regulatory breakdown ($0.953/gal tax burden), USGS Carquinez Strait runoff & berthing telemetry, and physical hazard risk matrix (USGS quakes, PSPS wildfires, PTWC tsunamis).
 - **`/math` (Math Guide)**: Educational guide detailing KaTeX LaTeX equations across all 15 pipeline sections (including 3-2-1 crack spreads, executive social gap multipliers, and CARB tax breakdown).
 - **`/sources` (Data Sources Catalog)**: Comprehensive public catalog documenting all 26 quantitative commodity futures, NOAA weather sensors, USGS hydrology stations, state tax portals, and financial news feeds.
 - **`/telemetry` (System Observability & Model Evolution)**: Real-time telemetry dashboard featuring Model Learning & Longitudinal Adaptation Tracking (rolling MAE vs naive baseline, LLM win rates, multi-window scoreboards), Vectorize Hindsight episodic memory observability, 7-day zero-cost data connector health audits (EIA, FRED, USDA, NOAA, AAA, Socrata, USGS), zero-cost LLM fallback & cumulative dollar/token savings, expanded API quota safety valves (Firecrawl, Finlight, IPASIS), and dynamic out-of-metro Leaflet demand heatmaps.
@@ -86,7 +85,7 @@ flowchart TD
     end
 
     subgraph EXTRACTOR["1. Event, Weather & Physical Extraction Agent"]
-        E1["Google Gemini 2.5 Flash / Domain NLP Lexicon"]
+        E1["Google Gemini 3.8 Flash / Domain NLP Lexicon"]
         E2["intraday_event_monitor.py, finlight_feed.py & firecrawl_scraper.py"]
         E3["noaa_weather.py (Token-Efficient Ingestion & SPC Mapping)"]
         E4["pasa_research_agent.py (PaSa Crawler-Selector Multi-Hop Loop)"]
@@ -101,15 +100,14 @@ flowchart TD
         Q2["Main Model: National Wholesale RBOB Futures"]
     end
 
-    subgraph METRO["4. Localized Metro Area Calibration Agents"]
-        L1["Tulsa Metro (tulsa_main.py - Cushing WTI & HF Sinclair Outages)"]
-        L2["Newark Metro (newark_main.py - PADD 1B & C&D Canal Detours)"]
-        L3["Cincinnati Tri-State (cincinnati_main.py - Dual-State Tax Gap)"]
-        L4["Greenville NC (greenville_main.py - Colonial Line 1/2 Hubs)"]
-        L5["Charlotte NC (charlotte_main.py - Paw Creek Distribution Hub)"]
-        L6["Oakland & SF Bay Area (oakland_main.py - CARB Burden & Physical Risks)"]
-        L7["Port St. Lucie FL (port_st_lucie_main.py - Waterborne Marine Freight)"]
-        L8["ULSD Distillate Diesel Engine (diesel_main.py - 3-2-1 Crack Margin)"]
+    subgraph METRO["4. Localized Regional Calibration Agents (18 Hubs across PADDs 1–7)"]
+        L1["PADD 1A/1B: Boston, Newark (Delaware River & Waterborne Imports)"]
+        L2["PADD 1C: Charlotte & Carolinas, Atlanta, Port St. Lucie (Colonial & Waterborne)"]
+        L3["PADD 2: Chicago, Detroit, Minneapolis, Tulsa, Cincinnati (Midwest & Cushing)"]
+        L4["PADD 3: Houston (Gulf Coast Refining & Export Complex)"]
+        L5["PADD 4: Denver, Salt Lake City (Rocky Mountain Refineries)"]
+        L6["PADD 5: Los Angeles, Oakland/SF Bay, Seattle, Phoenix, Las Vegas (PADD 5/CARB)"]
+        L7["ULSD Distillate Diesel Engine (diesel_main.py - 3-2-1 Crack Margin)"]
     end
 
     subgraph SIMULATOR["5. Synthesis & Scenario Simulator Agent"]
@@ -139,7 +137,7 @@ flowchart TD
     EXTRACTOR -->|Structured Bounded Vectors| FUSION
     FUSION -->|Unified Feature Matrix| MODEL
     MODEL -->|Base Commodity Forecast| METRO
-    METRO -->|Localized Metro Forecasts| SIMULATOR
+    METRO -->|Localized Regional Forecasts| SIMULATOR
     SIMULATOR -->|Real-Time Adjusted Forecasts| MLOPS
     MLOPS -->|Persistent Prediction History| REVIEW
     REVIEW -->|Empirical Diagnostic Feedback Signal| MODEL
@@ -152,7 +150,7 @@ flowchart TD
 * **1. Event, Weather & Physical Extraction Agent ([`src/event_analyzer.py`](src/event_analyzer.py), [`src/firecrawl_scraper.py`](src/firecrawl_scraper.py), [`src/finlight_feed.py`](src/finlight_feed.py), [`src/noaa_weather.py`](src/noaa_weather.py), [`src/nhc_hurricane.py`](src/nhc_hurricane.py), [`src/bsee_shutins.py`](src/bsee_shutins.py), [`src/usace_locks.py`](src/usace_locks.py), & [`src/alternative_data_feeds.py`](src/alternative_data_feeds.py)):** Ingests live financial media headlines (`finlight.me`), raw news bulletins, deep web articles and refinery disclosures converted to clean Markdown via Firecrawl Web Scraping API (`src/firecrawl_scraper.py`), NOAA alerts (`t.wxs.us`), NOAA NHC Hurricane advisories (`src/nhc_hurricane.py`), BSEE Gulf offshore platform shut-ins (`src/bsee_shutins.py`), EIA-930 hourly grid stress (`src/data_ingestion.py`), expanded EIA weekly petroleum balance series, USACE LPMS Ohio River lock delays (`src/usace_locks.py`), maritime chokepoints, executive social posts, Cboe OVX volatility, and Baker Hughes rig counts into structured numerical impact vectors. Enforces a 150 call/month Finlight quota safety valve (`data/finlight_quota.json`), an 800 call/month Firecrawl safety cap (`data/firecrawl_quota.json`), fail-closed webhook authentication (`src/api_server.py`), persistent Cloudflare D1 edge deduplication (`workers/intraday_monitor_worker.ts`), and 24-hour headline & evaluated ledger deduplication (`src/intraday_event_monitor.py` & `data/evaluated_headlines.json`, Issue #239).
 * **2. Exponential Memory Fusion Agent ([`src/feature_engineering.py`](src/feature_engineering.py)):** Models point-shock persistence over 2–3 weeks using a continuous mathematical decay accumulator ($\mathbf{M}_t = \mathbf{M}_{t-1} \cdot e^{-\frac{\ln 2}{t_{1/2}}} + \mathbf{V}_t$) with dynamic category-specific half-lives $t_{1/2} \in [2.5, 14.0]\text{ days}$ ($14.0\text{d}$ physical supply disruptions, $7.0\text{d}$ geopolitical risk, $5.0\text{d}$ OPEC action, $4.0\text{d}$ demand sentiment, $2.5\text{d}$ executive social posts). Enforces point-in-time `as_of` publication date joins and bitemporal vintage tracking ([`src/data_ingestion.py`](src/data_ingestion.py), [`data/eia_vintages.json`](data/eia_vintages.json)) to eliminate historical scalar broadcasting and lookahead bias during model retraining (Issue #121).
 * **3. Quantitative Forecasting Agent ([`src/models.py`](src/models.py)):** Fits regularized linear pipelines (StandardScaler + Ridge Regression $\alpha=10.0$) and XGBoost regressors on 80/20 chronological splits to predict wholesale RBOB futures return shocks. Features **Dynamic Volatility-Gated Persistence Blending (DV-GPB)** ($\lambda_{vol} = \frac{1}{1 + e^{-200.0(\sigma_{14d} - 0.015)}}$) shrinking forecasts to Naive Persistence during low-volatility plateaus while preserving 100% of event shock vectors during active market moves (Issue #214). Computes component-level feature attribution breakdowns (`compute_locale_feature_attribution_breakdown`) allocating signed price impact ($/gal) across 6 standardized domains (*Futures & Commodity, Refining Crack Margin, Weather & Environmental, Tax & Regulatory, Unstructured Sentiment, Regional Logistics*).
-* **4. Localized Metro Area Calibration Agents ([`src/locations/`](src/locations/)):** Subpackage calibration modules (`tulsa`, `newark`, `cincinnati`, `greenville`, `charlotte`, `oakland`, `port_st_lucie`) that adjust wholesale commodity baselines to regional retail pump prices, dynamic rack margins, delivery hub logistics, reconciled statutory CARB tax components ($0.953/gal total burden), state fuel tax gaps, and infrastructure shocks. Methodologically distinguishes **Observed Retail Ground Truth** (from official U.S. EIA weekly retail series and GasBuddy surveys) from historical proxy margin reconstructions (Issue #380). Integrates **Empirical Residual CI Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$)** achieving $\ge 90.0\%$ 95% CI empirical coverage across active rolling 30-day out-of-time evaluation windows.
+* **4. Localized Regional Calibration Agents ([`src/locations/`](src/locations/)):** Subpackage calibration modules and declarative specs covering 18 regional calibration hubs across PADDs 1–7 (Boston, Newark, Charlotte & Carolinas, Atlanta, Port St. Lucie, Chicago, Detroit, Minneapolis, Tulsa, Cincinnati, Houston, Denver, Salt Lake City, Los Angeles, Oakland/SF Bay, Seattle, Phoenix, Las Vegas) that adjust wholesale commodity baselines to regional retail pump prices, dynamic rack margins, delivery hub logistics, reconciled statutory CARB/state fuel tax burdens, and infrastructure shocks. Methodologically distinguishes **Observed Retail Ground Truth** (from official U.S. EIA weekly retail series and GasBuddy surveys) from historical proxy margin reconstructions (Issue #380). Integrates **Empirical Residual CI Recalibration ($\pm 1.96 \cdot \sigma_{\text{residual, 30d}}(r)$)** achieving $\ge 90.0\%$ 95% CI empirical coverage across active rolling 30-day out-of-time evaluation windows.
 * **5. Synthesis & Scenario Simulator Agent ([`src/scenario_engine.py`](src/scenario_engine.py) & [`src/locations/<location>/main.py`](src/locations/)):** Runs counterfactual "What-If" simulations (e.g. HF Sinclair EF-3 tornado shocks, Cushing pipeline spills, Hormuz blockades, Hayward Fault quakes, PG&E PSPS power shutoffs, and weekend tariff announcements) backed by **Seasonal & Climatological Plausibility Gating** (Issue #300), date-window constraints, active real-time telemetry threshold triggers (NOAA SPC, USGS hydrology, USGS seismic), precursor forward scenario synthesis (1–14 days lookahead), and off-season counterfactual warning annotations.
 * **6. MLOps Prediction Logging Agent ([`src/prediction_logger.py`](src/prediction_logger.py)):** Logs 5-business-day out-of-time forecasts (`pd.bdate_range`, strictly evaluating commodity market trading days rather than calendar offsets, Issue #380) and 8 extended MLOps feature/attribution vectors (`llm_price_pressure`, `llm_supply_disruption`, `quant_baseline_5d_price`, `llm_augmentation_delta`, `prediction_lower_95ci`, `prediction_upper_95ci`, `within_95ci_hit`, `data_source_provenance`) to `data/prediction_history.csv`, isolating pure quantitative model forecasts ($\hat{P}_{\text{quant}}$) alongside hybrid forecasts ($\hat{P}_{\text{hybrid}}$) to compute true LLM augmentation deltas ($\Delta_{\text{LLM}} = \hat{P}_{\text{hybrid}} - \hat{P}_{\text{quant}}$, Issue #390), automatically backfills actual ground-truth prices from `yfinance` and official EIA regional series as target dates arrive, evaluates empirical 95% Confidence Interval Coverage (`within_95ci_hit`), and computes continuous rolling 30/60/90-day MAE, RMSE, MAPE, Directional Hit Rate %, Model MAE Uplift % vs. Naive Persistence, Model vs. Persistence Win Rate %, and LLM vs. Quant Win Rate % via `GET /api/v1/forecast/scoreboard`.
 * **7. Model Performance Review & Feedback Loop Agent ([`.github/workflows/weekly_model_review.yml`](.github/workflows/weekly_model_review.yml), [`src/agent_memory.py`](src/agent_memory.py), [`src/hindsight_client.py`](src/hindsight_client.py), [`src/weekly_issue_reporter.py`](src/weekly_issue_reporter.py), [`src/catalog_monitor.py`](src/catalog_monitor.py), [`src/arxiv_monitor.py`](src/arxiv_monitor.py) & [`docs/research_sources.md`](docs/research_sources.md)):** Automated Saturday runner (08:00 AM Central / 13:00 UTC) evaluating rolling MAE/RMSE metrics, performing LLM self-reviews of open GitHub issues, executing **Vectorize Hindsight Episodic Memory** qualitative root-cause post-mortems and historical shock analogy recall with scale-to-zero proactive warmup and zero-data-loss pending memory reconciliation, monitoring developer catalogs & arXiv research preprints, and feeding empirical diagnostic signals back into model recalibration.
@@ -174,17 +172,17 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 
 1. **Auto-Updating Live README Forecast Table (`src/readme_updater.py`):** Automatically injects the latest 5-day national & Tulsa forecasts into `README.md`.
 2. **Public Web Dashboard Generator (`src/dashboard_generator.py`):** Builds a responsive HTML/Tailwind/Chart.js web app (`docs/index.html`) deployed automatically to GitHub Pages ([koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)).
-3. **Regional Tulsa, OK Retail Model (`tulsa_main.py`):** Dedicated regional forecasting module calibrated directly to live local pump prices (**$3.89/gal**), factoring in Cushing WTI crude proximity (50 miles from Tulsa) and HF Sinclair West Tulsa Refinery (125,000 bpd) shocks.
+3. **Regional Tulsa, OK Retail Model (`tulsa_main.py`):** Dedicated regional forecasting module calibrated directly to live local pump prices, factoring in Cushing WTI crude proximity (50 miles from Tulsa) and HF Sinclair West Tulsa Refinery (125,000 bpd) shocks.
 4. **Two-Tiered NOAA Weather Integration (`src/noaa_weather.py`):**
    - **Tier 1 (National Basins):** NOAA NHC Hurricane advisories in Gulf Coast refining hubs & Permian/Bakken winter freeze warnings.
-   - **Tier 2 (Localized Regional Metros):** NOAA NWS severe alerts across **Tulsa (`OKZ060/OKZ066`)**, **Newark (`DEZ001`)**, **Cincinnati (`OHZ077/KYZ091`)**, **Greenville (`NCZ081`)**, **Charlotte (`NCZ071`)**, **Oakland / SF Bay (`CAZ508/CAZ511`)**, and **Port St. Lucie (`FLZ147`)**.
+   - **Tier 2 (Localized Regional Metros):** NOAA NWS severe alerts across **Tulsa (`OKZ060/OKZ066`)**, **Newark (`DEZ001`)**, **Cincinnati (`OHZ077/KYZ091`)**, **Charlotte & Carolinas (`NCZ071`)**, **Oakland / SF Bay (`CAZ508/CAZ511`)**, and **Port St. Lucie (`FLZ147`)**.
 5. **Global Maritime Chokepoint & Inland Waterway Logistics Feeds (`src/geopolitical_feeds.py`):** Tracks Iran conflict alerts in the **Strait of Hormuz** (21.0M bpd / 20% of global oil), Red Sea / Suez Canal tanker rerouting events, Venezuela Orinoco heavy crude sanctions, Ohio/Mississippi River tow barge draft constraints, MKARNS navigation, and coastal waterborne lightering/terminal surcharges.
 6. **Real-Time Finlight Financial News Stream (`src/finlight_feed.py`):** Integrates live commodity & macroeconomic news articles from tier-1 financial media (Reuters, Bloomberg, Seeking Alpha, Investing.com) using the `finlight.me` REST API.
 7. **Executive Social Media & Weekend Gap Engine (`src/executive_social_feed.py`):** Quantifies Trump Twitter/Truth Social energy posts and models Monday morning futures open price gaps (1.42x volatility multiplier).
 8. **Alternative Physical Data & Key Movers (`src/alternative_data_feeds.py` & `src/key_movers_feed.py`):** Features Cboe Crude Volatility (`^OVX`), Baker Hughes Active Drilling Rig Counts, and statements from Saudi Energy Minister Prince Abdulaziz & Fed Chair Powell.
 9. **MLOps Prediction Tracker, Ground-Truth Backfilling & Cloud DB Sync (`src/prediction_logger.py`, Issue #82):** Logs 5-day out-of-time forecasts to `data/prediction_history.csv`, backfills actual historical market prices from `yfinance` as target dates arrive, automatically backfills test split history for newly added regions (`backfill_new_region_history`), and synchronizes forecast records to cloud relational stores (Turso Edge SQLite, Cloudflare D1 Edge Workers, Neon Postgres) via REST API endpoints (`POST /api/v1/forecast/cloud-sync` & `GET /api/v1/forecast/cloud-status`) with 100% local CSV offline fallback.
-10. **Fireworks Tech Graph Automated Architecture Diagram Generator (`src/fireworks_tech_graph.py`, Issue #191):** Synthesizes self-contained, validated SVG vector diagrams outputting to `docs/assets/multi_agent_architecture.svg` and `docs/assets/regional_metro_architecture.svg` visualizing the 8-stage multi-agent execution pipeline and 6 regional metro calibration hubs, with visual embeds in `AGENTS.md` and the public web app landing page (`docs/index.html`).
-11. **Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`):** Evaluates rolling MAE/RMSE/Hit Rate metrics across all active regions and performs an automated self-review of all open GitHub repository issues using Gemini 2.5 Flash to identify and rank the issue providing the highest potential modeling improvement.
+10. **Fireworks Tech Graph Automated Architecture Diagram Generator (`src/fireworks_tech_graph.py`, Issue #191):** Synthesizes self-contained, validated SVG vector diagrams outputting to `docs/assets/multi_agent_architecture.svg` and `docs/assets/regional_metro_architecture.svg` visualizing the 8-stage multi-agent execution pipeline and 18 regional calibration hubs across PADDs 1–7, with visual embeds in `AGENTS.md` and the public web app landing page (`docs/index.html`).
+11. **Weekly Model Performance Review & Issue Self-Review Engine (`src/weekly_issue_reporter.py` & `.github/workflows/weekly_model_review.yml`):** Evaluates rolling MAE/RMSE/Hit Rate metrics across all active regions and performs an automated self-review of all open GitHub repository issues using Gemini 3.8 Flash to identify and rank the issue providing the highest potential modeling improvement.
 12. **Local Dev Environment, Web Server & Systemd Timers (`dev-vm` Port 8080 & 8000):** Serves live dashboard analytics from the permanent `dev` branch on `dev-vm`, with systemd user timers (`midgley-daily-forecast.timer` and `midgley-weekly-review.timer`) running daily forecasts and weekly issue audits 24/7.
 13. **Automated Nightly Dev Releases (`.github/workflows/nightly_dev_release.yml`):** Automatically builds, tags (`dev-YYYY-MM-DD`), and documents GitHub pre-releases tracking whatever is on the `dev` branch every night at 3:00 AM Central Time (08:00 UTC).
 14. **3-Tier Multi-Tier Cache Gateway & Quota Sync (`src/lookup_cache.py`):** High-availability cascading cache (Turso Edge SQLite -> Cloudflare D1 Worker -> Local SQLite `data/lookup_cache.sqlite`) with SHA-256 headline deduplication ($0 token cost on repeated headlines) and cross-runner API quota ledger sync (`quota:finlight:current`).
@@ -221,6 +219,11 @@ Our empirical econometric analysis of executive social media posts (Twitter/X an
 45. **5-Tier Nested Model Evaluation Hierarchy & Statistical Validation (`src/model_evaluation.py` & `scripts/evaluate_model_hierarchy.py`, Issue #362):** Formalizes a 5-tier evaluation hierarchy (Tier 0: Naive Persistence $\to$ Tier 1: Price-Only $\to$ Tier 2: Price + Physical $\to$ Tier 3: Price + Qualitative Events $\to$ Tier 4: Full Hybrid Ensemble) with Diebold-Mariano tests (Harvey-Leybourne-Newbold horizon adjustment), stationary block bootstrap, and multi-horizon pinball quantile loss.
 46. **Empirical Event Parameter Calibration & Decoupled PRAXIST Engine (`src/event_calibration.py` & `src/praxist_engine.py`, Issue #361):** Matches real historical energy shocks against commodity abnormal returns (2022–2026) using L-BFGS-B optimization to calibrate empirical half-lives $t_{1/2}$ and sensitivity weights $\beta_{\text{event}}$, decoupling PRAXIST empirical research evaluations from synthetic data.
 47. **Alternative Forecasting Target Formulations & Residual Modeling (`src/models.py`, Issue #360):** Supports `level`, `difference`, `return`, and `persistence_residual` target modes with clipping bounds and automatic price reconstruction, comparing stationarity, variance properties, and out-of-sample forecasting accuracy.
+48. **Official EIA API v2 Weekly Retail Ground Truth & WPSR Fundamentals (`src/eia_api_client.py`, `src/eia_retail_feed.py`, `src/data_ingestion.py`):** Ingests official weekly retail gasoline price actuals (`EMM_EPMR_PTE_*`) directly from the U.S. EIA API v2 with bitemporal release tracking and lookahead-safe vintage caching (`data/eia_retail_vintages.json`), establishing official government ground truth for model backfilling and evaluation. Also ingests Weekly Petroleum Status Report (WPSR) fundamentals including national refinery utilization, crude inputs, and regional gasoline inventories.
+49. **USGS Water Data Modernization & OGC API GeoJSON Telemetry (`src/usgs_water_feed.py` & `src/usace_locks.py`):** Migrated upstream streamflow and stage ingestion from legacy `waterservices.usgs.gov` to modern USGS OGC API continuous features endpoints (`api.waterdata.usgs.gov/ogcapi/v1/collections/continuous/items`) with robust GeoJSON parsing and automatic legacy WaterML fallbacks.
+50. **Deterministic NYMEX Trading Calendar & RBOB Roll Straddle Gating (`src/market_calendar.py` & `src/models.py`):** Features exchange trading holiday schedules (CME Globex calendar, anonymous Easter calculation, New Year's, MLK, Presidents' Day, Good Friday, Memorial Day, Juneteenth, July 4th, Labor Day, Thanksgiving, Christmas) and RBOB contract roll boundary detection (`get_rbob_contract_expiry`), flagging forecasts straddling monthly roll dates (`roll_straddling`) to prevent artificial pricing shocks across contract transitions.
+51. **Statutory Tax Event Provenance & Announcement Tracking (`data/known_future_events.json`):** Tracks statutory state and federal fuel tax adjustments with transparent legislative provenance URLs, statutory citations (e.g. Ohio HB 519, California SB 1), and formal announcement dates, enabling lookahead-safe backtesting and prospective tax shock anticipation.
+52. **Pirate Weather Reanalysis & Production Telemetry Ingestion (`src/noaa_weather.py`, `src/feature_engineering.py`, `src/scenario_engine.py`, Issue #442):** Ingests live and historical Dark Sky-compatible weather reanalysis (HRRR / ERA5) across exact refining hub coordinates, with dual-endpoint routing (`api.pirateweather.net` for forecasts and `timemachine.pirateweather.net` for historical timestamps), computing heating/cooling degree days, freeze-off duration hours, and real-time refinery cold-snap risk (`freeze_off_risk_index`), directly wired into feature matrix construction and scenario simulation gates with REST and MCP tools.
 
 ---
 
@@ -274,12 +277,11 @@ Key guide coverage includes:
 
 | Region / Target | Ground Truth Basis | Model Algorithm | MAE ($/gal) | RMSE ($/gal) | MAPE (%) | Directional Hit Rate | 95% CI Coverage |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **National Wholesale (RBOB)** | NYMEX `RB=F` Settlement | Ridge (α=10.0) + Gemini 2.5 Flash | **$0.1069** | **$0.1490** | **4.76%** | **60.79%** (+4.40% boost) | **92.4%** |
+| **National Wholesale (RBOB)** | NYMEX `RB=F` Settlement | Ridge (α=10.0) + Gemini 3.8 Flash | **$0.1069** | **$0.1490** | **4.76%** | **60.79%** (+4.40% boost) | **92.4%** |
 | **Tulsa, OK Metro Retail** | EIA PADD 2 & GasBuddy | Ridge (α=10.0) + Localized NOAA | **$0.1331** | **$0.1880** | **4.83%** | **58.15%** | **91.8%** |
 | **Newark, DE Metro Retail** | EIA PADD 1B & Delmarva | Ridge (α=10.0) + Delaware Logistics | **$0.1285** | **$0.1764** | **4.52%** | **59.30%** | **93.1%** |
 | **Cincinnati, OH Metro Retail** | EIA PADD 2 & USACE Locks | Ridge (α=10.0) + River Tow Dynamics | **$0.1340** | **$0.1820** | **4.78%** | **58.70%** | **91.5%** |
-| **Greenville, NC Metro Retail** | EIA PADD 1C & Colonial | Ridge (α=10.0) + Colonial Allocation | **$0.1260** | **$0.1710** | **4.45%** | **60.10%** | **94.0%** |
-| **Charlotte, NC Metro Retail** | EIA PADD 1C & Colonial | Ridge (α=10.0) + Pipeline Cycle Basis | **$0.1272** | **$0.1735** | **4.48%** | **59.85%** | **93.6%** |
+| **Charlotte, NC Metro Retail (Carolinas Hub)** | EIA PADD 1C & Colonial | Ridge (α=10.0) + Pipeline Cycle Basis | **$0.1272** | **$0.1735** | **4.48%** | **59.85%** | **93.6%** |
 | **Oakland, CA Metro Retail** | EIA PADD 5 & CARB CaRFG | Ridge (α=10.0) + Richmond Refinery | **$0.1620** | **$0.2190** | **4.25%** | **61.40%** | **90.5%** |
 | **Port St. Lucie, FL Metro** | EIA PADD 1C & Freight | Ridge (α=10.0) + Waterborne Freight | **$0.1310** | **$0.1795** | **4.60%** | **59.20%** | **92.0%** |
 
@@ -288,9 +290,9 @@ Key guide coverage includes:
 ## 🤖 AI Use & Assistance Disclosure
 
 In commitment to transparency, engineering integrity, and clear attribution:
-* **Code Authoring & Development:** Assisted by **Google Gemini** (Gemini 3.7 Flash / Gemini 2.5 Flash / Gemini Pro via Antigravity Agentic Assistant).
+* **Code Authoring & Development:** Assisted by **Google Gemini** (Gemini 3.8 Flash / Gemini 3.7 Flash / Gemini Pro via Antigravity Agentic Assistant).
 * **Code Review & Quality Assurance:** Multi-pass pull request reviews and architectural audits utilizing **Anthropic Claude** (Claude Opus 5.5 / Claude 3.7 Sonnet) and **OpenAI ChatGPT** (ChatGPT 6 Astra / GPT-4o / o-series).
-* **Runtime Pipeline & In-Engine Event Extraction:** Live unstructured event extraction, NOAA alert parsing, and weekly issue triage powered strictly by **Google Gemini** (`gemini-2.5-flash` / `gemini-1.5-flash`) with deterministic rule lexicons for fail-safe offline execution.
+* **Runtime Pipeline & In-Engine Event Extraction:** Live unstructured event extraction, NOAA alert parsing, and weekly issue triage powered strictly by **Google Gemini** (`gemini-3.8-flash` / `gemini-2.5-flash` legacy) with deterministic rule lexicons for fail-safe offline execution.
 * **Quantitative Commodity Estimator:** Price forecasts are generated by regularized statistical models (**Standardized Ridge Regression** $\alpha=10.0$ and **XGBoost Regressors**) on numerical feature matrices, not generative text models.
 
 👉 **Read the complete policy: [`AI_DISCLOSURE.md`](AI_DISCLOSURE.md)**

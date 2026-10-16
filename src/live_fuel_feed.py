@@ -188,6 +188,90 @@ REGION_METADATA = {
         "static_anchor": 4.145,
         "name": "Port St. Lucie, FL Metro Retail",
         "aaa_keywords": ["Port St. Lucie", "St. Lucie", "State Average"]
+    },
+    "Chicago_IL": {
+        "zip": "60601",
+        "state": "IL",
+        "static_anchor": 3.850,
+        "name": "Greater Chicago Metro Retail",
+        "aaa_keywords": ["Chicago", "Cook County", "Metro Average"]
+    },
+    "Houston_TX": {
+        "zip": "77002",
+        "state": "TX",
+        "static_anchor": 2.850,
+        "name": "Houston, TX Metro Retail",
+        "aaa_keywords": ["Houston", "Harris County", "Texas"]
+    },
+    "Los_Angeles_CA": {
+        "zip": "90012",
+        "state": "CA",
+        "static_anchor": 4.890,
+        "name": "Los Angeles Basin, CA Metro Retail",
+        "aaa_keywords": ["Los Angeles", "Long Beach", "Orange County", "California"]
+    },
+    "Denver_CO": {
+        "zip": "80202",
+        "state": "CO",
+        "static_anchor": 3.150,
+        "name": "Denver, CO Metro Retail",
+        "aaa_keywords": ["Denver", "Colorado", "Boulder", "State Average"]
+    },
+    "New_York_NY": {
+        "zip": "10001",
+        "state": "NY",
+        "static_anchor": 3.480,
+        "name": "New York, NY Metro Retail",
+        "aaa_keywords": ["New York", "New York City", "Manhattan", "Long Island", "State Average"]
+    },
+    "San_Juan_PR": {
+        "zip": "00901",
+        "state": "PR",
+        "static_anchor": 3.490,
+        "name": "San Juan, PR Metro Retail",
+        "aaa_keywords": ["San Juan", "Puerto Rico", "DACO"]
+    },
+    "Boston_MA": {
+        "zip": "02108",
+        "state": "MA",
+        "static_anchor": 3.450,
+        "name": "Boston, MA Metro Retail",
+        "aaa_keywords": ["Boston", "Suffolk County", "Massachusetts", "State Average"]
+    },
+    "Seattle_WA": {
+        "zip": "98101",
+        "state": "WA",
+        "static_anchor": 4.250,
+        "name": "Seattle-Tacoma, WA Metro Retail",
+        "aaa_keywords": ["Seattle", "King County", "Washington", "State Average"]
+    },
+    "Phoenix_AZ": {
+        "zip": "85001",
+        "state": "AZ",
+        "static_anchor": 3.550,
+        "name": "Phoenix, AZ Metro Retail",
+        "aaa_keywords": ["Phoenix", "Maricopa County", "Arizona", "State Average"]
+    },
+    "Anchorage_AK": {
+        "zip": "99501",
+        "state": "AK",
+        "static_anchor": 3.750,
+        "name": "Anchorage, AK Metro Retail",
+        "aaa_keywords": ["Anchorage", "Alaska", "State Average"]
+    },
+    "Honolulu_HI": {
+        "zip": "96813",
+        "state": "HI",
+        "static_anchor": 4.650,
+        "name": "Honolulu, HI Metro Retail",
+        "aaa_keywords": ["Honolulu", "Oahu", "Hawaii", "State Average"]
+    },
+    "Guam_GU": {
+        "zip": "96910",
+        "state": "GU",
+        "static_anchor": 4.890,
+        "name": "Hagåtña, Guam Retail",
+        "aaa_keywords": ["Guam", "Hagatna", "Apra Harbor"]
     }
 }
 
@@ -419,7 +503,12 @@ def fetch_eia_or_yfinance_price(region_code: str) -> dict:
                     "NorthBay_CA": 2.782,
                     "Greenville_NC": 0.781,
                     "Charlotte_NC": 0.811,
-                    "Port_St_Lucie_FL": 0.976
+                    "Port_St_Lucie_FL": 0.976,
+                    "Chicago_IL": 1.150,
+                    "Houston_TX": 0.520,
+                    "Los_Angeles_CA": 2.470,
+                    "Denver_CO": 0.850,
+                    "New_York_NY": 1.180
                 }
                 offset = margins.get(region_code, 0.95)
                 est_price = latest_rbob + offset
@@ -438,10 +527,11 @@ def fetch_history_last_known_price(region_code: str) -> dict:
     history_path = os.path.join("data", "prediction_history.csv")
     if os.path.exists(history_path):
         try:
-            df = pd.read_csv(history_path)
+            from src.prediction_logger import read_prediction_history
+            df = read_prediction_history(history_path)
             reg_df = df[df['region'] == region_code]
             if not reg_df.empty:
-                if region_code in ["Oakland_CA", "BayArea_CA"]:
+                if region_code in ["Oakland_CA", "BayArea_CA", "Los_Angeles_CA"]:
                     reg_df = reg_df[reg_df['current_base_price'] > 4.50]
                 if not reg_df.empty:
                     last_price = float(reg_df.iloc[-1]['current_base_price'])
@@ -478,7 +568,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             price = gb_res["average_price"]
             source = gb_res["source"]
             if not is_price_outlier(region_code, price):
-                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                logger.info("Fetched live fuel observation via GasBuddy")
                 res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
 
         # Step 2: AAA Metro Web Scraper
@@ -488,7 +578,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
                 price = aaa_res["average_price"]
                 source = aaa_res["source"]
                 if not is_price_outlier(region_code, price):
-                    logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                    logger.info("Fetched live fuel observation via AAA")
                     cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
                     if not res or not cand.get("is_stale"):
                         res = cand
@@ -499,7 +589,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
                 price = eia_res["average_price"]
                 source = eia_res["source"]
-                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                logger.info("Fetched live fuel observation via EIA/yfinance")
                 cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
                 if not res or not cand.get("is_stale"):
                     res = cand
@@ -510,12 +600,12 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             if hist_res and hist_res.get("average_price") and pd.notna(hist_res.get("average_price")):
                 price = hist_res["average_price"]
                 source = hist_res["source"]
-                logger.info(f"Fetched live fuel price for {region_code} via {source}: ${price:.3f}/gal")
+                logger.info("Fetched live fuel observation via history")
                 res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
 
         # Step 5: Static Fallback Anchor
         if not res:
-            logger.info(f"Using static fallback anchor for {region_code}: ${static_fallback:.3f}/gal")
+            logger.info("Using static fallback anchor")
             res = validate_price_payload_freshness({"region": region_code, "price": static_fallback, "source": f"Static Anchor ({region_code})", "timestamp": timestamp_str})
 
         # Determine granularity level

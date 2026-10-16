@@ -36,6 +36,10 @@ def test_pyproject_ruff_configuration():
 
 def test_codebase_ruff_check_clean():
     """Verifies that src/, scripts/, and tests/ pass ruff check without errors."""
+    import shutil
+    if shutil.which("ruff") is None:
+        pytest.skip("Ruff CLI binary not installed in host PATH")
+
     cmd = ["ruff", "check", "src/", "scripts/", "tests/"]
     result = subprocess.run(
         cmd,
@@ -48,6 +52,9 @@ def test_codebase_ruff_check_clean():
 
 def test_ruff_catches_undefined_variable():
     """Verifies that ruff check catches undefined variables (F821) and fails with non-zero exit code."""
+    import shutil
+    if shutil.which("ruff") is None:
+        pytest.skip("Ruff CLI binary not installed in host PATH")
     with tempfile.NamedTemporaryFile(suffix=".py", mode="w", delete=False) as f:
         f.write("def broken_func():\n    return undefined_variable_12345\n")
         temp_file = f.name

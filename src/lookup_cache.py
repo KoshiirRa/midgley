@@ -66,6 +66,10 @@ class LookupCache:
             "writes": 0,
             "errors": 0,
         }
+        self._turso_circuit_broken = False
+        self._turso_error_count = 0
+        self._cf_circuit_broken = False
+        self._cf_error_count = 0
         self._init_db()
 
     def _init_db(self):
@@ -103,7 +107,7 @@ class LookupCache:
 
     def _turso_ensure_table(self, turso_url: str, turso_token: str):
         """Ensures the lookup_cache table exists on remote Turso Edge SQLite."""
-        if getattr(self, "_turso_table_initialized", False):
+        if getattr(self, "_turso_table_initialized", False) or getattr(self, "_turso_circuit_broken", False):
             return
         try:
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
@@ -127,12 +131,21 @@ class LookupCache:
                 if resp.status == 200:
                     self._turso_table_initialized = True
         except Exception as e:
-            logger.warning(f"Turso table initialization notice: {e}")
+            self._turso_error_count += 1
+            if self._turso_error_count >= 2:
+                self._turso_circuit_broken = True
+                logger.warning(f"Turso Edge circuit breaker TRIPPED ({e}). Bypassing remote Turso for the remainder of this session.")
+            else:
+                logger.warning(f"Turso table initialization notice: {e}")
 
     def _turso_get(self, key: str, turso_url: str, turso_token: str) -> Optional[Tuple[str, float, float]]:
         """Queries Tier 1 Turso Edge SQLite via HTTPS REST API."""
+        if getattr(self, "_turso_circuit_broken", False):
+            return None
         try:
             self._turso_ensure_table(turso_url, turso_token)
+            if getattr(self, "_turso_circuit_broken", False):
+                return None
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -165,14 +178,23 @@ class LookupCache:
                             expires_at = float(row[2].get("value", 0))
                             return val_str, created_at, expires_at
         except Exception as e:
-            logger.warning(f"Turso Edge cache fetch notice: {e}")
+            self._turso_error_count += 1
+            if self._turso_error_count >= 2:
+                self._turso_circuit_broken = True
+                logger.warning(f"Turso Edge circuit breaker TRIPPED on fetch ({e}). Bypassing remote Turso for this session.")
+            else:
+                logger.warning(f"Turso Edge cache fetch notice: {e}")
             self.stats["errors"] += 1
         return None
 
     def _turso_set(self, key: str, val_str: str, created_at: float, expires_at: float, turso_url: str, turso_token: str):
         """Writes entry to Tier 1 Turso Edge SQLite via HTTPS REST API."""
+        if getattr(self, "_turso_circuit_broken", False):
+            return
         try:
             self._turso_ensure_table(turso_url, turso_token)
+            if getattr(self, "_turso_circuit_broken", False):
+                return
             endpoint = f"{turso_url.rstrip('/')}/v2/pipeline"
             headers = {
                 "Authorization": f"Bearer {turso_token}",
@@ -200,7 +222,12 @@ class LookupCache:
             with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT_SECONDS) as resp:
                 pass
         except Exception as e:
-            logger.warning(f"Turso Edge cache write notice: {e}")
+            self._turso_error_count += 1
+            if self._turso_error_count >= 2:
+                self._turso_circuit_broken = True
+                logger.warning(f"Turso Edge circuit breaker TRIPPED on write ({e}). Bypassing remote Turso for this session.")
+            else:
+                logger.warning(f"Turso Edge cache write notice: {e}")
             self.stats["errors"] += 1
 
     def _cloudflare_get(self, key: str, cf_url: str, cf_token: str = None) -> Optional[Tuple[str, float, float]]:
@@ -220,7 +247,7 @@ class LookupCache:
                     return val_str, created_at, expires_at
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                logger.debug(f"Cloudflare Edge cache miss for key '{key}': HTTP 404")
+                logger.debug("Cloudflare Edge cache miss: HTTP 404")
             else:
                 logger.warning(f"Cloudflare Edge cache fetch notice: {e}")
                 self.stats["errors"] += 1
@@ -327,7 +354,7 @@ class LookupCache:
                             cursor.execute("DELETE FROM lookup_cache WHERE key = ?", (key,))
                             conn.commit()
             except Exception as e:
-                logger.warning(f"Error reading local SQLite cache for key '{key}': {e}")
+                logger.warning(f"Error reading local SQLite cache: {e}")
                 self.stats["errors"] += 1
 
         self.stats["misses"] += 1
@@ -364,7 +391,7 @@ class LookupCache:
                     )
                     conn.commit()
             except Exception as e:
-                logger.warning(f"Error setting local SQLite cache for key '{key}': {e}")
+                logger.warning(f"Error setting local SQLite cache: {e}")
                 self.stats["errors"] += 1
 
         turso_url, turso_token, cf_url, cf_token = self._get_edge_credentials()
@@ -611,8 +638,9 @@ class LookupCache:
                         results["turso"]["status"] = "read_mismatch"
                         results["turso"]["error"] = "Probe value could not be read back from Turso Edge"
                 except Exception as e:
+                    logger.debug(f"Turso probe exception: {e}")
                     results["turso"]["status"] = "error"
-                    results["turso"]["error"] = str(e)
+                    results["turso"]["error"] = "Turso probe connectivity error"
                 finally:
                     # Clean up transient probe key (Issue #437)
                     try:
@@ -652,8 +680,9 @@ class LookupCache:
                         results["cloudflare"]["status"] = "read_mismatch"
                         results["cloudflare"]["error"] = "Probe value could not be read back from Cloudflare D1"
                 except Exception as e:
+                    logger.debug(f"Cloudflare probe exception: {e}")
                     results["cloudflare"]["status"] = "error"
-                    results["cloudflare"]["error"] = str(e)
+                    results["cloudflare"]["error"] = "Cloudflare probe connectivity error"
                 finally:
                     # Clean up transient probe key (Issue #437)
                     try:

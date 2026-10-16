@@ -40,11 +40,12 @@ python run_all.py --use-llm-api
 python -m src.dashboard_generator
 
 # Auto-commit updated history & dashboard if on dev branch and working tree is dirty
-if [ -d ".git" ]; then
+if [ -e ".git" ]; then
     git add README.md docs/ data/prediction_history.csv 2>/dev/null || true
     if ! git diff-index --quiet HEAD --; then
         git commit -m "chmod: Daily automated local dev gas price forecast update [skip ci]" || true
         echo "Committed daily forecast updates to dev branch."
+        git push origin dev || echo "Warning: Failed to push daily forecast updates to origin dev."
     fi
 fi
 

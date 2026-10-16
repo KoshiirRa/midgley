@@ -41,7 +41,7 @@ This document provides a comprehensive guide for self-hosting custom instances o
 
 ## 2. Environment Configuration & API Keys
 
-Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 2.5 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys. 
+Midgley features a cascading multi-tier fallback architecture: primary LLM extraction uses Google Gemini 3.8 Flash, with soft failovers to OpenAI/Anthropic, and a 100% offline rule-based lexicon safety net that guarantees operational continuity even with zero API keys.
 
 All core mathematical transformations — including **CoSPOT Compositional Spectral & Wavelet Feature Prompting** (`src/cospot_spectral_engine.py`, Issue #215, arXiv:2609.02093), Purged Cross-Validation (`src/models.py`), Dynamic Volatility-Gated Persistence Blending (`src/dynamic_region.py`), dynamic **Baker Hughes Rig Count Ingestion** (`src/alternative_data_feeds.py`, Issue #269), **Executive Social Media Live Polling & Weekend Gap Classification** (`src/executive_social_feed.py`, Issue #268), **Key Market Movers Statement Feed** (`src/key_movers_feed.py`, Issue #270), **EIA PADD Inventory & Refinery Utilization** (`src/data_ingestion.py`, Issue #271), **EIA-930 Grid Stress Modeling** (`src/data_ingestion.py`, Issue #272), **USDA Biofuel & Ethanol Rack/RIN Feeds** (`src/data_ingestion.py`, Issue #273), **EIA State & Metro Surveys** (`src/data_ingestion.py`, Issue #274), **FERC Form 6 Pipeline Tariffs** (`src/data_ingestion.py`, Issue #275), **USACE Lock Delays & Hydrology** (`src/usace_locks.py`, Issue #276), and Qlib Symbolic Alpha mining (`src/qlib_symbolic_engine.py`) — run natively on standard Python libraries (`numpy`, `pandas`, `scipy`) without requiring extra cloud subscriptions or heavy GPU accelerators. Point-in-time publication snapshots are automatically tracked across bitemporal ledgers (`data/*_vintages.json`) and cached in `data/lookup_cache.sqlite`.
 
@@ -97,15 +97,31 @@ MIDGLEY_IP_SECURITY_ENABLED="1"   # Set to 0 to disable IP reputation checking
 # Optional OilpriceAPI Integration (25 call/day safety cap)
 OILPRICEAPI_KEY="op_live_..."
 
+# Optional Pirate Weather API Key (pirateweather.net - Point-in-time HRRR / ERA5 historical reanalysis, Issue #442)
+# Free tier allows 10,000 requests/month. Optional: Climatological / cached physics fallback runs out-of-the-box if unset.
+PIRATE_WEATHER_API_KEY=""
+
+# Optional NASA FIRMS Map Key (firms.modaps.eosdis.nasa.gov - Active fire thermal anomaly satellite telemetry, Issue #453)
+# Free key from NASA FIRMS API. Optional: historical thermal baseline & cached observations run if unset.
+NASA_FIRMS_MAP_KEY=""
+
+# Optional Wayback Machine Save Page Now 2 (SPN2) S3 Credentials (archive.org, Issue #491)
+# Free access keys from Internet Archive user account settings. Enables authenticated priority snapshot queues.
+WAYBACK_ACCESS_KEY=""
+WAYBACK_SECRET_KEY=""
+
 # Weights & Biases (W&B) MLOps & Validation Loss Tracking (wandb.ai, Issue #80)
 # Free personal tier (100 GB storage). Optional: runs offline/no-op if unset.
 WANDB_API_KEY="wandb_v1_..."
 WANDB_PROJECT="midgley-gas-forecasting"
 WANDB_MODE="online"               # Options: 'online', 'offline', 'disabled'
 
-# Discord Webhook Notification Gateway (Intraday Forecast Revisions, Issue #234)
-# Dispatches real-time alerts on intraday price shocks with environment tagging ([PRODUCTION] vs [DEVELOPMENT])
+# Discord Webhook & Direct Message (DM) Notification Gateway (Issues #234, #235)
+# Dispatches real-time alerts on intraday price shocks to channel webhooks and individual DM subscribers
 DISCORD_INTRADAY_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
+DISCORD_APP_ID="your_discord_application_id"
+DISCORD_PUBLIC_KEY="your_discord_ed25519_public_key"
+DISCORD_BOT_TOKEN="your_discord_bot_token_for_dm_alerts"
 
 # ==============================================================================
 # 3-TIER MULTI-TIER EDGE CACHE & QUOTA LEDGER CREDENTIALS (OPTIONAL)
@@ -155,7 +171,7 @@ HEADLINE_ARENA_CLIENT_SECRET="ha_sec_..."  # Or HEADLINE_ARENA_API_KEY
 HEADLINE_ARENA_DEV_SUBMIT="0"              # Set to 1 in dev to execute live test submissions (tagged [DEV-TEST])
 
 # Healthchecks Cron & Execution Heartbeat Monitoring (healthchecks.io, Issue #98)
-HEALTHCHECKS_PING_URL="https://hc-ping.com/12ab7587-e0ed-40ac-83ad-822f9eb56a3b"
+HEALTHCHECKS_PING_URL="https://hc-ping.com/<your-healthchecks-uuid-here>"
 # Or separate daily/weekly endpoints:
 # HEALTHCHECKS_DAILY_PING_URL="https://hc-ping.com/<uuid>"
 # HEALTHCHECKS_WEEKLY_PING_URL="https://hc-ping.com/<uuid>"
@@ -221,7 +237,7 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```
 4. Configure required authentication token and optional telemetry secrets (Axiom & Sentry):
    > [!IMPORTANT]
-   > **Fail-Closed Security (Issue #438)**: `midgley-cache-worker` strictly enforces Bearer token authentication against `CLOUDFLARE_AUTH_TOKEN`. If `CLOUDFLARE_AUTH_TOKEN` is unset or invalid, all cache write, read, and sync endpoints reject requests with `401 Unauthorized`.
+   > **Fail-Closed & Constant-Time Security (Issues #438, #559)**: `midgley-cache-worker` and `midgley-intraday-monitor` strictly enforce constant-time `timingSafeEqual()` Bearer token authentication against `CLOUDFLARE_AUTH_TOKEN`. If `CLOUDFLARE_AUTH_TOKEN` is unset or invalid, all cache write, read, sync, and admin trigger endpoints reject requests with `401 Unauthorized` without timing side-channels.
    ```bash
    npx wrangler secret put CLOUDFLARE_AUTH_TOKEN --config workers/wrangler.cache.toml --env staging
    npx wrangler secret put SENTRY_DSN --config workers/wrangler.cache.toml --env staging
@@ -254,6 +270,22 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
 
 ### Option C: Standalone Local Fallback (Tier 3 Default)
 If no edge credentials are supplied, Midgley defaults to local SQLite persistence at `data/lookup_cache.sqlite` with an in-memory fast dict lookup ($0 cloud infrastructure cost, zero external setup required).
+
+### Direct Cloud Database Engine & Legacy Migration (`scripts/migrate_csv_to_turso.py`)
+Midgley v0.8.0 introduces the direct `DatabaseClient` (`src/db/client.py`) connecting directly to Turso libSQL REST pipeline v2 or Cloudflare D1, or local SQLite (`data/midgley.db`).
+
+1. **Initialize Relational Schema:**
+   Midgley automatically executes `src/db/schema.sql` upon initial startup. To initialize or inspect manually:
+   ```bash
+   python3 -c "from src.db.client import get_db; db = get_db(); db.init_schema(); print('Schema initialized successfully.')"
+   ```
+
+2. **Deduplicate & Migrate Legacy CSV Prediction Ledgers:**
+   If upgrading from a prior version with a large `data/prediction_history.csv`, execute the migration script to deduplicate redundant backtest runs (collapsing identical runs by 80% with deterministic SHA-256 primary keys):
+   ```bash
+   python3 scripts/migrate_csv_to_turso.py
+   ```
+   The migration populates normalized relational tables (`forecasts`, `ground_truth`, and `evaluations`) in the configured database.
 
 ---
 
@@ -300,7 +332,7 @@ To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
      -e HINDSIGHT_API_PORT="8888" \
      -e DATABASE_URL="$SUPABASE_DATABASE_URL" \
      -e HINDSIGHT_API_LLM_PROVIDER="gemini" \
-     -e HINDSIGHT_API_LLM_MODEL="gemini-2.5-flash" \
+     -e HINDSIGHT_API_LLM_MODEL="gemini-3.8-flash" \
      -e HINDSIGHT_API_LLM_API_KEY="$GEMINI_API_KEY" \
      ghcr.io/vectorize-io/hindsight:latest
    ```
@@ -310,8 +342,22 @@ To run Hindsight on your own infrastructure (e.g. `dev-vm` / `10.42.42.54`):
 If no remote Hindsight or Supabase credentials are configured, Midgley automatically activates `SQLiteMemoryStore` at `data/agent_memory.sqlite`:
 * **Zero external services or cloud accounts required.**
 * Uses SQLite FTS5 with Porter stemming and BM25 ranking for analogy recall.
-* Generates structured post-mortems and parameter calibration recommendations via Gemini 2.5 Flash (or the Tier 3 Offline Rule-Based Lexicon).
+* Generates structured post-mortems and parameter calibration recommendations via Gemini 3.8 Flash (or the Tier 3 Offline Rule-Based Lexicon).
 * **Region-Scoped Memory Retention (Issue #326):** Memory shock ingestion is scoped specifically to the regional hub being evaluated (`backfill_actual_prices_and_evaluate(target_region=...)`), eliminating redundant global tail re-evaluations and protecting cloud API quotas.
+
+### 3.5.1. Historical Memory Reconciliation & Catch-Up Engine (Issue #557)
+To reconcile and backfill any historical forecasting anomalies from `data/prediction_history.csv` into local SQLite or Vectorize Hindsight memory banks:
+```bash
+# Reconcile all forecasting anomalies evaluated since a specific target date
+python scripts/reconcile_hindsight_memory.py --start-date 2026-09-25
+```
+This CLI tool automatically detects whether Vectorize Hindsight Hosted SaaS (`HINDSIGHT_API_KEY`) or local SQLite FTS5 is active and dual-dispatches any unretained prediction shocks ($|\text{error}| \ge \$0.25/\text{gal}$ or directional flips), ensuring zero loss of episodic memory context.
+
+### 3.5.2. Closed-Loop Episodic Grounding & Relational Telemetry (`src/hindsight_context.py`, Issue #559)
+Midgley v0.8.0 closes the loop between qualitative LLM forecasting and historical market experience:
+* **Pre-Forecast Precedent Injection:** When news or scenario prompts contain disruption catalyst terms (refinery unit outages, pipeline closures, river draft constraints, hurricane threats, RVP compliance deadlines), `src/hindsight_context.py` injects empirical precedents (`[HISTORICAL EPISODIC MEMORY PRECEDENT]`) into LLM scoring prompts, grounding qualitative forecasts with historical outage durations, pass-through lags, and realized price reaction bounds.
+* **Post-Settlement Causal Reflection:** `evaluate_and_reflect_settled_anomalies()` classifies large deviations ($>2\sigma$ or directional flips) into structured failure modes (`OVERESTIMATED_SHOCK`, `UNDERESTIMATED_SHOCK`, `DIRECTIONAL_FLIP`, `BASIS_DIVERGENCE`), recording durable reflections into Hindsight memory.
+* **Relational Telemetry Table (`hindsight_telemetry`):** All `RECALL`, `REFLECT`, and `RETAIN` operations log audit records (query, result summary, latency, status) directly into the unified database schema (`src/db/schema.sql`).
 
 ---
 
@@ -343,7 +389,7 @@ Midgley provides a production-hardened multi-stage Docker container built on `py
 
 ```bash
 # 1. Pull the pinned release container image
-docker pull ghcr.io/koshiirra/midgley:v0.7.0
+docker pull ghcr.io/koshiirra/midgley:v0.8.0
 
 # 2. Ensure host data directory exists
 mkdir -p data backups
@@ -357,7 +403,7 @@ docker run -d \
   -e GEMINI_API_KEY="AIzaSy..." \
   -e FINLIGHT_API_KEY="fl_live_..." \
   -e MIDGLEY_ADMIN_SECRET="sec_admin_secret_here" \
-  ghcr.io/koshiirra/midgley:v0.7.0
+  ghcr.io/koshiirra/midgley:v0.8.0
 
 # 4. Verify unauthenticated API server health
 curl http://localhost:8000/health
@@ -373,7 +419,7 @@ version: '3.8'
 
 services:
   midgley:
-    image: ghcr.io/koshiirra/midgley:v0.7.0
+    image: ghcr.io/koshiirra/midgley:v0.8.0
     container_name: midgley
     restart: unless-stopped
     ports:
@@ -384,7 +430,7 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - FINLIGHT_API_KEY=${FINLIGHT_API_KEY}
       - MIDGLEY_ADMIN_SECRET=${MIDGLEY_ADMIN_SECRET}
-      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie
+      - MIDGLEY_ENABLED_REGIONS=national,tulsa,newark,cincinnati,greenville,charlotte,oakland,port_st_lucie,chicago,houston
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -463,7 +509,7 @@ docker run -d \
   -p 8000:8000 \
   -v $(pwd)/data:/app/data \
   --env-file .env \
-  ghcr.io/koshiirra/midgley:v0.7.0
+  ghcr.io/koshiirra/midgley:v0.8.0
 
 # 4. Verify API recovery
 curl http://localhost:8000/health
@@ -501,13 +547,33 @@ curl http://localhost:8000/api/v1/system/quota
 ```
 
 ### Step 3: Run Baseline Forecast Pipeline & Alpha Factor Mining
-Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, regional diesel engines, and generates the public web dashboard):
+Execute the full multi-region prediction pipeline (which runs National Wholesale RBOB futures, Tulsa, Newark, Cincinnati, Greenville, Charlotte, Oakland, Port St. Lucie, Chicago, Houston, Los Angeles, regional diesel engines, and generates the public web dashboard):
 ```bash
 python3 run_all.py --use-llm-api
 ```
 
 > [!NOTE]
 > If you wish to run only the standalone National Wholesale RBOB model without calibrating regional metros, execute `python3 -m src.locations.national.main --use-llm-api`. Note that `--use-llm-api` is the canonical CLI flag (the `--llm` flag is deprecated and ignored). If `GEMINI_API_KEY` is omitted, `--use-llm-api` gracefully routes event scoring to the zero-cost Tier 3 offline lexicon.
+
+#### Forward Regulatory & Tax Calendar Customization (`data/known_future_events.json`)
+Midgley models deterministic forward shifts (e.g., annual California SB 1 excise tax rate updates on July 1, EPA summer RVP terminal deadlines on May 1, and winter transition on Sept 16) via `data/known_future_events.json`. To register custom state fuel tax adjustments or municipal fee changes:
+```json
+[
+  {
+    "effective_date": "2027-07-01",
+    "region": "Oakland_CA",
+    "event_type": "EXCISE_TAX_ADJUSTMENT",
+    "delta_tax_dollars": 0.022,
+    "description": "California annual statutory fuel excise tax inflation reset"
+  }
+]
+```
+
+#### Mixed-Frequency Kalman Filter Metro Nowcasting (`src/metro_nowcast.py`)
+To generate point-in-time filtered nowcasts fusing daily AAA station prices, crowdsourced GasBuddy metrics, and weekly EIA surveys:
+```bash
+python3 -c "from src.metro_nowcast import nowcast_metro_price; print(nowcast_metro_price('Tulsa_OK'))"
+```
 
 Mine Qlib symbolic alpha factors and evaluate DDG-DA domain adaptation benchmarks:
 ```bash
@@ -719,7 +785,7 @@ All workflow triggers in `.github/workflows/` evaluate strictly against UTC. The
 
 | Workflow Name | Workflow File | Cron Expression | UTC Time | US Central Time (CDT / CST) | US Eastern Time (EDT / EST) | Purpose |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Daily Gas Price Forecast** | `.github/workflows/gas_price_forecast.yml` | `17 7 * * *` | 07:17 UTC | 02:17 AM CDT / 01:17 AM CST | 03:17 AM EDT / 02:17 AM EST | Full multi-region forecasting & Pages deployment |
+| **Daily Gas Price Forecast** | .github/workflows/gas_price_forecast.yml | 17 22 * * * | 22:17 UTC | 05:17 PM CDT / 04:17 PM CST | 06:17 PM EDT / 05:17 PM EST | Full multi-region forecasting & Pages deployment |
 | **Weekly Model Review** | `.github/workflows/weekly_model_review.yml` | `12 13 * * 6` | Sat 13:12 UTC | Sat 08:12 AM CDT / 07:12 AM CST | Sat 09:12 AM EDT / 08:12 AM EST | Saturday performance audit & Hindsight reflection |
 | **Intraday Fallback Monitor** | `.github/workflows/intraday_event_monitor.yml` | `0 */2 * * *` | Every 2 hours | Every 2 hours | Every 2 hours | 2-hour fallback RSS polling & webhook gateway |
 | **Nightly Dev Release** | `.github/workflows/nightly_dev_release.yml` | `0 8 * * *` | 08:00 UTC | 03:00 AM CDT / 02:00 AM CST | 04:00 AM EDT / 03:00 AM EST | Automated nightly development snapshot release |
@@ -1077,8 +1143,31 @@ Execute formal 5-tier nested baseline hierarchy evaluations with Diebold-Mariano
 python3 scripts/evaluate_model_hierarchy.py --all-locales --horizons 1,2,3,4,5 --format all --output data/model_hierarchy_evaluation.json
 ```
 
+### 13. Execute Statistical Rigor & Feature Admission Evaluation (Issue #452)
+Run the rigorous statistical evaluation suite (Pesaran-Timmermann directional test, Newey-West HAC standard errors, Hansen Model Confidence Set bootstrap, and Benjamini-Hochberg FDR control):
+```bash
+python3 scripts/evaluate_forecast_rigor.py --region Tulsa_OK --horizons 1,3,5 --output data/statistical_rigor_report.json
+```
+
+### 14. Verify Hierarchical MinT Spatial Reconciliation & Empirical Bayes Shrinkage (Issue #450)
+Verify spatial hierarchy consistency (Metros -> PADDs -> National) and test MinT optimal projection:
+```bash
+python3 -c "from src.hierarchical_engine import build_aggregation_matrix, reconcile_mint; S, n, b = build_aggregation_matrix(); print(f'Aggregation Matrix shape: {S.shape}, Bottom nodes: {b}, Total nodes: {n}')"
+```
+
+### 16. Verify Dashboard Generation & WCAG 2.1 AA Accessibility (Issue #569)
+Generate all static dashboard HTML pages and execute full accessibility test assertions:
+```bash
+# Generate public web dashboard and telemetry views
+python3 -c "from src.dashboard_generator import generate_public_dashboard, generate_telemetry_page; generate_public_dashboard(); generate_telemetry_page()"
+
+# Run comprehensive accessibility and dashboard test suite
+pytest tests/test_dashboard_generator.py -v
+```
+
 ---
 
-*Midgley Version: `v0.7.0` | Engine: Gemini 2.5 Flash + Ridge (α=10.0) | License: Apache 2.0*
+*Midgley Version: `v0.8.6` | Engine: Gemini 3.8 Flash + Ridge (α=10.0) | License: Apache 2.0*
+
 
 

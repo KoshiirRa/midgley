@@ -161,6 +161,28 @@ class TestDiscordNotifier(unittest.TestCase):
             self.assertEqual(req_arg.get_method(), "POST")
             self.assertEqual(req_arg.headers.get("Content-type"), "application/json")
 
+    def test_format_payload_extreme_lengths(self):
+        long_event = {
+            "headline": "A" * 5000,
+            "source": "B" * 500,
+            "url": "https://example.com/" + "C" * 2000,
+            "archive_url": "https://web.archive.org/" + "D" * 2000,
+            "target_locales": ["National", "Tulsa", "Cincinnati", "Oakland", "BayArea", "Greenville", "Charlotte", "Newark", "Port_St_Lucie"],
+            "scores": {
+                "overall_price_pressure": 0.45,
+                "supply_disruption": 0.80,
+                "geopolitical_risk": 0.10,
+                "opec_action": 0.0
+            }
+        }
+        payload = format_intraday_discord_payload(long_event, environment="prod")
+        embed = payload["embeds"][0]
+        self.assertLessEqual(len(embed["title"]), 256)
+        self.assertLessEqual(len(embed["description"]), 4096)
+        for field in embed["fields"]:
+            self.assertLessEqual(len(field["name"]), 256)
+            self.assertLessEqual(len(field["value"]), 1024)
+
     @patch("urllib.request.urlopen")
     def test_send_notification_http_error(self, mock_urlopen):
         mock_urlopen.side_effect = urllib.error.URLError("Connection refused")
@@ -172,6 +194,116 @@ class TestDiscordNotifier(unittest.TestCase):
             )
             self.assertFalse(res)
 
+    def test_flag_link_long_headline_signature_alignment(self):
+        """Asserts that headlines > 120 chars sign the exact truncated URL parameter (Issue #605)."""
+        import urllib.parse
+        import hmac
+        import hashlib
+
+        long_headline = "A" * 150
+        event = {
+            "headline": long_headline,
+            "source": "RSS_GoogleNews",
+            "url": "https://example.com/long-article",
+            "scores": {"overall_price_pressure": 0.20, "supply_disruption": 0.10}
+        }
+        signing_key = "test_signing_key_secret_for_flagging"
+        with patch.dict(os.environ, {"FLAG_SIGNING_KEY": signing_key}):
+            payload = format_intraday_discord_payload(event, include_components=True)
+            comp_url = payload["components"][0]["components"][0]["url"]
+            parsed = urllib.parse.urlparse(comp_url)
+            qs = urllib.parse.parse_qs(parsed.query)
+
+            self.assertIn("headline", qs)
+            url_headline = qs["headline"][0]
+            self.assertEqual(url_headline, "A" * 120 + "...")
+            self.assertIn("sig", qs)
+            sig = qs["sig"][0]
+            exp = qs["exp"][0]
+            event_id = qs["id"][0]
+
+            # Verify that recalculating HMAC on the URL-truncated headline produces the exact same signature
+            headline_hash = hashlib.sha256(url_headline.encode("utf-8")).hexdigest()[:16]
+            expected_msg = f"flag_fp:v2|{event_id}|{headline_hash}|{exp}".encode("utf-8")
+            expected_sig = hmac.new(signing_key.encode("utf-8"), expected_msg, hashlib.sha256).hexdigest()[:32]
+            self.assertEqual(sig, expected_sig)
+
+    def test_flag_link_fallback_signing_keys(self):
+        """Asserts that flag links sign using CLOUDFLARE_AUTH_TOKEN or ADMIN_TOKEN if FLAG_SIGNING_KEY is absent."""
+        import urllib.parse
+        event = {
+            "headline": "Energy Supply Interruption",
+            "source": "RSS_Feed",
+            "url": "https://example.com/alert",
+            "scores": {"overall_price_pressure": 0.45, "supply_disruption": 0.50}
+        }
+        # Fallback to CLOUDFLARE_AUTH_TOKEN
+        with patch.dict(os.environ, {"CLOUDFLARE_AUTH_TOKEN": "cf_secret_key"}, clear=True):
+            payload = format_intraday_discord_payload(event, include_components=True)
+            comp_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(comp_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+
+        # Fallback to ADMIN_TOKEN
+        with patch.dict(os.environ, {"ADMIN_TOKEN": "admin_secret_key"}, clear=True):
+            payload = format_intraday_discord_payload(event, include_components=True)
+            comp_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(comp_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+
+
+    def test_format_duplicate_review_payload(self):
+        """Verifies duplicate review payload structure, Amber color, and action links."""
+        from src.discord_notifier import format_duplicate_review_discord_payload
+        new_event = {
+            "headline": "Exxon Joliet refinery unit flare forces unit shutdown",
+            "source": "Feed_Poller",
+            "url": "https://example.com/exxon-new",
+            "target_locales": ["Cincinnati"],
+            "scores": {"overall_price_pressure": 0.45, "supply_disruption": 0.60}
+        }
+        prior_event = {
+            "headline": "Exxon Joliet refinery suffers total power outage",
+            "url": "https://example.com/exxon-old",
+            "age_hours": 14.5
+        }
+        payload = format_duplicate_review_discord_payload(
+            new_event=new_event,
+            prior_event=prior_event,
+            matched_entity="ExxonMobil (Joliet Refinery)",
+            similarity=0.85,
+            environment="prod",
+            include_components=True
+        )
+        self.assertIn("embeds", payload)
+        embed = payload["embeds"][0]
+        self.assertIn("Potential Event Duplicate", embed["title"])
+        self.assertEqual(embed["color"], 15960850)  # Amber
+        self.assertIn("ExxonMobil (Joliet Refinery)", str(embed["fields"]))
+        self.assertIn("85% Overlap", str(embed["fields"]))
+
+        self.assertIn("components", payload)
+        buttons = payload["components"][0]["components"]
+        self.assertEqual(len(buttons), 3)
+        labels = [b["label"] for b in buttons]
+        self.assertIn("🔗 Confirm Duplicate", labels)
+        self.assertIn("⚡ Confirm New Incident", labels)
+        self.assertIn("🚩 Flag False Positive", labels)
+
+    def test_send_duplicate_review_notification_testing_suppression(self):
+        """Verifies duplicate review notification is safely suppressed under TESTING=1."""
+        from src.discord_notifier import send_duplicate_review_discord_notification
+        with patch.dict(os.environ, {"TESTING": "1"}, clear=True):
+            res = send_duplicate_review_discord_notification(
+                new_event={"headline": "New Event"},
+                prior_event={"headline": "Prior Event"},
+                matched_entity="Test Entity",
+                similarity=0.75,
+                webhook_url="https://discord.com/api/webhooks/test"
+            )
+            self.assertTrue(res)
+
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -106,6 +106,92 @@ class TestAPIServer(unittest.TestCase):
         sim = data["simulation"]
         self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
 
+    def test_post_simulate_chicago_whiting(self):
+        payload = {
+            "scenario_id": "whiting_refinery_outage",
+            "locale": "chicago"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "whiting_refinery_outage")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "Chicago_IL")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
+    def test_post_simulate_houston_hurricane(self):
+        payload = {
+            "scenario_id": "gulf_hurricane_shut_in",
+            "locale": "houston"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "gulf_hurricane_shut_in")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "Houston_TX")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
+    def test_post_simulate_los_angeles_el_segundo(self):
+        payload = {
+            "scenario_id": "socal_refinery_fccu_outage",
+            "locale": "los_angeles"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "socal_refinery_fccu_outage")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "Los_Angeles_CA")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
+    def test_get_denver_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=denver")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "Denver_CO")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 4 Rocky Mountain")
+
+    def test_post_simulate_denver_suncor(self):
+        payload = {
+            "scenario_id": "suncor_commerce_city_freeze_outage",
+            "locale": "denver"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "suncor_commerce_city_freeze_outage")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "Denver_CO")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
+    def test_get_new_york_forecast(self):
+        res = self.client.get("/api/v1/combined?locale=new_york")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["locale"]["region_id"], "New_York_NY")
+        self.assertEqual(data["locale"]["padd_region"], "PADD 1B Central Atlantic")
+
+    def test_post_simulate_new_york_buckeye(self):
+        payload = {
+            "scenario_id": "buckeye_pipeline_linden_disruption",
+            "locale": "new_york"
+        }
+        res = self.client.post("/api/v1/forecast/simulate", json=payload)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(data["scenario"]["id"], "buckeye_pipeline_linden_disruption")
+        sim = data["simulation"]
+        self.assertEqual(sim["target_locale"], "New_York_NY")
+        self.assertGreater(sim["simulated_price_per_gal"], sim["baseline_price_per_gal"])
+
     def test_post_simulate_invalid_id(self):
         payload = {
             "scenario_id": "invalid_scenario_xyz",

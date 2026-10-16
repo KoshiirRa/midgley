@@ -2,7 +2,7 @@
 Catalog Monitor Engine (src/catalog_monitor.py)
 Monitors curated developer catalog indexes (public-apis, free-for-dev, freestuff.dev,
 free-for-life, awesome, awesome-selfhosted) for newly added entries.
-Evaluates modeling relevance using Gemini 2.5 Flash (with a deterministic heuristic fallback)
+Evaluates modeling relevance using Gemini 3.8 Flash (with a deterministic heuristic fallback)
 and automatically opens GitHub Feature Request issues on KoshiirRa/midgley for worthwhile additions.
 """
 
@@ -76,6 +76,8 @@ def load_catalog_state() -> dict:
 
 def save_catalog_state(state: dict):
     """Saves persistent catalog state to JSON file."""
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
     state["last_scan"] = datetime.now().isoformat()
     try:
@@ -246,7 +248,7 @@ Respond strictly in valid JSON format with:
 }}"""
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.8-flash",
             contents=prompt
         )
         text_resp = response.text.strip()

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "los_angeles_ca",
+  "logger_region_key": "Los_Angeles_CA",
+  "display_name": "Los Angeles Basin, CA Metro Retail",
+  "padd_region": "PADD 5 West Coast",
+  "primary_city": "Los Angeles, CA",
+  "counties": [
+    "Los Angeles",
+    "Orange",
+    "Riverside",
+    "San Bernardino",
+    "Ventura"
+  ],
+  "baseline_price": 4.89,
+  "icon_class": "fa-sun",
+  "theme_color": "amber",
+  "econometric_drivers": {
+    "title": "South Coast Air Basin CaRFG Island & CARBOB Spot Pass-Through",
+    "description": "Models Southern California's isolated PADD 5 CARBOB refining complex and strict South Coast Air Quality Management District (SCAQMD) / CARB Phase 3 reformulated gasoline mandates. Retail pricing is driven by prompt Los Angeles CARBOB wholesale spot basis, CEC Southern California refinery utilization rates, early spring summer-blend RVP cutovers (6.99 psi cap), and San Pedro Bay waterborne import arbitrage."
+  },
+  "refining_logistics": {
+    "title": "Southern California Refining Cluster (~1.02M bpd Operable Capacity)",
+    "description": "Anchored by the dense South Bay and Harbor refining corridor: Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd), PBF Energy Torrance (166 kbpd), Phillips 66 Wilmington (139 kbpd), and Valero Wilmington (85 kbpd). Supplies Southern California, Orange County, the Inland Empire, Las Vegas, and Phoenix via Kinder Morgan SFPP West, South, and East pipeline systems.",
+    "primary_refinery": "Marathon Carson/Wilmington (363 kbpd), Chevron El Segundo (269 kbpd) & PBF Torrance (166 kbpd)",
+    "capacity_bpd": 1022000,
+    "pipelines": [
+      "Kinder Morgan SFPP West Line (Watson Hub to Colton/Inland Empire)",
+      "Kinder Morgan SFPP South Line (Watson Hub to Orange County & San Diego)",
+      "Kinder Morgan SFPP East Line (Colton to Phoenix AZ)",
+      "Crimson Pipeline Southern California Crude Network",
+      "Port of Los Angeles & Port of Long Beach Marine Tanker Berths"
+    ]
+  },
+  "tax_structure": {
+    "title": "CARB Environmental Tax, Cap-and-Trade & LA County Sales Tax Burden",
+    "description": "California imposes $0.953/gal state environmental tax and regulatory fee burden ($0.596 excise + $0.234 Cap-and-Trade + $0.088 LCFS + $0.035 UST/fees), yielding $1.407/gal total statutory tax with Federal excise ($0.184/gal) and Los Angeles County/Metro district sales taxes.",
+    "state_tax_per_gal": 0.953,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 1.407,
+    "notes": "CARB Phase 3 CaRFG mandate + South Coast AQMD Rule 461 vapor recovery compliance"
+  },
+  "infrastructure_delivery": {
+    "title": "Los Angeles CARBOB Spot & Watson Station Rack Margin Dynamics",
+    "equation_latex": "\\text{Rack Margin}_{\\text{LA}} = P_{\\text{LA Retail}} - P_{\\text{LA CARBOB Spot}} = \\$4.890 - \\$2.890 = \\$2.000/\\text{gal}",
+    "description": "Reflects prompt Los Angeles CARBOB wholesale spot benchmark (EIA EER_EPMRU_PF4_RLA_DPG), Kinder Morgan Watson Station (Carson) terminal injection, SCAQMD 6.99 psi summer volatility cap, and Newport-Inglewood / Palos Verdes fault seismic monitoring.",
+    "hub_distance_miles": 14,
+    "hub_name": "Kinder Morgan Watson Station (Carson) & El Segundo / Torrance Refining Hub"
+  },
+  "shock_scenarios": [
+    {
+      "name": "El Segundo / Torrance FCCU & Alkylation Outage",
+      "subtitle": "Unplanned South Bay Refinery Flaring Event",
+      "price_impact_per_gal": 0.450,
+      "pct_impact": 9.20,
+      "description": "Unplanned FCCU or alkylation trip at Chevron El Segundo (269 kbpd) or PBF Torrance (166 kbpd) spikes LA CARBOB spot basis"
+    },
+    {
+      "name": "USGS Newport-Inglewood Fault Quake (M>=6.0)",
+      "subtitle": "South Bay Refinery Trip & SFPP Pipeline Shutoff",
+      "price_impact_per_gal": 0.480,
+      "pct_impact": 9.82,
+      "description": "Triggers automatic seismic shutoff valves at Kinder Morgan Watson hub and precautionary hydrocracker trips across Carson/Wilmington"
+    },
+    {
+      "name": "Santa Ana Wildfire / SCE PSPS Grid Curtailment",
+      "subtitle": "Red Flag Wind Event & Substation De-Energization",
+      "price_impact_per_gal": 0.295,
+      "pct_impact": 6.03,
+      "description": "Southern California Edison (SCE) voltage sags and high-wind marine berth delays at San Pedro Bay tighten prompt LA Basin rack supply"
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 4450000,
+    "zero_vehicle_pct": 6.8,
+    "vehicles_per_household": 1.84,
+    "drive_alone_share": 0.735,
+    "carpool_share": 0.095,
+    "public_transit_share": 0.048,
+    "work_from_home_share": 0.122,
+    "mean_commute_minutes": 31.8,
+    "vehicle_dependency_ratio": 0.830,
+    "transit_alternative_index": 0.092,
+    "inelastic_demand_score": 0.815
+  }
+}

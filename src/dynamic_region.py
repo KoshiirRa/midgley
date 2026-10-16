@@ -64,7 +64,8 @@ class DynamicRegionRunner:
         history_csv = os.path.join(PROJECT_ROOT, "data", "prediction_history.csv")
         if os.path.exists(history_csv):
             try:
-                df = pd.read_csv(history_csv)
+                from src.prediction_logger import read_prediction_history
+                df = read_prediction_history(history_csv)
                 reg_df = df[df['region'].astype(str).str.lower() == self.logger_region_key.lower()]
                 if not reg_df.empty and 'current_base_price' in reg_df.columns:
                     prices = reg_df['current_base_price'].dropna().astype(float).values

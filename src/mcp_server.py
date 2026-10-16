@@ -248,6 +248,24 @@ async def list_tools() -> list[types.Tool]:
             }
         ),
         types.Tool(
+            name="get_pirate_weather_telemetry",
+            description="Fetches high-resolution NOAA HRRR / ERA5 weather reanalysis and physical risk indices for energy refining hubs and transit corridors via Pirate Weather (Issue #442).",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "hub": {
+                        "type": "string",
+                        "description": "Refining hub or regional metro: tulsa_cushing, delaware_city, cincinnati_catlettsburg, oakland_richmond, greenville_selma, charlotte_paw_creek, port_st_lucie_everglades, gulf_coast_houston",
+                        "default": "tulsa_cushing"
+                    },
+                    "target_date": {
+                        "type": "string",
+                        "description": "Optional ISO date (YYYY-MM-DD) for historical reanalysis (timemachine mode). Defaults to live."
+                    }
+                }
+            }
+        ),
+        types.Tool(
             name="get_usgs_seismic_telemetry",
             description="Fetches real-time USGS earthquake and ground shaking telemetry evaluated against critical petroleum refining, pipeline, and storage infrastructure (Issue #55).",
             inputSchema={
@@ -455,6 +473,14 @@ async def call_tool(
             cluster = args.get("cluster")
             connector = USGSWaterFeedConnector()
             res = connector.fetch_live_water_telemetry(cluster=cluster)
+            return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
+
+        elif name == "get_pirate_weather_telemetry":
+            from src.noaa_weather import PirateWeatherConnector
+            hub = args.get("hub", "tulsa_cushing")
+            target_date = args.get("target_date")
+            connector = PirateWeatherConnector()
+            res = connector.fetch_hub_weather(hub_name_or_code=hub, target_date=target_date)
             return [types.TextContent(type="text", text=json.dumps(res, indent=2))]
 
         elif name == "get_usgs_seismic_telemetry":

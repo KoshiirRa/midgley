@@ -1,9 +1,11 @@
 """
 LLM Event Analyzer Module
 Extracts structured numerical factor scores from unstructured text headlines and news reports.
-Supports ultra-fast Single-Batch LLM invocation (Google Gemini 2.5 Flash) with in-memory caching
+Supports ultra-fast Single-Batch LLM invocation (Google Gemini 3.8 Flash) with in-memory caching
 and a robust deterministic rule-based fallback.
 """
+
+from __future__ import annotations
 
 import os
 import re
@@ -13,6 +15,7 @@ import hashlib
 import pandas as pd
 import numpy as np
 import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 from src.lookup_cache import global_cache
 from src.telemetry import log_llm_usage
 from src.tokentab_accounting import token_tab_manager
@@ -73,7 +76,7 @@ _LLM_SCORE_CACHE = {}
 
 from src.knowledge_graph import kg_engine
 
-# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093)
+# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093 / Hindsight Episodic Memory)
 LLM_SINGLE_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following energy news headline/event description and extract structured numerical impact scores regarding unleaded gasoline and crude oil prices.
@@ -81,6 +84,7 @@ Analyze the following energy news headline/event description and extract structu
 Headline/Event: "{headline}"
 {graph_context}
 {spectral_context}
+{hindsight_context}
 Return ONLY a raw JSON object with the following fields:
 - "geopolitical_risk": float between -1.0 (de-escalation/peace) and +1.0 (war/sanctions/conflict)
 - "supply_disruption": float between 0.0 (no disruption) and +1.0 (major refinery/pipeline/shipping shutdown)
@@ -96,6 +100,7 @@ LLM_BATCH_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following JSON list of energy news headlines/event descriptions and extract structured numerical impact scores for each item.
 {spectral_context}
+{hindsight_context}
 Input Headlines:
 {headlines_json}
 
@@ -109,7 +114,7 @@ Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each obje
 JSON Array Output:
 """
 
-def _try_openai_single(headline: str, graph_context: str = "", spectral_context: str = "") -> dict:
+def _try_openai_single(headline: str, graph_context: str = "", spectral_context: str = "", hindsight_context: str = "") -> dict:
     openai_key = os.environ.get("OPENAI_API_KEY")
     if not openai_key:
         return None
@@ -118,7 +123,12 @@ def _try_openai_single(headline: str, graph_context: str = "", spectral_context:
         client = openai.OpenAI(api_key=openai_key)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context, spectral_context=spectral_context)}],
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(
+                headline=headline,
+                graph_context=graph_context,
+                spectral_context=spectral_context,
+                hindsight_context=hindsight_context
+            )}],
             temperature=0.1,
             response_format={"type": "json_object"}
         )
@@ -137,7 +147,7 @@ def _try_openai_single(headline: str, graph_context: str = "", spectral_context:
         return None
 
 
-def _try_anthropic_single(headline: str, graph_context: str = "", spectral_context: str = "") -> dict:
+def _try_anthropic_single(headline: str, graph_context: str = "", spectral_context: str = "", hindsight_context: str = "") -> dict:
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if not anthropic_key:
         return None
@@ -147,7 +157,12 @@ def _try_anthropic_single(headline: str, graph_context: str = "", spectral_conte
         response = client.messages.create(
             model="claude-3-5-haiku-20241022",
             max_tokens=300,
-            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context, spectral_context=spectral_context)}]
+            messages=[{"role": "user", "content": LLM_SINGLE_PROMPT.format(
+                headline=headline,
+                graph_context=graph_context,
+                spectral_context=spectral_context,
+                hindsight_context=hindsight_context
+            )}]
         )
         text = response.content[0].text.strip()
         if "```json" in text:
@@ -199,6 +214,14 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     graph_md = kg_schema.to_markdown()
     graph_context_str = f"\n{graph_md}\n" if graph_md else ""
 
+    # Build Hindsight Episodic Memory Precedent Context
+    hindsight_context_str = ""
+    try:
+        from src.hindsight_context import inject_hindsight_context
+        hindsight_context_str, _ = inject_hindsight_context(headline)
+    except Exception as e:
+        logger.debug(f"Hindsight context injection notice: {e}")
+
     # Enforce Basic Tier Zero-Cost Provider Routing
     if tier == "basic":
         scores = ZeroCostProviderHook.extract_zero_cost_scores(headline, is_basic_tier=True)
@@ -216,17 +239,22 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
     provider_used = "offline_lexicon"
     scores = None
 
-    # Tier 1: Gemini 2.5 Flash
+    # Tier 1: Gemini 3.8 Flash
     if api_key:
         try:
-            prompt_str = LLM_SINGLE_PROMPT.format(headline=headline, graph_context=graph_context_str, spectral_context=spectral_context)
+            prompt_str = LLM_SINGLE_PROMPT.format(
+                headline=headline,
+                graph_context=graph_context_str,
+                spectral_context=spectral_context,
+                hindsight_context=hindsight_context_str
+            )
             try:
                 from google import genai
                 from google.genai import types
                 client = genai.Client(api_key=api_key)
-                config = types.GenerateContentConfig(temperature=0.1)
+                config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model='gemini-3.8-flash',
                     contents=prompt_str,
                     config=config
                 )
@@ -251,15 +279,25 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 "opec_action": float(parsed.get("opec_action", 0.0)),
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
             }
-            provider_used = "gemini-2.5-flash"
-            log_llm_usage("google", "gemini-2.5-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
-            token_tab_manager.record_usage("gemini-2.5-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
+            provider_used = "gemini-3.8-flash"
+            log_llm_usage("google", "gemini-3.8-flash", prompt_tokens=len(headline.split()) * 2 + 100, completion_tokens=80, is_fallback=False)
+            token_tab_manager.record_usage("gemini-3.8-flash", "event_extraction", len(headline.split()) * 2 + 100, 80, status="success")
         except Exception as e:
             logger.debug(f"Gemini single API call notice ({e}). Checking Tier 2 secondary providers...")
 
     # Tier 2: Secondary OpenAI / Anthropic Soft Failover
     if not scores:
-        sec_scores = _try_openai_single(headline, graph_context=graph_context_str, spectral_context=spectral_context) or _try_anthropic_single(headline, graph_context=graph_context_str, spectral_context=spectral_context)
+        sec_scores = _try_openai_single(
+            headline,
+            graph_context=graph_context_str,
+            spectral_context=spectral_context,
+            hindsight_context=hindsight_context_str
+        ) or _try_anthropic_single(
+            headline,
+            graph_context=graph_context_str,
+            spectral_context=spectral_context,
+            hindsight_context=hindsight_context_str
+        )
         if sec_scores:
             scores = sec_scores
             provider_used = "secondary_llm"
@@ -292,7 +330,7 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
 
 def extract_batch_event_features_llm(headlines: list, api_key: str = None, spectral_context: str = "") -> list:
     """
-    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 2.5 Flash API call,
+    Ultra-Fast Batch Processor: Scores an array of headlines in 1 single Gemini 3.8 Flash API call,
     leveraging multi-tier lookup caching with SHA-256 digests.
     """
     # Check in-memory and multi-tier lookup cache first
@@ -314,17 +352,39 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
             
         if api_key:
             try:
-                logger.info(f"⚡ Launching Single-Batch Gemini 2.5 Flash LLM call for {len(uncached)} headlines...")
+                logger.info(f"⚡ Launching Single-Batch Gemini 3.8 Flash LLM call for {len(uncached)} headlines...")
                 input_json_str = json.dumps([{"id": i, "headline": h} for i, h in enumerate(uncached)], indent=2)
-                prompt = LLM_BATCH_PROMPT.format(headlines_json=input_json_str, spectral_context=spectral_context)
+                
+                # Retrieve collective hindsight context for catalyst headlines in batch (Issue #586 N-4)
+                hindsight_batch_context_str = ""
+                try:
+                    from src.hindsight_context import (
+                        is_catalyst_headline,
+                        query_episodic_precedents,
+                        format_hindsight_precedent_prompt_block,
+                        is_hindsight_prompt_injection_enabled
+                    )
+                    if is_hindsight_prompt_injection_enabled():
+                        batch_catalysts = [h for h in uncached if is_catalyst_headline(h)]
+                        if batch_catalysts:
+                            precedents = query_episodic_precedents(" ".join(batch_catalysts[:3]), top_k=2)
+                            hindsight_batch_context_str = format_hindsight_precedent_prompt_block(precedents)
+                except Exception:
+                    hindsight_batch_context_str = ""
+
+                prompt = LLM_BATCH_PROMPT.format(
+                    headlines_json=input_json_str,
+                    spectral_context=spectral_context,
+                    hindsight_context=hindsight_batch_context_str
+                )
                 
                 try:
                     from google import genai
                     from google.genai import types
                     client = genai.Client(api_key=api_key)
-                    config = types.GenerateContentConfig(temperature=0.1)
+                    config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                     response = client.models.generate_content(
-                        model='gemini-2.5-flash',
+                        model='gemini-3.8-flash',
                         contents=prompt,
                         config=config
                     )
@@ -592,5 +652,107 @@ def investigate_event_with_pasa(
             "scores": single_scores,
             "status": "fallback"
         }
+
+
+def compute_text_jaccard_similarity(text1: str, text2: str) -> float:
+    """
+    Computes semantic text similarity combining token Jaccard, containment index,
+    and character 3-gram Dice coefficient for robust news wire deduplication (Issue #446).
+    """
+    tokens1 = set(re.findall(r"\b\w{2,}\b", text1.lower()))
+    tokens2 = set(re.findall(r"\b\w{2,}\b", text2.lower()))
+    if not tokens1 or not tokens2:
+        return 0.0
+
+    intersection = len(tokens1.intersection(tokens2))
+    union = len(tokens1.union(tokens2))
+    jaccard = float(intersection / union) if union > 0 else 0.0
+    containment = float(intersection / min(len(tokens1), len(tokens2)))
+
+    # Character 3-gram overlap
+    t1_clean = re.sub(r"\s+", " ", text1.lower().strip())
+    t2_clean = re.sub(r"\s+", " ", text2.lower().strip())
+    ng1 = set(t1_clean[i:i+3] for i in range(len(t1_clean) - 2)) if len(t1_clean) >= 3 else set()
+    ng2 = set(t2_clean[i:i+3] for i in range(len(t2_clean) - 2)) if len(t2_clean) >= 3 else set()
+    ng_dice = float(2.0 * len(ng1.intersection(ng2)) / (len(ng1) + len(ng2))) if (ng1 and ng2) else 0.0
+
+    return float(max(jaccard, containment, ng_dice))
+
+
+
+def cluster_and_deduplicate_headlines(
+    events: List[Dict[str, Any]],
+    rolling_window_hours: int = 48,
+    similarity_threshold: float = 0.60
+) -> List[Dict[str, Any]]:
+    """
+    Performs semantic rolling-window deduplication and clustering on news wire headlines (Issue #446).
+    Groups near-identical syndicated stories, aggregates story velocity, and preserves primary unique events.
+    """
+    if not events:
+        return []
+
+    deduped = []
+    for ev in events:
+        headline = ev.get("headline", "") or ev.get("title", "")
+        if not headline:
+            continue
+
+        matched_cluster = None
+        for item in reversed(deduped):
+            prev_headline = item.get("headline", "")
+            sim = compute_text_jaccard_similarity(headline, prev_headline)
+            if sim >= similarity_threshold:
+                matched_cluster = item
+                break
+
+        if matched_cluster is not None:
+            matched_cluster["cluster_story_count"] = matched_cluster.get("cluster_story_count", 1) + 1
+            if "duplicates" not in matched_cluster:
+                matched_cluster["duplicates"] = []
+            matched_cluster["duplicates"].append(headline)
+        else:
+            entry = dict(ev)
+            entry["cluster_story_count"] = 1
+            entry["duplicates"] = []
+            deduped.append(entry)
+
+    return deduped
+
+
+def normalize_event_shocks(
+    events_df: pd.DataFrame,
+    window_days: int = 90,
+    categories: Optional[List[str]] = None
+) -> pd.DataFrame:
+    """
+    Applies rolling baseline z-score & logarithmic shock normalization (Issue #446).
+    Prevents shock saturation/clipping during high-velocity news periods.
+    """
+    if events_df is None or events_df.empty:
+        return events_df
+
+    df = events_df.copy()
+    cat_cols = categories or [
+        "geopolitical_risk",
+        "supply_disruption",
+        "demand_sentiment",
+        "opec_action",
+        "overall_price_pressure"
+    ]
+
+    for col in cat_cols:
+        if col in df.columns:
+            s = df[col].astype(float)
+            log_compressed = np.sign(s) * np.log1p(np.abs(s))
+            df[f"{col}_log"] = np.round(log_compressed, 4)
+
+            rolling_mean = s.rolling(window=window_days, min_periods=5).mean()
+            rolling_std = s.rolling(window=window_days, min_periods=5).std().replace(0, 1.0)
+            z_score = (s - rolling_mean) / rolling_std
+            df[f"{col}_zscore"] = np.round(z_score.fillna(0.0), 4)
+
+    return df
+
 
 

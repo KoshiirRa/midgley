@@ -17,7 +17,7 @@ import time
 import re
 import logging
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Tuple, Optional, Any
 
 # Ensure project root is in sys.path when executed directly
@@ -34,10 +34,15 @@ from src.event_analyzer import extract_event_features_llm, extract_event_feature
 from src.finlight_feed import is_trading_hours, fetch_finlight_on_demand, UNIFIED_ENERGY_QUERY
 from src.lookup_cache import clear_lookup_cache
 from src.prediction_logger import log_predictions, resolve_model_tag
+from src.hindsight_dedupe import HindsightEventDeduplicator
 try:
-    from src.discord_notifier import send_intraday_discord_notification
+    from src.discord_notifier import (
+        send_intraday_discord_notification,
+        send_duplicate_review_discord_notification
+    )
 except ImportError:
     send_intraday_discord_notification = None
+    send_duplicate_review_discord_notification = None
 
 logger = logging.getLogger(__name__)
 
@@ -52,21 +57,29 @@ FREE_RSS_FEEDS = [
 # Excluded Keywords to Filter Non-Energy Outages & Noise
 EXCLUDE_KEYWORDS = [
     "wikipedia", "software outage", "airline outage", "it outage", "cloud outage", "gaming outage", "network outage",
-    "canola", "cooking oil", "palm oil", "olive oil", "soybean oil"
+    "canola", "cooking oil", "palm oil", "olive oil", "soybean oil",
+    "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
+    "peanut oil", "sesame oil", "edible oil", "hydrogenated oil",
+    # Non-commercial / municipal local facility spills (Issue #317)
+    "data center", "data centre", "backup generator", "generator spill", "building spill"
 ]
 
 # Non-Energy Policy Keywords to Filter False Positive Trade/Policy Headlines
 NON_ENERGY_TARIFF_EXCLUDE = [
     "house should not transfer", "tariff authority", "steel tariff", "aluminum tariff", "copper tariff",
     "lumber tariff", "auto tariff", "solar tariff", "washing machine", "semiconductor tariff", "chip tariff",
-    "reciprocal trade act", "section 301", "section 232", "canola", "canola oil"
+    "reciprocal trade act", "section 301", "section 232", "canola", "canola oil",
+    "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
+    "peanut oil", "sesame oil", "edible oil", "hydrogenated oil", "cooking oil",
+    "palm oil", "olive oil", "soybean oil"
 ]
 
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate
 TRIGGER_KEYWORDS = [
     "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
-    "retaliat", "trade war", "opec emergency", "pipeline halt", "pipeline outage",
-    "explosion", "tornado", "blackout", "blockade", "sanction",
+    "opec emergency", "pipeline halt", "pipeline outage",
+    "explosion", "tornado", "blackout", "blockade",
+    "energy sanction", "oil sanction", "fuel sanction", "crude sanction", "petroleum sanction",
     "refinery outage", "refinery halt", "power grid outage", "plant outage", "terminal outage",
     "strait of hormuz", "red sea attack", "spill",
     # Market Technicals & Volatility
@@ -75,16 +88,46 @@ TRIGGER_KEYWORDS = [
     "executive order", "sanction threat", "strait blockade", "strategic petroleum reserve", "spr release", "opec cut", "opec quota",
     # Logistics & Infrastructure Hubs
     "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
-    "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
+    "catlettsburg", "delaware city", "west tulsa", "richmond refinery", "bp whiting", "citgo lemont", "whiting refinery", "lemont refinery",
     # Refinery Operator 8-K Signals (Issue #129 — EDGAR 8-K Monitor)
-    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+    "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66", "bp plc", "citgo",
     "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
     "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
-    "sweeny refinery", "bayway refinery",
+    "sweeny refinery", "bayway refinery", "chicago cbob", "chicago spot",
+    "baytown", "port arthur", "deer park", "texas city", "houston ship channel", "galveston bay", "motiva",
+    "el segundo", "torrance refinery", "carson refinery", "wilmington refinery", "la carbob", "watson station", "san pedro bay",
+    "suncor", "commerce city", "suncor refinery", "denver rack", "rocky mountain refining", "dj basin",
+    # PADD 5 Sub-Market Refining & Distribution (Issue #622)
+    "puget sound", "olympic pipeline", "cherry point", "ferndale refinery", "anacortes refinery",
+    "kinder morgan sfpp", "sfpp pipeline", "maricopa cbg", "phoenix rack",
+    "kenai refinery", "cook inlet", "trans-alaska pipeline", "taps",
+    "kapolei refinery", "par hawaii", "young brothers", "inter-island barge",
+    # PADD 7 Pacific Island Territories Refining & Distribution (Issue #621)
+    "apra harbor", "guam energy office", "mops 92", "mops mogas", "mobil oil guam",
+    "ip&e guam", "shell guam", "sppc 76", "cabras island", "port of guam",
+    # PADD 6 Caribbean Territories Logistics & DACO Regulation (Issue #620)
+    "san juan", "daco", "puerto rico", "capeco", "jones act tanker", "luma energy",
+    "san juan harbor", "puerto nuevo terminal", "puma energy caribe",
+    # PADD 1A New England Refining & Waterborne Supply (Issue #619)
+    "irving oil", "saint john refinery", "boston harbor", "chelsea river",
+    "everett terminal", "padd 1a", "new england gasoline", "massachusetts fuel tax",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
 EVALUATED_CACHE_FILE = os.path.join("data", "evaluated_headlines.json")
+
+
+def _strip_trailing_publisher(headline: str) -> str:
+    """Safely strips trailing publisher attribution without regex backtracking."""
+    s = (headline or "").strip()
+    last_idx = -1
+    for sep in (" - ", " – ", " — ", " | "):
+        idx = s.rfind(sep)
+        if idx > last_idx:
+            last_idx = idx
+    if last_idx > 0:
+        return s[:last_idx].strip()
+    return s
 
 
 def normalize_headline(headline: str) -> str:
@@ -97,17 +140,23 @@ def normalize_headline(headline: str) -> str:
         return ""
     import re
     # Strip trailing publisher tag: " - Publisher Name" or " | Publisher Name" or " — Publisher Name"
-    cleaned = re.sub(r'\s+[-–—|]\s+[^-–—|]+$', '', headline.strip())
+    cleaned = _strip_trailing_publisher(headline)
     # Lowercase and collapse whitespace
     cleaned = re.sub(r'\s+', ' ', cleaned.lower()).strip()
-    # Strip surrounding quotes or brackets
-    cleaned = re.sub(r'^[\'"“‘\[\(]+|[\'"”’\]\)]+$', '', cleaned).strip()
+    # Strip surrounding quotes or brackets safely without regex
+    cleaned = cleaned.strip("'\"“‘[]()”’")
     return cleaned
+
+
+KNOWN_PAYWALLED_DOMAINS = [
+    "energyintel.com", "wsj.com", "bloomberg.com", "ft.com", "reuters.com", "barrons.com"
+]
 
 
 class IntradayEventMonitor:
     def __init__(self, shock_threshold: float = 0.40):
         self.shock_threshold = shock_threshold
+        self.deduplicator = HindsightEventDeduplicator()
 
     def fetch_rss_headlines(self, max_age_hours: float = 72.0) -> List[Dict[str, str]]:
         """Fetches breaking titles from free RSS feeds without using API quotas, discarding stale entries older than max_age_hours."""
@@ -225,11 +274,17 @@ class IntradayEventMonitor:
 
         has_keyword = any(kw in text_lower for kw in TRIGGER_KEYWORDS)
 
-        # Allow tariff/tariffs if accompanied by energy/fuel/oil terms
-        if not has_keyword and ("tariff" in text_lower or "tariffs" in text_lower):
-            energy_context = any(e in text_lower for e in ["oil", "crude", "gasoline", "fuel", "petroleum", "refin", "diesel", "opec", "energy"])
-            if energy_context:
-                has_keyword = True
+        # Broad macro policy, sanctions & tariff keywords require co-occurrence with core energy terms (Issues #258, #312, #318)
+        if not has_keyword:
+            has_macro_policy = bool(re.search(r"\b(tariffs?|sanctions?|embargo|trade\s+war|retaliat\w*)\b", text_lower))
+            if has_macro_policy:
+                energy_context = any(e in text_lower for e in [
+                    "oil", "crude", "gasoline", "fuel", "petroleum", "refin", "diesel",
+                    "opec", "energy", "rbob", "distillate", "cushing", "wti", "brent",
+                    "spr", "crack spread", "barrel", "pipeline", "tanker"
+                ])
+                if energy_context:
+                    has_keyword = True
 
         if not has_keyword:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
@@ -253,7 +308,7 @@ class IntradayEventMonitor:
         is_anomaly = (overall_pressure >= self.shock_threshold) or (supply_disruption >= 0.50)
         return is_anomaly, scores
 
-    def is_headline_already_processed(self, headline: str, url: str = "", max_age_hours: float = 24.0) -> bool:
+    def is_headline_already_processed(self, headline: str, url: str = "", max_age_hours: float = 72.0) -> bool:
         """
         Checks data/intraday_events.json and data/evaluated_headlines.json to see if this
         headline or URL has already been evaluated and logged within the last max_age_hours.
@@ -324,12 +379,55 @@ class IntradayEventMonitor:
 
         return False
 
-    def resolve_target_locales(self, headline: str) -> List[str]:
+    def discover_open_source_coverage(self, headline: str, url: str = "") -> Dict[str, Any]:
+        """
+        Queries free Google News RSS for open/non-paywalled syndicated or local sister articles
+        when an article originates from a paywalled or ambiguous source (Issue #311).
+        Returns a dict with discovered articles, additional context text, and resolved facility tokens.
+        Under TESTING=1 or when feedparser is absent, returns an empty discovery structure without network requests.
+        """
+        is_paywalled = any(dom in (url or "").lower() for dom in KNOWN_PAYWALLED_DOMAINS)
+        has_generic_loc = any(g in headline.lower() for g in ["regional fuel", "refinery outage", "refinery trip", "regional prices"])
+
+        if not is_paywalled and not has_generic_loc:
+            return {"discovered_articles": [], "enriched_context": ""}
+
+        if os.environ.get("TESTING") == "1" or feedparser is None:
+            return {"discovered_articles": [], "enriched_context": ""}
+
+        import urllib.parse
+        clean_hl = _strip_trailing_publisher(headline)
+        tokens = [w for w in clean_hl.split() if w.lower() not in {"adds", "pressure", "to", "regional", "fuel", "prices", "the", "in", "a"}]
+        query_str = " ".join(tokens[:5])
+        if not query_str:
+            return {"discovered_articles": [], "enriched_context": ""}
+
+        search_url = f"https://news.google.com/rss/search?q={urllib.parse.quote_plus(query_str)}+when:3d&hl=en-US&gl=US&ceid=US:en"
+        discovered = []
+        context_snippets = []
+
+        try:
+            feed = feedparser.parse(search_url)
+            for entry in feed.entries[:5]:
+                title = entry.get("title", "").strip()
+                link = entry.get("link", "").strip()
+                if title and link and link != url:
+                    discovered.append({"title": title, "url": link})
+                    context_snippets.append(title)
+        except Exception as e:
+            logger.debug(f"Open-source discovery RSS query failed: {e}")
+
+        return {
+            "discovered_articles": discovered,
+            "enriched_context": " ".join(context_snippets)
+        }
+
+    def resolve_target_locales(self, headline: str, enriched_context: str = "") -> List[str]:
         """
         Maps incoming headline keywords to affected regional metro calibration agents.
         Returns a sorted list of target locale identifiers (e.g. ['Tulsa'], ['Greenville', 'Charlotte'], or ['National']).
         """
-        text = headline.lower()
+        text = (headline + " " + (enriched_context or "")).lower()
         targets = set()
 
         # Tulsa / Cushing / West Tulsa
@@ -340,8 +438,22 @@ class IntradayEventMonitor:
         if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b"]):
             targets.add("Newark")
 
-        # Cincinnati / Catlettsburg / Ohio River
-        if any(k in text for k in ["cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock"]):
+        # Cincinnati / Catlettsburg / Ohio River (PADD 2 Ohio Valley)
+        if any(k in text for k in [
+            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock", "hamilton county", "kenton county"
+        ]):
+            targets.add("Cincinnati")
+
+        # Chicago / Whiting / Lemont / Joliet / Des Plaines (PADD 2 Great Lakes)
+        if any(k in text for k in [
+            "chicago", "whiting", "lemont", "joliet", "will county", "cook county",
+            "bp whiting", "citgo lemont", "exxonmobil joliet", "illinois waterway", "chicago cbob", "chicago spot"
+        ]):
+            targets.add("Chicago")
+
+        # Midcontinent / Group 3 Refining Corridor
+        if any(k in text for k in ["midcontinent", "mid-continent", "group 3"]):
+            targets.add("Tulsa")
             targets.add("Cincinnati")
 
         # Greenville & Charlotte / Colonial Pipeline / Selma / Paw Creek
@@ -353,9 +465,24 @@ class IntradayEventMonitor:
         if any(k in text for k in ["oakland", "sf bay", "san francisco", "richmond refinery", "carb", "california"]):
             targets.add("Oakland")
 
+        # Los Angeles Basin / South Bay Refining Hub (El Segundo, Torrance, Carson, Wilmington)
+        if any(k in text for k in [
+            "los angeles", "el segundo", "torrance", "carson refinery", "wilmington refinery",
+            "san pedro bay", "port of long beach", "watson station", "la carbob", "south coast aqmd",
+            "scaqmd", "palos verdes", "newport-inglewood"
+        ]):
+            targets.add("Los_Angeles")
+
         # Port St. Lucie / Florida / Waterborne Freight
         if any(k in text for k in ["port st. lucie", "port st lucie", "florida", "waterborne freight"]):
             targets.add("Port_St_Lucie")
+
+        # Houston / USGC Refining Complex / Baytown / Port Arthur / Deer Park / Texas City
+        if any(k in text for k in [
+            "houston", "baytown", "port arthur", "deer park", "texas city", "houston ship channel",
+            "galveston bay", "harris county", "padd 3", "padd3", "motiva"
+        ]):
+            targets.add("Houston")
 
         # Refinery Operator 8-K Locale Routing (Issue #129 — EDGAR 8-K Monitor)
         # PBF Energy → Newark (Delaware City Refinery, PADD 1B)
@@ -370,8 +497,88 @@ class IntradayEventMonitor:
         if any(k in text for k in ["marathon petroleum", "marathon 8-k"]):
             targets.add("Cincinnati")
 
+        # BP / Citgo → Chicago (Whiting & Lemont Refineries, PADD 2 Great Lakes)
+        if any(k in text for k in ["bp whiting", "citgo lemont", "whiting refinery", "lemont refinery"]):
+            targets.add("Chicago")
+
+        # Motiva / Baytown / Port Arthur → Houston (USGC Refining Hub)
+        if any(k in text for k in ["motiva", "baytown refinery", "port arthur refinery"]):
+            targets.add("Houston")
+
+        # Denver / Suncor Commerce City / Rocky Mountain (PADD 4)
+        if any(k in text for k in [
+            "denver", "commerce city", "suncor", "suncor refinery", "padd 4", "padd4",
+            "rocky mountain", "rockies", "front range", "dj basin"
+        ]):
+            targets.add("Denver")
+
+        # New York Harbor & New York State / Bayway Refinery / Buckeye Pipeline (PADD 1B)
+        if any(k in text for k in [
+            "new york", "ny harbor", "new york harbor", "buckeye pipeline", "bayway refinery", "long island",
+            "hudson river", "arthur kill", "albany rack", "buffalo rack"
+        ]):
+            targets.add("New_York")
+
+        # Seattle / Puget Sound / PNW / Olympic Pipeline (PADD 5 Northwest)
+        if any(k in text for k in [
+            "seattle", "puget sound", "olympic pipeline", "cherry point", "ferndale",
+            "anacortes", "washington state", "pnw", "bp cherry point", "phillips 66 ferndale",
+            "hf sinclair puget sound"
+        ]):
+            targets.add("Seattle")
+
+        # Phoenix / Desert Southwest / SFPP Pipeline / Maricopa CBG (PADD 5 Southwest)
+        if any(k in text for k in [
+            "phoenix", "desert southwest", "sfpp", "kinder morgan sfpp", "east line", "west line",
+            "maricopa county", "maricopa cbg", "arizona fuel"
+        ]):
+            targets.add("Phoenix")
+
+        # Anchorage / Cook Inlet / Kenai / TAPS / Alaska (PADD 5 Alaska)
+        if any(k in text for k in [
+            "anchorage", "cook inlet", "kenai", "kenai refinery", "trans-alaska pipeline",
+            "taps", "ans crude", "alaska north slope", "alaska railbelt"
+        ]):
+            targets.add("Anchorage")
+
+        # Honolulu / Oahu / Kapolei / Par Hawaii / Inter-Island Barge (PADD 5 Hawaii)
+        if any(k in text for k in [
+            "honolulu", "kapolei", "par hawaii", "oahu", "young brothers", "inter-island barge",
+            "hawaiian islands", "barbers point", "par pacific"
+        ]):
+            targets.add("Honolulu")
+
+        # Guam / Hagåtña / Apra Harbor / Marianas / MOPS / Trans-Pacific (PADD 7 Pacific Territories)
+        if any(k in text for k in [
+            "guam", "hagatna", "apra harbor", "cabras island", "marianas", "mops 92",
+            "mobil oil guam", "ip&e guam", "shell guam", "sppc", "guam energy office", "port of guam"
+        ]):
+            targets.add("Guam")
+
+        # San Juan / Puerto Rico / DACO / Caribbean / PADD 6 (Issue #620)
+        if any(k in text for k in [
+            "san juan", "puerto rico", "daco", "capeco", "luma energy", "san juan harbor",
+            "puerto nuevo", "puma energy caribe", "caribbean petroleum", "caribbean territories"
+        ]):
+            targets.add("San_Juan")
+
+        # Boston / New England / Irving Oil / PADD 1A (Issue #619)
+        if any(k in text for k in [
+            "boston", "new england", "irving oil", "saint john refinery", "chelsea river",
+            "everett terminal", "padd 1a", "massachusetts gasoline", "boston harbor"
+        ]):
+            targets.add("Boston")
+
+        # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
+        if any(k in text for k in ["suncor 8-k", "suncor energy"]):
+            targets.add("Denver")
+
+        # Par Pacific → Honolulu (Kapolei Refinery, PADD 5 Hawaii)
+        if any(k in text for k in ["par pacific", "par pacific 8-k", "par hawaii"]):
+            targets.add("Honolulu")
+
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
-        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery", "bayway refinery"]):
+        if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery"]):
             targets.add("National")
 
         if not targets:
@@ -383,14 +590,18 @@ class IntradayEventMonitor:
         """
         Evaluates an individual incoming headline (from Webhook or RSS), logs anomalies,
         and triggers cache invalidation / prediction revision logging if threshold is met.
-        Deduplicates against previously processed headlines within 24 hours.
+        Deduplicates against previously processed headlines within 72 hours.
         """
-        target_locales = self.resolve_target_locales(headline)
+        # 1. Discover open-source coverage for paywalled or ambiguous headlines (Issue #311)
+        discovery = self.discover_open_source_coverage(headline, url=url)
+        enriched_context = discovery.get("enriched_context", "")
+
+        target_locales = self.resolve_target_locales(headline, enriched_context=enriched_context)
 
         # Deduplication check unless explicitly skipped or running automated test runner
         if not skip_dedup and not source.startswith("Test_"):
             if self.is_headline_already_processed(headline, url=url):
-                logger.info(f"Skipping duplicate headline within 24h window: '{headline}'")
+                logger.info(f"Skipping duplicate headline within 72h window: '{headline}'")
                 return {
                     "timestamp": datetime.now().isoformat(),
                     "headline": headline,
@@ -430,6 +641,7 @@ class IntradayEventMonitor:
             "archive_url": archive_url,
             "is_anomaly": is_anomaly_bool,
             "target_locales": target_locales,
+            "discovered_sources": discovery.get("discovered_articles", []),
             "scores": clean_scores
         }
 
@@ -438,6 +650,38 @@ class IntradayEventMonitor:
             self._save_evaluated_record(result)
 
         if is_anomaly:
+            # 2. Check for potential duplicate / follow-up reports sharing same entity (Issue #258)
+            dedup_check = self.deduplicator.check_potential_duplicate(headline, source=source, url=url)
+            if dedup_check and not source.startswith("Test_"):
+                logger.warning(
+                    f"⚠️ Potential duplicate anomaly detected on entity '{dedup_check['matched_entity']}' "
+                    f"({dedup_check['similarity']*100:.0f}% overlap). Holding for operator review: '{headline}'"
+                )
+                result["pending_review"] = True
+                result["duplicate_candidate_of"] = (
+                    dedup_check["prior_event"].get("hash")
+                    or dedup_check["prior_event"].get("headline")
+                )
+                result["matched_entity"] = dedup_check["matched_entity"]
+                result["similarity"] = dedup_check["similarity"]
+
+                # Dispatch duplicate disambiguation notification to Discord
+                if send_duplicate_review_discord_notification:
+                    try:
+                        sent = send_duplicate_review_discord_notification(
+                            new_event=result,
+                            prior_event=dedup_check["prior_event"],
+                            matched_entity=dedup_check["matched_entity"],
+                            similarity=dedup_check["similarity"]
+                        )
+                        result["duplicate_review_notified"] = bool(sent)
+                    except Exception as e:
+                        logger.warning(f"Failed to dispatch duplicate review Discord notification: {e}")
+
+                if not is_test:
+                    self._save_anomaly_record(result)
+                return result
+
             logger.info(f"🚨 HIGH-IMPACT INTRADAY ANOMALY DETECTED [{source}] (Targets: {target_locales}): '{headline}' (Scores: {scores})")
 
             # Dispatch Discord Webhook Notification (Issue #234)
@@ -455,31 +699,70 @@ class IntradayEventMonitor:
                 # 1. Log anomaly event to disk
                 self._save_anomaly_record(result)
 
+                # 1b. Retain confirmed non-duplicate anomaly into Hindsight SaaS memory bank (midgley-event-dedupe)
+                try:
+                    self.deduplicator.retain_event_in_hindsight(result)
+                except Exception as h_err:
+                    logger.debug(f"Hindsight retention notice: {h_err}")
+
                 # 2. Flush 15-minute SQLite response cache
                 clear_lookup_cache()
                 logger.info("  -> Cleared SQLite response cache for API gateway.")
 
 
-                # 3. Log Intraday Revision Record across target locales
-                for loc in target_locales:
-                    base_p = 3.184
-                    shocked_p = base_p * (1.0 + scores.get("overall_price_pressure", 0.0) * 0.04)
-                    dummy_df = pd.DataFrame([{
-                        "date": datetime.now().strftime("%Y-%m-%d"),
-                        "current_price": base_p,
-                        "predicted_5d_price": shocked_p,
-                        "quant_baseline_5d_price": base_p,
-                        "llm_price_pressure": scores.get("overall_price_pressure", 0.0),
-                        "llm_supply_disruption": scores.get("supply_disruption", 0.0),
-                        "llm_augmentation_delta": round(shocked_p - base_p, 4)
-                    }])
-                    log_predictions(
-                        dummy_df, 
-                        region=loc, 
-                        model_version=resolve_model_tag(region=loc, model_type="Intraday"),
-                        run_type="INTRADAY_REVISION",
-                        headline_trigger=headline
-                    )
+                # 3. Log Intraday Revision Record across target locales (Issue #559, Item E-3)
+                try:
+                    from src.db.client import get_db
+                    import hashlib
+                    db = get_db()
+                    
+                    # Record the anomaly event in intraday_events table
+                    evt_id = hashlib.sha256(f"{headline}_{source}_{datetime.now(timezone.utc).isoformat()}".encode("utf-8")).hexdigest()[:32]
+                    evt_sql = """
+                    INSERT INTO intraday_events (
+                        event_id, headline, source, url, published_at,
+                        geopolitical_risk, supply_disruption, demand_sentiment, opec_action, is_anomaly
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                    ON CONFLICT(event_id) DO NOTHING;
+                    """
+                    db.execute(evt_sql, (
+                        evt_id, headline, source, url or "", datetime.now(timezone.utc).isoformat(),
+                        scores.get("geopolitical_risk", 0.0), scores.get("supply_disruption", 0.0),
+                        scores.get("demand_sentiment", 0.0), scores.get("opec_action", 0.0)
+                    ))
+
+                    for loc in target_locales:
+                        # Find the parent forecast for this locale
+                        parent_rows = db.execute(
+                            "SELECT forecast_id, predicted_price, horizon FROM forecasts WHERE region = ? AND run_type = 'LIVE_PROSPECTIVE' ORDER BY created_at DESC LIMIT 1;",
+                            (loc,)
+                        )
+                        if not parent_rows:
+                            logger.warning(f"No active LIVE_PROSPECTIVE parent forecast found in db for region '{loc}'; skipping intraday revision insert.")
+                            continue
+
+                        parent_f_id = parent_rows[0]["forecast_id"]
+                        base_p = float(parent_rows[0]["predicted_price"])
+                        h_step = int(parent_rows[0].get("horizon", 5))
+
+                        pressure = scores.get("overall_price_pressure", 0.0)
+                        delta_p = round(base_p * pressure * 0.04, 4)
+                        revised_p = round(base_p + delta_p, 4)
+                        rev_id = hashlib.sha256(f"{parent_f_id}_{evt_id}_{datetime.now(timezone.utc).isoformat()}".encode("utf-8")).hexdigest()[:32]
+
+                        rev_sql = """
+                        INSERT INTO intraday_revisions (
+                            revision_id, parent_forecast_id, region, horizon,
+                            delta_price, revised_predicted_price, event_id, rationale
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(revision_id) DO NOTHING;
+                        """
+                        db.execute(rev_sql, (
+                            rev_id, parent_f_id, loc, h_step, delta_p, revised_p, evt_id,
+                            f"Shock alert: {headline[:80]}"
+                        ))
+                except Exception as rev_err:
+                    logger.debug(f"Notice recording intraday revision to database: {rev_err}")
 
                 # 4. Regenerate Public Web Dashboard
                 try:
@@ -498,8 +781,9 @@ class IntradayEventMonitor:
                     if ha_conn.is_configured and (ha_conn.is_prod or live_dev):
                         m_df = fetch_market_data(start_date="2024-01-01")
                         if not m_df.empty:
+                            cl_col = 'wti_crude' if 'wti_crude' in m_df.columns else ('crude_wti' if 'crude_wti' in m_df.columns else None)
                             rb_open = float(m_df['gasoline_rbob'].iloc[-1])
-                            cl_open = float(m_df['crude_wti'].iloc[-1]) if 'crude_wti' in m_df.columns else 75.0
+                            cl_open = float(m_df[cl_col].iloc[-1]) if cl_col else 75.0
                             pressure = scores.get("overall_price_pressure", 0.0)
                             rb_revised = rb_open * (1.0 + pressure * 0.04)
                             cl_revised = cl_open * (1.0 + pressure * 0.035)
@@ -569,6 +853,8 @@ class IntradayEventMonitor:
 
     def _save_evaluated_record(self, record: Dict):
         """Appends evaluated headline record to data/evaluated_headlines.json and prunes records older than 48 hours."""
+        if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_TELEMETRY_PERSIST"):
+            return
         os.makedirs("data", exist_ok=True)
         from datetime import timezone
         now = datetime.now(timezone.utc).replace(tzinfo=None)

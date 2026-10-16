@@ -37,11 +37,17 @@ from src.prediction_logger import (
     get_cloud_sync_status
 )
 from src.regional_metadata import list_all_regional_metadata
-from src.zip_geocoding import resolve_zip_code, get_unmapped_zip_telemetry
+from src.zip_geocoding import (
+    resolve_zip_code,
+    get_unmapped_zip_telemetry,
+    resolve_coordinates,
+    resolve_location,
+)
 from src.tokentab_accounting import token_tab_manager
-from src.key_manager import global_key_manager
+from src.key_manager import global_key_manager, setup_logging_redaction
 from src.version import get_version, get_model_version
 
+setup_logging_redaction()
 logger = logging.getLogger(__name__)
 
 MIDGLEY_ADMIN_SECRET = os.environ.get("MIDGLEY_ADMIN_SECRET")
@@ -60,7 +66,7 @@ async def verify_admin_secret(
 ) -> str:
     """Method B Admin Auth Dependency: Verifies X-Admin-Secret header against MIDGLEY_ADMIN_SECRET (fails closed if unconfigured)."""
     expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
-    if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+    if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_secret.encode("utf-8")):
         raise HTTPException(
             status_code=401,
             detail="Unauthorized: Invalid, missing, or unconfigured X-Admin-Secret header."
@@ -105,7 +111,7 @@ async def get_api_key_user(
         )
 
     expected_global = os.environ.get("MIDGLEY_API_KEY")
-    if expected_global and token == expected_global:
+    if expected_global and hmac.compare_digest(token.encode("utf-8"), expected_global.encode("utf-8")):
         key_info = {
             "key_prefix": "mg_global_master",
             "user_id": "master_admin",
@@ -123,15 +129,25 @@ async def get_api_key_user(
             detail=f"Unauthorized: {err_msg or 'Invalid API key token.'}"
         )
 
-    allowed, retry_after = await global_key_manager.check_rate_limit_async(
+    allowed, retry_after, remaining, reset_seconds = await global_key_manager.check_rate_limit_async(
         key_prefix=key_info["key_prefix"],
         rate_limit_rpm=key_info.get("rate_limit_rpm", 30)
     )
+    request.state.rate_limit = {
+        "limit": key_info.get("rate_limit_rpm", 30),
+        "remaining": remaining,
+        "reset": reset_seconds
+    }
     if not allowed:
         raise HTTPException(
             status_code=429,
             detail=f"Too Many Requests: Rate limit of {key_info.get('rate_limit_rpm', 30)} requests per minute exceeded for key '{key_info['key_prefix']}'.",
-            headers={"Retry-After": str(retry_after)}
+            headers={
+                "Retry-After": str(retry_after),
+                "X-RateLimit-Limit": str(key_info.get("rate_limit_rpm", 30)),
+                "X-RateLimit-Remaining": "0",
+                "X-RateLimit-Reset": str(reset_seconds)
+            }
         )
 
     request.state.key_info = key_info
@@ -205,7 +221,59 @@ LOCALE_MAP = {
     "clt": "Charlotte_NC",
     "port_st_lucie": "Port_St_Lucie_FL",
     "port_st_lucie_fl": "Port_St_Lucie_FL",
-    "psl": "Port_St_Lucie_FL"
+    "psl": "Port_St_Lucie_FL",
+    "chicago": "Chicago_IL",
+    "chicago_il": "Chicago_IL",
+    "chi": "Chicago_IL",
+    "houston": "Houston_TX",
+    "houston_tx": "Houston_TX",
+    "hou": "Houston_TX",
+    "los_angeles": "Los_Angeles_CA",
+    "los_angeles_ca": "Los_Angeles_CA",
+    "la": "Los_Angeles_CA",
+    "la_basin": "Los_Angeles_CA",
+    "socal": "Los_Angeles_CA",
+    "denver": "Denver_CO",
+    "denver_co": "Denver_CO",
+    "den": "Denver_CO",
+    "new_york": "New_York_NY",
+    "new_york_ny": "New_York_NY",
+    "nyc": "New_York_NY",
+    "ny": "New_York_NY",
+    "seattle": "Seattle_WA",
+    "seattle_wa": "Seattle_WA",
+    "puget_sound": "Seattle_WA",
+    "pnw": "Seattle_WA",
+    "sea": "Seattle_WA",
+    "phoenix": "Phoenix_AZ",
+    "phoenix_az": "Phoenix_AZ",
+    "phx": "Phoenix_AZ",
+    "desert_southwest": "Phoenix_AZ",
+    "anchorage": "Anchorage_AK",
+    "anchorage_ak": "Anchorage_AK",
+    "anc": "Anchorage_AK",
+    "alaska": "Anchorage_AK",
+    "honolulu": "Honolulu_HI",
+    "honolulu_hi": "Honolulu_HI",
+    "hnl": "Honolulu_HI",
+    "hawaii": "Honolulu_HI",
+    "oahu": "Honolulu_HI",
+    "guam": "Guam_GU",
+    "guam_gu": "Guam_GU",
+    "gu": "Guam_GU",
+    "hagatna": "Guam_GU",
+    "apra_harbor": "Guam_GU",
+    "san_juan": "San_Juan_PR",
+    "san_juan_pr": "San_Juan_PR",
+    "puerto_rico": "San_Juan_PR",
+    "pr": "San_Juan_PR",
+    "sju": "San_Juan_PR",
+    "boston": "Boston_MA",
+    "boston_ma": "Boston_MA",
+    "bos": "Boston_MA",
+    "new_england": "Boston_MA",
+    "padd1a": "Boston_MA",
+    "padd_1a": "Boston_MA"
 }
 
 # Regional PADD metadata
@@ -218,11 +286,23 @@ PADD_METADATA = {
     "Greenville_NC": {"name": "Greenville Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Charlotte_NC": {"name": "Charlotte Metro Area, NC", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
     "Port_St_Lucie_FL": {"name": "Port St. Lucie Metro Area, FL", "padd": "PADD 1C South Atlantic", "carb_tax": 0.0},
+    "Chicago_IL": {"name": "Greater Chicago Metro Area, IL/IN", "padd": "PADD 2 Midwest", "carb_tax": 0.0},
+    "Houston_TX": {"name": "Houston & USGC Refining Corridor, TX", "padd": "PADD 3 Gulf Coast", "carb_tax": 0.0},
+    "Los_Angeles_CA": {"name": "Los Angeles Basin & South Coast, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "Denver_CO": {"name": "Denver Metro Area & Rocky Mountain Hub, CO", "padd": "PADD 4 Rocky Mountain", "carb_tax": 0.0},
+    "New_York_NY": {"name": "New York Harbor & NY State Hub, NY", "padd": "PADD 1B Central Atlantic", "carb_tax": 0.0},
     "Oakland_CA": {"name": "Oakland & SF Bay Area, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "BayArea_CA": {"name": "SF Bay Area 9-County Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanFrancisco_CA": {"name": "San Francisco Metro Retail, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
     "SanJose_CA": {"name": "San Jose / Silicon Valley, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
-    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953}
+    "NorthBay_CA": {"name": "North Bay / Solano Region, CA", "padd": "PADD 5 West Coast", "carb_tax": 0.953},
+    "Seattle_WA": {"name": "Seattle & Puget Sound Refining Corridor, WA", "padd": "PADD 5 West Coast (PNW)", "carb_tax": 0.0},
+    "Phoenix_AZ": {"name": "Phoenix Metro & Desert Southwest Corridor, AZ", "padd": "PADD 5 West Coast (Southwest)", "carb_tax": 0.0},
+    "Anchorage_AK": {"name": "Anchorage Metro & Cook Inlet Corridor, AK", "padd": "PADD 5 West Coast (Alaska)", "carb_tax": 0.0},
+    "Honolulu_HI": {"name": "Honolulu Metro & Oahu Island Supply System, HI", "padd": "PADD 5 West Coast (Hawaii)", "carb_tax": 0.0},
+    "Guam_GU": {"name": "Hagåtña & Apra Harbor, Guam", "padd": "PADD 7 Pacific Territories", "carb_tax": 0.0},
+    "San_Juan_PR": {"name": "San Juan Metro & U.S. Caribbean Territories Hub, PR", "padd": "PADD 6 Caribbean Territories", "carb_tax": 0.0},
+    "Boston_MA": {"name": "Boston Metro Area & New England Hub, MA", "padd": "PADD 1A New England", "carb_tax": 0.0}
 }
 
 # Scenario Simulator Catalog
@@ -272,6 +352,87 @@ SCENARIOS_CATALOG = {
         "telemetry_hook": "evergreen",
         "locales": ["cincinnati", "national"]
     },
+    "whiting_refinery_outage": {
+        "name": "BP Whiting IN Refinery Electrical Substation Outage & Unit Trip",
+        "headline": "Plant-wide power failure forces emergency shutdown of BP Whiting 435,000 bpd refinery, triggering Midwest supply spike.",
+        "shock_pct": 0.0740,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["chicago", "national"]
+    },
+    "lemont_des_plaines_lockout": {
+        "name": "CITGO Lemont Des Plaines Barge Canal Lockout",
+        "headline": "Illinois Waterway lock maintenance and barge groundings restrict marine fuel transfers from CITGO Lemont.",
+        "shock_pct": 0.0325,
+        "category": "hydrological",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_flow",
+        "locales": ["chicago", "national"]
+    },
+    "great_lakes_polar_vortex": {
+        "name": "Great Lakes Polar Vortex Freeze-Off & Terminal Disruption",
+        "headline": "Sub-zero Arctic blast and Lake Michigan freeze halts terminal rack loading and refinery cooling water loops across Chicagoland.",
+        "shock_pct": 0.0428,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Mar 15",
+        "telemetry_hook": "openmeteo_freeze",
+        "locales": ["chicago", "national"]
+    },
+    "gulf_hurricane_shut_in": {
+        "name": "Category 4 Gulf Hurricane Landfall (Houston Ship Channel Surge)",
+        "headline": "Severe hurricane forces storm surge closures and emergency flaring across Baytown, Galveston Bay, and Port Arthur refineries.",
+        "shock_pct": 0.1228,
+        "category": "meteorological_tropical",
+        "season_window": "Jun 01 – Nov 30",
+        "telemetry_hook": "noaa_nhc",
+        "locales": ["houston", "national"]
+    },
+    "colonial_line1_origin_trip": {
+        "name": "Colonial Pipeline Line 1 Origin Metering Trip",
+        "headline": "Pasadena breakout station electrical failure halts outbound shipments on Colonial Line 1, trapping supply in USGC storage.",
+        "shock_pct": -0.0333,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["houston", "national"]
+    },
+    "gulf_hard_freeze": {
+        "name": "Severe Gulf Coast Hard Freeze (Winter Storm Uri Repeat)",
+        "headline": "Deep Arctic freeze drops Upper Texas Coast below 15°F, freezing uninsulated boiler lines and taking 1.5M bpd capacity offline.",
+        "shock_pct": 0.0860,
+        "category": "meteorological",
+        "season_window": "Dec 01 – Mar 01",
+        "telemetry_hook": "openmeteo_freeze",
+        "locales": ["houston", "national"]
+    },
+    "socal_refinery_fccu_outage": {
+        "name": "El Segundo / Torrance FCCU & Alkylation Unit Unplanned Trip",
+        "headline": "Emergency electrostatic precipitator and FCCU trip at PBF Torrance or Chevron El Segundo triggers acute LA CARBOB spot shortage.",
+        "shock_pct": 0.0859,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["los_angeles", "national"]
+    },
+    "usgs_newport_inglewood_quake": {
+        "name": "USGS Newport-Inglewood / Palos Verdes Fault Seismic Trip (M>=5.5)",
+        "headline": "Magnitude 5.8 earthquake along Newport-Inglewood fault forces automatic safety shut-ins across Wilmington and Carson refining complexes.",
+        "shock_pct": 0.1125,
+        "category": "geophysical",
+        "season_window": "Year-Round",
+        "telemetry_hook": "usgs_seismic",
+        "locales": ["los_angeles", "national"]
+    },
+    "santa_ana_psps_shutoff": {
+        "name": "Santa Ana Red Flag Wildfire & SCE/LADWP Grid PSPS Curtailment",
+        "headline": "Severe offshore Santa Ana windstorm triggers SCE Public Safety Power Shutoffs and pipeline pump station curtailments across LA Basin.",
+        "shock_pct": 0.0491,
+        "category": "meteorological_fire",
+        "season_window": "Sep 01 – Dec 15",
+        "telemetry_hook": "noaa_spc_fire",
+        "locales": ["los_angeles", "national"]
+    },
     "mississippi_low_water": {
         "name": "Lower Mississippi & Ohio River Low-Water Barge Bottleneck",
         "headline": "Severe drought restricts barge draft levels on Mississippi and Ohio rivers, raising Midwest rack freight.",
@@ -315,7 +476,7 @@ SCENARIOS_CATALOG = {
         "category": "regulatory_spec",
         "season_window": "Feb 15 – May 01",
         "telemetry_hook": "spec_calendar",
-        "locales": ["oakland", "national"]
+        "locales": ["oakland", "los_angeles", "national"]
     },
     "colonial_outage": {
         "name": "Colonial Pipeline Mainline Outage / Cyberattack Shock",
@@ -406,6 +567,42 @@ SCENARIOS_CATALOG = {
         "season_window": "Dec 01 – Feb 28",
         "telemetry_hook": "noaa_freeze",
         "locales": ["tulsa", "cincinnati", "national"]
+    },
+    "suncor_commerce_city_freeze_outage": {
+        "name": "Suncor Commerce City Total Freeze / Outage",
+        "headline": "Severe Arctic cold front causes equipment freeze damage and fires at Suncor Commerce City, forcing total shutdown of Colorado's sole 103 kbpd refinery.",
+        "shock_pct": 0.1220,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["denver", "national"]
+    },
+    "front_range_ozone_rfg_transition": {
+        "name": "Front Range Severe Ozone Nonattainment Summer RFG Transition",
+        "headline": "Statutory EPA Severe Ozone nonattainment mandate cuts over to 7.8 psi summer blend, driving Denver rack supply tightness.",
+        "shock_pct": 0.0570,
+        "category": "regulatory_spec",
+        "season_window": "May 01 – Sep 15",
+        "telemetry_hook": "spec_calendar",
+        "locales": ["denver", "national"]
+    },
+    "buckeye_pipeline_linden_disruption": {
+        "name": "Buckeye Pipeline Linden Terminal Disruption",
+        "headline": "Midstream valve and pumping failure at Buckeye Pipeline Linden hub curtails refined product deliveries across Long Island and Upstate NY.",
+        "shock_pct": 0.0819,
+        "category": "infrastructure",
+        "season_window": "Year-Round",
+        "telemetry_hook": "evergreen",
+        "locales": ["new_york", "national"]
+    },
+    "ny_harbor_barge_freeze_halt": {
+        "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+        "headline": "Severe Arctic cold freeze creates thick ice floes along the Hudson River, halting coastal fuel barges into Upstate NY terminal racks.",
+        "shock_pct": 0.0560,
+        "category": "weather",
+        "season_window": "Dec 01 – Feb 28",
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["new_york", "national"]
     }
 }
 
@@ -443,57 +640,117 @@ BatchCombinedRequest.model_rebuild()
 HeadlineArenaSubmitRequest.model_rebuild()
 
 
-# Rate Limiting & Unified Auth Middleware helper (Issue #437)
+# Dynamic sliding-window rate limit & unified auth middleware (Issues #437, #571, #614 T-26)
 @app.middleware("http")
-async def add_rate_limit_headers(request: Request, call_next):
+async def unified_auth_and_rate_limit_middleware(request: Request, call_next):
     expected_token = os.environ.get("MIDGLEY_API_KEY")
     is_testing = os.environ.get("TESTING") == "1"
 
-    if expected_token and not is_testing:
-        path = request.url.path
-        is_public = (
-            path == "/"
-            or path.startswith((
-                "/docs", "/redoc", "/openapi.json", "/.well-known", "/health",
-                "/status", "/metrics", "/api/v1/metrics", "/robots.txt", "/favicon.ico",
-                "/static", "/api/v1/webhooks", "/api/v1/events/webhook",
-                "/api/v1/events/queue-consumer", "/api/v1/events/poll"
-            ))
-        )
+    # Derive client IP identifier for rate limiting
+    client_ip = request.headers.get("x-forwarded-for", "").split(",")[0].strip() or (request.client.host if request.client else "127.0.0.1")
 
-        # Check for administrative headers
-        admin_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
-        admin_header = request.headers.get("X-Admin-Secret")
-        is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header, admin_secret))
+    path = request.url.path
+    is_public = (
+        path == "/"
+        or path.startswith((
+            "/docs", "/redoc", "/openapi.json", "/.well-known", "/health",
+            "/status", "/metrics", "/api/v1/metrics", "/robots.txt", "/favicon.ico",
+            "/static", "/api/v1/webhooks", "/api/v1/events/webhook",
+            "/api/v1/events/queue-consumer", "/api/v1/events/poll"
+        ))
+    )
 
-        if not is_public and not is_admin_auth:
-            auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
-            token = request.query_params.get("api_key")
-            if auth_header:
-                if auth_header.startswith("Bearer "):
-                    token = auth_header[7:].strip()
+    # Check for administrative headers
+    admin_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    admin_header = request.headers.get("X-Admin-Secret")
+    is_admin_auth = bool(admin_secret and admin_header and hmac.compare_digest(admin_header.encode("utf-8"), admin_secret.encode("utf-8")))
+
+    # Extract user auth token
+    auth_header = request.headers.get("Authorization") or request.headers.get("X-API-Key")
+    token = request.query_params.get("api_key")
+    if auth_header:
+        if auth_header.startswith("Bearer "):
+            token = auth_header[7:].strip()
+        else:
+            token = auth_header.strip()
+
+    # Rate limiting bucket resolution
+    rl_key = None
+    rl_limit = 60
+
+    if not is_testing:
+        if token:
+            # Check if global master token
+            if expected_token and hmac.compare_digest(token.encode("utf-8"), expected_token.encode("utf-8")):
+                rl_key = "mg_global_master"
+                rl_limit = 1000
+            else:
+                is_valid, key_info, _ = await global_key_manager.verify_key_async(token)
+                if is_valid and key_info:
+                    rl_key = key_info["key_prefix"]
+                    rl_limit = key_info.get("rate_limit_rpm", 30)
+                    request.state.key_info = key_info
                 else:
-                    token = auth_header.strip()
+                    # Failed authentication attempt -> throttle to prevent PBKDF2/credential flood (15 RPM)
+                    rl_key = f"failed_auth_{client_ip}"
+                    rl_limit = 15
+        elif is_admin_auth:
+            rl_key = "admin_secret"
+            rl_limit = 1000
+        else:
+            # Public unauthenticated route -> sliding window per client IP (120 RPM)
+            rl_key = f"public_{client_ip}"
+            rl_limit = 120
 
-            valid = False
-            if token:
-                if token == expected_token:
-                    valid = True
-                else:
-                    is_valid, _, _ = await global_key_manager.verify_key_async(token)
-                    if is_valid:
-                        valid = True
-
-            if not valid:
+        if rl_key:
+            allowed, retry_after, remaining, reset_sec = await global_key_manager.check_rate_limit_async(
+                key_prefix=rl_key,
+                rate_limit_rpm=rl_limit
+            )
+            request.state.rate_limit = {
+                "limit": rl_limit,
+                "remaining": remaining,
+                "reset": reset_sec
+            }
+            if not allowed:
                 return JSONResponse(
-                    status_code=401,
-                    content={"error": "Unauthorized", "message": "Invalid, missing, or unauthenticated API key."}
+                    status_code=429,
+                    content={
+                        "error": "Too Many Requests",
+                        "message": f"Rate limit of {rl_limit} requests per minute exceeded for bucket '{rl_key}'."
+                    },
+                    headers={
+                        "Retry-After": str(retry_after),
+                        "X-RateLimit-Limit": str(rl_limit),
+                        "X-RateLimit-Remaining": "0",
+                        "X-RateLimit-Reset": str(reset_sec)
+                    }
                 )
 
+    if expected_token and not is_testing and not is_public and not is_admin_auth:
+        valid = False
+        if token:
+            if expected_token and hmac.compare_digest(token.encode("utf-8"), expected_token.encode("utf-8")):
+                valid = True
+            elif getattr(request.state, "key_info", None) is not None:
+                valid = True
+            else:
+                is_valid, key_info, _ = await global_key_manager.verify_key_async(token)
+                if is_valid:
+                    valid = True
+
+        if not valid:
+            return JSONResponse(
+                status_code=401,
+                content={"error": "Unauthorized", "message": "Invalid, missing, or unauthenticated API key."}
+            )
+
     response = await call_next(request)
-    response.headers["X-RateLimit-Limit"] = "60"
-    response.headers["X-RateLimit-Remaining"] = "59"
-    response.headers["X-RateLimit-Reset"] = str(int(datetime.now().timestamp() + 60))
+    rate_limit = getattr(request.state, "rate_limit", None)
+    if rate_limit:
+        response.headers["X-RateLimit-Limit"] = str(rate_limit.get("limit", 30))
+        response.headers["X-RateLimit-Remaining"] = str(rate_limit.get("remaining", 0))
+        response.headers["X-RateLimit-Reset"] = str(rate_limit.get("reset", 0))
     return response
 
 
@@ -502,13 +759,21 @@ def _normalize_locale(locale_str: str) -> str:
     return LOCALE_MAP.get(cleaned, "National")
 
 
-def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = None) -> dict:
-    zip_res = None
-    if zip_code:
-        zip_res = resolve_zip_code(zip_code)
-        locale = zip_res.get("locale_code", locale or "national")
+def _get_live_prices_impl(
+    locale: str = "national",
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> dict:
+    loc_res = None
+    if lat is not None and lon is not None:
+        loc_res = resolve_coordinates(float(lat), float(lon))
+        locale = loc_res.get("locale_code", locale or "national")
+    elif zip_code:
+        loc_res = resolve_zip_code(zip_code)
+        locale = loc_res.get("locale_code", locale or "national")
 
-    if zip_code and not zip_res.get("is_metro_cluster_hit", False):
+    if zip_code and not loc_res.get("is_metro_cluster_hit", False):
         gb_data = fetch_gasbuddy_prices_by_zip(zip_code)
         if not gb_data:
             gb_data = {
@@ -518,22 +783,25 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
             }
         region_code = _normalize_locale(locale)
         meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
-        return {
+        res_data = {
             "status": "success",
             "timestamp": datetime.now().isoformat(),
             "zip_code": zip_code,
-            "zip_code_resolution": zip_res,
+            "zip_code_resolution": loc_res,
             "locale": {
                 "code": locale,
                 "region_id": region_code,
                 "name": meta["name"],
-                "padd_region": zip_res.get("padd_region", meta["padd"])
+                "padd_region": loc_res.get("padd_region", meta["padd"])
             },
             "price_per_gal": gb_data.get("average_price"),
             "source": gb_data.get("source"),
             "data": gb_data,
-            "carb_tax_regulatory_burden_per_gal": zip_res.get("state_tax_rate_per_gal", meta["carb_tax"])
+            "carb_tax_regulatory_burden_per_gal": loc_res.get("state_tax_rate_per_gal", meta["carb_tax"])
         }
+        if loc_res:
+            res_data["location_resolution"] = loc_res
+        return res_data
 
     region_code = _normalize_locale(locale)
     live_res = fetch_live_metro_retail_price(region_code)
@@ -563,16 +831,27 @@ def _get_live_prices_impl(locale: str = "national", zip_code: Optional[str] = No
     }
     if zip_code:
         res["zip_code"] = zip_code
-    if zip_res:
-        res["zip_code_resolution"] = zip_res
+    if loc_res:
+        res["location_resolution"] = loc_res
+        if "zip_code" in loc_res:
+            res["zip_code_resolution"] = loc_res
     return res
 
 
-def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Optional[str] = None) -> dict:
-    zip_res = None
-    if zip_code:
-        zip_res = resolve_zip_code(zip_code)
-        locale = zip_res.get("locale_code", locale or "national")
+def _get_forecast_impl(
+    locale: str = "national",
+    days: int = 5,
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> dict:
+    loc_res = None
+    if lat is not None and lon is not None:
+        loc_res = resolve_coordinates(float(lat), float(lon))
+        locale = loc_res.get("locale_code", locale or "national")
+    elif zip_code:
+        loc_res = resolve_zip_code(zip_code)
+        locale = loc_res.get("locale_code", locale or "national")
 
     region_code = _normalize_locale(locale)
     live_res = fetch_live_metro_retail_price(region_code)
@@ -590,10 +869,15 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             HISTORY_CSV_PATH,
             compute_rolling_scoreboard_metrics,
             get_regional_calibration_residuals,
-            compute_regional_residual_std
+            compute_regional_residual_std,
+            read_prediction_history
         )
         if os.path.exists(HISTORY_CSV_PATH):
-            df_hist = pd.read_csv(HISTORY_CSV_PATH)
+            try:
+                df_hist = read_prediction_history(HISTORY_CSV_PATH)
+            except Exception as e:
+                logger.warning(f"Notice reading prediction history in api_server: {e}")
+                df_hist = pd.DataFrame()
             if not df_hist.empty and 'region' in df_hist.columns:
                 reg_df = df_hist[df_hist['region'] == region_code]
                 if not reg_df.empty:
@@ -665,19 +949,21 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
     day_4 = h_preds.get(4, round(base_price + day_step * 4, 3))
     day_5 = h_preds.get(5, round(predicted_price, 3))
 
-    # Compute dynamic rolling accuracy metrics from ledger (Issue #440)
+    # Compute dynamic rolling accuracy metrics from ledger (Issue #440, #498)
     score_metrics = compute_rolling_scoreboard_metrics(
         window_days=30,
         region=region_code,
         horizon_days=days if days <= 5 else 5,
-        include_retroactive=False
+        include_retroactive=False,
+        df=df_hist if 'df_hist' in locals() and df_hist is not None else None
     )
     if score_metrics.get("total_evaluations", 0) < 5:
         score_metrics = compute_rolling_scoreboard_metrics(
             window_days="all",
             region=region_code,
             horizon_days=days if days <= 5 else 5,
-            include_retroactive=False
+            include_retroactive=False,
+            df=df_hist if 'df_hist' in locals() and df_hist is not None else None
         )
 
     hit_rate = round(score_metrics.get("directional_hit_rate_pct", 51.1) / 100.0, 4)
@@ -706,7 +992,7 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
         predicted_price=predicted_price
     )
 
-    return {
+    resp_data = {
         "status": "success",
         "timestamp": datetime.now().isoformat(),
         "locale": {
@@ -742,6 +1028,11 @@ def _get_forecast_impl(locale: str = "national", days: int = 5, zip_code: Option
             }
         }
     }
+    if loc_res:
+        resp_data["location_resolution"] = loc_res
+        if "zip_code" in loc_res:
+            resp_data["zip_code_resolution"] = loc_res
+    return resp_data
 
 
 @app.get("/api/v1/forecast/scoreboard", dependencies=[Depends(get_api_key_user)], summary="Get Realized-vs-Predicted Rolling Scoreboard Metrics")
@@ -847,9 +1138,10 @@ def get_system_radar_catalog(
             "models": models
         }
     except Exception as e:
+        logger.error(f"Error fetching radar models: {e}")
         return {
             "status": "error",
-            "message": str(e),
+            "message": "Failed to retrieve open source AI radar catalog",
             "timestamp": datetime.now().isoformat(),
             "models": []
         }
@@ -1005,7 +1297,7 @@ def get_system_cache_status(
         expected_secret = os.environ.get("MIDGLEY_ADMIN_SECRET")
         is_testing = os.environ.get("TESTING") == "1"
         if not is_testing:
-            if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret, expected_secret):
+            if not expected_secret or not x_admin_secret or not hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_secret.encode("utf-8")):
                 raise HTTPException(
                     status_code=401,
                     detail="Unauthorized: Active cache connectivity write/read probe requires a valid X-Admin-Secret header."
@@ -1095,38 +1387,62 @@ def revoke_api_key_endpoint(prefix: str):
 @app.get("/api/v1/prices/live", dependencies=[Depends(get_api_key_user)], summary="Get Live Fuel Prices")
 def get_live_prices(
     locale: Optional[str] = Query("national", description="Locale code (national, tulsa, newark, cincinnati, oakland, bayarea)"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US zip code for GasBuddy station lookup")
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US zip code for GasBuddy station lookup"),
+    lat: Optional[float] = Query(None, description="Optional latitude coordinate for GPS resolution"),
+    lon: Optional[float] = Query(None, description="Optional longitude coordinate for GPS resolution")
 ):
     """
     Returns real-time unleaded gasoline pump prices from GasBuddy GraphQL, AAA Web Scraper,
     or benchmark fallbacks with 15-minute response caching.
     """
-    return _get_live_prices_impl(locale=locale or "national", zip_code=zip_code)
+    return _get_live_prices_impl(locale=locale or "national", zip_code=zip_code, lat=lat, lon=lon)
 
 
 @app.get("/api/v1/forecast/predict", dependencies=[Depends(get_api_key_user)], summary="Get 5-Day Out-of-Time Forecast")
 def get_forecast(
     locale: Optional[str] = Query("national", description="Locale code"),
     days: int = Query(5, ge=1, le=30, description="Forecast horizon in days"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code"),
+    lat: Optional[float] = Query(None, description="Optional latitude coordinate for GPS resolution"),
+    lon: Optional[float] = Query(None, description="Optional longitude coordinate for GPS resolution")
 ):
     """
     Triggers model inference to compute 5-day out-of-time forecast, direction, expected dollar delta,
     and historical accuracy metrics.
     """
-    return _get_forecast_impl(locale=locale or "national", days=days, zip_code=zip_code)
+    return _get_forecast_impl(locale=locale or "national", days=days, zip_code=zip_code, lat=lat, lon=lon)
 
 
+@app.get("/api/v1/locations/resolve", summary="Resolve GPS Coordinates or ZIP Code to Metro Refining Hub")
+def resolve_location_endpoint(
+    lat: Optional[float] = Query(None, description="Latitude coordinate (e.g. 36.1540)"),
+    lon: Optional[float] = Query(None, description="Longitude coordinate (e.g. -95.9928)"),
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
+):
+    """
+    Resolves arbitrary GPS coordinates or a 5-digit US ZIP code to its nearest
+    Midgley metropolitan refining hub, PADD sub-region, and statutory motor fuel tax structure.
+    """
+    return resolve_location(zip_code=zip_code, lat=lat, lon=lon)
 
-def _get_combined_impl(locale: str = "national", zip_code: Optional[str] = None) -> dict:
-    zip_res = None
-    if zip_code:
-        zip_res = resolve_zip_code(zip_code)
-        locale = zip_res.get("locale_code", locale or "national")
+
+def _get_combined_impl(
+    locale: str = "national",
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None
+) -> dict:
+    loc_res = None
+    if lat is not None and lon is not None:
+        loc_res = resolve_coordinates(float(lat), float(lon))
+        locale = loc_res.get("locale_code", locale or "national")
+    elif zip_code:
+        loc_res = resolve_zip_code(zip_code)
+        locale = loc_res.get("locale_code", locale or "national")
 
     loc_clean = locale or "national"
-    live_data = _get_live_prices_impl(locale=loc_clean, zip_code=zip_code)
-    forecast_data = _get_forecast_impl(locale=loc_clean, days=5, zip_code=zip_code)
+    live_data = _get_live_prices_impl(locale=loc_clean, zip_code=zip_code, lat=lat, lon=lon)
+    forecast_data = _get_forecast_impl(locale=loc_clean, days=5, zip_code=zip_code, lat=lat, lon=lon)
     region_code = _normalize_locale(loc_clean)
 
     base_p = forecast_data["forecast"].get("current_base_price", 3.184)
@@ -1157,20 +1473,24 @@ def _get_combined_impl(locale: str = "national", zip_code: Optional[str] = None)
             "components": attr["components"]
         }
     }
-    if zip_res:
-        res["zip_code_resolution"] = zip_res
+    if loc_res:
+        res["location_resolution"] = loc_res
+        if "zip_code" in loc_res:
+            res["zip_code_resolution"] = loc_res
     return res
 
 
 @app.get("/api/v1/combined", dependencies=[Depends(get_api_key_user)], summary="Unified Live Price & Forecast Context")
 def get_combined(
     locale: Optional[str] = Query("national", description="Locale code"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
+    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code"),
+    lat: Optional[float] = Query(None, description="Optional latitude coordinate for GPS resolution"),
+    lon: Optional[float] = Query(None, description="Optional longitude coordinate for GPS resolution")
 ):
     """
     Returns both current live pump price and 5-day out-of-time forecast along with top market drivers.
     """
-    return _get_combined_impl(locale=locale or "national", zip_code=zip_code)
+    return _get_combined_impl(locale=locale or "national", zip_code=zip_code, lat=lat, lon=lon)
 
 
 @app.get("/api/v1/telemetry/unmapped-zips", summary="Get Unmapped Out-of-Metro ZIP Code Search Telemetry")
@@ -1250,6 +1570,20 @@ def get_usgs_seismic_endpoint(
     connector = USGSSeismicConnector()
     corr_arg = None if corridor == "all" else corridor
     return connector.fetch_live_seismic_telemetry(corridor=corr_arg, days=days or 30, min_mag=min_mag)
+
+
+@app.get("/api/v1/weather/pirate", summary="Get High-Resolution Pirate Weather Reanalysis & Physical Risk Telemetry", tags=["Physical Data Feeds"])
+def get_pirate_weather_endpoint(
+    hub: Optional[str] = Query("tulsa_cushing", description="Refining hub or regional metro: tulsa_cushing, delaware_city, cincinnati_catlettsburg, oakland_richmond, greenville_selma, charlotte_paw_creek, port_st_lucie_everglades, gulf_coast_houston"),
+    target_date: Optional[str] = Query(None, description="Optional target date (YYYY-MM-DD) for historical reanalysis (timemachine mode)")
+):
+    """
+    Returns high-resolution NOAA HRRR (3km grid) and ERA5 reanalysis weather telemetry
+    and physical risk indices (degree days, freeze-off risk, wind gusts) for energy refining hubs (Issue #442).
+    """
+    from src.noaa_weather import PirateWeatherConnector
+    connector = PirateWeatherConnector()
+    return connector.fetch_hub_weather(hub_name_or_code=hub or "tulsa_cushing", target_date=target_date)
 
 
 @app.get("/api/v1/aqi/live", summary="Get Live Refinery Air Quality & Industrial Flaring Telemetry", tags=["Physical Data Feeds"])
@@ -1796,6 +2130,205 @@ def get_ipasis_security_telemetry():
     }
 
 
+class DiscordSubscribeRequest(BaseModel):
+    delivery_type: Optional[str] = Field("webhook", description="Delivery target type: 'webhook' or 'discord_dm'")
+    webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL (required when delivery_type='webhook')")
+    discord_user_id: Optional[str] = Field(None, description="Discord User Snowflake ID (required when delivery_type='discord_dm')")
+    dm_channel_id: Optional[str] = Field(None, description="Optional pre-resolved Discord DM channel ID")
+    target_locales: Optional[List[str]] = Field(None, description="Target metro hubs, 'National', or 5-digit US ZIP codes")
+    zip_codes: Optional[List[str]] = Field(None, description="Optional list of 5-digit US ZIP codes to subscribe to")
+    zip_code: Optional[str] = Field(None, description="Optional single 5-digit US ZIP code to subscribe to")
+    minimum_shock_threshold: float = Field(0.25, ge=0.0, le=5.0, description="Minimum |ΔP| shock threshold in $/gal")
+    direction_filter: Optional[str] = Field("all_shocks", description="Directional bias: 'all_shocks', 'spikes_only', or 'drops_only'")
+    catalyst_domains: Optional[List[str]] = Field(None, description="Optional catalyst domains filter")
+    delivery_mode: Optional[str] = Field("realtime", description="Delivery cadence: 'realtime' or 'daily_digest'")
+    role_mention: Optional[str] = Field(None, description="Optional role/user mention for high-severity shocks")
+    client_label: Optional[str] = Field(None, description="Optional human-readable subscriber label")
+    verify_handshake: bool = Field(True, description="Whether to dispatch an immediate verification handshake embed")
+
+
+class DiscordTestNotificationRequest(BaseModel):
+    delivery_type: Optional[str] = Field("webhook", description="Target type: 'webhook' or 'discord_dm'")
+    webhook_url: Optional[str] = Field(None, description="Discord Incoming Webhook URL to test")
+    discord_user_id: Optional[str] = Field(None, description="Discord User ID to test DM reachability")
+    dm_channel_id: Optional[str] = Field(None, description="Optional DM channel ID")
+    target_locales: Optional[List[str]] = Field(default_factory=lambda: ["National"], description="Sample locales for test embed")
+
+
+@app.post("/api/v1/notifications/discord/subscribe", summary="Register Discord Webhook or Direct Message Alert Subscription", tags=["Notifications & Alerts"])
+async def subscribe_discord_notifications(request: Request, req: DiscordSubscribeRequest):
+    """
+    Issue #235: Registers a multi-subscriber Discord channel webhook (`delivery_type='webhook'`)
+    or personal Direct Message (`delivery_type='discord_dm'`) alert subscription with locale,
+    5-digit US ZIP code resolution, shock magnitude, and directional filtering.
+    Out-of-metro ZIP codes automatically update the unmapped ZIP query heatmap.
+    Protected by IPASIS IP reputation check.
+    """
+    client_ip = (
+        request.headers.get("cf-connecting-ip")
+        or request.headers.get("x-forwarded-for")
+        or request.headers.get("x-real-ip")
+        or (request.client.host if request.client else "127.0.0.1")
+    )
+    from src.ipasis_security import IPASISSecurityVerifier
+    verifier = IPASISSecurityVerifier()
+    ip_status = verifier.check_ip_reputation(client_ip)
+    if ip_status.get("is_blocked", False) and os.environ.get("IPASIS_BLOCK_HIGH_RISK", "1") != "0":
+        raise HTTPException(
+            status_code=403,
+            detail=f"Forbidden: Request origin IP '{client_ip}' flagged as high-risk by IPASIS security filter."
+        )
+
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+
+    merged_zips: List[str] = []
+    if req.zip_codes:
+        merged_zips.extend(req.zip_codes)
+    if req.zip_code:
+        merged_zips.append(req.zip_code)
+
+    dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
+    try:
+        sub_record = registry.register_subscription(
+            target_locales=req.target_locales,
+            zip_codes=merged_zips if merged_zips else None,
+            minimum_shock_threshold=req.minimum_shock_threshold,
+            delivery_type=dtype,
+            webhook_url=req.webhook_url,
+            discord_user_id=req.discord_user_id,
+            dm_channel_id=req.dm_channel_id,
+            direction_filter=req.direction_filter or "all_shocks",
+            catalyst_domains=req.catalyst_domains,
+            delivery_mode=req.delivery_mode or "realtime",
+            role_mention=req.role_mention,
+            client_label=req.client_label,
+            verify_handshake=req.verify_handshake
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=422, detail=str(ve))
+    except RuntimeError as re_err:
+        raise HTTPException(status_code=502, detail=str(re_err))
+
+    return {
+        "status": "subscribed",
+        "subscription": sub_record,
+        "ip_security": ip_status
+    }
+
+
+
+@app.delete("/api/v1/notifications/discord/subscriptions/{subscription_id}", summary="Unsubscribe a Discord Webhook or DM Alert Subscription", tags=["Notifications & Alerts"])
+async def unsubscribe_discord_notification(
+    subscription_id: str,
+    manage_token: Optional[str] = Query(None, description="Subscription manage_token returned upon registration"),
+    x_manage_token: Optional[str] = Header(None, alias="X-Manage-Token"),
+    x_admin_secret: Optional[str] = Header(None, alias="X-Admin-Secret")
+):
+    """
+    Issue #235: Unsubscribes a registered Discord webhook or DM alert subscription using its `manage_token`
+    (passed via query param `?manage_token=...` or `X-Manage-Token` header) or administrative secret.
+    """
+    token = manage_token or x_manage_token
+    expected_admin = os.environ.get("MIDGLEY_ADMIN_SECRET")
+    is_admin = bool(
+        expected_admin
+        and x_admin_secret
+        and hmac.compare_digest(x_admin_secret.encode("utf-8"), expected_admin.encode("utf-8"))
+    )
+    if not token and not is_admin:
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized: Missing manage_token (supply via ?manage_token= or X-Manage-Token header)."
+        )
+
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+    removed = registry.unsubscribe(subscription_id=subscription_id, manage_token=token, is_admin=is_admin)
+    if not removed:
+        raise HTTPException(
+            status_code=404,
+            detail="Subscription not found or invalid manage_token."
+        )
+    return {
+        "status": "unsubscribed",
+        "subscription_id": subscription_id,
+        "removed_at": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@app.get("/api/v1/notifications/discord/subscriptions/status", dependencies=[Depends(get_api_key_user)], summary="Get Active Discord Subscription Counts by Metro Hub & Delivery Mode", tags=["Notifications & Alerts"])
+async def get_discord_subscriptions_status():
+    """
+    Issue #235: Returns active subscription counts grouped by regional metro hub and delivery type (`webhook` vs `discord_dm`).
+    Requires valid API key authentication.
+    """
+    from src.discord_notifier import get_subscription_registry
+    registry = get_subscription_registry()
+    return {
+        "status": "success",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "summary": registry.get_status_summary()
+    }
+
+
+@app.post("/api/v1/notifications/discord/test", summary="Send Dry-Run Test Alert to Discord Webhook or User DM", tags=["Notifications & Alerts"])
+async def test_discord_notification_delivery(req: DiscordTestNotificationRequest):
+    """
+    Issue #235: Self-service health diagnostic endpoint allowing subscribers to send an immediate
+    synthetic dry-run alert embed to their Discord channel webhook or personal DM.
+    """
+    from src.discord_notifier import (
+        validate_discord_webhook_url,
+        normalize_locale_list,
+        format_welcome_verification_payload,
+        _post_webhook_payload,
+        send_discord_dm_payload
+    )
+
+    locales = normalize_locale_list(req.target_locales)
+    dtype = (req.delivery_type or ("discord_dm" if req.discord_user_id and not req.webhook_url else "webhook")).strip().lower()
+    payload = format_welcome_verification_payload(
+        target_locales=locales,
+        min_shock_threshold=0.25,
+        direction_filter="all_shocks",
+        delivery_type=dtype,
+        client_label="Dry-Run Diagnostic Test",
+        subscription_id="dry-run-test"
+    )
+
+    if dtype == "discord_dm":
+        if not req.discord_user_id or not str(req.discord_user_id).strip().isdigit():
+            raise HTTPException(status_code=422, detail="Valid numeric discord_user_id is required for discord_dm test.")
+        ok, ch_id, status, err = send_discord_dm_payload(
+            payload,
+            discord_user_id=str(req.discord_user_id).strip(),
+            dm_channel_id=req.dm_channel_id
+        )
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Discord DM test delivery failed: {err or f'HTTP {status}'}")
+        return {
+            "status": "delivered",
+            "delivery_type": "discord_dm",
+            "discord_user_id": str(req.discord_user_id).strip(),
+            "dm_channel_id": ch_id,
+            "target_locales": locales
+        }
+    else:
+        if not validate_discord_webhook_url(req.webhook_url):
+            raise HTTPException(status_code=422, detail="Invalid Discord webhook URL.")
+        ok, status, err = _post_webhook_payload(req.webhook_url.strip(), payload)
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Discord webhook test delivery failed: {err or f'HTTP {status}'}")
+        return {
+            "status": "delivered",
+            "delivery_type": "webhook",
+            "http_status": status,
+            "target_locales": locales
+        }
+
+
+
 @app.post("/api/v1/events/poll", summary="Trigger Intraday Event Polling Cycle")
 def trigger_event_polling(
     x_midgley_signature: Optional[str] = Header(None, alias="X-Midgley-Signature"),
@@ -1812,7 +2345,8 @@ def trigger_event_polling(
 
     if secret_key:
         auth_valid = False
-        if authorization and authorization == f"Bearer {secret_key}":
+        bearer_expected = f"Bearer {secret_key}"
+        if authorization and hmac.compare_digest(authorization.encode("utf-8"), bearer_expected.encode("utf-8")):
             auth_valid = True
         elif x_midgley_signature:
             expected_sig = hmac.new(secret_key.encode("utf-8"), b"poll", hashlib.sha256).hexdigest()

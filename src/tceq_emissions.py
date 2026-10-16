@@ -282,7 +282,7 @@ class TCEQEmissionsConnector:
     def _merge_live_events_to_storage(self, live_events: List[Dict[str, Any]]) -> None:
         """Merges new verified live events into local CSV benchmark storage without duplicates."""
         try:
-            df_curr = pd.read_csv(self.storage_file) if os.path.exists(self.storage_file) else pd.DataFrame()
+            df_curr = pd.read_csv(self.storage_file, low_memory=False) if os.path.exists(self.storage_file) else pd.DataFrame()
             df_new = pd.DataFrame(live_events)
             if not df_curr.empty:
                 combined = pd.concat([df_curr, df_new], ignore_index=True)
@@ -315,7 +315,7 @@ class TCEQEmissionsConnector:
         if not os.path.exists(self.storage_file) or force_refresh:
             self._initialize_benchmark_data()
 
-        df = pd.read_csv(self.storage_file)
+        df = pd.read_csv(self.storage_file, low_memory=False)
         df["event_date"] = pd.to_datetime(df["event_date"])
         df = df.sort_values("event_date")
 

@@ -70,7 +70,43 @@ Real-world event news persistence is modeled via exponential memory decay ($t_{1
 \text{Memory}_t = \text{Memory}_{t-1} \times e^{-\lambda} + \text{Shock}_t
 \]
 
-### D. Official EIA Retail Evaluation Ground Truth (Issue #403)
+### D. Backward-Ratio Roll-Adjusted Futures Formulation (Issue #444)
+NYMEX Chapter 191 maximum RVP specifications enforce contract roll transitions (13.5 psi winter vs 7.4 psi summer). Continuous unadjusted contracts are backward-adjusted via cumulative roll multipliers:
+\[
+\text{ret}_t = \frac{P^{(c)}_t}{P^{(c)}_{t-1}} - 1, \qquad P_s^{\text{adj}} = P_s^{\text{old}} \times \frac{P_{\text{roll}}^{\text{new}}}{P_{\text{roll}}^{\text{old}}} \quad \forall s < t_{\text{roll}}
+\]
+
+### E. Adaptive Conformal Inference & Calibrated Quantile Formulations (Issue #449)
+Online interval threshold tracking under distribution shift (Gibbs & Candès 2021):
+\[
+\alpha_{t+1} = \alpha_t + \gamma (\alpha^* - \text{miss}_t), \qquad \text{miss}_t = \mathbb{I}(y_t \notin [\hat{y}_{t}^{\text{low}}, \hat{y}_{t}^{\text{high}}])
+\]
+Student-$t$ parametric predictive quantiles ($P_{10}, P_{50}, P_{90}$):
+\[
+\hat{Q}_{q}(y_{t+h}) = \hat{y}_{t+h} + t_{\nu}^{-1}(q) \cdot \hat{\sigma}_{\text{res}}
+\]
+
+### F. Minimum Trace (MinT) Hierarchical Reconciliation (Issue #450)
+Reconciles incoherent multi-tier forecasts across National, PADD, and Metro levels via summing matrix $S$ ($n \times m$) and error covariance $W$ (Wickramasuriya et al. 2019):
+\[
+\tilde{\mathbf{y}} = S\left(S^\top W^{-1} S\right)^{-1} S^\top W^{-1} \hat{\mathbf{y}}
+\]
+Empirical Bayes shrinkage for thin-data metros:
+\[
+\hat{\theta}_r^{\text{EB}} = \left(X_r^\top X_r + \lambda I\right)^{-1} \left(X_r^\top y_r + \lambda \theta_0\right)
+\]
+
+### G. Statistical Hypothesis Testing & Model Confidence Set (Issue #452)
+- **Pesaran-Timmermann Directional Market Timing Test:**
+  \[
+  PT = \frac{\hat{p} - p^*}{\sqrt{\widehat{\text{Var}}(\hat{p})}} \sim \mathcal{N}(0, 1), \qquad p^* = p_y p_x + (1 - p_y)(1 - p_x)
+  \]
+- **Newey-West Multi-Horizon HAC Standard Error:**
+  \[
+  \hat{\Omega} = \hat{\gamma}_0 + 2 \sum_{j=1}^{h-1} \left(1 - \frac{j}{h}\right) \hat{\gamma}_j, \qquad SE = \sqrt{\frac{\hat{\Omega}}{T}}
+  \]
+
+### H. Official EIA Retail Evaluation Ground Truth (Issue #403)
 Point-in-time model evaluation uses official EIA/FRED weekly retail pump prices across PADDs and states as objective evaluation ground truth ($y_{t+h}$ in `prediction_history.csv`).
 
 ---
@@ -164,8 +200,14 @@ The empirical 95% CI coverage rate is tracked and exposed in rolling scoreboard 
 
 ### 4.3. Live Forecast README Automation & Workflow Freshness Gating (Issue #398)
 * **README Table Injector (`scripts/readme_updater.py` / `src/readme_updater.py`):** Automatically compiles multi-horizon projections across all 10 active regional hubs into the Markdown live summary table between `<!-- START_LIVE_FORECAST -->` and `<!-- END_LIVE_FORECAST -->` tags.
-* **UTC vs Central DST Schedule Alignment:** GitHub Actions cron schedules (`17 7 * * *`) evaluate strictly on UTC (07:17 UTC); during Daylight Saving Time (March to November), US Central Time is CDT (02:17 AM CDT / UTC-5), and during standard time (November to March), Central Time is CST (01:17 AM CST / UTC-6).
+* **UTC vs Central DST Schedule Alignment:** GitHub Actions cron schedules (`17 22 * * *`) evaluate strictly on UTC (22:17 UTC); during Daylight Saving Time (March to November), US Central Time is CDT (05:17 PM CDT / UTC-5), and during standard time (November to March), Central Time is CST (04:17 PM CST / UTC-6).
 * **Forecast Freshness Gating:** The public dashboard (`src/dashboard_generator.py`) evaluates the timestamp of the latest prediction record; if data age exceeds 36 hours, a warning badge (`Forecast Stale (>36h)`) is rendered to alert operators.
+
+### 4.4. Pipeline Runtime Optimization & Consolidated Cloud Synchronization (Issue #498)
+* **Decoupled Cloud Synchronization:** `sync_predictions_to_cloud()` is decoupled from inner multi-horizon logging loops (`log_predictions`) and per-region evaluation loops (`backfill_actual_prices_and_evaluate`). Instead, a single consolidated bulk synchronization executes post-pipeline in `run_all.py`, slashing over 75 minutes of synchronous HTTP network stalls against edge databases (Turso / Cloudflare D1).
+* **Non-Trading Day Filter & Incremental Actuals Lookback:** `backfill_actual_prices_and_evaluate()` explicitly filters candidate target dates to valid business days (`dayofweek < 5`), eliminating perpetual cache invalidation on weekends/holidays and caching confirmed empty observations in `data/rbob_actuals_cache.json`.
+* **Multi-Ticker Commodity Batching:** `fetch_market_data()` batches `["RB=F", "CL=F", "BZ=F", "HO=F"]` into a single yfinance query and leverages an in-process session cache (`_MARKET_DATA_SESSION_CACHE`) across all 8 regional calibration hubs.
+* **In-Memory DataFrame Propagation:** Pre-loaded prediction history dataframes (`df_hist`) are passed into `compute_rolling_scoreboard_metrics()`, `_get_forecast_impl`, `render_single_embed_card`, and `build_scoreboard_section_html`, eliminating repetitive disk I/O and re-evaluations across static API exports and social card generations.
 
 ---
 
@@ -173,7 +215,7 @@ The empirical 95% CI coverage rate is tracked and exposed in rolling scoreboard 
 
 The weekly model performance review runs automatically on Saturday mornings (08:00 AM Central / 13:00 UTC) via GitHub Actions cloud runners and local `dev-vm` systemd user timers (`midgley-weekly-review.timer`). Its primary purpose is to calculate rolling multi-region error metrics, self-review all open GitHub repository issues, and operate an automated feedback loop back into the forecasting pipeline:
 
-* **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley`, evaluates each issue's modeling impact using Google Gemini 2.5 Flash (with a domain-specific keyword heuristic fallback), ranks issues, and selects the top issue offering the largest potential reduction to model loss.
+* **Open GitHub Issue Self-Review:** Fetches all open repository issues on `KoshiirRa/midgley`, evaluates each issue's modeling impact using Google Gemini 3.8 Flash (with a domain-specific keyword heuristic fallback), ranks issues, and selects the top issue offering the largest potential reduction to model loss.
 * **Branch-Flagged Reporting:** Automatically flags issue titles with the source git branch (e.g. `[dev] 📊 Weekly Model Review Report...`).
 * **Mean Absolute Error (MAE):**
   \[
@@ -427,7 +469,7 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
 
 1. **`01` Commodity Futures & 3-2-1 Crack Spread:** NYMEX RBOB ($P_{\text{RBOB}}$), WTI ($P_{\text{WTI}}$), ULSD Heating Oil ($P_{\text{ULSD}}$), and standard 3-2-1 crack spread $\text{Crack}_{321} = \frac{2 \cdot P_{\text{RBOB}} + 1 \cdot P_{\text{ULSD}} - 3 \cdot (P_{\text{WTI}} / 42)}{3}$.
 2. **`02` Alternative Physical Feeds & Positioning:** 7 quantitative macro and positioning feeds: Cboe OVX, Baker Hughes Rig Counts, 10-Year Treasury Yields, 10-Year TIPS Breakevens, CFTC COT Managed Money Net Longs, FERC Natural Gas / LNG Spark Spreads, and USDA/EIA Ethanol/RIN blendstock margins.
-3. **`03` Live News Streams, Web Scraping & Multi-Tiered LLM Extraction:** Finlight financial news stream (150/mo cap), Firecrawl JavaScript web scraper (800/mo cap & 24h caching), zero-cost RSS polling ($<24\text{h}$ filter), webhook push with IPASIS security verification, and 3-tier LLM failover (Gemini 2.5 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
+3. **`03` Live News Streams, Web Scraping & Multi-Tiered LLM Extraction:** Finlight financial news stream (150/mo cap), Firecrawl JavaScript web scraper (800/mo cap & 24h caching), zero-cost RSS polling ($<24\text{h}$ filter), webhook push with IPASIS security verification, and 3-tier LLM failover (Gemini 3.8 Flash $\rightarrow$ GPT-4o-mini $\rightarrow$ Offline Lexicon).
 4. **`04` Executive Social Media & Weekend Gap Dynamics:** Social shock vector $\mathbf{V}_{\text{social}, t}$ with empirical regression weights ($\beta_{\text{OPEC}} = -1.85\%$, $\beta_{\text{tariff}} = +2.10\%$) and the $1.42\times$ weekend market close multiplier applied on Monday open reopening.
 5. **`05` Multi-Tiered NOAA Weather Risk:** 2-tiered weather ingestion via `t.wxs.us` lightweight terminal endpoints with deterministic SPC convective risk mapping ($90\%-95\%$ token reduction).
 6. **`06` Maritime Chokepoints & Inland Waterways:** Hormuz, Suez, Bab el-Mandeb, Delmarva detour, and Mississippi/Ohio River tow draft restrictions.
@@ -445,7 +487,7 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
 
 ## 14. CoSPOT Spectral Prompting & Hindsight Episodic Agent Memory (Issues #215, #230 & #421)
 
-* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 2.5 Flash prompts, eliminating LLM numerical blindness during breaking market events.
+* **CoSPOT Spectral Feature Prompting Engine ([`src/cospot_spectral_engine.py`](src/cospot_spectral_engine.py), arXiv:2609.02093):** Injects DFT frequency regime descriptors and DWT wavelet shock magnitudes into Gemini 3.8 Flash prompts, eliminating LLM numerical blindness during breaking market events.
 * **Vectorize Hindsight Episodic Agent Memory ([`src/agent_memory.py`](src/agent_memory.py) & [`src/hindsight_client.py`](src/hindsight_client.py)):** Biomimetic Retain-Recall-Reflect triad storing forecast experiences, performing zero-LLM analogy recall, and synthesizing qualitative post-mortems for Saturday weekly model reviews, backed by Vectorize Hindsight-Hosted SaaS (Issue #421), local Dev-VM Docker container, and local SQLite FTS5 fallback.
   - **Zero-Cold-Start Hosted Gateway:** Connects to `https://api.hindsight.vectorize.io` with Bearer auth, eliminating the compute cost and 75-second cold boot latencies associated with serverless Cloud Run containers.
   - **Standardized Bank Mission & Reasoning Profiles (`Midgley`):**
@@ -454,6 +496,7 @@ The mathematical documentation in [`docs/math.html`](docs/math.html) and generat
     - **Reflect Post-Mortems & Analogies:** Synthesizes qualitative root causes and parameter adjustments (shock decay half-lives $t_{1/2}$, seasonal transition buffers), parameterized with **Skepticism: 4/5**, **Literalism: 4/5**, and **Empathy: 1/5** (Detached).
   - **Socket Read Timeout Retries:** Configurable socket timeout (`HINDSIGHT_TIMEOUT`) with 2-attempt retries and exponential backoff.
   - **Zero-Data-Loss Reconciliation Ledger:** SQLite `cloud_synced` column auto-migration and `sync_pending_memories()` draining locally queued experiences once the remote bank is reachable.
+  - **Dynamic Anomaly Retention & Historical Catch-up (Issue #557):** Directly evaluates and retains newly backfilled rows (`evaluated_rows_indices`) in `src/prediction_logger.py`, preventing static DataFrame tail sampling biases. `scripts/reconcile_hindsight_memory.py` provides automated and manual historical reconciliation for unretained forecasting anomalies.
 
 ---
 

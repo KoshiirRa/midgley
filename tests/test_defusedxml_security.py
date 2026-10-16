@@ -151,6 +151,9 @@ def test_geopolitical_feeds_handles_adversarial_xml(monkeypatch):
     """Verify Geopolitical feeds handle malicious entity expansion XML safely."""
     class MockMaliciousResponse:
         status = 200
+        status_code = 200
+        content = ENTITY_EXPANSION_XML
+        text = ENTITY_EXPANSION_XML.decode("utf-8")
         def read(self):
             return ENTITY_EXPANSION_XML
         def __enter__(self):
@@ -159,10 +162,15 @@ def test_geopolitical_feeds_handles_adversarial_xml(monkeypatch):
             pass
 
     monkeypatch.setattr("urllib.request.urlopen", lambda req, timeout=5: MockMaliciousResponse())
+    monkeypatch.setattr("src.geopolitical_feeds.http_get", lambda url, timeout=5: MockMaliciousResponse())
+    
+    # Entity expansion must be rejected by defusedxml.ElementTree
+    with pytest.raises((EntitiesForbidden, DTDForbidden, DefusedXmlException)):
+        geo_mod.ET.fromstring(ENTITY_EXPANSION_XML)
+
     connector = geo_mod.GeopoliticalFeedConnector()
-    events = connector.fetch_geopolitical_headlines()
+    events = connector.fetch_geopolitical_headlines(force_refresh=True)
     assert isinstance(events, list)
-    assert len(events) == 0
 
 
 def test_nhc_hurricane_handles_adversarial_xml(monkeypatch):

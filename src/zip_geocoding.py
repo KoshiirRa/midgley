@@ -7,6 +7,7 @@ and persistent telemetry logging for out-of-metro lookups (Issues #50 & #195).
 """
 
 import os
+import math
 import json
 import logging
 from typing import Dict, Any, Optional
@@ -28,7 +29,35 @@ ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
     "280": "charlotte", "281": "charlotte", "282": "charlotte",
     "945": "oakland", "946": "oakland",
     "349": "port_st_lucie",
-    "940": "bayarea", "941": "bayarea", "942": "bayarea", "943": "bayarea", "944": "bayarea"
+    "940": "bayarea", "941": "bayarea", "942": "bayarea", "943": "bayarea", "944": "bayarea",
+    "600": "chicago", "601": "chicago", "602": "chicago", "603": "chicago", "604": "chicago",
+    "605": "chicago", "606": "chicago", "607": "chicago", "608": "chicago",
+    "463": "chicago", "464": "chicago",
+    "770": "houston", "772": "houston", "773": "houston", "774": "houston", "775": "houston",
+    "776": "houston", "777": "houston",
+    "900": "los_angeles", "901": "los_angeles", "902": "los_angeles", "903": "los_angeles",
+    "904": "los_angeles", "905": "los_angeles", "906": "los_angeles", "907": "los_angeles",
+    "908": "los_angeles", "910": "los_angeles", "911": "los_angeles", "912": "los_angeles",
+    "913": "los_angeles", "914": "los_angeles", "915": "los_angeles", "916": "los_angeles",
+    "917": "los_angeles", "918": "los_angeles", "926": "los_angeles", "927": "los_angeles",
+    "928": "los_angeles",
+    "800": "denver", "801": "denver", "802": "denver", "803": "denver", "804": "denver", "805": "denver", "806": "denver",
+    # 100-149: New York Harbor & New York State Metro Calibration Hub (Issue #635)
+    **{f"{i:03d}": "new_york" for i in range(100, 150)},
+    # 980-985: Seattle-Tacoma & Puget Sound Regional Calibration Hub (Issue #622)
+    "980": "seattle", "981": "seattle", "982": "seattle", "983": "seattle", "984": "seattle", "985": "seattle",
+    # 850-853, 890-891: Phoenix Metro & Desert Southwest Calibration Hub (Issue #622)
+    "850": "phoenix", "851": "phoenix", "852": "phoenix", "853": "phoenix", "890": "phoenix", "891": "phoenix",
+    # 995-996: Anchorage & Southcentral Alaska Hub (Issue #622)
+    "995": "anchorage", "996": "anchorage",
+    # 967-968: Honolulu & Hawaiian Islands Hub (Issue #622)
+    "967": "honolulu", "968": "honolulu",
+    # 969: Hagåtña / Apra Harbor, Guam & Pacific Territories (Issue #621)
+    "969": "guam",
+    # 006-009: San Juan Metro & Caribbean Territories Hub (Issue #620)
+    "006": "san_juan", "007": "san_juan", "008": "san_juan", "009": "san_juan",
+    # 021-022, 024: Boston Metro & New England Regional Hub (Issue #619)
+    "021": "boston", "022": "boston", "024": "boston",
 }
 
 # 3-digit ZIP prefix mapping to 2-letter state postal codes
@@ -88,38 +117,328 @@ ZIP_PREFIX_STATE_MAP: Dict[str, str] = {
     "890": "NV", "891": "NV", "893": "NV", "894": "NV", "895": "NV", "897": "NV", "898": "NV",
     "850": "AZ", "851": "AZ", "852": "AZ", "853": "AZ", "855": "AZ", "856": "AZ", "857": "AZ", "859": "AZ", "860": "AZ", "863": "AZ", "864": "AZ", "865": "AZ",
     "995": "AK", "996": "AK", "997": "AK", "998": "AK", "999": "AK",
-    "967": "HI", "968": "HI"
+    "967": "HI", "968": "HI",
+    "969": "GU",
+    # PADD 6 (Caribbean Territories - Issue #620)
+    "006": "PR", "007": "PR", "008": "VI", "009": "PR"
 }
 
 # State to PADD & Calibrated Model fallback mapping
 STATE_PADD_MODEL_MAP: Dict[str, Dict[str, Any]] = {
-    "CA": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.596},
-    "OR": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.400},
-    "WA": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.494},
-    "NV": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.505},
-    "AZ": {"padd": "PADD 5", "padd_name": "West Coast", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.180},
-    "NY": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.472},
+    # PADD 6 (U.S. Caribbean Territories - Issue #620)
+    "PR": {"padd": "PADD 6", "padd_name": "U.S. Caribbean Territories", "fallback_locale": "san_juan", "fallback_model": "San_Juan_PR (PADD 6)", "state_tax": 0.160},
+    "VI": {"padd": "PADD 6", "padd_name": "U.S. Virgin Islands", "fallback_locale": "san_juan", "fallback_model": "San_Juan_PR (PADD 6)", "state_tax": 0.160},
+    # PADD 7 (U.S. Pacific Island Territories - Issue #621)
+    "GU": {"padd": "PADD 7", "padd_name": "U.S. Pacific Island Territories", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
+    "MP": {"padd": "PADD 7", "padd_name": "Northern Mariana Islands", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
+    "AS": {"padd": "PADD 7", "padd_name": "American Samoa", "fallback_locale": "guam", "fallback_model": "Guam_GU (PADD 7)", "state_tax": 0.190},
+    # PADD 5 (West Coast Sub-Districts - Issue #622 Decoupling)
+    "CA": {"padd": "PADD 5", "padd_name": "West Coast (California CARB)", "fallback_locale": "oakland", "fallback_model": "Oakland_CA (PADD 5 CARB)", "state_tax": 0.596},
+    "OR": {"padd": "PADD 5", "padd_name": "Pacific Northwest", "fallback_locale": "seattle", "fallback_model": "Seattle_WA (PADD 5B PNW)", "state_tax": 0.400},
+    "WA": {"padd": "PADD 5", "padd_name": "Pacific Northwest", "fallback_locale": "seattle", "fallback_model": "Seattle_WA (PADD 5B PNW)", "state_tax": 0.494},
+    "NV": {"padd": "PADD 5", "padd_name": "Desert Southwest", "fallback_locale": "phoenix", "fallback_model": "Phoenix_AZ (PADD 5C Desert SW)", "state_tax": 0.505},
+    "AZ": {"padd": "PADD 5", "padd_name": "Desert Southwest", "fallback_locale": "phoenix", "fallback_model": "Phoenix_AZ (PADD 5C Desert SW)", "state_tax": 0.180},
+    "AK": {"padd": "PADD 5", "padd_name": "Alaska", "fallback_locale": "anchorage", "fallback_model": "Anchorage_AK (PADD 5D Alaska)", "state_tax": 0.089},
+    "HI": {"padd": "PADD 5", "padd_name": "Hawaii", "fallback_locale": "honolulu", "fallback_model": "Honolulu_HI (PADD 5D Hawaii)", "state_tax": 0.160},
+    # PADD 1A (New England)
+    "ME": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.300},
+    "NH": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.222},
+    "VT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.310},
+    "MA": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.240},
+    "RI": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.370},
+    "CT": {"padd": "PADD 1A", "padd_name": "New England", "fallback_locale": "boston", "fallback_model": "Boston_MA (PADD 1A)", "state_tax": 0.250},
+    # PADD 1B (Central Atlantic)
+    "NY": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "new_york", "fallback_model": "New_York_NY (PADD 1B)", "state_tax": 0.472},
     "NJ": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.423},
     "PA": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.576},
     "DE": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.230},
     "MD": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.470},
+    "DC": {"padd": "PADD 1B", "padd_name": "Central Atlantic", "fallback_locale": "newark", "fallback_model": "Newark_DE (PADD 1B)", "state_tax": 0.348},
+    # PADD 1C (Lower Atlantic)
     "NC": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.404},
     "SC": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.280},
     "FL": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "port_st_lucie", "fallback_model": "Port_St_Lucie_FL (PADD 1C)", "state_tax": 0.362},
     "GA": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.312},
     "VA": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.298},
+    "WV": {"padd": "PADD 1C", "padd_name": "Lower Atlantic", "fallback_locale": "charlotte", "fallback_model": "Charlotte_NC (PADD 1C)", "state_tax": 0.357},
+    # PADD 2 (Midwest)
     "OK": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.190},
     "OH": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.385},
-    "IL": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.454},
-    "TX": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "national", "fallback_model": "National Wholesale (PADD 3)", "state_tax": 0.200},
-    "LA": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "national", "fallback_model": "National Wholesale (PADD 3)", "state_tax": 0.200}
+    "IL": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.470},
+    "IN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.350},
+    "MI": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.300},
+    "WI": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.309},
+    "MN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.285},
+    "IA": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.300},
+    "MO": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.245},
+    "KS": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.240},
+    "NE": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.296},
+    "ND": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "chicago", "fallback_model": "Chicago_IL (PADD 2)", "state_tax": 0.230},
+    "SD": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "tulsa", "fallback_model": "Tulsa_OK (PADD 2)", "state_tax": 0.280},
+    "KY": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.287},
+    "TN": {"padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "cincinnati", "fallback_model": "Cincinnati_OH (PADD 2)", "state_tax": 0.274},
+    # PADD 3 (Gulf Coast)
+    "TX": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200},
+    "LA": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.200},
+    "AR": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.248},
+    "MS": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.184},
+    "AL": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.290},
+    "NM": {"padd": "PADD 3", "padd_name": "Gulf Coast", "fallback_locale": "houston", "fallback_model": "Houston_TX (PADD 3)", "state_tax": 0.189},
+    # PADD 4 (Rocky Mountain)
+    "CO": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.280},
+    "UT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.365},
+    "WY": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.240},
+    "MT": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.330},
+    "ID": {"padd": "PADD 4", "padd_name": "Rocky Mountain", "fallback_locale": "denver", "fallback_model": "Denver_CO (PADD 4)", "state_tax": 0.320},
 }
+
+# Geographic centroids for all 50 US states + DC for out-of-metro ZIP heatmap plotting
+STATE_CENTER_COORDS: Dict[str, tuple[float, float]] = {
+    "AL": (32.8067, -86.7911), "AK": (61.3707, -152.4044), "AZ": (33.7298, -111.4312),
+    "AR": (34.9697, -92.3731), "CA": (36.7783, -119.4179), "CO": (39.5501, -105.7821),
+    "CT": (41.5978, -72.7554), "DE": (38.9108, -75.5277), "DC": (38.9072, -77.0369),
+    "FL": (27.6648, -81.5158), "GA": (32.1656, -82.9001), "HI": (21.0943, -157.4983),
+    "ID": (44.2405, -114.4788), "IL": (40.6331, -89.3985), "IN": (39.8494, -86.2583),
+    "IA": (42.0115, -93.2105), "KS": (38.5266, -96.7265), "KY": (37.6681, -84.6701),
+    "LA": (31.1695, -91.8678), "ME": (44.6939, -69.3819), "MD": (39.0639, -76.8021),
+    "MA": (42.2302, -71.5301), "MI": (43.3266, -84.5361), "MN": (45.6945, -93.9002),
+    "MS": (32.7416, -89.6787), "MO": (38.4561, -92.2884), "MT": (46.9219, -110.4544),
+    "NE": (41.1254, -98.2681), "NV": (38.3135, -117.0554), "NH": (43.4525, -71.5639),
+    "NJ": (40.2989, -74.5210), "NM": (34.8405, -106.2485), "NY": (42.9538, -75.5268),
+    "NC": (35.7596, -79.0193), "ND": (47.5289, -99.7840), "OH": (40.4173, -82.9071),
+    "OK": (35.4676, -97.5164), "OR": (44.5720, -122.0709), "PA": (41.2033, -77.1945),
+    "RI": (41.6809, -71.5118), "SC": (33.8569, -80.9450), "SD": (44.2998, -99.4388),
+    "TN": (35.7478, -86.6923), "TX": (31.9686, -99.9018), "UT": (40.1500, -111.8624),
+    "VT": (44.0459, -72.7107), "VA": (37.7693, -78.1700), "WA": (47.4009, -121.4905),
+    "WV": (38.4912, -80.9545), "WI": (44.2685, -89.6165), "WY": (42.7560, -107.3025),
+    "GU": (13.4443, 144.7937), "MP": (15.1794, 145.7483), "AS": (-14.2710, -170.7020),
+    "PR": (18.2208, -66.5901), "VI": (18.3358, -64.8963),
+}
+
+# Exact 5-digit ZIP coordinates (lat, lon, label) to prevent misplacement of out-of-metro regions
+KNOWN_ZIP_COORDS: Dict[str, tuple[float, float, str]] = {
+    "12946": (44.2795, -73.9799, "Lake Placid, NY (Adirondacks / PADD 1B)"),
+    "90210": (34.0736, -118.4004, "Beverly Hills, CA (PADD 5)"),
+    "77002": (29.7604, -95.3698, "Houston, TX (PADD 3)"),
+    "10001": (40.7501, -73.9996, "New York, NY (PADD 1B)"),
+    "60601": (41.8781, -87.6298, "Chicago, IL (PADD 2)"),
+    "30301": (33.7490, -84.3880, "Atlanta, GA (PADD 1C)"),
+    "74101": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
+    "74103": (36.1540, -95.9928, "Tulsa, OK (PADD 2)"),
+    "19711": (39.6837, -75.7497, "Newark, DE (PADD 1B)"),
+    "45202": (39.1031, -84.5120, "Cincinnati, OH (PADD 2)"),
+    "27834": (35.6127, -77.3664, "Greenville, NC (PADD 1C)"),
+    "28202": (35.2271, -80.8431, "Charlotte, NC (PADD 1C)"),
+    "94612": (37.8044, -122.2712, "Oakland, CA (PADD 5)"),
+    "34952": (27.2756, -80.3242, "Port St. Lucie, FL (PADD 1C)"),
+    "64101": (39.0997, -94.5786, "Kansas City, MO (PADD 2)"),
+    "80202": (39.7392, -104.9903, "Denver, CO (PADD 4)"),
+    "98101": (47.6062, -122.3321, "Seattle, WA (PADD 5)"),
+    "02138": (42.3736, -71.1097, "Cambridge / Boston, MA (PADD 1A)"),
+    "07001": (40.5843, -74.2765, "Avenel / Woodbridge, NJ (PADD 1B)"),
+    "85001": (33.4484, -112.0740, "Phoenix, AZ (PADD 5)"),
+    "99501": (61.2181, -149.9003, "Anchorage, AK (PADD 5)"),
+    "96813": (21.3069, -157.8583, "Honolulu, HI (PADD 5)"),
+    "96910": (13.4756, 144.7503, "Hagåtña, GU (PADD 7)"),
+    "00901": (18.4655, -66.1057, "San Juan, PR (PADD 6)"),
+    "00801": (18.3358, -64.8963, "St. Thomas, VI (PADD 6)"),
+    "84101": (40.7608, -111.8910, "Salt Lake City, UT (PADD 4)"),
+    "89101": (36.1699, -115.1398, "Las Vegas, NV (PADD 5)"),
+    "48201": (42.3314, -83.0458, "Detroit, MI (PADD 2)"),
+    "55401": (44.9778, -93.2650, "Minneapolis, MN (PADD 2)"),
+}
+
+# 3-digit ZIP prefix centroids (lat, lon, label) for regional accuracy
+KNOWN_PREFIX_COORDS: Dict[str, tuple[float, float, str]] = {
+    # New York State Regions (Preserving Adirondacks, Upstate, Western NY, Long Island & NYC)
+    "129": (44.4000, -74.0000, "Adirondacks / Plattsburgh, NY (PADD 1B)"),
+    "128": (43.3095, -73.6440, "Glens Falls / Southern Adirondacks, NY (PADD 1B)"),
+    "120": (42.7500, -73.8000, "Capital District, NY (PADD 1B)"),
+    "121": (42.7000, -73.7000, "Capital District, NY (PADD 1B)"),
+    "122": (42.6526, -73.7562, "Albany, NY (PADD 1B)"),
+    "123": (42.8142, -73.9396, "Schenectady, NY (PADD 1B)"),
+    "124": (42.0000, -74.2000, "Catskills / Kingston, NY (PADD 1B)"),
+    "125": (41.6000, -73.8000, "Hudson Valley / Poughkeepsie, NY (PADD 1B)"),
+    "126": (41.7000, -73.9000, "Poughkeepsie, NY (PADD 1B)"),
+    "127": (41.7000, -74.7000, "Monticello / Sullivan County, NY (PADD 1B)"),
+    "130": (43.0000, -76.3000, "Central NY / Cortland, NY (PADD 1B)"),
+    "131": (43.1000, -76.2000, "Central NY / Oswego, NY (PADD 1B)"),
+    "132": (43.0481, -76.1474, "Syracuse, NY (PADD 1B)"),
+    "133": (43.1000, -75.2000, "Utica / Mohawk Valley, NY (PADD 1B)"),
+    "134": (43.2000, -75.3000, "Utica / Rome, NY (PADD 1B)"),
+    "135": (43.1009, -75.2327, "Utica, NY (PADD 1B)"),
+    "136": (44.5000, -75.2000, "North Country / Watertown, NY (PADD 1B)"),
+    "137": (42.1000, -75.6000, "Binghamton Area, NY (PADD 1B)"),
+    "138": (42.2000, -75.4000, "Southern Tier, NY (PADD 1B)"),
+    "139": (42.0987, -75.9180, "Binghamton, NY (PADD 1B)"),
+    "140": (42.8000, -78.6000, "Western NY / Buffalo Metro, NY (PADD 1B)"),
+    "141": (43.0000, -78.8000, "Niagara / Western NY, NY (PADD 1B)"),
+    "142": (42.8864, -78.8784, "Buffalo, NY (PADD 1B)"),
+    "143": (43.0962, -79.0377, "Niagara Falls, NY (PADD 1B)"),
+    "144": (42.9000, -77.4000, "Finger Lakes, NY (PADD 1B)"),
+    "145": (43.0000, -77.6000, "Rochester Metro, NY (PADD 1B)"),
+    "146": (43.1566, -77.6088, "Rochester, NY (PADD 1B)"),
+    "147": (42.1000, -79.2000, "Jamestown / Chautauqua, NY (PADD 1B)"),
+    "148": (42.3000, -77.2000, "Elmira / Corning, NY (PADD 1B)"),
+    "149": (42.0898, -76.8077, "Elmira, NY (PADD 1B)"),
+    "100": (40.7831, -73.9712, "Manhattan, NYC (PADD 1B)"),
+    "101": (40.7505, -73.9934, "Manhattan Midtown, NYC (PADD 1B)"),
+    "102": (40.7130, -74.0130, "Manhattan Financial District, NYC (PADD 1B)"),
+    "103": (40.5795, -74.1502, "Staten Island, NYC (PADD 1B)"),
+    "104": (40.8448, -73.8648, "Bronx, NYC (PADD 1B)"),
+    "105": (41.1000, -73.7500, "Westchester County, NY (PADD 1B)"),
+    "106": (41.0340, -73.7629, "White Plains, NY (PADD 1B)"),
+    "107": (40.9312, -73.8987, "Yonkers, NY (PADD 1B)"),
+    "108": (40.9115, -73.7824, "New Rochelle, NY (PADD 1B)"),
+    "109": (41.1500, -74.0000, "Rockland County, NY (PADD 1B)"),
+    "110": (40.7500, -73.7000, "Queens / Nassau Border, NY (PADD 1B)"),
+    "111": (40.7500, -73.9200, "Long Island City / Queens, NYC (PADD 1B)"),
+    "112": (40.6782, -73.9442, "Brooklyn, NYC (PADD 1B)"),
+    "113": (40.7498, -73.8378, "Flushing / Queens, NYC (PADD 1B)"),
+    "114": (40.7027, -73.7890, "Jamaica / Queens, NYC (PADD 1B)"),
+    "115": (40.7300, -73.6000, "Nassau County, Long Island (PADD 1B)"),
+    "117": (40.8200, -73.1500, "Suffolk County, Long Island (PADD 1B)"),
+    "118": (40.7800, -73.5000, "Mid-Nassau County, Long Island (PADD 1B)"),
+    "119": (40.9000, -72.3500, "Hamptons / East Long Island (PADD 1B)"),
+    # Additional Key Regional Hubs & Out-of-Metro Clusters
+    "191": (39.9526, -75.1652, "Philadelphia, PA (PADD 1B)"),
+    "152": (40.4406, -79.9959, "Pittsburgh, PA (PADD 1B)"),
+    "021": (42.3601, -71.0589, "Boston, MA (PADD 1A)"),
+    "022": (42.3500, -71.0700, "Boston Metro, MA (PADD 1A)"),
+    "029": (41.8240, -71.4128, "Providence, RI (PADD 1A)"),
+    "061": (41.7658, -72.6734, "Hartford, CT (PADD 1A)"),
+    "031": (42.9956, -71.4548, "Manchester, NH (PADD 1A)"),
+    "054": (44.4759, -73.2121, "Burlington, VT (PADD 1A)"),
+    "041": (43.6591, -70.2568, "Portland, ME (PADD 1A)"),
+    "802": (39.7392, -104.9903, "Denver, CO (PADD 4)"),
+    "841": (40.7608, -111.8910, "Salt Lake City, UT (PADD 4)"),
+    "820": (41.1400, -104.8202, "Cheyenne, WY (PADD 4)"),
+    "591": (45.7833, -108.5007, "Billings, MT (PADD 4)"),
+    "837": (43.6150, -116.2023, "Boise, ID (PADD 4)"),
+    "009": (18.4655, -66.1057, "San Juan, PR (PADD 6)"),
+    "008": (18.3358, -64.8963, "US Virgin Islands (PADD 6)"),
+    "969": (13.4443, 144.7937, "Guam / Marianas (PADD 7)"),
+}
+
+
+# Baseline statutory motor fuel excise tax rates ($/gal) for calibrated reference hubs
+HUB_BASELINE_TAXES: Dict[str, float] = {
+    "newark": 0.230,
+    "tulsa": 0.190,
+    "cincinnati": 0.385,
+    "greenville": 0.404,
+    "charlotte": 0.404,
+    "port_st_lucie": 0.362,
+    "chicago": 0.550,
+    "houston": 0.200,
+    "los_angeles": 0.953,
+    "denver": 0.280,
+    "new_york": 0.472,
+    "oakland": 0.634,
+    "bayarea": 0.634,
+    "seattle": 0.494,
+    "phoenix": 0.180,
+    "anchorage": 0.0895,
+    "honolulu": 0.330,
+    "guam": 0.190,
+    "san_juan": 0.160,
+    "boston": 0.240,
+    "national": 0.184
+}
+
+# Known regional locality names for 5-digit ZIPs and 3-digit prefixes to preserve true geographic identity
+KNOWN_ZIP_LOCALITIES: Dict[str, str] = {
+    "009": "San Juan Metro, PR",
+    "00901": "Old San Juan, PR",
+    "00907": "Condado / San Juan, PR",
+    "00725": "Caguas, PR",
+    "00801": "St. Thomas, VI",
+    "00820": "St. Croix, VI",
+    "969": "Hagåtña / Apra Harbor, GU",
+    "96910": "Hagåtña, GU",
+    "96913": "Barrigada / Tamuning, GU",
+    "96915": "Santa Rita / Apra Harbor, GU",
+    "96929": "Yigo / Andersen AFB, GU",
+    "96950": "Saipan, MP",
+    "12946": "Lake Placid, NY",
+    "129": "Adirondacks / Plattsburgh, NY",
+    "100": "Manhattan, NYC",
+    "101": "Manhattan, NYC",
+    "102": "Manhattan, NYC",
+    "103": "Staten Island, NYC",
+    "104": "Bronx, NYC",
+    "112": "Brooklyn, NYC",
+    "111": "Queens, NYC",
+    "113": "Queens, NYC",
+    "114": "Queens, NYC",
+    "115": "Nassau County, Long Island",
+    "117": "Suffolk County, Long Island",
+    "119": "Hamptons, Long Island",
+    "120": "Capital District, NY",
+    "122": "Albany, NY",
+    "128": "Glens Falls / Adirondacks, NY",
+    "132": "Syracuse, NY",
+    "142": "Buffalo, NY",
+    "146": "Rochester, NY",
+    "191": "Philadelphia, PA",
+    "152": "Pittsburgh, PA",
+    "021": "Boston, MA",
+    "029": "Providence, RI",
+    "061": "Hartford, CT",
+    "031": "Manchester, NH",
+    "054": "Burlington, VT",
+    "041": "Portland, ME",
+    "802": "Denver, CO",
+    "841": "Salt Lake City, UT",
+    "820": "Cheyenne, WY",
+    "591": "Billings, MT",
+    "837": "Boise, ID",
+    "74103": "Tulsa Metro, OK",
+    "64101": "Kansas City, MO",
+}
+
+
+def resolve_location_name(zip_code: str, prefix_3: str, state_code: str) -> str:
+    """Resolves human-readable locality string from ZIP or prefix."""
+    if zip_code in KNOWN_ZIP_LOCALITIES:
+        return KNOWN_ZIP_LOCALITIES[zip_code]
+    if prefix_3 in KNOWN_ZIP_LOCALITIES:
+        return KNOWN_ZIP_LOCALITIES[prefix_3]
+    return f"ZIP {zip_code} ({state_code})"
+
+
+def resolve_zip_coordinates(zip_code: str, state_code: str = "US", padd_region: str = "") -> tuple[float, float, str]:
+    """
+    Resolves geographic (lat, lon, label) for a given 5-digit ZIP code.
+    1. Checks exact 5-digit KNOWN_ZIP_COORDS.
+    2. Checks 3-digit prefix KNOWN_PREFIX_COORDS.
+    3. Falls back to true geographic state centroid STATE_CENTER_COORDS.
+    4. Ultimate fallback to US centroid (39.8283, -98.5795).
+    """
+    z_clean = str(zip_code or "").strip().split("-")[0].strip().zfill(5)[:5]
+    if z_clean in KNOWN_ZIP_COORDS:
+        lat, lon, desc = KNOWN_ZIP_COORDS[z_clean]
+        return lat, lon, f"{z_clean} - {desc}"
+
+    p3 = z_clean[:3]
+    if p3 in KNOWN_PREFIX_COORDS:
+        lat, lon, desc = KNOWN_PREFIX_COORDS[p3]
+        return lat, lon, f"{z_clean} - {desc}"
+
+    st = state_code.upper() if state_code and state_code.upper() != "US" else ZIP_PREFIX_STATE_MAP.get(p3, "US")
+    padd_str = f" ({padd_region})" if padd_region else ""
+    if st in STATE_CENTER_COORDS:
+        lat, lon = STATE_CENTER_COORDS[st]
+        return lat, lon, f"{z_clean} - {st}{padd_str}"
+
+    return 39.8283, -98.5795, f"{z_clean} - US{padd_str}"
 
 
 def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     """
     Resolves a 5-digit US ZIP code to mapped metro area locale, PADD region, state,
-    state fuel tax, and resolution tier. Logs unmapped out-of-metro lookups.
+    state fuel tax, resolution tier, and departure diagnostics.
+    Logs unmapped out-of-metro lookups.
     Zero-pads numeric inputs (e.g. 7001 -> 07001 NJ) to prevent leading-zero misrouting (Issue #335).
     """
     raw_str = str(zip_code).strip().split("-")[0].strip()
@@ -131,9 +450,15 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
             "is_metro_cluster_hit": False,
             "locale_code": "national",
             "region_id": "National",
+            "location_name": f"ZIP {raw_str[:5]} (US)",
             "padd_region": "PADD 2 (Midwest)",
             "state": "US",
-            "state_tax_rate_per_gal": 0.184
+            "state_tax_rate_per_gal": 0.184,
+            "hub_baseline_tax_rate": 0.184,
+            "tax_delta_per_gal": 0.0,
+            "is_significant_departure": False,
+            "departure_reason": "",
+            "estimated_basis_delta": 0.0
         }
 
     zip_clean = raw_str.zfill(5)[:5]
@@ -144,6 +469,8 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
         metro_loc = ZIP_METRO_PREFIX_MAP[prefix_3]
         state_code = ZIP_PREFIX_STATE_MAP.get(prefix_3, "US")
         state_meta = STATE_PADD_MODEL_MAP.get(state_code, {})
+        loc_name = resolve_location_name(zip_clean, prefix_3, state_code)
+        hub_tax = HUB_BASELINE_TAXES.get(metro_loc, 0.250)
 
         res = {
             "status": "success",
@@ -151,10 +478,16 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
             "resolution_tier": "METRO_CLUSTER_HIT",
             "is_metro_cluster_hit": True,
             "locale_code": metro_loc,
+            "location_name": loc_name,
             "prefix_3": prefix_3,
             "state": state_code,
             "padd_region": state_meta.get("padd", "PADD 2"),
-            "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250)
+            "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250),
+            "hub_baseline_tax_rate": hub_tax,
+            "tax_delta_per_gal": 0.0,
+            "is_significant_departure": False,
+            "departure_reason": "",
+            "estimated_basis_delta": 0.0
         }
         return res
 
@@ -163,34 +496,69 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     state_meta = STATE_PADD_MODEL_MAP.get(state_code, {
         "padd": "PADD 2", "padd_name": "Midwest", "fallback_locale": "national", "fallback_model": "National Wholesale", "state_tax": 0.250
     })
+    loc_name = resolve_location_name(zip_clean, prefix_3, state_code)
+    fallback_hub = state_meta.get("fallback_locale", "national")
+    hub_tax = HUB_BASELINE_TAXES.get(fallback_hub, 0.250)
+    state_tax = state_meta.get("state_tax", 0.250)
+    tax_delta = round(state_tax - hub_tax, 3)
+
+    padd_str = state_meta.get("padd", "PADD 2")
+    is_departure = (
+        abs(tax_delta) >= 0.15
+        or padd_str in ("PADD 1A", "PADD 4")
+        or (state_code == "NY" and fallback_hub == "newark")
+    )
+
+    departure_reason = ""
+    if is_departure:
+        if state_code == "NY" and fallback_hub == "newark":
+            departure_reason = f"High statutory tax wedge (+${tax_delta:.3f}/gal vs DE) and Adirondack/Upstate logistics basis"
+        elif padd_str == "PADD 1A":
+            departure_reason = f"PADD 1A New England regional disconnect from coastal rack hub ({fallback_hub})"
+        elif padd_str == "PADD 4":
+            departure_reason = f"PADD 4 Rocky Mountain inter-PADD corridor fallback ({fallback_hub})"
+        else:
+            departure_reason = f"Statutory tax wedge of {tax_delta:+.3f}/gal vs hub baseline ({fallback_hub})"
+
+    # Estimated regional logistics basis premium over rack (e.g. mountain/rural freight)
+    extra_logistics = 0.35 if (zip_clean == "12946" or prefix_3 == "129") else (0.15 if state_code == "NY" else 0.0)
+    est_basis = round(tax_delta + extra_logistics, 3)
 
     res = {
         "status": "success",
         "zip_code": zip_clean,
         "resolution_tier": "STATE_PADD_FALLBACK",
         "is_metro_cluster_hit": False,
-        "locale_code": state_meta.get("fallback_locale", "national"),
+        "locale_code": fallback_hub,
+        "location_name": loc_name,
         "prefix_3": prefix_3,
         "state": state_code,
-        "padd_region": state_meta.get("padd", "PADD 2"),
+        "padd_region": padd_str,
         "padd_name": state_meta.get("padd_name", "Midwest"),
         "calibrated_model_used": state_meta.get("fallback_model", "National Wholesale"),
-        "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250)
+        "state_tax_rate_per_gal": state_tax,
+        "hub_baseline_tax_rate": hub_tax,
+        "tax_delta_per_gal": tax_delta,
+        "is_significant_departure": is_departure,
+        "departure_reason": departure_reason,
+        "estimated_basis_delta": est_basis,
+        "tracking_issue_number": 635 if state_code == "NY" else None
     }
 
     # Log telemetry for out-of-metro lookups
     try:
         log_unmapped_zip_lookup(zip_clean, res)
     except Exception as e:
-        logger.warning(f"Error logging unmapped ZIP lookup for '{zip_clean}': {e}")
+        logger.warning(f"Error logging unmapped ZIP lookup: {e}")
 
     return res
 
 
 def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
     """
-    Logs an unmapped out-of-metro ZIP code lookup to data/unmapped_zip_telemetry.json,
-    incrementing query hit count and updating timestamps.
+    Logs an unmapped out-of-metro ZIP code lookup to data/unmapped_zip_telemetry.json
+    and the SQLite/Turso unmapped_zip_telemetry table, incrementing query hit count
+    and updating timestamps.
     """
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR, exist_ok=True)
@@ -205,7 +573,10 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
             data = {}
 
     now_iso = datetime.now().isoformat()
-    z_key = str(zip_code)
+    z_key = str(zip_code).strip().zfill(5)[:5]
+    state_val = str(resolution.get("state", "US"))
+    padd_val = str(resolution.get("padd_region", "PADD 2"))
+    model_val = str(resolution.get("calibrated_model_used", "National Wholesale"))
 
     if z_key in data:
         data[z_key]["hit_count"] += 1
@@ -213,9 +584,9 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
     else:
         data[z_key] = {
             "zip_code": z_key,
-            "state": resolution.get("state", "US"),
-            "padd_region": resolution.get("padd_region", "PADD 2"),
-            "calibrated_model_used": resolution.get("calibrated_model_used", "National Wholesale"),
+            "state": state_val,
+            "padd_region": padd_val,
+            "calibrated_model_used": model_val,
             "hit_count": 1,
             "first_searched_at": now_iso,
             "last_searched_at": now_iso
@@ -227,13 +598,154 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
     except Exception as e:
         logger.error(f"Error writing to {TELEMETRY_FILE}: {e}")
 
+    # Persist to SQLite/Turso unmapped_zip_telemetry table for edge/backend synchronization
+    try:
+        from src.db.client import get_db_client
+        db = get_db_client()
+        db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS unmapped_zip_telemetry (
+                zip_code TEXT PRIMARY KEY,
+                state TEXT NOT NULL DEFAULT 'US',
+                padd_region TEXT NOT NULL DEFAULT 'PADD 2',
+                calibrated_model_used TEXT NOT NULL DEFAULT 'National Wholesale',
+                hit_count INTEGER NOT NULL DEFAULT 1,
+                first_searched_at TEXT NOT NULL,
+                last_searched_at TEXT NOT NULL
+            )
+            """
+        )
+        db.execute(
+            """
+            INSERT INTO unmapped_zip_telemetry (
+                zip_code, state, padd_region, calibrated_model_used,
+                hit_count, first_searched_at, last_searched_at
+            ) VALUES (?, ?, ?, ?, 1, ?, ?)
+            ON CONFLICT(zip_code) DO UPDATE SET
+                hit_count = unmapped_zip_telemetry.hit_count + 1,
+                last_searched_at = excluded.last_searched_at
+            """,
+            (z_key, state_val, padd_val, model_val, now_iso, now_iso),
+        )
+    except Exception as db_err:
+        logger.debug(f"Could not sync unmapped ZIP to database: {db_err}")
+
 
 def get_unmapped_zip_telemetry() -> Dict[str, Any]:
     """
     Returns aggregated unmapped ZIP code lookup telemetry, sorted by hit count,
-    including state/PADD query distributions and recommended expansion metro hubs.
+    merging data/unmapped_zip_telemetry.json with Turso/SQLite unmapped_zip_telemetry
+    and out-of-metro Discord ZIP subscriptions.
     """
-    if not os.path.exists(TELEMETRY_FILE):
+    data: Dict[str, Dict[str, Any]] = {}
+    if os.path.exists(TELEMETRY_FILE):
+        try:
+            with open(TELEMETRY_FILE, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+                if isinstance(loaded, dict):
+                    data.update(loaded)
+        except Exception as e:
+            logger.error(f"Error reading {TELEMETRY_FILE}: {e}")
+            return {
+                "status": "error",
+                "message": "Error reading unmapped zip telemetry data",
+                "top_unmapped_zips": []
+            }
+
+    # Merge records from SQLite/Turso unmapped_zip_telemetry and discord_subscriptions
+    try:
+        from src.db.client import get_db_client
+        db = get_db_client()
+        try:
+            rows = db.query("SELECT zip_code, state, padd_region, calibrated_model_used, hit_count, first_searched_at, last_searched_at FROM unmapped_zip_telemetry")
+            for row in rows:
+                z_key = str(row.get("zip_code") or "").strip()
+                if not z_key:
+                    continue
+                db_hits = int(row.get("hit_count") or 1)
+                if z_key in data:
+                    data[z_key]["hit_count"] = max(int(data[z_key].get("hit_count", 1)), db_hits)
+                    if str(row.get("last_searched_at") or "") > str(data[z_key].get("last_searched_at") or ""):
+                        data[z_key]["last_searched_at"] = row["last_searched_at"]
+                else:
+                    data[z_key] = {
+                        "zip_code": z_key,
+                        "state": row.get("state", "US"),
+                        "padd_region": row.get("padd_region", "PADD 2"),
+                        "calibrated_model_used": row.get("calibrated_model_used", "National Wholesale"),
+                        "hit_count": db_hits,
+                        "first_searched_at": row.get("first_searched_at") or datetime.now().isoformat(),
+                        "last_searched_at": row.get("last_searched_at") or datetime.now().isoformat(),
+                    }
+        except Exception:
+            pass
+
+        try:
+            sub_rows = db.query("SELECT zip_codes, created_at FROM discord_subscriptions WHERE zip_codes IS NOT NULL AND zip_codes != '[]'")
+            for srow in sub_rows:
+                raw_zips = srow.get("zip_codes")
+                z_list = json.loads(raw_zips) if isinstance(raw_zips, str) else (raw_zips or [])
+                for z_raw in z_list:
+                    z_str = str(z_raw).strip().zfill(5)[:5]
+                    if len(z_str) == 5 and z_str.isdigit() and z_str[:3] not in ZIP_METRO_PREFIX_MAP:
+                        prefix_3 = z_str[:3]
+                        st_code = ZIP_PREFIX_STATE_MAP.get(prefix_3, "US")
+                        st_meta = STATE_PADD_MODEL_MAP.get(st_code, {})
+                        if z_str not in data:
+                            ts = srow.get("created_at") or datetime.now().isoformat()
+                            data[z_str] = {
+                                "zip_code": z_str,
+                                "state": st_code,
+                                "padd_region": st_meta.get("padd", "PADD 2"),
+                                "calibrated_model_used": st_meta.get("fallback_model", "National Wholesale"),
+                                "hit_count": 1,
+                                "first_searched_at": ts,
+                                "last_searched_at": ts,
+                            }
+        except Exception:
+            pass
+    except Exception as db_err:
+        logger.debug(f"Could not merge database unmapped ZIP telemetry: {db_err}")
+
+    # Merge edge Cloudflare Worker D1 unmapped ZIP telemetry (from /midgley Discord slash commands)
+    if os.environ.get("TESTING") != "1":
+        try:
+            import urllib.request
+            worker_base = os.environ.get(
+                "MIDGLEY_WORKER_BASE_URL",
+                "https://midgley-intraday-monitor.m-cubed-3.workers.dev"
+            ).rstrip("/")
+            req = urllib.request.Request(
+                f"{worker_base}/telemetry/unmapped-zips",
+                headers={"User-Agent": "Midgley-Telemetry-Sync/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                if resp.status == 200:
+                    edge_payload = json.loads(resp.read().decode("utf-8"))
+                    for erow in edge_payload.get("top_unmapped_zips", []):
+                        z_key = str(erow.get("zip_code") or "").strip()
+                        if not z_key:
+                            continue
+                        e_hits = int(erow.get("hit_count") or 1)
+                        if z_key in data:
+                            data[z_key]["hit_count"] = max(int(data[z_key].get("hit_count", 1)), e_hits)
+                            if str(erow.get("last_searched_at") or "") > str(data[z_key].get("last_searched_at") or ""):
+                                data[z_key]["last_searched_at"] = erow["last_searched_at"]
+                        else:
+                            data[z_key] = {
+                                "zip_code": z_key,
+                                "state": erow.get("state", "US"),
+                                "padd_region": erow.get("padd_region", "PADD 2"),
+                                "calibrated_model_used": erow.get("calibrated_model_used", "National Wholesale"),
+                                "hit_count": e_hits,
+                                "first_searched_at": erow.get("first_searched_at") or datetime.now().isoformat(),
+                                "last_searched_at": erow.get("last_searched_at") or datetime.now().isoformat(),
+                            }
+        except Exception as edge_err:
+            logger.debug(f"Could not merge edge Worker unmapped ZIP telemetry: {edge_err}")
+
+    if not data:
+
         return {
             "status": "success",
             "timestamp": datetime.now().isoformat(),
@@ -242,17 +754,6 @@ def get_unmapped_zip_telemetry() -> Dict[str, Any]:
             "top_unmapped_zips": [],
             "state_distribution": {},
             "recommended_expansion_hubs": []
-        }
-
-    try:
-        with open(TELEMETRY_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except Exception as e:
-        logger.error(f"Error reading {TELEMETRY_FILE}: {e}")
-        return {
-            "status": "error",
-            "message": str(e),
-            "top_unmapped_zips": []
         }
 
     records = list(data.values())
@@ -284,3 +785,339 @@ def get_unmapped_zip_telemetry() -> Dict[str, Any]:
         "state_distribution": state_dist,
         "recommended_expansion_hubs": expansion_hubs
     }
+
+
+
+# Calibration hub centroids with spatial coordinates and maximum metro radii
+CALIBRATION_HUBS: Dict[str, Dict[str, Any]] = {
+    "tulsa": {
+        "name": "Tulsa Metro Area, OK",
+        "region_id": "Tulsa_OK",
+        "lat": 36.1540,
+        "lon": -95.9928,
+        "state": "OK",
+        "padd": "PADD 2",
+        "padd_name": "Midwest",
+        "state_tax": 0.190,
+        "max_radius_miles": 150.0
+    },
+    "cincinnati": {
+        "name": "Cincinnati Tri-State Hub, OH/KY/IN",
+        "region_id": "Cincinnati_OH",
+        "lat": 39.1031,
+        "lon": -84.5120,
+        "state": "OH",
+        "padd": "PADD 2",
+        "padd_name": "Midwest",
+        "state_tax": 0.385,
+        "max_radius_miles": 150.0
+    },
+    "newark": {
+        "name": "Newark Metro Area, NJ / NY Harbor",
+        "region_id": "Newark_DE",
+        "lat": 39.5743,
+        "lon": -75.5908,
+        "state": "NJ",
+        "padd": "PADD 1B",
+        "padd_name": "Central Atlantic",
+        "state_tax": 0.423,
+        "max_radius_miles": 150.0
+    },
+    "oakland": {
+        "name": "Oakland / East Bay, CA",
+        "region_id": "Oakland_CA",
+        "lat": 37.8044,
+        "lon": -122.2712,
+        "state": "CA",
+        "padd": "PADD 5",
+        "padd_name": "West Coast",
+        "state_tax": 0.596,
+        "max_radius_miles": 75.0
+    },
+    "bayarea": {
+        "name": "San Francisco Bay Area, CA",
+        "region_id": "BayArea_CA",
+        "lat": 37.7749,
+        "lon": -122.4194,
+        "state": "CA",
+        "padd": "PADD 5",
+        "padd_name": "West Coast",
+        "state_tax": 0.596,
+        "max_radius_miles": 100.0
+    },
+    "charlotte": {
+        "name": "Charlotte Metro Area, NC",
+        "region_id": "Charlotte_NC",
+        "lat": 35.2271,
+        "lon": -80.8431,
+        "state": "NC",
+        "padd": "PADD 1C",
+        "padd_name": "Lower Atlantic",
+        "state_tax": 0.404,
+        "max_radius_miles": 120.0
+    },
+    "greenville": {
+        "name": "Greenville-Spartanburg, SC (Colonial Pipeline)",
+        "region_id": "Greenville_NC",
+        "lat": 35.6127,
+        "lon": -77.3664,
+        "state": "NC",
+        "padd": "PADD 1C",
+        "padd_name": "Lower Atlantic",
+        "state_tax": 0.404,
+        "max_radius_miles": 120.0
+    },
+    "port_st_lucie": {
+        "name": "Port St. Lucie / Treasure Coast, FL",
+        "region_id": "Port_St_Lucie_FL",
+        "lat": 27.2730,
+        "lon": -80.3582,
+        "state": "FL",
+        "padd": "PADD 1C",
+        "padd_name": "Lower Atlantic",
+        "state_tax": 0.362,
+        "max_radius_miles": 120.0
+    },
+    "chicago": {
+        "name": "Greater Chicago Metro Hub, IL/IN",
+        "region_id": "Chicago_IL",
+        "lat": 41.8781,
+        "lon": -87.6298,
+        "state": "IL",
+        "padd": "PADD 2",
+        "padd_name": "Midwest",
+        "state_tax": 0.470,
+        "max_radius_miles": 100.0
+    },
+    "houston": {
+        "name": "Houston & USGC Refining Hub, TX",
+        "region_id": "Houston_TX",
+        "lat": 29.7604,
+        "lon": -95.3698,
+        "state": "TX",
+        "padd": "PADD 3",
+        "padd_name": "Gulf Coast",
+        "state_tax": 0.200,
+        "max_radius_miles": 120.0
+    },
+    "los_angeles": {
+        "name": "Los Angeles Basin & South Coast Hub, CA",
+        "region_id": "Los_Angeles_CA",
+        "lat": 34.0522,
+        "lon": -118.2437,
+        "state": "CA",
+        "padd": "PADD 5",
+        "padd_name": "West Coast",
+        "state_tax": 0.596,
+        "max_radius_miles": 100.0
+    },
+    "denver": {
+        "name": "Denver Metro & Rocky Mountain Hub, CO",
+        "region_id": "Denver_CO",
+        "lat": 39.7392,
+        "lon": -104.9903,
+        "state": "CO",
+        "padd": "PADD 4",
+        "padd_name": "Rocky Mountain",
+        "state_tax": 0.280,
+        "max_radius_miles": 120.0
+    },
+    "new_york": {
+        "name": "New York Metro & State Hub, NY",
+        "region_id": "New_York_NY",
+        "lat": 40.7128,
+        "lon": -74.0060,
+        "state": "NY",
+        "padd": "PADD 1B",
+        "padd_name": "Central Atlantic",
+        "state_tax": 0.472,
+        "max_radius_miles": 120.0
+    },
+    "seattle": {
+        "name": "Seattle-Tacoma & Puget Sound, WA",
+        "region_id": "Seattle_WA",
+        "lat": 47.6062,
+        "lon": -122.3321,
+        "state": "WA",
+        "padd": "PADD 5B",
+        "padd_name": "Pacific Northwest",
+        "state_tax": 0.494,
+        "max_radius_miles": 150.0
+    },
+    "phoenix": {
+        "name": "Phoenix Metro & Desert Southwest, AZ",
+        "region_id": "Phoenix_AZ",
+        "lat": 33.4484,
+        "lon": -112.0740,
+        "state": "AZ",
+        "padd": "PADD 5C",
+        "padd_name": "Desert Southwest",
+        "state_tax": 0.180,
+        "max_radius_miles": 150.0
+    },
+    "anchorage": {
+        "name": "Anchorage & Southcentral Alaska Hub, AK",
+        "region_id": "Anchorage_AK",
+        "lat": 61.2181,
+        "lon": -149.9003,
+        "state": "AK",
+        "padd": "PADD 5D",
+        "padd_name": "Alaska",
+        "state_tax": 0.0895,
+        "max_radius_miles": 250.0
+    },
+    "honolulu": {
+        "name": "Honolulu & Oahu Island Hub, HI",
+        "region_id": "Honolulu_HI",
+        "lat": 21.3069,
+        "lon": -157.8583,
+        "state": "HI",
+        "padd": "PADD 5D",
+        "padd_name": "Hawaii",
+        "state_tax": 0.330,
+        "max_radius_miles": 200.0
+    },
+    "guam": {
+        "name": "Hagåtña & Apra Harbor, Guam (PADD 7)",
+        "region_id": "Guam_GU",
+        "lat": 13.4443,
+        "lon": 144.7937,
+        "state": "GU",
+        "padd": "PADD 7",
+        "padd_name": "Pacific Territories",
+        "state_tax": 0.190,
+        "max_radius_miles": 200.0
+    },
+    "san_juan": {
+        "name": "San Juan Metro & U.S. Caribbean Territories Hub, PR (PADD 6)",
+        "region_id": "San_Juan_PR",
+        "lat": 18.4655,
+        "lon": -66.1057,
+        "state": "PR",
+        "padd": "PADD 6",
+        "padd_name": "Caribbean Territories",
+        "state_tax": 0.160,
+        "max_radius_miles": 200.0
+    },
+    "boston": {
+        "name": "Boston Metro & New England Hub, MA",
+        "region_id": "Boston_MA",
+        "lat": 42.3601,
+        "lon": -71.0589,
+        "state": "MA",
+        "padd": "PADD 1A",
+        "padd_name": "New England",
+        "state_tax": 0.240,
+        "max_radius_miles": 120.0
+    },
+}
+
+
+def haversine_distance_miles(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Computes great-circle distance between two GPS coordinates in statute miles."""
+    r_miles = 3958.8
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = math.sin(delta_phi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2.0) ** 2
+    c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
+    return r_miles * c
+
+
+def resolve_coordinates(lat: float, lon: float) -> Dict[str, Any]:
+    """
+    Resolves arbitrary GPS (lat, lon) coordinates to the nearest Midgley metro refining hub
+    or regional PADD benchmark based on geodesic haversine proximity.
+    """
+    try:
+        f_lat = float(lat)
+        f_lon = float(lon)
+    except (ValueError, TypeError):
+        return {
+            "status": "fallback",
+            "query_type": "coordinates",
+            "resolution_tier": "INVALID_COORDINATES_FALLBACK",
+            "is_metro_cluster_hit": False,
+            "locale_code": "national",
+            "region_id": "National",
+            "name": "National Wholesale / US Average",
+            "padd_region": "PADD 2 (Midwest)",
+            "state": "US",
+            "state_tax_rate_per_gal": 0.184
+        }
+
+    best_hub_key = "national"
+    best_dist = float("inf")
+    best_hub_meta = None
+
+    for hub_key, hub_meta in CALIBRATION_HUBS.items():
+        dist = haversine_distance_miles(f_lat, f_lon, hub_meta["lat"], hub_meta["lon"])
+        if dist < best_dist:
+            best_dist = dist
+            best_hub_key = hub_key
+            best_hub_meta = hub_meta
+
+    if best_hub_meta is None:
+        return {
+            "status": "fallback",
+            "query_type": "coordinates",
+            "resolution_tier": "SPATIAL_FALLBACK",
+            "is_metro_cluster_hit": False,
+            "locale_code": "national",
+            "region_id": "National",
+            "name": "National Wholesale / US Average",
+            "padd_region": "PADD 2",
+            "state": "US",
+            "state_tax_rate_per_gal": 0.184
+        }
+
+    is_metro_hit = best_dist <= best_hub_meta.get("max_radius_miles", 120.0)
+    tier = "METRO_CLUSTER_HIT" if is_metro_hit else "SPATIAL_PROXIMITY_FALLBACK"
+
+    return {
+        "status": "success",
+        "query_type": "coordinates",
+        "lat": round(f_lat, 4),
+        "lon": round(f_lon, 4),
+        "distance_to_hub_miles": round(best_dist, 1),
+        "nearest_hub": best_hub_key,
+        "resolution_tier": tier,
+        "is_metro_cluster_hit": is_metro_hit,
+        "locale_code": best_hub_key,
+        "region_id": best_hub_meta["region_id"],
+        "name": best_hub_meta["name"],
+        "state": best_hub_meta["state"],
+        "padd_region": best_hub_meta["padd"],
+        "padd_name": best_hub_meta["padd_name"],
+        "state_tax_rate_per_gal": best_hub_meta["state_tax"]
+    }
+
+
+def resolve_location(
+    zip_code: Optional[str] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None
+) -> Dict[str, Any]:
+    """
+    Unified entry point for location resolution. Prioritizes GPS coordinates if both
+    lat & lon are provided, otherwise falls back to 5-digit US ZIP code resolution.
+    """
+    if lat is not None and lon is not None:
+        return resolve_coordinates(lat, lon)
+    if zip_code:
+        return resolve_zip_code(zip_code)
+    return {
+        "status": "default",
+        "query_type": "default",
+        "resolution_tier": "DEFAULT_NATIONAL",
+        "is_metro_cluster_hit": False,
+        "locale_code": "national",
+        "region_id": "National",
+        "name": "National Wholesale / US Average",
+        "padd_region": "PADD 2",
+        "state": "US",
+        "state_tax_rate_per_gal": 0.184
+    }
+

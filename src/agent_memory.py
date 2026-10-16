@@ -6,7 +6,7 @@ Issue #230: [Weekly Review 2.0] Qualitative Anomaly Post-Mortems
 Architecture:
 - Primary Engine: Vectorize Hindsight API on Google Cloud Run (Scale-to-Zero) backed by Supabase pgvector.
 - Zero-Cost Fallback: Local SQLite FTS5 Memory Store (data/agent_memory.sqlite) with BM25 indexing.
-- Synthesis: Gemini 2.5 Flash LLM reflection pass with deterministic rule-based fallback.
+- Synthesis: Gemini 3.8 Flash LLM reflection pass with deterministic rule-based fallback.
 """
 
 import os
@@ -25,7 +25,9 @@ from src.telemetry import log_agent_memory_op
 logger = logging.getLogger(__name__)
 
 DEFAULT_SQLITE_PATH = os.path.join("data", "agent_memory.sqlite")
+DEFAULT_VINTAGES_PATH = os.path.join("data", "agent_memory_vintages.json")
 HISTORY_CSV = os.path.join("data", "prediction_history.csv")
+TELEMETRY_LEDGER_PATH = os.path.join("data", "telemetry_ledger.json")
 
 
 class SQLiteMemoryStore:
@@ -326,10 +328,44 @@ class AgentMemoryManager:
         self,
         hindsight_url: Optional[str] = None,
         hindsight_key: Optional[str] = None,
-        sqlite_path: str = DEFAULT_SQLITE_PATH
+        sqlite_path: str = DEFAULT_SQLITE_PATH,
+        vintages_path: str = DEFAULT_VINTAGES_PATH,
+        ledger_path: str = TELEMETRY_LEDGER_PATH
     ):
         self.sqlite_store = SQLiteMemoryStore(db_path=sqlite_path)
         self.hindsight_client = HindsightClient(base_url=hindsight_url, api_key=hindsight_key)
+        self.vintages_path = vintages_path
+        self.ledger_path = ledger_path
+
+    def _persist_bank_vintages(self, inventory: Dict[str, Any]) -> bool:
+        """
+        Persists authoritative memory bank counts to data/agent_memory_vintages.json
+        for resilient fallback in ephemeral CI environments and offline runs.
+        """
+        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return False
+        if not inventory or (inventory.get("memories_count", 0) == 0 and inventory.get("reflections_count", 0) == 0):
+            return False
+        try:
+            os.makedirs(os.path.dirname(self.vintages_path), exist_ok=True)
+            snapshot = {
+                "bank_id": inventory.get("bank_id", self.hindsight_client.bank_id),
+                "source": inventory.get("source", "local_sqlite"),
+                "backend": inventory.get("backend", "Local SQLite FTS5"),
+                "memories_count": int(inventory.get("memories_count", 0)),
+                "observations_count": int(inventory.get("observations_count", 0)),
+                "reflections_count": int(inventory.get("reflections_count", 0)),
+                "pending_reconciliation_count": int(inventory.get("pending_reconciliation_count", 0)),
+                "last_synced_at": datetime.now(timezone.utc).isoformat()
+            }
+            tmp_path = f"{self.vintages_path}.tmp-{os.getpid()}"
+            with open(tmp_path, "w", encoding="utf-8") as f:
+                json.dump(snapshot, f, indent=2)
+            os.replace(tmp_path, self.vintages_path)
+            return True
+        except Exception as e:
+            logger.debug(f"Failed to persist agent memory vintages snapshot: {e}")
+            return False
 
     @property
     def is_cloud_engine_active(self) -> bool:
@@ -421,8 +457,6 @@ class AgentMemoryManager:
             )
             if cloud_res.get("status") == "SUCCESS" and local_res.get("memory_id"):
                 self.sqlite_store.mark_as_synced(local_res["memory_id"])
-                # Backfill any older pending memories that may have failed earlier
-                self.sync_pending_memories(limit=10)
 
         active_backend = "hindsight_cloud" if (cloud_res and cloud_res.get("status") == "SUCCESS") else "sqlite_fts5"
         log_agent_memory_op(
@@ -437,6 +471,90 @@ class AgentMemoryManager:
             "active_backend": active_backend
         }
 
+    def reconcile_unretained_prediction_anomalies(
+        self,
+        start_date: str = "2026-09-25",
+        history_csv: str = HISTORY_CSV
+    ) -> Dict[str, Any]:
+        """
+        Scans prediction_history.csv for evaluated prediction anomalies since start_date
+        and reconciles them into SQLite and Hindsight Hosted memory bank (Issue #557).
+        """
+        if not os.path.exists(history_csv):
+            return {"status": "SKIPPED", "synced": 0, "reason": "History CSV not found"}
+        
+        try:
+            from src.prediction_logger import read_prediction_history
+            df = read_prediction_history(history_csv)
+            if df.empty or 'actual_5d_price' not in df.columns:
+                return {"status": "SKIPPED", "synced": 0, "reason": "No evaluated predictions"}
+            
+            eval_df = df[df['actual_5d_price'].notna()].copy()
+            if 'is_retroactive_backtest' in eval_df.columns:
+                eval_df = eval_df[eval_df['is_retroactive_backtest'].fillna(False).astype(bool) == False]
+            if 'run_type' in eval_df.columns:
+                eval_df = eval_df[~eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)]
+            if 'forecast_target_date' in eval_df.columns:
+                eval_df = eval_df[eval_df['forecast_target_date'].astype(str) >= str(start_date)]
+            
+            if eval_df.empty:
+                return {"status": "SUCCESS", "synced": 0, "message": "No evaluated records in window"}
+            
+            # Sort chronologically
+            eval_df = eval_df.sort_values(by=['forecast_target_date', 'log_timestamp'], ascending=[True, True])
+            
+            synced_count = 0
+            retained_anomalies = []
+            for _, row in eval_df.iterrows():
+                err = float(row.get('error_dollars', 0.0))
+                reg = str(row.get('region', 'National'))
+                pred = float(row.get('predicted_5d_price', 0.0))
+                act = float(row.get('actual_5d_price', 0.0))
+                target_d = str(row.get('forecast_target_date', ''))
+                d_hit = row.get('directional_hit')
+                
+                anom_type = (
+                    "LARGE_OVERESTIMATE" if (pred - act) >= 0.25
+                    else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25
+                    else ("DIRECTIONAL_FLIP" if d_hit == 0.0 and abs(pred - act) >= 0.05
+                    else "NORMAL"))
+                )
+                if anom_type != "NORMAL":
+                    res = self.retain(
+                        content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
+                        region=reg,
+                        memory_type="anomaly_shock",
+                        anomaly_type=anom_type,
+                        error_dollars=err,
+                        predicted_price=pred,
+                        actual_price=act,
+                        forecast_target_date=target_d,
+                        metadata={"provenance_source": str(row.get("data_source_provenance", row.get("provenance_source", "yfinance")))}
+                    )
+                    synced_count += 1
+                    retained_anomalies.append({
+                        "region": reg,
+                        "target_date": target_d,
+                        "anomaly_type": anom_type,
+                        "error_dollars": err,
+                        "cloud_status": res.get("cloud_status")
+                    })
+            
+            # Snapshot latest inventory
+            try:
+                self._persist_bank_vintages(self.get_bank_inventory())
+            except Exception:
+                pass
+            logger.info(f"Reconciled {synced_count} historical prediction anomalies since {start_date} into episodic memory.")
+            return {
+                "status": "SUCCESS",
+                "synced_count": synced_count,
+                "retained_anomalies": retained_anomalies
+            }
+        except Exception as e:
+            logger.error(f"Error during historical anomaly reconciliation: {e}", exc_info=True)
+            return {"status": "ERROR", "error": str(e), "synced_count": 0}
+
     def recall(
         self,
         query: str,
@@ -448,8 +566,6 @@ class AgentMemoryManager:
         Recalls historical shock analogies. Prefers Cloud Run Hindsight; falls back to SQLite FTS5.
         """
         if self.is_cloud_engine_active:
-            # Sync any pending memories before performing recall
-            self.sync_pending_memories(limit=20)
             cloud_memories = self.hindsight_client.recall(
                 query=query,
                 region=region,
@@ -493,7 +609,7 @@ class AgentMemoryManager:
                 log_agent_memory_op(operation="reflect", backend="hindsight_cloud", status="success")
                 return cloud_ref["reflections"]
 
-        # 2. Try Gemini 2.5 Flash reflection
+        # 2. Try Gemini 3.8 Flash reflection
         if api_key is None:
             api_key = os.environ.get("GEMINI_API_KEY")
 
@@ -519,7 +635,11 @@ class AgentMemoryManager:
         """
         Retrieves authoritative memory bank inventory (experience, observation, and reflection counts,
         plus local-to-cloud pending reconciliation queue depth).
-        Checks remote Hindsight / Supabase cluster first; falls back to local SQLite FTS5 database.
+        Cascading 4-Tier Fallback Strategy:
+          - Tier 1: Remote Hindsight / Supabase pgvector API
+          - Tier 2: Populated Local SQLite FTS5 database (data/agent_memory.sqlite)
+          - Tier 3: Committed Vintage Snapshot (data/agent_memory_vintages.json)
+          - Tier 4: Cumulative Telemetry Ledger (data/telemetry_ledger.json)
         """
         # Count un-synced experiences in local SQLite
         pending_sync_count = 0
@@ -534,11 +654,11 @@ class AgentMemoryManager:
         except Exception as e:
             logger.debug(f"Failed to query pending reconciliation queue count: {e}")
 
-        # 1. Attempt remote cloud retrieval if client is configured
+        # Tier 1: Attempt remote cloud retrieval if client is configured
         if self.hindsight_client.is_configured:
             remote_stats = self.hindsight_client.get_bank_stats()
-            if remote_stats is not None:
-                return {
+            if remote_stats is not None and (remote_stats.get("memories", 0) > 0 or remote_stats.get("reflections", 0) > 0):
+                inv = {
                     "source": "remote_cloud",
                     "backend": "Vectorize Hindsight (Supabase pgvector)",
                     "bank_id": self.hindsight_client.bank_id,
@@ -547,8 +667,10 @@ class AgentMemoryManager:
                     "reflections_count": remote_stats.get("reflections", 0),
                     "pending_reconciliation_count": pending_sync_count
                 }
+                self._persist_bank_vintages(inv)
+                return inv
 
-        # 2. Fallback to local SQLite database
+        # Tier 2: Check local SQLite database if populated
         local_memories = 0
         local_reflections = 0
         try:
@@ -566,13 +688,67 @@ class AgentMemoryManager:
         except Exception as e:
             logger.debug(f"Failed to query local SQLite memory inventory: {e}")
 
+        if local_memories > 0 or local_reflections > 0:
+            inv = {
+                "source": "local_sqlite",
+                "backend": "Local SQLite FTS5",
+                "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "Midgley",
+                "memories_count": local_memories,
+                "observations_count": 0,
+                "reflections_count": local_reflections,
+                "pending_reconciliation_count": pending_sync_count
+            }
+            self._persist_bank_vintages(inv)
+            return inv
+
+        # Tier 3: Committed Vintage Snapshot (data/agent_memory_vintages.json)
+        if os.path.exists(self.vintages_path):
+            try:
+                with open(self.vintages_path, "r", encoding="utf-8") as f:
+                    vintage_data = json.load(f)
+                v_mems = int(vintage_data.get("memories_count", 0))
+                v_refs = int(vintage_data.get("reflections_count", 0))
+                if v_mems > 0 or v_refs > 0:
+                    return {
+                        "source": vintage_data.get("source", "local_sqlite"),
+                        "backend": vintage_data.get("backend", "Local SQLite FTS5 (Snapshot)"),
+                        "bank_id": vintage_data.get("bank_id", self.hindsight_client.bank_id if self.hindsight_client else "Midgley"),
+                        "memories_count": v_mems,
+                        "observations_count": int(vintage_data.get("observations_count", 0)),
+                        "reflections_count": v_refs,
+                        "pending_reconciliation_count": int(vintage_data.get("pending_reconciliation_count", pending_sync_count))
+                    }
+            except Exception as e:
+                logger.debug(f"Failed to read agent memory vintages snapshot: {e}")
+
+        # Tier 4: Cumulative Telemetry Ledger (data/telemetry_ledger.json)
+        if os.path.exists(self.ledger_path):
+            try:
+                with open(self.ledger_path, "r", encoding="utf-8") as f:
+                    ledger_data = json.load(f)
+                mem_totals = ledger_data.get("memory_totals", {})
+                t_retain = int(mem_totals.get("retain_count", 0))
+                t_reflect = int(mem_totals.get("reflect_count", 0))
+                if t_retain > 0 or t_reflect > 0:
+                    return {
+                        "source": "telemetry_ledger",
+                        "backend": "Cumulative Telemetry Ledger",
+                        "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "Midgley",
+                        "memories_count": t_retain,
+                        "observations_count": 0,
+                        "reflections_count": t_reflect,
+                        "pending_reconciliation_count": 0
+                    }
+            except Exception as e:
+                logger.debug(f"Failed to read telemetry ledger memory totals: {e}")
+
         return {
             "source": "local_sqlite",
             "backend": "Local SQLite FTS5",
-            "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "midgley-gas-forecasting",
-            "memories_count": local_memories,
+            "bank_id": self.hindsight_client.bank_id if self.hindsight_client else "Midgley",
+            "memories_count": 0,
             "observations_count": 0,
-            "reflections_count": local_reflections,
+            "reflections_count": 0,
             "pending_reconciliation_count": pending_sync_count
         }
 
@@ -600,9 +776,9 @@ JSON Output:
             from google import genai
             from google.genai import types
             client = genai.Client(api_key=api_key)
-            config = types.GenerateContentConfig(temperature=0.1)
+            config = types.GenerateContentConfig()
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-3.8-flash',
                 contents=prompt,
                 config=config
             )
@@ -668,7 +844,8 @@ def extract_top_prediction_anomalies(
         return []
 
     try:
-        df = pd.read_csv(history_csv)
+        from src.prediction_logger import read_prediction_history
+        df = read_prediction_history(history_csv)
         eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
         if eval_df.empty:
             return []

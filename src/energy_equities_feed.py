@@ -32,14 +32,17 @@ ENERGY_EQUITY_TICKERS = {
 }
 
 
-def save_energy_equities_vintage_record(correlations: dict, filepath: str = ENERGY_EQUITIES_VINTAGE_FILE) -> None:
+def save_energy_equities_vintage_record(correlations: dict, filepath: Optional[str] = None) -> None:
     """Appends a point-in-time energy equity correlation observation vintage record."""
+    fp = filepath or ENERGY_EQUITIES_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "energy_equities_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
-        if os.path.exists(filepath):
+        if os.path.exists(fp):
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
+                with open(fp, "r", encoding="utf-8") as f:
                     vintages = json.load(f)
             except Exception:
                 vintages = []

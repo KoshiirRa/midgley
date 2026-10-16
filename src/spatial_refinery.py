@@ -113,6 +113,198 @@ REFINERY_DATA: Dict[str, Dict[str, Any]] = {
         "capacity_bpd": 356000,
         "padd": "PADD 2",
         "primary_locales": ["Midwest_Region"]
+    },
+    "BP_Whiting": {
+        "name": "BP Whiting Refinery (Whiting, IN)",
+        "lat": 41.6784,
+        "lon": -87.4981,
+        "capacity_bpd": 435000,
+        "padd": "PADD 2",
+        "primary_locales": ["Chicago_IL"]
+    },
+    "Citgo_Lemont": {
+        "name": "CITGO Lemont Refinery (Lemont, IL)",
+        "lat": 41.6702,
+        "lon": -88.0553,
+        "capacity_bpd": 177000,
+        "padd": "PADD 2",
+        "primary_locales": ["Chicago_IL"]
+    },
+    "ExxonMobil_Joliet": {
+        "name": "ExxonMobil Joliet Refinery (Channahon, IL)",
+        "lat": 41.4392,
+        "lon": -88.1633,
+        "capacity_bpd": 251000,
+        "padd": "PADD 2",
+        "primary_locales": ["Chicago_IL"]
+    },
+    "ExxonMobil_Baytown": {
+        "name": "ExxonMobil Baytown Refinery (Baytown, TX)",
+        "lat": 29.7497,
+        "lon": -95.0125,
+        "capacity_bpd": 560000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Motiva_Port_Arthur": {
+        "name": "Motiva Port Arthur Refinery (Port Arthur, TX)",
+        "lat": 29.8690,
+        "lon": -93.9610,
+        "capacity_bpd": 630000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Marathon_Galveston_Bay": {
+        "name": "Marathon Galveston Bay Refinery (Texas City, TX)",
+        "lat": 29.3789,
+        "lon": -94.9216,
+        "capacity_bpd": 593000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Deer_Park_Pemex": {
+        "name": "PEMEX Deer Park Refinery (Deer Park, TX)",
+        "lat": 29.7188,
+        "lon": -95.1274,
+        "capacity_bpd": 312000,
+        "padd": "PADD 3",
+        "primary_locales": ["Houston_TX"]
+    },
+    "Marathon_Carson_Wilmington": {
+        "name": "Marathon Los Angeles Refinery (Carson/Wilmington, CA)",
+        "lat": 33.8065,
+        "lon": -118.2412,
+        "capacity_bpd": 363000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "Chevron_El_Segundo": {
+        "name": "Chevron El Segundo Refinery (El Segundo, CA)",
+        "lat": 33.9089,
+        "lon": -118.4144,
+        "capacity_bpd": 269000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "PBF_Torrance": {
+        "name": "PBF Torrance Refinery (Torrance, CA)",
+        "lat": 33.8511,
+        "lon": -118.3314,
+        "capacity_bpd": 166000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "Phillips66_Wilmington": {
+        "name": "Phillips 66 Los Angeles Refinery (Wilmington/Carson, CA)",
+        "lat": 33.7820,
+        "lon": -118.2890,
+        "capacity_bpd": 139000,
+        "padd": "PADD 5",
+        "primary_locales": ["Los_Angeles_CA"]
+    },
+    "Suncor_Commerce_City": {
+        "name": "Suncor Commerce City Refinery (Commerce City, CO)",
+        "lat": 39.8080,
+        "lon": -104.9450,
+        "capacity_bpd": 103000,
+        "padd": "PADD 4",
+        "primary_locales": ["Denver_CO"]
+    },
+    "Phillips66_Bayway": {
+        "name": "Phillips 66 Bayway Refinery (Linden, NJ / NY Harbor)",
+        "lat": 40.6387,
+        "lon": -74.2238,
+        "capacity_bpd": 258000,
+        "padd": "PADD 1B",
+        "primary_locales": ["New_York_NY"]
+    },
+    "BP_Cherry_Point": {
+        "name": "bp Cherry Point Refinery (Blaine, WA)",
+        "lat": 48.8625,
+        "lon": -122.7539,
+        "capacity_bpd": 242000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "Phillips66_Ferndale": {
+        "name": "Phillips 66 Ferndale Refinery (Ferndale, WA)",
+        "lat": 48.8239,
+        "lon": -122.7056,
+        "capacity_bpd": 105000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "Marathon_Anacortes": {
+        "name": "Marathon Anacortes Refinery (Anacortes, WA)",
+        "lat": 48.5089,
+        "lon": -122.5647,
+        "capacity_bpd": 120000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "HFSinclair_Puget_Sound": {
+        "name": "HF Sinclair Puget Sound Refinery (Anacortes, WA)",
+        "lat": 48.4908,
+        "lon": -122.5369,
+        "capacity_bpd": 149000,
+        "padd": "PADD 5",
+        "primary_locales": ["Seattle_WA"]
+    },
+    "KM_SFPP_Phoenix_Terminal": {
+        "name": "Kinder Morgan SFPP 51st Avenue Terminal (Phoenix, AZ)",
+        "lat": 33.4395,
+        "lon": -112.1691,
+        "capacity_bpd": 0,
+        "padd": "PADD 5",
+        "primary_locales": ["Phoenix_AZ"]
+    },
+    "Marathon_Kenai": {
+        "name": "Marathon Kenai Refinery (Nikiski, AK)",
+        "lat": 60.6783,
+        "lon": -151.3800,
+        "capacity_bpd": 68000,
+        "padd": "PADD 5",
+        "primary_locales": ["Anchorage_AK"]
+    },
+    "Par_Hawaii_Kapolei": {
+        "name": "Par Hawaii Kapolei Refinery (Kapolei, HI)",
+        "lat": 21.3114,
+        "lon": -158.1067,
+        "capacity_bpd": 94000,
+        "padd": "PADD 5",
+        "primary_locales": ["Honolulu_HI"]
+    },
+    "Cabras_Island_Terminal": {
+        "name": "Cabras Island Commercial Petroleum Terminal (Apra Harbor, GU)",
+        "lat": 13.4443,
+        "lon": 144.6667,
+        "capacity_bpd": 0,
+        "padd": "PADD 7",
+        "primary_locales": ["Guam_GU"]
+    },
+    "San_Juan_Terminal": {
+        "name": "San Juan Harbor Petroleum Marine Terminal & Yabucoa (PR)",
+        "lat": 18.4411,
+        "lon": -66.1130,
+        "capacity_bpd": 0,
+        "padd": "PADD 6",
+        "primary_locales": ["San_Juan_PR"]
+    },
+    "Irving_Oil_Saint_John": {
+        "name": "Irving Oil Saint John Refinery (Saint John, NB)",
+        "lat": 45.2733,
+        "lon": -65.9967,
+        "capacity_bpd": 320000,
+        "padd": "PADD 1A / Canada Import",
+        "primary_locales": ["Boston_MA"]
+    },
+    "Boston_Harbor_Terminals": {
+        "name": "Boston Harbor Petroleum Marine Terminals (Chelsea River / Everett, MA)",
+        "lat": 42.3917,
+        "lon": -71.0333,
+        "capacity_bpd": 0,
+        "padd": "PADD 1A",
+        "primary_locales": ["Boston_MA"]
     }
 }
 
@@ -171,6 +363,78 @@ METRO_CLUSTER_DATA: Dict[str, Dict[str, Any]] = {
         "lat": 27.2730,
         "lon": -80.3582,
         "zip": "34952"
+    },
+    "Chicago_IL": {
+        "name": "Greater Chicago Metro, IL/IN",
+        "lat": 41.8781,
+        "lon": -87.6298,
+        "zip": "60601"
+    },
+    "Houston_TX": {
+        "name": "Houston Metro & USGC Refining Corridor, TX",
+        "lat": 29.7604,
+        "lon": -95.3698,
+        "zip": "77002"
+    },
+    "Los_Angeles_CA": {
+        "name": "Los Angeles Basin & South Coast, CA",
+        "lat": 34.0522,
+        "lon": -118.2437,
+        "zip": "90012"
+    },
+    "Denver_CO": {
+        "name": "Denver Metro & Rocky Mountain Hub, CO",
+        "lat": 39.7392,
+        "lon": -104.9903,
+        "zip": "80202"
+    },
+    "New_York_NY": {
+        "name": "New York Metro & State Hub, NY",
+        "lat": 40.7128,
+        "lon": -74.0060,
+        "zip": "10001"
+    },
+    "Seattle_WA": {
+        "name": "Seattle-Tacoma & Puget Sound, WA",
+        "lat": 47.6062,
+        "lon": -122.3321,
+        "zip": "98101"
+    },
+    "Phoenix_AZ": {
+        "name": "Phoenix Metro & Desert Southwest, AZ",
+        "lat": 33.4484,
+        "lon": -112.0740,
+        "zip": "85001"
+    },
+    "Anchorage_AK": {
+        "name": "Anchorage & Southcentral Alaska Hub, AK",
+        "lat": 61.2181,
+        "lon": -149.9003,
+        "zip": "99501"
+    },
+    "Honolulu_HI": {
+        "name": "Honolulu & Oahu Island Hub, HI",
+        "lat": 21.3069,
+        "lon": -157.8583,
+        "zip": "96813"
+    },
+    "Guam_GU": {
+        "name": "Hagåtña & Apra Harbor Hub, Guam",
+        "lat": 13.4443,
+        "lon": 144.7937,
+        "zip": "96910"
+    },
+    "San_Juan_PR": {
+        "name": "San Juan Metro & Caribbean Territories Hub, PR",
+        "lat": 18.4655,
+        "lon": -66.1057,
+        "zip": "00901"
+    },
+    "Boston_MA": {
+        "name": "Boston Metro & New England Hub, MA",
+        "lat": 42.3601,
+        "lon": -71.0589,
+        "zip": "02108"
     }
 }
 

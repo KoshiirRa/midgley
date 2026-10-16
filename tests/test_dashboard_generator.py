@@ -18,6 +18,17 @@ from src.dashboard_generator import (
     CINCINNATI_PATH,
     GREENVILLE_PATH,
     CHARLOTTE_PATH,
+    PORT_ST_LUCIE_PATH,
+    CHICAGO_PATH,
+    CHICAGO_SUB_PATH,
+    HOUSTON_PATH,
+    HOUSTON_SUB_PATH,
+    LOS_ANGELES_PATH,
+    LOS_ANGELES_SUB_PATH,
+    DENVER_PATH,
+    DENVER_SUB_PATH,
+    NEW_YORK_PATH,
+    NEW_YORK_SUB_PATH,
     OAKLAND_PATH,
     BAYAREA_PATH,
     MATH_PATH,
@@ -36,7 +47,7 @@ def test_dashboard_generation_and_math_katex():
     generate_public_dashboard()
 
     # Verify existence of all expected dashboard HTML files
-    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
+    for path in [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, PORT_ST_LUCIE_PATH, CHICAGO_PATH, CHICAGO_SUB_PATH, HOUSTON_PATH, HOUSTON_SUB_PATH, LOS_ANGELES_PATH, LOS_ANGELES_SUB_PATH, DENVER_PATH, DENVER_SUB_PATH, NEW_YORK_PATH, NEW_YORK_SUB_PATH, OAKLAND_PATH, BAYAREA_PATH, MATH_PATH]:
         assert os.path.exists(path), f"Expected file does not exist: {path}"
         assert os.path.getsize(path) > 0, f"Generated file is empty: {path}"
 
@@ -117,7 +128,6 @@ def test_katex_mobile_responsive_css():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
         MATH_PATH,
     ]
@@ -408,9 +418,7 @@ def test_all_regional_dashboard_pages_have_dedicated_driver_cards():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
     ]
 
@@ -485,7 +493,7 @@ def test_feature_attribution_card_in_regional_pages():
     """Verify that all regional model pages contain the Component-Level Feature Attribution card."""
     generate_public_dashboard()
 
-    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, GREENVILLE_PATH, CHARLOTTE_PATH, OAKLAND_PATH, BAYAREA_PATH]
+    pages = [INDEX_PATH, NATIONAL_PATH, TULSA_PATH, NEWARK_PATH, CINCINNATI_PATH, CHARLOTTE_PATH, BAYAREA_PATH]
 
     for p in pages:
         with open(p, "r", encoding="utf-8") as f:
@@ -506,6 +514,42 @@ def test_scoreboard_section_in_index_html():
     assert "MLOps Continuous Performance Scoreboard" in html
     assert "Regional Accuracy Matrix" in html
     assert "Recent Completed Forecast Evaluations" in html
+
+
+def test_hubs_map_section_in_index_html():
+    """Verify that index.html contains the interactive modeled price hubs map section (Issue #646)."""
+    from src.dashboard_generator import generate_public_dashboard, INDEX_PATH, build_hubs_map_data
+    from src.locations.specs import get_canonical_region_specs
+
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    # Verify Map Container and Accessibility attributes
+    assert 'id="hubsMap"' in html
+    assert 'role="region"' in html
+    assert 'aria-label="Modeled Fuel Price Hubs Geographic Map"' in html
+    assert 'Geographic Model Footprint &amp; Modeled Price Hubs' in html
+
+    # Verify Leaflet and Carto tile script/styles
+    assert 'leaflet@1.9.4/dist/leaflet.css' in html
+    assert 'leaflet@1.9.4/dist/leaflet.js' in html
+    assert 'basemaps.cartocdn.com/dark_all' in html
+
+    # Verify territory preset navigation buttons
+    assert 'btnViewConus' in html
+    assert 'btnViewPacific' in html
+    assert 'btnViewCaribbean' in html
+    assert 'btnViewAll' in html
+
+    # Verify data points contain all 18 canonical regions + National benchmark
+    specs = get_canonical_region_specs()
+    assert len(specs) == 18
+    for spec in specs:
+        assert f'"{spec.slug}"' in html, f"Missing slug {spec.slug} in map dataset"
+
+    assert '"national"' in html, "Missing national benchmark in map dataset"
 
 
 def test_get_release_badge_dynamic_version(monkeypatch):
@@ -543,9 +587,7 @@ def test_dynamic_trend_badges_rendering():
         TULSA_PATH,
         NEWARK_PATH,
         CINCINNATI_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
-        OAKLAND_PATH,
         BAYAREA_PATH,
     ]
 
@@ -553,7 +595,6 @@ def test_dynamic_trend_badges_rendering():
         NATIONAL_PATH,
         TULSA_PATH,
         NEWARK_PATH,
-        GREENVILLE_PATH,
         CHARLOTTE_PATH,
     ]
 
@@ -573,11 +614,15 @@ def test_dynamic_trend_badges_rendering():
         # Verify dynamic badge structure with % Projected Trend exists on single-region pages
         assert "% Projected Trend" in html, f"Missing dynamic '% Projected Trend' badge in {path}"
 
-    # Verify Oakland renders dynamic percentage trend in its target card
+    # Verify Oakland redirect and Bay Area target card
     with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
         oak_html = f.read()
-        assert "5-Day Target:" in oak_html
-        assert "%" in oak_html
+        assert "bayarea.html" in oak_html
+
+    with open(BAYAREA_PATH, "r", encoding="utf-8") as f:
+        bay_html = f.read()
+        assert "5-Day Target:" in bay_html
+        assert "%" in bay_html
 
 
 def test_unlogged_regions_delta_preservation(monkeypatch, tmp_path):
@@ -734,36 +779,36 @@ def test_data_sources_page_generation():
     assert "Continuous Academic Literature &amp; Developer Catalog Feeds" in sources_content
 
     # Verify key monitored feeds across all categories
-    assert "RB=F" in sources_content
-    assert "CL=F" in sources_content
-    assert "BZ=F" in sources_content
-    assert "HO=F" in sources_content
-    assert "api.eia.gov/v2" in sources_content
-    assert "api.stlouisfed.org" in sources_content
-    assert "marsapi.ams.usda.gov" in sources_content
+    assert sources_content.count("RB=F") > 0
+    assert sources_content.count("CL=F") > 0
+    assert sources_content.count("BZ=F") > 0
+    assert sources_content.count("HO=F") > 0
+    assert sources_content.count("api.eia.gov/v2") > 0
+    assert sources_content.count("api.stlouisfed.org") > 0
+    assert sources_content.count("marsapi.ams.usda.gov") > 0
 
-    assert "^OVX" in sources_content
-    assert "bakerhughes.com" in sources_content
-    assert "cftc.gov" in sources_content
-    assert "ferc.gov" in sources_content
+    assert sources_content.count("^OVX") > 0
+    assert sources_content.count("bakerhughes.com") > 0
+    assert sources_content.count("cftc.gov") > 0
+    assert sources_content.count("ferc.gov") > 0
 
-    assert "api.finlight.me" in sources_content
-    assert "api.firecrawl.dev" in sources_content
-    assert "sec.gov/edgar/" in sources_content
+    assert sources_content.count("api.finlight.me") > 0
+    assert sources_content.count("api.firecrawl.dev") > 0
+    assert sources_content.count("sec.gov/edgar/") > 0
 
-    assert "api.weather.gov" in sources_content
-    assert "t.wxs.us" in sources_content
-    assert "spc.noaa.gov" in sources_content
-    assert "nhc.noaa.gov" in sources_content
-    assert "api.waterdata.usgs.gov" in sources_content
-    assert "earthquake.usgs.gov" in sources_content
-    assert "PurpleAir" in sources_content
+    assert sources_content.count("api.weather.gov") > 0
+    assert sources_content.count("t.wxs.us") > 0
+    assert sources_content.count("spc.noaa.gov") > 0
+    assert sources_content.count("nhc.noaa.gov") > 0
+    assert sources_content.count("api.waterdata.usgs.gov") > 0
+    assert sources_content.count("earthquake.usgs.gov") > 0
+    assert sources_content.count("PurpleAir") > 0
 
-    assert "api.census.gov" in sources_content
-    assert "GasBuddy" in sources_content
-    assert "export.arxiv.org" in sources_content
-    assert "api.core.ac.uk" in sources_content
-    assert "free-for-dev" in sources_content
+    assert sources_content.count("api.census.gov") > 0
+    assert sources_content.count("GasBuddy") > 0
+    assert sources_content.count("export.arxiv.org") > 0
+    assert sources_content.count("api.core.ac.uk") > 0
+    assert sources_content.count("free-for-dev") > 0
 
     # Verify Master Governance Ledger Table and dynamic search/filter script
     assert "id=\"master-feed-table\"" in sources_content
@@ -844,3 +889,232 @@ def test_dashboard_generator_html_escaping_and_csp(tmp_path):
     assert "<script>alert('XSS Attack!')</script>" not in card_html
     assert "&lt;script&gt;alert(&#x27;XSS Attack!&#x27;)&lt;/script&gt;" in card_html or "&lt;script&gt;alert(&#039;XSS Attack!&#039;)&lt;/script&gt;" in card_html
     assert "<img src=x onerror=alert(1)>" not in card_html
+
+
+def test_dashboard_aria_accessibility_and_landmarks():
+    """Verify WCAG 2.1 AA ARIA accessibility landmarks, table captions, chart descriptions,
+    and lack of double-dollar formatting bugs across all generated pages (Issue #569).
+    """
+    from src.dashboard_generator import (
+        SAVINGS_PATH,
+        DIESEL_PATH,
+        TELEMETRY_PATH,
+        generate_telemetry_page,
+    )
+
+    generate_public_dashboard()
+    generate_telemetry_page()
+
+    all_pages = [
+        INDEX_PATH,
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+        CHARLOTTE_PATH,
+        BAYAREA_PATH,
+        MATH_PATH,
+        SOURCES_PATH,
+        SOURCES_SUB_PATH,
+        SAVINGS_PATH,
+        DIESEL_PATH,
+        TELEMETRY_PATH,
+    ]
+
+    assert os.path.exists(OAKLAND_PATH)
+    with open(OAKLAND_PATH, "r", encoding="utf-8") as f:
+        assert "bayarea.html" in f.read()
+
+    assert os.path.exists(GREENVILLE_PATH)
+    with open(GREENVILLE_PATH, "r", encoding="utf-8") as f:
+        assert "charlotte.html" in f.read()
+
+    for page_path in all_pages:
+        assert os.path.exists(page_path), f"Page {page_path} was not generated"
+        with open(page_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # 1. Verify skip link target exists
+        assert '<main' in content and 'id="main-content"' in content and 'role="main"' in content, f"Missing main content landmark in {page_path}"
+        assert 'href="#main-content"' in content, f"Missing skip to content link in {page_path}"
+
+        # 2. Verify navigation landmark and dropdown accessibility
+        assert '<header' in content and 'role="banner"' in content, f"Missing banner role in {page_path}"
+        assert 'aria-label="Main Navigation"' in content, f"Missing Main Navigation aria-label in {page_path}"
+        assert 'id="metro-menu-btn"' in content, f"Missing metro menu button ID in {page_path}"
+        assert 'aria-haspopup="true"' in content, f"Missing aria-haspopup in {page_path}"
+
+        # 3. Check for double dollar artefacts (except math.html KaTeX)
+        if "math.html" not in page_path:
+            assert "$$0." not in content, f"Found double dollar formatting artefact ($$0.) in {page_path}"
+            assert "$${{" not in content, f"Found template double dollar artefact in {page_path}"
+
+    # Specific tests for chart canvases and tables
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_content = f.read()
+    assert 'canvas id="maeTrendChart" role="img" aria-label=' in index_content
+    assert 'canvas id="hitRateTrendChart" role="img" aria-label=' in index_content
+    assert '<caption class="sr-only">' in index_content
+    assert 'scope="col"' in index_content
+
+    with open(TULSA_PATH, "r", encoding="utf-8") as f:
+        tulsa_content = f.read()
+    assert 'canvas id="tulsaChart" role="img" aria-label=' in tulsa_content
+
+    with open(NEWARK_PATH, "r", encoding="utf-8") as f:
+        newark_content = f.read()
+    assert 'canvas id="newarkChart" role="img" aria-label=' in newark_content
+
+    with open(SAVINGS_PATH, "r", encoding="utf-8") as f:
+        savings_content = f.read()
+    assert '<label for="vehiclePreset"' in savings_content
+    assert '<label for="tankCapacity"' in savings_content
+    assert '<label for="fuelLevel"' in savings_content
+
+    with open(TELEMETRY_PATH, "r", encoding="utf-8") as f:
+        telemetry_content = f.read()
+    assert 'id="zipMap"' in telemetry_content
+    assert 'role="region"' in telemetry_content
+    assert 'aria-label="Geographic Out-of-Metro ZIP Code Demand Heatmap"' in telemetry_content
+    assert '<caption class="sr-only">' in telemetry_content
+
+
+def test_dashboard_pillars_grid_structure():
+    """Verify that all 6 Feature Ingestion Pillars are properly closed and that
+    the Documentation & Data Sources CTA Ribbon is placed outside the 3-column grid,
+    spanning the full container width (Issue #592).
+    """
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_content = f.read()
+
+    # Verify that Pillar 6 contains both its own closing tag and the grid's closing tag
+    pillar_6_marker = "6. Alternative Physical Feeds"
+    cta_marker = "Deep Dive into Model Architecture &amp; Data Streams"
+    
+    assert pillar_6_marker in index_content, "Pillar 6 not found in index.html"
+    assert cta_marker in index_content, "CTA Ribbon not found in index.html"
+
+    # Slice the content between Pillar 6 and the CTA ribbon
+    p6_pos = index_content.find(pillar_6_marker)
+    cta_pos = index_content.find(cta_marker)
+    assert p6_pos < cta_pos, "Pillar 6 must appear before CTA Ribbon"
+
+    between_p6_and_cta = index_content[p6_pos:cta_pos]
+    
+    # Must have at least two closing </div> tags between Pillar 6 title and CTA ribbon
+    # (one to close Pillar 6 card, and one to close the grid container)
+    div_close_count = between_p6_and_cta.count("</div>")
+    assert div_close_count >= 2, (
+        f"Expected at least 2 closing </div> tags between Pillar 6 and CTA ribbon (card + grid), "
+        f"found {div_close_count}. The CTA ribbon must not be nested inside the 3-column grid (Issue #592)."
+    )
+
+
+def test_chicago_page_generation():
+    """Verify that generate_public_dashboard generates docs/chicago.html and docs/chicago/index.html
+    with Greater Chicago metro calibration content, Whiting/Lemont refining logistics,
+    and shock scenarios (Issue #219).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(CHICAGO_PATH), f"Expected file does not exist: {CHICAGO_PATH}"
+    assert os.path.getsize(CHICAGO_PATH) > 0, f"Generated file is empty: {CHICAGO_PATH}"
+    assert os.path.exists(CHICAGO_SUB_PATH), f"Expected file does not exist: {CHICAGO_SUB_PATH}"
+    assert os.path.getsize(CHICAGO_SUB_PATH) > 0, f"Generated file is empty: {CHICAGO_SUB_PATH}"
+
+    with open(CHICAGO_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Greater Chicago, IL/IN Metro Retail Gas Forecast" in content
+    assert "BP Whiting" in content
+    assert "Citgo Lemont" in content or "CITGO Lemont" in content
+    assert "PADD 2 Great Lakes Hub" in content
+    assert "file:///" not in content
+
+
+def test_houston_page_generation():
+    """Verify that generate_public_dashboard generates docs/houston.html and docs/houston/index.html
+    with Houston & USGC refining corridor content, Baytown/Port Arthur logistics,
+    and shock scenarios (Issue #220).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(HOUSTON_PATH), f"Expected file does not exist: {HOUSTON_PATH}"
+    assert os.path.getsize(HOUSTON_PATH) > 0, f"Generated file is empty: {HOUSTON_PATH}"
+    assert os.path.exists(HOUSTON_SUB_PATH), f"Expected file does not exist: {HOUSTON_SUB_PATH}"
+    assert os.path.getsize(HOUSTON_SUB_PATH) > 0, f"Generated file is empty: {HOUSTON_SUB_PATH}"
+
+    with open(HOUSTON_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Houston, TX Metro Retail Gas Forecast" in content
+    assert "Baytown" in content
+    assert "Port Arthur" in content
+    assert "PADD 3 USGC Refining Epicenter" in content
+    assert "file:///" not in content
+
+
+def test_los_angeles_page_generation():
+    """Verify that generate_public_dashboard generates docs/los_angeles.html and docs/los_angeles/index.html
+    with Los Angeles Basin CaRFG content, El Segundo/Torrance/Carson logistics,
+    and shock scenarios (Issue #221).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(LOS_ANGELES_PATH), f"Expected file does not exist: {LOS_ANGELES_PATH}"
+    assert os.path.getsize(LOS_ANGELES_PATH) > 0, f"Generated file is empty: {LOS_ANGELES_PATH}"
+    assert os.path.exists(LOS_ANGELES_SUB_PATH), f"Expected file does not exist: {LOS_ANGELES_SUB_PATH}"
+    assert os.path.getsize(LOS_ANGELES_SUB_PATH) > 0, f"Generated file is empty: {LOS_ANGELES_SUB_PATH}"
+
+    with open(LOS_ANGELES_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Los Angeles, CA Metro Retail Gas Forecast" in content
+    assert "El Segundo" in content
+    assert "Torrance" in content
+    assert "PADD 5 South Coast CaRFG Hub" in content
+    assert "file:///" not in content
+
+
+def test_denver_page_generation():
+    """Verify that generate_public_dashboard generates docs/denver.html and docs/denver/index.html
+    with Denver & Rocky Mountain refining content, Suncor Commerce City logistics,
+    and shock scenarios (Issue #618).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(DENVER_PATH), f"Expected file does not exist: {DENVER_PATH}"
+    assert os.path.getsize(DENVER_PATH) > 0, f"Generated file is empty: {DENVER_PATH}"
+    assert os.path.exists(DENVER_SUB_PATH), f"Expected file does not exist: {DENVER_SUB_PATH}"
+    assert os.path.getsize(DENVER_SUB_PATH) > 0, f"Generated file is empty: {DENVER_SUB_PATH}"
+
+    with open(DENVER_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "Denver, CO Metro Retail Gas Forecast" in content
+    assert "Suncor Commerce City" in content
+    assert "PADD 4 Rocky Mountain Refining Hub" in content
+    assert "file:///" not in content
+
+
+def test_new_york_page_generation():
+    """Verify that generate_public_dashboard generates docs/new_york.html and docs/new_york/index.html
+    with New York & PADD 1B refining content, Phillips 66 Bayway / Buckeye logistics,
+    and shock scenarios (Issue #635).
+    """
+    generate_public_dashboard()
+
+    assert os.path.exists(NEW_YORK_PATH), f"Expected file does not exist: {NEW_YORK_PATH}"
+    assert os.path.getsize(NEW_YORK_PATH) > 0, f"Generated file is empty: {NEW_YORK_PATH}"
+    assert os.path.exists(NEW_YORK_SUB_PATH), f"Expected file does not exist: {NEW_YORK_SUB_PATH}"
+    assert os.path.getsize(NEW_YORK_SUB_PATH) > 0, f"Generated file is empty: {NEW_YORK_SUB_PATH}"
+
+    with open(NEW_YORK_PATH, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    assert "New York, NY Metro Retail Gas Forecast" in content
+    assert "Phillips 66 Bayway" in content
+    assert "PADD 1B Central Atlantic Refining Hub" in content
+    assert "file:///" not in content

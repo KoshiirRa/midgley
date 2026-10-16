@@ -9,10 +9,11 @@ from __future__ import annotations
 import os
 import json
 import uuid
+import hashlib
 import urllib.request
 import urllib.error
 import urllib.parse
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union, List, Tuple
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -23,6 +24,62 @@ from src.storage_io import atomic_write_csv, atomic_write_json, file_lock
 logger = logging.getLogger(__name__)
 
 HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
+
+PREDICTION_HISTORY_DTYPES = {
+    "forecast_id": str,
+    "issued_at_utc": str,
+    "log_timestamp": str,
+    "forecast_target_date": str,
+    "region": str,
+    "model_version": str,
+    "run_type": str,
+    "headline_trigger": str,
+    "predicted_direction": str,
+    "actual_direction": str,
+    "data_source_provenance": str,
+}
+
+
+def read_prediction_history(path: str = HISTORY_CSV_PATH) -> pd.DataFrame:
+    """
+    Safely reads prediction_history.csv with standardized column dtypes and low_memory=False
+    to prevent DtypeWarning on mixed-type categorical / text columns (Issue #468).
+    """
+    if not os.path.exists(path) or os.path.getsize(path) == 0:
+        return pd.DataFrame()
+    return pd.read_csv(path, dtype=PREDICTION_HISTORY_DTYPES, low_memory=False)
+
+
+def generate_forecast_id(
+    region: str,
+    model_version: str,
+    target_date: str,
+    horizon_days: Union[int, float],
+    run_type: str,
+    issued_at_utc: Optional[str] = None
+) -> str:
+    """
+    Generates a deterministic 32-character hex SHA-256 hash forecast ID (Issue #559, #602).
+    Canonical format:
+    - LIVE_PROSPECTIVE: {region}|{model_version}|{issued_at_utc}|{target_date[:10]}|{horizon_int}|{run_type}
+    - RETROSPECTIVE_BACKTEST: {region}|{model_version}|{target_date[:10]}|{horizon_int}|{run_type}
+    """
+    reg = str(region or "").strip()
+    mv = str(model_version or "").strip()
+    td = str(target_date or "")[:10].strip()
+    try:
+        h_int = int(round(float(horizon_days)))
+    except (ValueError, TypeError):
+        h_int = 5
+    rt = str(run_type or "").strip()
+
+    if rt == "LIVE_PROSPECTIVE" and issued_at_utc:
+        ts = str(issued_at_utc).strip()
+        raw_key = f"{reg}|{mv}|{ts}|{td}|{h_int}|{rt}"
+    else:
+        raw_key = f"{reg}|{mv}|{td}|{h_int}|{rt}"
+    return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:32]
+
 
 def ensure_history_store():
     """Ensures data directory and prediction_history.csv file exist with standard and extended MLOps schema."""
@@ -62,7 +119,7 @@ def ensure_history_store():
         else:
             # Migrate existing CSV if missing extended columns (Issue #389, #434)
             try:
-                df = pd.read_csv(HISTORY_CSV_PATH)
+                df = read_prediction_history(HISTORY_CSV_PATH)
                 updated = False
                 for col in columns:
                     if col not in df.columns:
@@ -111,10 +168,10 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
     if df is None:
         ensure_history_store()
         try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
         except Exception as e:
             logger.warning(f"Could not read prediction history CSV for cloud sync: {e}")
-            return {"status": "offline_fallback", "synced_rows": 0, "provider": "local_csv", "reason": str(e)}
+            return {"status": "offline_fallback", "synced_rows": 0, "provider": "local_csv", "reason": "Failed to read prediction history CSV"}
 
     if df is None or df.empty:
         return {"status": "synced", "synced_rows": 0, "provider": "local_csv"}
@@ -163,14 +220,20 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                     )"""
                 }
             }
-            # Chunk records into batches of 50
             total_synced = 0
-            chunk_size = 50
-            records_to_sync = df if len(df) <= 200 else df.tail(200)
+            records_to_sync = df if len(df) <= 50 else df.tail(50)
+            chunk_size = 25
+
+            # Ensure table exists
+            init_payload = json.dumps({"requests": [create_stmt, {"type": "close"}]}).encode("utf-8")
+            init_req = urllib.request.Request(endpoint, data=init_payload, headers=headers, method="POST")
+            with urllib.request.urlopen(init_req, timeout=10.0) as resp:
+                pass
+
             for i in range(0, len(records_to_sync), chunk_size):
-                chunk_df = records_to_sync.iloc[i:i+chunk_size]
-                requests = [create_stmt]
-                for _, row in chunk_df.iterrows():
+                chunk = records_to_sync.iloc[i:i+chunk_size]
+                requests = []
+                for _, row in chunk.iterrows():
                     f_id = str(row.get("forecast_id")) if pd.notna(row.get("forecast_id")) and str(row.get("forecast_id")).strip() else str(uuid.uuid4())
                     issued_utc = str(row.get("issued_at_utc")) if pd.notna(row.get("issued_at_utc")) and str(row.get("issued_at_utc")).strip() else datetime.now(timezone.utc).isoformat()
                     is_retro = 1 if bool(row.get("is_retroactive_backtest", False)) else 0
@@ -217,9 +280,9 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 requests.append({"type": "close"})
                 body = json.dumps({"requests": requests}).encode("utf-8")
                 req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
-                with urllib.request.urlopen(req, timeout=4.0) as resp:
-                    if resp.status == 200:
-                        total_synced += len(chunk_df)
+                with urllib.request.urlopen(req, timeout=15.0) as resp:
+                    if resp.status in (200, 201):
+                        total_synced += len(chunk)
 
             if total_synced > 0:
                 logger.info(f"Successfully synced {total_synced} prediction records to Turso Edge database.")
@@ -229,9 +292,13 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
                 err_body = e.read().decode("utf-8", errors="replace")
             except Exception:
                 err_body = ""
-            logger.warning(f"Turso prediction cloud sync notice: HTTP Error {e.code}: {e.reason} - {err_body}")
+            err_msg = f"Turso prediction cloud sync failed with HTTP {e.code}: {e.reason} - {err_body}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": f"Turso prediction cloud sync failed with HTTP {e.code}", "provider": "turso_edge"}
         except Exception as e:
-            logger.warning(f"Turso prediction cloud sync notice: {e}")
+            err_msg = f"Turso prediction cloud sync exception: {e}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": "Turso prediction cloud sync failed", "provider": "turso_edge"}
 
     # 2. Attempt Cloudflare D1 / Edge Worker sync if credentials present
     if cf_url:
@@ -245,27 +312,24 @@ def sync_predictions_to_cloud(df: Optional[pd.DataFrame] = None) -> dict:
             records_to_sync = df if len(df) <= 200 else df.tail(200)
             clean_df = records_to_sync.astype(object).where(pd.notna(records_to_sync), None)
             all_records = clean_df.to_dict(orient="records")
-            total_cf_synced = 0
-            chunk_size = 50
-            for i in range(0, len(all_records), chunk_size):
-                chunk = all_records[i:i+chunk_size]
-                body = json.dumps({"predictions": chunk}).encode("utf-8")
-                req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
-                with urllib.request.urlopen(req, timeout=4.0) as resp:
-                    if resp.status in (200, 201):
-                        total_cf_synced += len(chunk)
-
-            if total_cf_synced > 0:
-                logger.info(f"Successfully synced {total_cf_synced} prediction records to Cloudflare D1 Edge Worker.")
-                return {"status": "synced", "synced_rows": total_cf_synced, "provider": "cloudflare_d1"}
+            body = json.dumps({"predictions": all_records}).encode("utf-8")
+            req = urllib.request.Request(endpoint, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=15.0) as resp:
+                if resp.status in (200, 201):
+                    logger.info(f"Successfully synced {len(all_records)} prediction records to Cloudflare D1 Edge Worker.")
+                    return {"status": "synced", "synced_rows": len(all_records), "provider": "cloudflare_d1"}
         except urllib.error.HTTPError as e:
             try:
                 err_body = e.read().decode("utf-8", errors="replace")
             except Exception:
                 err_body = ""
-            logger.warning(f"Cloudflare D1 prediction sync notice: HTTP Error {e.code}: {e.reason} - {err_body}")
+            err_msg = f"Cloudflare D1 prediction sync failed with HTTP Error {e.code}: {e.reason} - {err_body}"
+            logger.error(err_msg)
+            return {"status": "offline_fallback", "reason": f"Cloudflare D1 prediction sync failed with HTTP {e.code}", "provider": "local_csv", "synced_rows": len(df)}
         except Exception as e:
-            logger.warning(f"Cloudflare D1 prediction sync notice: {e}")
+            err_msg = f"Cloudflare D1 prediction sync exception: {e}"
+            logger.error(err_msg)
+            return {"status": "error", "reason": "Cloudflare D1 prediction sync failed", "provider": "cloudflare_d1"}
 
     return {"status": "offline_fallback", "synced_rows": len(df), "provider": "local_csv"}
 
@@ -288,7 +352,7 @@ def get_cloud_sync_status() -> dict:
     total_local_rows = 0
     if os.path.exists(HISTORY_CSV_PATH):
         try:
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
             total_local_rows = len(df)
         except Exception:
             pass
@@ -318,7 +382,7 @@ def compute_regional_residual_std(
     base_std = default_std
     try:
         if os.path.exists(HISTORY_CSV_PATH):
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
             filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region, horizon_days=horizon_days)
             if not filtered.empty and 'actual_5d_price' in filtered.columns:
                 actuals = filtered['actual_5d_price'].astype(float).values
@@ -358,7 +422,7 @@ def get_regional_calibration_residuals(
     """
     try:
         if os.path.exists(HISTORY_CSV_PATH):
-            df = pd.read_csv(HISTORY_CSV_PATH)
+            df = read_prediction_history(HISTORY_CSV_PATH)
             filtered = filter_evaluated_history_by_window(
                 df,
                 window_days=window_days,
@@ -389,12 +453,13 @@ def get_regional_calibration_residuals(
 def resolve_model_tag(
     region: str = "National", 
     model_type: str = "Ridge", 
-    custom_version: Optional[str] = None
+    custom_version: Optional[str] = None,
+    pipeline: Optional[str] = None
 ) -> str:
     """
-    Standardizes model version tag generation across national and regional prediction loggers.
-    Dynamically resolves active model version (e.g. 'v1.6-Ipatieff') and attaches region and model type.
-    Example: 'v1.6-Ipatieff-Tulsa-Ridge' or 'v1.6-Ipatieff-National-Ridge'
+    Standardizes model version tag generation across national and regional prediction loggers (Issues #402, #607).
+    Dynamically resolves active model version (e.g. 'v1.6-Ipatieff') and attaches pipeline, region, and model type.
+    Example: 'v1.6-Ipatieff-ECM-Tulsa-Ridge' or 'v1.6-Ipatieff-National-Ridge'
     """
     if custom_version:
         return custom_version
@@ -406,7 +471,11 @@ def resolve_model_tag(
     
     clean_region = region.replace("_", "").replace(" ", "")
     clean_model_type = model_type.capitalize()
-    return f"{base_version}-{clean_region}-{clean_model_type}"
+    
+    prefix = f"{base_version}"
+    if pipeline:
+        prefix = f"{base_version}-{pipeline.upper()}"
+    return f"{prefix}-{clean_region}-{clean_model_type}"
 
 
 def log_predictions(
@@ -429,7 +498,7 @@ def log_predictions(
         model_version = resolve_model_tag(region=region, model_type="Ridge")
     ensure_history_store()
     try:
-        history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+        history_df = read_prediction_history(HISTORY_CSV_PATH)
     except Exception:
         history_df = pd.DataFrame()
     
@@ -449,11 +518,27 @@ def log_predictions(
         except (ValueError, TypeError):
             h_days = int(forecast_horizon_days)
 
+        base_dt = pd.to_datetime(row.get('date', row.get('log_timestamp', datetime.now())))
         if 'forecast_target_date' in row and pd.notna(row['forecast_target_date']):
             target_date = str(row['forecast_target_date'])
         else:
-            base_dt = pd.to_datetime(row['date'])
-            target_date = pd.bdate_range(start=base_dt, periods=h_days + 1)[-1].strftime("%Y-%m-%d")
+            try:
+                from src.market_calendar import get_trading_calendar
+                target_date = get_trading_calendar().get_target_date_for_horizon(base_dt, h_days)
+            except Exception:
+                target_date = pd.bdate_range(start=base_dt, periods=h_days + 1)[-1].strftime("%Y-%m-%d")
+
+        # Check NYMEX contract roll straddling (Finding A-5, A-8)
+        try:
+            from src.market_calendar import get_trading_calendar
+            is_straddle, expiry_dt = get_trading_calendar().is_roll_straddling(base_dt, target_date)
+            if is_straddle:
+                logger.warning(
+                    f"[MarketCalendar] Forecast for {region} (origin {base_dt.strftime('%Y-%m-%d')}, "
+                    f"target {target_date}, h={h_days}) straddles NYMEX RBOB contract roll expiry on {expiry_dt}."
+                )
+        except Exception as e:
+            logger.debug(f"Roll straddling check notice: {e}")
         
         quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
         aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)
@@ -500,9 +585,16 @@ def log_predictions(
         if record_run_type in ["DAILY_BATCH", "DAILY_FORECAST", None] or not record_run_type:
             record_run_type = "RETROSPECTIVE_BACKTEST" if is_retro else "LIVE_PROSPECTIVE"
 
-        # Unique forecast identifier and UTC issuance timestamp (Issue #434)
-        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else str(uuid.uuid4())
+        # Deterministic unique forecast identifier (Issue #559, #585, #602)
         issued_utc = str(row.get('issued_at_utc')) if ('issued_at_utc' in row and pd.notna(row['issued_at_utc'])) else now_utc_str
+        f_id = str(row.get('forecast_id')) if ('forecast_id' in row and pd.notna(row['forecast_id'])) else generate_forecast_id(
+            region=region,
+            model_version=model_version,
+            target_date=str(target_date)[:10],
+            horizon_days=h_days,
+            run_type=record_run_type,
+            issued_at_utc=issued_utc
+        )
 
         new_records.append({
             "forecast_id": f_id,
@@ -535,24 +627,45 @@ def log_predictions(
     new_df = pd.DataFrame(new_records)
     with file_lock(HISTORY_CSV_PATH):
         try:
-            history_df = pd.read_csv(HISTORY_CSV_PATH, dtype={"actual_direction": str, "predicted_direction": str})
+            history_df = read_prediction_history(HISTORY_CSV_PATH)
         except Exception:
             history_df = pd.DataFrame()
 
         combined = pd.concat([history_df, new_df], ignore_index=True)
         
-        # Ledger Immutability & Concurrency Safety (Issue #434):
-        # Prior issued forecasts are never overwritten. Revisions are recorded as distinct ledger rows.
-        # Only deduplicate if identical unique forecast_id is encountered.
+        # Ledger Immutability & Concurrency Safety (Issue #434, #559):
+        # Enforce deterministic deduplication on forecast_id.
         if not combined.empty and "forecast_id" in combined.columns:
             combined.drop_duplicates(subset=["forecast_id"], keep="last", inplace=True)
             combined.reset_index(drop=True, inplace=True)
 
         atomic_write_csv(HISTORY_CSV_PATH, combined, index=False)
+
+    # Direct database batch logging (Turso libSQL / D1 / SQLite)
     try:
-        sync_predictions_to_cloud(combined)
-    except Exception as e:
-        logger.warning(f"Background prediction cloud sync notice: {e}")
+        from src.db.client import get_db
+        db = get_db()
+        db_stmts = []
+        for rec in new_records:
+            sql = """
+            INSERT INTO forecasts (
+                forecast_id, region, model_version, origin_date, horizon, target_date,
+                predicted_price, ci_lower_95, ci_upper_95, llm_price_pressure, llm_supply_disruption, run_type
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(forecast_id) DO UPDATE SET
+                predicted_price = excluded.predicted_price,
+                ci_lower_95 = excluded.ci_lower_95,
+                ci_upper_95 = excluded.ci_upper_95;
+            """
+            db_stmts.append((sql, (
+                rec["forecast_id"], rec["region"], rec["model_version"], rec["log_timestamp"][:10],
+                rec["forecast_horizon_days"], rec["forecast_target_date"], rec["predicted_5d_price"],
+                rec["prediction_lower_95ci"], rec["prediction_upper_95ci"], rec["llm_price_pressure"],
+                rec["llm_supply_disruption"], rec["run_type"]
+            )))
+        db.execute_batch(db_stmts)
+    except Exception as db_err:
+        logger.debug(f"Notice logging predictions to database: {db_err}")
     
     logger.info(f"Logged {len(new_records)} predictions ({forecast_horizon_days}d horizon) for region '{region}' under version '{model_version}' (Run Type: {run_type}).")
     try:
@@ -568,12 +681,14 @@ def log_predictions(
 
 RBOB_ACTUALS_CACHE_FILE = "data/rbob_actuals_cache.json"
 _GLOBAL_RBOB_ACTUALS_CACHE: Dict[str, float] = {}
+_GLOBAL_ACTUALS_FETCHED_THIS_PROCESS: bool = False
 
 
 def validate_price_plausibility(price: Optional[float], region: str = "National", is_retail: bool = True) -> bool:
     """
-    Validates whether a price observation falls within economically plausible bands (Issue #399).
+    Validates whether a price observation falls within economically plausible bands (Issue #399, #591).
     Retail gasoline plausibility band: [$1.00, $10.00]/gal.
+    California retail gasoline plausibility band: [$4.00, $10.00]/gal (PADD 5 CARB Phase 3 standards).
     Wholesale RBOB futures plausibility band: [$0.50, $7.00]/gal.
     """
     if price is None:
@@ -582,8 +697,11 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
         val = float(price)
         if np.isnan(val) or np.isinf(val):
             return False
-        if is_retail and region != "National":
-            return 1.00 <= val <= 10.00
+        if is_retail:
+            if region in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA", "Oakland_Diesel"]:
+                return 5.00 <= val <= 10.00
+            if region != "National":
+                return 1.00 <= val <= 10.00
         elif region == "National" and not is_retail:
             return 0.50 <= val <= 7.00
         return 0.50 <= val <= 10.00
@@ -593,15 +711,15 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
 
 def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
     """
-    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427).
-    Also clears premature future actual prices (where forecast_target_date > today).
+    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427, #591).
+    Also clears premature future actual prices (where forecast_target_date > today) and resets corrupted California actual prices.
     Returns the number of rows purged or corrected.
     """
     path = csv_path or HISTORY_CSV_PATH
     if not os.path.exists(path):
         return 0
     try:
-        df = pd.read_csv(path)
+        df = read_prediction_history(path)
         initial_len = len(df)
         if initial_len == 0:
             return 0
@@ -615,6 +733,22 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
             valid_mask = valid_mask & df['current_base_price'].notna() & (df['current_base_price'] > 0.10)
         cleansed_df = df[valid_mask].copy()
         purged = initial_len - len(cleansed_df)
+
+        # 2. Reset corrupted California actual prices that mistakenly took National $4.465 or < $5.00 (Issue #591)
+        ca_regions = ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA"]
+        if 'region' in cleansed_df.columns and 'actual_5d_price' in cleansed_df.columns:
+            ca_corrupted = (
+                cleansed_df['region'].isin(ca_regions) &
+                cleansed_df['actual_5d_price'].notna() &
+                (cleansed_df['actual_5d_price'] < 5.00)
+            )
+            if ca_corrupted.any():
+                cleansed_df.loc[ca_corrupted, 'actual_5d_price'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'actual_direction'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'error_dollars'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'directional_hit'] = np.nan
+                cleansed_df.loc[ca_corrupted, 'within_95ci_hit'] = np.nan
+                purged += int(ca_corrupted.sum())
 
         # 2. Reset unmatured future actual prices (Issue #427)
         today_str = datetime.now().strftime("%Y-%m-%d")
@@ -657,14 +791,14 @@ def backfill_actual_prices_and_evaluate(
     Issue #427: Enforces strict maturity gating (forecast_target_date <= today).
     Strictly separates wholesale NYMEX RBOB (RB=F) and retail ground truth.
     """
-    global _GLOBAL_RBOB_ACTUALS_CACHE
+    global _GLOBAL_RBOB_ACTUALS_CACHE, _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS
     target_csv = csv_path or HISTORY_CSV_PATH
     if not csv_path:
         ensure_history_store()
     
     with file_lock(target_csv):
         try:
-            history_df = pd.read_csv(target_csv)
+            history_df = read_prediction_history(target_csv)
         except Exception as e:
             logger.warning(f"Could not read prediction history log ({e}). Returning empty DataFrame.")
             return pd.DataFrame()
@@ -681,8 +815,6 @@ def backfill_actual_prices_and_evaluate(
             
         history_df['actual_direction'] = history_df['actual_direction'].astype(object)
         history_df['predicted_direction'] = history_df['predicted_direction'].astype(object)
-        
-        logger.info("Fetching actual historical market prices to backfill prediction log...")
         
         today_str = datetime.now().strftime("%Y-%m-%d")
         unevaluated_mask = history_df['actual_5d_price'].isna()
@@ -704,33 +836,60 @@ def backfill_actual_prices_and_evaluate(
                 except Exception:
                     actuals_map = {}
 
-            # Refresh RBOB actuals cache if empty, force_eval, or if unevaluated matured dates are missing (Issue #432)
-            needs_refresh = (not actuals_map) or force_eval
-            if not needs_refresh and not matured_national.empty:
-                missing_dates = [d for d in matured_national['forecast_target_date'].unique() if str(d) not in actuals_map]
-                if missing_dates:
+            # Refresh RBOB actuals cache if empty, force_eval, or if unevaluated matured dates are missing (Issue #432, #498)
+            needs_refresh = False
+            if force_eval:
+                needs_refresh = True
+            elif not _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS:
+                if not actuals_map:
                     needs_refresh = True
+                elif not matured_national.empty:
+                    # Filter candidate missing dates to valid business days (Mon-Fri) to avoid weekend traps
+                    nat_dates = matured_national['forecast_target_date'].astype(str).unique()
+                    b_dates = [d for d in nat_dates if pd.to_datetime(d, errors='coerce').dayofweek < 5]
+                    missing_dates = [d for d in b_dates if str(d) not in actuals_map]
+                    if missing_dates:
+                        needs_refresh = True
 
             if needs_refresh and (not is_injected or force_eval):
+                logger.info("Fetching actual historical market prices to backfill prediction log...")
                 try:
-                    data = yf.download("RB=F", start="2022-01-01", progress=False)
-                    close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-                    dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
-                    actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
-                    fresh_map = actuals_df.set_index('date_str')['actual_rbob'].to_dict()
-                    if not actuals_map:
-                        actuals_map = fresh_map
+                    # Determine start date for download: full range if empty, incremental lookback if cached
+                    start_dl = "2022-01-01"
+                    if actuals_map:
+                        valid_keys = [k for k in actuals_map.keys() if k and k != "null"]
+                        if valid_keys:
+                            latest_k = max(valid_keys)
+                            start_dt = pd.to_datetime(latest_k) - pd.Timedelta(days=30)
+                            start_dl = start_dt.strftime("%Y-%m-%d")
+
+                    data = yf.download("RB=F", start=start_dl, progress=False)
+                    if data is not None and not data.empty:
+                        close_series = data['Close']['RB=F'] if isinstance(data.columns, pd.MultiIndex) and 'RB=F' in data['Close'].columns else data['Close']
+                        if isinstance(close_series, pd.DataFrame):
+                            close_series = close_series.iloc[:, 0]
+                        dates_formatted = [d.strftime("%Y-%m-%d") for d in close_series.index]
+                        actuals_df = pd.DataFrame({'date_str': dates_formatted, 'actual_rbob': close_series.values})
+                        fresh_map = actuals_df.dropna().set_index('date_str')['actual_rbob'].to_dict()
+                        if not actuals_map:
+                            actuals_map = fresh_map
+                        else:
+                            actuals_map.update(fresh_map)
+                        _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
+                        _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
+                        try:
+                            atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
+                        except Exception:
+                            pass
                     else:
-                        actuals_map.update(fresh_map)
-                    _GLOBAL_RBOB_ACTUALS_CACHE = actuals_map
-                    try:
-                        atomic_write_json(RBOB_ACTUALS_CACHE_FILE, actuals_map, indent=2)
-                    except Exception:
-                        pass
+                        _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
                 except Exception as e:
                     logger.warning(f"Could not download actuals from yfinance: {e}")
+                    _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
                     if actuals_map is None:
                         actuals_map = {}
+            elif not needs_refresh:
+                _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS = True
             
         if eia_feed_override is not None:
             eia_feed = eia_feed_override
@@ -755,6 +914,7 @@ def backfill_actual_prices_and_evaluate(
         return history_df
 
     updated = False
+    evaluated_rows_indices = []
     for idx in target_indices:
         row = history_df.loc[idx]
         target_date_str = str(row['forecast_target_date'])
@@ -808,12 +968,13 @@ def backfill_actual_prices_and_evaluate(
             history_df.at[idx, 'within_95ci_hit'] = ci_hit
             if source_prov:
                 history_df.at[idx, 'data_source_provenance'] = source_prov
+            evaluated_rows_indices.append(idx)
             updated = True
             
     if updated:
         with file_lock(target_csv):
             try:
-                disk_df = pd.read_csv(target_csv, dtype={"actual_direction": str, "predicted_direction": str, "data_source_provenance": str})
+                disk_df = read_prediction_history(target_csv)
             except Exception:
                 disk_df = history_df.copy()
 
@@ -822,19 +983,22 @@ def backfill_actual_prices_and_evaluate(
                     disk_df[str_col] = disk_df[str_col].astype(object)
 
             if not disk_df.empty and 'forecast_id' in disk_df.columns and 'forecast_id' in history_df.columns:
-                # Merge evaluated fields back into freshest on-disk dataframe preserving concurrently appended rows
+                # Merge evaluated fields back into freshest on-disk dataframe using fast indexed map (Issue #591)
                 eval_cols = [
                     'actual_5d_price', 'actual_direction', 'error_dollars',
                     'directional_hit', 'within_95ci_hit', 'data_source_provenance',
                     'prediction_lower_95ci', 'prediction_upper_95ci'
                 ]
-                updated_rows = history_df[history_df['actual_5d_price'].notna()].set_index('forecast_id')
-                for f_id, u_row in updated_rows.iterrows():
-                    match_mask = disk_df['forecast_id'] == f_id
-                    if match_mask.any():
-                        for col in eval_cols:
-                            if col in u_row and pd.notna(u_row[col]):
-                                disk_df.loc[match_mask, col] = u_row[col]
+                newly_evaluated_df = history_df.loc[evaluated_rows_indices]
+                if not newly_evaluated_df.empty:
+                    disk_id_map = {fid: idx for idx, fid in enumerate(disk_df['forecast_id']) if pd.notna(fid)}
+                    for _, u_row in newly_evaluated_df.iterrows():
+                        f_id = u_row.get('forecast_id')
+                        target_idx = disk_id_map.get(f_id)
+                        if target_idx is not None:
+                            for col in eval_cols:
+                                if col in u_row and pd.notna(u_row[col]):
+                                    disk_df.at[target_idx, col] = u_row[col]
                 history_df = disk_df
             elif not disk_df.empty and all(c in disk_df.columns and c in history_df.columns for c in ['log_timestamp', 'forecast_target_date', 'region']):
                 eval_cols = [
@@ -842,42 +1006,124 @@ def backfill_actual_prices_and_evaluate(
                     'directional_hit', 'within_95ci_hit', 'data_source_provenance',
                     'prediction_lower_95ci', 'prediction_upper_95ci'
                 ]
-                for _, u_row in history_df[history_df['actual_5d_price'].notna()].iterrows():
-                    match_mask = (
-                        (disk_df['log_timestamp'] == u_row['log_timestamp']) &
-                        (disk_df['forecast_target_date'] == u_row['forecast_target_date']) &
-                        (disk_df['region'] == u_row['region'])
-                    )
-                    if match_mask.any():
+                newly_evaluated_df = history_df.loc[evaluated_rows_indices]
+                disk_composite_map = {
+                    (r['log_timestamp'], r['forecast_target_date'], r['region']): idx
+                    for idx, r in disk_df.iterrows()
+                }
+                for _, u_row in newly_evaluated_df.iterrows():
+                    key = (u_row.get('log_timestamp'), u_row.get('forecast_target_date'), u_row.get('region'))
+                    target_idx = disk_composite_map.get(key)
+                    if target_idx is not None:
                         for col in eval_cols:
                             if col in u_row and pd.notna(u_row[col]):
-                                disk_df.loc[match_mask, col] = u_row[col]
+                                disk_df.at[target_idx, col] = u_row[col]
                 history_df = disk_df
 
             atomic_write_csv(target_csv, history_df, index=False)
 
-        if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
-            try:
-                sync_predictions_to_cloud(history_df)
-            except Exception as e:
-                logger.warning(f"Background prediction cloud sync notice: {e}")
         logger.info("Successfully backfilled actual prices and updated performance metrics.")
         
-        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issue #230, #326)
+        # Direct database batch update (Turso libSQL / SQLite)
+        try:
+            from src.db.client import get_db
+            import hashlib
+            db = get_db()
+            db_gt_stmts = []
+            db_eval_stmts = []
+            seen_gt = set()
+            seen_ev = set()
+            newly_evaluated_df = history_df.loc[evaluated_rows_indices]
+            for _, row in newly_evaluated_df.iterrows():
+                reg = str(row.get('region', 'National'))
+                target_d = str(row.get('forecast_target_date', ''))[:10]
+                act_p = float(row.get('actual_5d_price', 0.0))
+                if act_p > 0 and target_d:
+                    series_id = f"ACTUAL_{reg.upper()}"
+                    gt_key = (series_id, target_d)
+                    if gt_key not in seen_gt:
+                        seen_gt.add(gt_key)
+                        gt_sql = """
+                        INSERT INTO ground_truth (series_id, obs_date, actual_price, settled_at, source)
+                        VALUES (?, ?, ?, ?, ?)
+                        ON CONFLICT(series_id, obs_date) DO UPDATE SET actual_price = excluded.actual_price;
+                        """
+                        src_prov = str(row.get('data_source_provenance', 'live_feed'))
+                        db_gt_stmts.append((gt_sql, (series_id, target_d, act_p, target_d, src_prov)))
+
+                f_id = row.get('forecast_id')
+                if f_id and pd.notna(f_id) and str(f_id).strip():
+                    eval_id = hashlib.sha256(f"{f_id}_{target_d}".encode("utf-8")).hexdigest()[:32]
+                    if eval_id not in seen_ev:
+                        seen_ev.add(eval_id)
+                        pred_p = float(row.get('predicted_5d_price', 0.0))
+                        err_d = float(row.get('error_dollars', abs(pred_p - act_p)))
+                        pct_e = (err_d / act_p * 100.0) if act_p > 0 else 0.0
+                        d_hit = int(row.get('directional_hit', 1)) if pd.notna(row.get('directional_hit')) else 1
+                        w_95 = int(row.get('within_95ci_hit', 1)) if pd.notna(row.get('within_95ci_hit')) else 1
+                        eval_sql = """
+                        INSERT INTO evaluations (
+                            evaluation_id, forecast_id, series_id, actual_price, absolute_error,
+                            percentage_error, directional_correct, within_95ci
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(evaluation_id) DO UPDATE SET
+                            actual_price = excluded.actual_price,
+                            absolute_error = excluded.absolute_error,
+                            percentage_error = excluded.percentage_error,
+                            directional_correct = excluded.directional_correct,
+                            within_95ci = excluded.within_95ci;
+                        """
+                        db_eval_stmts.append((eval_sql, (
+                            eval_id, str(f_id), f"ACTUAL_{reg.upper()}", act_p, err_d, pct_e, d_hit, w_95
+                        )))
+            if db_gt_stmts:
+                db.execute_batch(db_gt_stmts)
+            if db_eval_stmts:
+                db.execute_batch(db_eval_stmts)
+        except Exception as db_err:
+            logger.debug(f"Notice updating evaluations to database: {db_err}")
+
+        # Ingest evaluated memories/anomalies into AgentMemoryManager (Retain - Issues #230, #326, #557)
         if target_csv == HISTORY_CSV_PATH and os.environ.get("TESTING") != "1":
             try:
                 from src.agent_memory import AgentMemoryManager
                 mem_mgr = AgentMemoryManager()
-                eval_candidates = history_df[history_df['actual_5d_price'].notna()]
-                if target_region:
-                    eval_candidates = eval_candidates[eval_candidates['region'] == target_region]
-                for _, row in eval_candidates.tail(10).iterrows():
+                
+                # Priority 1: Retain records newly evaluated in this exact pass (Issue #557)
+                if evaluated_rows_indices:
+                    valid_eval_indices = [i for i in evaluated_rows_indices if i in history_df.index]
+                    candidate_df = history_df.loc[valid_eval_indices]
+                else:
+                    # Priority 2: Fallback to temporally sorted recent evaluated records (Issue #557)
+                    eval_df = history_df[history_df['actual_5d_price'].notna()]
+                    if target_region:
+                        eval_df = eval_df[eval_df['region'] == target_region]
+                    candidate_df = eval_df.sort_values(
+                        by=['forecast_target_date', 'log_timestamp'],
+                        ascending=[False, False]
+                    )
+
+                # Exclude retrospective backtest rows from live episodic memory retention (Issue #591)
+                if not candidate_df.empty:
+                    if 'is_retroactive_backtest' in candidate_df.columns:
+                        candidate_df = candidate_df[candidate_df['is_retroactive_backtest'].fillna(False).astype(bool) == False]
+                    if 'run_type' in candidate_df.columns:
+                        candidate_df = candidate_df[~candidate_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)]
+                    candidate_df = candidate_df.head(5)
+                
+                for _, row in candidate_df.iterrows():
                     err = float(row.get('error_dollars', 0.0))
                     reg = str(row.get('region', target_region or 'National'))
                     pred = float(row.get('predicted_5d_price', 0.0))
                     act = float(row.get('actual_5d_price', 0.0))
                     target_d = str(row.get('forecast_target_date', ''))
-                    anom_type = "LARGE_OVERESTIMATE" if (pred - act) >= 0.25 else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25 else ("DIRECTIONAL_FLIP" if row.get('directional_hit') == 0.0 and abs(pred - act) >= 0.05 else "NORMAL"))
+                    d_hit = row.get('directional_hit')
+                    anom_type = (
+                        "LARGE_OVERESTIMATE" if (pred - act) >= 0.25
+                        else ("LARGE_UNDERESTIMATE" if (act - pred) >= 0.25
+                        else ("DIRECTIONAL_FLIP" if d_hit == 0.0 and abs(pred - act) >= 0.05
+                        else "NORMAL"))
+                    )
                     if anom_type != "NORMAL":
                         mem_mgr.retain(
                             content=f"Evaluated forecast for {reg} on {target_d}: Predicted ${pred:.4f}, Actual ${act:.4f}, Error ${err:+.4f}/gal ({anom_type})",
@@ -888,7 +1134,7 @@ def backfill_actual_prices_and_evaluate(
                             predicted_price=pred,
                             actual_price=act,
                             forecast_target_date=target_d,
-                            metadata={"provenance_source": str(row.get("provenance_source", "yfinance"))}
+                            metadata={"provenance_source": str(row.get("data_source_provenance", row.get("provenance_source", "yfinance")))}
                         )
             except Exception as e:
                 logger.debug(f"Agent memory retention notice: {e}")
@@ -917,6 +1163,47 @@ def backfill_new_region_history(
             model_version = get_model_version().replace(" ", "-")
         except Exception:
             model_version = "v1.6-Ipatieff"
+
+    skip_backfill = os.environ.get("MIDGLEY_SKIP_BACKFILL") == "1" or (
+        os.environ.get("GITHUB_ACTIONS") == "true"
+        and os.environ.get("TESTING") != "1"
+        and os.environ.get("MIDGLEY_FORCE_BACKFILL") != "1"
+    )
+    if skip_backfill:
+        logger.info(
+            f"Skipping historical backfill for {region} ({forecast_horizon_days}d) - "
+            f"policy enforces offloading backfills to local dev environment."
+        )
+        return 0
+
+    # Fast skip if history has already been backfilled in database (Turso / SQLite)
+    try:
+        from src.db.client import get_db
+        db = get_db()
+        db_rows = db.execute(
+            "SELECT COUNT(*) as cnt FROM forecasts WHERE region = ? AND model_version = ? AND horizon = ?",
+            (region, model_version, forecast_horizon_days)
+        )
+        if db_rows and db_rows[0].get("cnt", 0) >= 30:
+            logger.debug(f"History already backfilled in database for {region} ({model_version}, {forecast_horizon_days}d). Skipping redundant backfill.")
+            return 0
+    except Exception as e:
+        logger.debug(f"Notice checking database history in backfill_new_region_history: {e}")
+
+    # Fast skip if history has already been backfilled in local CSV ledger (Issue #591)
+    if os.path.exists(HISTORY_CSV_PATH):
+        try:
+            hist_df = read_prediction_history(HISTORY_CSV_PATH)
+            if not hist_df.empty and 'region' in hist_df.columns and 'model_version' in hist_df.columns:
+                mask = (hist_df['region'] == region) & (hist_df['model_version'] == model_version)
+                if 'forecast_horizon_days' in hist_df.columns:
+                    mask = mask & (hist_df['forecast_horizon_days'].fillna(5).astype(int) == forecast_horizon_days)
+                if mask.sum() >= 30:
+                    logger.debug(f"History already backfilled for {region} ({model_version}, {forecast_horizon_days}d). Skipping redundant backfill.")
+                    return 0
+        except Exception as e:
+            logger.debug(f"Notice checking existing history in backfill_new_region_history: {e}")
+
     dates_arr = getattr(test_dates, 'values', test_dates)
     base_arr = getattr(base_prices, 'values', base_prices)
     pred_arr = getattr(predicted_prices, 'values', predicted_prices)
@@ -1065,13 +1352,15 @@ def compute_rolling_scoreboard_metrics(
     window_days: int | str = 30, 
     region: str = None,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> dict:
     """
     Computes rolling performance metrics (MAE, RMSE, MAPE, Directional Hit Rate %,
     Naive Persistence Baseline MAE, and Model MAE Uplift %) over a given rolling day window and horizon.
     """
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     filtered_df = filter_evaluated_history_by_window(
         df, 
         window_days=window_days, 
@@ -1157,10 +1446,12 @@ def compute_rolling_scoreboard_metrics(
 def compute_regional_scoreboard_breakdown(
     window_days: int | str = 30,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> list[dict]:
     """Computes rolling performance metrics for each active region under optional horizon filter."""
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     if df.empty or 'actual_5d_price' not in df.columns:
         return []
 
@@ -1183,7 +1474,8 @@ def compute_regional_scoreboard_breakdown(
             window_days=window_days, 
             region=reg, 
             horizon_days=horizon_days,
-            include_retroactive=include_retroactive
+            include_retroactive=include_retroactive,
+            df=eval_df
         )
         if metrics["total_evaluations"] > 0:
             breakdown.append({
@@ -1207,13 +1499,17 @@ def compute_horizon_scoreboard_breakdown(
     window_days: int | str = 30, 
     region: str = None,
     horizons: Optional[list[int]] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> list[dict]:
     """
     Computes rolling performance metrics broken down across discrete forecast horizons (1d through 5d).
     """
     if horizons is None:
         horizons = [1, 2, 3, 4, 5]
+
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
 
     breakdown = []
     horizon_labels = {
@@ -1229,7 +1525,8 @@ def compute_horizon_scoreboard_breakdown(
             window_days=window_days, 
             region=region, 
             horizon_days=h,
-            include_retroactive=include_retroactive
+            include_retroactive=include_retroactive,
+            df=df
         )
         label = horizon_labels.get(h, f"{h}-Day Forward")
         breakdown.append({
@@ -1254,10 +1551,12 @@ def get_recent_evaluated_records(
     region: str = None, 
     limit: int = 50,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> list[dict]:
     """Returns chronologically sorted evaluated forecast records."""
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     filtered_df = filter_evaluated_history_by_window(
         df, 
         window_days="all", 
@@ -1295,7 +1594,8 @@ def get_recent_evaluated_records(
 
 def compute_mlops_observability_summary(
     window_days: int | str = 30,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    df: Optional[pd.DataFrame] = None
 ) -> dict:
     """
     Computes MLOps observability statistics over evaluated predictions:
@@ -1304,10 +1604,11 @@ def compute_mlops_observability_summary(
     - Average LLM Price Pressure & Supply Disruption
     - Performance Breakdown by Data Source Provenance
     """
-    df = backfill_actual_prices_and_evaluate()
+    if df is None:
+        df = backfill_actual_prices_and_evaluate()
     filtered_df = filter_evaluated_history_by_window(
         df, 
-        window_days=window_days,
+        window_days=window_days, 
         include_retroactive=include_retroactive
     )
 

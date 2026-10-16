@@ -244,3 +244,50 @@ curl -X POST "https://your-midgley-domain.com/api/v1/events/webhook" \
   }
 }
 ```
+
+---
+
+## 7. Outbound Discord Subscriptions: Channel Webhooks, Direct Messages (`discord_dm`) & `/midgley` Slash Commands (Issue #235)
+
+In addition to ingesting breaking news webhooks via `POST /api/v1/events/webhook`, Midgley provides an outbound **Multi-Subscriber Discord Notification Gateway** (`src/discord_notifier.py` & `workers/intraday_monitor_worker.ts`) supporting both shared channel webhooks and personal **Direct Message (`discord_dm`)** subscriptions so multiple members in the same Discord server can receive tailored alerts without spamming shared chat channels.
+
+### A. Registering a Channel Webhook or Direct Message Subscription via REST API
+
+```bash
+# 1. Register a shared Discord Channel Incoming Webhook
+curl -X POST "http://localhost:8000/api/v1/notifications/discord/subscribe" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "delivery_type": "webhook",
+    "webhook_url": "https://discord.com/api/webhooks/123456789/token_abc",
+    "target_locales": ["National", "Tulsa"],
+    "minimum_shock_threshold": 0.35,
+    "direction_filter": "spikes_only",
+    "client_label": "Tulsa Fleet Operations"
+  }'
+
+# 2. Register a personal Discord Direct Message (DM) subscription by User ID
+curl -X POST "http://localhost:8000/api/v1/notifications/discord/subscribe" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "delivery_type": "discord_dm",
+    "discord_user_id": "998877665544332211",
+    "target_locales": ["Cincinnati", "Chicago"],
+    "minimum_shock_threshold": 0.25,
+    "direction_filter": "all_shocks",
+    "client_label": "Regional Trader DM"
+  }'
+```
+
+### B. Interactive `/midgley` Discord Slash Commands (`POST /discord/interactions`)
+
+Users in any Discord server with the Midgley App installed (or via a User-Installable App) can manage their personal DM subscriptions and request on-demand forecasts with zero chat clutter (`flags: 64` ephemeral responses + private DM cards):
+
+* `/midgley subscribe locale:Tulsa min_shock:0.25 direction:spikes_only delivery:dm`
+* `/midgley unsubscribe locale:Tulsa` (or `locale:all`)
+* `/midgley status`
+* `/midgley forecast locale:Oakland horizon:5`
+* `/midgley test-alert locale:Cincinnati`
+
+If a user's server privacy settings block Direct Messages from server members (Discord HTTP `403`, code `50007`), `/midgley` automatically falls back to an **ephemeral in-channel card (`flags: 64`)** visible only to the caller and provides instructions for enabling server DMs.
+

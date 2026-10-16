@@ -24,7 +24,7 @@ import json
 import logging
 import urllib.request
 from datetime import datetime
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List, Tuple, Union
 import pandas as pd
 from src.storage_io import atomic_write_json, file_lock
 
@@ -33,26 +33,161 @@ logger = logging.getLogger("midgley.eia_retail_feed")
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 VINTAGES_FILE = os.path.join(DATA_DIR, "eia_retail_vintages.json")
 
+# Mapping of FRED series IDs to official U.S. EIA API v2 Series IDs (Issue #608, Section 4.1)
+FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
+    "GASREGW": "EMM_EPMR_PTE_NUS_DPG",
+    "GASREGW01B": "EMM_EPMR_PTE_R1Y_DPG",
+    "GASREGW01C": "EMM_EPMR_PTE_R1Z_DPG",
+    "GASREGWMW": "EMM_EPMR_PTE_R20_DPG",
+    "GASREGWOH": "EMM_EPMR_PTE_SOH_DPG",
+    "GASREGWFL": "EMM_EPMR_PTE_SFL_DPG",
+    "GASREGWCA": "EMM_EPMR_PTE_SCA_DPG",
+    "GASREGWSF": "EMM_EPMR_PTE_Y05SF_DPG",
+    "GASREGWLA": "EMM_EPMR_PTE_Y05LA_DPG",
+    "GASREGWCHI": "EMM_EPMR_PTE_Y03CH_DPG",
+    "GASREGWIL": "EMM_EPMR_PTE_SIL_DPG",
+    "GASREGWHO": "EMM_EPMR_PTE_Y44HO_DPG",
+    "GASREGWTX": "EMM_EPMR_PTE_STX_DPG",
+    "GASREGWGC": "EMM_EPMR_PTE_R30_DPG",
+    "EMM_EPMR_PTE_NUS_DPG": "EMM_EPMR_PTE_NUS_DPG",
+    "EMM_EPMR_PTE_R1Y_DPG": "EMM_EPMR_PTE_R1Y_DPG",
+    "EMM_EPMR_PTE_R1Z_DPG": "EMM_EPMR_PTE_R1Z_DPG",
+    "EMM_EPMR_PTE_R20_DPG": "EMM_EPMR_PTE_R20_DPG",
+    "EMM_EPMR_PTE_SOH_DPG": "EMM_EPMR_PTE_SOH_DPG",
+    "EMM_EPMR_PTE_SFL_DPG": "EMM_EPMR_PTE_SFL_DPG",
+    "EMM_EPMR_PTE_SCA_DPG": "EMM_EPMR_PTE_SCA_DPG",
+    "EMM_EPMR_PTE_Y05SF_DPG": "EMM_EPMR_PTE_Y05SF_DPG",
+    "EMM_EPMR_PTE_Y05LA_DPG": "EMM_EPMR_PTE_Y05LA_DPG",
+    "EMM_EPMR_PTE_Y03CH_DPG": "EMM_EPMR_PTE_Y03CH_DPG",
+    "EMM_EPMR_PTE_SIL_DPG": "EMM_EPMR_PTE_SIL_DPG",
+    "EMM_EPMR_PTE_Y44HO_DPG": "EMM_EPMR_PTE_Y44HO_DPG",
+    "EMM_EPMR_PTE_STX_DPG": "EMM_EPMR_PTE_STX_DPG",
+    "EMM_EPMR_PTE_R30_DPG": "EMM_EPMR_PTE_R30_DPG",
+    "GASDESW": "EMD_EPD2D_PTE_NUS_DPG",
+    "GASDESW01B": "EMD_EPD2D_PTE_R1Y_DPG",
+    "GASDESW01C": "EMD_EPD2D_PTE_R1Z_DPG",
+    "GASDESWMW": "EMD_EPD2D_PTE_R20_DPG",
+    "GASDESWFL": "EMD_EPD2D_PTE_SFL_DPG",
+    "GASDESWCA": "EMD_EPD2D_PTE_SCA_DPG",
+    "GASDESWGC": "EMD_EPD2D_PTE_R30_DPG",
+    "EMD_EPD2D_PTE_R30_DPG": "EMD_EPD2D_PTE_R30_DPG",
+    "GASREGWDEN": "EMM_EPMR_PTE_Y35DE_DPG",
+    "GASREGWCO": "EMM_EPMR_PTE_SCO_DPG",
+    "GASREGWRM": "EMM_EPMR_PTE_R40_DPG",
+    "EMM_EPMR_PTE_Y35DE_DPG": "EMM_EPMR_PTE_Y35DE_DPG",
+    "EMM_EPMR_PTE_SCO_DPG": "EMM_EPMR_PTE_SCO_DPG",
+    "EMM_EPMR_PTE_R40_DPG": "EMM_EPMR_PTE_R40_DPG",
+    "GASDESWRM": "EMD_EPD2D_PTE_R40_DPG",
+    "EMD_EPD2D_PTE_R40_DPG": "EMD_EPD2D_PTE_R40_DPG",
+    "GASREGWNYC": "EMM_EPMR_PTE_Y35NY_DPG",
+    "GASREGWNY": "EMM_EPMR_PTE_SNY_DPG",
+    "EMM_EPMR_PTE_Y35NY_DPG": "EMM_EPMR_PTE_Y35NY_DPG",
+    "EMM_EPMR_PTE_SNY_DPG": "EMM_EPMR_PTE_SNY_DPG",
+    "GASDESWNY": "EMD_EPD2D_PTE_SNY_DPG",
+    "EMD_EPD2D_PTE_SNY_DPG": "EMD_EPD2D_PTE_SNY_DPG",
+    "GASREGWSEA": "EMM_EPMR_PTE_Y48SE_DPG",
+    "GASREGWWA": "EMM_EPMR_PTE_SWA_DPG",
+    "EMM_EPMR_PTE_Y48SE_DPG": "EMM_EPMR_PTE_Y48SE_DPG",
+    "EMM_EPMR_PTE_SWA_DPG": "EMM_EPMR_PTE_SWA_DPG",
+    "GASREGWAZ": "EMM_EPMR_PTE_SAZ_DPG",
+    "EMM_EPMR_PTE_SAZ_DPG": "EMM_EPMR_PTE_SAZ_DPG",
+    "GASREGWAK": "EMM_EPMR_PTE_SAK_DPG",
+    "EMM_EPMR_PTE_SAK_DPG": "EMM_EPMR_PTE_SAK_DPG",
+    "GASREGWHI": "EMM_EPMR_PTE_SHI_DPG",
+    "EMM_EPMR_PTE_SHI_DPG": "EMM_EPMR_PTE_SHI_DPG",
+    "GASREGW5XCA": "EMM_EPMR_PTE_R50XCA_DPG",
+    "EMM_EPMR_PTE_R50XCA_DPG": "EMM_EPMR_PTE_R50XCA_DPG",
+    "GASDESW5XCA": "EMD_EPD2D_PTE_R50XCA_DPG",
+    "EMD_EPD2D_PTE_R50XCA_DPG": "EMD_EPD2D_PTE_R50XCA_DPG",
+    "GASREGWBOS": "EMM_EPMR_PTE_Y01BO_DPG",
+    "GASREGWMA": "EMM_EPMR_PTE_SMA_DPG",
+    "GASREGW01A": "EMM_EPMR_PTE_R1X_DPG",
+    "EMM_EPMR_PTE_Y01BO_DPG": "EMM_EPMR_PTE_Y01BO_DPG",
+    "EMM_EPMR_PTE_SMA_DPG": "EMM_EPMR_PTE_SMA_DPG",
+    "EMM_EPMR_PTE_R1X_DPG": "EMM_EPMR_PTE_R1X_DPG",
+    "GASDESW01A": "EMD_EPD2D_PTE_R1X_DPG",
+    "EMD_EPD2D_PTE_R1X_DPG": "EMD_EPD2D_PTE_R1X_DPG",
+    # Island Territorial Agency Series (Guam GEO & Puerto Rico DACO, Issues #620, #621)
+    "GEO_RETAIL_GUAM": "GEO_RETAIL_GUAM",
+    "GEODESWGUAM": "GEODESWGUAM",
+    "GASREGWGUAM": "GASREGWGUAM",
+    "GASDESWGUAM": "GASDESWGUAM",
+    "DACO_RETAIL_PR": "DACO_RETAIL_PR",
+    "DACODESWPR": "DACODESWPR",
+    "GASREGWPR": "GASREGWPR",
+    "GASDESWPR": "GASDESWPR",
+}
+
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
+# Strictly NO cross-geography national fallbacks for regional targets (Issue #608)
 REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
     "National": [("GASREGW", "U.S. Regular All Formulations Retail Price")],
-    "Tulsa_OK": [("GASREGWOK", "Oklahoma Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
-    "Newark_DE": [("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
+    "Tulsa_OK": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for OK)")],
+    "Newark_DE": [("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "New_York_NY": [("GASREGWNYC", "New York City Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWNY", "New York State Regular Conventional Retail Price"), ("GASREGW01B", "PADD 1B Central Atlantic Regular Retail Price")],
     "Cincinnati_OH": [("GASREGWOH", "Ohio Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
-    "Cincinnati_KY": [("GASREGWKY", "Kentucky Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
-    "Greenville_NC": [("GASREGWNC", "North Carolina Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
-    "Charlotte_NC": [("GASREGWNC", "North Carolina Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
+    "Cincinnati_KY": [("GASREGWMW", "PADD 2 Midwest Regular Retail Price (Official Regional Benchmark for KY)")],
+    "Chicago_IL": [("GASREGWCHI", "Chicago Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWIL", "Illinois Regular Conventional Retail Price"), ("GASREGWMW", "PADD 2 Midwest Regular Retail Price")],
+    "Houston_TX": [("GASREGWHO", "Houston Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWTX", "Texas Regular Conventional Retail Price"), ("GASREGWGC", "PADD 3 Gulf Coast Regular Retail Price")],
+    "Los_Angeles_CA": [("GASREGWLA", "Los Angeles Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "Denver_CO": [("GASREGWDEN", "Denver Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWCO", "Colorado Regular Conventional Retail Price"), ("GASREGWRM", "PADD 4 Rocky Mountain Regular Retail Price")],
+    "Greenville_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
+    "Charlotte_NC": [("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price (Official Regional Benchmark for NC)")],
     "Port_St_Lucie_FL": [("GASREGWFL", "Florida Regular Conventional Retail Price"), ("GASREGW01C", "PADD 1C Lower Atlantic Regular Retail Price")],
-    "Oakland_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "BayArea_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "SanFrancisco_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "SanJose_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    "NorthBay_CA": [("GASREGWCA", "California Regular Reformulated Retail Price"), ("GASREGW", "U.S. Regular Retail Price")],
-    # On-Highway Diesel series (Issue #461)
+    "Oakland_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "BayArea_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "SanFrancisco_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "SanJose_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "NorthBay_CA": [("GASREGWSF", "San Francisco All Formulations Retail Price (EIA City Tier)"), ("GASREGWCA", "California Regular Reformulated Retail Price")],
+    "Seattle_WA": [("GASREGWSEA", "Seattle Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWWA", "Washington Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Phoenix_AZ": [("GASREGWAZ", "Arizona Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Anchorage_AK": [("GASREGWAK", "Alaska Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Honolulu_HI": [("GASREGWHI", "Hawaii Regular Conventional Retail Price"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "Guam_GU": [("GEO_RETAIL_GUAM", "Guam Energy Office Monthly Petroleum Monitor"), ("GASREGW5XCA", "PADD 5 West Coast Excluding California Regular Retail Price")],
+    "San_Juan_PR": [("DACO_RETAIL_PR", "Puerto Rico DACO Daily Fuel Price Survey"), ("GASREGWGC", "PADD 3 Gulf Coast Regular Retail Price")],
+    "Boston_MA": [("GASREGWBOS", "Boston Regular All Formulations Retail Price (EIA City Tier)"), ("GASREGWMA", "Massachusetts Regular Conventional Retail Price"), ("GASREGW01A", "PADD 1A New England Regular Retail Price")],
+    # On-Highway Diesel series (Unified _ULSD and _Diesel aliases, Issues #461, #478, #608)
+    "National_ULSD": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
     "National_Diesel": [("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
-    "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price"), ("GASDESW", "U.S. No 2 Diesel Retail Price")],
+    "Tulsa_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OK)")],
+    "Tulsa_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OK)")],
+    "Newark_ULSD": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "Newark_Diesel": [("GASDESW01B", "PADD 1B No 2 Diesel Retail Price (Official Regional Benchmark for DE/NJ)")],
+    "New_York_ULSD": [("GASDESWNY", "New York No 2 Diesel Retail Price"), ("GASDESW01B", "PADD 1B Central Atlantic No 2 Diesel Retail Price")],
+    "New_York_Diesel": [("GASDESWNY", "New York No 2 Diesel Retail Price"), ("GASDESW01B", "PADD 1B Central Atlantic No 2 Diesel Retail Price")],
+    "Cincinnati_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
+    "Cincinnati_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for OH/KY)")],
+    "Chicago_ULSD": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for IL/IN)")],
+    "Chicago_Diesel": [("GASDESWMW", "PADD 2 Midwest No 2 Diesel Retail Price (Official Regional Benchmark for IL/IN)")],
+    "Houston_ULSD": [("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price (Official Regional Benchmark for TX)")],
+    "Houston_Diesel": [("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price (Official Regional Benchmark for TX)")],
+    "Los_Angeles_ULSD": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Los_Angeles_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Denver_ULSD": [("GASDESWRM", "PADD 4 Rocky Mountain No 2 Diesel Retail Price (Official Regional Benchmark for CO)")],
+    "Denver_Diesel": [("GASDESWRM", "PADD 4 Rocky Mountain No 2 Diesel Retail Price (Official Regional Benchmark for CO)")],
+    "Greenville_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Greenville_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Charlotte_ULSD": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Charlotte_Diesel": [("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price (Official Regional Benchmark for NC)")],
+    "Oakland_ULSD": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Oakland_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Oakland_CARB_Diesel": [("GASDESWCA", "California No 2 Diesel Retail Price")],
+    "Port_St_Lucie_ULSD": [("GASDESWFL", "Florida No 2 Diesel Retail Price"), ("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price")],
+    "Port_St_Lucie_Diesel": [("GASDESWFL", "Florida No 2 Diesel Retail Price"), ("GASDESW01C", "PADD 1C Lower Atlantic No 2 Diesel Retail Price")],
+    "Seattle_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Seattle_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Phoenix_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Phoenix_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Anchorage_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Anchorage_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Honolulu_ULSD": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Honolulu_Diesel": [("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Guam_ULSD": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "Guam_Diesel": [("GEODESWGUAM", "Guam Energy Office Diesel Retail Price"), ("GASDESW5XCA", "PADD 5 West Coast Excluding California No 2 Diesel Retail Price")],
+    "San_Juan_ULSD": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price")],
+    "San_Juan_Diesel": [("DACODESWPR", "Puerto Rico DACO Daily Diesel Price Survey"), ("GASDESWGC", "PADD 3 Gulf Coast No 2 Diesel Retail Price")],
+    "Boston_ULSD": [("GASDESW01A", "PADD 1A New England No 2 Diesel Retail Price")],
+    "Boston_Diesel": [("GASDESW01A", "PADD 1A New England No 2 Diesel Retail Price")],
 }
 
 # Baseline realistic fallback prices by series if offline
@@ -61,16 +196,82 @@ FALLBACK_RETAIL_PRICES: Dict[str, float] = {
     "GASREGW01B": 3.390,
     "GASREGW01C": 3.250,
     "GASREGWMW": 3.200,
-    "GASREGWOK": 2.950,
     "GASREGWOH": 3.220,
-    "GASREGWKY": 3.150,
-    "GASREGWNC": 3.190,
     "GASREGWFL": 3.320,
     "GASREGWCA": 4.850,
+    "GASREGWSF": 4.950,
+    "GASREGWLA": 4.890,
+    "GASREGWCHI": 3.850,
+    "GASREGWIL": 3.650,
+    "GASREGWHO": 2.850,
+    "GASREGWTX": 2.820,
+    "GASREGWGC": 2.800,
+    "EMM_EPMR_PTE_NUS_DPG": 3.450,
+    "EMM_EPMR_PTE_R1Y_DPG": 3.390,
+    "EMM_EPMR_PTE_R1Z_DPG": 3.250,
+    "EMM_EPMR_PTE_R20_DPG": 3.200,
+    "EMM_EPMR_PTE_SOH_DPG": 3.220,
+    "EMM_EPMR_PTE_SFL_DPG": 3.320,
+    "EMM_EPMR_PTE_SCA_DPG": 4.850,
+    "EMM_EPMR_PTE_Y05SF_DPG": 4.950,
+    "EMM_EPMR_PTE_Y05LA_DPG": 4.890,
+    "EMM_EPMR_PTE_Y03CH_DPG": 3.850,
+    "EMM_EPMR_PTE_SIL_DPG": 3.650,
+    "EMM_EPMR_PTE_Y44HO_DPG": 2.850,
+    "EMM_EPMR_PTE_STX_DPG": 2.820,
+    "EMM_EPMR_PTE_R30_DPG": 2.800,
     "GASDESW": 3.850,
     "GASDESWMW": 3.750,
     "GASDESW01B": 3.920,
-    "GASDESWCA": 5.150
+    "GASDESW01C": 3.790,
+    "GASDESWFL": 3.820,
+    "GASDESWCA": 5.150,
+    "GASDESWGC": 3.450,
+    "EMD_EPD2D_PTE_R30_DPG": 3.450,
+    "GASREGWDEN": 3.150,
+    "GASREGWCO": 3.100,
+    "GASREGWRM": 3.120,
+    "EMM_EPMR_PTE_Y35DE_DPG": 3.150,
+    "EMM_EPMR_PTE_SCO_DPG": 3.100,
+    "EMM_EPMR_PTE_R40_DPG": 3.120,
+    "GASDESWRM": 3.750,
+    "EMD_EPD2D_PTE_R40_DPG": 3.750,
+    "GASREGWNYC": 3.480,
+    "GASREGWNY": 3.420,
+    "EMM_EPMR_PTE_Y35NY_DPG": 3.480,
+    "EMM_EPMR_PTE_SNY_DPG": 3.420,
+    "GASDESWNY": 4.150,
+    "EMD_EPD2D_PTE_SNY_DPG": 4.150,
+    "GASREGWSEA": 4.150,
+    "GASREGWWA": 4.100,
+    "EMM_EPMR_PTE_Y48SE_DPG": 4.150,
+    "EMM_EPMR_PTE_SWA_DPG": 4.100,
+    "GASREGWAZ": 3.250,
+    "EMM_EPMR_PTE_SAZ_DPG": 3.250,
+    "GASREGWAK": 3.850,
+    "EMM_EPMR_PTE_SAK_DPG": 3.850,
+    "GASREGWHI": 4.650,
+    "EMM_EPMR_PTE_SHI_DPG": 4.650,
+    "GASREGW5XCA": 3.950,
+    "EMM_EPMR_PTE_R50XCA_DPG": 3.950,
+    "GASDESW5XCA": 4.450,
+    "EMD_EPD2D_PTE_R50XCA_DPG": 4.450,
+    "GEO_RETAIL_GUAM": 4.890,
+    "GEODESWGUAM": 5.250,
+    "GASREGWGUAM": 4.890,
+    "GASDESWGUAM": 5.250,
+    "DACO_RETAIL_PR": 3.490,
+    "DACODESWPR": 3.950,
+    "GASREGWPR": 3.490,
+    "GASDESWPR": 3.950,
+    "GASREGWBOS": 3.450,
+    "GASREGWMA": 3.420,
+    "GASREGW01A": 3.450,
+    "EMM_EPMR_PTE_Y01BO_DPG": 3.450,
+    "EMM_EPMR_PTE_SMA_DPG": 3.420,
+    "EMM_EPMR_PTE_R1X_DPG": 3.450,
+    "GASDESW01A": 4.150,
+    "EMD_EPD2D_PTE_R1X_DPG": 4.150
 }
 
 
@@ -119,25 +320,46 @@ class EIARetailFeed:
         except Exception:
             pass
 
-        # Query FRED CSV endpoint (Zero-Cost official public gateway)
-        try:
-            url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
-            req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIARetailFeed/1.0"})
-            with urllib.request.urlopen(req, timeout=4) as resp:
-                if resp.status == 200:
-                    lines = resp.read().decode('utf-8').strip().split('\n')
-                    for line in lines[1:]:  # Skip header
-                        parts = line.split(',')
-                        if len(parts) == 2 and parts[1] != '.' and parts[1].strip():
-                            try:
-                                d_str = parts[0].strip()
-                                val = float(parts[1].strip())
-                                if val > 0:
-                                    date_map[d_str] = round(val, 3)
-                            except ValueError:
-                                continue
-        except Exception as e:
-            logger.debug(f"FRED fetch failed for {series_id} ({e}), trying fallback.")
+        # 1. Attempt official EIA API v2 client first (Section 4.1)
+        eia_v2_id = FRED_TO_EIA_V2_SERIES.get(series_id, series_id if series_id.startswith("EMM_") else None)
+        if eia_v2_id:
+            try:
+                from src.eia_api_client import get_eia_client
+                eia_client = get_eia_client()
+                v2_data = eia_client.fetch_retail_gasoline_series(eia_v2_id)
+                if v2_data:
+                    date_map.update(v2_data)
+            except Exception as e:
+                logger.debug(f"Direct EIA API v2 query for {eia_v2_id} failed: {e}")
+
+        # 2. Query FRED CSV endpoint if EIA v2 is unavailable or unconfigured
+        if not date_map:
+            fred_id = series_id if not series_id.startswith("EMM_") else None
+            if not fred_id:
+                # Find reverse mapping
+                for k, v in FRED_TO_EIA_V2_SERIES.items():
+                    if v == series_id and not k.startswith("EMM_"):
+                        fred_id = k
+                        break
+            if fred_id:
+                try:
+                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={fred_id}"
+                    req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIARetailFeed/1.0"})
+                    with urllib.request.urlopen(req, timeout=4) as resp:
+                        if resp.status == 200:
+                            lines = resp.read().decode('utf-8').strip().split('\n')
+                            for line in lines[1:]:  # Skip header
+                                parts = line.split(',')
+                                if len(parts) == 2 and parts[1] != '.' and parts[1].strip():
+                                    try:
+                                        d_str = parts[0].strip()
+                                        val = float(parts[1].strip())
+                                        if val > 0:
+                                            date_map[d_str] = round(val, 3)
+                                    except ValueError:
+                                        continue
+                except Exception as e:
+                    logger.debug(f"FRED fetch failed for {fred_id} ({e}), trying fallback.")
 
         # Fallback to stored vintages
         if not date_map:
@@ -267,3 +489,74 @@ class EIARetailFeed:
                 return records if isinstance(records, list) else []
         except Exception:
             return []
+
+
+def validate_eia_ground_truth_coverage(feed: Optional[EIARetailFeed] = None) -> bool:
+    """
+    Validates EIA ground truth series mapping integrity (Issue #608):
+    1. Asserts no non-national region maps or falls back to national GASREGW / GASDESW.
+    2. Verifies every mapped series resolves to official EIA v2 mapping.
+    3. Verifies that all mapped series resolve to historical or fallback observations.
+    """
+    if feed is None:
+        feed = EIARetailFeed()
+
+    for region, series_list in REGION_TO_EIA_SERIES.items():
+        is_national = region in ("National", "National_ULSD", "National_Diesel")
+        for sid, desc in series_list:
+            if not is_national and sid in ("GASREGW", "GASDESW"):
+                raise ValueError(
+                    f"Violation in {region}: regional metro mapped to national benchmark {sid} ('{desc}')"
+                )
+            if sid not in FRED_TO_EIA_V2_SERIES:
+                raise ValueError(f"Series ID {sid} for region {region} lacks official EIA v2 mapping")
+
+            history = feed.fetch_series_history(sid)
+            if not history and sid not in FALLBACK_RETAIL_PRICES:
+                raise ValueError(f"Series ID {sid} for region {region} has no historical data or fallback price")
+
+    return True
+
+
+def get_regional_retail_history(
+    region: str,
+    dates: Union[pd.Series, pd.DatetimeIndex, List[Any]],
+    live_price: Optional[float] = None,
+    feed: Optional[EIARetailFeed] = None
+) -> pd.Series:
+    """
+    Constructs an authentic regional retail price history series aligned to target dates.
+    Uses EIA/FRED official regional survey series (Issues #607, #608).
+    Optionally level-anchors to live pump price while strictly preserving genuine historical variance.
+    """
+    if feed is None:
+        feed = EIARetailFeed()
+
+    series_info = REGION_TO_EIA_SERIES.get(region)
+    primary_sid = series_info[0][0] if series_info else "GASREGW"
+
+    history_dict = feed.fetch_series_history(primary_sid)
+    dt_index = pd.to_datetime(dates)
+
+    if history_dict:
+        eia_series = pd.Series(history_dict, name="retail_price", dtype=float)
+        eia_series.index = pd.to_datetime(eia_series.index)
+        eia_series = eia_series.sort_index()
+        # Union index with target dates to properly forward-fill weekly survey to daily business dates
+        combined_index = eia_series.index.union(dt_index).sort_values()
+        aligned = eia_series.reindex(combined_index).ffill().bfill().reindex(dt_index)
+        fallback_val = FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40)
+        aligned = aligned.fillna(fallback_val)
+    else:
+        fallback_val = FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40)
+        aligned = pd.Series(fallback_val, index=dt_index, dtype=float)
+
+    # If live_price provided, level-anchor to live pump price while preserving historical variance
+    if live_price is not None and len(aligned) > 0 and pd.notna(live_price):
+        current_survey_latest = aligned.dropna().iloc[-1] if not aligned.dropna().empty else fallback_val
+        offset = float(live_price) - float(current_survey_latest)
+        aligned = aligned + offset
+
+    orig_index = dates.index if isinstance(dates, pd.Series) else None
+    return pd.Series(aligned.values, index=orig_index, dtype=float)
+

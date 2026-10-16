@@ -236,7 +236,7 @@ class PHMSAPipelineConnector:
         if not os.path.exists(self.storage_file) or force_refresh:
             self._initialize_benchmark_dataset()
 
-        df = pd.read_csv(self.storage_file)
+        df = pd.read_csv(self.storage_file, low_memory=False)
         df["incident_date"] = pd.to_datetime(df["incident_date"])
         df = df.sort_values("incident_date")
 

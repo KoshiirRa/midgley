@@ -24,6 +24,8 @@ from src.prediction_logger import (
     backfill_actual_prices_and_evaluate
 )
 from src.live_fuel_feed import fetch_live_metro_retail_price
+from src.asymmetric_ecm import AsymmetricECM
+from src.rvp_regulations import get_known_future_tax_deltas
 
 logger = logging.getLogger(__name__)
 
@@ -35,14 +37,42 @@ REGION_MODULE_MAP = {
     "newark_de": ("src.locations.newark.regional", "fetch_newark_market_data", "get_newark_regional_events", "Newark_DE"),
     "cincinnati": ("src.locations.cincinnati.regional", "fetch_cincinnati_market_data", "get_cincinnati_regional_events", "Cincinnati_OH"),
     "cincinnati_oh": ("src.locations.cincinnati.regional", "fetch_cincinnati_market_data", "get_cincinnati_regional_events", "Cincinnati_OH"),
-    "greenville": ("src.locations.greenville.regional", "fetch_greenville_market_data", "get_greenville_regional_events", "Greenville_NC"),
-    "greenville_nc": ("src.locations.greenville.regional", "fetch_greenville_market_data", "get_greenville_regional_events", "Greenville_NC"),
+    "greenville": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
+    "greenville_nc": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
     "charlotte": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
     "charlotte_nc": ("src.locations.charlotte.regional", "fetch_charlotte_market_data", "get_charlotte_regional_events", "Charlotte_NC"),
-    "oakland": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "Oakland_CA"),
-    "oakland_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "Oakland_CA"),
+    "oakland": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "oakland_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "bay_area": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "bayarea": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
+    "bayarea_ca": ("src.locations.oakland.regional", "fetch_oakland_market_data", "get_oakland_regional_events", "BayArea_CA"),
     "port_st_lucie": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
     "port_st_lucie_fl": ("src.locations.port_st_lucie.regional", "fetch_port_st_lucie_market_data", "get_port_st_lucie_regional_events", "Port_St_Lucie_FL"),
+    "chicago": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
+    "chicago_il": ("src.locations.chicago.regional", "fetch_chicago_market_data", "get_chicago_regional_events", "Chicago_IL"),
+    "houston": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
+    "houston_tx": ("src.locations.houston.regional", "fetch_houston_market_data", "get_houston_regional_events", "Houston_TX"),
+    "los_angeles": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
+    "los_angeles_ca": ("src.locations.los_angeles.regional", "fetch_los_angeles_market_data", "get_los_angeles_regional_events", "Los_Angeles_CA"),
+    "denver": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
+    "denver_co": ("src.locations.denver.regional", "fetch_denver_market_data", "get_denver_regional_events", "Denver_CO"),
+    "new_york": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "new_york_ny": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "nyc": ("src.locations.new_york.regional", "fetch_new_york_market_data", "get_new_york_regional_events", "New_York_NY"),
+    "seattle": ("src.locations.seattle.regional", "fetch_seattle_market_data", "get_seattle_regional_events", "Seattle_WA"),
+    "seattle_wa": ("src.locations.seattle.regional", "fetch_seattle_market_data", "get_seattle_regional_events", "Seattle_WA"),
+    "phoenix": ("src.locations.phoenix.regional", "fetch_phoenix_market_data", "get_phoenix_regional_events", "Phoenix_AZ"),
+    "phoenix_az": ("src.locations.phoenix.regional", "fetch_phoenix_market_data", "get_phoenix_regional_events", "Phoenix_AZ"),
+    "anchorage": ("src.locations.anchorage.regional", "fetch_anchorage_market_data", "get_anchorage_regional_events", "Anchorage_AK"),
+    "anchorage_ak": ("src.locations.anchorage.regional", "fetch_anchorage_market_data", "get_anchorage_regional_events", "Anchorage_AK"),
+    "honolulu": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
+    "honolulu_hi": ("src.locations.honolulu.regional", "fetch_honolulu_market_data", "get_honolulu_regional_events", "Honolulu_HI"),
+    "guam": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
+    "guam_gu": ("src.locations.guam.regional", "fetch_guam_market_data", "get_guam_regional_events", "Guam_GU"),
+    "san_juan": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
+    "san_juan_pr": ("src.locations.san_juan.regional", "fetch_san_juan_market_data", "get_san_juan_regional_events", "San_Juan_PR"),
+    "boston": ("src.locations.boston.regional", "fetch_boston_market_data", "get_boston_regional_events", "Boston_MA"),
+    "boston_ma": ("src.locations.boston.regional", "fetch_boston_market_data", "get_boston_regional_events", "Boston_MA"),
 }
 
 
@@ -80,11 +110,22 @@ def run_regional_pipeline(
         fetch_market_fn = lambda start_date="2022-01-01", live_current_price=None: fetch_market_data(start_date=start_date)
         get_events_fn = lambda: []
 
+    from src.locations.specs import get_region_spec
+    from src.metro_nowcast import nowcast_metro_price
+
+    spec = get_region_spec(reg_clean)
+    if spec:
+        display_name = spec.display_name
+
     if live_pump_price is None:
         live_res = fetch_live_metro_retail_price(logger_region_key)
-        live_pump_price = live_res["price"]
+        raw_price = float(live_res["price"])
+        nowcast_res = nowcast_metro_price(logger_region_key, live_price=raw_price)
+        live_pump_price = float(nowcast_res["filtered_nowcast"])
+    else:
+        nowcast_res = nowcast_metro_price(logger_region_key, live_price=live_pump_price)
 
-    logger.info(f"Executing Regional Pipeline for '{display_name}' ({logger_region_key}) | Anchor: ${live_pump_price:.2f}/gal")
+    logger.info(f"Executing Regional Pipeline for '{display_name}' ({logger_region_key}) | Nowcast Anchor: ${live_pump_price:.3f}/gal (SE: ${nowcast_res['nowcast_std_err']:.4f})")
 
     # Step 1: Ingest Market Data for Region
     import inspect
@@ -126,6 +167,23 @@ def run_regional_pipeline(
     results = multi_horizon_results[5]
     splits = results['splits']
     results['multi_horizon_results'] = multi_horizon_results
+    results['nowcast'] = nowcast_res
+    if spec:
+        results['region_spec'] = spec
+
+    # Microstructure Edgeworth Cycle Modeling for cycling Midwestern hubs (Issue #447, #612)
+    if spec and spec.has_edgeworth_cycles:
+        try:
+            from src.locations.cincinnati.regional import compute_cincinnati_edgeworth_forecast
+            edgeworth_forecast = compute_cincinnati_edgeworth_forecast(
+                market_df=market_df,
+                live_oh_price=live_pump_price,
+                horizon_days=5
+            )
+            results['edgeworth_cycle_forecast'] = edgeworth_forecast
+            logger.info(f"Edgeworth Cycle Analysis for {display_name}: {edgeworth_forecast['cycle_diagnostics']}")
+        except Exception as e:
+            logger.warning(f"Could not compute Edgeworth cycle forecast for {display_name}: {e}")
 
     # Step 5: Real-Time Scenario Simulations & Prediction Logging
     last_row_hybrid_5 = splits.get('X_live_hybrid', splits['X_test_hybrid'].iloc[-1:])
@@ -155,10 +213,43 @@ def run_regional_pipeline(
             "Impact (%)": f"{pct_change:+.2f}%"
         })
 
-    model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type)
     last_date = market_df['date'].iloc[-1]
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
-    dynamic_margin = live_pump_price - latest_rbob
+
+    # Fit Asymmetric Pass-Through ECM for region using authentic retail history (Issues #443, #607, #608)
+    ecm_model = None
+    try:
+        reg_col = f"{reg_clean}_retail_gasoline"
+        if reg_col in market_df.columns:
+            retail_series = market_df[reg_col]
+        else:
+            from src.eia_retail_feed import get_regional_retail_history
+            retail_series = get_regional_retail_history(logger_region_key, market_df['date'], live_pump_price)
+        wholesale_series = market_df['gasoline_rbob']
+        ecm_model = AsymmetricECM(wholesale_lags=3, retail_lags=2)
+        ecm_model.fit(retail_data=retail_series, wholesale_series=wholesale_series)
+    except Exception as e:
+        logger.debug(f"AsymmetricECM fitting skipped for {logger_region_key}: {e}")
+
+    # Dynamic model version tag distinguishing active ECM pipeline from legacy models (Issue #607, T-2)
+    pipeline_tag = "ECM" if (ecm_model and ecm_model.is_fitted) else None
+    model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type, pipeline=pipeline_tag)
+
+    # Pre-fetch secondary dual-anchor retail prices once per regional run (Issue #591)
+    dual_anchor_map = {
+        "Oakland_CA": [("BayArea_CA", "bayarea_avg_retail_gasoline", 5.05)],
+        "Cincinnati_OH": [("Cincinnati_KY", "cincinnati_ky_retail_gasoline", 3.19)]
+    }
+    sec_cached_prices: Dict[str, float] = {}
+    if logger_region_key in dual_anchor_map:
+        for sec_key, _, sec_default in dual_anchor_map[logger_region_key]:
+            try:
+                sec_live = fetch_live_metro_retail_price(sec_key).get("price")
+                sec_cached_prices[sec_key] = float(sec_live) if sec_live and pd.notna(sec_live) else sec_default
+            except Exception:
+                sec_cached_prices[sec_key] = sec_default
+
+    is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean or "los_angeles" in reg_clean)
 
     for h in [1, 2, 3, 4, 5]:
         h_res = multi_horizon_results.get(h)
@@ -169,18 +260,53 @@ def run_regional_pipeline(
         h_preds_hybrid = h_res.get('predictions_hybrid', h_res.get('y_pred_hybrid'))
         h_preds_quant = h_res.get('predictions_quant', h_res.get('y_pred_quant'))
 
-        # Determine regional baseline series
+        # Determine regional baseline series from authentic ground truth
         reg_col = f"{reg_clean}_retail_gasoline"
         if reg_col in h_splits['test_df'].columns:
             hist_base = h_splits['test_df'][reg_col]
         else:
-            hist_base = h_splits['test_df']['gasoline_rbob'] + dynamic_margin
+            from src.eia_retail_feed import get_regional_retail_history
+            hist_base = get_regional_retail_history(logger_region_key, h_test_dates, live_pump_price)
 
         rbob_hist = h_splits['test_df']['gasoline_rbob']
         pred_ret_hybrid = (h_preds_hybrid - rbob_hist) / rbob_hist
         pred_ret_quant = (h_preds_quant - rbob_hist) / rbob_hist
-        hist_pred = hist_base * (1.0 + pred_ret_hybrid)
-        hist_quant = hist_base * (1.0 + pred_ret_quant)
+
+        # Backtest full deployed pipeline with ECM and forward tax adjustments (Issue #607, T-2)
+        if ecm_model and ecm_model.is_fitted:
+            hist_pred_vals = []
+            hist_quant_vals = []
+            for idx in range(len(h_test_dates)):
+                t_ret = float(hist_base.iloc[idx] if hasattr(hist_base, 'iloc') else hist_base[idx])
+                t_whl = float(rbob_hist.iloc[idx] if hasattr(rbob_hist, 'iloc') else rbob_hist[idx])
+                t_pred_whl = float(h_preds_hybrid.iloc[idx] if hasattr(h_preds_hybrid, 'iloc') else h_preds_hybrid[idx])
+                t_quant_whl = float(h_preds_quant.iloc[idx] if hasattr(h_preds_quant, 'iloc') else h_preds_quant[idx])
+                t_date = str(h_test_dates.iloc[idx] if hasattr(h_test_dates, 'iloc') else h_test_dates[idx])
+                t_tax = get_known_future_tax_deltas(region=logger_region_key, as_of_date=t_date, horizon_days=h)
+                
+                hp = ecm_model.forecast_horizon(
+                    current_retail=t_ret,
+                    current_wholesale=t_whl,
+                    future_wholesale_deltas=[t_pred_whl - t_whl],
+                    horizon_days=h,
+                    forward_tax_delta=t_tax,
+                    is_california=is_ca
+                )
+                hq = ecm_model.forecast_horizon(
+                    current_retail=t_ret,
+                    current_wholesale=t_whl,
+                    future_wholesale_deltas=[t_quant_whl - t_whl],
+                    horizon_days=h,
+                    forward_tax_delta=t_tax,
+                    is_california=is_ca
+                )
+                hist_pred_vals.append(hp)
+                hist_quant_vals.append(hq)
+            hist_pred = pd.Series(hist_pred_vals, index=h_test_dates.index)
+            hist_quant = pd.Series(hist_quant_vals, index=h_test_dates.index)
+        else:
+            hist_pred = hist_base * (1.0 + pred_ret_hybrid)
+            hist_quant = hist_base * (1.0 + pred_ret_quant)
 
         try:
             backfill_new_region_history(
@@ -206,6 +332,34 @@ def run_regional_pipeline(
         h_forecast = live_pump_price * (1.0 + baseline_return_h)
         h_quant = live_pump_price * (1.0 + quant_return_h)
 
+        # Forward regulatory/tax deltas (Issue #451)
+        tax_delta_h = get_known_future_tax_deltas(region=logger_region_key, as_of_date=str(last_date), horizon_days=h)
+        is_ca = bool("ca" in reg_clean or "oakland" in reg_clean or "bayarea" in reg_clean or "los_angeles" in reg_clean)
+
+        # Calibrate with Asymmetric ECM pass-through (Issue #443)
+        if ecm_model and ecm_model.is_fitted:
+            ecm_forecast_h = ecm_model.forecast_horizon(
+                current_retail=live_pump_price,
+                current_wholesale=latest_rbob,
+                future_wholesale_deltas=[raw_pred_h - latest_rbob],
+                horizon_days=h,
+                forward_tax_delta=tax_delta_h,
+                is_california=is_ca
+            )
+            h_forecast = round(ecm_forecast_h, 4)
+            ecm_quant_h = ecm_model.forecast_horizon(
+                current_retail=live_pump_price,
+                current_wholesale=latest_rbob,
+                future_wholesale_deltas=[raw_quant_h - latest_rbob],
+                horizon_days=h,
+                forward_tax_delta=tax_delta_h,
+                is_california=is_ca
+            )
+            h_quant = round(ecm_quant_h, 4)
+        else:
+            h_forecast = round(h_forecast + tax_delta_h, 4)
+            h_quant = round(h_quant + tax_delta_h, 4)
+
         today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': live_pump_price,
@@ -228,17 +382,9 @@ def run_regional_pipeline(
             logger.debug(f"Live prediction logging skipped for {logger_region_key}: {e}")
 
         # Process dual-anchor secondary sub-regions (Issue #464)
-        dual_anchor_map = {
-            "Oakland_CA": [("BayArea_CA", "bayarea_avg_retail_gasoline", 5.05)],
-            "Cincinnati_OH": [("Cincinnati_KY", "cincinnati_ky_retail_gasoline", 3.19)]
-        }
         if logger_region_key in dual_anchor_map:
             for sec_key, sec_col, sec_default in dual_anchor_map[logger_region_key]:
-                try:
-                    sec_live = fetch_live_metro_retail_price(sec_key).get("price")
-                    sec_base_price = float(sec_live) if sec_live and pd.notna(sec_live) else sec_default
-                except Exception:
-                    sec_base_price = sec_default
+                sec_base_price = sec_cached_prices.get(sec_key, sec_default)
 
                 sec_hist_base = h_splits['test_df'].get(sec_col, h_splits['test_df']['gasoline_rbob'] + (sec_base_price - latest_rbob))
                 sec_hist_pred = sec_hist_base * (1.0 + pred_ret_hybrid)

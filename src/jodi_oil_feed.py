@@ -110,7 +110,7 @@ class JODIOilConnector:
         if not os.path.exists(self.storage_file) or force_refresh:
             self._initialize_benchmark_data()
 
-        df = pd.read_csv(self.storage_file)
+        df = pd.read_csv(self.storage_file, low_memory=False)
         
         # Calculate publication release date (period month end + publication_lag_days)
         df["period_date"] = pd.to_datetime(df["period"] + "-01")

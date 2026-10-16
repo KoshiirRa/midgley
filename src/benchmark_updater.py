@@ -97,14 +97,20 @@ class HistoricalBenchmarkManager:
 
     @classmethod
     def refresh_geopolitical(cls) -> Dict[str, Any]:
-        """Refreshes geopolitical chokepoint events benchmark."""
+        """Refreshes geopolitical chokepoint events benchmark with merge semantics (Issue #603)."""
         try:
-            from src.geopolitical_feeds import GeopoliticalFeedConnector
+            from src.geopolitical_feeds import GeopoliticalFeedConnector, deduplicate_events
             connector = GeopoliticalFeedConnector()
             events = connector.fetch_geopolitical_headlines(force_refresh=True)
             if events:
-                save_historical_benchmark("geopolitical", events)
-                return {"status": "SUCCESS", "records": len(events)}
+                existing = load_historical_benchmark("geopolitical") or []
+                if isinstance(existing, list) and len(existing) > 0:
+                    combined = existing + events
+                    merged = deduplicate_events(combined)
+                else:
+                    merged = deduplicate_events(events) if isinstance(events, list) else events
+                save_historical_benchmark("geopolitical", merged)
+                return {"status": "SUCCESS", "records": len(merged)}
         except Exception as e:
             logger.warning(f"Geopolitical benchmark refresh error: {e}")
         return {"status": "FAILED", "records": 0}

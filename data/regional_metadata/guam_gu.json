@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "guam_gu",
+  "logger_region_key": "Guam_GU",
+  "display_name": "Hagåtña & Apra Harbor, Guam",
+  "padd_region": "PADD 7 Pacific Territories",
+  "primary_city": "Hagåtña, GU",
+  "counties": [
+    "Guam",
+    "Northern Islands",
+    "Saipan",
+    "Rota",
+    "Tinian"
+  ],
+  "baseline_price": 4.89,
+  "icon_class": "fa-ship",
+  "theme_color": "sky",
+  "econometric_drivers": {
+    "title": "Trans-Pacific Product Tankers, Mean of Platts Singapore (MOPS) & Apra Harbor Logistics",
+    "description": "Guam is an isolated Western Pacific island economy completely decoupled from the North American domestic pipeline and refining grid. 100% of finished motor gasoline is imported via Medium Range (MR) product tankers originating from Asian refining hubs (Singapore, South Korea, Japan) or under Defense Logistics Agency (DLA) Energy bulk supply contracts. Wholesale acquisition costs track Mean of Platts Singapore (MOPS) 92/95 RON Mogas rather than US Gulf Coast RBOB, loaded with trans-Pacific clean tanker freight charters, demurrage risk, and Cabras Island terminal throughput fees."
+  },
+  "refining_logistics": {
+    "title": "Cabras Island Commercial Fuel Pier & Asian Product Tanker Supply Lines",
+    "description": "Guam has no indigenous crude refining capacity. Refined motor gasoline is discharged at the Cabras Island commercial petroleum terminal in Apra Harbor into bulk storage tanks operated by Mobil Oil Guam, IP&E (Shell), and South Pacific Petroleum Corp (76). Ocean tanker voyages from Singapore and South Korea require 8 to 14 days transit across the Philippine Sea.",
+    "primary_refinery": "Asian Refining Hubs (Singapore Jurong / South Korea Ulsan & Yeosu)",
+    "capacity_bpd": 0,
+    "pipelines": [
+      "Apra Harbor Deepwater Commercial Tanker Berths",
+      "Cabras Island Marine Terminal Fuel Headers",
+      "F-24 DLA Energy Military Pipeline Corridor"
+    ]
+  },
+  "tax_structure": {
+    "title": "Guam Liquid Fuel Tax & Public Transit Surcharge",
+    "description": "Guam territorial motor fuel tax consists of the baseline Liquid Fuel Tax ($0.150/gal) plus the statutory Mass Transit surcharge ($0.040/gal), creating a total territorial tax burden of $0.190/gal, plus Federal excise ($0.184/gal) for a combined tax burden of $0.374/gal.",
+    "state_tax_per_gal": 0.190,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.374,
+    "notes": "Guam Liquid Fuel Tax of $0.150/gal plus $0.040/gal Mass Transit surcharge ($0.190/gal territorial total). Exempt from Jones Act U.S.-build requirement under 48 U.S.C. § 1421r."
+  },
+  "infrastructure_delivery": {
+    "title": "Apra Harbor Terminal Throughput & Asian MR Tanker Freight Charter",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Guam}} = P_{\\text{Guam Retail}} - P_{\\text{MOPS 92 Landed}} = \\$4.890 - \\$3.350 = \\$1.540/\\text{gal}",
+    "description": "Wholesale rack prices reflect Asian MOPS Mogas spot pricing, clean product tanker Worldscale freight rates, bunker fuel adjustment factors, and Apra Harbor port throughput fees.",
+    "hub_distance_miles": 8,
+    "hub_name": "Apra Harbor Commercial Port & Cabras Island Fuel Farm"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Super Typhoon Apra Harbor Port Lockdown",
+      "subtitle": "Category 5 Typhoon Forces Port of Guam Closure and Tanker Holds",
+      "price_impact_per_gal": 0.550,
+      "pct_impact": 11.25,
+      "description": "Western Pacific super typhoon approaches the Mariana Islands; US Coast Guard sets Port Condition Zulu, shutting Apra Harbor to commercial tanker traffic and sparking islandwide panic buying."
+    },
+    {
+      "name": "Singapore / South Korea Refinery Outage Spikes MOPS Benchmark",
+      "subtitle": "Asian Refining Disruption Drives Up Mogas 92 RON Landed Costs",
+      "price_impact_per_gal": 0.420,
+      "pct_impact": 8.59,
+      "description": "Unplanned flasher or FCC outages at Singapore Jurong or South Korean refining complexes elevate MOPS spot acquisition costs for Western Pacific product importers."
+    },
+    {
+      "name": "Clean Product Tanker Freight Rate Surge",
+      "subtitle": "Trans-Pacific MR Tanker Charter Shortage Increases Freight Premium",
+      "price_impact_per_gal": 0.220,
+      "pct_impact": 4.50,
+      "description": "Rising Pacific dirty/clean tanker rates and marine bunker fuel costs expand the landed freight surcharge on shipments from East Asia to Apra Harbor."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 51000,
+    "zero_vehicle_pct": 6.5,
+    "vehicles_per_household": 1.95,
+    "drive_alone_share": 0.745,
+    "carpool_share": 0.162,
+    "public_transit_share": 0.012,
+    "work_from_home_share": 0.055,
+    "mean_commute_minutes": 23.4,
+    "vehicle_dependency_ratio": 0.907,
+    "transit_alternative_index": 0.045,
+    "inelastic_demand_score": 0.880
+  }
+}

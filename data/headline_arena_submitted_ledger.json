@@ -2,11 +2,273 @@
   "submitted_challenges": {
     "chal_cl_456": {
       "asset": "CL",
-      "submitted_at": "2026-09-24T15:42:01.984602+00:00",
-      "submitted_ts": 1790264521.984602,
+      "submitted_at": "2026-10-02T20:33:20.125282+00:00",
+      "submitted_ts": 1790973200.125282,
       "response": {
         "status": "accepted",
         "counts_for_score": true
+      }
+    },
+    "933e6e3a-761b-431b-9a74-6f086c6ecffe": {
+      "asset": "RB",
+      "submitted_at": "2026-10-04T21:04:58.246315+00:00",
+      "submitted_ts": 1791147898.246315,
+      "response": {
+        "prediction_id": "9348f7b3-6dfa-4c7b-bd4b-43bdb8c6c99b",
+        "challenge_id": "933e6e3a-761b-431b-9a74-6f086c6ecffe",
+        "direction": "bullish",
+        "confidence": 0.9115,
+        "probabilities": null,
+        "summary": null,
+        "revision_number": 1,
+        "token_usage": null,
+        "created_at": "2026-10-04T21:04:57.873894",
+        "revision_quality_hint": null,
+        "claim_reminder": null,
+        "counts_for_score": true,
+        "note": null,
+        "stake_id": null,
+        "stake_bin": null
+      }
+    },
+    "5f37ca6a-5fee-4460-bb69-fd602e46f8fd": {
+      "asset": "CL",
+      "submitted_at": "2026-10-04T21:05:06.723957+00:00",
+      "submitted_ts": 1791147906.723957,
+      "response": {
+        "prediction_id": "d81d6add-f3cc-484f-bbc8-c3f13684c247",
+        "challenge_id": "5f37ca6a-5fee-4460-bb69-fd602e46f8fd",
+        "direction": "bullish",
+        "confidence": 0.8775,
+        "probabilities": null,
+        "summary": null,
+        "revision_number": 1,
+        "token_usage": null,
+        "created_at": "2026-10-04T21:05:06.313513",
+        "revision_quality_hint": null,
+        "claim_reminder": null,
+        "counts_for_score": true,
+        "note": null,
+        "stake_id": null,
+        "stake_bin": null
+      }
+    },
+    "9301480d-c1ca-44fd-b4d5-c9c980d7faa9": {
+      "asset": "RB",
+      "submitted_at": "2026-10-05T22:37:52.366679+00:00",
+      "submitted_ts": 1791239872.366679,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "RB",
+        "challenge_id": "9301480d-c1ca-44fd-b4d5-c9c980d7faa9",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "f96ea804-1fce-4c0e-a202-fbd215920954",
+          "challenge_id": "9301480d-c1ca-44fd-b4d5-c9c980d7faa9",
+          "direction": "bullish",
+          "confidence": 0.9115,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-05T22:37:52.246618",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "dfa74f0a-c8fe-41a2-8de0-9a49128a5218": {
+      "asset": "CL",
+      "submitted_at": "2026-10-05T22:37:55.060984+00:00",
+      "submitted_ts": 1791239875.060984,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "CL",
+        "challenge_id": "dfa74f0a-c8fe-41a2-8de0-9a49128a5218",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "f4c14b3b-e96b-4f76-affc-d82da3aecfb4",
+          "challenge_id": "dfa74f0a-c8fe-41a2-8de0-9a49128a5218",
+          "direction": "bullish",
+          "confidence": 0.8775,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-05T22:37:54.941435",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "7f376e1e-a184-4e1d-bb05-251a06dc1d87": {
+      "asset": "RB",
+      "submitted_at": "2026-10-06T21:15:21.613401+00:00",
+      "submitted_ts": 1791321321.613401,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "RB",
+        "challenge_id": "7f376e1e-a184-4e1d-bb05-251a06dc1d87",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "6ca6ca3e-2c58-47b5-8357-5d8fe21d29ba",
+          "challenge_id": "7f376e1e-a184-4e1d-bb05-251a06dc1d87",
+          "direction": "bullish",
+          "confidence": 0.8944,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-06T21:15:21.417528",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "a1324886-e5cd-4474-9b98-27abefb191f7": {
+      "asset": "CL",
+      "submitted_at": "2026-10-06T21:15:23.285719+00:00",
+      "submitted_ts": 1791321323.285719,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "CL",
+        "challenge_id": "a1324886-e5cd-4474-9b98-27abefb191f7",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "f971e2c9-1fa5-4ff9-8105-6eb120df0de7",
+          "challenge_id": "a1324886-e5cd-4474-9b98-27abefb191f7",
+          "direction": "bullish",
+          "confidence": 0.8588,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-06T21:15:23.125306",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "6000cbac-344a-4fa8-a7c5-bc1adcdfbe37": {
+      "asset": "RB",
+      "submitted_at": "2026-10-08T00:12:42.510623+00:00",
+      "submitted_ts": 1791418362.510623,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "RB",
+        "challenge_id": "6000cbac-344a-4fa8-a7c5-bc1adcdfbe37",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "1b80e5cd-da23-46c0-a95d-fd393e830899",
+          "challenge_id": "6000cbac-344a-4fa8-a7c5-bc1adcdfbe37",
+          "direction": "bullish",
+          "confidence": 0.9265,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-08T00:12:42.292167",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "931357c9-f562-40fb-a6bf-a31315ea06f2": {
+      "asset": "CL",
+      "submitted_at": "2026-10-08T00:12:44.543946+00:00",
+      "submitted_ts": 1791418364.543946,
+      "response": {
+        "status": "SUCCESS",
+        "mode": "LIVE_SUBMISSION",
+        "asset": "CL",
+        "challenge_id": "931357c9-f562-40fb-a6bf-a31315ea06f2",
+        "counts_for_score": true,
+        "response": {
+          "prediction_id": "c2b60901-ba03-4001-a2dd-2f4ba4d34e07",
+          "challenge_id": "931357c9-f562-40fb-a6bf-a31315ea06f2",
+          "direction": "bullish",
+          "confidence": 0.8944,
+          "probabilities": null,
+          "summary": null,
+          "revision_number": 1,
+          "token_usage": null,
+          "created_at": "2026-10-08T00:12:44.400992",
+          "revision_quality_hint": null,
+          "claim_reminder": null,
+          "counts_for_score": true,
+          "note": null,
+          "stake_id": null,
+          "stake_bin": null
+        }
+      }
+    },
+    "31eaebed-adc4-40f2-94b7-b7d004097d41": {
+      "asset": "RB",
+      "submitted_at": "2026-10-08T23:07:30.057984+00:00",
+      "submitted_ts": 1791500850.057984,
+      "response": {
+        "prediction_id": "93ee854d-0a77-42ea-9c83-e9f5412ed82e",
+        "challenge_id": "31eaebed-adc4-40f2-94b7-b7d004097d41",
+        "direction": "bullish",
+        "confidence": 0.8944,
+        "probabilities": null,
+        "summary": null,
+        "revision_number": 1,
+        "token_usage": null,
+        "created_at": "2026-10-08T23:07:29.924858",
+        "revision_quality_hint": null,
+        "claim_reminder": null,
+        "counts_for_score": true,
+        "note": null,
+        "stake_id": null,
+        "stake_bin": null
+      }
+    },
+    "27792e49-a227-4efd-894c-ba27c104a981": {
+      "asset": "CL",
+      "submitted_at": "2026-10-08T23:07:32.053528+00:00",
+      "submitted_ts": 1791500852.053528,
+      "response": {
+        "prediction_id": "330d4cb2-2b8b-4a97-af88-02f24b6c6df1",
+        "challenge_id": "27792e49-a227-4efd-894c-ba27c104a981",
+        "direction": "bullish",
+        "confidence": 0.8588,
+        "probabilities": null,
+        "summary": null,
+        "revision_number": 1,
+        "token_usage": null,
+        "created_at": "2026-10-08T23:07:31.910884",
+        "revision_quality_hint": null,
+        "claim_reminder": null,
+        "counts_for_score": true,
+        "note": null,
+        "stake_id": null,
+        "stake_bin": null
       }
     }
   }

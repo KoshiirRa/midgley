@@ -642,7 +642,7 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
 def evaluate_open_issues_for_modelling(issues: list, nat_mae: float = 0.1069, tulsa_mae: float = 0.5611, api_key: str = None) -> dict:
     """
     Evaluates open GitHub issues to determine which issue yields the single biggest improvement to price forecasting.
-    Uses Google Gemini 2.5 Flash if GEMINI_API_KEY is available, with deterministic domain heuristic fallback.
+    Uses Google Gemini 3.8 Flash if GEMINI_API_KEY is available, with deterministic domain heuristic fallback.
     """
     if not issues:
         return {
@@ -701,9 +701,9 @@ JSON Output:
                 from google import genai
                 from google.genai import types
                 client = genai.Client(api_key=api_key)
-                config = types.GenerateContentConfig(temperature=0.1)
+                config = types.GenerateContentConfig()
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model='gemini-3.8-flash',
                     contents=prompt,
                     config=config
                 )
@@ -783,7 +783,7 @@ def get_current_git_branch() -> str:
 REGION_METADATA = {
     "National": {
         "display_name": "National Wholesale (RBOB)",
-        "architecture": "Ridge ($\\alpha=10.0$) + Gemini 2.5 Flash + Physics Feeds"
+        "architecture": "Ridge ($\\alpha=10.0$) + Gemini 3.8 Flash + Physics Feeds"
     },
     "Tulsa_OK": {
         "display_name": "Tulsa, OK Metro Retail",
@@ -1148,9 +1148,64 @@ def format_scenario_plausibility_markdown_section() -> str:
         return f"## 🌪️ Scenario Seasonality & Climatological Horizon Matrix\n*Plausibility audit notice: {e}*"
 
 
+def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
+    """
+    Loads prediction and evaluation records from unified database (Turso libSQL / SQLite),
+    with graceful fallback to prediction_history.csv when offline or in test environments.
+    """
+    # 1. Attempt database query
+    try:
+        from src.db.client import get_db
+        db = get_db()
+        sql = """
+        SELECT
+            f.forecast_id,
+            f.region,
+            f.model_version,
+            f.origin_date AS log_timestamp,
+            f.target_date AS forecast_target_date,
+            f.horizon AS forecast_horizon_days,
+            f.predicted_price AS predicted_5d_price,
+            f.ci_lower_95 AS prediction_lower_95ci,
+            f.ci_upper_95 AS prediction_upper_95ci,
+            f.llm_price_pressure,
+            f.llm_supply_disruption,
+            f.run_type,
+            e.actual_price AS actual_5d_price,
+            e.absolute_error AS error_dollars,
+            e.directional_correct AS directional_hit,
+            e.within_95ci AS within_95ci_hit
+        FROM forecasts f
+        LEFT JOIN evaluations e ON f.forecast_id = e.forecast_id
+        ORDER BY f.target_date ASC, f.created_at ASC;
+        """
+        rows = db.execute(sql)
+        if rows:
+            df = pd.DataFrame(rows)
+            for col in ['predicted_5d_price', 'prediction_lower_95ci', 'prediction_upper_95ci',
+                        'llm_price_pressure', 'llm_supply_disruption', 'actual_5d_price',
+                        'error_dollars', 'directional_hit', 'within_95ci_hit']:
+                if col in df.columns:
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
+            if 'forecast_horizon_days' in df.columns:
+                df['forecast_horizon_days'] = pd.to_numeric(df['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
+            if 'current_base_price' not in df.columns and 'predicted_5d_price' in df.columns:
+                df['current_base_price'] = df['predicted_5d_price']
+            logger.info(f"Loaded {len(df)} prediction records directly from unified database.")
+            return df
+    except Exception as e:
+        logger.debug(f"Notice: Database query failed ({e}), falling back to CSV datastore.")
+
+    # 2. Fallback to CSV
+    from src.prediction_logger import read_prediction_history
+    if os.path.exists(csv_path):
+        return read_prediction_history(csv_path)
+    return pd.DataFrame()
+
+
 def generate_weekly_markdown_report() -> str:
     """
-    Parses data/prediction_history.csv and builds a formatted Markdown report for GitHub Issues.
+    Parses unified database (Turso / SQLite) with CSV fallback and builds a formatted Markdown report for GitHub Issues.
     Also fetches open repository issues and performs a self-review evaluation to identify
     the issue offering the largest potential modeling improvement.
     """
@@ -1159,10 +1214,10 @@ def generate_weekly_markdown_report() -> str:
     timestamp_utc = now_utc.strftime("%Y-%m-%d %H:%M UTC")
     branch = get_current_git_branch()
     
-    if not os.path.exists(HISTORY_CSV):
+    df = load_prediction_records(HISTORY_CSV)
+    if df.empty:
         return f"# [{branch}] 📊 Daily Forecast Batch Execution ({timestamp_utc}) | Weekly Model Review Report\n\nNo prediction history found."
         
-    df = pd.read_csv(HISTORY_CSV)
     df = df.dropna(subset=['region']).copy()
     eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
     

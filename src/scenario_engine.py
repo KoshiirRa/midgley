@@ -61,7 +61,7 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "active_window": (2, 15, 5, 1),        # Feb 15 - May 01
         "peak_window": (3, 1, 4, 15),          # Mar 01 - Apr 15
         "telemetry_hook": "spec_calendar",
-        "locales": ["oakland", "national"],
+        "locales": ["oakland", "los_angeles", "national"],
         "season_label": "Statutory CARB RVP Summer-Blend Switchover (Feb 15 – May 01)",
         "peak_label": "Peak Spec Transition Squeeze (Mar 01 – Apr 15)"
     },
@@ -74,6 +74,16 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "locales": ["oakland", "national"],
         "season_label": "California Diablo/Santa Ana Offshore Wind Fire Season (Jul 01 – Nov 15)",
         "peak_label": "Peak Autumn Red Flag Fire Weather (Sep 01 – Oct 31)"
+    },
+    "santa_ana_psps_shutoff": {
+        "name": "Santa Ana Red Flag Wildfire & SCE/LADWP Grid PSPS Curtailment",
+        "category": "meteorological_fire",
+        "active_window": (9, 1, 12, 15),       # Sep 01 - Dec 15
+        "peak_window": (10, 1, 11, 30),        # Oct 01 - Nov 30
+        "telemetry_hook": "noaa_spc_fire",
+        "locales": ["los_angeles", "national"],
+        "season_label": "Southern California Santa Ana Offshore Wind Fire Season (Sep 01 – Dec 15)",
+        "peak_label": "Peak Santa Ana Red Flag Fire Weather (Oct 01 – Nov 30)"
     },
     "carquinez_atmospheric_river": {
         "name": "Carquinez Strait Atmospheric River Runoff & Tanker Berthing Halt",
@@ -131,7 +141,7 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "active_window": (5, 1, 10, 31),       # May 01 - Oct 31
         "peak_window": (6, 1, 9, 30),          # Jun 01 - Sep 30
         "telemetry_hook": "usgs_flow",
-        "locales": ["national", "tulsa"],
+        "locales": ["national", "tulsa", "houston"],
         "season_label": "Gulf Coast Tropical Runoff & Heavy Rain Season (May 01 – Oct 31)",
         "peak_label": "Peak Marine Berthing Disruption Window (Jun 01 – Sep 30)"
     },
@@ -196,6 +206,16 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "season_label": "Evergreen Year-Round Refinery Unit Trip Risk",
         "peak_label": None
     },
+    "socal_refinery_fccu_outage": {
+        "name": "El Segundo / Torrance FCCU & Alkylation Unit Unplanned Trip",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["los_angeles", "national"],
+        "season_label": "Evergreen Year-Round Refinery Unit Trip Risk",
+        "peak_label": None
+    },
     "hayward_quake": {
         "name": "USGS Hayward Fault M>=6.0 Seismic Quake & Pipeline Shutoff",
         "category": "geophysical",
@@ -203,6 +223,16 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "peak_window": None,
         "telemetry_hook": "usgs_seismic",
         "locales": ["oakland", "national"],
+        "season_label": "Evergreen Year-Round Seismic Hazard",
+        "peak_label": None
+    },
+    "usgs_newport_inglewood_quake": {
+        "name": "USGS Newport-Inglewood / Palos Verdes Fault Seismic Trip (M>=5.5)",
+        "category": "geophysical",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "usgs_seismic",
+        "locales": ["los_angeles", "national"],
         "season_label": "Evergreen Year-Round Seismic Hazard",
         "peak_label": None
     },
@@ -225,6 +255,46 @@ SCENARIO_CLIMATOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "locales": ["national"],
         "season_label": "Evergreen Year-Round Trade Policy Shock",
         "peak_label": None
+    },
+    "suncor_commerce_city_freeze_outage": {
+        "name": "Suncor Commerce City Total Freeze / Outage",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["denver", "national"],
+        "season_label": "Evergreen Year-Round Refinery Outage Risk",
+        "peak_label": None
+    },
+    "front_range_ozone_rfg_transition": {
+        "name": "Front Range Severe Ozone Nonattainment Summer RFG Transition",
+        "category": "regulatory_spec",
+        "active_window": (5, 1, 9, 15),
+        "peak_window": (5, 15, 6, 15),
+        "telemetry_hook": "spec_calendar",
+        "locales": ["denver", "national"],
+        "season_label": "Front Range 7.8 psi Summer RVP Transition Window (May 01 – Sep 15)",
+        "peak_label": "Peak Summer Spec Transition Squeeze (May 15 – Jun 15)"
+    },
+    "buckeye_pipeline_linden_disruption": {
+        "name": "Buckeye Pipeline Linden Terminal Disruption",
+        "category": "infrastructure",
+        "active_window": None,
+        "peak_window": None,
+        "telemetry_hook": "evergreen",
+        "locales": ["new_york", "national"],
+        "season_label": "Evergreen Year-Round Midstream Pipeline Disruption",
+        "peak_label": None
+    },
+    "ny_harbor_barge_freeze_halt": {
+        "name": "Hudson River Winter Freeze & Barge Lightering Halt",
+        "category": "weather",
+        "active_window": (12, 1, 2, 28),
+        "peak_window": (1, 1, 1, 31),
+        "telemetry_hook": "noaa_freeze",
+        "locales": ["new_york", "national"],
+        "season_label": "Winter Marine Barge Freeze-Up Risk (Dec 01 – Feb 28)",
+        "peak_label": "Peak Ice Jam Squeeze (Jan 01 – Jan 31)"
     }
 }
 
@@ -314,6 +384,19 @@ def _evaluate_live_telemetry_trigger(telemetry_hook: str, scenario_id: str) -> T
             live_risk = seismic_live.get("indices", {}).get("bay_area_seismic_risk_index", 0.0)
             if live_risk >= 0.40:
                 return True, 1.0, f"USGS Bay Area seismic event activity detected (Risk index: {live_risk:.2f})."
+
+        # 4. NOAA Arctic Deep Freeze & Polar Vortex Outbreak (Pirate Weather HRRR / ERA5 Reanalysis)
+        elif telemetry_hook == "noaa_freeze":
+            from src.noaa_weather import PirateWeatherConnector
+            pw_conn = PirateWeatherConnector()
+            hub_code = "tulsa_cushing" if "tulsa" in scenario_id else ("cincinnati_catlettsburg" if "cincinnati" in scenario_id else "gulf_coast_houston")
+            hub_w = pw_conn.fetch_hub_weather(hub_code)
+            temp = float(hub_w.get("temperature", 65.0))
+            freeze_risk = float(hub_w.get("freeze_off_risk_index", 0.0))
+            if temp <= 20.0 or freeze_risk >= 0.80:
+                return True, 1.0, f"Severe arctic freeze outbreak at {hub_code} (Temp: {temp:.1f}°F, Freeze-off Risk: {freeze_risk:.2f})."
+            elif temp <= 32.0 or freeze_risk >= 0.40:
+                return False, 0.25, f"Sub-freezing conditions monitored at {hub_code} (Temp: {temp:.1f}°F)."
 
     except Exception as e:
         logger.debug(f"Telemetry hook evaluation notice for '{scenario_id}': {e}")
@@ -607,4 +690,32 @@ def get_all_scenarios_with_plausibility(
         "count": len(results),
         "target_date": target_date if isinstance(target_date, str) else (target_date.isoformat() if target_date else datetime.now(timezone.utc).date().isoformat()),
         "scenarios": results
+    }
+
+
+def enrich_scenario_with_episodic_memory(
+    scenario_id_or_headline: str,
+    region: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Queries Hindsight episodic memory to retrieve empirical historical analog precedents
+    for a given scenario specification or custom shock headline.
+    """
+    headline = scenario_id_or_headline
+    if scenario_id_or_headline in SCENARIO_CLIMATOLOGY_REGISTRY:
+        headline = SCENARIO_CLIMATOLOGY_REGISTRY[scenario_id_or_headline].get("name", scenario_id_or_headline)
+
+    precedents = []
+    prompt_block = ""
+    try:
+        from src.hindsight_context import inject_hindsight_context
+        prompt_block, precedents = inject_hindsight_context(headline, region=region)
+    except Exception as e:
+        logger.debug(f"Hindsight scenario enrichment notice: {e}")
+
+    return {
+        "scenario_input": scenario_id_or_headline,
+        "precedent_count": len(precedents),
+        "precedents": precedents,
+        "prompt_context": prompt_block
     }

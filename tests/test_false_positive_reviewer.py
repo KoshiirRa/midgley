@@ -34,6 +34,22 @@ def test_analyze_headline_triggers_agricultural_oil():
     assert "agricultural or edible oils" in analysis["diagnosis"]
 
 
+def test_analyze_headline_triggers_sanctions_macro():
+    headline = "Russia sanctions bill gives Trump sweeping new tariff powers - Reuters"
+    analysis = analyze_headline_triggers(headline)
+
+    assert analysis["has_energy_context"] is False
+    assert any("sanction" in t for t in analysis["matched_triggers"])
+    assert "non-energy policy false positive" in analysis["diagnosis"]
+
+
+def test_analyze_headline_triggers_data_center_spill():
+    headline = "Data Center’s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup"
+    analysis = analyze_headline_triggers(headline)
+
+    assert "minor localized facility/generator spill" in analysis["diagnosis"]
+
+
 def test_parse_headline_from_issue_body():
     body_trigger_block = """## False Positive Anomaly Report (#258)
 
@@ -46,6 +62,16 @@ def test_parse_headline_from_issue_body():
 
     body_fallback = "> *\"Pipeline Blast Halts Crude Flow\"*"
     assert parse_headline_from_issue_body(body_fallback) == "Pipeline Blast Halts Crude Flow"
+
+    # Issue #617 case: Body is directly a flag link
+    body_flag_url = "https://midgley-intraday-monitor.m-cubed-3.workers.dev/flag?id=d7bddaeb2be84d74&exp=1791590422&sig=&headline=Supreme+Court+Dismisses+Appeal+on+Classification+of+Hydrogenated+Rice+Bran+Oil&source=RSS_Feed"
+    assert parse_headline_from_issue_body(body_flag_url) == "Supreme Court Dismisses Appeal on Classification of Hydrogenated Rice Bran Oil"
+
+
+def test_analyze_headline_triggers_rice_bran_oil():
+    headline = "Supreme Court Dismisses Appeal on Classification of Hydrogenated Rice Bran Oil Due to Retention of Essential Characteristics."
+    analysis = analyze_headline_triggers(headline)
+    assert "agricultural or edible oils" in analysis["diagnosis"]
 
 
 def test_format_diagnostic_comment():

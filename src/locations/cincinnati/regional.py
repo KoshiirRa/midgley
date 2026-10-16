@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
+from typing import Dict, Any, Optional, List, Tuple, Union
 import logging
 
 from src.noaa_weather import get_cincinnati_weather_dataset
@@ -42,35 +43,18 @@ def fetch_cincinnati_market_data(
 
     logger.info(f"Fetching market data for Cincinnati OH/KY region (Live OH: ${live_oh_price:.3f}/gal, Live KY: ${live_ky_price:.3f}/gal)...")
     
-    tickers = {
-        "gasoline_rbob": "RB=F",
-        "wti_crude": "CL=F",
-        "brent_crude": "BZ=F"
-    }
-    
-    dfs = []
-    for name, ticker in tickers.items():
-        try:
-            data = yf.download(ticker, start=start_date, end=end_date, progress=False)
-            close_series = data['Close'][ticker] if isinstance(data.columns, pd.MultiIndex) else data['Close']
-            df_item = pd.DataFrame({'date': pd.to_datetime(close_series.index).tz_localize(None), name: close_series.values})
-            dfs.append(df_item.set_index('date'))
-        except Exception as e:
-            logger.warning(f"Could not download ticker {ticker}: {e}")
-            
-    if not dfs or all(df.empty for df in dfs):
+    from src.data_ingestion import fetch_market_data
+    from src.eia_retail_feed import get_regional_retail_history
+    base_df = fetch_market_data(start_date=start_date, end_date=end_date)
+    if base_df is None or base_df.empty or 'gasoline_rbob' not in base_df.columns:
         return _generate_synthetic_cincinnati_data(start_date, end_date, live_oh_price, live_ky_price)
         
-    market_df = pd.concat(dfs, axis=1).sort_index().ffill().bfill().reset_index()
-    if market_df.empty or 'gasoline_rbob' not in market_df.columns or len(market_df) == 0:
-        return _generate_synthetic_cincinnati_data(start_date, end_date, live_oh_price, live_ky_price)
-    
+    market_df = base_df.copy()
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
-    margin_oh = live_oh_price - latest_rbob
-    margin_ky = live_ky_price - latest_rbob
     
-    market_df['cincinnati_oh_retail_gasoline'] = market_df['gasoline_rbob'] + margin_oh
-    market_df['cincinnati_ky_retail_gasoline'] = market_df['gasoline_rbob'] + margin_ky
+    # Authentic regional retail series via EIA survey (Issues #607, #608)
+    market_df['cincinnati_oh_retail_gasoline'] = get_regional_retail_history("Cincinnati_OH", market_df['date'], live_oh_price)
+    market_df['cincinnati_ky_retail_gasoline'] = get_regional_retail_history("Cincinnati_KY", market_df['date'], live_ky_price)
     market_df['cincinnati_metro_avg_retail'] = (market_df['cincinnati_oh_retail_gasoline'] + market_df['cincinnati_ky_retail_gasoline']) / 2.0
     
     market_df['brent_crude_per_gal'] = market_df['brent_crude'] / 42.0
@@ -97,8 +81,13 @@ def _generate_synthetic_cincinnati_data(
     margin_oh = live_oh_price - rbob[-1]
     margin_ky = live_ky_price - rbob[-1]
     
-    oh_retail = rbob + margin_oh
-    ky_retail = rbob + margin_ky
+    var_oh = 0.14 * np.sin(np.linspace(0, 4 * np.pi, n)) + np.random.normal(0, 0.02, n)
+    var_ky = 0.12 * np.cos(np.linspace(0, 4 * np.pi, n)) + np.random.normal(0, 0.02, n)
+    var_oh -= var_oh[-1]
+    var_ky -= var_ky[-1]
+    
+    oh_retail = rbob + margin_oh + var_oh
+    ky_retail = rbob + margin_ky + var_ky
     metro_avg = (oh_retail + ky_retail) / 2.0
     
     return pd.DataFrame({
@@ -187,4 +176,53 @@ def get_cincinnati_regional_events() -> pd.DataFrame:
     # Combine Macro + Regional + Local NOAA Weather + USGS Hydrology + AQI
     combined_events = pd.concat(frames, ignore_index=True)
     return combined_events.sort_values('date').reset_index(drop=True)
+
+
+def compute_cincinnati_edgeworth_forecast(
+    market_df: pd.DataFrame,
+    live_oh_price: Optional[float] = None,
+    live_ky_price: Optional[float] = None,
+    horizon_days: int = 5
+) -> Dict[str, Any]:
+    """
+    Computes Edgeworth price cycle diagnostics and restoration hazard forecast for Cincinnati OH/KY (Issue #447).
+    """
+    from src.edgeworth_cycle import EdgeworthCycleAnalyzer, RestorationHazardModel
+
+    analyzer = EdgeworthCycleAnalyzer(jump_threshold_cpg=0.08)
+    hazard_model = RestorationHazardModel()
+
+    # Diagnostics on Ohio retail series
+    oh_series = market_df.get('cincinnati_oh_retail_gasoline', pd.Series(dtype=float))
+    rbob_series = market_df.get('gasoline_rbob', pd.Series(dtype=float))
+
+    diag = analyzer.compute_cycle_diagnostics(oh_series)
+
+    if not oh_series.empty and not rbob_series.empty:
+        hazard_model.fit(oh_series, rbob_series)
+
+    current_oh = live_oh_price if live_oh_price is not None else (float(oh_series.iloc[-1]) if not oh_series.empty else 3.25)
+    current_rbob = float(rbob_series.iloc[-1]) if not rbob_series.empty else 2.45
+
+    # Estimate elapsed days since last sharp restoration
+    elapsed = 4
+    if len(oh_series) >= 10:
+        d_oh = oh_series.diff()
+        jumps_idx = np.where(d_oh >= 0.08)[0]
+        if len(jumps_idx) > 0:
+            elapsed = int(len(oh_series) - 1 - jumps_idx[-1])
+
+    forecast_oh = hazard_model.forecast_expected_horizon_change(
+        current_retail=current_oh,
+        current_wholesale=current_rbob,
+        elapsed_days=elapsed,
+        horizon_days=horizon_days
+    )
+
+    return {
+        "region": "Cincinnati_Tri_State",
+        "cycle_diagnostics": diag,
+        "hazard_model_forecast": forecast_oh
+    }
+
 

@@ -21,14 +21,17 @@ logger = logging.getLogger(__name__)
 DIESEL_VINTAGE_FILE = os.path.join("data", "diesel_vintages.json")
 
 
-def save_diesel_vintage_record(record: dict, filepath: str = DIESEL_VINTAGE_FILE) -> None:
+def save_diesel_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time ULSD / regional diesel price observation (Issue #295)."""
+    fp = filepath or DIESEL_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "diesel_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
-        if os.path.exists(filepath):
+        if os.path.exists(fp):
             try:
-                with open(filepath, "r", encoding="utf-8") as f:
+                with open(fp, "r", encoding="utf-8") as f:
                     vintages = json.load(f)
             except Exception:
                 vintages = []
@@ -85,7 +88,19 @@ DIESEL_BASE_ANCHORS = {
     "greenville": 3.710,
     "charlotte": 3.730,
     "oakland": 5.250,
-    "port_st_lucie": 3.820
+    "port_st_lucie": 3.820,
+    "chicago": 3.890,
+    "houston": 3.450,
+    "los_angeles": 5.190,
+    "denver": 3.750,
+    "new_york": 4.150,
+    "seattle": 4.450,
+    "phoenix": 3.750,
+    "anchorage": 4.150,
+    "honolulu": 5.450,
+    "guam": 5.250,
+    "san_juan": 3.950,
+    "boston": 4.150
 }
 
 LOCALE_TO_REGION_MAP = {
@@ -96,7 +111,19 @@ LOCALE_TO_REGION_MAP = {
     "greenville": "Greenville_NC",
     "charlotte": "Charlotte_NC",
     "oakland": "Oakland_CA",
-    "port_st_lucie": "Port_St_Lucie_FL"
+    "port_st_lucie": "Port_St_Lucie_FL",
+    "chicago": "Chicago_IL",
+    "houston": "Houston_TX",
+    "los_angeles": "Los_Angeles_CA",
+    "denver": "Denver_CO",
+    "new_york": "New_York_NY",
+    "seattle": "Seattle_WA",
+    "phoenix": "Phoenix_AZ",
+    "anchorage": "Anchorage_AK",
+    "honolulu": "Honolulu_HI",
+    "guam": "Guam_GU",
+    "san_juan": "San_Juan_PR",
+    "boston": "Boston_MA"
 }
 
 
@@ -365,7 +392,19 @@ DIESEL_REGION_LOG_KEYS = {
     "greenville": "Greenville_ULSD",
     "charlotte": "Charlotte_ULSD",
     "oakland": "Oakland_CARB_Diesel",
-    "port_st_lucie": "Port_St_Lucie_ULSD"
+    "port_st_lucie": "Port_St_Lucie_ULSD",
+    "chicago": "Chicago_ULSD",
+    "houston": "Houston_ULSD",
+    "los_angeles": "Los_Angeles_CARB_Diesel",
+    "denver": "Denver_ULSD",
+    "new_york": "New_York_ULSD",
+    "seattle": "Seattle_ULSD",
+    "phoenix": "Phoenix_ULSD",
+    "anchorage": "Anchorage_ULSD",
+    "honolulu": "Honolulu_ULSD",
+    "guam": "Guam_ULSD",
+    "san_juan": "San_Juan_ULSD",
+    "boston": "Boston_ULSD"
 }
 
 

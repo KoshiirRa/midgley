@@ -58,11 +58,15 @@ HISTORICAL_BTS_BASELINE: List[Dict[str, Any]] = [
 ]
 
 
-def save_bts_vintage_record(record: Dict[str, Any], filepath: str = BTS_VINTAGE_FILE) -> None:
+def save_bts_vintage_record(record: Dict[str, Any], filepath: Optional[str] = None) -> None:
     """
     Persists a bitemporal point-in-time U.S. BTS observation record.
     Eliminates lookahead bias in historical model backtests.
     """
+    fp = filepath or BTS_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(BTS_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
+    filepath = fp
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -98,10 +102,12 @@ def save_bts_vintage_record(record: Dict[str, Any], filepath: str = BTS_VINTAGE_
         logger.debug(f"Could not persist BTS vintage record: {e}")
 
 
-def get_bts_vintages_as_of(as_of_date: str, filepath: str = BTS_VINTAGE_FILE) -> List[Dict[str, Any]]:
+def get_bts_vintages_as_of(as_of_date: str, filepath: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Retrieves BTS vintage records available on or before as_of_date.
     """
+    if filepath is None:
+        filepath = BTS_VINTAGE_FILE
     if not os.path.exists(filepath):
         return []
     try:
@@ -145,6 +151,8 @@ class BTSTransportationConnector:
             logger.info("Loaded BTS Freight TSI dataset from lookup cache.")
             df = pd.DataFrame(cached["records"])
             df['date'] = pd.to_datetime(df['date'])
+            if 'bts_tsi_freight' in df.columns:
+                df = df[df['bts_tsi_freight'] > 0.0].reset_index(drop=True)
             if start_date:
                 df = df[df['date'] >= pd.to_datetime(start_date)].reset_index(drop=True)
             return df
@@ -173,6 +181,8 @@ class BTSTransportationConnector:
                                 continue
                             try:
                                 freight_val = float(row.get("tsi_freight", 0.0) or 0.0)
+                                if freight_val <= 0.0:
+                                    continue
                                 truck_val = float(row.get("truck_d11", row.get("idx_truck_d11", 0.0)) or 0.0)
                                 petro_val = float(row.get("petroleum_d11", row.get("petroleum", 0.0)) or 0.0)
                                 pass_val = float(row.get("tsi_passenger", 0.0) or 0.0)
@@ -249,6 +259,11 @@ class BTSTransportationConnector:
 
         # Standardize & compute derived momentum indicators
         df = df.sort_values('date').reset_index(drop=True)
+        if 'bts_tsi_freight' in df.columns:
+            df = df[df['bts_tsi_freight'] > 0.0].reset_index(drop=True)
+        for col in ['bts_truck_tonnage', 'bts_petroleum_transport', 'bts_tsi_passenger', 'bts_tsi_total']:
+            if col in df.columns:
+                df[col] = df[col].replace(0.0, np.nan).ffill().bfill()
 
         if "bts_tsi_freight_mom_pct" not in df.columns:
             df['bts_tsi_freight_mom_pct'] = df['bts_tsi_freight'].pct_change(1).fillna(0.0) * 100.0
@@ -416,13 +431,16 @@ HISTORICAL_FHWA_BASELINE: List[Dict[str, Any]] = [
 ]
 
 
-def save_fhwa_vintage_record(record: Dict[str, Any], filepath: str = FHWA_VINTAGE_FILE) -> None:
+def save_fhwa_vintage_record(record: Dict[str, Any], filepath: Optional[str] = None) -> None:
     """
     Persists a bitemporal point-in-time FHWA Traffic Volume observation record.
     Eliminates lookahead bias in historical model backtests.
     """
+    fp = filepath or FHWA_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(FHWA_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:

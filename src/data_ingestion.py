@@ -27,15 +27,26 @@ from src.lookup_cache import global_cache
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+_MARKET_DATA_SESSION_CACHE: Dict[Tuple[str, str], pd.DataFrame] = {}
+
+
 def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allow_synthetic: bool = True) -> Optional[pd.DataFrame]:
     """
     Fetches daily commodity futures market data using yfinance:
     - RB=F: RBOB Gasoline Futures ($/gallon proxy for unleaded gas)
     - CL=F: WTI Crude Oil Futures ($/barrel)
     - BZ=F: Brent Crude Oil Futures ($/barrel)
+    - HO=F: Heating Oil Futures ($/gallon)
+    Utilizes process-level in-memory session caching to avoid redundant network roundtrips across regional pipelines (Issue #498).
     """
     if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
+
+    cache_key = (str(start_date), str(end_date))
+    if cache_key in _MARKET_DATA_SESSION_CACHE:
+        logger.debug(f"Returning in-memory session cached market data for {cache_key}.")
+        cached_df = _MARKET_DATA_SESSION_CACHE[cache_key].copy()
+        return cached_df
 
     logger.info(f"Fetching market data from {start_date} to {end_date}...")
     
@@ -47,34 +58,53 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allo
     }
     
     dfs = []
-    for name, ticker in tickers.items():
-        try:
-            data = yf.download(ticker, start=start_date, end=end_date, progress=False)
-            if data is None or data.empty:
-                logger.warning(f"Empty market download for ticker {ticker}.")
-                continue
-            if isinstance(data.columns, pd.MultiIndex):
-                if 'Close' in data.columns.levels[0] and ticker in data['Close'].columns:
-                    close_series = data['Close'][ticker]
-                else:
-                    logger.warning(f"Ticker {ticker} missing Close column in MultiIndex.")
-                    continue
-            else:
-                if 'Close' in data.columns:
-                    close_series = data['Close']
-                else:
-                    logger.warning(f"Ticker {ticker} missing Close column.")
-                    continue
-            
-            if close_series.dropna().empty:
-                logger.warning(f"Ticker {ticker} Close series has no non-null observations.")
-                continue
+    # Attempt high-efficiency batched download in a single network roundtrip (Issue #498)
+    try:
+        batch_data = yf.download(list(tickers.values()), start=start_date, end=end_date, progress=False)
+        if batch_data is not None and not batch_data.empty and isinstance(batch_data.columns, pd.MultiIndex):
+            if 'Close' in batch_data.columns.levels[0]:
+                close_df = batch_data['Close']
+                for name, ticker in tickers.items():
+                    if ticker in close_df.columns:
+                        series = close_df[ticker].dropna()
+                        if not series.empty:
+                            df_item = pd.DataFrame({'date': pd.to_datetime(series.index).tz_localize(None), name: series.values})
+                            dfs.append(df_item.set_index('date'))
+    except Exception as e:
+        logger.debug(f"Batched market data download failed, falling back to individual loop: {e}")
+        dfs = []
 
-            df_item = pd.DataFrame({'date': close_series.index, name: close_series.values})
-            df_item['date'] = pd.to_datetime(df_item['date']).dt.tz_localize(None)
-            dfs.append(df_item.set_index('date'))
-        except Exception as e:
-            logger.warning(f"Could not download ticker {ticker}: {e}")
+    # Fallback to individual ticker download if batch was incomplete
+    if len(dfs) < len(tickers):
+        dfs = []
+        for name, ticker in tickers.items():
+            try:
+                data = yf.download(ticker, start=start_date, end=end_date, progress=False)
+                if data is None or data.empty:
+                    logger.warning(f"Empty market download for ticker {ticker}.")
+                    continue
+                if isinstance(data.columns, pd.MultiIndex):
+                    if 'Close' in data.columns.levels[0] and ticker in data['Close'].columns:
+                        close_series = data['Close'][ticker]
+                    else:
+                        logger.warning(f"Ticker {ticker} missing Close column in MultiIndex.")
+                        continue
+                else:
+                    if 'Close' in data.columns:
+                        close_series = data['Close']
+                    else:
+                        logger.warning(f"Ticker {ticker} missing Close column.")
+                        continue
+                
+                if close_series.dropna().empty:
+                    logger.warning(f"Ticker {ticker} Close series has no non-null observations.")
+                    continue
+
+                df_item = pd.DataFrame({'date': close_series.index, name: close_series.values})
+                df_item['date'] = pd.to_datetime(df_item['date']).dt.tz_localize(None)
+                dfs.append(df_item.set_index('date'))
+            except Exception as e:
+                logger.warning(f"Could not download ticker {ticker}: {e}")
             
     if not dfs or all(df.empty for df in dfs):
         if not allow_synthetic:
@@ -94,6 +124,7 @@ def fetch_market_data(start_date: str = "2022-01-01", end_date: str = None, allo
 
     market_df.attrs['is_synthetic'] = False
     market_df.attrs['provenance'] = 'AUTHENTIC_MARKET_DATA'
+    _MARKET_DATA_SESSION_CACHE[cache_key] = market_df.copy()
     return market_df
 
 
@@ -435,6 +466,8 @@ FRED_VINTAGE_FILE = os.path.join("data", "fred_vintages.json")
 def save_fred_vintage_record(record: dict, filepath: str = FRED_VINTAGE_FILE) -> None:
     """Appends a FRED observation vintage record to persistent JSON storage. (Issue #287)"""
     fp = filepath or FRED_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "fred_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     os.makedirs(os.path.dirname(fp), exist_ok=True)
     vintages = []
     if os.path.exists(fp):
@@ -519,37 +552,68 @@ class EIADataConnector:
             "us_distillate_fuel": 3920.0
         }
 
-        # Attempt dynamic fetch from open FRED weekly series (Zero-Cost public CSVs)
         dynamic_fetches_succeeded = 0
+
+        # 1. Attempt official EIA API v2 Client for real WPSR fundamentals (Section 4.3)
         try:
-            series_to_fetch = {
-                "WPULEUS1": ("ref_util", "PADD1_EastCoast"),
-                "WPULEUS2": ("ref_util", "PADD2_Midwest"),
+            from src.eia_api_client import get_eia_client
+            client = get_eia_client()
+            wpsr_series_map = {
                 "WPULEUS3": ("ref_util", "PADD3_GulfCoast"),
-                "WPULEUS5": ("ref_util", "PADD5_WestCoast"),
-                "WGFUPUS2": ("prod_supplied", "us_motor_gasoline")
+                "W_NA_YUP_R20_PER": ("ref_util", "PADD2_Midwest"),
+                "W_NA_YUP_R30_PER": ("ref_util", "PADD3_GulfCoast"),
+                "WGFUPUS2": ("prod_supplied", "us_motor_gasoline"),
+                "WGTSTP11": ("gas_stocks", "PADD1"),
+                "WGTSTP21": ("gas_stocks", "PADD2"),
             }
-            for sid, (target_dict, target_key) in series_to_fetch.items():
-                try:
-                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
-                    req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIAConnector/1.0"})
-                    with urllib.request.urlopen(req, timeout=3) as resp:
-                        if resp.status == 200:
-                            lines = resp.read().decode('utf-8').strip().split('\n')
-                            if len(lines) > 1:
-                                last_row = lines[-1].split(',')
-                                if len(last_row) == 2 and last_row[1] != '.':
-                                    val = float(last_row[1])
-                                    if target_dict == "ref_util":
-                                        ref_util[target_key] = round(val, 1)
-                                        dynamic_fetches_succeeded += 1
-                                    elif target_dict == "prod_supplied":
-                                        prod_supplied[target_key] = round(val, 1)
-                                        dynamic_fetches_succeeded += 1
-                except Exception:
-                    continue
+            for sid, (target_dict_name, target_key) in wpsr_series_map.items():
+                hist = client.fetch_wpsr_supply_series(sid)
+                if hist:
+                    latest_d = max(hist.keys())
+                    val = hist[latest_d]
+                    if target_dict_name == "ref_util":
+                        ref_util[target_key] = round(val, 1)
+                        dynamic_fetches_succeeded += 1
+                    elif target_dict_name == "prod_supplied":
+                        prod_supplied[target_key] = round(val, 1)
+                        dynamic_fetches_succeeded += 1
+                    elif target_dict_name == "gas_stocks":
+                        gas_stocks[target_key] = round(val / 1000.0, 1)
+                        dynamic_fetches_succeeded += 1
         except Exception as e:
-            logger.debug(f"Dynamic EIA/FRED series fetch notice: {e}")
+            logger.debug(f"EIA API v2 WPSR fetch notice: {e}")
+
+        # 2. Fallback to open FRED weekly series if EIA v2 was unconfigured/offline
+        if dynamic_fetches_succeeded == 0:
+            try:
+                series_to_fetch = {
+                    "WPULEUS1": ("ref_util", "PADD1_EastCoast"),
+                    "WPULEUS2": ("ref_util", "PADD2_Midwest"),
+                    "WPULEUS3": ("ref_util", "PADD3_GulfCoast"),
+                    "WPULEUS5": ("ref_util", "PADD5_WestCoast"),
+                    "WGFUPUS2": ("prod_supplied", "us_motor_gasoline")
+                }
+                for sid, (target_dict, target_key) in series_to_fetch.items():
+                    try:
+                        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
+                        req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIAConnector/1.0"})
+                        with urllib.request.urlopen(req, timeout=3) as resp:
+                            if resp.status == 200:
+                                lines = resp.read().decode('utf-8').strip().split('\n')
+                                if len(lines) > 1:
+                                    last_row = lines[-1].split(',')
+                                    if len(last_row) == 2 and last_row[1] != '.':
+                                        val = float(last_row[1])
+                                        if target_dict == "ref_util":
+                                            ref_util[target_key] = round(val, 1)
+                                            dynamic_fetches_succeeded += 1
+                                        elif target_dict == "prod_supplied":
+                                            prod_supplied[target_key] = round(val, 1)
+                                            dynamic_fetches_succeeded += 1
+                    except Exception:
+                        continue
+            except Exception as e:
+                logger.debug(f"Dynamic EIA/FRED series fetch notice: {e}")
 
         if dynamic_fetches_succeeded >= 4:
             status_tag = "OBSERVED"
@@ -600,6 +664,8 @@ class EIADataConnector:
         """
         Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -729,6 +795,8 @@ class EIA930GridMonitorConnector:
         """
         Saves or appends a bitemporal EIA-930 observation snapshot to persistent vintage storage (Issue #272).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia930_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -881,6 +949,8 @@ class USDABiofuelConnector:
         """
         Saves or appends a bitemporal USDA biofuel observation snapshot to persistent vintage storage (Issue #273).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "usda_biofuel_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -1347,6 +1417,8 @@ class NYMEXForwardCurveConnector:
     @staticmethod
     def save_nymex_forward_vintage_record(record: dict, filepath: str = os.path.join("data", "nymex_forward_vintages.json")) -> None:
         """Saves bitemporal NYMEX forward curve snapshot."""
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "nymex_forward_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -1627,6 +1699,8 @@ class NOAACOOPSConnector:
     @staticmethod
     def save_noaa_coops_vintage_record(record: dict, filepath: str = os.path.join("data", "noaa_coops_vintages.json")) -> None:
         """Saves bitemporal NOAA CO-OPS observation snapshot."""
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "noaa_coops_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -1826,6 +1900,8 @@ class EIAStateMetroRetailConnector:
         """
         Saves or appends a bitemporal EIA observation snapshot to persistent vintage storage (Issue #121).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -2437,6 +2513,8 @@ OILPRICEAPI_MAX_DAILY_CALLS = 25
 
 def save_oilpriceapi_vintage_record(record: dict, filepath: str = OILPRICEAPI_VINTAGE_FILE) -> None:
     """Persists a bitemporal point-in-time OilpriceAPI observation (Issue #284)."""
+    if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "oilpriceapi_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -2576,6 +2654,14 @@ class OilPriceAPIDataConnector:
         data["daily_calls"][day_key] = today_calls + 1
         data["last_call"] = now.isoformat()
 
+        if os.environ.get("TESTING") == "1" and os.path.abspath(OILPRICEAPI_QUOTA_FILE) == os.path.abspath(os.path.join("data", "oilpriceapi_quota.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return True, {
+                "allowed": True,
+                "today_calls": today_calls + 1,
+                "max_daily_calls": self.max_daily_calls,
+                "safety_valve_active": False
+            }
+
         try:
             with open(OILPRICEAPI_QUOTA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
@@ -2634,6 +2720,9 @@ class OilPriceAPIDataConnector:
             global_cache.set(f"oilpriceapi_{cache_key}", payload, ttl_seconds=86400)
         except Exception:
             pass
+
+        if os.environ.get("TESTING") == "1" and os.path.abspath(OILPRICEAPI_CACHE_FILE) == os.path.abspath(os.path.join("data", "oilpriceapi_cache.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
 
         # Write to local JSON disk response cache file
         os.makedirs("data", exist_ok=True)
@@ -2846,8 +2935,11 @@ CFTC_VINTAGE_FILE = os.path.join("data", "cftc_vintages.json")
 
 def save_cftc_vintage_record(record: dict, filepath: str = CFTC_VINTAGE_FILE) -> None:
     """Appends a point-in-time CFTC COT positioning vintage record."""
+    fp = filepath or CFTC_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "cftc_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:
@@ -3078,6 +3170,8 @@ class FERCDataConnector:
         """
         Saves or appends a bitemporal FERC observation snapshot to persistent vintage storage (Issue #275).
         """
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "ferc_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
@@ -3141,8 +3235,11 @@ RADAR_VINTAGE_FILE = os.path.join("data", "radar_vintages.json")
 
 def save_radar_vintage_record(models: list, filepath: str = RADAR_VINTAGE_FILE, as_of: str = None) -> None:
     """Persists a bitemporal point-in-time Open Source AI Radar models snapshot (Issue #289)."""
+    fp = filepath or RADAR_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "radar_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
     try:
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
         vintages = []
         if os.path.exists(filepath):
             try:
@@ -3313,6 +3410,8 @@ class OpenSourceAIRadarConnector:
 
     def _save_disk_cache(self, models: List[Dict[str, Any]]):
         """Saves radar records to data/radar_cache.json."""
+        if os.environ.get("TESTING") == "1" and os.path.abspath(self.CACHE_FILE) == os.path.abspath(os.path.join("data", "radar_cache.json")):
+            return
         try:
             os.makedirs(os.path.dirname(self.CACHE_FILE), exist_ok=True)
             with open(self.CACHE_FILE, "w", encoding="utf-8") as f:
@@ -3499,4 +3598,109 @@ def fetch_carb_compliance_breakdown(as_of_date: Optional[str] = None) -> Dict[st
     """
     from src.carb_compliance import get_dynamic_carb_compliance_breakdown
     return get_dynamic_carb_compliance_breakdown(as_of_date=as_of_date)
+
+
+def compute_roll_adjusted_rbob(
+    df: pd.DataFrame,
+    price_col: str = "gasoline_rbob",
+    roll_schedule_days_before_expiry: int = 5
+) -> pd.DataFrame:
+    """
+    Computes backward-ratio roll-adjusted continuous RBOB futures returns and prices (Issue #404, #444).
+    Eliminates artificial contract expiry price jumps (e.g. late-February +14.1% and late-August -10.2% RVP transitions)
+    governed by NYMEX Chapter 191 maximum RVP rules (13.5 psi winter vs 7.4 psi summer).
+
+    Formula:
+        ret_t = P_t^(c) / P_{t-1}^(c) - 1
+        P_s^{adj} = P_s^{old} * (P_{roll}^{new} / P_{roll}^{old})  for all s < t_{roll}
+
+    Also attaches:
+        - gasoline_rbob_roll_adj: Multiplicatively backward-adjusted price series
+        - gasoline_rbob_roll_adj_ret: Roll-adjusted percentage return
+        - summer_rbob_indicator: Binary switch (1 for April 1 - Sept 15 summer RVP window, 0 otherwise)
+    """
+    result_df = df.copy()
+    if price_col not in result_df.columns or "date" not in result_df.columns:
+        return result_df
+
+    dates = pd.to_datetime(result_df["date"])
+    prices = result_df[price_col].values.astype(float)
+    n = len(prices)
+
+    month_day = dates.dt.strftime("%m-%d")
+    is_summer = ((month_day >= "04-01") & (month_day <= "09-15")).astype(int).values
+    result_df["summer_rbob_indicator"] = is_summer
+
+    multipliers = np.ones(n, dtype=float)
+
+    # Detect monthly roll points (Feb->Mar transition and Aug->Sep transition)
+    for i in range(len(result_df) - 1, 0, -1):
+        if dates.iloc[i].month != dates.iloc[i - 1].month:
+            p_prev = prices[i - 1]
+            p_curr = prices[i]
+            if p_prev > 0 and p_curr > 0:
+                ratio = p_curr / p_prev
+                prev_month = dates.iloc[i - 1].month
+                if prev_month in (2, 8) and (ratio > 1.08 or ratio < 0.92):
+                    multipliers[:i] *= (p_curr / p_prev)
+
+    adj_prices = prices * multipliers
+    if len(adj_prices) > 0 and adj_prices[-1] > 0:
+        adj_prices = adj_prices * (prices[-1] / adj_prices[-1])
+
+    result_df[f"{price_col}_roll_adj"] = np.round(adj_prices, 4)
+    ret_roll = np.zeros(n, dtype=float)
+    if n > 1:
+        ret_roll[1:] = (adj_prices[1:] - adj_prices[:-1]) / adj_prices[:-1]
+    result_df[f"{price_col}_roll_adj_ret"] = np.round(ret_roll, 6)
+
+    return result_df
+
+
+def fetch_regional_wholesale_spot_matrix(
+    start_date: str = "2022-01-01",
+    end_date: Optional[str] = None,
+    include_provenance: bool = True
+) -> pd.DataFrame:
+    """
+    Fetches and maps physical wholesale spot benchmark series across all regional metro hubs (Issue #444, #480).
+    Attaches field-level provenance metadata to each series (Issue #480).
+    Maps:
+        - Newark, DE -> NY Harbor Conventional Spot (DGASNYH via FRED)
+        - Charlotte, Greenville, Port St. Lucie -> U.S. Gulf Coast Spot (DGASUSGULF via FRED)
+        - Oakland & Bay Area -> Los Angeles CARBOB Spot (LA_CARBOB / EIA API v2)
+        - Tulsa, OK -> Group 3 Mid-Continent proxy (USGC + $0.035 differential)
+        - Cincinnati, OH/KY -> Chicago CBOB proxy (USGC + $0.045 differential)
+    """
+    connector = EIARegionalSpotConnector()
+    daily_spots = connector.fetch_daily_regional_spot_prices()
+    spot_dict = daily_spots.get("spot_prices", {})
+    prov_tag = daily_spots.get("provenance_type", "SYNTHETIC_FALLBACK")
+
+    end_dt = end_date or datetime.now().strftime("%Y-%m-%d")
+    dates = pd.date_range(start=start_date, end=end_dt, freq="B")
+
+    ny_harbor = spot_dict.get("ny_harbor_spot_per_gal", 2.395)
+    gulf_coast = spot_dict.get("gulf_coast_spot_per_gal", 2.285)
+    la_carbob = spot_dict.get("los_angeles_spot_per_gal", 2.890)
+
+    data = {
+        "date": dates,
+        "spot_ny_harbor_dgasnyh": ny_harbor,
+        "spot_us_gulf_coast_dgasusgulf": gulf_coast,
+        "spot_la_carbob": la_carbob,
+        "spot_tulsa_group3": np.round(gulf_coast + 0.035, 4),
+        "spot_cincinnati_chicago_cbob": np.round(gulf_coast + 0.045, 4)
+    }
+
+    if include_provenance:
+        data["spot_ny_harbor_dgasnyh_provenance"] = prov_tag
+        data["spot_us_gulf_coast_dgasusgulf_provenance"] = prov_tag
+        data["spot_la_carbob_provenance"] = prov_tag if prov_tag != "OBSERVED" else "ESTIMATED_PROXY"
+        data["spot_tulsa_group3_provenance"] = "ESTIMATED_PROXY"
+        data["spot_cincinnati_chicago_cbob_provenance"] = "ESTIMATED_PROXY"
+
+    df = pd.DataFrame(data)
+    return df
+
 

@@ -1,37 +1,91 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "region_id": "chicago_il",
-  "display_name": "Chicago Metro, IL",
-  "theme_color": "emerald",
-  "icon_class": "fa-gas-pump",
-  "padd_region": "PADD_2",
-  "zip_code": "60601",
-  "base_price_anchor": 3.95,
-  "statutory_tax_gal": 0.655,
-  "rack_margin_offset": 0.5,
-  "logger_region_key": "Chicago_Il",
+  "logger_region_key": "Chicago_IL",
+  "display_name": "Greater Chicago Metro, IL & IN",
+  "padd_region": "PADD 2 Midwest / Great Lakes",
+  "primary_city": "Chicago, IL",
+  "counties": [
+    "Cook",
+    "DuPage",
+    "Will",
+    "Lake",
+    "Kane",
+    "McHenry",
+    "Lake_IN",
+    "Porter_IN"
+  ],
+  "baseline_price": 3.85,
+  "icon_class": "fa-city",
+  "theme_color": "sky",
   "econometric_drivers": {
-    "title": "Regional Econometric Drivers",
-    "description": "Localized market dynamics calibrated for chicago_il."
+    "title": "Chicagoland Multi-Tier Fuel Taxes & Cross-State Border Arbitrage",
+    "description": "Models commuter fuel purchasing substitution between Cook County, IL (subject to state, county, municipal fuel taxes plus up to 10.25% composite sales tax) and Northwest Indiana (Lake and Porter counties) driven by a persistent $0.35-$0.55/gal cross-border retail price differential along the I-80/I-90/I-94 corridors."
   },
   "refining_logistics": {
-    "title": "Refining Capacity & Logistics",
-    "description": "Regional supply infrastructure and pipeline corridors serving chicago_il."
+    "title": "Great Lakes Refining Complex & Midwest Pipeline Confluence",
+    "description": "Chicagoland rack supplies are anchored by BP's 435,000 bpd Whiting IN refinery (6th largest in the US), CITGO's 177,000 bpd Lemont refinery along the Des Plaines River, and ExxonMobil's 251,000 bpd Joliet refinery. Inbound Western Canadian crude arrives via Enbridge pipelines, while outbound refined product disperses via the Wolverine, West Shore, and Badger pipelines.",
+    "primary_refinery": "BP Whiting IN Refinery (435 kbpd) & CITGO Lemont (177 kbpd)",
+    "capacity_bpd": 612000,
+    "pipelines": [
+      "Enbridge Lines 6A/6B/78",
+      "Explorer Pipeline",
+      "Wolverine Pipeline",
+      "West Shore Pipeline",
+      "Badger Pipeline",
+      "Buckeye Chicago Complex"
+    ]
   },
   "tax_structure": {
-    "title": "Statutory Fuel Tax Structure",
-    "description": "State motor fuel excise tax ($0.655/gal) and regulatory overhead."
+    "title": "Multi-Layered Municipal Tax Structure & Statutory Fees",
+    "description": "Illinois state motor fuel tax ($0.470/gal, CPI-indexed), Cook County tax ($0.060/gal), City of Chicago fuel tax ($0.080/gal), environmental/UST fees ($0.011/gal), and Federal excise tax ($0.184/gal), combined with state and local sales tax on motor fuel, creates a statutory tax load exceeding $1.00/gal inside Chicago compared to ~$0.55/gal across the Indiana state line.",
+    "state_tax_per_gal": 0.470,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.805,
+    "notes": "Base statutory fuel tax of $0.805/gal (excluding local sales tax) with $0.40/gal spread against Northwest Indiana"
   },
   "infrastructure_delivery": {
-    "title": "Delivery Hub & Rack Margin Equation",
-    "description": "Terminal delivery hub dynamics for chicago_il.",
-    "equation_latex": "P_{\\text{Retail}} = P_{\\text{RBOB}} + \\text{RackMargin}"
+    "title": "Chicago CBOB Delivery Hub & Rack Margin Dynamics",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Chicago}} = P_{\\text{Chicago Retail}} - P_{\\text{Chicago CBOB Spot}} = \\$3.850 - \\$2.325 = \\$1.525/\\text{gal}",
+    "description": "Reflects the Chicago CBOB wholesale pipeline spot benchmark at the Hammond/Lemont terminal complexes, RFG 7.4 psi summer volatility compliance, and retail rack pass-through.",
+    "hub_distance_miles": 18,
+    "hub_name": "Hammond / Lemont Midwest Terminal Hub"
   },
   "shock_scenarios": [
     {
-      "id": "unplanned_refinery_outage",
-      "name": "Local Unplanned Refinery Outage",
-      "impact_gal": 0.15,
-      "description": "Simulates a 150,000 bpd refinery unit trips near chicago_il."
+      "name": "BP Whiting Power Failure & Unit Trip",
+      "subtitle": "Plant-Wide Electrical Outage",
+      "price_impact_per_gal": 0.285,
+      "pct_impact": 7.40,
+      "description": "Causes sudden regional supply deficit across Midwest racks"
+    },
+    {
+      "name": "Citgo Lemont Des Plaines Barge Canal Lockout",
+      "subtitle": "Illinois Waterway Lock Maintenance",
+      "price_impact_per_gal": 0.125,
+      "pct_impact": 3.25,
+      "description": "Restricts marine barge transfers and expands terminal rack premiums"
+    },
+    {
+      "name": "Great Lakes Polar Vortex Freeze-Off",
+      "subtitle": "Lake Michigan Blizzard Freeze",
+      "price_impact_per_gal": 0.165,
+      "pct_impact": 4.28,
+      "description": "Freezes cooling water intake loops and halts terminal truck loading"
     }
-  ]
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 3820000,
+    "zero_vehicle_pct": 12.5,
+    "vehicles_per_household": 1.65,
+    "drive_alone_share": 0.672,
+    "carpool_share": 0.078,
+    "public_transit_share": 0.115,
+    "work_from_home_share": 0.125,
+    "mean_commute_minutes": 31.8,
+    "vehicle_dependency_ratio": 0.750,
+    "transit_alternative_index": 0.215,
+    "inelastic_demand_score": 0.745
+  }
 }

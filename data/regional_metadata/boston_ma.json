@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "region_id": "boston_ma",
+  "logger_region_key": "Boston_MA",
+  "display_name": "Boston Metro & New England Hub, MA",
+  "padd_region": "PADD 1A New England",
+  "primary_city": "Boston, MA",
+  "counties": [
+    "Suffolk",
+    "Middlesex",
+    "Norfolk",
+    "Essex",
+    "Worcester",
+    "Plymouth",
+    "Hillsborough (NH)",
+    "Providence (RI)",
+    "Cumberland (ME)"
+  ],
+  "baseline_price": 3.45,
+  "icon_class": "fa-ship",
+  "theme_color": "blue",
+  "econometric_drivers": {
+    "title": "100% Import Dependent Marine Supply Chain, Zero Local Refining & Irving Oil Maritime Link",
+    "description": "New England (PADD 1A) operates with zero operable crude oil refining capacity, rendering the six-state region completely dependent on clean petroleum product imports. Wholesale supply is delivered via waterborne coastal product tankers, coastal barge movements from New York Harbor, pipeline deliveries terminating in southern New England (Colonial Pipeline delivery into Springfield and Providence), and ocean tanker imports from the Irving Oil Refinery in Saint John, New Brunswick (320 kbpd). In winter, intense competition between home heating oil, dual-fuel electric power generation, and transportation distillates strains deepwater terminal headers in Boston Harbor, creating sharp seasonal crack spread volatility."
+  },
+  "refining_logistics": {
+    "title": "Boston Harbor Marine Petroleum Terminals, Chelsea River Headers & New Brunswick Tanker Corridors",
+    "description": "Refined motor gasoline and distillate cargoes arrive via ocean-going tankers and coastal barges discharging at marine terminals in Boston Harbor (Chelsea River, Everett, Revere), Providence, and Portland, ME. The primary regional refining anchor is Irving Oil Saint John (320 kbpd), Canada's largest refinery, which supplies up to 40% of northern New England's gasoline imports. Secondary volumes arrive via Colonial Pipeline terminal spurs in Springfield and Providence, and waterborne barge shuttles from Phillips 66 Bayway (NY Harbor).",
+    "primary_refinery": "Irving Oil Saint John Refinery (320 kbpd) & Waterborne Imports",
+    "capacity_bpd": 320000,
+    "pipelines": [
+      "Boston Harbor Chelsea River Marine Terminal Complex",
+      "Colonial Pipeline Southern New England Terminus (Springfield/Providence)",
+      "Portland-Montreal Pipe Line Corridor",
+      "NY Harbor Long Island Sound Coastal Barge Lanes"
+    ]
+  },
+  "tax_structure": {
+    "title": "Massachusetts State Fuel Excise Tax & Multi-State Cross-Border Arbitrage",
+    "description": "Massachusetts imposes a statutory motor fuel excise tax of $0.240/gal, which combines with the federal excise tax ($0.184/gal) for an aggregate baseline tax burden of $0.424/gal. The Boston metropolitan market experiences significant retail price gradients along state borders due to tax differentials: New Hampshire levies $0.222/gal (-1.8¢ vs MA), while Connecticut imposes $0.250/gal (+1.0¢ vs MA) and Rhode Island levies $0.370/gal (+13.0¢ vs MA), driving commuter fueling arbitrage across Interstate corridors (I-93, I-95, I-84).",
+    "state_tax_per_gal": 0.240,
+    "federal_tax_per_gal": 0.184,
+    "total_tax_per_gal": 0.424,
+    "notes": "Massachusetts state excise tax of $0.240/gal ($0.424/gal total tax). Commuter tax arbitrage along NH ($0.222/gal), CT ($0.250/gal), and RI ($0.370/gal) state borders."
+  },
+  "infrastructure_delivery": {
+    "title": "NY Harbor Barge Basis Differential, Marine Tanker Freight & Boston Harbor Rack Parity",
+    "equation_latex": "\\text{Rack Margin}_{\\text{Boston}} = P_{\\text{Boston Retail}} - (P_{\\text{NY Harbor Spot}} + \\text{Freight}_{\\text{Barge/Tanker}}) = \\$3.450 - (\\$2.300 + \\$0.065) = \\$1.085/\\text{gal}",
+    "description": "Wholesale acquisition costs in Boston Harbor track Spot NY Harbor conventional gasoline plus coastal barge freight and tanker delivery differentials (+4¢ to +8¢/gal). Distribution from Chelsea River and Everett terminal racks supplies eastern Massachusetts, while western Massachusetts is supplied via pipeline racks in Springfield.",
+    "hub_distance_miles": 4,
+    "hub_name": "Boston Harbor Deepwater Petroleum Terminals (Chelsea River & Everett)"
+  },
+  "shock_scenarios": [
+    {
+      "name": "Irving Oil Saint John Refinery Unscheduled Outage",
+      "subtitle": "Atlantic Canadian Refined Cargo Interruption",
+      "price_impact_per_gal": 0.320,
+      "pct_impact": 9.28,
+      "description": "Unscheduled shutdown of the 320 kbpd Irving Oil refinery in Saint John, New Brunswick curtails clean waterborne product tanker shipments into Boston Harbor, forcing emergency barge redeployments from New York Harbor."
+    },
+    {
+      "name": "Severe Winter Bomb Cyclone Nor'easter Halts Boston Harbor Tanker Berthing",
+      "subtitle": "Marine Harbor Closure & Barge Navigation Halt",
+      "price_impact_per_gal": 0.245,
+      "pct_impact": 7.10,
+      "description": "Severe winter bomb cyclone nor'easter causes dangerous seas and gale-force winds in Massachusetts Bay; US Coast Guard Sector Boston suspends vessel movements in Boston Harbor and the Chelsea River, delaying tanker discharges."
+    },
+    {
+      "name": "Winter Distillate & Heating Oil Terminal Bottleneck",
+      "subtitle": "Extreme Cold Snap Generates Terminal Berth Competition",
+      "price_impact_per_gal": 0.175,
+      "pct_impact": 5.07,
+      "description": "Prolonged polar cold wave drives acute heating oil and dual-fuel electrical grid demand, creating acute berth congestion at Boston petroleum piers and widening the seasonal wholesale crack spread."
+    }
+  ],
+  "commuter_demographics": {
+    "vintage_year": 2024,
+    "total_households": 2050000,
+    "zero_vehicle_pct": 13.5,
+    "vehicles_per_household": 1.52,
+    "drive_alone_share": 0.635,
+    "carpool_share": 0.075,
+    "public_transit_share": 0.145,
+    "work_from_home_share": 0.145,
+    "mean_commute_minutes": 31.2,
+    "vehicle_dependency_ratio": 0.710,
+    "transit_alternative_index": 0.290,
+    "inelastic_demand_score": 0.780
+  }
+}

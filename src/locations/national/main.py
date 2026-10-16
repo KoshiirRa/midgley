@@ -52,6 +52,15 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     results = multi_horizon_results[5]
     splits = results['splits']
     results['multi_horizon_results'] = multi_horizon_results
+
+    # Wholesale Volatility Term Structure & Predictive Density Cones (Issue #448, #611)
+    from src.volatility_engine import WholesaleVolatilityEngine
+    vol_engine = WholesaleVolatilityEngine()
+    current_market_price = float(market_df['gasoline_rbob'].iloc[-1])
+    vol_engine.calibrate(market_df['gasoline_rbob'])
+    vol_forecasts = vol_engine.forecast_volatility_term_structure(current_market_price, max_horizon=5)
+    results['volatility_forecasts'] = vol_forecasts
+    print(f"  -> Calibrated Wholesale Volatility Engine: GARCH uncond var: {vol_engine.garch.unconditional_variance:.6f}, Student-t df: {vol_engine.dist.df:.1f}")
     
     print("\n[Step 4/6] Model Evaluation & Metrics Summary (5-Day Horizon Primary Baseline)...")
     print("\n" + "=" * 65)
@@ -136,7 +145,22 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
             'forecast_horizon_days': h
         })
         
-        # Append latest live real-time forecast row
+        # Check if historical backtest is already recorded in history
+        need_backfill = True
+        if os.path.exists("data/prediction_history.csv"):
+            try:
+                from src.prediction_logger import read_prediction_history
+                ph = read_prediction_history("data/prediction_history.csv")
+                if not ph.empty and 'region' in ph.columns and 'model_version' in ph.columns:
+                    m = (ph['region'] == "National") & (ph['model_version'] == national_version)
+                    if 'forecast_horizon_days' in ph.columns:
+                        m = m & (ph['forecast_horizon_days'].fillna(5).astype(int) == h)
+                    if m.sum() >= 30:
+                        need_backfill = False
+            except Exception:
+                pass
+
+        # Construct today's live prediction row
         live_pred = float(h_res['live_pred_price'])
         live_quant_pred = float(h_res.get('live_pred_quant_price', live_pred))
         h_today_df = pd.DataFrame([{
@@ -144,10 +168,22 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
             'current_price': current_live_price,
             'predicted_5d_price': live_pred,
             'quant_baseline_5d_price': live_quant_pred,
-            'forecast_horizon_days': h
+            'forecast_horizon_days': h,
+            'is_retroactive_backtest': False
         }])
-        h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
-        log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
+
+        if need_backfill:
+            h_full_df = pd.concat([h_log_df, h_today_df], ignore_index=True)
+            log_predictions(h_full_df, region="National", model_version=national_version, forecast_horizon_days=h)
+        else:
+            log_predictions(
+                h_today_df,
+                region="National",
+                model_version=national_version,
+                forecast_horizon_days=h,
+                run_type="LIVE_PROSPECTIVE",
+                is_retroactive_backtest=False
+            )
 
     backfill_actual_prices_and_evaluate(target_region="National")
     print(f"  -> Logged & backfilled discrete 1D-5D predictions to store (data/prediction_history.csv)")

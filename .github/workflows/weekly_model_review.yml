@@ -25,12 +25,12 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.13
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
           cache: 'pip'
@@ -45,7 +45,7 @@ jobs:
           ruff check src/ scripts/ tests/
 
       - name: Cache Lookup Datastore & Quota Ledger
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             data/lookup_cache.sqlite
@@ -72,8 +72,9 @@ jobs:
           HINDSIGHT_BANK_ID: "Midgley"
           SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
           MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION: ${{ vars.MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION || secrets.MIDGLEY_ENABLE_MULTI_AGENT_SIMULATION }}
+          MIDGLEY_SKIP_BACKFILL: "1"
         run: |
-          python run_all.py --use-llm-api
+          python run_all.py --use-llm-api --skip-backfills
 
       - name: Open Weekly GitHub Issue Report & Recommendations
         env:
@@ -83,28 +84,56 @@ jobs:
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
           HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
           HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+          HINDSIGHT_BANK_ID: "Midgley"
           SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           python -m src.weekly_issue_reporter
 
       - name: Regenerate Public Dashboard with Updated Reflections
+        env:
+          HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+          HINDSIGHT_BANK_ID: "Midgley"
         run: |
           python run_all.py --dashboard-only
 
-      - name: Commit Updated Performance Metrics & Prediction History
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chrono: Weekly Saturday model performance review & rolling accuracy update"
-          file_pattern: "README.md docs/ data/"
+      - name: Commit and Push Updated Performance Metrics & Prediction History
+        if: always()
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout "origin/$BRANCH" -- data/headline_arena_*.json 2>/dev/null || true
+          git add README.md MODEL_LEARNING.md docs data
+          if ! git diff --quiet; then
+            git diff --name-only
+            echo "::error::Unexpected modified tracked files detected"
+            exit 1
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: Weekly Saturday model performance review & rolling accuracy update [skip ci]"
+            for i in 1 2 3; do
+              git checkout "origin/$BRANCH" -- data/headline_arena_*.json 2>/dev/null || true
+              if git pull --rebase origin "$BRANCH"; then
+                git push origin "HEAD:$BRANCH" && exit 0
+              else
+                git rebase --abort || true
+              fi
+              sleep $((i * 15))
+            done
+            echo "::error::Could not rebase and push after 3 attempts"; exit 1
+          fi
 
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: 'docs'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

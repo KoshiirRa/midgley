@@ -189,34 +189,45 @@ class KnowledgeGraphEngine:
     def _load_from_db(self):
         """Loads nodes and edges from SQLite into NetworkX graph."""
         self.graph.clear()
-        with sqlite3.connect(self.db_path, timeout=15.0) as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT node_id, name, entity_type, attributes, created_at FROM kg_nodes")
-            for row in cursor.fetchall():
-                node_id, name, entity_type, attrs_str, created_at = row
-                attrs = json.loads(attrs_str) if attrs_str else {}
-                self.graph.add_node(
-                    node_id,
-                    name=name,
-                    entity_type=entity_type,
-                    created_at=created_at,
-                    **attrs
-                )
-
-            cursor.execute("SELECT source_id, target_id, relation, weight, attributes, created_at FROM kg_edges")
-            for row in cursor.fetchall():
-                source_id, target_id, relation, weight, attrs_str, created_at = row
-                attrs = json.loads(attrs_str) if attrs_str else {}
-                if self.graph.has_node(source_id) and self.graph.has_node(target_id):
-                    self.graph.add_edge(
-                        source_id,
-                        target_id,
-                        relation=relation,
-                        weight=weight,
+        try:
+            with sqlite3.connect(self.db_path, timeout=15.0) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT node_id, name, entity_type, attributes, created_at FROM kg_nodes")
+                for row in cursor.fetchall():
+                    node_id, name, entity_type, attrs_str, created_at = row
+                    attrs = json.loads(attrs_str) if attrs_str else {}
+                    self.graph.add_node(
+                        node_id,
+                        name=name,
+                        entity_type=entity_type,
                         created_at=created_at,
                         **attrs
                     )
-        logger.debug(f"Loaded Knowledge Graph: {self.graph.number_of_nodes()} nodes, {self.graph.number_of_edges()} edges.")
+
+                cursor.execute("SELECT source_id, target_id, relation, weight, attributes, created_at FROM kg_edges")
+                for row in cursor.fetchall():
+                    source_id, target_id, relation, weight, attrs_str, created_at = row
+                    attrs = json.loads(attrs_str) if attrs_str else {}
+                    if self.graph.has_node(source_id) and self.graph.has_node(target_id):
+                        self.graph.add_edge(
+                            source_id,
+                            target_id,
+                            relation=relation,
+                            weight=weight,
+                            created_at=created_at,
+                            **attrs
+                        )
+            logger.debug(f"Loaded Knowledge Graph: {self.graph.number_of_nodes()} nodes, {self.graph.number_of_edges()} edges.")
+        except sqlite3.DatabaseError as e:
+            logger.warning(f"Knowledge Graph SQLite database corrupt or malformed ({e}). Resetting database file {self.db_path}...")
+            try:
+                if os.path.exists(self.db_path):
+                    corrupt_backup = f"{self.db_path}.corrupt_{int(datetime.now(timezone.utc).timestamp())}"
+                    os.rename(self.db_path, corrupt_backup)
+            except Exception as rename_err:
+                logger.error(f"Failed to quarantine corrupt db: {rename_err}")
+            self._init_db()
+            self.seed_initial_petroleum_topology()
 
     def add_node(self, node_id: str, name: str, entity_type: str, **kwargs) -> NodeRecord:
         """Adds or updates an entity node in graph and SQLite."""
@@ -387,12 +398,17 @@ class KnowledgeGraphEngine:
         if not valid_roots:
             return GraphContextSchema(focus_entities=[], nodes=[], edges=[])
 
-        subgraph_nodes = set(valid_roots)
+        # Collect nodes by minimum hop distance from any valid root
+        node_distances: Dict[str, int] = {}
         for root in valid_roots:
             lengths = nx.single_source_shortest_path_length(self.graph.to_undirected(), root, cutoff=depth)
-            subgraph_nodes.update(lengths.keys())
+            for node, dist in lengths.items():
+                if node not in node_distances or dist < node_distances[node]:
+                    node_distances[node] = dist
 
-        selected_nodes = list(subgraph_nodes)[:max_nodes]
+        # Prioritize valid_roots (dist=0) first, then nearest neighbors, deterministically sorted by node_id
+        sorted_nodes = sorted(node_distances.keys(), key=lambda n: (node_distances[n], n))
+        selected_nodes = sorted_nodes[:max_nodes]
         sub_g = self.graph.subgraph(selected_nodes)
 
         nodes_list = []
@@ -537,6 +553,124 @@ class KnowledgeGraphEngine:
             "edges": edges
         }
 
+    def compute_metro_outage_exposure_index(
+        self,
+        metro_id: str,
+        outage_capacities: Optional[Dict[str, float]] = None,
+        firms_anomalies: Optional[Dict[str, float]] = None
+    ) -> Dict[str, Any]:
+        """
+        Computes the topological supply network outage exposure index X_{r,t} for metro r (Issue #453):
+        X_{r,t} = sum_{k in S_r} s_{r,k} * (offline_capacity_{k,t} / total_capacity_k)
+        incorporating NASA FIRMS satellite thermal flaring anomaly scores.
+        """
+        metro_key = metro_id.lower().replace("_ok", "").replace("_de", "").replace("_oh", "").replace("_ky", "").replace("_nc", "").replace("_ca", "").replace("_fl", "")
+
+        # Canonical supply topology share mappings (s_{r,k} where sum(s_{r,k}) = 1.0)
+        METRO_SUPPLY_SHARES: Dict[str, List[Dict[str, Any]]] = {
+            "tulsa": [
+                {"node": "refinery_west_tulsa", "name": "HF Sinclair West Tulsa", "capacity": 85000, "share": 0.70, "firms_hub": "west_tulsa_cushing"},
+                {"node": "refinery_ponca_city", "name": "Phillips 66 Ponca City", "capacity": 210000, "share": 0.30, "firms_hub": "west_tulsa_cushing"}
+            ],
+            "newark": [
+                {"node": "refinery_delaware_city", "name": "PBF Delaware City", "capacity": 190000, "share": 0.55, "firms_hub": "delaware_city_delmarva"},
+                {"node": "refinery_bayway", "name": "Phillips 66 Bayway", "capacity": 258000, "share": 0.30, "firms_hub": "delaware_city_delmarva"},
+                {"node": "terminal_delaware_river", "name": "Delaware River Marine Terminal", "capacity": 100000, "share": 0.15, "firms_hub": "delaware_city_delmarva"}
+            ],
+            "cincinnati": [
+                {"node": "refinery_catlettsburg", "name": "Marathon Catlettsburg", "capacity": 291000, "share": 0.65, "firms_hub": "catlettsburg_ohio_valley"},
+                {"node": "refinery_lima", "name": "Cenovus Lima", "capacity": 180000, "share": 0.20, "firms_hub": "catlettsburg_ohio_valley"},
+                {"node": "pipeline_buckeye", "name": "Buckeye Ohio System", "capacity": 120000, "share": 0.15, "firms_hub": "catlettsburg_ohio_valley"}
+            ],
+            "greenville": [
+                {"node": "pipeline_colonial_line1", "name": "Colonial Pipeline Line 1", "capacity": 1400000, "share": 0.75, "firms_hub": "baytown_houston"},
+                {"node": "pipeline_plantation", "name": "Plantation Pipeline", "capacity": 720000, "share": 0.25, "firms_hub": "baytown_houston"}
+            ],
+            "charlotte": [
+                {"node": "pipeline_colonial_line1", "name": "Colonial Pipeline Line 1", "capacity": 1400000, "share": 0.80, "firms_hub": "baytown_houston"},
+                {"node": "pipeline_plantation", "name": "Plantation Pipeline", "capacity": 720000, "share": 0.20, "firms_hub": "baytown_houston"}
+            ],
+            "oakland": [
+                {"node": "refinery_richmond", "name": "Chevron Richmond", "capacity": 250000, "share": 0.50, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_martinez", "name": "PBF Martinez", "capacity": 157000, "share": 0.30, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_benicia", "name": "Valero Benicia", "capacity": 170000, "share": 0.20, "firms_hub": "richmond_martinez_bay_area"}
+            ],
+            "bayarea": [
+                {"node": "refinery_richmond", "name": "Chevron Richmond", "capacity": 250000, "share": 0.50, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_martinez", "name": "PBF Martinez", "capacity": 157000, "share": 0.30, "firms_hub": "richmond_martinez_bay_area"},
+                {"node": "refinery_benicia", "name": "Valero Benicia", "capacity": 170000, "share": 0.20, "firms_hub": "richmond_martinez_bay_area"}
+            ],
+            "port_st_lucie": [
+                {"node": "terminal_port_everglades", "name": "Port Everglades Marine Terminal", "capacity": 300000, "share": 0.65, "firms_hub": "baytown_houston"},
+                {"node": "terminal_port_canaveral", "name": "Port Canaveral Marine Terminal", "capacity": 150000, "share": 0.35, "firms_hub": "baytown_houston"}
+            ]
+        }
+
+        supply_nodes = METRO_SUPPLY_SHARES.get(metro_key, [])
+        if not supply_nodes:
+            return {
+                "metro_id": metro_id,
+                "outage_exposure_index": 0.0,
+                "exposure_severity": "NOMINAL",
+                "contributing_nodes": []
+            }
+
+        total_exposure = 0.0
+        contributions = []
+
+        for item in supply_nodes:
+            node_id = item["node"]
+            cap = item["capacity"]
+            share = item["share"]
+            hub_code = item.get("firms_hub", "")
+
+            # Offline capacity from explicit filings or incident logs
+            offline = 0.0
+            if outage_capacities and node_id in outage_capacities:
+                offline = outage_capacities[node_id]
+
+            # Satellite FIRMS thermal anomaly boost (Z >= 2.5 indicates flaring trip)
+            firms_z = 0.0
+            if firms_anomalies and hub_code in firms_anomalies:
+                firms_z = firms_anomalies[hub_code]
+            elif firms_anomalies and node_id in firms_anomalies:
+                firms_z = firms_anomalies[node_id]
+
+            if firms_z >= 2.5:
+                # Flaring trip proxy: assume 35% capacity throttle during severe thermal upsets
+                offline = max(offline, cap * 0.35)
+
+            outage_fraction = min(offline / max(cap, 1.0), 1.0)
+            node_exposure = share * outage_fraction
+            total_exposure += node_exposure
+
+            contributions.append({
+                "node": node_id,
+                "name": item["name"],
+                "supply_share": share,
+                "offline_capacity_bpd": offline,
+                "total_capacity_bpd": cap,
+                "outage_fraction": round(outage_fraction, 3),
+                "firms_anomaly_z": round(firms_z, 2),
+                "exposure_contribution": round(node_exposure, 4)
+            })
+
+        severity = "NOMINAL"
+        if total_exposure >= 0.40:
+            severity = "CRITICAL"
+        elif total_exposure >= 0.20:
+            severity = "ELEVATED"
+        elif total_exposure >= 0.05:
+            severity = "MODERATE"
+
+        return {
+            "metro_id": metro_id,
+            "outage_exposure_index": round(total_exposure, 4),
+            "exposure_severity": severity,
+            "contributing_nodes": contributions
+        }
+
 
 # Global Singleton Instance for Zero-Cost In-Memory Re-Use
 kg_engine = KnowledgeGraphEngine()
+

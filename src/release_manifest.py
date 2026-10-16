@@ -53,6 +53,36 @@ def generate_release_manifest() -> Dict[str, Any]:
                     "default": "",
                     "required": False,
                     "description": "Remote Vectorize Hindsight / Supabase pgvector episodic memory endpoint."
+                },
+                {
+                    "name": "DISCORD_BOT_TOKEN",
+                    "default": "",
+                    "required": False,
+                    "description": "Discord Bot token for delivering private Direct Message alerts and opening DM channels."
+                },
+                {
+                    "name": "DISCORD_APP_ID",
+                    "default": "",
+                    "required": False,
+                    "description": "Discord Application ID for registering /midgley slash commands."
+                },
+                {
+                    "name": "DISCORD_PUBLIC_KEY",
+                    "default": "",
+                    "required": False,
+                    "description": "Ed25519 public key for verifying incoming Discord interaction payloads."
+                },
+                {
+                    "name": "CARTO_API_KEY",
+                    "default": "",
+                    "required": False,
+                    "description": "Optional CARTO Basemaps API key for authenticated Leaflet dark tiles on telemetry dashboards."
+                },
+                {
+                    "name": "MIDGLEY_SUBSCRIBERS_DB_PATH",
+                    "default": "data/subscribers.sqlite",
+                    "required": False,
+                    "description": "Optional override path for the SQLite subscriber database."
                 }
             ],
             "deprecated": []
@@ -65,9 +95,16 @@ def generate_release_manifest() -> Dict[str, Any]:
                 "noaa_spc_risk",
                 "ovx_implied_vol",
                 "usgs_gauge_stage",
-                "weekend_gap_shock"
+                "weekend_gap_shock",
+                "enverus_permian_rigs",
+                "enverus_gulf_coast_rigs"
             ],
-            "added_features": ["usgs_gauge_stage", "weekend_gap_shock"],
+            "added_features": [
+                "usgs_gauge_stage",
+                "weekend_gap_shock",
+                "enverus_permian_rigs",
+                "enverus_gulf_coast_rigs"
+            ],
             "retrain_action": "retrain_regional_models",
             "retrain_command": "python scripts/manage_regions.py retrain --all"
         },
@@ -80,6 +117,16 @@ def generate_release_manifest() -> Dict[str, Any]:
             {
                 "id": "20260918_add_reachability_telemetry",
                 "description": "Adds multi-protocol reachability tracking columns",
+                "automatic": True
+            },
+            {
+                "id": "20261010_add_discord_subscriptions",
+                "description": "Adds multi-subscriber Discord webhook and direct message subscription registry table and indexes",
+                "automatic": True
+            },
+            {
+                "id": "20261012_add_unmapped_zip_telemetry",
+                "description": "Adds persistent cross-run out-of-metro ZIP code query demand tracking table",
                 "automatic": True
             }
         ],

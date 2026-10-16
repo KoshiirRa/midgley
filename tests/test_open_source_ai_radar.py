@@ -6,6 +6,7 @@ Issue #187
 import os
 import json
 import unittest
+import tempfile
 from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
 
@@ -16,14 +17,18 @@ from src.api_server import app
 
 class TestOpenSourceAIRadar(unittest.TestCase):
     def setUp(self):
+        self._orig_cache_file = OpenSourceAIRadarConnector.CACHE_FILE
+        self.temp_cache = os.path.join(tempfile.gettempdir(), f"radar_cache_test_{os.getpid()}.json")
+        OpenSourceAIRadarConnector.CACHE_FILE = self.temp_cache
         self.connector = OpenSourceAIRadarConnector()
         self.client = TestClient(app)
-        if os.path.exists(self.connector.CACHE_FILE):
-            os.remove(self.connector.CACHE_FILE)
+        if os.path.exists(self.temp_cache):
+            os.remove(self.temp_cache)
 
     def tearDown(self):
-        if os.path.exists(self.connector.CACHE_FILE):
-            os.remove(self.connector.CACHE_FILE)
+        if os.path.exists(self.temp_cache):
+            os.remove(self.temp_cache)
+        OpenSourceAIRadarConnector.CACHE_FILE = self._orig_cache_file
 
     def test_curated_baseline_fallback(self):
         models = self.connector.CURATED_BASELINE_MODELS
