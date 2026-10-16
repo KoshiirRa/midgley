@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-15T22:47:09.107118",
+  "timestamp": "2026-10-16T01:46:43.320568",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-15T22:46:38Z"
+      "timestamp": "2026-10-16T01:46:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -41,7 +41,7 @@
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 6.35,
-    "day_2_price": 6.329,
+    "day_2_price": 6.357,
     "day_3_price": 6.351,
     "day_4_price": 6.382,
     "day_5_price": 6.379,
