@@ -1,10 +1,10 @@
 {
   "created_at": "2026-09-02 00:19:23",
   "llm_totals": {
-    "prompt_tokens": 67182,
-    "completion_tokens": 38260,
-    "total_tokens": 105442,
-    "estimated_cost_usd": 0.016502,
+    "prompt_tokens": 70022,
+    "completion_tokens": 39860,
+    "total_tokens": 109882,
+    "estimated_cost_usd": 0.024634,
     "fallback_activations": 323
   },
   "llm_events": [
@@ -8367,49 +8367,237 @@
       "total_tokens": 204,
       "estimated_cost_usd": 3.3e-05,
       "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:17:57",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 142,
+      "completion_tokens": 80,
+      "total_tokens": 222,
+      "estimated_cost_usd": 0.000407,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:17:59",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 144,
+      "completion_tokens": 80,
+      "total_tokens": 224,
+      "estimated_cost_usd": 0.000408,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:01",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 144,
+      "completion_tokens": 80,
+      "total_tokens": 224,
+      "estimated_cost_usd": 0.000408,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:04",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 146,
+      "completion_tokens": 80,
+      "total_tokens": 226,
+      "estimated_cost_usd": 0.00041,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:07",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 144,
+      "completion_tokens": 80,
+      "total_tokens": 224,
+      "estimated_cost_usd": 0.000408,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:09",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 154,
+      "completion_tokens": 80,
+      "total_tokens": 234,
+      "estimated_cost_usd": 0.000416,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:12",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 0.000405,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:15",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 144,
+      "completion_tokens": 80,
+      "total_tokens": 224,
+      "estimated_cost_usd": 0.000408,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:17",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 146,
+      "completion_tokens": 80,
+      "total_tokens": 226,
+      "estimated_cost_usd": 0.00041,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:19",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 140,
+      "completion_tokens": 80,
+      "total_tokens": 220,
+      "estimated_cost_usd": 0.000405,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:21",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 158,
+      "completion_tokens": 80,
+      "total_tokens": 238,
+      "estimated_cost_usd": 0.000419,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:23",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 142,
+      "completion_tokens": 80,
+      "total_tokens": 222,
+      "estimated_cost_usd": 0.000407,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:25",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 150,
+      "completion_tokens": 80,
+      "total_tokens": 230,
+      "estimated_cost_usd": 0.000412,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:27",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 144,
+      "completion_tokens": 80,
+      "total_tokens": 224,
+      "estimated_cost_usd": 0.000408,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:29",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 142,
+      "completion_tokens": 80,
+      "total_tokens": 222,
+      "estimated_cost_usd": 0.000407,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:32",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 0.000393,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:34",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 138,
+      "completion_tokens": 80,
+      "total_tokens": 218,
+      "estimated_cost_usd": 0.000403,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:36",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 138,
+      "completion_tokens": 80,
+      "total_tokens": 218,
+      "estimated_cost_usd": 0.000403,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:38",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 136,
+      "completion_tokens": 80,
+      "total_tokens": 216,
+      "estimated_cost_usd": 0.000402,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-10-16 20:18:40",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 0.000393,
+      "is_fallback": false
     }
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 26126,
+    "retain_count": 26130,
     "recall_count": 10,
     "reflect_count": 12,
-    "cloud_calls": 10855,
+    "cloud_calls": 10859,
     "local_fallback_calls": 15275
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-30 19:44:34",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:44:36",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:44:38",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:44:40",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-30 19:44:42",
       "environment": "prod",
@@ -16372,6 +16560,38 @@
     },
     {
       "timestamp": "2026-10-16 00:28:02",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-10-16 20:04:45",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-10-16 20:04:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-10-16 20:04:52",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-10-16 20:04:54",
       "environment": "prod",
       "operation": "retain",
       "backend": "hindsight_cloud",

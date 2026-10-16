@@ -34,7 +34,9 @@ from src.dashboard_generator import (
     MATH_PATH,
     SOURCES_PATH,
     SOURCES_SUB_PATH,
+    TELEMETRY_PATH,
     get_analytics_script,
+    get_carto_basemap_url,
 )
 
 
@@ -404,6 +406,59 @@ def test_cloudflare_analytics_injection():
             os.environ["CLOUDFLARE_ANALYTICS_TOKEN"] = old_env
         else:
             os.environ.pop("CLOUDFLARE_ANALYTICS_TOKEN", None)
+
+
+def test_carto_basemap_url_resolution_and_sanitization(monkeypatch):
+    """Verify CARTO basemap tile URL resolution, credential sanitization, and custom override:
+    - Default keyless URL when neither CARTO_API_KEY nor CARTO_CLIENT_ID is set.
+    - Appends ?key=<safe_param> when CARTO_API_KEY is configured.
+    - Sanitizes special/malicious characters to prevent header or query injection.
+    - Prioritizes MIDGLEY_BASEMAP_TILE_URL override when present.
+    - Confirms generated docs/index.html and docs/telemetry.html embed the configured URL.
+    """
+    # 1. Unset environment variables -> default CARTO dark_all
+    monkeypatch.delenv("CARTO_API_KEY", raising=False)
+    monkeypatch.delenv("CARTO_CLIENT_ID", raising=False)
+    monkeypatch.delenv("MIDGLEY_BASEMAP_TILE_URL", raising=False)
+    url = get_carto_basemap_url()
+    assert url == "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+
+    # 2. CARTO_API_KEY provided -> appends ?key=
+    test_param = "carto_test_client_key_99"
+    monkeypatch.setenv("CARTO_API_KEY", test_param)
+    url_with_key = get_carto_basemap_url()
+    assert url_with_key == f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={test_param}"
+
+    # 3. Special characters stripped (preserving alphanumeric, dash, underscore)
+    monkeypatch.setenv("CARTO_API_KEY", "carto_safe-123!@#$%^&*()_+=<>?/")
+    url_sanitized = get_carto_basemap_url()
+    assert url_sanitized == "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=carto_safe-123_"
+
+    # 4. CARTO_CLIENT_ID alternative variable
+    monkeypatch.delenv("CARTO_API_KEY", raising=False)
+    monkeypatch.setenv("CARTO_CLIENT_ID", "carto_client_alt_456")
+    url_alt = get_carto_basemap_url()
+    assert url_alt == "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=carto_client_alt_456"
+
+    # 5. MIDGLEY_BASEMAP_TILE_URL custom override takes precedence
+    custom_tile = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    monkeypatch.setenv("MIDGLEY_BASEMAP_TILE_URL", custom_tile)
+    url_custom = get_carto_basemap_url()
+    assert url_custom == custom_tile
+
+    # 6. Integration: generate_public_dashboard() with CARTO_API_KEY embeds key in docs/index.html and docs/telemetry.html
+    monkeypatch.delenv("MIDGLEY_BASEMAP_TILE_URL", raising=False)
+    monkeypatch.delenv("CARTO_CLIENT_ID", raising=False)
+    monkeypatch.setenv("CARTO_API_KEY", test_param)
+    generate_public_dashboard()
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index_html = f.read()
+    assert f"?key={test_param}" in index_html
+
+    with open(TELEMETRY_PATH, "r", encoding="utf-8") as f:
+        telemetry_html = f.read()
+    assert f"?key={test_param}" in telemetry_html
 
 
 def test_all_regional_dashboard_pages_have_dedicated_driver_cards():
