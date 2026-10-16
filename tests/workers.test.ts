@@ -791,6 +791,10 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         const fcJson = (await fcRes.json()) as any;
         expect(fcJson.data.flags).toBe(64);
         expect(fcJson.data.embeds[0].title).toContain("3D Forecast");
+        expect(JSON.stringify(fcJson.data.embeds[0])).toContain("Projected Pump Price (3D)");
+        expect(JSON.stringify(fcJson.data.embeds[0])).toContain("Expected Shift (ΔP)");
+        expect(JSON.stringify(fcJson.data.embeds[0])).toContain("95% Confidence Interval");
+        expect(JSON.stringify(fcJson.data.embeds[0])).toContain("Multi-Day Trajectory (1D – 3D Path)");
 
         // 4. /midgley unsubscribe locale:all
         const unsubReq = createSignedInteractionRequest({
@@ -1043,6 +1047,44 @@ describe("Intraday Monitor Worker Security (Issue #438)", () => {
         expect(fcPaJson.data.embeds[0].title).toContain("Philadelphia, PA");
         expect(JSON.stringify(fcPaJson.data.embeds[0])).toContain("Statutory Tax Wedge");
         expect(JSON.stringify(fcPaJson.data.embeds[0])).toContain("+$0.346/gal");
+        expect(JSON.stringify(fcPaJson.data.embeds[0])).toContain("Projected Pump Price (3D)");
+        expect(JSON.stringify(fcPaJson.data.embeds[0])).toContain("Multi-Day Trajectory");
+
+        // Forecast for ZIP 55555 (Minnesota Fallback corridor, Issue verification)
+        const fcMnReq = createSignedInteractionRequest({
+          type: 2,
+          member: { user: { id: "555555555555", username: "minnesota_user" } },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "zip_code", type: 3, value: "55555" },
+                  { name: "horizon", type: 4, value: 5 }
+                ]
+              }
+            ]
+          }
+        });
+        const fcMnRes = await handleDiscordInteraction(fcMnReq, env, {});
+        expect(fcMnRes.status).toBe(200);
+        const fcMnJson = (await fcMnRes.json()) as any;
+        const mnEmbed = fcMnJson.data.embeds[0];
+        expect(mnEmbed.title).toContain("ZIP 55555 (MN)");
+        expect(mnEmbed.title).toContain("5D Forecast");
+        // Verify genuine forecast fields are now delivered on the card!
+        const mnFieldsStr = JSON.stringify(mnEmbed.fields);
+        expect(mnFieldsStr).toContain("Projected Pump Price (5D)");
+        expect(mnFieldsStr).toContain("Expected Shift (ΔP)");
+        expect(mnFieldsStr).toContain("95% Confidence Interval");
+        expect(mnFieldsStr).toContain("Current Base Price");
+        expect(mnFieldsStr).toContain("Quantitative Engine");
+        expect(mnFieldsStr).toContain("Multi-Day Trajectory (1D – 5D Path)");
+        expect(mnFieldsStr).toContain("State Statutory Fuel Tax");
+        expect(mnFieldsStr).toContain("Statutory Tax Wedge");
+        expect(mnFieldsStr).toContain("Estimated Basis & Price Synthesis");
       } finally {
         globalThis.fetch = originalFetch;
       }
