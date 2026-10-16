@@ -18,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.13
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
           cache: 'pip'
@@ -42,16 +42,24 @@ jobs:
         run: |
           python scripts/sync_headline_arena.py
 
-      - name: Rebase On Latest Remote Changes
-        run: |
-          if ! git pull --rebase origin main; then
-            git rebase --abort || true
-            echo "::warning::Rebase conflict encountered during headline arena sync; aborted cleanly without writing conflict markers."
-            exit 1
-          fi
-
       - name: Commit and Push Updated Pending Cache and Ledger
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(headline-arena): Update pending forecasts cache and submission ledger [skip ci]"
-          file_pattern: "data/headline_arena_pending_forecasts.json data/headline_arena_submitted_ledger.json"
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/headline_arena_pending_forecasts.json data/headline_arena_submitted_ledger.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(headline-arena): Update pending forecasts cache and submission ledger [skip ci]"
+            for i in 1 2 3; do
+              if git pull --rebase origin "$BRANCH"; then
+                git push origin "HEAD:$BRANCH" && exit 0
+              else
+                git rebase --abort || true
+              fi
+              sleep $((i * 15))
+            done
+            echo "::error::Could not rebase and push after 3 attempts"; exit 1
+          else
+            echo "No changes in Headline Arena pending forecasts or submitted ledger."
+          fi

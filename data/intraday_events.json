@@ -5235,7 +5235,7 @@
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-15T17:27:59.712194",
+    "timestamp": "2026-10-09T23:56:47.586949",
     "headline": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
     "source": "RSS_Feed",
     "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
@@ -5248,15 +5248,414 @@
     "discovered_sources": [],
     "scores": {
       "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "supply_disruption": 0.2,
+      "demand_sentiment": -0.7,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": -0.7
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-15T17:31:25.432368",
+    "timestamp": "2026-10-10T05:00:08.065459",
+    "headline": "\u2018We are a self-respecting country\u2019: Piyush Goyal on Russian oil and US tariff threat | ETSA 2026 - The Economic Times",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNRWNJdXR2cEZpMDhmbTFwQUpQRF9jQWlJS2llNTljdktsVFdTOUlCQjZ2N0ZMVVp6WkxTOVhlTlJUeW5rTFZ0OVFhWU5RYlJGWUU2d1MtTl8tcmU0ME4wQXZDbm1VdmN2X3lYNHo1TXlOWmxyYmVpd05ubi0xa1JtLUF6RGZBSFloUlNGMnNpUEI2Q0s3Y0xSZkFFeG1oRGFNZHFNcHpnWDRIdUpVdEQyRV95a3U5clV4aF8tejBpRnFZMTBQV0RyaFVtRUZVVTZKUFBvQm90SmJkOTREZGJjMXllc0RCY2owb0VB0gHwAUFVX3lxTE5YSW1ZWmpNbDAwYzNrbXpWS1VsVnVIUzFMVEx3elFhYWp6TnFvWV9SN0J0YkZqaXFnUGFPNVpqemMxY0p1QTBLNFJ2NENGMFN0NGFCUVJQLXVNQkVLNkw5RUMydXRSeWxXaURSYW9yNjNtNktUQkJ0Ql9wbzhDbkpXMWI1NGgxQkRIQzhqMzhZV2pGS3RlanJwTzFlS3QwRTRINGVLbDlIMjBRbnNRclRNcHM5SzJZYUJXOVA4c1JIeENyYzJZWWpjSFN6dzZRbEQyRjlDTHlBMEoyaEIzQnVPMHNSRTRWU1M5WWtsc0lXYw?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNRWNJdXR2cEZpMDhmbTFwQUpQRF9jQWlJS2llNTljdktsVFdTOUlCQjZ2N0ZMVVp6WkxTOVhlTlJUeW5rTFZ0OVFhWU5RYlJGWUU2d1MtTl8tcmU0ME4wQXZDbm1VdmN2X3lYNHo1TXlOWmxyYmVpd05ubi0xa1JtLUF6RGZBSFloUlNGMnNpUEI2Q0s3Y0xSZkFFeG1oRGFNZHFNcHpnWDRIdUpVdEQyRV95a3U5clV4aF8tejBpRnFZMTBQV0RyaFVtRUZVVTZKUFBvQm90SmJkOTREZGJjMXllc0RCY2owb0VB0gHwAUFVX3lxTE5YSW1ZWmpNbDAwYzNrbXpWS1VsVnVIUzFMVEx3elFhYWp6TnFvWV9SN0J0YkZqaXFnUGFPNVpqemMxY0p1QTBLNFJ2NENGMFN0NGFCUVJQLXVNQkVLNkw5RUMydXRSeWxXaURSYW9yNjNtNktUQkJ0Ql9wbzhDbkpXMWI1NGgxQkRIQzhqMzhZV2pGS3RlanJwTzFlS3QwRTRINGVLbDlIMjBRbnNRclRNcHM5SzJZYUJXOVA4c1JIeENyYzJZWWpjSFN6dzZRbEQyRjlDTHlBMEoyaEIzQnVPMHNSRTRWU1M5WWtsc0lXYw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi6wFBVV95cUxNRWNJdXR2cEZpMDhmbTFwQUpQRF9jQWlJS2llNTljdktsVFdTOUlCQjZ2N0ZMVVp6WkxTOVhlTlJUeW5rTFZ0OVFhWU5RYlJGWUU2d1MtTl8tcmU0ME4wQXZDbm1VdmN2X3lYNHo1TXlOWmxyYmVpd05ubi0xa1JtLUF6RGZBSFloUlNGMnNpUEI2Q0s3Y0xSZkFFeG1oRGFNZHFNcHpnWDRIdUpVdEQyRV95a3U5clV4aF8tejBpRnFZMTBQV0RyaFVtRUZVVTZKUFBvQm90SmJkOTREZGJjMXllc0RCY2owb0VB0gHwAUFVX3lxTE5YSW1ZWmpNbDAwYzNrbXpWS1VsVnVIUzFMVEx3elFhYWp6TnFvWV9SN0J0YkZqaXFnUGFPNVpqemMxY0p1QTBLNFJ2NENGMFN0NGFCUVJQLXVNQkVLNkw5RUMydXRSeWxXaURSYW9yNjNtNktUQkJ0Ql9wbzhDbkpXMWI1NGgxQkRIQzhqMzhZV2pGS3RlanJwTzFlS3QwRTRINGVLbDlIMjBRbnNRclRNcHM5SzJZYUJXOVA4c1JIeENyYzJZWWpjSFN6dzZRbEQyRjlDTHlBMEoyaEIzQnVPMHNSRTRWU1M5WWtsc0lXYw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.4,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.55
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-10T12:08:42.113694",
+    "headline": "Sanctions For Thee, Crude For Me: The Paradox Of Trump's Energy Doctrine - NDTV Profit",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNel90TjZiMXpHSlU5My1LQTJmX0g3ODg3Qll5S3k5Wm1iRk1MQk53Z0k1TnREWEJIZVN3U3JNenJ2ckhFdTRZV3RzNlhkSl90TVE5R0M4dEg5SEpVdUpZdGpseWI2c1BFUGh0dFBzM180WFNLcDB4UEdLS05McDdjdWVKdDFEaWllU1pBMnVzaWZQdjUwUzB0U1JodXJVYWlmenRqdktWMlJIcTdqcmlHUzFhZ9IBuwFBVV95cUxNSk9aYUVZc1k3YTlvaGpzWlVCeEtFRkdWYWs5MWpqbzRkMWxYWG5ocmRYZGZZZzY5WmxacXRPdDJyekJTenkyMm90UUZoSFROZUE5bDI2WE5wXzBrZ3ZEWGFqS0kxMHpDM01sQmt6OVAtZ3lTalpxanBtQW94WndzQTVGbXRnT1ZaTnVPc3hlVGc1WC1KVlMySm5xYV82dXFhVU5vMzJEQk9udmFqekxwamR2Wk1sNC0zN3pV?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNel90TjZiMXpHSlU5My1LQTJmX0g3ODg3Qll5S3k5Wm1iRk1MQk53Z0k1TnREWEJIZVN3U3JNenJ2ckhFdTRZV3RzNlhkSl90TVE5R0M4dEg5SEpVdUpZdGpseWI2c1BFUGh0dFBzM180WFNLcDB4UEdLS05McDdjdWVKdDFEaWllU1pBMnVzaWZQdjUwUzB0U1JodXJVYWlmenRqdktWMlJIcTdqcmlHUzFhZ9IBuwFBVV95cUxNSk9aYUVZc1k3YTlvaGpzWlVCeEtFRkdWYWs5MWpqbzRkMWxYWG5ocmRYZGZZZzY5WmxacXRPdDJyekJTenkyMm90UUZoSFROZUE5bDI2WE5wXzBrZ3ZEWGFqS0kxMHpDM01sQmt6OVAtZ3lTalpxanBtQW94WndzQTVGbXRnT1ZaTnVPc3hlVGc1WC1KVlMySm5xYV82dXFhVU5vMzJEQk9udmFqekxwamR2Wk1sNC0zN3pV?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxNel90TjZiMXpHSlU5My1LQTJmX0g3ODg3Qll5S3k5Wm1iRk1MQk53Z0k1TnREWEJIZVN3U3JNenJ2ckhFdTRZV3RzNlhkSl90TVE5R0M4dEg5SEpVdUpZdGpseWI2c1BFUGh0dFBzM180WFNLcDB4UEdLS05McDdjdWVKdDFEaWllU1pBMnVzaWZQdjUwUzB0U1JodXJVYWlmenRqdktWMlJIcTdqcmlHUzFhZ9IBuwFBVV95cUxNSk9aYUVZc1k3YTlvaGpzWlVCeEtFRkdWYWs5MWpqbzRkMWxYWG5ocmRYZGZZZzY5WmxacXRPdDJyekJTenkyMm90UUZoSFROZUE5bDI2WE5wXzBrZ3ZEWGFqS0kxMHpDM01sQmt6OVAtZ3lTalpxanBtQW94WndzQTVGbXRnT1ZaTnVPc3hlVGc1WC1KVlMySm5xYV82dXFhVU5vMzJEQk9udmFqekxwamR2Wk1sNC0zN3pV?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.6,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-10T18:19:41.375238",
+    "headline": "Oil tanker explodes after hitting naval mine in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBBUHBTSEE2RWp1Q2JER29qVzlWOTJ1RlRjVUd3YlB0enNMa1ZmOXYyTWZzVVRZSTdlMkhIaXJFNVlNcjIwdFBJSEFDcko0bFlocjl4U3d0RTE1LVRiN0QwVFp2dFlvcWt4dVE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBBUHBTSEE2RWp1Q2JER29qVzlWOTJ1RlRjVUd3YlB0enNMa1ZmOXYyTWZzVVRZSTdlMkhIaXJFNVlNcjIwdFBJSEFDcko0bFlocjl4U3d0RTE1LVRiN0QwVFp2dFlvcWt4dVE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTFBBUHBTSEE2RWp1Q2JER29qVzlWOTJ1RlRjVUd3YlB0enNMa1ZmOXYyTWZzVVRZSTdlMkhIaXJFNVlNcjIwdFBJSEFDcko0bFlocjl4U3d0RTE1LVRiN0QwVFp2dFlvcWt4dVE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 1.0,
+      "supply_disruption": 0.9,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 1.0
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-10T23:22:29.087844",
+    "headline": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPdFRxaTROTkdRdkg1ZXl3WFdSMEtPQ2M3b0xZdTdtU0tUTUxFelBQTXNFTVp2dzVmLU1VSGZKWWxXZUNZd1pqcVdWT1F3LXJTa25qUDZ1aGFVdjYtcGgwYnVaUmEycTJzLU92OWNoWkhGTzBnU2J4aDExc20wU2NUUklWcDRSWmVhVk9IZ3poOVhLeFFKZ1pMMGxrUlZ1eFBfX0dtMk9ZZUV0aUhROVFrSnk2cVdUeDJX?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPdFRxaTROTkdRdkg1ZXl3WFdSMEtPQ2M3b0xZdTdtU0tUTUxFelBQTXNFTVp2dzVmLU1VSGZKWWxXZUNZd1pqcVdWT1F3LXJTa25qUDZ1aGFVdjYtcGgwYnVaUmEycTJzLU92OWNoWkhGTzBnU2J4aDExc20wU2NUUklWcDRSWmVhVk9IZ3poOVhLeFFKZ1pMMGxrUlZ1eFBfX0dtMk9ZZUV0aUhROVFrSnk2cVdUeDJX?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuAFBVV95cUxPdFRxaTROTkdRdkg1ZXl3WFdSMEtPQ2M3b0xZdTdtU0tUTUxFelBQTXNFTVp2dzVmLU1VSGZKWWxXZUNZd1pqcVdWT1F3LXJTa25qUDZ1aGFVdjYtcGgwYnVaUmEycTJzLU92OWNoWkhGTzBnU2J4aDExc20wU2NUUklWcDRSWmVhVk9IZ3poOVhLeFFKZ1pMMGxrUlZ1eFBfX0dtMk9ZZUV0aUhROVFrSnk2cVdUeDJX?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": -0.7,
+      "supply_disruption": 0.1,
+      "demand_sentiment": 0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.6
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-11T04:49:24.617488",
+    "headline": "Germany Sticks to Russia Sanctions After Trump Diesel Announcement - The Moscow Times",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOWmxqWkRaMFlDbnJNbHBUZEoxaFJZMHJiMDdBM0xOT2J3Z2xYakRJejdjM3V5bi0yMmxMSnplb0ZJam5HTThoVXBxLWN6Ym1Rb0R2ZEJmQnE3RU9kbFBPZ2E2dHA3WU1IYU4zWUpjNVh1VWFsUVpsdklOdFllQmtMLXRKdm43S0hmQUNNaUJRZlNsTXRKcjl5MjRfWjVBNVBaaHN3NmlWTWxycWFaMWtjSEhMN091UQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOWmxqWkRaMFlDbnJNbHBUZEoxaFJZMHJiMDdBM0xOT2J3Z2xYakRJejdjM3V5bi0yMmxMSnplb0ZJam5HTThoVXBxLWN6Ym1Rb0R2ZEJmQnE3RU9kbFBPZ2E2dHA3WU1IYU4zWUpjNVh1VWFsUVpsdklOdFllQmtMLXRKdm43S0hmQUNNaUJRZlNsTXRKcjl5MjRfWjVBNVBaaHN3NmlWTWxycWFaMWtjSEhMN091UQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitgFBVV95cUxOWmxqWkRaMFlDbnJNbHBUZEoxaFJZMHJiMDdBM0xOT2J3Z2xYakRJejdjM3V5bi0yMmxMSnplb0ZJam5HTThoVXBxLWN6Ym1Rb0R2ZEJmQnE3RU9kbFBPZ2E2dHA3WU1IYU4zWUpjNVh1VWFsUVpsdklOdFllQmtMLXRKdm43S0hmQUNNaUJRZlNsTXRKcjl5MjRfWjVBNVBaaHN3NmlWTWxycWFaMWtjSEhMN091UQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.5,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.4
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-11T12:22:39.290958",
+    "headline": "US, Canada Trade Negotiators Meet After Trump Sets New Tariff Deadline - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZFFXR09yZWZFb0g0RTUycGVURG83NHFKR2xGZm96U2lzT000cnRTMmplcnIxd2h5QXU5cEtwdUpreWg1NlZpWXg4TnBDWEs1UjgzT3VIeXNZMnljUTdkR0Z1djZtMTFaODBVOWJIZ1hsZVUxREx5TkVIcmtQLWFOTnJtbGZFVzZUWUQ0SFNCV3prNl9odjlBQ2pJQk14N1BhZ2c?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZFFXR09yZWZFb0g0RTUycGVURG83NHFKR2xGZm96U2lzT000cnRTMmplcnIxd2h5QXU5cEtwdUpreWg1NlZpWXg4TnBDWEs1UjgzT3VIeXNZMnljUTdkR0Z1djZtMTFaODBVOWJIZ1hsZVUxREx5TkVIcmtQLWFOTnJtbGZFVzZUWUQ0SFNCV3prNl9odjlBQ2pJQk14N1BhZ2c?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxPZFFXR09yZWZFb0g0RTUycGVURG83NHFKR2xGZm96U2lzT000cnRTMmplcnIxd2h5QXU5cEtwdUpreWg1NlZpWXg4TnBDWEs1UjgzT3VIeXNZMnljUTdkR0Z1djZtMTFaODBVOWJIZ1hsZVUxREx5TkVIcmtQLWFOTnJtbGZFVzZUWUQ0SFNCV3prNl9odjlBQ2pJQk14N1BhZ2c?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.5,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.4,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-11T18:43:47.247851",
+    "headline": "Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.15,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.7
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-11T23:33:56.533900",
+    "headline": "'Insufficent': Iranian regime rejects US response to conditions set to reopen Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1VTWktcjIxV0ZCYnE4TThGNFZBXzd0TklyUUtkY1VLMUNKZDcteHN2SEQ1QzZoS0RJUVNrQUsyM1lrUkZJMWRRdDFCZGk2ZjJ4VEloTkctWGozMXphTExQZndTWURIbnplZVE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1VTWktcjIxV0ZCYnE4TThGNFZBXzd0TklyUUtkY1VLMUNKZDcteHN2SEQ1QzZoS0RJUVNrQUsyM1lrUkZJMWRRdDFCZGk2ZjJ4VEloTkctWGozMXphTExQZndTWURIbnplZVE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTE1VTWktcjIxV0ZCYnE4TThGNFZBXzd0TklyUUtkY1VLMUNKZDcteHN2SEQ1QzZoS0RJUVNrQUsyM1lrUkZJMWRRdDFCZGk2ZjJ4VEloTkctWGozMXphTExQZndTWURIbnplZVE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.9
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-12T05:04:26.894283",
+    "headline": "Iran accuses CENTCOM chief of running oil smuggling operations in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxOdmZiX2w1dktDTGcwbzRkeEdOdVpWNWdYUjI0R0llVzg0dG5ZVTc3YTNJVGJEcE9iNUZGMU9uZTRpRmtXcDlWdk1hdnhhWGg4OXdtSTk0WV9WdFotN3NibzcxVTVJdFFtdkZkUFJqb0w5N2RXdnhOek5VcHZpOGkxNFhMT3JobEt5LXZXdDJuN0I2SFhTaTNvb19YMmNHVXpjcHF3UHRPZk1TREUwc2lLcm45eVgzc2VEWnVTOGZ3R3U?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.55,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-12T14:51:37.467437",
+    "headline": "Dearth Of Refineries And Tariffs Squeeze Americans - WIBC 93.1 FM",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigAFBVV95cUxPaHRjZk9aVDhnM25TRVFhdmFERS00ZENvdVJ3OHl0TWxxRnMtUEZLem11RjhaSV9VNjE0ZzhkT2hWTVJQVlBaeDJ3cjhtbmU4aURuWEhQSmoyNTZHMl9pQlFVelZ3dVpic19GdzVJRlQwTTZvdm1CcnFiYWJON1ZtYg?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.1,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.7
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-12T22:49:12.813808",
+    "headline": "Trump\u2019s Tariff Inflation Shock Proves Limited as Energy and Semiconductor Costs Increase the Burden on U.S. Households - https://economy.ac/",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBpRGtMVFY0dWFvelJzejNfQUp5Y2RHVFR0TUdzeFZVZUtGemZyeXliS3BuZmQ3Q0pmYmpYRnRJcnFWMHVQY3JhZmc1VHhEV2hmWTEwbnNpVQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBpRGtMVFY0dWFvelJzejNfQUp5Y2RHVFR0TUdzeFZVZUtGemZyeXliS3BuZmQ3Q0pmYmpYRnRJcnFWMHVQY3JhZmc1VHhEV2hmWTEwbnNpVQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiV0FVX3lxTFBpRGtMVFY0dWFvelJzejNfQUp5Y2RHVFR0TUdzeFZVZUtGemZyeXliS3BuZmQ3Q0pmYmpYRnRJcnFWMHVQY3JhZmc1VHhEV2hmWTEwbnNpVQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.3,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.6
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-13T06:02:59.747998",
+    "headline": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.2,
+      "demand_sentiment": -0.8,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.6
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-13T15:42:08.925382",
+    "headline": "Trump makes plans with Russia, signs executive order to lower diesel prices - Spectrum News",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRFdBMm9jUFpZNU10LVh6WVlxeDhyR1pCYUdjV0ktUnd2aXBHWU9tR3Z4UkZadWxybkhDcDQ4blFPVHFGYmtsTXNXQVNGWS03Y2c3M3R2RGRuajBtSDl4cnNhekVUNjBfYk9QbGF0MTUzZ2h5NXlCdElvSm9yTWdaNE9PalQwTGtGSFo3cnJzVU1TdW1ldVlwWnVCdUJHQ3BlTWg2LTdweE0?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRFdBMm9jUFpZNU10LVh6WVlxeDhyR1pCYUdjV0ktUnd2aXBHWU9tR3Z4UkZadWxybkhDcDQ4blFPVHFGYmtsTXNXQVNGWS03Y2c3M3R2RGRuajBtSDl4cnNhekVUNjBfYk9QbGF0MTUzZ2h5NXlCdElvSm9yTWdaNE9PalQwTGtGSFo3cnJzVU1TdW1ldVlwWnVCdUJHQ3BlTWg2LTdweE0?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxNRFdBMm9jUFpZNU10LVh6WVlxeDhyR1pCYUdjV0ktUnd2aXBHWU9tR3Z4UkZadWxybkhDcDQ4blFPVHFGYmtsTXNXQVNGWS03Y2c3M3R2RGRuajBtSDl4cnNhekVUNjBfYk9QbGF0MTUzZ2h5NXlCdElvSm9yTWdaNE9PalQwTGtGSFo3cnJzVU1TdW1ldVlwWnVCdUJHQ3BlTWg2LTdweE0?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": -0.1,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-13T21:03:49.551216",
+    "headline": "Phillips 66 (PSX) 355,000-bpd refinery in Roxana, Illinois, having issues with catalytic cracker unit, according to reports, citing sources - Newsquawk",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxPNkRkTW03OE9FbHYyOVVRbDlPYjJ5T1Q4NHRMVDF6YklSd3FFOGE1OUpUcG1xUlRJbkZ1NkpzNlI1WjdtMXF4VW43RExjTFlPUVVVNU5QU1dSRkY5V29xY29ULV9yOEV4Y1RZSFBheVY1X0JPRmxJUC1GUU0xRzF0c1dUSy1uLWdOTUVOb3NPU3EtbFFBZFo1NlN3M3V5d2cxOHBnMER4d2xMWWpFX1N3ZlIzMEVMVjhkVDRHNTRkbmlENU84ZzZReXJ1d1BNTHlaMV9Bck9fQ2d5OUlSM0ZSUnB1SmxkTmdqSHByWVAtQXZLM2dRSGk1RGxGMTU?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxPNkRkTW03OE9FbHYyOVVRbDlPYjJ5T1Q4NHRMVDF6YklSd3FFOGE1OUpUcG1xUlRJbkZ1NkpzNlI1WjdtMXF4VW43RExjTFlPUVVVNU5QU1dSRkY5V29xY29ULV9yOEV4Y1RZSFBheVY1X0JPRmxJUC1GUU0xRzF0c1dUSy1uLWdOTUVOb3NPU3EtbFFBZFo1NlN3M3V5d2cxOHBnMER4d2xMWWpFX1N3ZlIzMEVMVjhkVDRHNTRkbmlENU84ZzZReXJ1d1BNTHlaMV9Bck9fQ2d5OUlSM0ZSUnB1SmxkTmdqSHByWVAtQXZLM2dRSGk1RGxGMTU?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi_AFBVV95cUxPNkRkTW03OE9FbHYyOVVRbDlPYjJ5T1Q4NHRMVDF6YklSd3FFOGE1OUpUcG1xUlRJbkZ1NkpzNlI1WjdtMXF4VW43RExjTFlPUVVVNU5QU1dSRkY5V29xY29ULV9yOEV4Y1RZSFBheVY1X0JPRmxJUC1GUU0xRzF0c1dUSy1uLWdOTUVOb3NPU3EtbFFBZFo1NlN3M3V5d2cxOHBnMER4d2xMWWpFX1N3ZlIzMEVMVjhkVDRHNTRkbmlENU84ZzZReXJ1d1BNTHlaMV9Bck9fQ2d5OUlSM0ZSUnB1SmxkTmdqSHByWVAtQXZLM2dRSGk1RGxGMTU?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T00:58:49.179678",
+    "headline": "Valero Energy Corp Stock (VLO) Moved Up by 3.26% on Oct 13: Drivers Behind the Movement - TradingKey",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxOQWF3MlA2ajNUTWkwamtUcUdiU3VxdGQzVmRKWFlvN2Roa2JxdHZCS3UxWGNHZ2xnLXl5SExKZUlHbXhoTXdrTWhvaGdmVkpuTmZaeGdKSTVCajlHVnI3TDJEUmJNSEdkYUM2OElHRWx3T2F1ekd4YmhNckxZcC1ncDhKOXZMLWxaaFE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.0,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.75
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T07:17:55.560810",
+    "headline": "Will Phillips 66 (PSX) Face A Bayway Refinery Strike? - Yahoo Finance",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijAFBVV95cUxNWEIyN2pidFRiUzJYSUttRmFFcE1WbTBfUlhjR0NUZVRXdkFjUzVtTkRPVzBMaUlISmxHdVVHUUd2VkQ5dW1OQ0VnSERZYTJNeUNhNDhjb1dDYlZEaUVvV0NCZlVDVFhCNFRMdldkWEhQREVSdElFMlFFTW82N1JqdjZTWVBuZG13VUFNdQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.6,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.5
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T13:27:31.394466",
+    "headline": "Russian oil for me, sanctions for thee: An American masterclass in hypocrisy - Firstpost",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNbVgweEF4bDFEZUtaQXI0X0NZS2pmaTJ6ajJsaGYxdWI2VHNJMFRLQTd0TGNmU05wZ2hWZDIxMVByN280RlhJQnNScFZuQVJZN0dJUlJNRDJfU1JhaHRDRDZNNDFocWd4aVVMQ2l6bXRJVVY1ZTUzMDc5TG1mVk1OOGtNRFYyM3dWSzVpdVFIMkd0elVvSGxQRXFlUzJBNkVqVUdCbEJ6QVpIS1E3Mk85QkI3c1dKajdKaWlyUWZNRdIBxAFBVV95cUxNRjR5cF9WY2RqWVoyaVZIb0w4STd0RWJRRXlpcFZXU19YVmthb25yM2ViaEdzZk1wSnk0NUJoZzBIUVhLaDhsVUQ0TkluekhyMlctSVMwcy1wN3pfNFV0N19ZaFhLbUdxV21Hek1kaFFIOUp6OFlDbVRPN0NfZkMybzhDYXBMNUhPZ2xNSUczakxTMkZlMm85dEJkYkhBOTBobU9fRGZsdFhJeERjdTdXdHBlRDVaSFFzM2RTdGdSVVR1RnVF?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNbVgweEF4bDFEZUtaQXI0X0NZS2pmaTJ6ajJsaGYxdWI2VHNJMFRLQTd0TGNmU05wZ2hWZDIxMVByN280RlhJQnNScFZuQVJZN0dJUlJNRDJfU1JhaHRDRDZNNDFocWd4aVVMQ2l6bXRJVVY1ZTUzMDc5TG1mVk1OOGtNRFYyM3dWSzVpdVFIMkd0elVvSGxQRXFlUzJBNkVqVUdCbEJ6QVpIS1E3Mk85QkI3c1dKajdKaWlyUWZNRdIBxAFBVV95cUxNRjR5cF9WY2RqWVoyaVZIb0w4STd0RWJRRXlpcFZXU19YVmthb25yM2ViaEdzZk1wSnk0NUJoZzBIUVhLaDhsVUQ0TkluekhyMlctSVMwcy1wN3pfNFV0N19ZaFhLbUdxV21Hek1kaFFIOUp6OFlDbVRPN0NfZkMybzhDYXBMNUhPZ2xNSUczakxTMkZlMm85dEJkYkhBOTBobU9fRGZsdFhJeERjdTdXdHBlRDVaSFFzM2RTdGdSVVR1RnVF?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivwFBVV95cUxNbVgweEF4bDFEZUtaQXI0X0NZS2pmaTJ6ajJsaGYxdWI2VHNJMFRLQTd0TGNmU05wZ2hWZDIxMVByN280RlhJQnNScFZuQVJZN0dJUlJNRDJfU1JhaHRDRDZNNDFocWd4aVVMQ2l6bXRJVVY1ZTUzMDc5TG1mVk1OOGtNRFYyM3dWSzVpdVFIMkd0elVvSGxQRXFlUzJBNkVqVUdCbEJ6QVpIS1E3Mk85QkI3c1dKajdKaWlyUWZNRdIBxAFBVV95cUxNRjR5cF9WY2RqWVoyaVZIb0w4STd0RWJRRXlpcFZXU19YVmthb25yM2ViaEdzZk1wSnk0NUJoZzBIUVhLaDhsVUQ0TkluekhyMlctSVMwcy1wN3pfNFV0N19ZaFhLbUdxV21Hek1kaFFIOUp6OFlDbVRPN0NfZkMybzhDYXBMNUhPZ2xNSUczakxTMkZlMm85dEJkYkhBOTBobU9fRGZsdFhJeERjdTdXdHBlRDVaSFFzM2RTdGdSVVR1RnVF?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.4,
+      "supply_disruption": 0.1,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T18:26:50.977909",
+    "headline": "Tariff Pass-Through and the Energy Shock: Why the Pump Has Weighed on Inflation More Than Customs - https://economy.ac/",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA3M1c1dkdwOGpkSVNsQ2dCcDNrSExwMXREN3JTNzNhakkwOFRWczkwYUFvT0ZIcXlXYzJ3UHItSEFUV3d5ZXkyRTNHbHFnc2FaN252UThPeXNGQQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA3M1c1dkdwOGpkSVNsQ2dCcDNrSExwMXREN3JTNzNhakkwOFRWczkwYUFvT0ZIcXlXYzJ3UHItSEFUV3d5ZXkyRTNHbHFnc2FaN252UThPeXNGQQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiWkFVX3lxTFA3M1c1dkdwOGpkSVNsQ2dCcDNrSExwMXREN3JTNzNhakkwOFRWczkwYUFvT0ZIcXlXYzJ3UHItSEFUV3d5ZXkyRTNHbHFnc2FaN252UThPeXNGQQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.5
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-14T23:06:49.639449",
+    "headline": "Container ship sinks in Strait of Hormuz as Iran steps up attacks",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMWFKMzFFcmxqYVdxcTVUYmZBZTZHejZpWTJmZ3o3Z3lFbnA0NTV4MkFlb1ZEMmRGQmw3MjJkc2RnTFgtX19YRkZOUDR4WXhNeWg5Zy1qV3FpeVpTVUo5QVBOVmJxcXVhc0NqandfT2ltQ3BseThmbG5oQTJhYUJ4MV9nM240c3I3ZG5wai1fY3ZIYWdpbGfSAZsBQVVfeXFMUHl0VWNMbEpIOXhweHBSVTdYdHNjd1V5a2NfNkJSdFk5UUV0R2lDSUtZV1BpMEM3aWxZOXlWRTBRRTNtVkxRcDZtYVFDdnA5X3RPLW4zTm42M0hzVFJYNGtoMWJHcjVGVlJ1a2Jja1F5SnFDUHVTYVFkYXRYTFFnbDd1REZsc0haTlNibWhxdTU0aHZCcjVYQ0x1Vm8?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMWFKMzFFcmxqYVdxcTVUYmZBZTZHejZpWTJmZ3o3Z3lFbnA0NTV4MkFlb1ZEMmRGQmw3MjJkc2RnTFgtX19YRkZOUDR4WXhNeWg5Zy1qV3FpeVpTVUo5QVBOVmJxcXVhc0NqandfT2ltQ3BseThmbG5oQTJhYUJ4MV9nM240c3I3ZG5wai1fY3ZIYWdpbGfSAZsBQVVfeXFMUHl0VWNMbEpIOXhweHBSVTdYdHNjd1V5a2NfNkJSdFk5UUV0R2lDSUtZV1BpMEM3aWxZOXlWRTBRRTNtVkxRcDZtYVFDdnA5X3RPLW4zTm42M0hzVFJYNGtoMWJHcjVGVlJ1a2Jja1F5SnFDUHVTYVFkYXRYTFFnbDd1REZsc0haTlNibWhxdTU0aHZCcjVYQ0x1Vm8?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxQMWFKMzFFcmxqYVdxcTVUYmZBZTZHejZpWTJmZ3o3Z3lFbnA0NTV4MkFlb1ZEMmRGQmw3MjJkc2RnTFgtX19YRkZOUDR4WXhNeWg5Zy1qV3FpeVpTVUo5QVBOVmJxcXVhc0NqandfT2ltQ3BseThmbG5oQTJhYUJ4MV9nM240c3I3ZG5wai1fY3ZIYWdpbGfSAZsBQVVfeXFMUHl0VWNMbEpIOXhweHBSVTdYdHNjd1V5a2NfNkJSdFk5UUV0R2lDSUtZV1BpMEM3aWxZOXlWRTBRRTNtVkxRcDZtYVFDdnA5X3RPLW4zTm42M0hzVFJYNGtoMWJHcjVGVlJ1a2Jja1F5SnFDUHVTYVFkYXRYTFFnbDd1REZsc0haTlNibWhxdTU0aHZCcjVYQ0x1Vm8?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.9
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-15T03:48:52.979946",
     "headline": "'US-Canada Tariff Truce?' Poilievre Offers Trump Alternatives For Russia Oil; Carney Mum - The Times of India",
     "source": "RSS_Feed",
     "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOOHJ1SGtiQmhpMHFsYVNnRDhPbnNJVEp5MFVBNXpGUGhvZ09kWExYT2RjMHFxVUJubjBYOUpiNG9GSUxjT3c4dTRWWTE5QmZKNzhNaXc5cVVsVVJXQTV5a040eUUwYi1MNkRCNnlvY3A2NjVyNENLSTlQZm1qTTFSa0pnMURLUnN5cHRtbDFnOGZZalM0d2txZ3RIWkI1ZmhVSE5hV01fWU12bDBQM0VocGVrd2ktYktkN2N2S1FqeE1pYk8ycVJhVzV1UVBJUzM4d2dDVWcwdl9UY0doN3ltUnVyMmlLc0dEb09Xcy11Y1NEWWN4cmVPa9IB_gFBVV95cUxPMU55c2VCWjlDWl9OSzMwVjBkX0MtV08tQVk3WHR0T2djblQzelp0a3ZIRUVtUjZiUHJvbXZGVUtSaUpJSkJPNjZVMUNGa25qVGhqaXFXNU9tYzRtQ3lfTDhWNUh3N2JTTGJsaEhJNFdMbHFRNkNpRWVibUNmRzVobl9ndG4wLXRYT2p4bDJnNGkzSUtydHRvNVhEWU93ZmNOT0NxZ3V6ejFEWXAxUHNKckNWb05hYzZ0cGxua29ZSXdJdjZDWVFiTVJiRnRycnNxUlY5UENoZUROTU01czdQa2JrX3kxQVFCUWE0eERFTlRudlN1X3lHRVhQMGpHQQ?oc=5",
@@ -5268,58 +5667,16 @@
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "geopolitical_risk": -0.3,
+      "supply_disruption": 0.1,
+      "demand_sentiment": 0.2,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": -0.4
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-15T17:46:06.586017",
-    "headline": "'Trump to decide on 100% tariffs on India, China over Russian oil purchases in 10 days' - MillenniumPost",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPaUpkMnc0QlNTVlJJM2hZV0lUSFJ2cWdVOEtxd3dUZDFBSFpORkYzLURtcjZfcUdrdTFCZzc2d1M0bFZoU0V0UkRfWDhiMnJ0STVmMHlnX3BudzJ3ZW9LRUdfZ0JwZFVnSGc0Mk5NYXYxNmxWZV9xZnJhMjdRajNEVlBQM2Z6dlloellLV3Nvd0JRSnlMY1VpaUM0RmxRbXk1cjZfT05WZWhscFQ0NjZXN3NTTG5QemhjRHdkUW1TcXV3YUlGLUVhWk02elTSAdIBQVVfeXFMTWF4QU1ub3hRT2FMYWlwQmdfYkNDUUNPaGZCYkhTSnk0ZGVoTXRGR29CeDkzSjBWQ3ZKOVE2VkhtY2pDeFI2Z1dyNWdkVDVQZXZ3b1ZPM0xVMU1hUE1MYUswaWNodkVGbFh1NmRfVkNzbTNvVUJaLUV0N3FjT2x6S3g5SzZqd3BsT3dwaEFWX3VwMlRzVkdUM3lPdm1wTTRpQ3A4SW9iRWRFeVhDLUF2NkstV2FwQ0VJZTZ3TUtvN3lZMDhEdEhTMk8wOW9tcHhOd2dR?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPaUpkMnc0QlNTVlJJM2hZV0lUSFJ2cWdVOEtxd3dUZDFBSFpORkYzLURtcjZfcUdrdTFCZzc2d1M0bFZoU0V0UkRfWDhiMnJ0STVmMHlnX3BudzJ3ZW9LRUdfZ0JwZFVnSGc0Mk5NYXYxNmxWZV9xZnJhMjdRajNEVlBQM2Z6dlloellLV3Nvd0JRSnlMY1VpaUM0RmxRbXk1cjZfT05WZWhscFQ0NjZXN3NTTG5QemhjRHdkUW1TcXV3YUlGLUVhWk02elTSAdIBQVVfeXFMTWF4QU1ub3hRT2FMYWlwQmdfYkNDUUNPaGZCYkhTSnk0ZGVoTXRGR29CeDkzSjBWQ3ZKOVE2VkhtY2pDeFI2Z1dyNWdkVDVQZXZ3b1ZPM0xVMU1hUE1MYUswaWNodkVGbFh1NmRfVkNzbTNvVUJaLUV0N3FjT2x6S3g5SzZqd3BsT3dwaEFWX3VwMlRzVkdUM3lPdm1wTTRpQ3A4SW9iRWRFeVhDLUF2NkstV2FwQ0VJZTZ3TUtvN3lZMDhEdEhTMk8wOW9tcHhOd2dR?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizAFBVV95cUxPaUpkMnc0QlNTVlJJM2hZV0lUSFJ2cWdVOEtxd3dUZDFBSFpORkYzLURtcjZfcUdrdTFCZzc2d1M0bFZoU0V0UkRfWDhiMnJ0STVmMHlnX3BudzJ3ZW9LRUdfZ0JwZFVnSGc0Mk5NYXYxNmxWZV9xZnJhMjdRajNEVlBQM2Z6dlloellLV3Nvd0JRSnlMY1VpaUM0RmxRbXk1cjZfT05WZWhscFQ0NjZXN3NTTG5QemhjRHdkUW1TcXV3YUlGLUVhWk02elTSAdIBQVVfeXFMTWF4QU1ub3hRT2FMYWlwQmdfYkNDUUNPaGZCYkhTSnk0ZGVoTXRGR29CeDkzSjBWQ3ZKOVE2VkhtY2pDeFI2Z1dyNWdkVDVQZXZ3b1ZPM0xVMU1hUE1MYUswaWNodkVGbFh1NmRfVkNzbTNvVUJaLUV0N3FjT2x6S3g5SzZqd3BsT3dwaEFWX3VwMlRzVkdUM3lPdm1wTTRpQ3A4SW9iRWRFeVhDLUF2NkstV2FwQ0VJZTZ3TUtvN3lZMDhEdEhTMk8wOW9tcHhOd2dR?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-15T18:01:21.917168",
-    "headline": "US tariff risk puts India\u2019s exports under pressure over Russian oil dependence-INP - Independent News Pakistan",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNcHo3a09aZzhmOWFrTDlWbFVnSnoyQVRIZ2d0aEFjdTRuaXhDTGVwZE1rR1lCZTNOWG9sUnRENVdzRE14MnJtQUM1RnpybnR0bHJtNklXZzkzT1c0aUJ1c2dmaHdpaWtFWDNidXY4RjZ4LVhTZFFRN0ZiVnEteGgxOGNVZ2NaR3hCbWtXbC10aHBaREltM1BLd1dvemRxdXR2QlNWZFVKaTVsZ2QwQmxEb1lFLW5pZnlCWmtiVXdELXlEa1ZYaUZj?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNcHo3a09aZzhmOWFrTDlWbFVnSnoyQVRIZ2d0aEFjdTRuaXhDTGVwZE1rR1lCZTNOWG9sUnRENVdzRE14MnJtQUM1RnpybnR0bHJtNklXZzkzT1c0aUJ1c2dmaHdpaWtFWDNidXY4RjZ4LVhTZFFRN0ZiVnEteGgxOGNVZ2NaR3hCbWtXbC10aHBaREltM1BLd1dvemRxdXR2QlNWZFVKaTVsZ2QwQmxEb1lFLW5pZnlCWmtiVXdELXlEa1ZYaUZj?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixwFBVV95cUxNcHo3a09aZzhmOWFrTDlWbFVnSnoyQVRIZ2d0aEFjdTRuaXhDTGVwZE1rR1lCZTNOWG9sUnRENVdzRE14MnJtQUM1RnpybnR0bHJtNklXZzkzT1c0aUJ1c2dmaHdpaWtFWDNidXY4RjZ4LVhTZFFRN0ZiVnEteGgxOGNVZ2NaR3hCbWtXbC10aHBaREltM1BLd1dvemRxdXR2QlNWZFVKaTVsZ2QwQmxEb1lFLW5pZnlCWmtiVXdELXlEa1ZYaUZj?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-15T18:16:33.850999",
+    "timestamp": "2026-10-15T09:00:58.768634",
     "headline": "'Trump likely to take decision in 10 days or so': Sergio Gor on 100% tariff against India for Russian oil purchases - Business Today",
     "source": "RSS_Feed",
     "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxOU283aklDYWRkWVhLY2piTUJtc1Rld2p1bkdVNmpYMXVyMkFNT3dpbFlwNEg4ZnB6ZzZlNGFKOVpqaVBCbUVseko4R0loOEJoSUdVZGVybm9hWG9fdXpjNGRSRURHNjVJRmNueU5Zb25JZm1QNi1MSXJYRzN0S2pCRnpFNk5tSUEtU25mYy15WTJQTHVjU2gzdXVsZTFrMzk3WVRtblNTMW5oUnNWY1lZU1RndG11TlIxRmdxd2llTXpldV90VWY3cFBnMXNVXzRGZjY2dmlfVVhWRWRzTlFpNVBjZWxIbTd4VVhKWUtFRDdfMlRBMGc2Ti1LeEFRMlXSAYQCQVVfeXFMUHpJQkFaOHhTbHVNcVczT2d4b1hIUHRnVzl1WHN3N1NkSy04NTJWMzlEZDNCeFFiVDlwSXVXaEtURDJJSElWYnVZdnBmaTNIbFoyUHU0aW1Udk5LWWtpaWhfanVvWEdNMEVaWUoxQVM1SUNNaGxES1BPQkRnNmNqNFpJbmxaV2d2TlktdW9uRnpmTUJVaktySWJ4NHQ1RWtnb3J2dFpVT1ZTaF9OLXd6X0hqSlFMYTBKUXpoSGc3QmxPeXZjSDN0WktaZFM1Q3JqMkRWSGkyN2ZuNzVTTUpLUElxQkNWMGUxZzI0TF9EQW16VE1nNWJ3dlFXOFhEbTk3Y3NUeFU?oc=5",
@@ -5331,58 +5688,58 @@
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "geopolitical_risk": 0.9,
+      "supply_disruption": 0.6,
+      "demand_sentiment": -0.1,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": 0.8
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-15T18:31:03.345370",
-    "headline": "10 days & 100% tariffs: Trump's punitive tariffs on India for Russian oil buying sit as a ticking bomb - Bhaskar English",
+    "timestamp": "2026-10-15T14:48:01.938380",
+    "headline": "'Trump to decide on 100% tariffs on India, China over Russian oil purchases in 10 days' - MillenniumPost",
     "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNcWJiTVRwWWMyZXBDOFFJcHpSczFXYVFsaFNVa1VSU052SlF2eERDd0NTMDdzNFplei13emY3dExXd0RfMndCV19fbHpUU0Q3RGFBS2I5UnRMOFJNdXYwZkJYNWwxR1h6QU1GTVhNMFdYX3Z0akdQRk1UMjRHNFB2QXZwMk5iTnRhVndjSWFpN3RBM1FNc1RUYkdMTjk5bFd3dHhZNUhpbmxXUUdrWGZGSGFWcEhqRUZpbXpWetIBwgFBVV95cUxPZTllMUVTY3RQc1BiRWl1Zldvbm82X0t5X1BaQTd2ZElDaERmSF83bXktVUNyLTdoZzZPTkdUd05URFB3Zl9XM1VHOWhKU09qWmx6V1p2aHdiRTNldGhkNmpaeUxvbnFjQ3dTeklkOW14aDN0enVqcDVHVnhxQ2h2cldKb293ejFvUDlnXzJnVEM0bGZ2OUl6eW1Cdm1tOUpBcHlXMzhmZlR4aTY4WGxzTTlObjRYb0JfS2hqX3NXdWtvdw?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNcWJiTVRwWWMyZXBDOFFJcHpSczFXYVFsaFNVa1VSU052SlF2eERDd0NTMDdzNFplei13emY3dExXd0RfMndCV19fbHpUU0Q3RGFBS2I5UnRMOFJNdXYwZkJYNWwxR1h6QU1GTVhNMFdYX3Z0akdQRk1UMjRHNFB2QXZwMk5iTnRhVndjSWFpN3RBM1FNc1RUYkdMTjk5bFd3dHhZNUhpbmxXUUdrWGZGSGFWcEhqRUZpbXpWetIBwgFBVV95cUxPZTllMUVTY3RQc1BiRWl1Zldvbm82X0t5X1BaQTd2ZElDaERmSF83bXktVUNyLTdoZzZPTkdUd05URFB3Zl9XM1VHOWhKU09qWmx6V1p2aHdiRTNldGhkNmpaeUxvbnFjQ3dTeklkOW14aDN0enVqcDVHVnhxQ2h2cldKb293ejFvUDlnXzJnVEM0bGZ2OUl6eW1Cdm1tOUpBcHlXMzhmZlR4aTY4WGxzTTlObjRYb0JfS2hqX3NXdWtvdw?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxNcWJiTVRwWWMyZXBDOFFJcHpSczFXYVFsaFNVa1VSU052SlF2eERDd0NTMDdzNFplei13emY3dExXd0RfMndCV19fbHpUU0Q3RGFBS2I5UnRMOFJNdXYwZkJYNWwxR1h6QU1GTVhNMFdYX3Z0akdQRk1UMjRHNFB2QXZwMk5iTnRhVndjSWFpN3RBM1FNc1RUYkdMTjk5bFd3dHhZNUhpbmxXUUdrWGZGSGFWcEhqRUZpbXpWetIBwgFBVV95cUxPZTllMUVTY3RQc1BiRWl1Zldvbm82X0t5X1BaQTd2ZElDaERmSF83bXktVUNyLTdoZzZPTkdUd05URFB3Zl9XM1VHOWhKU09qWmx6V1p2aHdiRTNldGhkNmpaeUxvbnFjQ3dTeklkOW14aDN0enVqcDVHVnhxQ2h2cldKb293ejFvUDlnXzJnVEM0bGZ2OUl6eW1Cdm1tOUpBcHlXMzhmZlR4aTY4WGxzTTlObjRYb0JfS2hqX3NXdWtvdw?oc=5",
+    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPaUpkMnc0QlNTVlJJM2hZV0lUSFJ2cWdVOEtxd3dUZDFBSFpORkYzLURtcjZfcUdrdTFCZzc2d1M0bFZoU0V0UkRfWDhiMnJ0STVmMHlnX3BudzJ3ZW9LRUdfZ0JwZFVnSGc0Mk5NYXYxNmxWZV9xZnJhMjdRajNEVlBQM2Z6dlloellLV3Nvd0JRSnlMY1VpaUM0RmxRbXk1cjZfT05WZWhscFQ0NjZXN3NTTG5QemhjRHdkUW1TcXV3YUlGLUVhWk02elTSAdIBQVVfeXFMTWF4QU1ub3hRT2FMYWlwQmdfYkNDUUNPaGZCYkhTSnk0ZGVoTXRGR29CeDkzSjBWQ3ZKOVE2VkhtY2pDeFI2Z1dyNWdkVDVQZXZ3b1ZPM0xVMU1hUE1MYUswaWNodkVGbFh1NmRfVkNzbTNvVUJaLUV0N3FjT2x6S3g5SzZqd3BsT3dwaEFWX3VwMlRzVkdUM3lPdm1wTTRpQ3A4SW9iRWRFeVhDLUF2NkstV2FwQ0VJZTZ3TUtvN3lZMDhEdEhTMk8wOW9tcHhOd2dR?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPaUpkMnc0QlNTVlJJM2hZV0lUSFJ2cWdVOEtxd3dUZDFBSFpORkYzLURtcjZfcUdrdTFCZzc2d1M0bFZoU0V0UkRfWDhiMnJ0STVmMHlnX3BudzJ3ZW9LRUdfZ0JwZFVnSGc0Mk5NYXYxNmxWZV9xZnJhMjdRajNEVlBQM2Z6dlloellLV3Nvd0JRSnlMY1VpaUM0RmxRbXk1cjZfT05WZWhscFQ0NjZXN3NTTG5QemhjRHdkUW1TcXV3YUlGLUVhWk02elTSAdIBQVVfeXFMTWF4QU1ub3hRT2FMYWlwQmdfYkNDUUNPaGZCYkhTSnk0ZGVoTXRGR29CeDkzSjBWQ3ZKOVE2VkhtY2pDeFI2Z1dyNWdkVDVQZXZ3b1ZPM0xVMU1hUE1MYUswaWNodkVGbFh1NmRfVkNzbTNvVUJaLUV0N3FjT2x6S3g5SzZqd3BsT3dwaEFWX3VwMlRzVkdUM3lPdm1wTTRpQ3A4SW9iRWRFeVhDLUF2NkstV2FwQ0VJZTZ3TUtvN3lZMDhEdEhTMk8wOW9tcHhOd2dR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizAFBVV95cUxPaUpkMnc0QlNTVlJJM2hZV0lUSFJ2cWdVOEtxd3dUZDFBSFpORkYzLURtcjZfcUdrdTFCZzc2d1M0bFZoU0V0UkRfWDhiMnJ0STVmMHlnX3BudzJ3ZW9LRUdfZ0JwZFVnSGc0Mk5NYXYxNmxWZV9xZnJhMjdRajNEVlBQM2Z6dlloellLV3Nvd0JRSnlMY1VpaUM0RmxRbXk1cjZfT05WZWhscFQ0NjZXN3NTTG5QemhjRHdkUW1TcXV3YUlGLUVhWk02elTSAdIBQVVfeXFMTWF4QU1ub3hRT2FMYWlwQmdfYkNDUUNPaGZCYkhTSnk0ZGVoTXRGR29CeDkzSjBWQ3ZKOVE2VkhtY2pDeFI2Z1dyNWdkVDVQZXZ3b1ZPM0xVMU1hUE1MYUswaWNodkVGbFh1NmRfVkNzbTNvVUJaLUV0N3FjT2x6S3g5SzZqd3BsT3dwaEFWX3VwMlRzVkdUM3lPdm1wTTRpQ3A4SW9iRWRFeVhDLUF2NkstV2FwQ0VJZTZ3TUtvN3lZMDhEdEhTMk8wOW9tcHhOd2dR?oc=5",
     "is_anomaly": true,
     "target_locales": [
       "National"
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-15T18:46:41.943954",
-    "headline": "Iranian strikes sink two cargo ships on Strait of Hormuz",
-    "source": "Geopolitical_Strait_of_Hormuz",
-    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNRWJQcjNrRWJuQ05vdkJjOUFpUTRIVzhYNEFmUnZpRkpyRnh5dHpad1FlR3pPanRualIzbXB4RG1VYXZWN25RUVd3S3dKcWIyVUkwQzRQbmlmdjliMFg5d0xHN1ZSVFB0QW9QdkMwbDFlN0g1S3ZKcW5vU3Jqa1EzN2JLRnZlem9DWnJZYjNnbE4yMElBRnRnN1Fza2tjbWlRVS11TU1OMUJ1RWR4dXpzQlp0dFA5Z21oTG9xQ2d30gHDAUFVX3lxTFBoeVYzOURaY25GZU1xa0hsUlhpdm9vT2xfdW1IN2xMUERmcDBiV3BRV05WRE9CVkhyMGszVXpkVWdjOTdZM3ozZU12VDRybTBuN3FxWFdVTjBDRmRpWlppaVE3aHFFRkZnTkFmUU9MX1NiTGlBYnd0ZS1uU2lZOW5HVUdLcnlyR01EMVRJTDhBZUl2dTNrMllrYjk0a0pTc0ZqLWlQWldKSjBvcTdNQnZidGZsc0txZHhDRkxPUGdxeE5yVQ?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNRWJQcjNrRWJuQ05vdkJjOUFpUTRIVzhYNEFmUnZpRkpyRnh5dHpad1FlR3pPanRualIzbXB4RG1VYXZWN25RUVd3S3dKcWIyVUkwQzRQbmlmdjliMFg5d0xHN1ZSVFB0QW9QdkMwbDFlN0g1S3ZKcW5vU3Jqa1EzN2JLRnZlem9DWnJZYjNnbE4yMElBRnRnN1Fza2tjbWlRVS11TU1OMUJ1RWR4dXpzQlp0dFA5Z21oTG9xQ2d30gHDAUFVX3lxTFBoeVYzOURaY25GZU1xa0hsUlhpdm9vT2xfdW1IN2xMUERmcDBiV3BRV05WRE9CVkhyMGszVXpkVWdjOTdZM3ozZU12VDRybTBuN3FxWFdVTjBDRmRpWlppaVE3aHFFRkZnTkFmUU9MX1NiTGlBYnd0ZS1uU2lZOW5HVUdLcnlyR01EMVRJTDhBZUl2dTNrMllrYjk0a0pTc0ZqLWlQWldKSjBvcTdNQnZidGZsc0txZHhDRkxPUGdxeE5yVQ?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxNRWJQcjNrRWJuQ05vdkJjOUFpUTRIVzhYNEFmUnZpRkpyRnh5dHpad1FlR3pPanRualIzbXB4RG1VYXZWN25RUVd3S3dKcWIyVUkwQzRQbmlmdjliMFg5d0xHN1ZSVFB0QW9QdkMwbDFlN0g1S3ZKcW5vU3Jqa1EzN2JLRnZlem9DWnJZYjNnbE4yMElBRnRnN1Fza2tjbWlRVS11TU1OMUJ1RWR4dXpzQlp0dFA5Z21oTG9xQ2d30gHDAUFVX3lxTFBoeVYzOURaY25GZU1xa0hsUlhpdm9vT2xfdW1IN2xMUERmcDBiV3BRV05WRE9CVkhyMGszVXpkVWdjOTdZM3ozZU12VDRybTBuN3FxWFdVTjBDRmRpWlppaVE3aHFFRkZnTkFmUU9MX1NiTGlBYnd0ZS1uU2lZOW5HVUdLcnlyR01EMVRJTDhBZUl2dTNrMllrYjk0a0pTc0ZqLWlQWldKSjBvcTdNQnZidGZsc0txZHhDRkxPUGdxeE5yVQ?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
+      "geopolitical_risk": 0.9,
       "supply_disruption": 0.5,
-      "demand_sentiment": 0.0,
+      "demand_sentiment": -0.9,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.42
+      "overall_price_pressure": -0.7
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-15T20:15:53.394403",
+    "timestamp": "2026-10-15T19:47:47.949101",
+    "headline": "Valero Prepares Restart of Port Arthur, Texas Oil Refinery After Blast, Sources Say - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisgFBVV95cUxOLUhFdUp0V2RxRFNOWlpCXzFoNnNlV0lPM2JfVmtEcXRBalFldXdLNnp2WWF6N1dYNXE2SjVOSWZVcEdqem9jVjZOS3JScm50TWIxSEZCTnZseGx6YzJSdHdqQkJyWkZfRGlDdFBsM2xRaFMyMl8tYWRMYklsNFpURFhzbHl5SlZlSkxkQ3BwcWVldkJjOUZ3aHNZZTg5cjIyaXlOY1RsNFVCdFExT3hsSU93?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": -0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.6
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-15T22:57:59.064598",
     "headline": "States Sue Over Latest Trump Tariff Attempt - EnergyNow.com",
     "source": "RSS_Feed",
     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
@@ -5394,37 +5751,41 @@
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "geopolitical_risk": 0.3,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.7,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": -0.6
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-15T22:46:27.116797",
-    "headline": "Macklem in Bangkok: oil, tariffs and job losses test the Bank of Canada\u2019s hike case - investingLive",
+    "timestamp": "2026-10-16T03:44:51.143524",
+    "headline": "Valero Energy Corp Stock (VLO) Closed Down by 3.41% on Oct 15: Drivers Behind the Movement - TradingKey",
     "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNa1cyOXZpbE85UFk1b3pXU191Qk5COFNTLTdGWVQtWGpCWVRzYnpUSlNfeDV2akNRbTg5b0pMcGFkX3BnMzJTR2VxRDZidUN4UHdHZlhNMlVIRkFmdjZsWXh4MUhRTDBpLXU2ajRrWFZqa0cwRU92WVUxYlVMc3c4ZjJ0WmJvSk9XTmRieVRrNVVBUjB1cUR0NENTX1NzeHVpY3NRd01Fand4N2RtZUU4dVh3OVZ5RTNlejdQNlJZYw?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNa1cyOXZpbE85UFk1b3pXU191Qk5COFNTLTdGWVQtWGpCWVRzYnpUSlNfeDV2akNRbTg5b0pMcGFkX3BnMzJTR2VxRDZidUN4UHdHZlhNMlVIRkFmdjZsWXh4MUhRTDBpLXU2ajRrWFZqa0cwRU92WVUxYlVMc3c4ZjJ0WmJvSk9XTmRieVRrNVVBUjB1cUR0NENTX1NzeHVpY3NRd01Fand4N2RtZUU4dVh3OVZ5RTNlejdQNlJZYw?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivwFBVV95cUxNa1cyOXZpbE85UFk1b3pXU191Qk5COFNTLTdGWVQtWGpCWVRzYnpUSlNfeDV2akNRbTg5b0pMcGFkX3BnMzJTR2VxRDZidUN4UHdHZlhNMlVIRkFmdjZsWXh4MUhRTDBpLXU2ajRrWFZqa0cwRU92WVUxYlVMc3c4ZjJ0WmJvSk9XTmRieVRrNVVBUjB1cUR0NENTX1NzeHVpY3NRd01Fand4N2RtZUU4dVh3OVZ5RTNlejdQNlJZYw?oc=5",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNT1NoUlFFdHBhNkg3ZWR0NG1feDB1RUkxdEJubk9ibGVQTHZTYm9MWTZRLUVaemlaa0lKVVpFb1pNZ3o0clkxMUxzcmxNbWNXOTA3X3FmVHZPdS1LaWxpSUZqTWtibnVkSDQxbEl1d1FQSzdsWVNpSE00OXlfUUpqUkI2M3Jwb3ktNlE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNT1NoUlFFdHBhNkg3ZWR0NG1feDB1RUkxdEJubk9ibGVQTHZTYm9MWTZRLUVaemlaa0lKVVpFb1pNZ3o0clkxMUxzcmxNbWNXOTA3X3FmVHZPdS1LaWxpSUZqTWtibnVkSDQxbEl1d1FQSzdsWVNpSE00OXlfUUpqUkI2M3Jwb3ktNlE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxNT1NoUlFFdHBhNkg3ZWR0NG1feDB1RUkxdEJubk9ibGVQTHZTYm9MWTZRLUVaemlaa0lKVVpFb1pNZ3o0clkxMUxzcmxNbWNXOTA3X3FmVHZPdS1LaWxpSUZqTWtibnVkSDQxbEl1d1FQSzdsWVNpSE00OXlfUUpqUkI2M3Jwb3ktNlE?oc=5",
     "is_anomaly": true,
     "target_locales": [
       "National"
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.0,
+      "demand_sentiment": -0.4,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": -0.7
     },
-    "discord_notified": true
+    "pending_review": true,
+    "duplicate_candidate_of": "Valero Energy Corp Stock (VLO) Moved Up by 3.26% on Oct 13: Drivers Behind the Movement - TradingKey",
+    "matched_entity": "Valero",
+    "similarity": 0.58,
+    "duplicate_review_notified": false
   },
   {
-    "timestamp": "2026-10-16T01:45:58.027457",
+    "timestamp": "2026-10-16T08:52:09.158569",
     "headline": "\u201cInflation Driven by Oil and Tariff Shocks Shouldn\u2019t Be Dismissed as \u2018Transitory\u2019\u201d - \uc870\uc120\uc77c\ubcf4",
     "source": "RSS_Feed",
     "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOejBFWnZfcTVuaXhDQ001UDFkc2cxUzY3VVpGWVVEUjFkdW5TUHV3N2tURnJULS0wV1p2bWdGaWlYZlp0YzlMUjhjZlBDV08tcmZVNEVCTHZ1TWF5TzRvSTV0elotLUY2SFI2aGdlejU3S1RmaUo5Mmt6X1o3UnFHZlNBRndIUVFyRjdTM0NR?oc=5",
@@ -5436,141 +5797,32 @@
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "geopolitical_risk": 0.3,
+      "supply_disruption": 0.4,
+      "demand_sentiment": -0.2,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": 0.5
     },
     "discord_notified": true
   },
   {
-    "timestamp": "2026-10-16T05:15:48.287266",
-    "headline": "India hikes petrol export tariff, cuts diesel duty to adjust to global energy prices - ThePrint",
+    "timestamp": "2026-10-16T14:42:09.851543",
+    "headline": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
     "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPd2hsUmRVbGxSOFJNR3hNck1BcU1zeUlySEszeE1WZFZBbUdFTGRFdVhNU0I2OHlweGJxZVNoanYyMEF6SlhZcE9faFJLdE5ZNjBIMFAzRTExQWZ3WHpQRTZycGN2T2VobVFtQU1ENlVjRFVHUlkxdURKd3Y0a3BZV2stNGZzTkdYcEVXOXVyY3RMQ0s3cGpuREx2ak9EQ3hUMGpka1FpNE1vZlpZSnEtaXRyUkgxMnUzN3NrddIBwgFBVV95cUxNdmE5a21JNjBJNXBiMEkxVkp0U29uMG9VUGI3UU8ybW1lVm9hc1lkVXFjMWFsV0ZnN1UyOUlDU3FZR3U5cmZmUHc4aFBRem1rSTBDdE9OQjZUdW02S1pjbnhCbXNtMU5CLVgxNzNOVzRyUEJTZXVGMXp4UXZMSm9mSnVqMFVIS2ZNMm9fQWdlSnZvS29sQnZUaGVWSFVscVhZNzFUM3lTVVJTUkJrZ3JOcnl4WE9pXzRnZ2hsd2Q1LVpDdw?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPd2hsUmRVbGxSOFJNR3hNck1BcU1zeUlySEszeE1WZFZBbUdFTGRFdVhNU0I2OHlweGJxZVNoanYyMEF6SlhZcE9faFJLdE5ZNjBIMFAzRTExQWZ3WHpQRTZycGN2T2VobVFtQU1ENlVjRFVHUlkxdURKd3Y0a3BZV2stNGZzTkdYcEVXOXVyY3RMQ0s3cGpuREx2ak9EQ3hUMGpka1FpNE1vZlpZSnEtaXRyUkgxMnUzN3NrddIBwgFBVV95cUxNdmE5a21JNjBJNXBiMEkxVkp0U29uMG9VUGI3UU8ybW1lVm9hc1lkVXFjMWFsV0ZnN1UyOUlDU3FZR3U5cmZmUHc4aFBRem1rSTBDdE9OQjZUdW02S1pjbnhCbXNtMU5CLVgxNzNOVzRyUEJTZXVGMXp4UXZMSm9mSnVqMFVIS2ZNMm9fQWdlSnZvS29sQnZUaGVWSFVscVhZNzFUM3lTVVJTUkJrZ3JOcnl4WE9pXzRnZ2hsd2Q1LVpDdw?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivAFBVV95cUxPd2hsUmRVbGxSOFJNR3hNck1BcU1zeUlySEszeE1WZFZBbUdFTGRFdVhNU0I2OHlweGJxZVNoanYyMEF6SlhZcE9faFJLdE5ZNjBIMFAzRTExQWZ3WHpQRTZycGN2T2VobVFtQU1ENlVjRFVHUlkxdURKd3Y0a3BZV2stNGZzTkdYcEVXOXVyY3RMQ0s3cGpuREx2ak9EQ3hUMGpka1FpNE1vZlpZSnEtaXRyUkgxMnUzN3NrddIBwgFBVV95cUxNdmE5a21JNjBJNXBiMEkxVkp0U29uMG9VUGI3UU8ybW1lVm9hc1lkVXFjMWFsV0ZnN1UyOUlDU3FZR3U5cmZmUHc4aFBRem1rSTBDdE9OQjZUdW02S1pjbnhCbXNtMU5CLVgxNzNOVzRyUEJTZXVGMXp4UXZMSm9mSnVqMFVIS2ZNMm9fQWdlSnZvS29sQnZUaGVWSFVscVhZNzFUM3lTVVJTUkJrZ3JOcnl4WE9pXzRnZ2hsd2Q1LVpDdw?oc=5",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
     "is_anomaly": true,
     "target_locales": [
       "National"
     ],
     "discovered_sources": [],
     "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
+      "geopolitical_risk": 0.7,
+      "supply_disruption": 0.1,
+      "demand_sentiment": -0.7,
       "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-16T05:45:56.226885",
-    "headline": "India-U.S. trade deal in final stages; decision on Russian oil tariffs possible soon - Traders Union",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOYlZxODJLLUkwX080a3dQbWlYemN4RUVmOTdzLWhBZTFxaHNzNU12b3JhY09aSFRMMmJvVXU4dDZyWjZob05yNjVvWWt0THdtcU10am9ncHNQdmh6MGJHN2l2Ri1qYU5aMTMzek90c0QyM1d4WUJPYVVYQjlJYnNMeTlDWVJLQm9rZVBfZ0xkNUVjczA2RVQ4TW15UDU3bXM?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOYlZxODJLLUkwX080a3dQbWlYemN4RUVmOTdzLWhBZTFxaHNzNU12b3JhY09aSFRMMmJvVXU4dDZyWjZob05yNjVvWWt0THdtcU10am9ncHNQdmh6MGJHN2l2Ri1qYU5aMTMzek90c0QyM1d4WUJPYVVYQjlJYnNMeTlDWVJLQm9rZVBfZ0xkNUVjczA2RVQ4TW15UDU3bXM?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinwFBVV95cUxOYlZxODJLLUkwX080a3dQbWlYemN4RUVmOTdzLWhBZTFxaHNzNU12b3JhY09aSFRMMmJvVXU4dDZyWjZob05yNjVvWWt0THdtcU10am9ncHNQdmh6MGJHN2l2Ri1qYU5aMTMzek90c0QyM1d4WUJPYVVYQjlJYnNMeTlDWVJLQm9rZVBfZ0xkNUVjczA2RVQ4TW15UDU3bXM?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-16T14:16:02.439093",
-    "headline": "TSLA vs Ford: Oil, tariffs, and a recall collide | FXStreet - \u0634\u0628\u0643\u0629 \u062a\u0648\u0627\u0635\u0644 \u0627\u0644\u0625\u062e\u0628\u0627\u0631\u064a\u0629",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nVmRGTEttUnNqTi1ybl9tR1d3d1czakVrYmZTVWIzMHdwZnZrSFpRSDFOT05TUXRlN2lEckc5UE5TSk5PX0RFdUxJd0lObV9rUTZn?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nVmRGTEttUnNqTi1ybl9tR1d3d1czakVrYmZTVWIzMHdwZnZrSFpRSDFOT05TUXRlN2lEckc5UE5TSk5PX0RFdUxJd0lObV9rUTZn?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nVmRGTEttUnNqTi1ybl9tR1d3d1czakVrYmZTVWIzMHdwZnZrSFpRSDFOT05TUXRlN2lEckc5UE5TSk5PX0RFdUxJd0lObV9rUTZn?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-16T15:00:55.923744",
-    "headline": "TSLA vs Ford: Oil, tariffs, and a recall collide - FXStreet",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPWEhlQ3R4N2FpYlFIdkFUX2hFLThhSndDbGhzWjgwNWpfMVc0eTItbkw4V1ppcHdKLVJUQ0Z0cDBIV3hBUXdubkhUZ3NTYlJ6NVJxeU4tbHVoaUV4c0N5d1h2VnhlWFAxbFhFVllzZG1DWHBMRlNHWHJja0t6bDJOYUtUSmQ1MlZhTXRtdU00NU5YUQ?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPWEhlQ3R4N2FpYlFIdkFUX2hFLThhSndDbGhzWjgwNWpfMVc0eTItbkw4V1ppcHdKLVJUQ0Z0cDBIV3hBUXdubkhUZ3NTYlJ6NVJxeU4tbHVoaUV4c0N5d1h2VnhlWFAxbFhFVllzZG1DWHBMRlNHWHJja0t6bDJOYUtUSmQ1MlZhTXRtdU00NU5YUQ?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxPWEhlQ3R4N2FpYlFIdkFUX2hFLThhSndDbGhzWjgwNWpfMVc0eTItbkw4V1ppcHdKLVJUQ0Z0cDBIV3hBUXdubkhUZ3NTYlJ6NVJxeU4tbHVoaUV4c0N5d1h2VnhlWFAxbFhFVllzZG1DWHBMRlNHWHJja0t6bDJOYUtUSmQ1MlZhTXRtdU00NU5YUQ?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "pending_review": true,
-    "duplicate_candidate_of": "TSLA vs Ford: Oil, tariffs, and a recall collide | FXStreet - \u0634\u0628\u0643\u0629 \u062a\u0648\u0627\u0635\u0644 \u0627\u0644\u0625\u062e\u0628\u0627\u0631\u064a\u0629",
-    "matched_entity": "Energy Infrastructure",
-    "similarity": 0.73,
-    "duplicate_review_notified": true
-  },
-  {
-    "timestamp": "2026-10-16T16:45:56.778581",
-    "headline": "Construction Input Prices Up 11.2% Annually as Fuel and Tariffs Bite - News and Statistics - IndexBox",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQbHJ1cDdCSmNJc0x4LUZfdlFaUEFLVlJ4Zm5oVm5GSE9JWTBPWXBINXhpWWE4bkJBUGpXV2ZsTnp6WV94dEg1bGlkYWIxNDlZTktwQ25JSUZaZXhualBSVS1HdWVNUmYtWVdhUTNyVHI1NXFtMnhSeC1Qb0tqQWktSUp2MFpvb2ZmWXFJemNSUkY4akdFRk5sU01OOFVzYU9aNTA5VGpjX1UzTlpLeHA4eFRoZDJvT3dUNUxPbFFYVWl4dw?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQbHJ1cDdCSmNJc0x4LUZfdlFaUEFLVlJ4Zm5oVm5GSE9JWTBPWXBINXhpWWE4bkJBUGpXV2ZsTnp6WV94dEg1bGlkYWIxNDlZTktwQ25JSUZaZXhualBSVS1HdWVNUmYtWVdhUTNyVHI1NXFtMnhSeC1Qb0tqQWktSUp2MFpvb2ZmWXFJemNSUkY4akdFRk5sU01OOFVzYU9aNTA5VGpjX1UzTlpLeHA4eFRoZDJvT3dUNUxPbFFYVWl4dw?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxQbHJ1cDdCSmNJc0x4LUZfdlFaUEFLVlJ4Zm5oVm5GSE9JWTBPWXBINXhpWWE4bkJBUGpXV2ZsTnp6WV94dEg1bGlkYWIxNDlZTktwQ25JSUZaZXhualBSVS1HdWVNUmYtWVdhUTNyVHI1NXFtMnhSeC1Qb0tqQWktSUp2MFpvb2ZmWXFJemNSUkY4akdFRk5sU01OOFVzYU9aNTA5VGpjX1UzTlpLeHA4eFRoZDJvT3dUNUxPbFFYVWl4dw?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
-    },
-    "discord_notified": true
-  },
-  {
-    "timestamp": "2026-10-16T17:31:03.162753",
-    "headline": "Ryazan refinery halted processing at one primary unit after drone attacks, sources say - Reuters",
-    "source": "RSS_Feed",
-    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOUWF4d1Z5QlhpMUR3Y0JvLWNnVElGVUU2Vnk0ZHVvcUFLZzFFcWhEb184TmZVSVdzQjdoM1BuRS0zVWNtZ2owWmRPTklGNm4yOXN3SzBDanAzemJzVTVGRXBXYUtsanBLVGRqM3kwTndodXk0VkxJbUw5blhzRVNsNmk1SzBVc3YwTkpuLW5IMS1GVlJZcW05SmE3RDFYdThhVGpuWC1RSXVuNno3VTJYZkkwdWUyODVZWHJjQVdyLTlyeFlqU3l2d1Vn?oc=5",
-    "raw_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOUWF4d1Z5QlhpMUR3Y0JvLWNnVElGVUU2Vnk0ZHVvcUFLZzFFcWhEb184TmZVSVdzQjdoM1BuRS0zVWNtZ2owWmRPTklGNm4yOXN3SzBDanAzemJzVTVGRXBXYUtsanBLVGRqM3kwTndodXk0VkxJbUw5blhzRVNsNmk1SzBVc3YwTkpuLW5IMS1GVlJZcW05SmE3RDFYdThhVGpuWC1RSXVuNno3VTJYZkkwdWUyODVZWHJjQVdyLTlyeFlqU3l2d1Vn?oc=5",
-    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxOUWF4d1Z5QlhpMUR3Y0JvLWNnVElGVUU2Vnk0ZHVvcUFLZzFFcWhEb184TmZVSVdzQjdoM1BuRS0zVWNtZ2owWmRPTklGNm4yOXN3SzBDanAzemJzVTVGRXBXYUtsanBLVGRqM3kwTndodXk0VkxJbUw5blhzRVNsNmk1SzBVc3YwTkpuLW5IMS1GVlJZcW05SmE3RDFYdThhVGpuWC1RSXVuNno3VTJYZkkwdWUyODVZWHJjQVdyLTlyeFlqU3l2d1Vn?oc=5",
-    "is_anomaly": true,
-    "target_locales": [
-      "National"
-    ],
-    "discovered_sources": [],
-    "scores": {
-      "geopolitical_risk": 0.8,
-      "supply_disruption": 0.8,
-      "demand_sentiment": 0.0,
-      "opec_action": 0.0,
-      "overall_price_pressure": 0.52
+      "overall_price_pressure": -0.6
     },
     "discord_notified": true
   }

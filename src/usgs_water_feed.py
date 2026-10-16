@@ -31,10 +31,10 @@ USGS_WATER_VINTAGE_FILE = os.path.join("data", "usgs_water_vintages.json")
 
 def save_water_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time USGS water telemetry observation (Issue #293)."""
-    if filepath is None:
-        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
-            return
-        filepath = USGS_WATER_VINTAGE_FILE
+    fp = filepath or USGS_WATER_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(USGS_WATER_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
+    filepath = fp
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []

@@ -406,8 +406,8 @@ class BakerHughesDataConnector:
         """
         Saves or appends a bitemporal Baker Hughes observation snapshot to persistent vintage storage (Issue #269).
         """
-        default_path = os.path.join("data", "baker_hughes_vintages.json")
-        if (filepath is None or filepath == default_path) and os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        fp = filepath or os.path.join("data", "baker_hughes_vintages.json")
+        if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(os.path.join("data", "baker_hughes_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
             return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)

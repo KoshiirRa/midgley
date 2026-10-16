@@ -1,7 +1,7 @@
 {
   "benchmark_key": "geopolitical",
-  "last_refreshed_utc": "2026-10-15 16:51:44",
-  "records_count": 248,
+  "last_refreshed_utc": "2026-10-16 00:25:22",
+  "records_count": 377,
   "data": [
     {
       "date": "2023-04-27 00:00:00",
@@ -1642,46 +1642,683 @@
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQT2xRdFJUaDZpcGpQUm9qSUZyN1h5cmFnd0dlLVktOFVqanRsQ0UxSzI4MEl1YWRzLXVyUk04bWYtZk1HMUsyRmxzdV9HQW9nQVFhZUk0bFdRa3p2MVFtM3A0LU5MdUs2eHVTc3dPeEQ1YU5NR0V6Q2Q5VUREelVmdHhFel8yRUFVZmFEZk5VWWNUdzUxYnBwYkxFOFQwZ2NXQmVGZEdWZw?oc=5"
     },
     {
-      "date": "2026-10-15",
-      "headline": "Two cargo ships sunk in Strait of Hormuz as Iran ramps up attacks in run-up to midterms",
+      "date": "2026-10-09",
+      "headline": "Tanker attacks in Strait of Hormuz surge to wartime high as Iran tries to choke off oil exports",
       "category": "Geopolitical_Strait_of_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOTWt5dWE5MFQwOFNCVHdMb3Z2ZHRnMHczOG1QMEIyeW1ycXlFWTJnNUxOT0FTYzhwdTFMMmZhYjN4ZFVJbkNmS0NsdTJieWFLZ1RwQzU4WDg1MmxpdXlNLTNwV3BBZS1Gbk5wUDZ4Qy1mUG9uYU1FNEFyM0V5WlFISVE2a0IzX3U2N29z?oc=5"
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQLXQ5SXNEMzB0UFVEM09pZjB6S29PbXBPZWdwQ1VUei1iSkJ4RWx6d0pvOUhRVXdiVTZKeHUzUkVVSUE5bmtENm5OOXFrN24zYjhYdlN5R1VfckRfaGt3eXJlLXVNSFR6OE5lTTdWT19mRGVRNDQ5QTltV09OdXdSd2h6c9IBiAFBVV95cUxOeXViRmlFc2pYOS1vS3htNzF6Q0hLcEt1Vm1VUEJkb0NrWENIcFRtSXNiUDUxMk5DbFVQbXpBaTdsU25vajNhd3lQTW93bk05RGVWdlNkWFRtRkZxa1M5c3ZBTkxRWGxHOEwyM1dYS1hTczRJNjNZUk5MUXVGS0ROcWlYX0lzdkVD?oc=5"
     },
     {
-      "date": "2026-10-15",
-      "headline": "Iran says a ship sank after striking a mine in Strait of Hormuz, and other Middle East developments",
+      "date": "2026-10-09",
+      "headline": "Iran's IRGC strikes tanker and threatens to target ships beyond Hormuz",
       "category": "Geopolitical_Strait_of_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQQnpCTWlhR21RaWFXLXJlVTA2Ym5CcVlfZlJqcHZycC11QkN5UEtieS0xTEZBVlZEeHJ1TzM5NmhlNGUtTk5vYWEyVU50ZVIxbDdjVkxfeHFCZnh5UV9ZaTJsbWdrWFJNYlRSNFpjRmtkRWtZdHNOTE1EVkIxX0J3djZ6N0VBNDJ6NGpvRlZ4ZFVDRWIzdVozV0pudllQOFIybE1qdlhWZkJoeWJy?oc=5"
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQWlVjeEVmSlRydklvYWNpWW4zMFlnVFVUTmtzdDNiS3Z2dHd6MUtWdnZBWXV0Y0lXNlpfLWFtZlpDNkxsQ1V5VjBVZFhJNDZEdWRpMnk4WTRxNWV4V0dhdDFLX1M0WVhJWjl5Y0pzekhnQ0VqYlhObllEYU9WRWtaV3NUWEdkOTVnSkdlSTF0Z1E2Mm1wdE5LbnNrbTF6OEpHc3VCaEdvNXFFNk0?oc=5"
     },
     {
-      "date": "2026-10-14",
-      "headline": "Container ship sinks in Strait of Hormuz as Iran steps up attacks",
+      "date": "2026-10-09",
+      "headline": "Iran attacks tankers beyond Strait of Hormuz",
       "category": "Geopolitical_Strait_of_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMWFKMzFFcmxqYVdxcTVUYmZBZTZHejZpWTJmZ3o3Z3lFbnA0NTV4MkFlb1ZEMmRGQmw3MjJkc2RnTFgtX19YRkZOUDR4WXhNeWg5Zy1qV3FpeVpTVUo5QVBOVmJxcXVhc0NqandfT2ltQ3BseThmbG5oQTJhYUJ4MV9nM240c3I3ZG5wai1fY3ZIYWdpbGfSAZsBQVVfeXFMUHl0VWNMbEpIOXhweHBSVTdYdHNjd1V5a2NfNkJSdFk5UUV0R2lDSUtZV1BpMEM3aWxZOXlWRTBRRTNtVkxRcDZtYVFDdnA5X3RPLW4zTm42M0hzVFJYNGtoMWJHcjVGVlJ1a2Jja1F5SnFDUHVTYVFkYXRYTFFnbDd1REZsc0haTlNibWhxdTU0aHZCcjVYQ0x1Vm8?oc=5"
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPTHpvdlEyOU5Sdk1wZThacFU0dW56MTIzLTJKN1lydVZrS212dTJteVdHakpxX1VvYVIzdXFzcE12OUhhbDZNaTlzczJIMktDS0Z2c3dGaTNXRlpRSVR3dldvTUhuUlNJdUREVlptTWxiV1NYbkZXdXF5a1BiTGhxQWFrWHU?oc=5"
     },
     {
-      "date": "2026-10-15",
-      "headline": "Iranian attacks sink two ships in Strait of Hormuz",
+      "date": "2026-10-09",
+      "headline": "October Sees Near Daily Strikes on Ships in Hormuz",
       "category": "Geopolitical_Strait_of_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPNVg0eWh4OTZ1NG5IR1M1ZWJJejUxUncyYVVWeHB3QTdHaHYzUnRDOHBpaFpEZldsb0RNZG5SNVZDMWJIVUV6U0JZRVhLSmdtWEZfSnpGSDlXWVU1UlRRSF9wT0JSbktPRTRWT2dkazNCSmJoWDBaUl9wZEI3bjVpLUNZS2ZDWW9IQk9oUndRNU1qYUpHclhnUzhVYVU1RE0?oc=5"
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNaUZxWFlCRHBnbzYta2R6U2c4alJSM2RwYXZSR3B0R21ySXNNdlp5dFpKSk5DNHRzRFIydzd2N1dtQUJjNWlFcHpmaTB3dGtjbmF0S1k0c0JmcW5jcDkyR3B0S2twb1FVcE9qNUFHSFM0SVNTQzFoR1A0MXItOFE5T2stRDdQRVdCcTI0?oc=5"
     },
     {
-      "date": "2026-10-15",
-      "headline": "Gulf Oil Is Still Flowing Despite a Surge in Attacks on Ships",
+      "date": "2026-10-09",
+      "headline": "If the Strait of Hormuz is open, why are gas and diesel so expensive?",
       "category": "Geopolitical_Strait_of_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5FN08tZVdYdzRGSTkwbFNVTjdlRmd2RmxpVEdTS05JblktRVpZeElnOGFMajhWNDhmSlVBbGlPdmNEU2FPaG5KWjlPbTRxVmFFLWxWSzg0Q3ZVMUFEYlg0aklhYk1VNHFjSDU0YjlubXQxcXZaOFdJcXZPNXFGNjQ?oc=5"
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5SRkxoaHc0ZTdSVkM5b2s5ZHhXRC1sdFJQdkQ5NDEtZTJVWXNEbDRBbWdORExTNndyVDhSRjY5YmtDa3Vpc3Z3YVp0MG43YWYzQkVJVVYzSjRhdDZlaE1sQVlkWV9wVmxxTUZra214WjVwdUNLeXR0WDgwSVo?oc=5"
     },
     {
-      "date": "2026-10-14",
-      "headline": "Houthi attacks add new geopolitical risk to softening container rates",
+      "date": "2026-10-09",
+      "headline": "Red Sea container transits hit post-crisis high as carriers accelerate return",
       "category": "Geopolitical_Suez_Bab_el_Mandeb",
       "chokepoint": "Suez_Bab_el_Mandeb",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQUGl3cXY3TEpfeUNiS3NsYjV2czBJSnpZWlVodlItTzNJUENvemk1Y3dpNnJoWUo1dDBmWG1aZWxHM3hxS1JEZ0VoQkpDNmwtdFBUQ3ZvYy0wVHdZQ2p6elgzdFRIU0pwWW54MVE1NWxoa3gxWWRTSGVsMlp4Q0FwdGgxbTh2YS10YzhPTFlEaUFqMHN6QWp0Tw?oc=5"
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNdDRTaUNEUVFNN0tjWG1wQUs0V1RsS0tCVURNSm1Id29sSUdUN1hwZE9xU01nRHRSM1J1ejdLVHRncXZXRVlla0VjQ2U4NDVVR21oQzhadUhGM3VVVTJ2QUYwSzdZZTROT09KaTJQWVlFdzA3YV9XUHBSTTNxS2l1NExEc01kMkcxcWJ5RkpR?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "The Houthi-Saudi conflict is directly affecting African countries in the Red Sea region \u2014 and beyond",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOQnBha3VpVVVrYTg2Wi1WLVJUQjRPNzNyaG1EYklBZFZuQ1A2T0hxRDFTMWJycnZjVm0zc2Q3dXR1OVBHdWh3elVBMHhxLS14RU9fcVJ4WkdqUGVZd05iVHJYU3BpcmRnbTlRdkZkcXpKX2pYZ0hIS00yOG0yMl9LaXBTSjVnaG9LQmhmTGp3dVRfbXFFQ1RtTTQ2NS10b3c5WkdwRmFHcklDdmxOSlNkT3hYS0dRRGZBM0JpWWtB0gG-AUFVX3lxTE9XT2JMLVBaekkxTy1OQ0w4R2d0bnk4SF85RlBwNDMzSE1BN1M5TmZaUVRsSFJsaE1BYjBmTnZ1TVRieUVPbVZIYmRNbHZzbmRsVXJ2cExLUVBxV2p4cnB0a3BJUHctbVc5bWJHRUQ1ZWgyNGFmZ0tCMGs2eUZhbWhwd2FtVWVnV2ZwbDhEcjRTRGlGWDZBMTBwRWtwTFBxNVd4Y3NzdS1pUGdfcE80b0lNb2hKVFFMXzFRVHdpN2c?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Egypt\u2019s Yemen dilemma: Can Suez be protected without fighting the Houthis?",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNUlBvS3AtN1p0OWZGVWFGLWVTUnBmYjNQb2I5SEZGSzExTUxTTGFXbWlHUmFnRGhUck4wVGxTSXc4TXV1NFU4RkRqd0ZENGdQSThxMWpVVTFkUG5IeUVXcHhOMnlxN0RoZEEtb2hCZTN5TnBLVGFnUlZwTXJCMUFIWWwtSWpqbHNSZmlUcEtSdkI5TDNEQTZvalJxZzkyR000MXZ6ZQ?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Three tankers carrying Saudi crude make U-turns in Red Sea after Houthi warning",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPa3BvZ05Vcl9JODllVTdCek1GNTB5SFZyMHR3NmxfS0lRaDdCZVRMdFBNN1hvNHg4SkpxRmtzUjlyaTJ3RjdyRWRHTF9fUWZmZFZ2ei1hZ0ZQZmtuR0Njd3lBN2lpQWRQN1RRQ1lIUmZPV051b2hBM0VMdVdFZTY1RVJjVzNtMVZXS2VnLXgyQVcySkxxcFRFT3dVOGlicTZiTE9yOExoS0s?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Venezuela looking to sign 105 oil contracts by end of year-head of PDVSA",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNZi11Q0h2dzdNc1k0V0JHbU9lZ2RadENhM3hnM3E1VE1oOHVuYmJmM0d2cEhQUWVfaUFVTndUMGlXZU5XOW54US1OVTc5bm9CdlR2bXlPMmpuX0RfdzNlemItaDVQcGh5MlRDckFFeWtva09WSG9PelJtbTZucFhERjZaWDkzcTFkY2FfYUNmNV9YVGxuZ1ZfcndRRHNwa0VmaW1EX2tTYTF4SlVHNE9Zc0s2UE9fQQ?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "PDVSA head says Venezuela oil production will reach 1.5mln BPD at close of 2027",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPZlBzYXVWbEtuelEtbVcwc2Utc3p5Z3RBMmU5RlN4LVN3dFFMVVN3emdBQlI2bWZwSTREdUo2ZnI4Z0t0SWxkMGZocjZIS0ltR2trRGhYYzQ5SE54TXpnbEM1M280Mm45MU5aQ2ppUUhwY1Q5RmlYOElqNFNncFhueTZEVEVHRm9Xc0lNdlhrNU4yUG9NYnBMYzRpSW1JbkNTQ0lVNkQtNVRYVWRSUm1nMVZsS2I?oc=5"
+    },
+    {
+      "date": "2026-10-08",
+      "headline": "Ex-Trump officials find new jobs in Venezuela\u2019s lucrative oil industry",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOSGZIcm9mM2xlanI0Q1NQeXpScGVhbE5ycl9WRGs0NTFPNm9wSnYzMDJObUVwdVctZXJvUk1FcmR2MmRMZHg0aDJaN2xhSjg5S0ZuTi1mNXBzQlZDbE9kaFJ3d2hZdlFZSElOSDNRVkF1M2lWWmZLd3pNMUQ4YUtiRGVrZ1k0MV9FRnBPTGgySmhWZ0JXY1RPNlJIQnBjTEJXaUlMTEJXMFNKbTFyOGNJWDlySWVlVUhVOUxNNQ?oc=5"
+    },
+    {
+      "date": "2026-10-08",
+      "headline": "Venezuela Ends PDVSA's Monopoly",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9SUk81XzRQNzVFSUxVbTlvTGZUODktckFxZ0t5S3BkS0o1N3pJLXhraGczbm9GMlg5a2ZTcVZiTG0taUlXenJIeDZjRjJ1YWNHc3dPTjc2VHVSNkJqTTdlcHdMWW9qbFZRX0JYamxmT0N5SUpUYklRY3lPWFJZUQ?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "US hits International Criminal Court with sweeping sanctions as part of drive to dismantle tribunal",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "US Adds Sanctions to International Criminal Court",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "ICC prosecutor condemns US sanctions, says work will continue",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Haiti\u2019s electoral council drops rule targeting candidates sanctioned by foreign countries",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "US imposes sanctions on International Criminal Court, hours after former judge wins Nobel",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "News24 | US sanctions ICC, vows to end court on day Nobel honours former judge",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Iranian Network Reportedly Used Binance to Move $850M in Funds: WSJ",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Oil tanker explodes after hitting naval mine in Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBBUHBTSEE2RWp1Q2JER29qVzlWOTJ1RlRjVUd3YlB0enNMa1ZmOXYyTWZzVVRZSTdlMkhIaXJFNVlNcjIwdFBJSEFDcko0bFlocjl4U3d0RTE1LVRiN0QwVFp2dFlvcWt4dVE?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Iran\u2019s Guards says oil tanker exploded after hitting mine in Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNQk9TQ0lXdlVGdHh2aXh1dGFoV3ljUzVXN3Z0bnI1QUZRWDJFQjNvMDNpMjZ2YTk2RXU1WFoyTldQZkdZUWtnMmszUFlxUTNhTnZFcllJYTFmUmc3LURjWXJWVFZ6TllmdFV1VklpNHhDS05nREJaelN5bkpwWEx0bXBneWNnQVFpQldGb0xVMjJfcTdXSGNnYnJ4cUpFeE5Mb3VwWFdNaDBkcWptUGtHeDF3?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Maha Capital, Ballard Partners Lobby Venezuelan Oil Approvals",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBGQTgxbXZuM2NBSDVERkQ1cTNUMVlKM0VtTm9keWo1V2NJSXBQVW9feVlXaTVSYU5uVVI2bWswVmI2a0I1WmdsMnJtS1NFdC1Xa0J3OUxtdTJwd2ZkZWtIcEdXeHo1aFIzNnNqX09fWnp2M19YQmE3Wg?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Trump Administration Discusses Taking Stake in Venezuela Oil",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOUEFna0JRelltV2lsTTZOUkhrdi11aVdVejdiYll2MElhYi1lSHVsWDNBb0VTVVh3UkZocTBiYnJKdm12cDFZSW8tT3k0Y0Z0ZXBxWGd0NWVaUHZud2lsaDd6RVhQLWZULVdyQ0pabk9YNFVxTEp1T29jQlB3c01KeDRXTnZ0OFlYTW5KbHY2Mm9mSjM2bW42RHRxRUN2RDFicmdxbzBpbWg?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump Admin Sanctions International Criminal Court Hours After Former Judge Wins Nobel Peace Prize: \u2018Ban Transactions With This Rogue Court,\u2019 Rubio Says",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump vows quick end to Iran war as fighting in Yemen intensifies",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump and Iran agree on one thing. The US election calendar isn't driving their decisions on the war",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Houthis Bombard Saudi Air Links in Effort to Cut Kingdom Off From Rest of World",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump reaches Russian diesel supply deal as U.S. fuel prices surge",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Venezuela president authorizes SpaceX's Starlink to operate in the country",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Iran war live: Kremlin says Trump welcomed Russia\u2019s effort in Iran deal",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Trump's diesel agreement with Putin accused of contradicting Russia sanctions law",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Venezuela Wants to Return to the Days When Its Oil Fields Were Booming\u2014With U.S. Help",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "DOJ Scrutinizing Binance Compliance With 2023 Settlement Accord",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Trump Cuts Deal for Russian Diesel Injection",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "The ICC Is a Threat to America",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Supertanker explodes after striking mine in Strait of Hormuz, Iran's Revolutionary Guards say",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOSGpOcWdmNk5WcmRweGtHa2dFYTRpMWRpSWlfOGtabGFyODZTY2g1R2wySUt0MXFFbEtkQmdkUHFlaDFKNnRnZUdsNThHZms1eTJUSkJzWFRjczNmbmYyTXBwTU1ZeEJVLWJBczI0M1dJOVhpN05ULWdtYzBTUHJ6akNvemJKZkxnY3Bld1ppVWNqdElOQnBwNzhiUW53TnBnaHhpUkg5TmM2MkZjSzEwRjhPRHVER05lWTJwb1Q1cDhJU0VaS0REeTFXZGg?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Ship captains and crews crossing Hormuz earn so much they're 'almost being viewed as mercenaries'",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPLTdOMGpITUdOSkdpMFVLSWR4Tm9OUHJrd203RmtVVWx1aUxBd2xGUjRibDFzRW9pTXJQeU5EZE5LMm1PdmVoRFlYMTdWNGZlMDlRbzRNUWdkbFJIaTJ0Q2dZSl9HQnBzMW5wZHhfamw4bmFza0JFWFlSNGd5T2tBTVpiY3R0Nm5hb0Rkai1zc3U1Ujk3WU90WlVMRENkMlF1eV9uVTdLUWRvcl9XNnc?oc=5"
+    },
+    {
+      "date": "2026-10-09",
+      "headline": "Colombian Billionaire Jaime Gilinski Poised To Exchange Venezuelan Oil Field For Majority Control of GeoPark",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOaF81N3pvbUlEbG4tNkhpV1Nudk5lZFZjd0tLMGp1ZlMwXzd4ZDRJcy1RTE14SUV6TlVoTWgzVXdqSDRfazRLX1NhTEFHWDZYOXVudmhONGV3SXNIdm04c2VHdUtkaE02bDFzNURFT2xWTHEwRTV3aFZpZ0RZX25ZV1B6aGpCd2U5M3FqSkt6RTFNZWZPd1Z6NzBqSnhfS29IallpSDdnMVpyYk9ITnRBdmI4bUpwNjh0N1VqU3Z4UzVGNlZtN0FXbnNJRHMyaEdPTmNyWGVMVFE0T2xPZWlReDNhdFdfcTF5ZGgw?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump's Russian Diesel Deal Draws Ukraine Criticism",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Why is US turning to Russia for diesel despite sanctions?",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Germany sticks to Russia sanctions after Trump announcement on diesel",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump hails Russia deal to release diesel as midterms loom",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Venezuela authorises Elon Musk\u2019s Starlink to operate nationwide",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "US lifts sanctions on daughter of military-linked Myanmar businessman",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Saudi-led coalition says it\u2019s carrying out operation in Yemen",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Trump Asks Supreme Court to Revive Dismissed Hillary Clinton Russia Lawsuit After Nearly $1 Million In Sanctions: \u2018Troubling Trend\u2019",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "After oil increasingly left the Gulf, Iran is trying to regain its stranglehold on shipping",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE43VjFQRFkxRVVwaTRiTHBubTY3M19MS1I2RFZsbWxHakhPUlNfc0Y5WVFvQ2xrY3FaSTAycE1sVmU3QXhnZ1RRTGlndVNPX3MyVVplNXllaFpGN1F6MjMtUnkzRl9JVDNCcWhyaVhOc0otM3lsbXZuWGljYw?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "'Insufficent': Iranian regime rejects US response to conditions set to reopen Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1VTWktcjIxV0ZCYnE4TThGNFZBXzd0TklyUUtkY1VLMUNKZDcteHN2SEQ1QzZoS0RJUVNrQUsyM1lrUkZJMWRRdDFCZGk2ZjJ4VEloTkctWGozMXphTExQZndTWURIbnplZVE?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Iran sets supertanker ablaze after US takes out ship breaking blockade",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNaEpobHdGeDJGWEtYM2hfQzFFaHJVdnlObTFEMEJ2V3NDSi1ZbHM5YUY5bk5felVWN29FdENYQTAyQXVQdVhEZXZJeFh1LUgtc2dKSWZfU3lZeUZHQ2l4VzRpX0JhQmdzaGFDcnJaZzF4XzBTc29GRzZqcmxnOUZHNmh0Vk5nenh1UjVSQ1MwazhDcFNGZTNtU05MUnRQY3Y4TmxsRnBHZ21DYkdKMnRYZWVn?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Supertanker catches fire in the Strait of Hormuz, Iran says",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNSUJYNU5LQnduMHBrVVl2VlFsbnBib2VvVVhVT1BRUUd1MnBjaHl5Zy0wY1l1c2JEekFOaXZHZk9KWEVfWUZyRUs5Mm5KeGs5aElhWHZITW81WEJmUnRaSTU1OFN6OURTM1U2cXlrV1pyeU1LaDNmRlc1bVc3NEUyVUFiVnB0YU52OUJIOTNhT0J3ZTMtejNzaFlDMUFLanRWanp6S0tFaFNqbE1F?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "US military disables ship attempting to bypass Strait of Hormuz blockade",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQRnlBdzc1T2VIdlNCdjRBUkEwUXBHR1pBNnVpSVE4RnlCcDJYRFdLYjdxMFgwZVBsVW43Z2s3bC1iUUNRX1NHRl9OSmNITnYxMUFxcU56SlpJRWllbFRKNW0xZmJyNzlpcnJ5dkNiajRTWTN1SUZVY2NCVkxlYWh6UkZEVVd0MHNiUHJz0gGQAUFVX3lxTE9uZmNoOFlhUkdiTG5YSFlUOG1LZEJNOERjMWxfZDZTTjl2QWlNalpBdE9RVWw3ajhMdXppX2t3aGdNMU1kb3RBaW5sanBwSW95T240M0stUEd6Uld4T2ItcGRCN0ZSUDlsT2MtdmpneFNyem9GamlVQlM5NUJtNGk0ZG1qZndPX3pna2pUYmpCaA?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "India and the Widening Tanker Freight Squeeze",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPMTRXZEd1NllIV3M3TGhhZU1qeFc1SGxGaTF1R3BFaE85ZlZwczljRlFoaFk1ZmQ3elh4YmxZeG5SaUZmV3E5ZVMzRWViZEdLM3M5R0EwY0Yxdklia0pDc0ZaV0RoX1JWSS1hYXNMeTVsbV84ak5qbG5vVGM3SHY5anBtVU5wWVR4Tmpj?oc=5"
+    },
+    {
+      "date": "2026-10-10",
+      "headline": "Red Sea War Insurance Costs Rise After Houthi Blockade, Sources Say",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxON0NERGpwbGs2bFVWUG04cXBHQkd5NEptTkFmLW5lSnBwdko0UEVNMnpFUkd2UFBVVGJzUmpCX1hmbWtyNnlYWmp4Wm1aVkRGZHhHT082a29fSlduT0VncmQ4RFhRR0kzMU9McmR4NzFfZk5BR3lScEpoTDZ6cko2QlZTeGNackZSeDdPRVd1TDZOQzl5LVFVSzRydWpuQQ?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Venezuela has 82 days to close 44 more oil deals. Can PDVSA do it?",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQUE1HZ1lNbWZqdEdSQzk4M05ORE1nOFlFUm5qdHQyd2IzSHYyNGl6R0dHYW9mODlfRmQ5RlpRNzZiSjNVTU54Sy1LQ0JieDNJaWxnS2h0NGRqdlZfcWQxSGxXS3d2QWVHV3JpbDg5VXBfR0dZSVhhVGN5QmhkWHpYNHVTWjN3WlN5R1lzSGp1VllCMTBKbTJmbFJQYW5JcGoyRU5PUlJGLXZGY2c4bExZN0RxOA?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Venezuela Targets 105 Oil Contracts by End-2026",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOWHdlemRlM09kMUlWVmlWOVpOOElmZ0NFOEE5UVJPVmg2SmJBcTFkNWJsX3FmRWY1a2NmSnU4Z1VjaGU2Q1dVeElJbXZ6WnRCaTRPeHZLTXVsY1c5WW1lQ2ducE1NRU1uMV9ZMUlIVmltN1plQ0lvbVJEZXpuckVNT2FXOWhZbDJZaGVFdzdrTWl2MTdl?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Fugitive businessman taken into US custody in Venezuela bribery case",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNbDFNMU9kbWlDVG1BdDRPMDJHRjA3WE9hSTFzNExUVkRRWUVERHV6Zi00dTBzWU9Ed3Z6bTNRSnJ0VjEtSGVIWDZLOEZzOC1TMmxnaVd2RTRtVTV5b3ZmTktvWEZKWDhLRDNwYU1yQ0dGSVUtclJtUzJ1RXEwSDRrbWMxV1FpYjc1N21MSzQtM1V5cnQ3T3M0S3FUSE9ibGR0MXdJSHlqOTBCTlo2aVFqZVZ4YXVSYkhqSzFv0gG7AUFVX3lxTE1sMU0xT2RtaUNUbUF0NE8wMkdGMDdYT2FJMXM0TFRWRFFZRUREdXpmLTR1MHNZT0R3dnptM1FKcnRWMS1IZUhYNks4RnM4LVMybGdpV3ZFNG1VNXlvdmZOS29YRkpYOEtEM3BhTXJDR0ZJVS1yUm1TMnVFcTBINGttYzFXUWliNzU3bUxLNC0zVXlydDdPczRLcVRIT2JsZHQxd0lIeWo5MEJOWjZpUWplVnhhdVJiSGpLMW8?oc=5"
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Houthis show military reach with deadly missile strikes on Riyadh",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Saudi Arabia vows response over Houthi \u2018war crime\u2019 attack on Riyadh airport",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Trump says he is 'going to look at' joining Saudi Arabia in the fight against Iran-backed Houthis after deadly airport strike",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Riyadh airport attack another dangerous moment in already tense conflict",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "The Cameras Designed to Keep Us Safe Are Now Being Used in War",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Yemen fighting expands as Houthis attack Saudi airport: What to know",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Fear and uncertainty for civilians as Yemen\u2019s capital comes under attack",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Yemen's Houthis renew warning over Saudi airports after deadly Riyadh attack",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Trump, Zelensky clash over diesel deal as Russian strikes kill 21",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "How Ukraine uses precision drone strikes to hobble Russian oil refineries",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Middle East crisis live: Houthis warn passengers against using Saudi airport after deadly attack on Riyadh",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "'Going bankrupt': Iran shopkeepers struggle as war dims demand",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-11",
+      "headline": "Trump urges Zelensky replacement as diesel row rages",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Iran sets crosshairs on \u2018US-UAE\u2019 oil shuttle out of Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxObWp5UElEV2piTFkzc3NRUTR4NDJfM0trT2wybWw5U2pkeGdpdlg2NHVCN1lCZWN3MGIwX3F3OWtDc1lwOG1LQmhENVVPT0s1T1FGZjNwNDczSE9WczU4SkN3QlVVRTlpOFcwTGp0ZFU4ZjRLcG5HRm1tOTdjUUMyOXZDLUlFMUgzZlhzTlp1LXN2dDhycE1lS1pGYXNlaTMtLTNiOFZwcFR3ZkNwaVJEUdIBtgFBVV95cUxNLU5pTjR5VVVpNEZJYjRfVVRuZ1lTZ0Y5OWd5LXFocDdJc1YyNFc4T1ZWMVRhTWxIUXhxNG5qQUtoeWdqdWtxM2J6SGhIQkVDMk1iZ0o5U2tCZmZRcC1tRDNkRUFBcUxFRGRfWlVPTU9jVjJjQ2RDNDNrRWpvbjREYklOVnEtZlpFdlhkUjZHeVlFWmpSWnNNd1NYRXZ4NUg0bDJVN2NFeU5RTGFNLTRvT1BHV3Brdw?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Iran\u2019s IRGC says 3rd \u2018offending\u2019 supertanker hit in Strait of Hormuz in 2 days",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNdWxWOG5jQVFENjY3b1JfdV9XdE5ELVJQX1NVRGpQTGwzYWJNVkl3eWVrWTJ4R0RWRkRTUEJzeXNhSTFaTjEzQ3EwZ0xhUTZaSjliOEg5QmpzVEtVamoxSVNoYlh5aXZzVElrcmtSUzRCcWNBTGd6OGpfcTdQQlFNQ1RCYWEydDF2OTZvMUhMeWMya1h1MVZyb3ZjVk5JQVg0a2U4RFE4aTlpVWFvaHlOeFY5dmswNmFETjlBcHI3N2pPak1iamdj?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Iran claims strike on Adnoc L&S VLCC in the Strait of Hormuz",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNVVQ5Rzk3ZEtmMnhjZm12bG5FbUJKem5xQl9zLTVBSUpfSXFUcEE0dm1yWlhZSXlyZE9XMmlKbU5CNEhqb1ZON2dnc2EzaURPZ0RtT3lkOHpYNXlLamNtTGNSQmMyM0tvYkF2OWJ6M2JHQUM4V2VqOWt0UDZ2OFdzcUlwYjNsMDc5RmtDS01rRC1fcVVYV042U09idFlySDEtVkIzX3lVbDhoa1RLdkJaTg?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Iran hits tanker in Sohar and two in Hormuz, US disables bulker",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNU255S0ZwRHJ6dTY1RHlYLVdxNDI5SlZ5cU5sVUV4RWtjTXp6NG5JZnlzazhDT24xWHVTTC1TSnItX2tKZEVGa3VnbWp0MG9PUERvQm5BUGUzWTFMNmR6cnBoQ1gwQ2pzWE44cUtlVmRWdFYzOVdLV2NER3ZXdlZiVlRDWE1GMkJkdWFXaFY2LWNUZlRoTXhfSGhYZkQ5SGFReGZLbUEzVXE?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Oil Futures Little Changed as Market Weighs Export Recovery, Shipping Risks",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxONUtscjBad2NrYlFpckhZRUc0SUFnc3YzYjhqenRqaHlUUHE5Z1BpVGJlRjZWaE5BSzZxUWtoNnFoXzg1VVd5QlNWY3RMLVBiUW1QUXNaTUFBMExBMTNEaXQ3bU13QnlfbUJScW5yNUJDQTJ2SUJXMmo3NXZyOTBtb2FNOThkNjc1ZlgwU3JGRkRSclhaS25UQjk4QWNiZ2Y2bkpiMkJidk1LakNnTmNodTVYN0Q0cTg?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Another Hormuz? What to know about the Houthi threat to the Red Sea",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPek9rZ1lJTlNXenlqS0tKUDZqaHpSRTZXT0RTRGVkM3NWRzJsWnI5bTAwQzVWWmdjYlkzekZWTEwxR2RTcUxnb2ZLSVF2QjZBS1F2T18zcEhuMkgtdzRsMkU2clo1V2twOFhqMURSdC1PUGxXaURLa1loN2FzVlduZ2lfTGdSY0VkRGNnS2Yzem1wNW1wUXpZM0FCeTdiZVZQMTlNVzdiekpneTFhYWhza2VB?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "News Shippers stressing over risks from Suez Canal and Red Sea transits",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOdjQ4azJ2UWFoRWpuYVR4X1RKdHAwVkF1azZHX3IzYXNYSXBRbURiWjdkSzl2SEpHdzJIU2ZwVkJPSGFoZHlpclhGVE9FcGRxeWFpTU9hbGl1NktDcHFSU0l6Z09FOUZXTlpVaWZKdFBSazA4LUk5X0pjSmNPQ0hLQzE0dUtkSmpHOW5TRlFTdm9Nd0ZESnc?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Yemen\u2019s Houthis Ready to Join Iran War if Needed, Raising New Shipping Risk",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOeFJUdEstYWRWaXFweFNEbFNDZ3BhcXh6YndhZVg1QXJnbXFFSmhIbGQyLUpySHc5c2xyZUtEMGdIeWh4S1puZDBBWllGNVk3ZzhycHVrekMtaE9hZkF2VmRXbjJDWEp6Wl9QMUtqcjRqQ3dtdlUtbjI1dGlzTXVraVVCMUR2c0psMnZRcWhRVWhUa2Z1VW9TM0FBMGpnMmZYbHNVMTVn?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Dominican Republic and Venezuela to discuss direct purchases of gas and asphalt \u2014 The Rio Times",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQTnFCQ1dvSUpRNEx5VHFzODJpckoxYnplSmZ0andSTkVfWXFYOXc5TEtpT3AzT2UxQVJoTVNPRWRYQld3NUdFSldCYm9tMGpfYjNpdzJUbThPaDdGU3pmVlZWMUFaMFU3TmwtVUxOekRld3ZlWGdjV29ERXluNHdhWGcyNXh2ZWtNUk5qQ09lNm5YRHdxZWtUQ2xwdVVpQ002SG1UcENZRVpZSEx4RU9z?oc=5"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Subeca Announces Backing by Burnt Island Ventures, Cycle H2O, and SUEZ to Bring Flexible Connectivity to Water Metering",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Saudi Arabia Fends off Fresh Strikes After Deadly Airport Attacks",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Security incident at US-run airbase was almost certainly directed by Iran, UK prime minister says",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Which war is having the biggest impact on diesel prices - Iran or Ukraine?",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "UK PM Burnham says Iran's IRGC likely behind RAF Fairford incident",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Zelenskyy says Russia continues attacks on Ukraine energy targets, violating Trump\u2019s ceasefire claim",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Iran-Saudi talks on Yemen\u2019s Houthis: What\u2019s in it for Tehran?",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Why are the Houthis striking Saudi airports?",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "What is the diesel deal between Putin and Trump?",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "\u00c1lvaro Pulido: US detains man accused in multi-billion Venezuelan money laundering scheme",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Why are the Houthis attacking Saudi airports and how are the missiles getting through?",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Hormuz Oil Flows Drop Amid Volatility in Region",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Saudi Arabia faces new missile and drone fire after major attacks on airports",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Iran shifting tactics to step up attacks on shipping before US vote, officials say",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQOXl4Z2E1ajJabkV2V0d3VVN4TE4xZVdXU0xjY1FwX2QwNzVpSEZ2UUdWY2d2N0w0TEZCXzRFR2oyZ3l4MlZkMER3cDZtOFRMc2p4VzRSWE1OZGdJaHBvRlZieVJ3Unc4bXEyRHFvalF4MEkwTmduUEFtV0lBX3NZS2Q0M2hoSkozeWFNMS02MnF5QmNveXNFNklHVktxYy1RM1BRcHlSVm92aWYzRnJpNTJvVWYtemNjbklpM3Jna2t0bUIweUV6VQ?oc=5"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Hormuz ships pummeled with worst attacks of the Iran War \u2014 as oil flows plummet",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPbDRzVVN2aEZGcW5ydngyVTFMNFhpQWNkV2RNRkFtc1lidWVQM2pjbHNWTGFCVWRIR1BtSndXVHBHaHV5b0NwNkxoOVBlU1B5SVo2RUs0NEpRUnpiUnNjUnJ4ZWQ5WFNvcEJNSUxaNTBqVWpDRWpWcks5b2txNEd4cjVnbS1YaTY2cHBycU8tSlpWSWZUTEVyckQ4VHJtcDZ0VEFxdFdXN01qTzJYXzdqUjhnc2lDU3B4dGE4?oc=5"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Iran increases threat to Strait of Hormuz shipping",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9fRWdpaXVOblJVWUNoZFVBRkl3VjhucjRzQi1MdncxZGlBLUEtWXFETFllZmdIME5LWlR5dk8yRzh2Z05KZ080clBuaWNFMEx6alZEUlFwRjBueFYyc2NYZ3pGbzR3OVAxM0tZ?oc=5"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Iranian attacks target 6 ships near Strait of Hormuz in 1 day, highest since war with US began",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOOGxibXEtZ2FFRTM2RGpqU0FpNTRfb3RLakt5UENVc0pzUGNTWFl3dVA1ZDlFYkUwQWpnN3dCMkJuT0NIMU1JWkNrWkh1UUczZkE2M0Q4R3pEc3lwN2Y5QzdEQXdJc3RzUVBSOFhDbUdkZW5RZnJtREQ1ZUlmLUlNMFhRMWl2T1Z4NXg1SkJFZnY5NmdPVFE1TlN0RWFDRVNoSkhGOXJfT2JseGxtY1c4MW9lbzdmcjcycnh5VDVUNG9GallPMjQzLU1JZkxWNmluZVg1Rw?oc=5"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Hormuz attacks spike after US airstrike on Iran-linked tanker - Al",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQOWpCTkxOYVBYY2dmVmkxZ2NiamliZnUwRTd2bE9NVnduOFh2UjAzOHpWZXJpUy1pdHVWVC1wLVZPNk12RmZ0TWI5eDRwazB5YVNrTkdmUk9NQlZnX0I1ZkNyVUVaYXhLaklsMmxrUnh3R0gxNXFNLVFKYTZZMjJJQXFBOWtlampXbG5MSW1kZXM2UWVidTlORXQ2OGpxY3oybmJlNWZn?oc=5"
     },
     {
       "date": "2026-10-13",
@@ -1691,11 +2328,249 @@
       "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNa2hFNU5pa2s3V2ItYkVmT0xiNWdRaUp1a2lrNWJabnB3NEhkd0pfRnpIN0lRcWhrY1A5MEZrSHR0MkVqczVXZ0REdElmMlhHSElyY1dWcUxadVdSNGVwbTI1RnFmM1NxSDVTVDhWMnZ1XzhmZjNZTUVaamdhemdDSjdROHdLZnFaVkFLWWd4Z2gzRG5mbEY5ZXNiRWxTWlZvVC10QXZ3?oc=5"
     },
     {
+      "date": "2026-10-13",
+      "headline": "Tankers Stack Up as Venezuela Sells Oil Faster Than Its Ports Can Handle",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOSmJNVFdRQzBfblhNSXJEcGFiaDduX3hFWHVHaFVyeTRIcDlIV255cDVsczEyLVpKUU9TQmxOOS1rYzJBZ2ZhSGFVRzVFSnU0OUxNc0Nfal9qRVl5QkZkYTFjc19RMTZKbmtYb2Nsd0pKaHR1NUZvTmRxUURuQ3A5U2owcEtfMnRGN0NaWDg2VEV0eUhad3pKX0JVYmduemZJTm9WMzZB?oc=5"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Iran sees \u2018false flag\u2019 operations after UK blames IRGC for airbase incident",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Iran threatens Gulf data centres: How exposed is the region\u2019s internet?",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Crypto to Crude: Coinbase Billionaire Sees \u2018Superlative\u2019 Opening in Venezuela",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Deadly Houthi attacks in Yemen\u2019s Taiz as government forces advance in Marib",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Gulf oil production rebounds ahead of increase in Iran war hostilities",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Chipmakers Under Pressure; Saudi Arabia Intercepts Missiles",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "France seizes another 'shadow fleet' tanker; Russia decries 'piracy'",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Houthi Attacks Intensify Threat of Wider War in Middle East",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Spy chief says Iran targeting military sites, suspected plot at RAF base 'not unique\u2019",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "MI5 chief says Iran is targeting military sites and suspected plot at RAF Fairford is \u2018not unique\u2019",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Ships in Hormuz strait hit by worst spate of attacks since start of war",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "\u2018From liabilities to goldmines\u2019: refineries eye record profits from diesel shortage",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Diesel deal opens way for more Russia-US cooperation,  Kremlin envoy says",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Iran says it\u2019s \u2018counting the moments\u2019 until it can attack American warships; Saudi Aramco facilities attacked as Houthi attacks escalate",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "The Morning Risk Report: Bank of America to Pay $1.2 Billion to Settle Violations of Money Laundering, Sanctions Laws",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Saudi-led coalition intercepts Houthi missile launched towards Riyadh",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "IEA warns diesel supply crunch to extend into 2027",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Iran's central bank governor dismisses claims of economic collapse amid US blockade",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Stocks Waver Ahead of CPI, Bank Earnings; Aramco Hit By Houthis",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Bank of America Results Hit by Weaker Trading, $1.2 Billion Penalty",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Bank of America plunges as Q3 loss widens on Treasury Department's $1.2B fine",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Iran steps up Hormuz surveillance: Attacks soar, oil flows crash again",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Iran adopting new tactics in Hormuz ahead of U.S. midterm vote - Reuters",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Venezuela\u2019s Machado Tops Poll as US-Backed Negotiations Resume",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Dangote refinery extends IPO: Plant has reshaped Nigeria's fuel market",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Gulf Oil Is Still Flowing Despite a Surge in Attacks on Ships",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5FN08tZVdYdzRGSTkwbFNVTjdlRmd2RmxpVEdTS05JblktRVpZeElnOGFMajhWNDhmSlVBbGlPdmNEU2FPaG5KWjlPbTRxVmFFLWxWSzg0Q3ZVMUFEYlg0aklhYk1VNHFjSDU0YjlubXQxcXZaOFdJcXZPNXFGNjQ?oc=5"
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Oil flow through Strait of Hormuz hits 12M barrels a day \u2014 defying increasing attacks from Iran",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQQ2VVSXprZWZkSjNMV1dVZVRGTzhPU01UUlptMkFKS2VxWXlfWHdfVnVocTJpQzYxZ1d2Nm9IWWF2c0ZsQVBBMTV1bFJUeTBENjRRQzdMUzlWSnFhcWJtS09HWlhyb01sWTl0N0U5SUt5dmhUT3o4WUZQTU8tVi1ORnhVRE9sOXlXeDhoZDAzRWtDSGNyMlVFYUh4X2tqbVZ4WF9zWVM5QmkycFhWOTlPVDlBUElDVWVQdUR2SnFEZmF5UQ?oc=5"
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Viral footage shows iPhones floating in Strait of Hormuz after Iran sinks Singaporean cargo ship",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBaRWtja3pid0YxQ05JMHB0NnVVRFYyRHNKc0YyNkd3akRJTTBvWkVEdFhSMzAyemJHSXNPZzkybEZ3NS1Hck1PV0JER3hidTBoZDkxVEd3?oc=5"
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Two cargo ships sunk in Strait of Hormuz as Iran ramps up attacks in run-up to midterms",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOTWt5dWE5MFQwOFNCVHdMb3Z2ZHRnMHczOG1QMEIyeW1ycXlFWTJnNUxOT0FTYzhwdTFMMmZhYjN4ZFVJbkNmS0NsdTJieWFLZ1RwQzU4WDg1MmxpdXlNLTNwV3BBZS1Gbk5wUDZ4Qy1mUG9uYU1FNEFyM0V5WlFISVE2a0IzX3U2N29z?oc=5"
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Container ship sinks in Strait of Hormuz as Iran steps up attacks",
+      "category": "Geopolitical_Strait_of_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQMWFKMzFFcmxqYVdxcTVUYmZBZTZHejZpWTJmZ3o3Z3lFbnA0NTV4MkFlb1ZEMmRGQmw3MjJkc2RnTFgtX19YRkZOUDR4WXhNeWg5Zy1qV3FpeVpTVUo5QVBOVmJxcXVhc0NqandfT2ltQ3BseThmbG5oQTJhYUJ4MV9nM240c3I3ZG5wai1fY3ZIYWdpbGfSAZsBQVVfeXFMUHl0VWNMbEpIOXhweHBSVTdYdHNjd1V5a2NfNkJSdFk5UUV0R2lDSUtZV1BpMEM3aWxZOXlWRTBRRTNtVkxRcDZtYVFDdnA5X3RPLW4zTm42M0hzVFJYNGtoMWJHcjVGVlJ1a2Jja1F5SnFDUHVTYVFkYXRYTFFnbDd1REZsc0haTlNibWhxdTU0aHZCcjVYQ0x1Vm8?oc=5"
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Houthi attacks add new geopolitical risk to softening container rates",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQUGl3cXY3TEpfeUNiS3NsYjV2czBJSnpZWlVodlItTzNJUENvemk1Y3dpNnJoWUo1dDBmWG1aZWxHM3hxS1JEZ0VoQkpDNmwtdFBUQ3ZvYy0wVHdZQ2p6elgzdFRIU0pwWW54MVE1NWxoa3gxWWRTSGVsMlp4Q0FwdGgxbTh2YS10YzhPTFlEaUFqMHN6QWp0Tw?oc=5"
+    },
+    {
       "date": "2026-10-14",
       "headline": "Container Shipping\u2019s Red Sea Comeback is Outpacing the Risk Warnings",
       "category": "Geopolitical_Suez_Bab_el_Mandeb",
       "chokepoint": "Suez_Bab_el_Mandeb",
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPVV9wRGc3RWI1MWRGY29HNFNWQ2dVNHlWelpXMWpOU2tWdnNHd0w1SjNBNUxWelV1dktGVzRkQ1FUQVg0YjAzcmdLZ20zcUtQQmdQTldzSmRxc0dXZXpRWkNPX29vU3FFUkdOb2JBM0kwMXZRS3pncmhlMGVNeFlsNmpVNjc0VlJsb2tKR1JOS1lxQUF6ZVp3ejNoYXFvZDZwU2p4bFk1c1haZ1FXNFdIVkNjb09hX0s5eDZybEdn?oc=5"
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Red Sea Brief - 15 October 2026",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNV0tCdERSVVAzcHdRcHQxU25vM2lrZ1I3cDU1OXdiUkVTMVVxYm1VS1NNWVIxMTl4dnpqUTJ6WmMwV0NSZVpkWTVoYUFwXzNMRXdEdEZuZWpUb3ZlVGJNWDd2MlRvMGJCNFRpYVpIcVVYMmQ4cnZZUmU0UlR5ZTZEeTFOcEdVMmRiZ3Fr?oc=5"
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Trump Announces Sweeping US Grab for Control of Venezuela\u2019s Vast Oil Reserves - What This Could Mean For Canadian Crude",
+      "category": "Geopolitical_Venezuela_Orinoco",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOYzkzVjNXTFNkVG1scG15eWtRWVlSMkgtdjZ1TGZQSm1tRkdUZ28zcDJyek5NVjJQU3FGT1QyWjl2WnJWanBQT1FHMmhicGRvejNBcWlkb3MtSllGSkNseFhzWGIxQWRhUEdWZlZsay1WRzBqcmZCWjNtRHktaFhwMEFfeWFZQTZ1M3hzSE55TGVramZOMm9jNUprdm9IRGxubnY3S3dib1JCUE5XZnFWTzJIdjJBX0l3cWlyYQ?oc=5"
     },
     {
       "date": "2026-10-14",
@@ -1705,39 +2580,67 @@
       "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQaFBxWmtSblctd25PaXJCUl95cTJjTHpRdDhxUjE5VFcyOXhIdU1UcnhZRXk4VTg5YjQ0amFsZEpBcjNuZEJXSUwwMXN2QUdhVXV5YlNpX2lRX1BNMkpxNldrNi04ZzlESDBZMVlPS0xjMjR1Z2tacG9oV1E3WFpTWHh1Ti1BaHAzdlA3b0VWek9UTVNJUGJv?oc=5"
     },
     {
-      "date": "2026-10-14",
-      "headline": "What\u2019s the Status of International Oil Companies in Venezuela?",
-      "category": "Geopolitical_Venezuela_Orinoco",
+      "date": "2026-10-15",
+      "headline": "US-Sanctioned Tycoon Strengthens Hold on Zimbabwe Ruling Party",
+      "category": "Venezuela",
       "chokepoint": "Venezuela_Orinoco",
-      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQczJLZGFLbldnVWRFM0hpVS1qV3RGc0RMUDN1VXNtRGJVT05EYzA2Nm5JYkc5RUltSlc1Z09Xb0xxNTBjdDFWWWIwQ2xXWVpWUEYwSFNiS0ZZNEtuSEwwVUFQWWZwVkxXci1ma0E3RHlVMktoeVlmbWdHc2VKdWwwekM5R0ZTcFhMalVqeEdDdlNMTFhhNFE?oc=5"
+      "url": ""
     },
     {
       "date": "2026-10-15",
-      "headline": "Iranian strikes sink two cargo ships on Strait of Hormuz",
-      "category": "Geopolitical_Strait_of_Hormuz",
+      "headline": "Gulf cost edge keeps chemical buyers hooked despite Hormuz risks",
+      "category": "Iran_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNRWJQcjNrRWJuQ05vdkJjOUFpUTRIVzhYNEFmUnZpRkpyRnh5dHpad1FlR3pPanRualIzbXB4RG1VYXZWN25RUVd3S3dKcWIyVUkwQzRQbmlmdjliMFg5d0xHN1ZSVFB0QW9QdkMwbDFlN0g1S3ZKcW5vU3Jqa1EzN2JLRnZlem9DWnJZYjNnbE4yMElBRnRnN1Fza2tjbWlRVS11TU1OMUJ1RWR4dXpzQlp0dFA5Z21oTG9xQ2d30gHDAUFVX3lxTFBoeVYzOURaY25GZU1xa0hsUlhpdm9vT2xfdW1IN2xMUERmcDBiV3BRV05WRE9CVkhyMGszVXpkVWdjOTdZM3ozZU12VDRybTBuN3FxWFdVTjBDRmRpWlppaVE3aHFFRkZnTkFmUU9MX1NiTGlBYnd0ZS1uU2lZOW5HVUdLcnlyR01EMVRJTDhBZUl2dTNrMllrYjk0a0pTc0ZqLWlQWldKSjBvcTdNQnZidGZsc0txZHhDRkxPUGdxeE5yVQ?oc=5"
-    },
-    {
-      "date": "2026-10-14",
-      "headline": "Venezuela Condemns Interference in its Internal Affairs by Uruguay\u2019s Foreign Minister",
-      "category": "Geopolitical_Venezuela_Orinoco",
-      "chokepoint": "Venezuela_Orinoco",
-      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNZHd2djhnYTB3TzJ5NzVaSGlQaks4anNBcGxLcWtYc0hISGdLVDVzYjNmZGtXZndVdmpkWGRKeUhWdGRYQjJvdlNzVTZqbjI5X1hrWGt5a1ZWUXJWRk9MdEhqcGRzZWdDeTFydzlvQllGLWVJb183VmRVdmIzSEhpVkZ0WW5zczhld0xkZWtYMG0xQ0hHMFRINkVfa2l0end4bnlFdzg1ZHJvU0xac3pfU05n?oc=5"
+      "url": ""
     },
     {
       "date": "2026-10-15",
-      "headline": "Iran\u2019s Army Says Oil Tanker on Fire in the Strait of Hormuz",
-      "category": "Geopolitical_Strait_of_Hormuz",
+      "headline": "IMF says African economies performing well despite shocks from the Iran war",
+      "category": "Iran_Hormuz",
       "chokepoint": "Strait_of_Hormuz",
-      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQSGhGYXU5R3A3QURLVnFJel9QbEczUC1nS1ZVcGZjenRMaTROTWl1aHhJeG5ZdFFmYnhOZnFrMzBOV08tQWlFM0J2RGQtTDBqZEs2THhJQkFzUnJyT1B6VXJMeEZFVTVyanZxZm1KbGppSjJ1YWk3RHVrdVNPZFVKcjRpcTNGWmt0bGVtRkVCZ09jbzQ?oc=5"
+      "url": ""
     },
     {
-      "date": "2026-10-14",
-      "headline": "TRUMP\u2019S VENEZUELA OIL DEAL: A Strategic Win for America, but is it a Good Deal for Venezuelans?",
-      "category": "Geopolitical_Venezuela_Orinoco",
-      "chokepoint": "Venezuela_Orinoco",
-      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxONlEzeVVJclF5cHdXcF9yY01KMVdpNnlINGRua2NvQ21yZmozVU9pTG5RQTczMHQybDZnVGYyNXNNcHc0ZjBkZEYxMWZMWnZxbzRXQzBJbXJvc2tIeEZwV1Eyd2l4TjBMYXZPU2lSLUF3bDhlY3NyczNxbFVxOGxVVnlXSUpDbkRuTXNMSTlSb0NLUmR2NVlkVE5mZzNQTXZLcFlRdFJQUDc4WEdRUFFXbGJUMWNlVFdXMUF2dndR?oc=5"
+      "date": "2026-10-15",
+      "headline": "TotalEnergies Sees Strong LNG Trading Amid Strait of Hormuz Tensions",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "US-Iran stalemate: What are Trump\u2019s next military options?",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Iran\u2019s deputy army chief warns ships not to attempt Hormuz crossings - Al Jazeera",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "The Morning Risk Report: Debanking Probe Finds JPMorgan, Banks Cut Off MAGA Sellers and Democrat Groups",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "Donald Trump claims \u2018Iran war will end very soon\u2019 as midterm rallies heat up \u2013 US politics live",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-15",
+      "headline": "EU postpones summit with Gulf states amid Saudi security fears",
+      "category": "Suez_RedSea",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
     }
   ]
 }

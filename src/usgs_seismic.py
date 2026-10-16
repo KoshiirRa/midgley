@@ -32,10 +32,10 @@ USGS_SEISMIC_VINTAGE_FILE = os.path.join("data", "usgs_seismic_vintages.json")
 
 def save_seismic_vintage_record(record: dict, filepath: Optional[str] = None) -> None:
     """Persists a bitemporal point-in-time USGS seismic telemetry observation (Issue #292)."""
-    if filepath is None:
-        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
-            return
-        filepath = USGS_SEISMIC_VINTAGE_FILE
+    fp = filepath or USGS_SEISMIC_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(USGS_SEISMIC_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
+    filepath = fp
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []

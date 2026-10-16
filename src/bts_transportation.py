@@ -63,10 +63,10 @@ def save_bts_vintage_record(record: Dict[str, Any], filepath: Optional[str] = No
     Persists a bitemporal point-in-time U.S. BTS observation record.
     Eliminates lookahead bias in historical model backtests.
     """
-    if filepath is None:
-        if os.environ.get("TESTING") == "1" and os.environ.get("TEST_PERSIST_RECORD") != "1":
-            return
-        filepath = BTS_VINTAGE_FILE
+    fp = filepath or BTS_VINTAGE_FILE
+    if os.environ.get("TESTING") == "1" and os.path.abspath(fp) == os.path.abspath(BTS_VINTAGE_FILE) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+        return
+    filepath = fp
     try:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         vintages = []
@@ -151,6 +151,8 @@ class BTSTransportationConnector:
             logger.info("Loaded BTS Freight TSI dataset from lookup cache.")
             df = pd.DataFrame(cached["records"])
             df['date'] = pd.to_datetime(df['date'])
+            if 'bts_tsi_freight' in df.columns:
+                df = df[df['bts_tsi_freight'] > 0.0].reset_index(drop=True)
             if start_date:
                 df = df[df['date'] >= pd.to_datetime(start_date)].reset_index(drop=True)
             return df
@@ -257,6 +259,11 @@ class BTSTransportationConnector:
 
         # Standardize & compute derived momentum indicators
         df = df.sort_values('date').reset_index(drop=True)
+        if 'bts_tsi_freight' in df.columns:
+            df = df[df['bts_tsi_freight'] > 0.0].reset_index(drop=True)
+        for col in ['bts_truck_tonnage', 'bts_petroleum_transport', 'bts_tsi_passenger', 'bts_tsi_total']:
+            if col in df.columns:
+                df[col] = df[col].replace(0.0, np.nan).ffill().bfill()
 
         if "bts_tsi_freight_mom_pct" not in df.columns:
             df['bts_tsi_freight_mom_pct'] = df['bts_tsi_freight'].pct_change(1).fillna(0.0) * 100.0

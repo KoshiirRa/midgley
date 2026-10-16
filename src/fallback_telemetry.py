@@ -10,6 +10,7 @@ Persists data to: data/fallback_telemetry.json
 import os
 import json
 import time
+import copy
 import logging
 from datetime import datetime, timezone
 from typing import Dict, Any
@@ -65,7 +66,7 @@ class FallbackTelemetryLogger:
                     initial = get_initial_telemetry_structure()
                     for k, v in initial.items():
                         if k not in data:
-                            data[k] = v
+                            data[k] = copy.deepcopy(v)
                     return data
         except Exception as e:
             logger.warning(f"Failed to load fallback telemetry from {self.filepath}: {e}")
