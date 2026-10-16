@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-16T07:17:15.877906",
+  "timestamp": "2026-10-16T14:16:37.263698",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.334,
+    "current_price_per_gal": 4.327,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-16T07:16:43Z"
+      "timestamp": "2026-10-16T14:16:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-22",
-    "current_base_price": 4.334,
-    "predicted_price_per_gal": 4.2,
+    "current_base_price": 4.327,
+    "predicted_price_per_gal": 4.193,
     "expected_change_dollars": -0.134,
-    "expected_change_percent": -3.09,
+    "expected_change_percent": -3.1,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.938,
-    "prediction_upper_95ci": 4.462,
+    "prediction_lower_95ci": 3.931,
+    "prediction_upper_95ci": 4.455,
     "calibration_method": "conformal",
     "calibration_sample_size": 16,
     "directional_hit_rate_historical": 0.1875,
     "historical_mae_dollars": 0.169,
     "evaluation_sample_size": 16,
-    "day_1_price": 4.307,
-    "day_2_price": 4.253,
-    "day_3_price": 4.223,
-    "day_4_price": 4.221,
-    "day_5_price": 4.2,
+    "day_1_price": 4.3,
+    "day_2_price": 4.246,
+    "day_3_price": 4.216,
+    "day_4_price": 4.214,
+    "day_5_price": 4.193,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.134/gal (-3.09%): Driven primarily by Futures & Commodity Benchmark ($-0.060/gal), Refining Yield & Crack Spread ($-0.034/gal).",
+      "summary_text": "National forecast $-0.134/gal (-3.10%): Driven primarily by Futures & Commodity Benchmark ($-0.060/gal), Refining Yield & Crack Spread ($-0.034/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.06,
-          "impact_pct": -1.38,
+          "impact_pct": -1.39,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.034,
-          "impact_pct": -0.78,
+          "impact_pct": -0.79,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.06,
-      "impact_pct": -1.38,
+      "impact_pct": -1.39,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.034,
-      "impact_pct": -0.78,
+      "impact_pct": -0.79,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.134/gal (-3.09%): Driven primarily by Futures & Commodity Benchmark ($-0.060/gal), Refining Yield & Crack Spread ($-0.034/gal).",
+    "summary_text": "National forecast $-0.134/gal (-3.10%): Driven primarily by Futures & Commodity Benchmark ($-0.060/gal), Refining Yield & Crack Spread ($-0.034/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",

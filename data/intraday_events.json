@@ -5485,5 +5485,26 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-16T14:16:02.439093",
+    "headline": "TSLA vs Ford: Oil, tariffs, and a recall collide | FXStreet - \u0634\u0628\u0643\u0629 \u062a\u0648\u0627\u0635\u0644 \u0627\u0644\u0625\u062e\u0628\u0627\u0631\u064a\u0629",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nVmRGTEttUnNqTi1ybl9tR1d3d1czakVrYmZTVWIzMHdwZnZrSFpRSDFOT05TUXRlN2lEckc5UE5TSk5PX0RFdUxJd0lObV9rUTZn?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nVmRGTEttUnNqTi1ybl9tR1d3d1czakVrYmZTVWIzMHdwZnZrSFpRSDFOT05TUXRlN2lEckc5UE5TSk5PX0RFdUxJd0lObV9rUTZn?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiU0FVX3lxTE9nVmRGTEttUnNqTi1ybl9tR1d3d1czakVrYmZTVWIzMHdwZnZrSFpRSDFOT05TUXRlN2lEckc5UE5TSk5PX0RFdUxJd0lObV9rUTZn?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
