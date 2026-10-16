@@ -247,7 +247,7 @@ class LookupCache:
                     return val_str, created_at, expires_at
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                logger.debug(f"Cloudflare Edge cache miss for key '{key}': HTTP 404")
+                logger.debug("Cloudflare Edge cache miss: HTTP 404")
             else:
                 logger.warning(f"Cloudflare Edge cache fetch notice: {e}")
                 self.stats["errors"] += 1
@@ -354,7 +354,7 @@ class LookupCache:
                             cursor.execute("DELETE FROM lookup_cache WHERE key = ?", (key,))
                             conn.commit()
             except Exception as e:
-                logger.warning(f"Error reading local SQLite cache for key '{key}': {e}")
+                logger.warning(f"Error reading local SQLite cache: {e}")
                 self.stats["errors"] += 1
 
         self.stats["misses"] += 1
@@ -391,7 +391,7 @@ class LookupCache:
                     )
                     conn.commit()
             except Exception as e:
-                logger.warning(f"Error setting local SQLite cache for key '{key}': {e}")
+                logger.warning(f"Error setting local SQLite cache: {e}")
                 self.stats["errors"] += 1
 
         turso_url, turso_token, cf_url, cf_token = self._get_edge_credentials()

@@ -307,7 +307,16 @@ function parseRSSItems(xmlText: string): RSSItem[] {
 export function normalizeHeadline(title: string): string {
   if (!title) return "";
   // Strip trailing publisher attribution tag: " - Publisher", " | Publisher", " — Publisher"
-  let cleaned = title.replace(/\s+[-–—|]\s+[^-–—|]+$/, "").trim();
+  let cleaned = title.trim();
+  const sepIdx = Math.max(
+    cleaned.lastIndexOf(" - "),
+    cleaned.lastIndexOf(" – "),
+    cleaned.lastIndexOf(" — "),
+    cleaned.lastIndexOf(" | ")
+  );
+  if (sepIdx > 0) {
+    cleaned = cleaned.slice(0, sepIdx).trim();
+  }
   // Lowercase and strip non-alphanumeric for clean hashing key
   return cleaned.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 80);
 }
@@ -2250,7 +2259,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
 
       if (embed) {
         if (embed.description) {
-          const match = embed.description.match(/> \*"(.*?)"\*/s) || embed.description.match(/> (.*?)$/m);
+          const match = embed.description.match(/> \*"([^"\r\n]+)"\*/) || embed.description.match(/> ([^\r\n]+)/);
           if (match) headline = match[1].trim();
         }
         for (const field of embed.fields || []) {
@@ -2261,7 +2270,7 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
           if (fName.includes("Supply Disruption")) supplyDisruption = fVal;
           if (fName.includes("Geopolitical Risk")) geopoliticalRisk = fVal;
           if (fName.includes("Intelligence Sources")) {
-            const urlMatch = field.value.match(/\[Original Article\]\((.*?)\)/);
+            const urlMatch = field.value.match(/\[Original Article\]\(([^)\s]+)\)/);
             if (urlMatch) originalUrl = urlMatch[1].trim();
           }
         }

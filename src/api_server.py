@@ -1138,9 +1138,10 @@ def get_system_radar_catalog(
             "models": models
         }
     except Exception as e:
+        logger.error(f"Error fetching radar models: {e}")
         return {
             "status": "error",
-            "message": str(e),
+            "message": "Failed to retrieve open source AI radar catalog",
             "timestamp": datetime.now().isoformat(),
             "models": []
         }

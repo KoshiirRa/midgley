@@ -726,7 +726,7 @@ class AQIFeedConnector:
                             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_AIRNOW)
                         return result
             except Exception as e:
-                logger.warning(f"EPA AirNow API request for ZIP {zip_code} encountered error: {e}. Falling back to baseline.")
+                logger.warning(f"EPA AirNow API request encountered error: {e}. Falling back to baseline.")
 
         # Fallback / Offline Model: Geographic & Seasonal Deterministic Baseline
         now = datetime.now()

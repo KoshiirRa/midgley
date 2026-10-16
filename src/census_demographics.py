@@ -410,7 +410,8 @@ class CensusDemographicsConnector:
             f"https://api.census.gov/data/{target_vintage}/acs/acs5?get={var_str}&for=county:{county_fips}&in=state:{state_fips}"
         ]
 
-        for url in endpoints:
+        for endpoint in endpoints:
+            url = endpoint
             if self.api_key:
                 url += f"&key={self.api_key}"
             try:
@@ -431,7 +432,7 @@ class CensusDemographicsConnector:
                             return parsed
             except urllib.error.HTTPError as he:
                 if he.code == 404:
-                    logger.debug(f"Census ACS {target_vintage} endpoint not yet released or 404: {url}")
+                    logger.debug(f"Census ACS {target_vintage} endpoint not yet released or 404: {endpoint}")
                 else:
                     logger.debug(f"Census API HTTP error {he.code}: {he}")
             except Exception as ex:

@@ -549,7 +549,7 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     try:
         log_unmapped_zip_lookup(zip_clean, res)
     except Exception as e:
-        logger.warning(f"Error logging unmapped ZIP lookup for '{zip_clean}': {e}")
+        logger.warning(f"Error logging unmapped ZIP lookup: {e}")
 
     return res
 
@@ -628,7 +628,7 @@ def log_unmapped_zip_lookup(zip_code: str, resolution: Dict[str, Any]) -> None:
             (z_key, state_val, padd_val, model_val, now_iso, now_iso),
         )
     except Exception as db_err:
-        logger.debug(f"Could not sync unmapped ZIP '{z_key}' to database: {db_err}")
+        logger.debug(f"Could not sync unmapped ZIP to database: {db_err}")
 
 
 def get_unmapped_zip_telemetry() -> Dict[str, Any]:
@@ -648,7 +648,7 @@ def get_unmapped_zip_telemetry() -> Dict[str, Any]:
             logger.error(f"Error reading {TELEMETRY_FILE}: {e}")
             return {
                 "status": "error",
-                "message": str(e),
+                "message": "Error reading unmapped zip telemetry data",
                 "top_unmapped_zips": []
             }
 

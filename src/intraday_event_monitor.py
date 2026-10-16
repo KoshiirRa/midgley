@@ -117,6 +117,19 @@ ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
 EVALUATED_CACHE_FILE = os.path.join("data", "evaluated_headlines.json")
 
 
+def _strip_trailing_publisher(headline: str) -> str:
+    """Safely strips trailing publisher attribution without regex backtracking."""
+    s = (headline or "").strip()
+    last_idx = -1
+    for sep in (" - ", " – ", " — ", " | "):
+        idx = s.rfind(sep)
+        if idx > last_idx:
+            last_idx = idx
+    if last_idx > 0:
+        return s[:last_idx].strip()
+    return s
+
+
 def normalize_headline(headline: str) -> str:
     """
     Normalizes a news headline by stripping trailing RSS publisher attribution suffixes
@@ -127,7 +140,7 @@ def normalize_headline(headline: str) -> str:
         return ""
     import re
     # Strip trailing publisher tag: " - Publisher Name" or " | Publisher Name" or " — Publisher Name"
-    cleaned = re.sub(r'\s+[-–—|]\s+[^-–—|]+$', '', headline.strip())
+    cleaned = _strip_trailing_publisher(headline)
     # Lowercase and collapse whitespace
     cleaned = re.sub(r'\s+', ' ', cleaned.lower()).strip()
     # Strip surrounding quotes or brackets
@@ -383,7 +396,7 @@ class IntradayEventMonitor:
             return {"discovered_articles": [], "enriched_context": ""}
 
         import urllib.parse
-        clean_hl = re.sub(r"\s+[-–—|]\s+[^-–—|]+$", "", headline.strip())
+        clean_hl = _strip_trailing_publisher(headline)
         tokens = [w for w in clean_hl.split() if w.lower() not in {"adds", "pressure", "to", "regional", "fuel", "prices", "the", "in", "a"}]
         query_str = " ".join(tokens[:5])
         if not query_str:

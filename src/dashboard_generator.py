@@ -12,6 +12,7 @@ import os
 import subprocess
 import json
 import html
+import urllib.parse
 from typing import Dict, Any, Tuple, List, Optional
 import pandas as pd
 import numpy as np
@@ -160,23 +161,28 @@ def format_human_source(source: str, url: str = "") -> str:
         return s_clean
 
     s_lower = s_clean.lower()
-    url_lower = url.lower() if url else ""
+    url_host = ""
+    if url:
+        try:
+            url_host = (urllib.parse.urlparse(url).hostname or "").lower()
+        except Exception:
+            url_host = ""
 
-    if "reuters" in s_lower or "reuters" in url_lower:
+    if "reuters" in s_lower or url_host.endswith("reuters.com"):
         return "Reuters Energy"
-    if "bloomberg" in s_lower or "bloomberg" in url_lower:
+    if "bloomberg" in s_lower or url_host.endswith("bloomberg.com"):
         return "Bloomberg Market Wire"
-    if "noaa" in s_lower or "weather.gov" in s_lower or "weather.gov" in url_lower or "wxs.us" in url_lower:
+    if "noaa" in s_lower or "weather.gov" in s_lower or url_host.endswith("weather.gov") or url_host.endswith("wxs.us"):
         return "NOAA NWS Storm Alert"
-    if "cme" in s_lower or "nymex" in s_lower or "cmegroup" in url_lower:
+    if "cme" in s_lower or "nymex" in s_lower or url_host.endswith("cmegroup.com"):
         return "CME Group / NYMEX"
-    if "finlight" in s_lower or "finlight" in url_lower:
+    if "finlight" in s_lower or url_host.endswith("finlight.me"):
         return "Financial Media Wire"
-    if "nyt" in s_lower or "nytimes" in url_lower:
+    if "nyt" in s_lower or url_host.endswith("nytimes.com"):
         return "New York Times Energy"
-    if "cnbc" in s_lower or "cnbc" in url_lower:
+    if "cnbc" in s_lower or url_host.endswith("cnbc.com"):
         return "CNBC Energy Wire"
-    if "google" in s_lower or "news.google" in url_lower:
+    if "google" in s_lower or url_host.endswith("news.google.com") or url_host == "news.google.com":
         return "Google News Energy Feed"
     if "rss" in s_lower:
         return "Energy News Wire"
@@ -2509,7 +2515,7 @@ def generate_public_dashboard():
         logger.debug(f"Staleness check notice: {stale_err}")
 
     # Build Map Points and Map Section HTML for docs/index.html (Issue #646)
-    carto_api_key = (os.environ.get("CARTO_API_KEY") or "cb1_4iqf_1_7880b5cbe390b5b1835b1f06").strip()
+    carto_api_key = os.environ.get("CARTO_API_KEY", "").strip()
     carto_tile_url = (
         f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
         if carto_api_key
@@ -7323,7 +7329,7 @@ def generate_telemetry_page():
     if not map_points:
         map_points = []
     map_points_json = json.dumps(map_points)
-    carto_api_key = (os.environ.get("CARTO_API_KEY") or "cb1_4iqf_1_7880b5cbe390b5b1835b1f06").strip()
+    carto_api_key = os.environ.get("CARTO_API_KEY", "").strip()
     carto_tile_url = (
         f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
         if carto_api_key

@@ -779,36 +779,36 @@ def test_data_sources_page_generation():
     assert "Continuous Academic Literature &amp; Developer Catalog Feeds" in sources_content
 
     # Verify key monitored feeds across all categories
-    assert "RB=F" in sources_content
-    assert "CL=F" in sources_content
-    assert "BZ=F" in sources_content
-    assert "HO=F" in sources_content
-    assert "api.eia.gov/v2" in sources_content
-    assert "api.stlouisfed.org" in sources_content
-    assert "marsapi.ams.usda.gov" in sources_content
+    assert sources_content.count("RB=F") > 0
+    assert sources_content.count("CL=F") > 0
+    assert sources_content.count("BZ=F") > 0
+    assert sources_content.count("HO=F") > 0
+    assert sources_content.count("api.eia.gov/v2") > 0
+    assert sources_content.count("api.stlouisfed.org") > 0
+    assert sources_content.count("marsapi.ams.usda.gov") > 0
 
-    assert "^OVX" in sources_content
-    assert "bakerhughes.com" in sources_content
-    assert "cftc.gov" in sources_content
-    assert "ferc.gov" in sources_content
+    assert sources_content.count("^OVX") > 0
+    assert sources_content.count("bakerhughes.com") > 0
+    assert sources_content.count("cftc.gov") > 0
+    assert sources_content.count("ferc.gov") > 0
 
-    assert "api.finlight.me" in sources_content
-    assert "api.firecrawl.dev" in sources_content
-    assert "sec.gov/edgar/" in sources_content
+    assert sources_content.count("api.finlight.me") > 0
+    assert sources_content.count("api.firecrawl.dev") > 0
+    assert sources_content.count("sec.gov/edgar/") > 0
 
-    assert "api.weather.gov" in sources_content
-    assert "t.wxs.us" in sources_content
-    assert "spc.noaa.gov" in sources_content
-    assert "nhc.noaa.gov" in sources_content
-    assert "api.waterdata.usgs.gov" in sources_content
-    assert "earthquake.usgs.gov" in sources_content
-    assert "PurpleAir" in sources_content
+    assert sources_content.count("api.weather.gov") > 0
+    assert sources_content.count("t.wxs.us") > 0
+    assert sources_content.count("spc.noaa.gov") > 0
+    assert sources_content.count("nhc.noaa.gov") > 0
+    assert sources_content.count("api.waterdata.usgs.gov") > 0
+    assert sources_content.count("earthquake.usgs.gov") > 0
+    assert sources_content.count("PurpleAir") > 0
 
-    assert "api.census.gov" in sources_content
-    assert "GasBuddy" in sources_content
-    assert "export.arxiv.org" in sources_content
-    assert "api.core.ac.uk" in sources_content
-    assert "free-for-dev" in sources_content
+    assert sources_content.count("api.census.gov") > 0
+    assert sources_content.count("GasBuddy") > 0
+    assert sources_content.count("export.arxiv.org") > 0
+    assert sources_content.count("api.core.ac.uk") > 0
+    assert sources_content.count("free-for-dev") > 0
 
     # Verify Master Governance Ledger Table and dynamic search/filter script
     assert "id=\"master-feed-table\"" in sources_content

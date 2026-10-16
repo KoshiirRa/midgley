@@ -1175,7 +1175,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=f"HTTP {e.code}: {err_msg[:100]}"
             )
-            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg, "asset": asset, "challenge_id": challenge_id}
+            return {"status": "HTTP_ERROR", "code": e.code, "error": f"HTTP {e.code}", "asset": asset, "challenge_id": challenge_id}
         except Exception as e:
             latency = (time.time() - start_time) * 1000.0
             log_connector_event(
@@ -1185,7 +1185,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=str(e)[:100]
             )
-            return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
+            return {"status": "NETWORK_ERROR", "error": "Headline Arena network error", "asset": asset, "challenge_id": challenge_id}
 
     def submit_forecast(
         self,
@@ -1407,7 +1407,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=f"HTTP {e.code}: {err_msg[:100]}"
             )
-            return {"status": "HTTP_ERROR", "code": e.code, "error": err_msg, "asset": asset, "challenge_id": challenge_id}
+            return {"status": "HTTP_ERROR", "code": e.code, "error": f"HTTP {e.code}", "asset": asset, "challenge_id": challenge_id}
         except Exception as e:
             latency = (time.time() - start_time) * 1000.0
             logger.error(f"Headline Arena submission network error for {asset} (challenge {challenge_id}): {e}")
@@ -1418,7 +1418,7 @@ class HeadlineArenaConnector:
                 latency_ms=latency,
                 details=str(e)[:100]
             )
-            return {"status": "NETWORK_ERROR", "error": str(e), "asset": asset, "challenge_id": challenge_id}
+            return {"status": "NETWORK_ERROR", "error": "Headline Arena submission network error", "asset": asset, "challenge_id": challenge_id}
 
     def dispatch_pending_forecasts(
         self,
@@ -1686,13 +1686,16 @@ def main():
             model_provider=args.model_provider,
             model_name=args.model_name
         )
+        sanitized = dict(res)
+        if "client_secret" in sanitized:
+            sanitized["client_secret"] = "***REDACTED***"
         print("\nRegistration Result:")
-        print(json.dumps(res, indent=2))
-        if "client_id" in res and "client_secret" in res:
+        print(json.dumps(sanitized, indent=2))
+        if "client_id" in res:
             print("\n" + "=" * 70)
             print("  SUCCESS! Set the following environment variables in .env or GitHub Secrets:")
-            print(f"  HEADLINE_ARENA_CLIENT_ID={res['client_id']}")
-            print(f"  HEADLINE_ARENA_CLIENT_SECRET={res['client_secret']}")
+            print(f"  HEADLINE_ARENA_CLIENT_ID={res.get('client_id')}")
+            print("  HEADLINE_ARENA_CLIENT_SECRET=<redacted_from_terminal_output>")
             print("=" * 70)
         return
 

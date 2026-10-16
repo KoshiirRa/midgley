@@ -247,7 +247,16 @@ def validate_discord_webhook_url(webhook_url: Optional[str]) -> bool:
     """Validates that a URL is a well-formed HTTPS Discord Incoming Webhook URL."""
     if not webhook_url or not isinstance(webhook_url, str):
         return False
-    return bool(DISCORD_WEBHOOK_REGEX.match(webhook_url.strip()))
+    try:
+        parsed = urllib.parse.urlparse(webhook_url.strip())
+        if parsed.scheme != "https":
+            return False
+        hostname = (parsed.hostname or "").lower()
+        if hostname not in ("discord.com", "discordapp.com", "ptb.discord.com", "canary.discord.com"):
+            return False
+        return bool(DISCORD_WEBHOOK_REGEX.match(webhook_url.strip()))
+    except Exception:
+        return False
 
 
 def _get_encryption_secret() -> bytes:
@@ -1406,10 +1415,20 @@ def _post_webhook_payload(webhook_url: str, payload: Dict[str, Any], timeout: in
     if os.environ.get("TESTING") == "1" and not os.environ.get("TEST_WEBHOOK_DISPATCH"):
         return True, 204, None
 
+    if not validate_discord_webhook_url(webhook_url):
+        return False, None, "Invalid or unauthorized Discord webhook URL"
+
     try:
+        parsed = urllib.parse.urlparse(webhook_url.strip())
+        if parsed.scheme != "https" or (parsed.hostname or "").lower() not in (
+            "discord.com", "discordapp.com", "ptb.discord.com", "canary.discord.com"
+        ):
+            return False, None, "Invalid or unauthorized Discord webhook host"
+        safe_url = urllib.parse.urlunparse(parsed)
+
         data_bytes = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
-            webhook_url,
+            safe_url,
             data=data_bytes,
             headers={
                 "Content-Type": "application/json",

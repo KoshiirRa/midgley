@@ -128,7 +128,7 @@ def fetch_live_weather_events(
                     "weather_type": f"SPC Convective {cat}"
                 })
         except Exception as e:
-            logger.debug(f"Live SPC risk fetch notice for {zip_code}: {e}")
+            logger.debug(f"Live SPC risk fetch notice: {e}")
 
     # 3. Fetch live Open-Meteo degree days & thermal stress
     if hub_code:
@@ -845,7 +845,7 @@ def fetch_wxs_weather_data(location_or_zip: str = "74101", timeout_sec: int = 5)
             if response.status == 200:
                 return json.loads(response.read().decode('utf-8'))
     except Exception as e:
-        logger.debug(f"wxs.us fetch notice for {location_or_zip}: {e}")
+        logger.debug(f"wxs.us fetch notice: {e}")
         
     return {}
 

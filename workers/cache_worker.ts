@@ -296,7 +296,7 @@ export default {
         } catch (err: any) {
           console.error(`[Cache Worker Error] Prediction sync failed: ${err.message || String(err)}`);
           await captureSentryException(env, ctx, err, { action: "SYNC_PREDICTIONS" });
-          return new Response(JSON.stringify({ error: "Prediction sync failed", details: err.message || String(err) }), {
+          return new Response(JSON.stringify({ error: "Prediction sync failed" }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });
@@ -338,7 +338,7 @@ export default {
         } catch (err: any) {
           console.error(`[Cache Worker Error] STORE for key "${key}" failed: ${err.message || String(err)}`);
           await captureSentryException(env, ctx, err, { action: "STORE", key });
-          return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message || String(err) }), {
+          return new Response(JSON.stringify({ error: "Internal Server Error" }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });
@@ -356,7 +356,7 @@ export default {
           });
         } catch (err: any) {
           console.error(`[Cache Worker Error] DELETE cache failed: ${err.message || String(err)}`);
-          return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message || String(err) }), {
+          return new Response(JSON.stringify({ error: "Internal Server Error" }), {
             status: 500,
             headers: { "Content-Type": "application/json" }
           });
