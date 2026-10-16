@@ -180,6 +180,12 @@ HEALTHCHECKS_PING_URL="https://hc-ping.com/<your-healthchecks-uuid-here>"
 ARCHIVEBOX_URL="http://10.42.42.54:8000"
 ARCHIVEBOX_API_KEY=""
 
+# CARTO Basemap Raster Tile Layer (carto.com/basemaps/apikey, Issue #646)
+# Optional CARTO basemap key for watermark-free dark basemaps on docs/index.html and docs/telemetry.html
+CARTO_API_KEY=""
+# Optional custom basemap tile URL template override (e.g. OpenStreetMap or private tile server)
+MIDGLEY_BASEMAP_TILE_URL=""
+
 # Comma-separated list of refinery operator tickers to monitor for 8-K filings.
 # Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
 # Cloudflare Worker production: set EDGAR_8K_TICKERS in wrangler.toml [vars].

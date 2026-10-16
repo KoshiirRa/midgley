@@ -63,6 +63,7 @@ jobs:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
           FINLIGHT_API_KEY: ${{ secrets.FINLIGHT_API_KEY }}
           CLOUDFLARE_ANALYTICS_TOKEN: ${{ secrets.CLOUDFLARE_ANALYTICS_TOKEN }}
+          CARTO_API_KEY: ${{ secrets.CARTO_API_KEY }}
           AIRNOW_API_KEY: ${{ secrets.AIRNOW_API_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_INTRADAY_WEBHOOK_URL || secrets.DISCORD_WEBHOOK_URL }}
           HEADLINE_ARENA_CLIENT_ID: ${{ secrets.HEADLINE_ARENA_CLIENT_ID }}
