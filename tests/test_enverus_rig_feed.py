@@ -90,6 +90,27 @@ def test_enverus_connector_worker_fetch():
             assert data["source"] == "CLOUDFLARE_BROWSER_RENDERING"
 
 
+def test_enverus_connector_browser_run_fetch():
+    """Tests direct Cloudflare Browser Run REST API execution and markdown parsing."""
+    connector = EnverusRigFeedConnector(account_id="test_account_123")
+
+    with patch.dict(os.environ, {"TESTING": "0", "CLOUDFLARE_API_TOKEN": "mock_token_abc"}):
+        with patch("src.enverus_rig_feed.http_post") as mock_post:
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {
+                "success": True,
+                "result": SAMPLE_CLOUDFLARE_MARKDOWN
+            }
+            mock_post.return_value = mock_resp
+
+            data = connector.fetch_via_cloudflare_browser_run()
+            assert data is not None
+            assert data["total_rigs"] == 656
+            assert data["source"] == "CLOUDFLARE_BROWSER_RENDERING"
+            assert any(b["play"] == "PERMIAN" and b["latest_count"] == 254 for b in data["basins"])
+
+
 def test_enverus_connector_direct_api_fetch():
     """Tests direct Drillinginfo REST API fallback."""
     connector = EnverusRigFeedConnector()
