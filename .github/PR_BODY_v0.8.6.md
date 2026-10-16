@@ -17,9 +17,10 @@ Midgley **v0.8.6** expands the regional metro calibration footprint to 18 active
    - **PADD 6**: San Juan & U.S. Caribbean Territories (`San_Juan_PR`, Issue #620)
    - **PADD 7**: Guam & Pacific Island Territories (`Guam_GU`, Issue #621)
 
-2. **Cloudflare Browser Run REST API & Edge Headless Scraping (Issues #533 & #640)**:
-   - Direct execution of Cloudflare Browser Run REST API (`https://api.cloudflare.com/client/v4/accounts/<id>/browser-run/markdown`) in [`src/enverus_rig_feed.py`](src/enverus_rig_feed.py) to render Enverus daily rig count via serverless headless Chromium.
-   - Cloudflare Workers Paid Browser Rendering binding (`MYBROWSER.quickAction("markdown", ...)`) fallback in [`workers/enverus_scraper.ts`](workers/enverus_scraper.ts).
+2. **Unified Cloudflare Browser Run Client Libraries & Edge Scraping (Issues #533 & #640)**:
+   - Centralized, reusable Browser Run client modules in Python ([`src/cloudflare_browser_run.py`](src/cloudflare_browser_run.py)) and TypeScript ([`workers/browser_run.ts`](workers/browser_run.ts)) to render pages to Markdown via serverless headless Chromium (`POST https://api.cloudflare.com/client/v4/accounts/<id>/browser-run/markdown`).
+   - Dynamic credential resolution for `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` across environment secrets and workers without hardcoded account IDs in source files.
+   - Leveraged Cloudflare Workers Paid Browser Rendering binding (`MYBROWSER.quickAction("markdown", ...)`) with direct REST fallback.
    - Replaced legacy synthetic Permian rig multiplier with genuine bitemporal basin counts.
 
 3. **Multi-Subscriber Discord Webhook, DM & Slash Command Gateway (Issue #235)**:
@@ -70,8 +71,8 @@ model_version:
 
 ### Verification Run Results
 
-- `TESTING=1 pytest -v tests/test_enverus_rig_feed.py`: **6/6 passed**
-- `npm test` (Vitest): **35/35 passed**
+- `TESTING=1 pytest -v tests/test_cloudflare_browser_run.py tests/test_enverus_rig_feed.py`: **17/17 passed**
+- `npm test` (Vitest): **38/38 passed**
 - `TESTING=1 pytest -v tests/test_dashboard_generator.py -k test_data_sources_page_generation`: **passed**
 - `TESTING=1 pytest -v tests/test_docs_links.py`: **2/2 passed**
 - `TESTING=1 pytest -v tests/test_truncation_invariance.py`: **3/3 passed**

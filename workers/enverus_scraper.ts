@@ -9,6 +9,8 @@
  * Policy User-Agent: MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)
  */
 
+import { fetchMarkdownViaBrowserRun } from "./browser_run";
+
 export const MIDGLEY_AGENT_USER_AGENT = "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)";
 
 export interface EnverusBasinMetric {
@@ -192,62 +194,13 @@ export function parseEnverusMarkdown(markdownText: string): Partial<EnverusDaily
 }
 
 /**
- * Executes headless scraping via Cloudflare Browser Rendering API
+ * Executes headless scraping via Cloudflare Browser Run unified library
  */
 export async function fetchViaCloudflareBrowser(env: any, userAgent: string): Promise<string | null> {
-  // 1. Try Cloudflare Workers Browser Run binding (.quickAction)
-  if (env?.MYBROWSER) {
-    try {
-      if (typeof env.MYBROWSER.quickAction === "function") {
-        const response = await env.MYBROWSER.quickAction("markdown", {
-          url: "https://www.enverus.com/dailyrigcount/",
-          userAgent: userAgent
-        });
-        if (typeof response === "string") return response;
-        if (response && typeof response.result === "string") return response.result;
-        if (response && typeof response.text === "function") return await response.text();
-      }
-
-      if (typeof env.MYBROWSER.fetch === "function") {
-        const req = new Request("https://www.enverus.com/dailyrigcount/", {
-          headers: { "User-Agent": userAgent }
-        });
-        const res = await env.MYBROWSER.fetch(req);
-        if (res && res.status === 200) {
-          return await res.text();
-        }
-      }
-    } catch (err: any) {
-      console.warn(`[Cloudflare Browser Rendering] Execution exception: ${err.message || String(err)}`);
-    }
-  }
-
-  // 2. Direct Cloudflare Browser Run REST API fallback (https://developers.cloudflare.com/browser-run/)
-  const apiToken = env?.CLOUDFLARE_API_TOKEN || env?.CLOUDFLARE_AUTH_TOKEN;
-  const accountId = env?.CLOUDFLARE_ACCOUNT_ID || env?.ACCOUNT_ID || "5c214edff77bbcf4dee0445f5e204066";
-  if (apiToken && accountId) {
-    try {
-      const restRes = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/browser-run/markdown`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiToken}`,
-          "Content-Type": "application/json",
-          "User-Agent": userAgent
-        },
-        body: JSON.stringify({ url: "https://www.enverus.com/dailyrigcount/" })
-      });
-      if (restRes && restRes.status === 200) {
-        const data: any = await restRes.json();
-        if (data?.result && typeof data.result === "string") {
-          return data.result;
-        }
-      }
-    } catch (err: any) {
-      console.warn(`[Cloudflare Browser Run REST] Exception: ${err.message || String(err)}`);
-    }
-  }
-
-  return null;
+  return await fetchMarkdownViaBrowserRun(env, {
+    url: "https://www.enverus.com/dailyrigcount/",
+    userAgent
+  });
 }
 
 /**

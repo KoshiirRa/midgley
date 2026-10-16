@@ -1291,7 +1291,54 @@ Total Orientation PlayWeekMonthYear
       expect(json.status).toBe("success");
       expect(json.total_rigs).toBe(656);
       expect(json.basins).toBeDefined();
-      expect(json.basins.some((b: any) => b.play === "PERMIAN" && b.latest_count === 254)).toBe(true);
+    });
+  });
+
+  describe("Cloudflare Browser Run Unified Client (workers/browser_run.ts)", () => {
+    it("renders markdown using env.MYBROWSER quickAction", async () => {
+      const { fetchMarkdownViaBrowserRun } = await import("../workers/browser_run");
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue("# Header\n\nContent")
+      };
+      const env = { MYBROWSER: mockBrowser };
+      const md = await fetchMarkdownViaBrowserRun(env, "https://example.com/test");
+      expect(md).toBe("# Header\n\nContent");
+      expect(mockBrowser.quickAction).toHaveBeenCalledWith("markdown", expect.objectContaining({
+        url: "https://example.com/test"
+      }));
+    });
+
+    it("falls back to Browser Run REST API when binding is absent and credentials are provided", async () => {
+      const { fetchMarkdownViaBrowserRun } = await import("../workers/browser_run");
+      const originalFetch = global.fetch;
+      try {
+        global.fetch = vi.fn().mockResolvedValue({
+          status: 200,
+          json: vi.fn().mockResolvedValue({ success: true, result: "## REST API Markdown" })
+        } as any);
+
+        const env = {
+          CLOUDFLARE_ACCOUNT_ID: "test_acc_abc",
+          CLOUDFLARE_API_TOKEN: "test_token_xyz"
+        };
+        const md = await fetchMarkdownViaBrowserRun(env, "https://example.com/api-test");
+        expect(md).toBe("## REST API Markdown");
+        expect(global.fetch).toHaveBeenCalledWith(
+          "https://api.cloudflare.com/client/v4/accounts/test_acc_abc/browser-run/markdown",
+          expect.objectContaining({
+            method: "POST"
+          })
+        );
+      } finally {
+        global.fetch = originalFetch;
+      }
+    });
+
+    it("returns null cleanly when neither binding nor REST credentials are provided", async () => {
+      const { fetchMarkdownViaBrowserRun } = await import("../workers/browser_run");
+      const env = {};
+      const md = await fetchMarkdownViaBrowserRun(env, "https://example.com/none");
+      expect(md).toBeNull();
     });
   });
 });

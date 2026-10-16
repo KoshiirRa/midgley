@@ -21,7 +21,8 @@ import pandas as pd
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Union
 
-from src.http_client import http_get, http_post, MIDGLEY_AGENT_USER_AGENT
+from src.http_client import http_get, MIDGLEY_AGENT_USER_AGENT
+from src.cloudflare_browser_run import fetch_markdown_via_browser_run
 from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
@@ -186,66 +187,30 @@ class EnverusRigFeedConnector:
         self.worker_url = worker_url or os.getenv("MIDGLEY_WORKER_URL", "https://midgley-intraday-monitor.koshiirra.workers.dev")
         self.user_agent = MIDGLEY_AGENT_USER_AGENT
         self.direct_url = "https://app.drillinginfo.com/drcservice/api/OverTable"
-        self.account_id = account_id or os.getenv("CLOUDFLARE_ACCOUNT_ID") or os.getenv("CLOUDFLARE_ACCOUNT") or "5c214edff77bbcf4dee0445f5e204066"
+        self.account_id = account_id or os.getenv("CLOUDFLARE_ACCOUNT_ID") or os.getenv("CLOUDFLARE_ACCOUNT")
         self.enverus_url = "https://www.enverus.com/dailyrigcount/"
-
-    def _resolve_cloudflare_token(self) -> Optional[str]:
-        """Resolves Cloudflare API / Auth token from environment or local wrangler configuration."""
-        token = os.getenv("CLOUDFLARE_API_TOKEN") or os.getenv("CLOUDFLARE_AUTH_TOKEN")
-        if token and token.strip():
-            return token.strip()
-
-        # Check local wrangler config paths defensively (Linux / Windows)
-        candidate_paths = [
-            os.path.expanduser("~/.config/.wrangler/config/default.toml"),
-            os.path.expandvars(r"%APPDATA%\xdg.config\.wrangler\config\default.toml"),
-        ]
-        for cfg_path in candidate_paths:
-            if os.path.exists(cfg_path):
-                try:
-                    with open(cfg_path, "r", encoding="utf-8") as f:
-                        for line in f:
-                            if line.strip().startswith("oauth_token"):
-                                parts = line.split("=")
-                                if len(parts) >= 2:
-                                    extracted = parts[1].strip().strip('"').strip("'")
-                                    if extracted:
-                                        return extracted
-                except Exception:
-                    pass
-        return None
 
     def fetch_via_cloudflare_browser_run(self) -> Optional[Dict[str, Any]]:
         """
         Directly executes Cloudflare Browser Run REST API (/browser-run/markdown)
-        to render https://www.enverus.com/dailyrigcount/ via headless serverless Chromium
+        via src.cloudflare_browser_run to render https://www.enverus.com/dailyrigcount/
         and parse the resulting markdown (Issue #640, https://developers.cloudflare.com/browser-run/).
         """
         if os.getenv("TESTING") == "1":
             return ENVERUS_BENCHMARK_FIXTURE
 
-        token = self._resolve_cloudflare_token()
-        if not token or not self.account_id:
-            logger.debug("Cloudflare Browser Run credentials not configured; skipping direct browser-run REST call.")
-            return None
-
         try:
-            url = f"https://api.cloudflare.com/client/v4/accounts/{self.account_id}/browser-run/markdown"
-            headers = {
-                "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json",
-                "User-Agent": self.user_agent
-            }
-            payload = {"url": self.enverus_url}
-            resp = http_post(url, json=payload, headers=headers, timeout=25)
-            if resp and resp.status_code == 200:
-                data = resp.json()
-                md_text = data.get("result") if isinstance(data, dict) else None
-                if md_text and isinstance(md_text, str) and len(md_text) > 50:
-                    parsed = parse_enverus_markdown(md_text)
-                    if parsed.get("total_rigs", 0) > 0:
-                        parsed["source"] = "CLOUDFLARE_BROWSER_RENDERING"
-                        return parsed
+            md_text = fetch_markdown_via_browser_run(
+                self.enverus_url,
+                account_id=self.account_id,
+                user_agent=self.user_agent,
+                timeout=25.0
+            )
+            if md_text and isinstance(md_text, str) and len(md_text) > 50:
+                parsed = parse_enverus_markdown(md_text)
+                if parsed.get("total_rigs", 0) > 0:
+                    parsed["source"] = "CLOUDFLARE_BROWSER_RENDERING"
+                    return parsed
         except Exception as e:
             logger.debug(f"Direct Cloudflare Browser Run execution failed: {e}")
         return None

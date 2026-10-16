@@ -95,7 +95,7 @@ def test_enverus_connector_browser_run_fetch():
     connector = EnverusRigFeedConnector(account_id="test_account_123")
 
     with patch.dict(os.environ, {"TESTING": "0", "CLOUDFLARE_API_TOKEN": "mock_token_abc"}):
-        with patch("src.enverus_rig_feed.http_post") as mock_post:
+        with patch("src.cloudflare_browser_run.http_post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.status_code = 200
             mock_resp.json.return_value = {
