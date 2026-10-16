@@ -29,6 +29,8 @@ jobs:
 
       - name: Merge Main Branch into Self-Hosted
         run: |
+          git reset --hard HEAD
+          git clean -fd
           git fetch origin main:main
           git merge main -X theirs -m "chore(sync): auto-merge main updates into self-hosted branch"
 
