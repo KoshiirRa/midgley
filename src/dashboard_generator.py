@@ -168,21 +168,24 @@ def format_human_source(source: str, url: str = "") -> str:
         except Exception:
             url_host = ""
 
-    if "reuters" in s_lower or url_host.endswith("reuters.com"):
+    def _is_domain(dom: str) -> bool:
+        return bool(url_host == dom or url_host.endswith("." + dom))
+
+    if "reuters" in s_lower or _is_domain("reuters.com"):
         return "Reuters Energy"
-    if "bloomberg" in s_lower or url_host.endswith("bloomberg.com"):
+    if "bloomberg" in s_lower or _is_domain("bloomberg.com"):
         return "Bloomberg Market Wire"
-    if "noaa" in s_lower or "weather.gov" in s_lower or url_host.endswith("weather.gov") or url_host.endswith("wxs.us"):
+    if "noaa" in s_lower or "weather.gov" in s_lower or _is_domain("weather.gov") or _is_domain("wxs.us"):
         return "NOAA NWS Storm Alert"
-    if "cme" in s_lower or "nymex" in s_lower or url_host.endswith("cmegroup.com"):
+    if "cme" in s_lower or "nymex" in s_lower or _is_domain("cmegroup.com"):
         return "CME Group / NYMEX"
-    if "finlight" in s_lower or url_host.endswith("finlight.me"):
+    if "finlight" in s_lower or _is_domain("finlight.me"):
         return "Financial Media Wire"
-    if "nyt" in s_lower or url_host.endswith("nytimes.com"):
+    if "nyt" in s_lower or _is_domain("nytimes.com"):
         return "New York Times Energy"
-    if "cnbc" in s_lower or url_host.endswith("cnbc.com"):
+    if "cnbc" in s_lower or _is_domain("cnbc.com"):
         return "CNBC Energy Wire"
-    if "google" in s_lower or url_host.endswith("news.google.com") or url_host == "news.google.com":
+    if "google" in s_lower or _is_domain("google.com"):
         return "Google News Energy Feed"
     if "rss" in s_lower:
         return "Energy News Wire"
@@ -417,12 +420,13 @@ def get_analytics_script() -> str:
     Option A: Build-Time Environment Isolation. Returns an empty string when the token is missing/unset
     (e.g., local development, dev branch builds, automated unit tests).
     """
-    token = os.environ.get("CLOUDFLARE_ANALYTICS_TOKEN", "").strip()
-    if not token:
+    beacon_val = os.environ.get("CLOUDFLARE_ANALYTICS_TOKEN", "").strip()
+    if not beacon_val:
         return ""
 
+    safe_beacon = "".join(c for c in beacon_val if c.isalnum() or c in "-_")
     return f"""    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "{token}"}}'></script>"""
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "{safe_beacon}"}}'></script>"""
 
 
 def get_head_meta_tags(
@@ -2515,12 +2519,7 @@ def generate_public_dashboard():
         logger.debug(f"Staleness check notice: {stale_err}")
 
     # Build Map Points and Map Section HTML for docs/index.html (Issue #646)
-    carto_api_key = os.environ.get("CARTO_API_KEY", "").strip()
-    carto_tile_url = (
-        f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
-        if carto_api_key
-        else "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-    )
+    carto_tile_url = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
     hub_points, hubs_points_json = build_hubs_map_data(prices_map)
     hubs_map_html = build_hubs_map_section_html(hub_points)
 
@@ -7329,12 +7328,7 @@ def generate_telemetry_page():
     if not map_points:
         map_points = []
     map_points_json = json.dumps(map_points)
-    carto_api_key = os.environ.get("CARTO_API_KEY", "").strip()
-    carto_tile_url = (
-        f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={carto_api_key}"
-        if carto_api_key
-        else "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-    )
+    carto_tile_url = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
 
 
     def build_telemetry_html(hdr, learning_section_html=""):

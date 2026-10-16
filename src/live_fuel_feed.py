@@ -568,7 +568,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             price = gb_res["average_price"]
             source = gb_res["source"]
             if not is_price_outlier(region_code, price):
-                logger.info(f"Fetched live fuel observation for {region_code} via {source}")
+                logger.info("Fetched live fuel observation via GasBuddy")
                 res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
 
         # Step 2: AAA Metro Web Scraper
@@ -578,7 +578,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
                 price = aaa_res["average_price"]
                 source = aaa_res["source"]
                 if not is_price_outlier(region_code, price):
-                    logger.info(f"Fetched live fuel observation for {region_code} via {source}")
+                    logger.info("Fetched live fuel observation via AAA")
                     cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
                     if not res or not cand.get("is_stale"):
                         res = cand
@@ -589,7 +589,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
                 price = eia_res["average_price"]
                 source = eia_res["source"]
-                logger.info(f"Fetched live fuel observation for {region_code} via {source}")
+                logger.info("Fetched live fuel observation via EIA/yfinance")
                 cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
                 if not res or not cand.get("is_stale"):
                     res = cand
@@ -600,12 +600,12 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             if hist_res and hist_res.get("average_price") and pd.notna(hist_res.get("average_price")):
                 price = hist_res["average_price"]
                 source = hist_res["source"]
-                logger.info(f"Fetched live fuel observation for {region_code} via {source}")
+                logger.info("Fetched live fuel observation via history")
                 res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
 
         # Step 5: Static Fallback Anchor
         if not res:
-            logger.info(f"Using static fallback anchor for {region_code}")
+            logger.info("Using static fallback anchor")
             res = validate_price_payload_freshness({"region": region_code, "price": static_fallback, "source": f"Static Anchor ({region_code})", "timestamp": timestamp_str})
 
         # Determine granularity level

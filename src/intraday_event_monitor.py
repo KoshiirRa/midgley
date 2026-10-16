@@ -143,8 +143,8 @@ def normalize_headline(headline: str) -> str:
     cleaned = _strip_trailing_publisher(headline)
     # Lowercase and collapse whitespace
     cleaned = re.sub(r'\s+', ' ', cleaned.lower()).strip()
-    # Strip surrounding quotes or brackets
-    cleaned = re.sub(r'^[\'"“‘\[\(]+|[\'"”’\]\)]+$', '', cleaned).strip()
+    # Strip surrounding quotes or brackets safely without regex
+    cleaned = cleaned.strip("'\"“‘[]()”’")
     return cleaned
 
 

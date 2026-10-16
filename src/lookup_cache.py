@@ -638,8 +638,9 @@ class LookupCache:
                         results["turso"]["status"] = "read_mismatch"
                         results["turso"]["error"] = "Probe value could not be read back from Turso Edge"
                 except Exception as e:
+                    logger.debug(f"Turso probe exception: {e}")
                     results["turso"]["status"] = "error"
-                    results["turso"]["error"] = str(e)
+                    results["turso"]["error"] = "Turso probe connectivity error"
                 finally:
                     # Clean up transient probe key (Issue #437)
                     try:
@@ -679,8 +680,9 @@ class LookupCache:
                         results["cloudflare"]["status"] = "read_mismatch"
                         results["cloudflare"]["error"] = "Probe value could not be read back from Cloudflare D1"
                 except Exception as e:
+                    logger.debug(f"Cloudflare probe exception: {e}")
                     results["cloudflare"]["status"] = "error"
-                    results["cloudflare"]["error"] = str(e)
+                    results["cloudflare"]["error"] = "Cloudflare probe connectivity error"
                 finally:
                     # Clean up transient probe key (Issue #437)
                     try:
