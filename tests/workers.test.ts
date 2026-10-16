@@ -1310,9 +1310,9 @@ Total Orientation PlayWeekMonthYear
 
     it("falls back to Browser Run REST API when binding is absent and credentials are provided", async () => {
       const { fetchMarkdownViaBrowserRun } = await import("../workers/browser_run");
-      const originalFetch = global.fetch;
+      const originalFetch = globalThis.fetch;
       try {
-        global.fetch = vi.fn().mockResolvedValue({
+        globalThis.fetch = vi.fn().mockResolvedValue({
           status: 200,
           json: vi.fn().mockResolvedValue({ success: true, result: "## REST API Markdown" })
         } as any);
@@ -1323,14 +1323,14 @@ Total Orientation PlayWeekMonthYear
         };
         const md = await fetchMarkdownViaBrowserRun(env, "https://example.com/api-test");
         expect(md).toBe("## REST API Markdown");
-        expect(global.fetch).toHaveBeenCalledWith(
+        expect(globalThis.fetch).toHaveBeenCalledWith(
           "https://api.cloudflare.com/client/v4/accounts/test_acc_abc/browser-run/markdown",
           expect.objectContaining({
             method: "POST"
           })
         );
       } finally {
-        global.fetch = originalFetch;
+        globalThis.fetch = originalFetch;
       }
     });
 
