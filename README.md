@@ -1,7 +1,7 @@
-# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.8.5 / v0.8.5-dev)
+# LLM-Augmented Unleaded Gas Price Prediction Model (`midgley` v0.8.6 / v0.8.6-dev)
 
-[![Release: v0.8.5](https://img.shields.io/badge/Release-v0.8.5-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.8.5)
-[![Development: v0.8.5-dev](https://img.shields.io/badge/Dev-v0.8.5--dev-blue.svg)](https://github.com/KoshiirRa/midgley/tree/dev)
+[![Release: v0.8.6](https://img.shields.io/badge/Release-v0.8.6-orange.svg)](https://github.com/KoshiirRa/midgley/releases/tag/v0.8.6)
+[![Development: v0.8.6-dev](https://img.shields.io/badge/Dev-v0.8.6--dev-blue.svg)](https://github.com/KoshiirRa/midgley/tree/dev)
 [![GHCR Docker](https://img.shields.io/badge/GHCR-midgley%3Aself--hosted-blue.svg?logo=docker)](https://github.com/KoshiirRa/midgley/pkgs/container/midgley)
 [![Daily Gas Price LLM Forecasting & Public Dashboard](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml/badge.svg?branch=main)](https://github.com/KoshiirRa/midgley/actions/workflows/gas_price_forecast.yml)
 [![Weekly Model Review](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml/badge.svg?branch=main)](https://github.com/KoshiirRa/midgley/actions/workflows/weekly_model_review.yml)
