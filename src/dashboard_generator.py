@@ -175,7 +175,7 @@ def format_human_source(source: str, url: str = "") -> str:
         return "Reuters Energy"
     if "bloomberg" in s_lower or _is_domain("bloomberg.com"):
         return "Bloomberg Market Wire"
-    if "noaa" in s_lower or "weather.gov" in s_lower or _is_domain("weather.gov") or _is_domain("wxs.us"):
+    if "noaa" in s_lower or "weather" in s_lower or "nws" in s_lower or _is_domain("weather.gov") or _is_domain("wxs.us"):
         return "NOAA NWS Storm Alert"
     if "cme" in s_lower or "nymex" in s_lower or _is_domain("cmegroup.com"):
         return "CME Group / NYMEX"
