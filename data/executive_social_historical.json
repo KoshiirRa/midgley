@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-10-16 21:41:00",
-  "records_count": 64,
+  "last_refreshed_utc": "2026-10-17 00:42:35",
+  "records_count": 69,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -594,7 +594,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-16 21:28:32",
+      "date": "2026-10-17 00:29:25",
       "platform": "Google News RSS",
       "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
       "target": "Energy_Market",
@@ -604,7 +604,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-16 21:28:32",
+      "date": "2026-10-17 00:29:25",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -614,7 +614,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-16 21:28:32",
+      "date": "2026-10-17 00:29:25",
       "platform": "Google News RSS",
       "post_text": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
       "target": "Energy_Market",
@@ -624,7 +624,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-16 21:28:32",
+      "date": "2026-10-17 00:29:25",
       "platform": "Google News RSS",
       "post_text": "COMMENTARY: Alberta\u2019s Economic Decline Predates Trump\u2019s Tariffs - EnergyNow",
       "target": "Energy_Market",
@@ -634,9 +634,59 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-16 21:28:32",
+      "date": "2026-10-17 00:29:25",
       "platform": "Google News RSS",
-      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-17 00:29:25",
+      "platform": "Google News RSS",
+      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-17 00:29:25",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-17 00:29:25",
+      "platform": "Google News RSS",
+      "post_text": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-17 00:29:25",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: Alberta\u2019s Economic Decline Predates Trump\u2019s Tariffs - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-17 00:29:25",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,

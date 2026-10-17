@@ -1,7 +1,7 @@
 {
   "benchmark_key": "geopolitical",
-  "last_refreshed_utc": "2026-10-16 21:28:32",
-  "records_count": 405,
+  "last_refreshed_utc": "2026-10-17 00:29:24",
+  "records_count": 409,
   "data": [
     {
       "date": "2023-04-27 00:00:00",
@@ -2836,6 +2836,34 @@
       "headline": "Asian Cup in Saudi Arabia still on, organisers say, but golf tour postponed",
       "category": "Suez_RedSea",
       "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": ""
+    },
+    {
+      "date": "2026-10-16",
+      "headline": "INSIGHT: Why is the Bab el-Mandeb Strait so Important?",
+      "category": "Geopolitical_Suez_Bab_el_Mandeb",
+      "chokepoint": "Suez_Bab_el_Mandeb",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOYU5uY0N0N1Z3XzlndVJXcXFraFhRY3pieFJFX0I5NlJqMnQxdDRETzN5ZkVQb18yamxhU1E3N0pHalVOMG50dWJpNGFtMnMzUkk3ZkNLMmczMGppSDZGcEZxUGlnWXFMTUJ0Zy1kR0RvM1Z3Wks1aUZKY2hzaGtrZw?oc=5"
+    },
+    {
+      "date": "2026-10-16",
+      "headline": "World Bank Sees Up to $5 Billion in Possible Loans to Venezuela",
+      "category": "Venezuela",
+      "chokepoint": "Venezuela_Orinoco",
+      "url": ""
+    },
+    {
+      "date": "2026-10-16",
+      "headline": "Explainer: Why is the battle for Yemen's Taiz so important?",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
+      "url": ""
+    },
+    {
+      "date": "2026-10-16",
+      "headline": "Norwegian teen sentenced to 20 years in prison for plotting murder in UK for Iran-linked gang",
+      "category": "Iran_Hormuz",
+      "chokepoint": "Strait_of_Hormuz",
       "url": ""
     }
   ]
