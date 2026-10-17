@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-17T13:34:45.660454",
+  "timestamp": "2026-10-17T16:46:38.850814",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-17T13:34:27Z"
+      "timestamp": "2026-10-17T16:46:16Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-23",
     "current_base_price": 4.167,
-    "predicted_price_per_gal": 4.058,
-    "expected_change_dollars": -0.109,
-    "expected_change_percent": -2.62,
+    "predicted_price_per_gal": 4.05,
+    "expected_change_dollars": -0.117,
+    "expected_change_percent": -2.81,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.938,
-    "prediction_upper_95ci": 4.178,
+    "prediction_lower_95ci": 3.93,
+    "prediction_upper_95ci": 4.17,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.161,
-    "day_2_price": 4.13,
-    "day_3_price": 4.094,
-    "day_4_price": 4.066,
-    "day_5_price": 4.058,
+    "day_1_price": 4.15,
+    "day_2_price": 4.127,
+    "day_3_price": 4.081,
+    "day_4_price": 4.052,
+    "day_5_price": 4.05,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.038,
+        "delta_dollars": -0.041,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.027,
+        "delta_dollars": -0.029,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -65,7 +65,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.016,
+        "delta_dollars": -0.018,
         "share_pct": 15.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -73,7 +73,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.013,
+        "delta_dollars": -0.014,
         "share_pct": 12.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
@@ -96,37 +96,37 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast $-0.109/gal (-2.62%): Driven primarily by Regional Logistics & Hub Delivery ($-0.038/gal), Futures & Commodity Benchmark ($-0.027/gal).",
+      "summary_text": "Port St Lucie FL forecast $-0.117/gal (-2.81%): Driven primarily by Regional Logistics & Hub Delivery ($-0.041/gal), Futures & Commodity Benchmark ($-0.029/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.038,
-          "impact_pct": -0.91,
+          "impact_dollars": -0.041,
+          "impact_pct": -0.98,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.027,
-          "impact_pct": -0.65,
+          "impact_dollars": -0.029,
+          "impact_pct": -0.7,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
-          "impact_dollars": -0.016,
-          "impact_pct": -0.38,
+          "impact_dollars": -0.018,
+          "impact_pct": -0.43,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.013,
-          "impact_pct": -0.31,
+          "impact_dollars": -0.014,
+          "impact_pct": -0.34,
           "share_pct": 12.0,
           "direction": "DOWN"
         },
@@ -153,32 +153,32 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.038,
-      "impact_pct": -0.91,
+      "impact_dollars": -0.041,
+      "impact_pct": -0.98,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.027,
-      "impact_pct": -0.65,
+      "impact_dollars": -0.029,
+      "impact_pct": -0.7,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
-      "impact_dollars": -0.016,
-      "impact_pct": -0.38,
+      "impact_dollars": -0.018,
+      "impact_pct": -0.43,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.013,
-      "impact_pct": -0.31,
+      "impact_dollars": -0.014,
+      "impact_pct": -0.34,
       "share_pct": 12.0,
       "direction": "DOWN"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast $-0.109/gal (-2.62%): Driven primarily by Regional Logistics & Hub Delivery ($-0.038/gal), Futures & Commodity Benchmark ($-0.027/gal).",
+    "summary_text": "Port St Lucie FL forecast $-0.117/gal (-2.81%): Driven primarily by Regional Logistics & Hub Delivery ($-0.041/gal), Futures & Commodity Benchmark ($-0.029/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.038,
+        "delta_dollars": -0.041,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.027,
+        "delta_dollars": -0.029,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -221,7 +221,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.016,
+        "delta_dollars": -0.018,
         "share_pct": 15.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -229,7 +229,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.013,
+        "delta_dollars": -0.014,
         "share_pct": 12.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
