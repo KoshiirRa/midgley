@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-17T03:34:23.777260",
+  "timestamp": "2026-10-17T08:25:47.738086",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.319,
+    "current_price_per_gal": 6.301,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-17T03:33:59Z"
+      "timestamp": "2026-10-17T08:25:29Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-23",
-    "current_base_price": 6.319,
-    "predicted_price_per_gal": 6.17,
+    "current_base_price": 6.301,
+    "predicted_price_per_gal": 6.152,
     "expected_change_dollars": -0.149,
     "expected_change_percent": -2.36,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 6.05,
-    "prediction_upper_95ci": 6.29,
+    "prediction_lower_95ci": 6.032,
+    "prediction_upper_95ci": 6.272,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.308,
-    "day_2_price": 6.259,
-    "day_3_price": 6.22,
-    "day_4_price": 6.179,
-    "day_5_price": 6.17,
+    "day_1_price": 6.29,
+    "day_2_price": 6.241,
+    "day_3_price": 6.202,
+    "day_4_price": 6.161,
+    "day_5_price": 6.152,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -102,7 +102,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.052,
-          "impact_pct": -0.82,
+          "impact_pct": -0.83,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.03,
-          "impact_pct": -0.47,
+          "impact_pct": -0.48,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.052,
-      "impact_pct": -0.82,
+      "impact_pct": -0.83,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.03,
-      "impact_pct": -0.47,
+      "impact_pct": -0.48,
       "share_pct": 20.0,
       "direction": "DOWN"
     },
