@@ -6156,5 +6156,30 @@
       "overall_price_pressure": -0.4
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-18T20:19:33.721912",
+    "headline": "Iranian oil tanker explodes after hitting a naval mine in the Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPMTNwMldqM3c1RGphWlkzWjQ3RndNaTNMLTJsQWpON01HamFoX3l0Y1JiVHZONU1mOEJIanJZYkNuUXFSM0VPLW1LQ3BWOXpzTVV6LUdJcjE3YWpaVWt1RGNYeDEtVkt5c2VQWXdNOHNseXc0QTNUbXZwMy1XQ1hUcWdNVWEwV3F5U203UUJyaTNFaURXdXJFRWJnb1I5d0ZnWDNZdUN2QTVyS1NETDRGMjZpcVRWSHBfREV2OWhQdzBlS2lsRWxBODhNdHhRVnZDbnJvc2x2MzZEZTk1eU55dHhWamt5RjZ0RFJHNXZPVXQyVFNm?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPMTNwMldqM3c1RGphWlkzWjQ3RndNaTNMLTJsQWpON01HamFoX3l0Y1JiVHZONU1mOEJIanJZYkNuUXFSM0VPLW1LQ3BWOXpzTVV6LUdJcjE3YWpaVWt1RGNYeDEtVkt5c2VQWXdNOHNseXc0QTNUbXZwMy1XQ1hUcWdNVWEwV3F5U203UUJyaTNFaURXdXJFRWJnb1I5d0ZnWDNZdUN2QTVyS1NETDRGMjZpcVRWSHBfREV2OWhQdzBlS2lsRWxBODhNdHhRVnZDbnJvc2x2MzZEZTk1eU55dHhWamt5RjZ0RFJHNXZPVXQyVFNm?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9AFBVV95cUxPMTNwMldqM3c1RGphWlkzWjQ3RndNaTNMLTJsQWpON01HamFoX3l0Y1JiVHZONU1mOEJIanJZYkNuUXFSM0VPLW1LQ3BWOXpzTVV6LUdJcjE3YWpaVWt1RGNYeDEtVkt5c2VQWXdNOHNseXc0QTNUbXZwMy1XQ1hUcWdNVWEwV3F5U203UUJyaTNFaURXdXJFRWJnb1I5d0ZnWDNZdUN2QTVyS1NETDRGMjZpcVRWSHBfREV2OWhQdzBlS2lsRWxBODhNdHhRVnZDbnJvc2x2MzZEZTk1eU55dHhWamt5RjZ0RFJHNXZPVXQyVFNm?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.2,
+      "overall_price_pressure": 0.82
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran says oil tanker hit naval mine in Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.5,
+    "duplicate_review_notified": false
   }
 ]
