@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-18T00:21:30.554831",
+  "timestamp": "2026-10-18T13:51:36.515590",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.309,
+    "current_price_per_gal": 4.299,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -17,8 +17,8 @@
       "requested_granularity": "NATIONAL",
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
-      "cache_status": "HIT_STALE",
-      "timestamp": "2026-10-17T23:53:42Z"
+      "cache_status": "HIT_FRESH",
+      "timestamp": "2026-10-18T13:51:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-23",
-    "current_base_price": 4.309,
-    "predicted_price_per_gal": 4.254,
+    "current_base_price": 4.299,
+    "predicted_price_per_gal": 4.244,
     "expected_change_dollars": -0.055,
     "expected_change_percent": -1.28,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 4.008,
-    "prediction_upper_95ci": 4.5,
+    "prediction_lower_95ci": 3.998,
+    "prediction_upper_95ci": 4.49,
     "calibration_method": "conformal",
     "calibration_sample_size": 20,
     "directional_hit_rate_historical": 0.15,
     "historical_mae_dollars": 0.2019,
     "evaluation_sample_size": 20,
-    "day_1_price": 4.306,
-    "day_2_price": 4.275,
-    "day_3_price": 4.263,
-    "day_4_price": 4.253,
-    "day_5_price": 4.254,
+    "day_1_price": 4.296,
+    "day_2_price": 4.265,
+    "day_3_price": 4.253,
+    "day_4_price": 4.243,
+    "day_5_price": 4.244,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.014,
-          "impact_pct": -0.32,
+          "impact_pct": -0.33,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.014,
-      "impact_pct": -0.32,
+      "impact_pct": -0.33,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
