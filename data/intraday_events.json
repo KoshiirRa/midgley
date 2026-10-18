@@ -6135,5 +6135,26 @@
       "overall_price_pressure": -0.55
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-18T17:10:24.711457",
+    "headline": "Trump waives new Russia tariffs as October 18 oil deadline arrives - CryptoSlate",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOaUhLQklpVng4OWNVOHVqT0J4Zmh4X3ZQUmJGeWRmSU4ybEZydEFaSlZIRXByZk1sZHFZaHNQellGYi02TElwOXFKU24ydHQzenVTc3RwR01aSi10cEhyU1doMWxOTUFSeWs4WFZRMHBfaXJsbllwcGQxV1MwOFg4Y1R3MUN0SE9mRHRodnpYUlAzS1VxTkE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOaUhLQklpVng4OWNVOHVqT0J4Zmh4X3ZQUmJGeWRmSU4ybEZydEFaSlZIRXByZk1sZHFZaHNQellGYi02TElwOXFKU24ydHQzenVTc3RwR01aSi10cEhyU1doMWxOTUFSeWs4WFZRMHBfaXJsbllwcGQxV1MwOFg4Y1R3MUN0SE9mRHRodnpYUlAzS1VxTkE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxOaUhLQklpVng4OWNVOHVqT0J4Zmh4X3ZQUmJGeWRmSU4ybEZydEFaSlZIRXByZk1sZHFZaHNQellGYi02TElwOXFKU24ydHQzenVTc3RwR01aSi10cEhyU1doMWxOTUFSeWs4WFZRMHBfaXJsbllwcGQxV1MwOFg4Y1R3MUN0SE9mRHRodnpYUlAzS1VxTkE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": -0.45,
+      "supply_disruption": 0.05,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.4
+    },
+    "discord_notified": true
   }
 ]
