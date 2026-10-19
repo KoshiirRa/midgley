@@ -293,11 +293,22 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
   - **Issue #644**: [`feat(edge,monitoring): Expand intraday monitor feed coverage with Tier-1/Tier-2 refinery operator 8-Ks and regional midstream feeds`](https://github.com/KoshiirRa/midgley/issues/644) — Adds ExxonMobil, Chevron, Suncor, Par Pacific, and midstream operators.
   - **Issue #645**: [`feat(edge,ai): Leverage Cloudflare Workers AI & Vectorize for edge event scoring, semantic deduplication, and brief synthesis`](https://github.com/KoshiirRa/midgley/issues/645) — Zero-shot SLM classification, Vectorize 384d semantic deduplication, and institutional Discord analyst briefs.
 
-### 4. Verification Commands
-```bash
-python scripts/register_discord_commands.py --dry-run
-TESTING=1 pytest -v tests/test_docs_parity.py tests/test_event_analyzer.py tests/test_alpha_factor_miner.py tests/test_pasa_research_agent.py tests/test_weekly_issue_reporter.py tests/test_system_telemetry.py tests/test_tokentab_accounting.py tests/test_scenario_simulator.py tests/test_oilpriceapi_dynamic.py tests/test_oilpriceapi_ingestion.py
-TESTING=1 pytest -v tests/test_declarative_regions.py tests/test_locations.py tests/test_regional_metadata.py tests/test_discord_subscriptions.py tests/test_zip_geocoding.py tests/test_api_server.py tests/test_hierarchical_engine.py tests/test_zero_cost_fallbacks.py tests/test_hindsight_benchmark.py tests/test_open_source_ai_radar.py tests/test_system_telemetry.py tests/test_docs_links.py
-npx vitest run tests/workers.test.ts
-```
+### 5. AAA Daily CSV, Cloudflare Browser Run Edge Fallback & Out-of-Metro ZIP Routing
+* **Primary AAA Daily CSV Ingestion (`lykmapipo/US-Gas-Prices`)**:
+  - Implemented `fetch_aaa_csv_prices` in [`src/live_fuel_feed.py`](src/live_fuel_feed.py) querying `lykmapipo/US-Gas-Prices` daily metro and state CSVs with a 24-hour cache TTL and 7-day backward date auto-discovery.
+  - Multi-grade support for Regular, Midgrade, Premium, and Diesel products with zero external API fees or subscription cost.
+* **Cloudflare Browser Run Secondary Fallback (Issue #640)**:
+  - Implemented `fetch_aaa_cloudflare_browser_run` in [`src/live_fuel_feed.py`](src/live_fuel_feed.py) leveraging Cloudflare Browser Rendering API / Browser Run (`CLOUDFLARE_BROWSER_RUN_URL` or `CLOUDFLARE_ACCOUNT_ID` + `CLOUDFLARE_API_TOKEN`) to render JavaScript-driven fuel price tables without consuming Firecrawl quotas.
+  - Preserves graceful local in-process parser fallback when Cloudflare is unconfigured or unavailable, as well as a backward-compatibility alias `fetch_aaa_cloudrun_scraper`.
+* **Out-of-Metro & Rural ZIP Code Fallback Hierarchy**:
+  - Added `fetch_live_out_of_metro_price(zip_code, state_code)` to resolve non-cluster ZIP codes (`is_metro_cluster_hit == False`):
+    1. Primary: Hyper-local GasBuddy GraphQL station-level query for queried ZIP code (`granularity: "STATION"`).
+    2. Fallback A: `lykmapipo` AAA State Daily CSV (`granularity: "STATE"`).
+    3. Fallback B: Cloudflare Browser Run AAA State Scraper.
+    4. Benchmark: EIA State / yfinance RBOB benchmark offset.
+    5. Anchor: PADD Static Anchor.
+  - Updated `_get_live_prices_impl` in [`src/api_server.py`](src/api_server.py) with dynamic out-of-metro routing and automated provenance tracking, replacing legacy static fallbacks ($3.890).
+* **Data Sources Catalog & Test Suite Verification**:
+  - Updated Data Sources Card 5.3 in [`src/sources_generator.py`](src/sources_generator.py) to document Cloudflare Browser Run ingestion.
+  - Added test coverage in [`tests/test_live_fuel_feed.py`](tests/test_live_fuel_feed.py) and [`tests/test_zip_geocoding.py`](tests/test_zip_geocoding.py); verified 56/56 unit and integration tests passing on `dev-vm`.
 

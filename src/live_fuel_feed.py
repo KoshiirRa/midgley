@@ -11,17 +11,25 @@ Provides integration functions for real-time gas price ingestion across all regi
 import os
 import re
 import json
+import csv
+import io
 import urllib.request
 import urllib.parse
 import pandas as pd
 import logging
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+from typing import Optional, Dict, Any, List, Tuple
 from src.lookup_cache import global_cache
 
 logger = logging.getLogger(__name__)
 
 # GasBuddy Internal GraphQL Endpoint
 GASBUDDY_GRAPHQL_URL = "https://www.gasbuddy.com/graphql"
+
+# lykmapipo/US-Gas-Prices Daily CSV Endpoints
+LYKMAPIPO_METRO_CSV_URL = "https://raw.githubusercontent.com/lykmapipo/US-Gas-Prices/main/data/metro-daily-averages/{date}.csv"
+LYKMAPIPO_STATE_CSV_URL = "https://raw.githubusercontent.com/lykmapipo/US-Gas-Prices/main/data/state-daily-averages/{date}.csv"
+CACHE_TTL_AAA_CSV = 86400  # 24 hours
 
 # Data Age Control Constants
 MAX_DATA_AGE_HOURS = 24.0  # Strict 24-hour maximum data staleness threshold
@@ -82,8 +90,8 @@ def is_price_outlier(region_code: str, price: float) -> bool:
         return True
     p_val = float(price)
     
-    # For CA regions (Oakland, BayArea, etc.), enforce California physical bounds [$3.50, $9.00]
-    if region_code in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA"]:
+    # For CA regions or state, enforce California physical bounds [$3.50, $9.00]
+    if region_code == "CA" or str(region_code).endswith("_CA") or region_code in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA", "Los_Angeles_CA"]:
         if p_val < 3.50 or p_val > 9.00:
             logger.warning(f"CA OUTLIER PRICE WARNING for {region_code}: ${p_val:.3f}/gal is outside expected CA range [$3.50, $9.00].")
             return True
@@ -356,6 +364,267 @@ def fetch_gasbuddy_tulsa_prices(zip_code: str = "74103") -> dict:
     return {"average_price": fallback_price, "stations": [], "source": "Tulsa Fallback Anchor"}
 
 
+def fetch_aaa_csv_prices(region_or_state: str, is_state: bool = False) -> Optional[dict]:
+    """
+    Fetches daily AAA retail fuel prices from the lykmapipo/US-Gas-Prices repository.
+    Serves as the primary zero-cost, high-reliability source for both metro and state pump prices.
+    Caches parsed daily tables with a 24-hour TTL in global_cache.
+    Supports all 4 fuel products: regular, midgrade, premium, and diesel.
+    """
+    cache_key = "aaa_csv_state_table" if (is_state or len(region_or_state) == 2) else "aaa_csv_metro_table"
+    cached_data = global_cache.get(cache_key)
+    csv_text = None
+    as_of_date = None
+
+    if cached_data and isinstance(cached_data, dict) and cached_data.get("csv_text"):
+        csv_text = cached_data["csv_text"]
+        as_of_date = cached_data.get("date")
+    else:
+        # Fetch from GitHub with date auto-discovery across the last 7 days
+        url_template = LYKMAPIPO_STATE_CSV_URL if (is_state or len(region_or_state) == 2) else LYKMAPIPO_METRO_CSV_URL
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        
+        now = datetime.now(timezone.utc)
+        for days_back in range(8):
+            cand_date = (now - timedelta(days=days_back)).strftime("%Y-%m-%d")
+            url = url_template.format(date=cand_date)
+            try:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, timeout=5) as response:
+                    if response.status == 200:
+                        raw_bytes = response.read()
+                        csv_text = raw_bytes.decode('utf-8', errors='ignore')
+                        as_of_date = cand_date
+                        global_cache.set(
+                            cache_key,
+                            {"date": as_of_date, "csv_text": csv_text},
+                            ttl_seconds=CACHE_TTL_AAA_CSV
+                        )
+                        logger.info(f"Loaded AAA daily CSV from lykmapipo ({cache_key}, date: {as_of_date})")
+                        break
+            except Exception as e:
+                logger.debug(f"Candidate AAA CSV date {cand_date} notice: {e}")
+                continue
+
+    if not csv_text:
+        return None
+
+    try:
+        reader = csv.DictReader(io.StringIO(csv_text))
+        rows = list(reader)
+        if not rows:
+            return None
+
+        # Case 1: National Average query
+        if region_or_state == "National":
+            regs, mids, prems, diesels = [], [], [], []
+            for r in rows:
+                try:
+                    reg = float(r.get("Regular", 0))
+                    if 1.50 <= reg <= 8.50:
+                        regs.append(reg)
+                        if "Mid-Grade" in r and float(r["Mid-Grade"]) > 0:
+                            mids.append(float(r["Mid-Grade"]))
+                        if "Premium" in r and float(r["Premium"]) > 0:
+                            prems.append(float(r["Premium"]))
+                        if "Diesel" in r and float(r["Diesel"]) > 0:
+                            diesels.append(float(r["Diesel"]))
+                except (ValueError, TypeError):
+                    continue
+            if regs:
+                avg_reg = sum(regs) / len(regs)
+                avg_mid = sum(mids) / len(mids) if mids else avg_reg + 0.35
+                avg_prem = sum(prems) / len(prems) if prems else avg_reg + 0.70
+                avg_dsl = sum(diesels) / len(diesels) if diesels else avg_reg + 0.50
+                return {
+                    "average_price": round(avg_reg, 3),
+                    "grades": {
+                        "regular": round(avg_reg, 3),
+                        "midgrade": round(avg_mid, 3),
+                        "premium": round(avg_prem, 3),
+                        "diesel": round(avg_dsl, 3)
+                    },
+                    "source": "AAA National Daily CSV (US Average)",
+                    "as_of_date": as_of_date or rows[0].get("Date", ""),
+                    "granularity": "NATIONAL"
+                }
+
+        # Case 2: State-level query (is_state=True or 2-letter state abbreviation)
+        target_state = region_or_state.upper() if len(region_or_state) == 2 else None
+        if not target_state and is_state:
+            meta = REGION_METADATA.get(region_or_state, {})
+            target_state = meta.get("state", "US")
+
+        if is_state or (target_state and len(target_state) == 2 and target_state != "US"):
+            for r in rows:
+                if r.get("State-Abbreviation", "").strip().upper() == target_state:
+                    reg = float(r["Regular"])
+                    mid = float(r.get("Mid-Grade", reg + 0.35))
+                    prem = float(r.get("Premium", reg + 0.70))
+                    dsl = float(r.get("Diesel", reg + 0.50))
+                    return {
+                        "average_price": round(reg, 3),
+                        "grades": {
+                            "regular": round(reg, 3),
+                            "midgrade": round(mid, 3),
+                            "premium": round(prem, 3),
+                            "diesel": round(dsl, 3)
+                        },
+                        "source": f"AAA State Daily CSV ({target_state})",
+                        "as_of_date": r.get("Date", as_of_date or ""),
+                        "granularity": "STATE"
+                    }
+
+        # Case 3: Metro-level query
+        meta = REGION_METADATA.get(region_or_state, {})
+        target_state = meta.get("state", "US")
+        keywords = meta.get("aaa_keywords", [region_or_state.split("_")[0]])
+
+        state_rows = [r for r in rows if r.get("State-Abbreviation", "").strip().upper() == target_state] if target_state != "US" else rows
+
+        for kw in keywords:
+            kw_clean = kw.lower().replace(" metro", "").replace(" retail", "").strip()
+            for r in state_rows:
+                metro_name = r.get("Metro-Name", "").lower()
+                if kw_clean in metro_name:
+                    reg = float(r["Regular"])
+                    mid = float(r.get("Mid-Grade", reg + 0.35))
+                    prem = float(r.get("Premium", reg + 0.70))
+                    dsl = float(r.get("Diesel", reg + 0.50))
+                    return {
+                        "average_price": round(reg, 3),
+                        "grades": {
+                            "regular": round(reg, 3),
+                            "midgrade": round(mid, 3),
+                            "premium": round(prem, 3),
+                            "diesel": round(dsl, 3)
+                        },
+                        "source": f"AAA Metro Daily CSV ({r.get('Metro-Name')}, {target_state})",
+                        "as_of_date": r.get("Date", as_of_date or ""),
+                        "granularity": "METRO"
+                    }
+
+        # If metro search yields no match, fallback to state table
+        if target_state and target_state != "US":
+            return fetch_aaa_csv_prices(target_state, is_state=True)
+
+    except Exception as parse_err:
+        logger.debug(f"Error parsing AAA CSV for {region_or_state}: {parse_err}")
+
+    return None
+
+
+def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -> Optional[dict]:
+    """
+    Secondary fallback scraper routed via Cloudflare Browser Rendering / Browser Run.
+    Leverages headless Chromium at the edge to render JavaScript-driven fuel price accordions
+    and tables without consuming Firecrawl quota or running heavy browser binaries locally.
+    Supports:
+    1. Dedicated Cloudflare Worker Browser Run endpoint (CLOUDFLARE_BROWSER_RUN_URL).
+    2. Direct Cloudflare Browser Rendering REST API (CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_TOKEN / CLOUDFLARE_AUTH_TOKEN).
+    Falls back gracefully to local parser if Cloudflare is unconfigured, times out, or fails.
+    """
+    token = os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CLOUDFLARE_AUTH_TOKEN")
+    timeout = float(os.environ.get("CLOUDFLARE_BROWSER_TIMEOUT", "15.0"))
+
+    # Option 1: Dedicated Cloudflare Worker Browser Run endpoint
+    worker_url = os.environ.get("CLOUDFLARE_BROWSER_RUN_URL") or os.environ.get("CLOUDFLARE_BROWSER_URL")
+    if worker_url:
+        try:
+            url = f"{worker_url.rstrip('/')}/scrape?region={urllib.parse.quote(region_code)}&is_state={'1' if is_state else '0'}"
+            headers = {"User-Agent": "Midgley/1.0 (+CloudflareBrowserClient)"}
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                if resp.status == 200:
+                    payload = json.loads(resp.read().decode("utf-8"))
+                    if payload and payload.get("average_price"):
+                        payload["source"] = f"AAA Cloudflare Browser Run ({payload.get('source', region_code)})"
+                        return payload
+        except Exception as e:
+            logger.debug(f"Cloudflare Worker Browser Run notice for {region_code}: {e}")
+
+    # Option 2: Direct Cloudflare Browser Rendering REST API
+    account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
+    if account_id and token:
+        try:
+            meta = REGION_METADATA.get(region_code, {})
+            state = meta.get("state", "US") if not is_state else (region_code if len(region_code) == 2 else meta.get("state", "US"))
+            target_url = f"https://gasprices.aaa.com/?state={state}" if state != "US" else "https://gasprices.aaa.com/"
+
+            cf_endpoint = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/browser-rendering/content"
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "User-Agent": "Midgley/1.0 (+CloudflareBrowserRendering)"
+            }
+            body = json.dumps({"url": target_url}).encode("utf-8")
+            req = urllib.request.Request(cf_endpoint, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                if resp.status == 200:
+                    resp_bytes = resp.read()
+                    try:
+                        json_resp = json.loads(resp_bytes.decode("utf-8"))
+                        rendered_html = json_resp.get("result", "") if isinstance(json_resp, dict) else str(resp_bytes)
+                    except Exception:
+                        rendered_html = resp_bytes.decode("utf-8", errors="ignore")
+
+                    if rendered_html and "<table" in rendered_html.lower():
+                        from bs4 import BeautifulSoup
+                        soup = BeautifulSoup(rendered_html, 'html.parser')
+                        keywords = meta.get("aaa_keywords", [region_code.split("_")[0]])
+                        for kw in keywords:
+                            kw_lower = kw.lower()
+                            for el in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'td', 'th']):
+                                text = el.get_text(strip=True)
+                                if kw_lower in text.lower() and len(text) < 100:
+                                    tbl = el.find_next('table')
+                                    if tbl:
+                                        for tr in tbl.find_all('tr'):
+                                            tr_text = tr.get_text(strip=True)
+                                            if 'current avg' in tr_text.lower():
+                                                prices = re.findall(r'\$(\d+\.\d{2,4})', tr_text)
+                                                if prices:
+                                                    val = float(prices[0])
+                                                    if 1.50 <= val <= 8.50:
+                                                        logger.info(f"Cloudflare Browser Run matched '{kw}' for {region_code}: ${val:.3f}/gal")
+                                                        return {
+                                                            "average_price": round(val, 3),
+                                                            "source": f"AAA Cloudflare Browser Run ({kw}, {state})",
+                                                            "granularity": "STATE" if is_state else "METRO"
+                                                        }
+                        tables = soup.find_all('table')
+                        if tables:
+                            for tr in tables[0].find_all('tr'):
+                                tr_text = tr.get_text(strip=True)
+                                if 'current avg' in tr_text.lower():
+                                    prices = re.findall(r'\$(\d+\.\d{2,4})', tr_text)
+                                    if prices:
+                                        val = float(prices[0])
+                                        if 1.50 <= val <= 8.50:
+                                            return {
+                                                "average_price": round(val, 3),
+                                                "source": f"AAA Cloudflare Browser Run ({state})",
+                                                "granularity": "STATE"
+                                            }
+        except Exception as e:
+            logger.debug(f"Direct Cloudflare Browser Rendering notice for {region_code}: {e}")
+
+    # Local in-process fallback if Cloudflare Browser Run is not configured or failed
+    if is_state:
+        return fetch_aaa_fuel_prices_all_grades(region_code)
+    else:
+        return fetch_aaa_metro_price(region_code)
+
+
+def fetch_aaa_cloudrun_scraper(region_code: str, is_state: bool = False) -> Optional[dict]:
+    """Backward compatibility alias for fetch_aaa_cloudflare_browser_run."""
+    return fetch_aaa_cloudflare_browser_run(region_code, is_state=is_state)
+
+
 def fetch_aaa_metro_price(region_code: str) -> dict:
     """
     Scrapes AAA Gas Prices (gasprices.aaa.com) for targeted metro average gas prices.
@@ -420,8 +689,22 @@ def fetch_aaa_metro_price(region_code: str) -> dict:
 def fetch_aaa_fuel_prices_all_grades(region_code: str = "National") -> dict:
     """
     Scrapes AAA Gas Prices (gasprices.aaa.com) for multi-grade fuel prices (Regular, Midgrade, Premium, Diesel).
-    Returns zero-cost fuel price vector without API fees or paid subscriptions.
+    Prioritizes lykmapipo daily CSV (zero-cost, multi-grade) before falling back to web scraper.
     """
+    # 1. Primary: lykmapipo daily CSV
+    csv_res = fetch_aaa_csv_prices(region_code)
+    if csv_res and csv_res.get("grades") and csv_res.get("average_price"):
+        return {
+            "region": region_code,
+            "source": csv_res.get("source", "AAA Daily CSV"),
+            "is_free_alternative": True,
+            "cost_per_query": 0.0,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "grades": csv_res["grades"],
+            "average_price": csv_res["average_price"],
+            "as_of_date": csv_res.get("as_of_date", "")
+        }
+
     meta = REGION_METADATA.get(region_code, REGION_METADATA["National"])
     state = meta.get("state", "US")
     url = f"https://gasprices.aaa.com/?state={state}" if state != "US" else "https://gasprices.aaa.com/"
@@ -475,6 +758,98 @@ def fetch_aaa_fuel_prices_all_grades(region_code: str = "National") -> dict:
         "diesel": round(reg_price + 0.50, 3)
     }
     return result
+
+
+def fetch_live_out_of_metro_price(zip_code: str, state_code: str = "US") -> dict:
+    """
+    Resolves live retail fuel price for an out-of-metro (rural / exurban) ZIP code.
+    Fallback hierarchy:
+    1. Primary: GasBuddy GraphQL query for the specific queried ZIP code (Station-level precision).
+    2. Fallback A: lykmapipo AAA State Daily CSV (State-level average for the zip's state).
+    3. Fallback B: Cloud Run AAA State Scraper.
+    4. Benchmark: EIA State / yfinance.
+    5. Anchor: PADD static anchor.
+    """
+    timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Step 1: GasBuddy GraphQL by queried zip code (Hyper-local station observations)
+    gb_res = fetch_gasbuddy_prices_by_zip(zip_code)
+    if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
+        price = gb_res["average_price"]
+        source = gb_res["source"]
+        if not is_price_outlier(state_code, price):
+            logger.info(f"Fetched live out-of-metro observation via GasBuddy for ZIP {zip_code}: ${price:.3f}/gal")
+            return validate_price_payload_freshness({
+                "price": price,
+                "average_price": price,
+                "source": source,
+                "timestamp": timestamp_str,
+                "granularity": "STATION",
+                "zip_code": zip_code,
+                "state": state_code,
+                "stations": gb_res.get("stations", [])
+            })
+
+    # Step 2: lykmapipo AAA State Daily CSV
+    csv_res = fetch_aaa_csv_prices(state_code, is_state=True)
+    if csv_res and csv_res.get("average_price") and pd.notna(csv_res.get("average_price")):
+        price = csv_res["average_price"]
+        if not is_price_outlier(state_code, price):
+            logger.info(f"Fetched out-of-metro fallback via AAA State CSV for {state_code}: ${price:.3f}/gal")
+            return validate_price_payload_freshness({
+                "price": price,
+                "average_price": price,
+                "source": csv_res["source"],
+                "timestamp": timestamp_str,
+                "granularity": "STATE",
+                "zip_code": zip_code,
+                "state": state_code,
+                "grades": csv_res.get("grades", {})
+            })
+
+    # Step 3: Cloudflare Browser Run AAA State Scraper
+    cf_res = fetch_aaa_cloudflare_browser_run(state_code, is_state=True)
+    if cf_res and cf_res.get("average_price") and pd.notna(cf_res.get("average_price")):
+        price = cf_res["average_price"]
+        if not is_price_outlier(state_code, price):
+            logger.info(f"Fetched out-of-metro fallback via Cloudflare Browser Run for {state_code}: ${price:.3f}/gal")
+            return validate_price_payload_freshness({
+                "price": price,
+                "average_price": price,
+                "source": cf_res.get("source", f"AAA Cloudflare Browser Run ({state_code})"),
+                "timestamp": timestamp_str,
+                "granularity": "STATE",
+                "zip_code": zip_code,
+                "state": state_code,
+                "grades": cf_res.get("grades", {})
+            })
+
+    # Step 4: EIA / yfinance Benchmark
+    eia_res = fetch_eia_or_yfinance_price(state_code)
+    if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
+        price = eia_res["average_price"]
+        logger.info(f"Fetched out-of-metro fallback via EIA for {state_code}: ${price:.3f}/gal")
+        return validate_price_payload_freshness({
+            "price": price,
+            "average_price": price,
+            "source": eia_res["source"],
+            "timestamp": timestamp_str,
+            "granularity": "STATE",
+            "zip_code": zip_code,
+            "state": state_code
+        })
+
+    # Step 5: Static Fallback Anchor
+    static_fallback = REGION_METADATA.get("National", {}).get("static_anchor", 4.316)
+    return validate_price_payload_freshness({
+        "price": static_fallback,
+        "average_price": static_fallback,
+        "source": f"PADD Static Anchor ({state_code})",
+        "timestamp": timestamp_str,
+        "granularity": "NATIONAL",
+        "zip_code": zip_code,
+        "state": state_code
+    })
 
 
 def fetch_eia_or_yfinance_price(region_code: str) -> dict:
@@ -546,11 +921,12 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
     """
     Fetches real-time retail gas price for a metro region executing the full fallback chain:
     0. 15-Minute SWR Cache Layer (LookupCache.get_swr)
-    1. Live GasBuddy GraphQL API
-    2. AAA Metro Web Scraper
-    3. EIA / yfinance Benchmark
-    4. Last Known prediction_history.csv Price
-    5. Static Regional Fallback Anchor
+    1. lykmapipo AAA Daily CSV (Primary Zero-Cost Metro Source)
+    2. AAA Cloudflare Browser Run (Secondary Edge Scraper Fallback)
+    3. Live GasBuddy GraphQL API (Station-level Hyper-local Fallback)
+    4. EIA / yfinance Benchmark
+    5. Last Known prediction_history.csv Price
+    6. Static Regional Fallback Anchor
     """
     cache_key = f"live_price_{region_code}"
 
@@ -562,28 +938,46 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
 
         res = None
 
-        # Step 1: Live GasBuddy GraphQL API
-        gb_res = fetch_gasbuddy_prices_by_zip(zip_code)
-        if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
-            price = gb_res["average_price"]
-            source = gb_res["source"]
+        # Step 1: lykmapipo AAA Daily CSV (Primary Zero-Cost Metro Source)
+        csv_res = fetch_aaa_csv_prices(region_code)
+        if csv_res and csv_res.get("average_price") and pd.notna(csv_res.get("average_price")):
+            price = csv_res["average_price"]
+            source = csv_res["source"]
             if not is_price_outlier(region_code, price):
-                logger.info("Fetched live fuel observation via GasBuddy")
-                res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
+                logger.info(f"Fetched live fuel observation via AAA Daily CSV for {region_code}: ${price:.3f}/gal")
+                payload = {"region": region_code, "price": price, "source": source, "timestamp": timestamp_str}
+                if csv_res.get("grades"):
+                    payload["grades"] = csv_res["grades"]
+                res = validate_price_payload_freshness(payload)
 
-        # Step 2: AAA Metro Web Scraper
+        # Step 2: AAA Cloudflare Browser Run (Secondary Edge Scraper Fallback)
         if not res or res.get("is_stale"):
-            aaa_res = fetch_aaa_metro_price(region_code)
-            if aaa_res and aaa_res.get("average_price") and pd.notna(aaa_res.get("average_price")):
-                price = aaa_res["average_price"]
-                source = aaa_res["source"]
+            cf_res = fetch_aaa_cloudflare_browser_run(region_code)
+            if cf_res and cf_res.get("average_price") and pd.notna(cf_res.get("average_price")):
+                price = cf_res["average_price"]
+                source = cf_res.get("source", f"AAA Cloudflare Browser Run ({region_code})")
                 if not is_price_outlier(region_code, price):
-                    logger.info("Fetched live fuel observation via AAA")
+                    logger.info(f"Fetched live fuel observation via Cloudflare Browser Run for {region_code}: ${price:.3f}/gal")
+                    payload = {"region": region_code, "price": price, "source": source, "timestamp": timestamp_str}
+                    if cf_res.get("grades"):
+                        payload["grades"] = cf_res["grades"]
+                    cand = validate_price_payload_freshness(payload)
+                    if not res or not cand.get("is_stale"):
+                        res = cand
+
+        # Step 3: Live GasBuddy GraphQL API (Station-level Hyper-local Fallback)
+        if not res or res.get("is_stale"):
+            gb_res = fetch_gasbuddy_prices_by_zip(zip_code)
+            if gb_res and gb_res.get("average_price") and pd.notna(gb_res.get("average_price")):
+                price = gb_res["average_price"]
+                source = gb_res["source"]
+                if not is_price_outlier(region_code, price):
+                    logger.info("Fetched live fuel observation via GasBuddy")
                     cand = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
                     if not res or not cand.get("is_stale"):
                         res = cand
 
-        # Step 3: EIA / yfinance Benchmark Calculation
+        # Step 4: EIA / yfinance Benchmark Calculation
         if not res or res.get("is_stale"):
             eia_res = fetch_eia_or_yfinance_price(region_code)
             if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
@@ -594,7 +988,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
                 if not res or not cand.get("is_stale"):
                     res = cand
 
-        # Step 4: Last Known prediction_history.csv Price
+        # Step 5: Last Known prediction_history.csv Price
         if not res:
             hist_res = fetch_history_last_known_price(region_code)
             if hist_res and hist_res.get("average_price") and pd.notna(hist_res.get("average_price")):
@@ -603,17 +997,17 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
                 logger.info("Fetched live fuel observation via history")
                 res = validate_price_payload_freshness({"region": region_code, "price": price, "source": source, "timestamp": timestamp_str})
 
-        # Step 5: Static Fallback Anchor
+        # Step 6: Static Fallback Anchor
         if not res:
             logger.info("Using static fallback anchor")
             res = validate_price_payload_freshness({"region": region_code, "price": static_fallback, "source": f"Static Anchor ({region_code})", "timestamp": timestamp_str})
 
         # Determine granularity level
         source_name = res.get("source", "Static Anchor")
-        if "GasBuddy" in source_name or "AAA" in source_name:
-            served_granularity = "METRO"
-        elif "EIA State" in source_name or "State" in source_name:
+        if "State" in source_name or "EIA State" in source_name:
             served_granularity = "STATE"
+        elif "GasBuddy" in source_name or "Metro" in source_name or "AAA" in source_name:
+            served_granularity = "METRO"
         else:
             served_granularity = "NATIONAL"
 

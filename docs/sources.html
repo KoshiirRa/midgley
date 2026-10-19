@@ -1304,8 +1304,8 @@
                     </div>
                 </div>
 
-                <!-- Card 5.3: Crowdsourced Retail Pump Prices -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="live retail pump prices gasbuddy graphql aaa fuel gauge scraper opis rack margins denver suncor colorado">
+                <!-- Card 5.3: Crowdsourced & AAA Retail Pump Prices -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="live retail pump prices gasbuddy graphql aaa fuel gauge scraper lykmapipo csv cloudflare browser run puppeteer opis rack margins">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">
@@ -1314,22 +1314,22 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-white">Live Retail Fuel Feeds</h4>
-                                    <span class="font-mono text-xs text-purple-400">GasBuddy / AAA Scraper</span>
+                                    <span class="font-mono text-xs text-purple-400">lykmapipo CSV &bull; Cloudflare Browser Run &bull; GasBuddy</span>
                                 </div>
                             </div>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Real-Time &bull; 6h TTL</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Daily CSV &bull; 24h TTL</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Ingests real-time retail street pump benchmarks via GasBuddy GraphQL API and AAA Daily Fuel Gauge scraper. Backfills actual outcomes and anchors local baseline prices.
+                            Primary ingestion via lykmapipo/US-Gas-Prices daily AAA metro and state CSVs (multi-grade zero-cost observations). Secondary fallback to headless Chromium Cloudflare Browser Run edge rendering (Issue #640), hyper-local station query via GasBuddy GraphQL, and EIA benchmark calibration.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> Tulsa, Newark, Cincinnati, Greenville, Charlotte, Port St. Lucie, Oakland, Chicago, Houston, Los Angeles, Denver, New York, Seattle, Phoenix, Anchorage, Honolulu, Guam, San Juan, Boston</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Coverage:</span> All 18 calibration metro hubs, state-level aggregates, and out-of-metro rural ZIP routing</div>
                             <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/live_fuel_feed.py</code></div>
                         </div>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
-                        <span>Provider: Crowdsourced / AAA Public</span>
-                        <span class="text-emerald-400 font-semibold">$0 Open Scraper</span>
+                        <span>Provider: lykmapipo (AAA) / Cloudflare Browser Run / GasBuddy</span>
+                        <span class="text-emerald-400 font-semibold">$0 Open Ingestion</span>
                     </div>
                 </div>
 
