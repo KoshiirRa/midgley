@@ -18,6 +18,17 @@ import intradayWorker, {
   QueueMessageBatch
 } from "../workers/intraday_monitor_worker";
 import cacheWorker, { timingSafeEqual as cacheTimingSafeEqual, Env as CacheEnv } from "../workers/cache_worker";
+import {
+  scoreHeadlineAtEdge,
+  querySemanticDedupe,
+  indexHeadlineVector,
+  retainHindsightMemory,
+  queryHindsightBank,
+  synthesizeAnalystBrief,
+  getHeadlineEmbedding,
+  fallbackRegexScore,
+  extractMatchedEntityAtEdge
+} from "../workers/ai_event_scorer";
 
 function uint8ArrayToHex(arr: Uint8Array): string {
   return Array.from(arr)
@@ -1381,6 +1392,503 @@ Total Orientation PlayWeekMonthYear
       const env = {};
       const md = await fetchMarkdownViaBrowserRun(env, "https://example.com/none");
       expect(md).toBeNull();
+    });
+  });
+
+  describe("Cloudflare Workers AI & Vectorize Edge Intelligence (Issue #645)", () => {
+    describe("Zero-Shot Catalyst & Severity Scoring at the Edge", () => {
+      it("scores refinery outages accurately with Workers AI structured output", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: JSON.stringify({
+              is_anomaly: true,
+              catalyst_domain: "refinery_pipeline",
+              affected_hub: "Houston_TX",
+              direction: "spike",
+              magnitude: "critical",
+              half_life_days: 6.5,
+              confidence: 0.94,
+              reasoning: "Port Arthur CDU shutdown tightens Gulf Coast supply"
+            })
+          })
+        };
+
+        const result = await scoreHeadlineAtEdge(
+          "Valero Port Arthur CDU restart delay tightens Gulf Coast RBOB supply",
+          { AI: mockAi }
+        );
+
+        expect(result.is_anomaly).toBe(true);
+        expect(result.catalyst_domain).toBe("refinery_pipeline");
+        expect(result.affected_hub).toBe("Houston_TX");
+        expect(result.direction).toBe("spike");
+        expect(result.magnitude).toBe("critical");
+        expect(result.confidence).toBe(0.94);
+        expect(result.model).toContain("llama-3.2");
+        expect(mockAi.run).toHaveBeenCalled();
+      });
+
+      it("classifies non-energy macroeconomic trade discussions as noise", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: JSON.stringify({
+              is_anomaly: false,
+              catalyst_domain: "noise",
+              affected_hub: "None",
+              direction: "neutral",
+              magnitude: "low",
+              half_life_days: 0.0,
+              confidence: 0.98,
+              reasoning: "Timber and soft lumber tariff debate without fuel implications"
+            })
+          })
+        };
+
+        const result = await scoreHeadlineAtEdge(
+          "Senate debate intensifies over softwood lumber tariffs",
+          { AI: mockAi }
+        );
+
+        expect(result.is_anomaly).toBe(false);
+        expect(result.catalyst_domain).toBe("noise");
+        expect(result.direction).toBe("neutral");
+      });
+
+      it("falls back to deterministic regex heuristic when AI is unconfigured or times out", async () => {
+        // 1. Unconfigured AI
+        const fallbackRes = await scoreHeadlineAtEdge(
+          "Colonial Pipeline outage shuts Line 1 gasoline transmission",
+          {}
+        );
+        expect(fallbackRes.is_anomaly).toBe(true);
+        expect(fallbackRes.catalyst_domain).toBe("refinery_pipeline");
+        expect(fallbackRes.model).toBe("regex_heuristic_fallback");
+
+        // 2. Timeout simulation
+        const slowAi = {
+          run: vi.fn().mockImplementation(() => new Promise(resolve => setTimeout(resolve, 200)))
+        };
+        const timeoutRes = await scoreHeadlineAtEdge(
+          "Hurricane threatens Gulf of Mexico offshore platforms",
+          { AI: slowAi },
+          50 // 50ms timeout
+        );
+        expect(timeoutRes.is_anomaly).toBe(true);
+        expect(timeoutRes.catalyst_domain).toBe("weather_hurricane");
+        expect(timeoutRes.model).toBe("regex_heuristic_fallback");
+      });
+
+      it("correctly identifies noise commodities via regex fallback", () => {
+        const noiseRes = fallbackRegexScore("Soybean and canola cooking oil prices drop across Midwest grocery stores");
+        expect(noiseRes.is_anomaly).toBe(false);
+        expect(noiseRes.catalyst_domain).toBe("noise");
+      });
+    });
+
+    describe("Vectorize Dense Embedding & Semantic Deduplication", () => {
+      it("computes 384-dimensional dense vector embeddings", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            shape: [1, 384],
+            data: [new Array(384).fill(0.05)]
+          })
+        };
+
+        const embedding = await getHeadlineEmbedding("Colonial Pipeline outage", { AI: mockAi });
+        expect(embedding).toHaveLength(384);
+        expect(embedding?.[0]).toBe(0.05);
+      });
+
+      it("suppresses redundant events when Vectorize cosine similarity >= 0.88", async () => {
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [
+              {
+                id: "vec-123",
+                score: 0.93,
+                metadata: { headline: "Colonial Pipeline shuts Line 1 after leak" }
+              }
+            ]
+          }),
+          insert: vi.fn()
+        };
+
+        const res = await querySemanticDedupe(
+          "Colonial Pipeline Line 1 closed due to pipeline spill",
+          { EVENT_INDEX: mockIndex },
+          { embedding: new Array(384).fill(0.01) }
+        );
+
+        expect(res.status).toBe("duplicate");
+        expect(res.similarity).toBe(0.93);
+        expect(res.source).toBe("vectorize");
+        expect(res.matched_id).toBe("vec-123");
+      });
+
+      it("flags evolving incident status when Vectorize similarity is in [0.70, 0.88)", async () => {
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [
+              {
+                id: "vec-flaring-456",
+                score: 0.77,
+                metadata: { headline: "Port Arthur refinery reports flaring" }
+              }
+            ]
+          }),
+          insert: vi.fn()
+        };
+
+        const res = await querySemanticDedupe(
+          "Port Arthur refinery initiates full unit shutdown following flaring",
+          { EVENT_INDEX: mockIndex },
+          { embedding: new Array(384).fill(0.01) }
+        );
+
+        expect(res.status).toBe("evolving");
+        expect(res.similarity).toBe(0.77);
+        expect(res.source).toBe("vectorize");
+        expect(res.matched_id).toBe("vec-flaring-456");
+      });
+
+      it("marks event as novel and inserts into Vectorize when similarity < 0.70", async () => {
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [
+              {
+                id: "vec-old",
+                score: 0.42,
+                metadata: { headline: "Denver airport jet fuel deliveries normal" }
+              }
+            ]
+          }),
+          insert: vi.fn().mockResolvedValue({ count: 1 })
+        };
+
+        const res = await querySemanticDedupe(
+          "Major refinery fire reported at Joliet refinery",
+          { EVENT_INDEX: mockIndex },
+          { embedding: new Array(384).fill(0.01) }
+        );
+
+        expect(res.status).toBe("novel");
+        expect(res.source).toBe("none");
+
+        const inserted = await indexHeadlineVector(
+          "Major refinery fire reported at Joliet refinery",
+          new Array(384).fill(0.01),
+          { domain: "refinery_pipeline" },
+          { EVENT_INDEX: mockIndex }
+        );
+        expect(inserted).toBe(true);
+        expect(mockIndex.insert).toHaveBeenCalled();
+      });
+    });
+
+    describe("Cross-Environment Hindsight Memory Bank (midgley-event-dedupe)", () => {
+      const originalFetch = globalThis.fetch;
+
+      afterEach(() => {
+        globalThis.fetch = originalFetch;
+      });
+
+      it("recalls prior memories from Hindsight SaaS when Vectorize is empty", async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            results: [
+              {
+                document_id: "hs-doc-999",
+                score: 0.91,
+                text: "Joliet refinery CDU shutdown due to power failure",
+                entities: ["Joliet"]
+              }
+            ]
+          })
+        } as any);
+
+        const env = {
+          HINDSIGHT_API_TOKEN: "mock_hindsight_key",
+          HINDSIGHT_DEDUPE_BANK_ID: "midgley-event-dedupe"
+        };
+
+        const hsRes = await queryHindsightBank(
+          "Power failure forces Joliet refinery CDU unit offline",
+          env
+        );
+
+        expect(hsRes.matched).toBe(true);
+        expect(hsRes.similarity).toBe(0.91);
+        expect(hsRes.docId).toBe("hs-doc-999");
+      });
+
+      it("retains confirmed anomalies into Hindsight midgley-event-dedupe with entity extraction", async () => {
+        let sentBody: any = null;
+        globalThis.fetch = vi.fn().mockImplementation((url, opts) => {
+          sentBody = JSON.parse(opts.body);
+          return Promise.resolve({
+            ok: true,
+            status: 201,
+            json: async () => ({ success: true })
+          });
+        });
+
+        const env = {
+          HINDSIGHT_API_TOKEN: "mock_hindsight_key",
+          HINDSIGHT_DEDUPE_BANK_ID: "midgley-event-dedupe"
+        };
+
+        const retained = await retainHindsightMemory(
+          {
+            headline: "ExxonMobil Baytown refinery unit tripped after severe storm",
+            url: "https://example.com/baytown-trip",
+            source: "TestFeed",
+            magnitude: "high",
+            locales: ["Houston_TX"]
+          },
+          env
+        );
+
+        expect(retained).toBe(true);
+        expect(sentBody).toBeDefined();
+        expect(sentBody.items[0].entities[0].text).toBe("Baytown");
+        expect(sentBody.items[0].tags).toContain("edge_worker");
+      });
+
+      it("extracts recognized physical facilities and operators reliably", () => {
+        expect(extractMatchedEntityAtEdge("Fire reported at Joliet refinery unit")).toBe("Joliet");
+        expect(extractMatchedEntityAtEdge("Colonial pipeline shutdown after leak")).toBe("Colonial Pipeline");
+        expect(extractMatchedEntityAtEdge("Valero reports mechanical failure")).toBe("Valero");
+        expect(extractMatchedEntityAtEdge("General interest article")).toBeNull();
+      });
+    });
+
+    describe("Grounded Institutional Analyst Briefing Synthesis", () => {
+      it("synthesizes grounded institutional briefs via Workers AI", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: "Chicago spot gasoline margins widened +4.2¢/gal following Joliet CDU restart delays. Retail stations are expected to absorb wholesale spikes over a 4-day pass-through horizon."
+          })
+        };
+
+        const brief = await synthesizeAnalystBrief(
+          {
+            hub_name: "Chicago (IL)",
+            current_price: 3.450,
+            predicted_shift: 0.085,
+            direction: "UP",
+            confidence_interval: [3.410, 3.590],
+            active_catalysts: ["Joliet CDU restart delayed"]
+          },
+          { AI: mockAi }
+        );
+
+        expect(brief).toContain("Chicago spot gasoline margins");
+        expect(mockAi.run).toHaveBeenCalled();
+      });
+
+      it("falls back to deterministic template when Workers AI is unconfigured or times out", async () => {
+        const brief = await synthesizeAnalystBrief(
+          {
+            hub_name: "Denver (CO)",
+            current_price: 3.120,
+            predicted_shift: -0.045,
+            direction: "DOWN",
+            confidence_interval: [3.050, 3.200]
+          },
+          {}
+        );
+
+        expect(brief).toContain("Denver (CO) fuel forecast projects a DOWN trajectory");
+        expect(brief).toContain("-0.045 $/gal");
+      });
+    });
+
+    describe("Queue Consumer Integration with Edge Deduplication & Scoring", () => {
+      const originalFetch = globalThis.fetch;
+
+      beforeEach(() => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+          ok: true,
+          status: 204,
+          json: async () => ({})
+        });
+      });
+
+      afterEach(() => {
+        globalThis.fetch = originalFetch;
+      });
+
+      it("suppresses queue batch dispatch when semantic deduplication finds an exact duplicate", async () => {
+        const ackSpy = vi.fn();
+        const retrySpy = vi.fn();
+        const mockDb = createMockD1Database();
+
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [{ id: "vec-dup-99", score: 0.95, metadata: { headline: "Existing refinery fire" } }]
+          }),
+          insert: vi.fn()
+        };
+
+        const batch: QueueMessageBatch = {
+          queue: "intraday-events",
+          messages: [
+            {
+              id: "msg-dup",
+              timestamp: new Date(),
+              body: {
+                headline: "Existing refinery fire in Port Arthur",
+                url: "https://example.com/port-arthur",
+                source: "Test_Queue"
+              },
+              attempts: 1,
+              ack: ackSpy,
+              retry: retrySpy
+            }
+          ],
+          ackAll: vi.fn(),
+          retryAll: vi.fn()
+        };
+
+        const env: IntradayEnv = {
+          GH_PAT: "mock_gh_pat_token",
+          REPO_OWNER: "KoshiirRa",
+          REPO_NAME: "midgley",
+          DB: mockDb,
+          EVENT_INDEX: mockIndex
+        };
+
+        const result = await handleQueueBatch(batch, env);
+        expect(result.processed).toBe(1);
+        expect(result.acked).toBe(1);
+        expect(ackSpy).toHaveBeenCalled();
+        expect(globalThis.fetch).not.toHaveBeenCalledWith(
+          expect.stringContaining("dispatches"),
+          expect.anything()
+        );
+      });
+
+      it("suppresses queue batch dispatch when edge scoring classifies headline as noise", async () => {
+        const ackSpy = vi.fn();
+        const retrySpy = vi.fn();
+        const mockDb = createMockD1Database();
+
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: JSON.stringify({
+              is_anomaly: false,
+              catalyst_domain: "noise",
+              affected_hub: "None",
+              direction: "neutral",
+              magnitude: "low",
+              confidence: 0.99
+            })
+          })
+        };
+
+        const batch: QueueMessageBatch = {
+          queue: "intraday-events",
+          messages: [
+            {
+              id: "msg-noise",
+              timestamp: new Date(),
+              body: {
+                headline: "Palm oil imports hit record in Southeast Asia",
+                url: "https://example.com/palm-oil",
+                source: "Test_Queue"
+              },
+              attempts: 1,
+              ack: ackSpy,
+              retry: retrySpy
+            }
+          ],
+          ackAll: vi.fn(),
+          retryAll: vi.fn()
+        };
+
+        const env: IntradayEnv = {
+          GH_PAT: "mock_gh_pat_token",
+          REPO_OWNER: "KoshiirRa",
+          REPO_NAME: "midgley",
+          DB: mockDb,
+          AI: mockAi
+        };
+
+        const result = await handleQueueBatch(batch, env);
+        expect(result.processed).toBe(1);
+        expect(result.acked).toBe(1);
+        expect(ackSpy).toHaveBeenCalled();
+        expect(globalThis.fetch).not.toHaveBeenCalledWith(
+          expect.stringContaining("dispatches"),
+          expect.anything()
+        );
+      });
+    });
+
+    describe("Discord /midgley forecast Dynamic Briefing Integration", () => {
+      it("includes the Institutional Analyst Brief field in /midgley forecast embed responses", async () => {
+        const secretKey = nacl.sign.keyPair().secretKey;
+        const publicKeyHex = uint8ArrayToHex(secretKey.slice(32));
+        const timestamp = String(Math.floor(Date.now() / 1000));
+
+        const body = JSON.stringify({
+          type: 2, // APPLICATION_COMMAND
+          id: "interaction_forecast_brief",
+          token: "mock_token_brief",
+          user: { id: "test_trader_456", username: "quant_trader" },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "locale", value: "Chicago_IL" },
+                  { name: "horizon", value: 5 }
+                ]
+              }
+            ]
+          }
+        });
+
+        const message = new TextEncoder().encode(timestamp + body);
+        const signature = nacl.sign.detached(message, secretKey);
+        const signatureHex = uint8ArrayToHex(signature);
+
+        const req = new Request("https://worker.local/discord/interactions", {
+          method: "POST",
+          headers: {
+            "X-Signature-Ed25519": signatureHex,
+            "X-Signature-Timestamp": timestamp,
+            "Content-Type": "application/json"
+          },
+          body
+        });
+
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: "Chicago wholesale basis widened due to pipeline maintenance. Expect localized retail price support through day 5."
+          })
+        };
+
+        const env: IntradayEnv = {
+          DISCORD_PUBLIC_KEY: publicKeyHex,
+          AI: mockAi
+        };
+
+        const res = await handleDiscordInteraction(req, env, {});
+        expect(res.status).toBe(200);
+        const data = (await res.json()) as any;
+        expect(data.type).toBe(4); // CHANNEL_MESSAGE_WITH_SOURCE
+        const embed = data.data.embeds[0];
+        expect(embed.title).toContain("Midgley 5D Forecast");
+
+        const briefField = embed.fields.find((f: any) => f.name.includes("Institutional Analyst Brief"));
+        expect(briefField).toBeDefined();
+        expect(briefField.value).toContain("Chicago wholesale basis widened");
+      });
     });
   });
 });

@@ -8,6 +8,16 @@
 
 import nacl from "tweetnacl";
 import { getEnverusDailyRigCount, MIDGLEY_AGENT_USER_AGENT as DEFAULT_MIDGLEY_AGENT_UA } from "./enverus_scraper";
+import {
+  ScoredCatalyst,
+  SemanticDedupeResult,
+  scoreHeadlineAtEdge,
+  querySemanticDedupe,
+  indexHeadlineVector,
+  retainHindsightMemory,
+  synthesizeAnalystBrief,
+  getHeadlineEmbedding
+} from "./ai_event_scorer";
 
 export interface Env {
   GH_PAT?: string;
@@ -28,6 +38,16 @@ export interface Env {
   FLAG_SIGNING_KEY?: string;
   DB?: any;
   MYBROWSER?: any;
+  AI?: any;
+  EVENT_INDEX?: {
+    query(vector: number[], options: { topK?: number; returnMetadata?: string }): Promise<{
+      matches: Array<{ id: string; score: number; metadata?: Record<string, any> }>;
+    }>;
+    insert(vectors: Array<{ id: string; values: number[]; metadata?: Record<string, any> }>): Promise<any>;
+  };
+  HINDSIGHT_API_URL?: string;
+  HINDSIGHT_DEDUPE_BANK_ID?: string;
+  HINDSIGHT_API_TOKEN?: string;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
     sendBatch(messages: { body: any }[], options?: any): Promise<void>;
@@ -542,10 +562,61 @@ export async function handleQueueBatch(
         continue;
       }
 
+      // Check Vectorize & Hindsight multi-tier semantic deduplication
+      const dedupeRes = await querySemanticDedupe(headline, env);
+      if (dedupeRes.status === "duplicate") {
+        console.log(`[Queue Semantic Dedupe] Suppressing duplicate event (${dedupeRes.source}): "${headline}"`);
+        await markHeadlineDispatchedInCache(headline, env);
+        message.ack();
+        acked++;
+        continue;
+      }
+
+      // Zero-shot catalyst scoring at the edge via Workers AI
+      const scored = await scoreHeadlineAtEdge(headline, env);
+      if (!scored.is_anomaly) {
+        console.log(`[Queue Catalyst Filter] Noise classified by ${scored.model}: "${headline}"`);
+        await markHeadlineDispatchedInCache(headline, env);
+        message.ack();
+        acked++;
+        continue;
+      }
+
       const res = await dispatchGitHubEvent(env, headline, url);
       if (res.dispatched) {
         console.log(`[Queue Consumer Dispatch Success] Event dispatched for: "${headline}"`);
         await markHeadlineDispatchedInCache(headline, env);
+
+        // Background multi-store persistence to Vectorize and Hindsight midgley-event-dedupe
+        const persistTask = async () => {
+          try {
+            const embedding = await getHeadlineEmbedding(headline, env);
+            if (embedding) {
+              await indexHeadlineVector(headline, embedding, {
+                domain: scored.catalyst_domain,
+                hub: scored.affected_hub,
+                magnitude: scored.magnitude,
+                model: scored.model
+              }, env);
+            }
+            await retainHindsightMemory({
+              headline,
+              url,
+              source: message.body?.source || "QueueConsumer",
+              magnitude: scored.magnitude,
+              locales: [scored.affected_hub]
+            }, env);
+          } catch (pErr: any) {
+            console.warn(`[Background Persistence Notice] ${pErr?.message || String(pErr)}`);
+          }
+        };
+
+        if (ctx && typeof ctx.waitUntil === "function") {
+          ctx.waitUntil(persistTask());
+        } else {
+          await persistTask();
+        }
+
         message.ack();
         acked++;
       } else {
@@ -654,6 +725,15 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
 
         // Enqueue to INTRADAY_QUEUE using existing WebhookRequest-compatible schema
         const headline = `${ticker} 8-K: ${title}`;
+
+        // Multi-tier semantic deduplication check (Vectorize + Hindsight)
+        const dedupeRes = await querySemanticDedupe(headline, env);
+        if (dedupeRes.status === "duplicate") {
+          console.log(`[EDGAR Semantic Dedupe] Suppressed duplicate 8-K (${dedupeRes.source}): "${headline}"`);
+          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
+          continue;
+        }
+
         const enqueued = await enqueueIntradayEvent(env, ctx, {
           headline,
           url: link,
@@ -746,6 +826,14 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
         continue;
       }
 
+      // Check Vectorize & Hindsight multi-tier semantic deduplication
+      const dedupeRes = await querySemanticDedupe(anomaly.title, env);
+      if (dedupeRes.status === "duplicate") {
+        console.log(`[RSS Semantic Dedupe] Suppressed duplicate anomaly (${dedupeRes.source}): "${anomaly.title}"`);
+        await markHeadlineDispatchedInCache(anomaly.title, env);
+        continue;
+      }
+
       if (env.INTRADAY_QUEUE) {
         const enqueued = await enqueueIntradayEvent(env, ctx, {
           headline: anomaly.title,
@@ -768,6 +856,31 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
       if (res.dispatched) {
         console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
         await markHeadlineDispatchedInCache(anomaly.title, env);
+
+        const persistTask = async () => {
+          try {
+            const embedding = await getHeadlineEmbedding(anomaly.title, env);
+            if (embedding) {
+              await indexHeadlineVector(anomaly.title, embedding, {
+                source: "RSS",
+                as_of: new Date().toISOString()
+              }, env);
+            }
+            await retainHindsightMemory({
+              headline: anomaly.title,
+              url: anomaly.link,
+              source: "RSS"
+            }, env);
+          } catch (pErr: any) {
+            console.warn(`[Background Persistence Notice] ${pErr?.message || String(pErr)}`);
+          }
+        };
+
+        if (ctx && typeof ctx.waitUntil === "function") {
+          ctx.waitUntil(persistTask());
+        } else {
+          await persistTask();
+        }
       } else {
         console.error(`[GitHub Dispatch Failed] Error: ${res.error}`);
         await captureSentryException(env, ctx, new Error(res.error || "GitHub Dispatch Failed"), { anomalyTitle: anomaly.title });
@@ -2339,6 +2452,21 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
           );
         }
       }
+
+      const analystBrief = await synthesizeAnalystBrief({
+        hub_name: targetDisplayName,
+        current_price: effectiveBasePrice,
+        predicted_shift: effectiveDelta,
+        direction: effectiveDelta > 0.005 ? "UP" : (effectiveDelta < -0.005 ? "DOWN" : "FLAT"),
+        confidence_interval: [effectiveLower95, effectiveUpper95],
+        active_catalysts: zipRes?.is_significant_departure ? [`State tax wedge: ${zipRes.tax_delta_per_gal.toFixed(3)}$/gal`] : []
+      }, env);
+
+      forecastFields.push({
+        name: "📝 Institutional Analyst Brief",
+        value: analystBrief,
+        inline: false
+      });
 
       forecastFields.push({
         name: "🔗 Live Interactive Views",

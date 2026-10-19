@@ -6,9 +6,19 @@ compatibility_date = "2024-09-01"
 AXIOM_DATASET = "midgley-workers"
 EDGAR_8K_TICKERS = "PBF,DINO,MPC,VLO,PSX"
 MIDGLEY_AGENT_USER_AGENT = "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
-# SEC_USER_AGENT is sensitive — set as a Worker secret (never commit to wrangler.toml):
+HINDSIGHT_API_URL = "https://api.hindsight.vectorize.io"
+HINDSIGHT_DEDUPE_BANK_ID = "midgley-event-dedupe"
+# SEC_USER_AGENT and HINDSIGHT_API_TOKEN are sensitive — set as Worker secrets (never commit to wrangler.toml):
 # wrangler secret put SEC_USER_AGENT
+# wrangler secret put HINDSIGHT_API_TOKEN
 # Value format: "Midgley your@email.com" (per EDGAR robots.txt policy)
+
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "EVENT_INDEX"
+index_name = "midgley-event-embeddings"
 
 [browser]
 binding = "MYBROWSER"

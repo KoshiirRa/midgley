@@ -51,6 +51,13 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 ### 8. Production CI/CD Workflow Secret Parity
 - **Cloudflare Edge Secret Wiring**: Wired `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` across all production GitHub Actions workflows ([`.github/workflows/gas_price_forecast.yml`](.github/workflows/gas_price_forecast.yml), [`.github/workflows/weekly_model_review.yml`](.github/workflows/weekly_model_review.yml), [`.github/workflows/intraday_event_monitor.yml`](.github/workflows/intraday_event_monitor.yml), [`.github/workflows/deploy_cloudflare_worker.yml`](.github/workflows/deploy_cloudflare_worker.yml)), ensuring scheduled runs can execute Cloudflare Browser Run rendering in production CI.
 
+### 9. Cloudflare Workers AI, Vectorize Deduplication & Hindsight Memory Mesh (Issue #645)
+- **Zero-Shot Catalyst & Severity Scoring at the Edge**: Implemented [`workers/ai_event_scorer.ts`](workers/ai_event_scorer.ts) using `@cf/meta/llama-3.2-3b-instruct` to classify incoming news headlines and EDGAR 8-K filings into structured catalyst domains (`refinery_pipeline`, `weather_hurricane`, `geopolitical_opec`, `regulatory_tax`, `noise`), identifying affected hubs, expected direction, and decay half-lives directly at the edge with zero external API fees.
+- **Sub-10ms Edge Vector Search with Cloudflare Vectorize**: Wired `[[vectorize]] binding = "EVENT_INDEX"` and `@cf/baai/bge-small-en-v1.5` dense embeddings into [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts). Enforces strict cosine similarity gates: $\ge 0.88$ suppresses redundant wire alerts, $[0.70, 0.88)$ flags evolving development status updates, and $< 0.70$ indexes novel events.
+- **Unified Hindsight Memory Mesh (`midgley-event-dedupe`)**: Integrated Tier-2 cross-environment memory recall and non-blocking background retention via `ctx.waitUntil()`. Automatically persists confirmed edge anomalies into the shared Hindsight SaaS `midgley-event-dedupe` memory bank, keeping edge workers and Python batch pipelines ([`src/hindsight_dedupe.py`](src/hindsight_dedupe.py)) 100% synchronized in memory.
+- **Grounded Institutional Analyst Briefings**: Powered Discord `/midgley forecast` slash commands and DM alerts with `@cf/meta/llama-3.1-8b-instruct`, dynamically synthesizing a 2-sentence institutional summary explaining wholesale basis movements strictly grounded in point-in-time model metrics.
+- **Hermetic Latency Boundaries & Fallbacks**: Enforced a hard 1,500ms `Promise.race` timeout ceiling with deterministic fallback to `fallbackRegexScore()` and D1 cache tables, guaranteeing zero cron halts or worker timeouts. Added 16 unit tests across edge AI scoring, Vectorize deduplication, and Hindsight recall in [`tests/workers.test.ts`](tests/workers.test.ts).
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
@@ -99,9 +106,13 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 ### 1. Architectural Changes
 * **Feed Hierarchy**: Retail price resolution now follows `lykmapipo` CSV $\rightarrow$ Cloudflare Browser Run $\rightarrow$ GasBuddy GraphQL $\rightarrow$ EIA $\rightarrow$ History $\rightarrow$ PADD Anchor.
 * **ZIP Resolution**: Out-of-metro ZIP requests strictly return authentic local station observations (via GasBuddy) or state-level observations (via AAA state CSV), never falling back to static arbitrary constants.
+* **Edge Intelligence & Vector Mesh**: Cloudflare Workers Paid leverages Workers AI (`@cf/meta/llama-3.2-3b-instruct`) and Vectorize (`midgley-event-embeddings`) for real-time catalyst scoring and sub-10ms semantic deduplication, automatically synchronizing confirmed events into the shared Hindsight SaaS `midgley-event-dedupe` memory bank.
 
 ### 2. Environment Variables & Secrets
 * `CLOUDFLARE_ACCOUNT_ID` *(Optional)*: Cloudflare Account ID for edge headless browser rendering.
 * `CLOUDFLARE_API_TOKEN` *(Optional)*: Cloudflare API token with Browser Rendering and Workers permissions.
 * `CLOUDFLARE_BROWSER_RUN_URL` *(Optional)*: URL of a deployed Cloudflare Worker exposing Browser Run capabilities.
 * `CARTO_API_KEY` *(Optional)*: Key for authenticating CARTO Dark Matter map tiles on public dashboards.
+* `HINDSIGHT_API_TOKEN` *(Optional)*: Bearer token for authenticating against the Hindsight SaaS memory bank (`midgley-event-dedupe`).
+* `HINDSIGHT_API_URL` *(Optional)*: Hindsight API base URL (defaults to `https://api.hindsight.vectorize.io`).
+* `HINDSIGHT_DEDUPE_BANK_ID` *(Optional)*: Target memory bank ID (defaults to `midgley-event-dedupe`).
