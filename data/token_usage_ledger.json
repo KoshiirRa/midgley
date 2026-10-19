@@ -7535,6 +7535,72 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-10-19T04:28:49.946220+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 130,
+      "output_tokens": 80,
+      "total_tokens": 210,
+      "cost_usd": 0.000398,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-19T04:28:54.145135+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 134,
+      "output_tokens": 80,
+      "total_tokens": 214,
+      "cost_usd": 0.000401,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-19T04:28:56.274300+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 0.000402,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-19T04:28:58.198827+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 134,
+      "output_tokens": 80,
+      "total_tokens": 214,
+      "cost_usd": 0.000401,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-19T04:29:00.720428+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 122,
+      "output_tokens": 80,
+      "total_tokens": 202,
+      "cost_usd": 0.000392,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-19T04:29:05.183189+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 130,
+      "output_tokens": 80,
+      "total_tokens": 210,
+      "cost_usd": 0.000398,
+      "status": "success"
     }
   ]
 }
