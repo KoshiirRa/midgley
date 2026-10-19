@@ -43,6 +43,7 @@ jobs:
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           preCommands: |
             npx wrangler queues create intraday-event-dlq || true
             npx wrangler queues create intraday-event-queue || true

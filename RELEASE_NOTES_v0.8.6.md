@@ -279,6 +279,8 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
   - `DISCORD_BOT_TOKEN`: Discord Bot token used to open DM channels (`POST /api/v10/users/@me/channels`) and deliver private Direct Message alerts (`delivery_type="discord_dm"`).
   - `DISCORD_APP_ID`: Discord Application ID for registering `/midgley` slash commands (`scripts/register_discord_commands.py`).
   - `DISCORD_PUBLIC_KEY`: Ed25519 public key for verifying `/discord/interactions` requests.
+  - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare Account ID wired into GitHub Actions workflows (`gas_price_forecast.yml`, `weekly_model_review.yml`, `intraday_event_monitor.yml`, `deploy_cloudflare_worker.yml`) enabling headless Cloudflare Browser Run execution in production CI.
+  - `CLOUDFLARE_API_TOKEN`: Cloudflare API token with Browser Rendering and Workers permissions wired into GitHub Actions workflows.
   - `CARTO_API_KEY`: Optional CARTO Basemaps API key appended to Leaflet dark tile URLs on `docs/telemetry.html` (defaults to bundled public non-commercial key if unset or empty).
   - `MIDGLEY_SUBSCRIBERS_DB_PATH`: Optional override path for the SQLite subscriber registry (defaults to `data/subscribers.sqlite`).
 

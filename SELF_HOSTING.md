@@ -131,9 +131,11 @@ DISCORD_BOT_TOKEN="your_discord_bot_token_for_dm_alerts"
 TURSO_DATABASE_URL="https://midgley-cache-db.turso.io"
 TURSO_AUTH_TOKEN="eyJhbGciOi..."
 
-# Tier 2: Cloudflare D1 / Edge Worker Gateway
+# Tier 2: Cloudflare D1 / Edge Worker Gateway & Browser Run (Issue #640)
 CLOUDFLARE_CACHE_URL="https://midgley-cache.worker.dev"
 CLOUDFLARE_AUTH_TOKEN="cf_token_..."
+CLOUDFLARE_ACCOUNT_ID="cf_account_id_..."
+CLOUDFLARE_API_TOKEN="cf_api_token_..."
 
 # ==============================================================================
 # HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN) (Issue #230)
