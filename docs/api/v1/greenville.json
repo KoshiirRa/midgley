@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-20T01:25:19.588611",
+  "timestamp": "2026-10-20T11:09:40.390282",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.61,
+    "current_price_per_gal": 3.591,
     "source": "AAA Web Scraper (State Average, NC)",
     "provenance": {
       "source": "AAA Web Scraper (State Average, NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-20T01:24:50Z"
+      "timestamp": "2026-10-20T11:09:15Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-22",
-    "current_base_price": 3.61,
-    "predicted_price_per_gal": 3.547,
+    "current_base_price": 3.591,
+    "predicted_price_per_gal": 3.528,
     "expected_change_dollars": -0.063,
     "expected_change_percent": -1.75,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.427,
-    "prediction_upper_95ci": 3.667,
+    "prediction_lower_95ci": 3.408,
+    "prediction_upper_95ci": 3.648,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.597,
-    "day_2_price": 3.585,
-    "day_3_price": 3.572,
-    "day_4_price": 3.524,
-    "day_5_price": 3.547,
+    "day_1_price": 3.578,
+    "day_2_price": 3.566,
+    "day_3_price": 3.553,
+    "day_4_price": 3.505,
+    "day_5_price": 3.528,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -102,7 +102,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.025,
-          "impact_pct": -0.69,
+          "impact_pct": -0.7,
           "share_pct": 40.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.016,
-          "impact_pct": -0.44,
+          "impact_pct": -0.45,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.025,
-      "impact_pct": -0.69,
+      "impact_pct": -0.7,
       "share_pct": 40.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.016,
-      "impact_pct": -0.44,
+      "impact_pct": -0.45,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
