@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-10-20 21:26:41",
+  "last_updated": "2026-10-21 00:26:52",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 01:38:54",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 23.3,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-10-01 01:38:56",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9992,16 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Submitted CL (challenge c61a8114-72ef-4340-9001-2e66be6c6eb0): direction=bullish, confidence=0.8665, scored=True"
+    },
+    {
+      "timestamp": "2026-10-21 00:26:52",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 414.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
     }
   ]
 }
