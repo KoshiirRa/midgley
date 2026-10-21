@@ -6336,5 +6336,26 @@
       "overall_price_pressure": 0.72
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-21T07:16:51.857989",
+    "headline": "Troubled waters: life during wartime for Iranians on the strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPTURKcy1qZTY3U2xQb1NMVHZkOFpCNzVDUUZtWk1qck84ZXQ5M0VyX2MwVU9GNjF1VUw1RzdCWXYwTm9ZVkxfeHN2YjBIWF83YjlXQk1IT1FLS2JDOGRyTUxvM2QzYm5IaUFJd1pXbTlmYURMLS1VMjhOX1B0VEFjbXMxbVotWkhqam02R01YSEw1ZmdjMW5N?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPTURKcy1qZTY3U2xQb1NMVHZkOFpCNzVDUUZtWk1qck84ZXQ5M0VyX2MwVU9GNjF1VUw1RzdCWXYwTm9ZVkxfeHN2YjBIWF83YjlXQk1IT1FLS2JDOGRyTUxvM2QzYm5IaUFJd1pXbTlmYURMLS1VMjhOX1B0VEFjbXMxbVotWkhqam02R01YSEw1ZmdjMW5N?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilwFBVV95cUxPTURKcy1qZTY3U2xQb1NMVHZkOFpCNzVDUUZtWk1qck84ZXQ5M0VyX2MwVU9GNjF1VUw1RzdCWXYwTm9ZVkxfeHN2YjBIWF83YjlXQk1IT1FLS2JDOGRyTUxvM2QzYm5IaUFJd1pXbTlmYURMLS1VMjhOX1B0VEFjbXMxbVotWkhqam02R01YSEw1ZmdjMW5N?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.72,
+      "supply_disruption": 0.45,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.48
+    },
+    "discord_notified": true
   }
 ]
