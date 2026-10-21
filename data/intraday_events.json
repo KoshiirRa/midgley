@@ -6378,5 +6378,26 @@
       "overall_price_pressure": -0.4
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-21T18:30:39.221794",
+    "headline": "Iran has lost its last opportunity: Left with the Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOdEFrMm1mOXBKSGZuTnhuZndwOVNicDBGWnpGYlZOd2lMQVpMQk83cHV2eWhTR0o2NmRIemlHQzd0RXBmUEl0N3ZWRlVHeDBJZWVDLTl6aDJnSFpDeXlxQzk5Mm1UU3BOdlBJWXBCQU5qWHBqYjdDdFFQUkEyNGJqR2IzbmRjbUI0a3ZXME5FdE9JZlkyeWdwNElKZ3h0Nnlf?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOdEFrMm1mOXBKSGZuTnhuZndwOVNicDBGWnpGYlZOd2lMQVpMQk83cHV2eWhTR0o2NmRIemlHQzd0RXBmUEl0N3ZWRlVHeDBJZWVDLTl6aDJnSFpDeXlxQzk5Mm1UU3BOdlBJWXBCQU5qWHBqYjdDdFFQUkEyNGJqR2IzbmRjbUI0a3ZXME5FdE9JZlkyeWdwNElKZ3h0Nnlf?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMioAFBVV95cUxOdEFrMm1mOXBKSGZuTnhuZndwOVNicDBGWnpGYlZOd2lMQVpMQk83cHV2eWhTR0o2NmRIemlHQzd0RXBmUEl0N3ZWRlVHeDBJZWVDLTl6aDJnSFpDeXlxQzk5Mm1UU3BOdlBJWXBCQU5qWHBqYjdDdFFQUkEyNGJqR2IzbmRjbUI0a3ZXME5FdE9JZlkyeWdwNElKZ3h0Nnlf?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.72,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.15,
+      "overall_price_pressure": 0.76
+    },
+    "discord_notified": true
   }
 ]
