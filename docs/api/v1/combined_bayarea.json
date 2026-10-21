@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-21T07:17:25.025749",
+  "timestamp": "2026-10-21T13:37:10.286466",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.239,
+    "current_price_per_gal": 6.207,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-21T07:17:02Z"
+      "timestamp": "2026-10-21T13:36:48Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-27",
-    "current_base_price": 6.239,
-    "predicted_price_per_gal": 6.133,
+    "current_base_price": 6.207,
+    "predicted_price_per_gal": 6.101,
     "expected_change_dollars": -0.106,
-    "expected_change_percent": -1.7,
+    "expected_change_percent": -1.71,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 6.013,
-    "prediction_upper_95ci": 6.253,
+    "prediction_lower_95ci": 5.981,
+    "prediction_upper_95ci": 6.221,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.218,
-    "day_2_price": 6.172,
-    "day_3_price": 6.191,
-    "day_4_price": 6.148,
-    "day_5_price": 6.133,
+    "day_1_price": 6.186,
+    "day_2_price": 6.14,
+    "day_3_price": 6.159,
+    "day_4_price": 6.116,
+    "day_5_price": 6.101,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "BayArea CA forecast $-0.106/gal (-1.70%): Driven primarily by Tax & Regulatory Overhead ($-0.037/gal), Refining Yield & Crack Spread ($-0.026/gal).",
+      "summary_text": "BayArea CA forecast $-0.106/gal (-1.71%): Driven primarily by Tax & Regulatory Overhead ($-0.037/gal), Refining Yield & Crack Spread ($-0.026/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.037,
-          "impact_pct": -0.59,
+          "impact_pct": -0.6,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.037,
-      "impact_pct": -0.59,
+      "impact_pct": -0.6,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "BayArea CA forecast $-0.106/gal (-1.70%): Driven primarily by Tax & Regulatory Overhead ($-0.037/gal), Refining Yield & Crack Spread ($-0.026/gal).",
+    "summary_text": "BayArea CA forecast $-0.106/gal (-1.71%): Driven primarily by Tax & Regulatory Overhead ($-0.037/gal), Refining Yield & Crack Spread ($-0.026/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
