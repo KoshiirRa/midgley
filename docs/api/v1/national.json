@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-20T21:26:31.142813",
+  "timestamp": "2026-10-21T00:55:53.543572",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-20T21:26:30Z"
+      "timestamp": "2026-10-21T00:55:53Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-26",
+    "target_date": "2026-10-27",
     "current_base_price": 4.279,
-    "predicted_price_per_gal": 4.223,
-    "expected_change_dollars": -0.056,
-    "expected_change_percent": -1.31,
+    "predicted_price_per_gal": 4.228,
+    "expected_change_dollars": -0.051,
+    "expected_change_percent": -1.19,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.956,
-    "prediction_upper_95ci": 4.49,
+    "prediction_lower_95ci": 3.958,
+    "prediction_upper_95ci": 4.497,
     "calibration_method": "conformal",
-    "calibration_sample_size": 21,
-    "directional_hit_rate_historical": 0.1905,
-    "historical_mae_dollars": 0.1965,
-    "evaluation_sample_size": 21,
-    "day_1_price": 4.268,
-    "day_2_price": 4.236,
-    "day_3_price": 4.229,
-    "day_4_price": 4.219,
-    "day_5_price": 4.223,
+    "calibration_sample_size": 22,
+    "directional_hit_rate_historical": 0.2273,
+    "historical_mae_dollars": 0.1882,
+    "evaluation_sample_size": 22,
+    "day_1_price": 4.269,
+    "day_2_price": 4.243,
+    "day_3_price": 4.252,
+    "day_4_price": 4.233,
+    "day_5_price": 4.228,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.025,
+        "delta_dollars": -0.023,
         "share_pct": 45.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.014,
+        "delta_dollars": -0.013,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -89,28 +89,28 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.002,
+        "delta_dollars": 0.0,
         "share_pct": 2.5,
-        "direction": "DOWN",
-        "description": "Tax relief or off-peak RVP specification"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.056/gal (-1.31%): Driven primarily by Futures & Commodity Benchmark ($-0.025/gal), Refining Yield & Crack Spread ($-0.014/gal).",
+      "summary_text": "National forecast $-0.051/gal (-1.19%): Driven primarily by Futures & Commodity Benchmark ($-0.023/gal), Refining Yield & Crack Spread ($-0.013/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.025,
-          "impact_pct": -0.58,
+          "impact_dollars": -0.023,
+          "impact_pct": -0.54,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.014,
-          "impact_pct": -0.33,
+          "impact_dollars": -0.013,
+          "impact_pct": -0.3,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -140,11 +140,11 @@
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "description": "Fixed statutory tax overhead",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
           "share_pct": 2.5,
-          "direction": "DOWN"
+          "direction": "FLAT"
         }
       ]
     }
@@ -153,16 +153,16 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.025,
-      "impact_pct": -0.58,
+      "impact_dollars": -0.023,
+      "impact_pct": -0.54,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.014,
-      "impact_pct": -0.33,
+      "impact_dollars": -0.013,
+      "impact_pct": -0.3,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -192,20 +192,20 @@
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "description": "Fixed statutory tax overhead",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
       "share_pct": 2.5,
-      "direction": "DOWN"
+      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.056/gal (-1.31%): Driven primarily by Futures & Commodity Benchmark ($-0.025/gal), Refining Yield & Crack Spread ($-0.014/gal).",
+    "summary_text": "National forecast $-0.051/gal (-1.19%): Driven primarily by Futures & Commodity Benchmark ($-0.023/gal), Refining Yield & Crack Spread ($-0.013/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.025,
+        "delta_dollars": -0.023,
         "share_pct": 45.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.014,
+        "delta_dollars": -0.013,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.002,
+        "delta_dollars": 0.0,
         "share_pct": 2.5,
-        "direction": "DOWN",
-        "description": "Tax relief or off-peak RVP specification"
+        "direction": "FLAT",
+        "description": "Fixed statutory tax overhead"
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-20T21:26:32.424772",
+  "timestamp": "2026-10-21T00:55:55.189577",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-20T21:26:10Z"
+      "timestamp": "2026-10-21T00:55:35Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -43,7 +43,7 @@
     "day_1_price": 3.578,
     "day_2_price": 3.566,
     "day_3_price": 3.553,
-    "day_4_price": 3.505,
+    "day_4_price": 3.541,
     "day_5_price": 3.528,
     "feature_attributions": {
       "regional_logistics": {

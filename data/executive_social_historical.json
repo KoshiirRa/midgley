@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-10-20 01:24:18",
-  "records_count": 44,
+  "last_refreshed_utc": "2026-10-21 00:55:04",
+  "records_count": 51,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -394,37 +394,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-20 01:21:46",
-      "platform": "Google News RSS",
-      "post_text": "Oil slides as Trump delays new Russia measures, OPEC trims demand outlook - Anadolu Ajans\u0131",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-10-20 01:21:46",
-      "platform": "Google News RSS",
-      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-10-20 01:21:46",
-      "platform": "Google News RSS",
-      "post_text": "Trump Waives Russia Oil Sanctions, Tariffs Ahead of Enforcement - Egypt Oil & Gas",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-10-20 01:21:46",
+      "date": "2026-10-21 00:38:12",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -434,9 +404,109 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-20 01:21:46",
+      "date": "2026-10-21 00:38:12",
       "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
+      "post_text": "Oil slides as Trump delays new Russia measures, OPEC trims demand outlook - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:38:12",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:38:12",
+      "platform": "Google News RSS",
+      "post_text": "Does Trump\u2019s 60-day tariff waiver really give relief to India? What it means for US trade deal & oil prices - The Times of India",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "Oil slides as Trump delays new Russia measures, OPEC trims demand outlook - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "Does Trump\u2019s 60-day tariff waiver really give relief to India? What it means for US trade deal & oil prices - The Times of India",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "Oil slides as Trump delays new Russia measures, OPEC trims demand outlook - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-21 00:53:24",
+      "platform": "Google News RSS",
+      "post_text": "Does Trump\u2019s 60-day tariff waiver really give relief to India? What it means for US trade deal & oil prices - The Times of India",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
