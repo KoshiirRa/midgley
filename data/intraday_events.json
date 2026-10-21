@@ -6399,5 +6399,26 @@
       "overall_price_pressure": 0.76
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-21T23:08:34.608157",
+    "headline": "Explosions heard near Strait of Hormuz: Iran state media",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPQUJpd2huX1BGajRCdEVSTms5UmJ1WGtBU1luRUUyZml4OUJQLUo3TUFUZHlEZFAwWGdpNWZyOFBYLTJQRTExa1ZNenU3ZmdjV3hpenZGQlp2YmpmNHRyOHg1RmJRMGl3MGhyNkF0QlJldGlGZDJXYWNMbDhjZU5oVXlfRVNEZVJJZVpROVFvTU9lWXlSUVlvZV95VXRvTUk1emc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPQUJpd2huX1BGajRCdEVSTms5UmJ1WGtBU1luRUUyZml4OUJQLUo3TUFUZHlEZFAwWGdpNWZyOFBYLTJQRTExa1ZNenU3ZmdjV3hpenZGQlp2YmpmNHRyOHg1RmJRMGl3MGhyNkF0QlJldGlGZDJXYWNMbDhjZU5oVXlfRVNEZVJJZVpROVFvTU9lWXlSUVlvZV95VXRvTUk1emc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxPQUJpd2huX1BGajRCdEVSTms5UmJ1WGtBU1luRUUyZml4OUJQLUo3TUFUZHlEZFAwWGdpNWZyOFBYLTJQRTExa1ZNenU3ZmdjV3hpenZGQlp2YmpmNHRyOHg1RmJRMGl3MGhyNkF0QlJldGlGZDJXYWNMbDhjZU5oVXlfRVNEZVJJZVpROVFvTU9lWXlSUVlvZV95VXRvTUk1emc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.55,
+      "demand_sentiment": 0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.75
+    },
+    "discord_notified": true
   }
 ]
