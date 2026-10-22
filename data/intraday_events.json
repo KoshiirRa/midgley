@@ -6445,5 +6445,26 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.8,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-10-22T09:16:37.451254",
+    "headline": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNSzRPWW9ZaG5rYlg3RGhsalJOdjZ2N2h1eUlUVk1vd1BqWHJMR2V2MU4weFpKeVlRbXVTNVhlRmwzSTVOSm5mdVVzQ1RyZGVJT0JTaXhsWVJfM2RqVjh2YUw0WmZoeThvSVBScWRIMTFEMkgyYzQyZVc4WC1lNWRGX1F0ZGNuVlVtcDNHaHdaTzdla3p0RGtmZDNrZXdEM2Ey?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNSzRPWW9ZaG5rYlg3RGhsalJOdjZ2N2h1eUlUVk1vd1BqWHJMR2V2MU4weFpKeVlRbXVTNVhlRmwzSTVOSm5mdVVzQ1RyZGVJT0JTaXhsWVJfM2RqVjh2YUw0WmZoeThvSVBScWRIMTFEMkgyYzQyZVc4WC1lNWRGX1F0ZGNuVlVtcDNHaHdaTzdla3p0RGtmZDNrZXdEM2Ey?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMioAFBVV95cUxNSzRPWW9ZaG5rYlg3RGhsalJOdjZ2N2h1eUlUVk1vd1BqWHJMR2V2MU4weFpKeVlRbXVTNVhlRmwzSTVOSm5mdVVzQ1RyZGVJT0JTaXhsWVJfM2RqVjh2YUw0WmZoeThvSVBScWRIMTFEMkgyYzQyZVc4WC1lNWRGX1F0ZGNuVlVtcDNHaHdaTzdla3p0RGtmZDNrZXdEM2Ey?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.65,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.45
+    },
+    "discord_notified": true
   }
 ]

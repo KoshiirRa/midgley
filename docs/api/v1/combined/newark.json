@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-22T01:00:42.299317",
+  "timestamp": "2026-10-22T09:17:01.862788",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.971,
+    "current_price_per_gal": 3.965,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-22T01:00:21Z"
+      "timestamp": "2026-10-22T09:16:40Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-28",
-    "current_base_price": 3.971,
-    "predicted_price_per_gal": 3.845,
+    "current_base_price": 3.965,
+    "predicted_price_per_gal": 3.839,
     "expected_change_dollars": -0.126,
-    "expected_change_percent": -3.17,
+    "expected_change_percent": -3.18,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.643,
-    "prediction_upper_95ci": 4.047,
+    "prediction_lower_95ci": 3.637,
+    "prediction_upper_95ci": 4.041,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 2,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.946,
-    "day_2_price": 3.884,
-    "day_3_price": 3.865,
-    "day_4_price": 3.867,
-    "day_5_price": 3.845,
+    "day_1_price": 3.94,
+    "day_2_price": 3.878,
+    "day_3_price": 3.859,
+    "day_4_price": 3.861,
+    "day_5_price": 3.839,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast $-0.126/gal (-3.17%): Driven primarily by Refining Yield & Crack Spread ($-0.044/gal), Regional Logistics & Hub Delivery ($-0.032/gal).",
+      "summary_text": "Newark DE forecast $-0.126/gal (-3.18%): Driven primarily by Refining Yield & Crack Spread ($-0.044/gal), Regional Logistics & Hub Delivery ($-0.032/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast $-0.126/gal (-3.17%): Driven primarily by Refining Yield & Crack Spread ($-0.044/gal), Regional Logistics & Hub Delivery ($-0.032/gal).",
+    "summary_text": "Newark DE forecast $-0.126/gal (-3.18%): Driven primarily by Refining Yield & Crack Spread ($-0.044/gal), Regional Logistics & Hub Delivery ($-0.032/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
