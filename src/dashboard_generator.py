@@ -796,7 +796,13 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
             with open(intraday_json, "r", encoding="utf-8") as f:
                 events = json.load(f)
                 if isinstance(events, list) and len(events) > 0:
-                    anomalies = [e for e in events if e.get("is_anomaly")]
+                    anomalies = [
+                        e for e in events
+                        if e.get("is_anomaly")
+                        and not e.get("pending_review")
+                        and e.get("review_decision") != "duplicate"
+                        and not e.get("is_duplicate")
+                    ]
                     latest_evt = anomalies[-1] if anomalies else events[-1]
 
                     if run_type == "INTRADAY_REVISION" or bool(headline_trigger):
@@ -819,7 +825,13 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
                 with open(intraday_json, "r", encoding="utf-8") as f:
                     events = json.load(f)
                     if isinstance(events, list):
-                        anomalies = [e for e in events if e.get("is_anomaly")]
+                        anomalies = [
+                            e for e in events
+                            if e.get("is_anomaly")
+                            and not e.get("pending_review")
+                            and e.get("review_decision") != "duplicate"
+                            and not e.get("is_duplicate")
+                        ]
                         target_evts = anomalies if anomalies else events
                         for evt in reversed(target_evts):
                             h_text = evt.get("headline", "")

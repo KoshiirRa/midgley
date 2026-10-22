@@ -75,25 +75,8 @@ def resolve_cloudflare_api_token(api_token: Optional[str] = None) -> Optional[st
     if token and token.strip():
         return token.strip()
 
-    # Check local wrangler config paths defensively (Linux / Windows)
-    candidate_paths = [
-        os.path.expanduser("~/.config/.wrangler/config/default.toml"),
-        os.path.expandvars(r"%APPDATA%\xdg.config\.wrangler\config\default.toml"),
-    ]
-    for cfg_path in candidate_paths:
-        if os.path.exists(cfg_path):
-            try:
-                with open(cfg_path, "r", encoding="utf-8") as f:
-                    for line in f:
-                        if line.strip().startswith("oauth_token"):
-                            parts = line.split("=")
-                            if len(parts) >= 2:
-                                extracted = parts[1].strip().strip('"').strip("'")
-                                if extracted:
-                                    return extracted
-            except Exception:
-                pass
     return None
+
 
 
 class CloudflareBrowserRunClient:
@@ -137,7 +120,10 @@ class CloudflareBrowserRunClient:
             )
             return None
 
-        endpoint = f"https://api.cloudflare.com/client/v4/accounts/{acc_id}/browser-run/markdown"
+        endpoints = [
+            f"https://api.cloudflare.com/client/v4/accounts/{acc_id}/browser-run/markdown",
+            f"https://api.cloudflare.com/client/v4/accounts/{acc_id}/browser-rendering/markdown",
+        ]
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -148,7 +134,15 @@ class CloudflareBrowserRunClient:
         effective_timeout = timeout or self.timeout
 
         try:
-            resp = http_post(endpoint, json=payload, headers=headers, timeout=effective_timeout)
+            resp = None
+            for ep in endpoints:
+                resp = http_post(ep, json=payload, headers=headers, timeout=effective_timeout)
+                if resp is not None and resp.status_code == 200:
+                    break
+                if resp is not None and resp.status_code != 404:
+                    # Non-404 error (e.g. 401, 403, 500), no need to try alternate path
+                    break
+
             latency_ms = (time.time() - t0) * 1000.0
 
             if resp is not None and resp.status_code == 200:
@@ -183,6 +177,7 @@ class CloudflareBrowserRunClient:
                 )
                 logger.debug("Cloudflare Browser Run returned status %s for %s", status_code, url)
                 return None
+
         except Exception as e:
             latency_ms = (time.time() - t0) * 1000.0
             log_connector_event(

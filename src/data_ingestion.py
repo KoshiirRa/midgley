@@ -269,6 +269,10 @@ def load_live_regional_intraday_events(region_name: str, max_age_days: int = 30,
         regional_tokens = REGIONAL_KEYWORDS.get(reg_key, [reg_key])
 
         for ev in events:
+            # Issue #258 / #623: Suppress duplicate follow-up catalysts and pending reviews
+            if ev.get("pending_review") or ev.get("review_decision") == "duplicate" or ev.get("is_duplicate"):
+                continue
+
             ts_str = ev.get("timestamp", "")
             try:
                 dt = datetime.fromisoformat(ts_str).replace(tzinfo=None) if ts_str else now

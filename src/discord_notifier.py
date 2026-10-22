@@ -484,6 +484,11 @@ def format_intraday_discord_payload(
         headline_hash = hashlib.sha256(safe_headline_param.encode("utf-8", errors="ignore")).hexdigest()[:16]
         msg = f"flag_fp:v2|{event_hash}|{headline_hash}|{exp_time}".encode("utf-8")
         sig_param = hmac.new(signing_secret.encode("utf-8"), msg, hashlib.sha256).hexdigest()[:32]
+    else:
+        logger.warning(
+            "Neither FLAG_SIGNING_KEY, ADMIN_TOKEN, nor CLOUDFLARE_AUTH_TOKEN is configured in environment. "
+            "Discord flag link will be generated without HMAC signature and will be rejected by Cloudflare Worker."
+        )
     flag_params = urllib.parse.urlencode({
         "id": event_hash,
         "exp": str(exp_time),
@@ -1688,6 +1693,11 @@ def format_duplicate_review_discord_payload(
         sig_dup = hmac.new(signing_secret.encode("utf-8"), msg_dup, hashlib.sha256).hexdigest()[:32]
         msg_dist = f"review_dist:v1|{new_hash}|{prior_hash}|distinct|{exp_time}".encode("utf-8")
         sig_dist = hmac.new(signing_secret.encode("utf-8"), msg_dist, hashlib.sha256).hexdigest()[:32]
+    else:
+        logger.warning(
+            "Neither FLAG_SIGNING_KEY, ADMIN_TOKEN, nor CLOUDFLARE_AUTH_TOKEN is configured in environment. "
+            "Duplicate review links will be generated without HMAC signature and will be rejected by Cloudflare Worker."
+        )
 
     base_worker = "https://midgley-intraday-monitor.m-cubed-3.workers.dev"
     dup_params = urllib.parse.urlencode({

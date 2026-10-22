@@ -543,6 +543,11 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                     payload = json.loads(resp.read().decode("utf-8"))
                     if payload and payload.get("average_price"):
                         payload["source"] = f"AAA Cloudflare Browser Run ({payload.get('source', region_code)})"
+                        try:
+                            from src.connector_telemetry import log_connector_event
+                            log_connector_event("Cloudflare_Browser_Run", url, status="SUCCESS")
+                        except Exception:
+                            pass
                         return payload
         except Exception as e:
             logger.debug(f"Cloudflare Worker Browser Run notice for {region_code}: {e}")
@@ -584,18 +589,23 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                                     tbl = el.find_next('table')
                                     if tbl:
                                         for tr in tbl.find_all('tr'):
-                                            tr_text = tr.get_text(strip=True)
-                                            if 'current avg' in tr_text.lower():
-                                                prices = re.findall(r'\$(\d+\.\d{2,4})', tr_text)
-                                                if prices:
-                                                    val = float(prices[0])
-                                                    if 1.50 <= val <= 8.50:
-                                                        logger.info(f"Cloudflare Browser Run matched '{kw}' for {region_code}: ${val:.3f}/gal")
-                                                        return {
-                                                            "average_price": round(val, 3),
-                                                            "source": f"AAA Cloudflare Browser Run ({kw}, {state})",
-                                                            "granularity": "STATE" if is_state else "METRO"
-                                                        }
+                                             tr_text = tr.get_text(strip=True)
+                                             if 'current avg' in tr_text.lower():
+                                                 prices = re.findall(r'\$(\d+\.\d{2,4})', tr_text)
+                                                 if prices:
+                                                     val = float(prices[0])
+                                                     if 1.50 <= val <= 8.50:
+                                                         logger.info(f"Cloudflare Browser Run matched '{kw}' for {region_code}: ${val:.3f}/gal")
+                                                         try:
+                                                             from src.connector_telemetry import log_connector_event
+                                                             log_connector_event("Cloudflare_Browser_Run", target_url, status="SUCCESS")
+                                                         except Exception:
+                                                             pass
+                                                         return {
+                                                             "average_price": round(val, 3),
+                                                             "source": f"AAA Cloudflare Browser Run ({kw}, {state})",
+                                                             "granularity": "STATE" if is_state else "METRO"
+                                                         }
                         tables = soup.find_all('table')
                         if tables:
                             for tr in tables[0].find_all('tr'):
@@ -605,6 +615,11 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                                     if prices:
                                         val = float(prices[0])
                                         if 1.50 <= val <= 8.50:
+                                            try:
+                                                from src.connector_telemetry import log_connector_event
+                                                log_connector_event("Cloudflare_Browser_Run", target_url, status="SUCCESS")
+                                            except Exception:
+                                                pass
                                             return {
                                                 "average_price": round(val, 3),
                                                 "source": f"AAA Cloudflare Browser Run ({state})",
@@ -612,6 +627,7 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                                             }
         except Exception as e:
             logger.debug(f"Direct Cloudflare Browser Rendering notice for {region_code}: {e}")
+
 
     # Local in-process fallback if Cloudflare Browser Run is not configured or failed
     if is_state:

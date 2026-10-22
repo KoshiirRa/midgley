@@ -58,6 +58,16 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Grounded Institutional Analyst Briefings**: Powered Discord `/midgley forecast` slash commands and DM alerts with `@cf/meta/llama-3.1-8b-instruct`, dynamically synthesizing a 2-sentence institutional summary explaining wholesale basis movements strictly grounded in point-in-time model metrics.
 - **Hermetic Latency Boundaries & Fallbacks**: Enforced a hard 1,500ms `Promise.race` timeout ceiling with deterministic fallback to `fallbackRegexScore()` and D1 cache tables, guaranteeing zero cron halts or worker timeouts. Added 16 unit tests across edge AI scoring, Vectorize deduplication, and Hindsight recall in [`tests/workers.test.ts`](tests/workers.test.ts).
 
+### 10. Cloudflare Browser Run Scraper Failover & Client Hardening (Issue #640)
+- **Firecrawl Scraper Failover**: Instrumented [`src/firecrawl_scraper.py`](src/firecrawl_scraper.py) with `_scrape_via_cloudflare_browser_run()`. When `FIRECRAWL_API_KEY` is omitted or safety quotas (800 calls/month, 30/day) are reached, the connector now automatically attempts edge headless rendering via Cloudflare Browser Run before falling back to local deterministic regex HTML parsing.
+- **Client Authentication & Dual Endpoint Resilience**: Refactored `resolve_cloudflare_api_token()` in [`src/cloudflare_browser_run.py`](src/cloudflare_browser_run.py) to eliminate invalid Wrangler CLI OAuth token leakage and HTTP 401 errors, requiring explicit `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_AUTH_TOKEN` environment variables. Added dual-path fallback between `/browser-run/markdown` and `/browser-rendering/markdown`.
+- **HTTP Client User-Agent Normalization**: Updated `http_get()` and `http_post()` in [`src/http_client.py`](src/http_client.py) to safely accept and extract `user_agent` keyword arguments directly into request headers, eliminating `TypeError: Session.request() got an unexpected keyword argument 'user_agent'` crashes during Drillinginfo and Enverus daily rig count upstream failovers.
+- **Full Connector Telemetry & Audit Observability**: Fully wired `log_connector_event("Cloudflare_Browser_Run", ...)` across [`src/live_fuel_feed.py`](src/live_fuel_feed.py), [`src/firecrawl_scraper.py`](src/firecrawl_scraper.py), and [`src/cloudflare_browser_run.py`](src/cloudflare_browser_run.py), recording real-time latency and execution status into `data/connector_telemetry.json` and the 7-day performance audit table in `docs/telemetry.html`.
+
+### 11. Intraday Anomaly Duplicate Review Filtering & HMAC Signature Resiliency
+- **Duplicate & Pending Review Suppression**: Filtered pending reviews and duplicate events in [`src/dashboard_generator.py`](src/dashboard_generator.py) and [`src/data_ingestion.py`](src/data_ingestion.py) to suppress duplicate follow-up catalysts and pending review flags from contaminating intelligence dashboards and regional model inputs.
+- **HMAC Flag Link Signature Resiliency**: Hardened duplicate review action links in [`src/discord_notifier.py`](src/discord_notifier.py) with automatic credential fallbacks (`FLAG_SIGNING_KEY` $\rightarrow$ `ADMIN_TOKEN` $\rightarrow$ `CLOUDFLARE_AUTH_TOKEN`), and added `FLAG_SIGNING_KEY` to [`.env.example`](.env.example).
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
@@ -79,13 +89,16 @@ All test runs and code analyses were offloaded to the dedicated Linux dev VM (`d
 # 1. Fuel Feed, ZIP Geocoding & API Server Integration Suite (50 tests)
 TESTING=1 pytest -v tests/test_live_fuel_feed.py tests/test_zip_geocoding.py tests/test_api_server.py
 
-# 2. Data Sources Page Generation Suite
+# 2. Cloudflare Browser Run, Scrapers & Rig Count Verification (53 tests)
+TESTING=1 pytest -v tests/test_cloudflare_browser_run.py tests/test_firecrawl_scraper.py tests/test_enverus_rig_feed.py tests/test_live_fuel_feed.py tests/test_discord_notifier.py
+
+# 3. Data Sources Page Generation Suite
 TESTING=1 pytest -v tests/test_dashboard_generator.py -k test_data_sources_page_generation
 
-# 3. Documentation & Link Hygiene Suite
+# 4. Documentation & Link Hygiene Suite
 TESTING=1 pytest -v tests/test_docs_links.py
 
-# 4. Full Codebase Linter & Style Enforcement
+# 5. Full Codebase Linter & Style Enforcement
 ruff check src/ tests/
 ```
 
@@ -93,6 +106,10 @@ ruff check src/ tests/
 - **`tests/test_live_fuel_feed.py`**: 12/12 passed (tested `fetch_aaa_csv_prices`, `fetch_aaa_cloudflare_browser_run`, `fetch_live_out_of_metro_price`, `is_price_outlier`, fallback cascades).
 - **`tests/test_zip_geocoding.py`**: 13/13 passed (tested cluster hits, rural non-cluster resolution, telemetry aggregation, coordinate lookups).
 - **`tests/test_api_server.py`**: 25/25 passed (tested authentication, live prices endpoint with ZIP codes, simulation, webhooks).
+- **`tests/test_cloudflare_browser_run.py`**: 11/11 passed (tested client configuration, token resolution, dual endpoints, and error handling).
+- **`tests/test_firecrawl_scraper.py`**: 8/8 passed (tested Cloudflare Browser Run failover, quota checks, and fallback extraction).
+- **`tests/test_enverus_rig_feed.py`**: 6/6 passed (tested Drillinginfo direct API, worker endpoint, and benchmark fixtures).
+- **`tests/test_discord_notifier.py`**: 16/16 passed (tested duplicate review link signature generation, fallbacks, and test suppression).
 - **`tests/test_dashboard_generator.py`**: 1/1 passed (`test_data_sources_page_generation`).
 - **`tests/test_docs_links.py`**: 2/2 passed (verified zero local `file://` URLs in generated docs).
 - **`ruff check src/ tests/`**: All checks passed cleanly with zero linting or formatting errors.
@@ -105,6 +122,7 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 
 ### 1. Architectural Changes
 * **Feed Hierarchy**: Retail price resolution now follows `lykmapipo` CSV $\rightarrow$ Cloudflare Browser Run $\rightarrow$ GasBuddy GraphQL $\rightarrow$ EIA $\rightarrow$ History $\rightarrow$ PADD Anchor.
+* **Scraper Fallback Cascade**: Web scraping across intelligence feeds follows Firecrawl API $\rightarrow$ Cloudflare Browser Run (`/browser-run/markdown` and `/browser-rendering/markdown`) $\rightarrow$ native deterministic HTML parser.
 * **ZIP Resolution**: Out-of-metro ZIP requests strictly return authentic local station observations (via GasBuddy) or state-level observations (via AAA state CSV), never falling back to static arbitrary constants.
 * **Edge Intelligence & Vector Mesh**: Cloudflare Workers Paid leverages Workers AI (`@cf/meta/llama-3.2-3b-instruct`) and Vectorize (`midgley-event-embeddings`) for real-time catalyst scoring and sub-10ms semantic deduplication, automatically synchronizing confirmed events into the shared Hindsight SaaS `midgley-event-dedupe` memory bank.
 
@@ -112,7 +130,9 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 * `CLOUDFLARE_ACCOUNT_ID` *(Optional)*: Cloudflare Account ID for edge headless browser rendering.
 * `CLOUDFLARE_API_TOKEN` *(Optional)*: Cloudflare API token with Browser Rendering and Workers permissions.
 * `CLOUDFLARE_BROWSER_RUN_URL` *(Optional)*: URL of a deployed Cloudflare Worker exposing Browser Run capabilities.
+* `FLAG_SIGNING_KEY` *(Optional)*: HMAC secret for signing Discord flag and duplicate review buttons (falls back to `ADMIN_TOKEN` / `CLOUDFLARE_AUTH_TOKEN`).
 * `CARTO_API_KEY` *(Optional)*: Key for authenticating CARTO Dark Matter map tiles on public dashboards.
 * `HINDSIGHT_API_TOKEN` *(Optional)*: Bearer token for authenticating against the Hindsight SaaS memory bank (`midgley-event-dedupe`).
 * `HINDSIGHT_API_URL` *(Optional)*: Hindsight API base URL (defaults to `https://api.hindsight.vectorize.io`).
 * `HINDSIGHT_DEDUPE_BANK_ID` *(Optional)*: Target memory bank ID (defaults to `midgley-event-dedupe`).
+

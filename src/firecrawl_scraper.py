@@ -325,6 +325,37 @@ class FirecrawlConnector:
                 "timestamp": datetime.now().isoformat()
             }
 
+    def _scrape_via_cloudflare_browser_run(self, url: str, timeout: int = 15) -> Optional[Dict[str, Any]]:
+        """
+        Attempts edge headless Chromium rendering via Cloudflare Browser Run (Issue #640).
+        Returns structured payload on success, or None on failure or unconfigured credentials.
+        """
+        if os.environ.get("TESTING") == "1":
+            return None
+        try:
+            from src.cloudflare_browser_run import fetch_markdown_via_browser_run
+            md_text = fetch_markdown_via_browser_run(url, timeout=float(timeout))
+            if md_text and isinstance(md_text, str) and len(md_text.strip()) > 30:
+                logger.info(f"Successfully scraped '{url}' via Cloudflare Browser Run ({len(md_text)} chars)")
+                title = url
+                lines = [line.strip() for line in md_text.splitlines() if line.strip()]
+                for line in lines:
+                    if line.startswith("#"):
+                        title = line.lstrip("#").strip()
+                        break
+                return {
+                    "success": True,
+                    "provider": "cloudflare_browser_run",
+                    "markdown": md_text,
+                    "title": title,
+                    "url": url,
+                    "status_code": 200,
+                    "timestamp": datetime.now().isoformat()
+                }
+        except Exception as e:
+            logger.debug(f"Cloudflare Browser Run scrape notice for '{url}': {e}")
+        return None
+
     def scrape_url(
         self,
         url: str,
@@ -334,7 +365,7 @@ class FirecrawlConnector:
         force_refresh: bool = False
     ) -> Dict[str, Any]:
         """
-        Scrapes the given URL to clean Markdown using Firecrawl API or deterministic fallback.
+        Scrapes the given URL to clean Markdown using Firecrawl API, Cloudflare Browser Run, or deterministic fallback.
         
         Parameters:
             url: Target web page URL to scrape.
@@ -372,8 +403,13 @@ class FirecrawlConnector:
 
         # 4. Check if API key exists and safety quota is available
         if not self.api_key:
-            logger.info(f"FIRECRAWL_API_KEY not set. Using zero-cost native HTML fallback for '{url}'.")
-            result = self._extract_fallback_markdown(url, timeout=timeout)
+            # Attempt Cloudflare Browser Run edge rendering first (Issue #640)
+            cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
+            if cf_res:
+                result = cf_res
+            else:
+                logger.info(f"FIRECRAWL_API_KEY not set. Using zero-cost native HTML fallback for '{url}'.")
+                result = self._extract_fallback_markdown(url, timeout=timeout)
             _IN_MEMORY_SCRAPE_CACHE[url_hash] = result
             self._write_disk_cache(url_hash, result)
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_SECONDS)
@@ -381,12 +417,17 @@ class FirecrawlConnector:
 
         quota_ok, quota_status = _check_and_increment_quota()
         if not quota_ok:
-            logger.warning(f"Firecrawl quota safety valve triggered. Falling back to native HTML parser.")
-            result = self._extract_fallback_markdown(url, timeout=timeout)
+            logger.warning(f"Firecrawl quota safety valve triggered. Falling back to Cloudflare Browser Run / native HTML.")
+            cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
+            if cf_res:
+                result = cf_res
+            else:
+                result = self._extract_fallback_markdown(url, timeout=timeout)
             _IN_MEMORY_SCRAPE_CACHE[url_hash] = result
             self._write_disk_cache(url_hash, result)
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_SECONDS)
             return result
+
 
         # 5. Execute Firecrawl API request
         t0 = time.time()
@@ -452,8 +493,9 @@ class FirecrawlConnector:
             log_connector_event("Firecrawl_API", url, status=f"HTTP_{http_err.code}", latency_ms=latency_ms, details=str(http_err))
             token_tab_manager.record_usage("firecrawl", "web_to_markdown", len(url), 0, status=f"error_{http_err.code}")
             
-            # Fallback to native parser on HTTP error
-            result = self._extract_fallback_markdown(url, timeout=timeout)
+            # Fallback to Cloudflare Browser Run before native parser on HTTP error
+            cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
+            result = cf_res if cf_res else self._extract_fallback_markdown(url, timeout=timeout)
             _IN_MEMORY_SCRAPE_CACHE[url_hash] = result
             self._write_disk_cache(url_hash, result)
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_SECONDS)
@@ -464,9 +506,11 @@ class FirecrawlConnector:
             logger.warning(f"Firecrawl API network/parse error for '{url}': {err}. Falling back.")
             log_connector_event("Firecrawl_API", url, status="ERROR", latency_ms=latency_ms, details=str(err))
             
-            # Fallback to native parser
-            result = self._extract_fallback_markdown(url, timeout=timeout)
+            # Fallback to Cloudflare Browser Run before native parser
+            cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
+            result = cf_res if cf_res else self._extract_fallback_markdown(url, timeout=timeout)
             _IN_MEMORY_SCRAPE_CACHE[url_hash] = result
             self._write_disk_cache(url_hash, result)
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_SECONDS)
             return result
+
