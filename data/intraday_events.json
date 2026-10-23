@@ -6613,5 +6613,30 @@
       "overall_price_pressure": 0.8
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-23T22:59:10.234024",
+    "headline": "Iran says 7 vessels hit near Strait of Hormuz, warns US of wider response",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQdzd2aFlGYzdlVW02UnBBaDJJck94ZVJXaVlmV0JRTGpIdjNIWUdXOG9rcGhjNW5jS0xpazROVG9OUXozOGoza3VFVWlzTV9WR3VFZktyWGxKZUJpZXd2VjNGTVl0OWE5QVUzRFNFLTNQd1pSc0dUMWJ2RXVUUnY2YUdEMNIBiAFBVV95cUxNZjh5RWEwNkYxbmRHNmNPWUE4NmM2OVdZWFA3QWNOS3hGQXJRbXB2eEh5SzB5WWJyTEtLTElCS1JjbXFkV1lGWUdIZnRUYU5OTnNJa0hnWWphcWU0Rk1lOGhZRFNyWHZlZzVIeTh4ZjVaR2JvejVYNE1uTlBRTnFTOVJ4ZnEwN20x?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQdzd2aFlGYzdlVW02UnBBaDJJck94ZVJXaVlmV0JRTGpIdjNIWUdXOG9rcGhjNW5jS0xpazROVG9OUXozOGoza3VFVWlzTV9WR3VFZktyWGxKZUJpZXd2VjNGTVl0OWE5QVUzRFNFLTNQd1pSc0dUMWJ2RXVUUnY2YUdEMNIBiAFBVV95cUxNZjh5RWEwNkYxbmRHNmNPWUE4NmM2OVdZWFA3QWNOS3hGQXJRbXB2eEh5SzB5WWJyTEtLTElCS1JjbXFkV1lGWUdIZnRUYU5OTnNJa0hnWWphcWU0Rk1lOGhZRFNyWHZlZzVIeTh4ZjVaR2JvejVYNE1uTlBRTnFTOVJ4ZnEwN20x?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigwFBVV95cUxQdzd2aFlGYzdlVW02UnBBaDJJck94ZVJXaVlmV0JRTGpIdjNIWUdXOG9rcGhjNW5jS0xpazROVG9OUXozOGoza3VFVWlzTV9WR3VFZktyWGxKZUJpZXd2VjNGTVl0OWE5QVUzRFNFLTNQd1pSc0dUMWJ2RXVUUnY2YUdEMNIBiAFBVV95cUxNZjh5RWEwNkYxbmRHNmNPWUE4NmM2OVdZWFA3QWNOS3hGQXJRbXB2eEh5SzB5WWJyTEtLTElCS1JjbXFkV1lGWUdIZnRUYU5OTnNJa0hnWWphcWU0Rk1lOGhZRFNyWHZlZzVIeTh4ZjVaR2JvejVYNE1uTlBRTnFTOVJ4ZnEwN20x?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.65,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.15,
+      "overall_price_pressure": 0.72
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran says 7 oil tankers damaged in Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.33,
+    "duplicate_review_notified": false
   }
 ]
