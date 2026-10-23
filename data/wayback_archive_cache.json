@@ -1038,7 +1038,7 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5": {
-    "timestamp": "2026-10-20T21:24:04.783296+00:00",
+    "timestamp": "2026-10-23T14:44:43.112414+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
@@ -9891,13 +9891,14 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiywFBVV95cUxQN0w2ZjViaHN2RGhScVlFQWw1ekcxMXpJRUVhaGw4dkwzT2NCaTFEdnlROUthczhTNUhNR29qeDFWckIwXzhxTkFNTnBtYURSbU5uUXROSkVHNk10ekJ5SmlBRS1FczhjMnY4RFlORTZ3RXFLOWZ6Mzg4cGNyQzQydHBUbVRZcEhfeDcwa1Z1QWhrdDgxXzVvT1dVeTdPekFEYmMtdWduOTllLTQyRFNPNnNhVjFPcUlBel9ETXpHQ1VtakR0d1ZhZ3YxUQ?oc=5": {
-    "timestamp": "2026-10-16T14:40:10.972632+00:00",
+    "timestamp": "2026-10-23T14:44:58.020377+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQN0w2ZjViaHN2RGhScVlFQWw1ekcxMXpJRUVhaGw4dkwzT2NCaTFEdnlROUthczhTNUhNR29qeDFWckIwXzhxTkFNTnBtYURSbU5uUXROSkVHNk10ekJ5SmlBRS1FczhjMnY4RFlORTZ3RXFLOWZ6Mzg4cGNyQzQydHBUbVRZcEhfeDcwa1Z1QWhrdDgxXzVvT1dVeTdPekFEYmMtdWduOTllLTQyRFNPNnNhVjFPcUlBel9ETXpHQ1VtakR0d1ZhZ3YxUQ?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQN0w2ZjViaHN2RGhScVlFQWw1ekcxMXpJRUVhaGw4dkwzT2NCaTFEdnlROUthczhTNUhNR29qeDFWckIwXzhxTkFNTnBtYURSbU5uUXROSkVHNk10ekJ5SmlBRS1FczhjMnY4RFlORTZ3RXFLOWZ6Mzg4cGNyQzQydHBUbVRZcEhfeDcwa1Z1QWhrdDgxXzVvT1dVeTdPekFEYmMtdWduOTllLTQyRFNPNnNhVjFPcUlBel9ETXpHQ1VtakR0d1ZhZ3YxUQ?oc=5",
     "headline": "Petrol and diesel set to surge above R30 in October: these are the latest projections - IOL",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiywFBVV95cUxQN0w2ZjViaHN2RGhScVlFQWw1ekcxMXpJRUVhaGw4dkwzT2NCaTFEdnlROUthczhTNUhNR29qeDFWckIwXzhxTkFNTnBtYURSbU5uUXROSkVHNk10ekJ5SmlBRS1FczhjMnY4RFlORTZ3RXFLOWZ6Mzg4cGNyQzQydHBUbVRZcEhfeDcwa1Z1QWhrdDgxXzVvT1dVeTdPekFEYmMtdWduOTllLTQyRFNPNnNhVjFPcUlBel9ETXpHQ1VtakR0d1ZhZ3YxUQ?oc=5",
-    "error": "The read operation timed out"
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMi8AFBVV95cUxOM205VlVfOEdqSE9FNzhIMjhGc1Bwb01KY2ZnR3NSeHFiUnhmck9PcVBGZzdpMzlFOE9sd2xLWkFvRUs0Qm5HMmE4MDBTYzA3TkdiOUh3dlo4c1Z1dFhWYmhDTlFYMnp6eG1VRmhIU29pRFl5a3dQY3RrSnFfX3ZrWkF1ZFNadDFQTmhab2xKX3N5ZUF5c1JqZ3pqWGpxYUQtalpaMVI1ZzVobVU3Y0xmSW5yam1PeWVoc19qOGFsaTNSd29sTG5RZDFPSWxrVzVlcFVsckI2RXNHd2RQcmdMbmIzYVFqOG9Gcy1QMDQ2eGg?oc=5": {
     "timestamp": "2026-10-02T05:45:22.096133",
@@ -15582,5 +15583,23 @@
     "headline": "Michigan, Ohio Gas Prices Spike Further Amid Refinery Breakdown - Yahoo Finance",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikAFBVV95cUxOVkpscGI3TkhKR0ljOC01QVl1U2RzZFpUdkxPZlNMMFo0WWJGeUJ2eUs1ZHJSTFdRVk5nbG5SLWtnenZ4TUozdTdGUWljQ3RCbFFBeUhPN0NTeEs3OWFCNU4xOEEwdU9ubUk3OHZGN1BHUlAzbWNud2tyWVc0MXRDT1kweDZaM1JGUmJEMHBhc24?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMilgFBVV95cUxQTk1UWWFzYm96NHJJcGJEdVdncTBCRDhlR0tzcDJzWlZrMU42YVVtNS1Ib1M4em80UkJoTFV1Z1BfZTBCWmFkeUpxbllnYzJ5cU1MTlNNNmxxQXhBUG9PNWpxMVlWYlQ1VkRQd192SjJPb1RMQzZpMFZYZHlkdUFnczVYZTEzSEcwUGtvbS0wSlpCay1Ja0E?oc=5": {
+    "timestamp": "2026-10-23T14:44:50.255574+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQTk1UWWFzYm96NHJJcGJEdVdncTBCRDhlR0tzcDJzWlZrMU42YVVtNS1Ib1M4em80UkJoTFV1Z1BfZTBCWmFkeUpxbllnYzJ5cU1MTlNNNmxxQXhBUG9PNWpxMVlWYlQ1VkRQd192SjJPb1RMQzZpMFZYZHlkdUFnczVYZTEzSEcwUGtvbS0wSlpCay1Ja0E?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQTk1UWWFzYm96NHJJcGJEdVdncTBCRDhlR0tzcDJzWlZrMU42YVVtNS1Ib1M4em80UkJoTFV1Z1BfZTBCWmFkeUpxbllnYzJ5cU1MTlNNNmxxQXhBUG9PNWpxMVlWYlQ1VkRQd192SjJPb1RMQzZpMFZYZHlkdUFnczVYZTEzSEcwUGtvbS0wSlpCay1Ja0E?oc=5",
+    "headline": "Gasoline prices in Michigan jump over 20 cents in the last week, AAA says - CBS News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxQTk1UWWFzYm96NHJJcGJEdVdncTBCRDhlR0tzcDJzWlZrMU42YVVtNS1Ib1M4em80UkJoTFV1Z1BfZTBCWmFkeUpxbllnYzJ5cU1MTlNNNmxxQXhBUG9PNWpxMVlWYlQ1VkRQd192SjJPb1RMQzZpMFZYZHlkdUFnczVYZTEzSEcwUGtvbS0wSlpCay1Ja0E?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQc3hXdVB5ekd5RjV2U2ZISlo0U09CV3RCVUJWdjg3ZFBiOUozZFN1dFFRUTN5OWZoYVp6UkdIN0FIVkVHWkpLbzBOYXJ3TVR3R3RTOUsxVWpWa0RNWFFKSWZUUzJ6U0xma1k5cHBhYnFqRFV5WVBNa1hoQ3QtSEk1cGpnT1JJck01d1VDZXVDODRxM0c0M0ZNN0RKbVNESm5wcUprTmQ1X28tSzhEZHhDYlNyeS1KanowcDNseHRkN2c2dw?oc=5": {
+    "timestamp": "2026-10-23T14:44:57.162410+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQc3hXdVB5ekd5RjV2U2ZISlo0U09CV3RCVUJWdjg3ZFBiOUozZFN1dFFRUTN5OWZoYVp6UkdIN0FIVkVHWkpLbzBOYXJ3TVR3R3RTOUsxVWpWa0RNWFFKSWZUUzJ6U0xma1k5cHBhYnFqRFV5WVBNa1hoQ3QtSEk1cGpnT1JJck01d1VDZXVDODRxM0c0M0ZNN0RKbVNESm5wcUprTmQ1X28tSzhEZHhDYlNyeS1KanowcDNseHRkN2c2dw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQc3hXdVB5ekd5RjV2U2ZISlo0U09CV3RCVUJWdjg3ZFBiOUozZFN1dFFRUTN5OWZoYVp6UkdIN0FIVkVHWkpLbzBOYXJ3TVR3R3RTOUsxVWpWa0RNWFFKSWZUUzJ6U0xma1k5cHBhYnFqRFV5WVBNa1hoQ3QtSEk1cGpnT1JJck01d1VDZXVDODRxM0c0M0ZNN0RKbVNESm5wcUprTmQ1X28tSzhEZHhDYlNyeS1KanowcDNseHRkN2c2dw?oc=5",
+    "headline": "Virginia Gas Prices: Cheapest and most expensive places to fill up - Oct. 23, 2026 - WSLS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxQc3hXdVB5ekd5RjV2U2ZISlo0U09CV3RCVUJWdjg3ZFBiOUozZFN1dFFRUTN5OWZoYVp6UkdIN0FIVkVHWkpLbzBOYXJ3TVR3R3RTOUsxVWpWa0RNWFFKSWZUUzJ6U0xma1k5cHBhYnFqRFV5WVBNa1hoQ3QtSEk1cGpnT1JJck01d1VDZXVDODRxM0c0M0ZNN0RKbVNESm5wcUprTmQ1X28tSzhEZHhDYlNyeS1KanowcDNseHRkN2c2dw?oc=5",
+    "error": "The read operation timed out"
   }
 }

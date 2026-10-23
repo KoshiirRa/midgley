@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-23T03:56:28.287866",
+  "timestamp": "2026-10-23T14:45:45.974668",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.965,
+    "current_price_per_gal": 3.964,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-23T03:56:07Z"
+      "timestamp": "2026-10-23T14:45:23Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-29",
-    "current_base_price": 3.965,
-    "predicted_price_per_gal": 3.889,
+    "current_base_price": 3.964,
+    "predicted_price_per_gal": 3.888,
     "expected_change_dollars": -0.076,
     "expected_change_percent": -1.92,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.687,
-    "prediction_upper_95ci": 4.091,
+    "prediction_lower_95ci": 3.686,
+    "prediction_upper_95ci": 4.09,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 2,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.95,
-    "day_2_price": 3.895,
-    "day_3_price": 3.888,
-    "day_4_price": 3.899,
-    "day_5_price": 3.889,
+    "day_1_price": 3.949,
+    "day_2_price": 3.894,
+    "day_3_price": 3.887,
+    "day_4_price": 3.898,
+    "day_5_price": 3.888,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
