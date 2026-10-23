@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-22T23:04:21.142498",
+  "timestamp": "2026-10-23T00:56:18.012973",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-22T23:04:20Z"
+      "timestamp": "2026-10-23T00:56:17Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-28",
+    "target_date": "2026-10-29",
     "current_base_price": 4.27,
-    "predicted_price_per_gal": 4.172,
-    "expected_change_dollars": -0.098,
-    "expected_change_percent": -2.3,
+    "predicted_price_per_gal": 4.21,
+    "expected_change_dollars": -0.06,
+    "expected_change_percent": -1.41,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.892,
-    "prediction_upper_95ci": 4.452,
+    "prediction_lower_95ci": 3.926,
+    "prediction_upper_95ci": 4.494,
     "calibration_method": "conformal",
-    "calibration_sample_size": 23,
-    "directional_hit_rate_historical": 0.2609,
-    "historical_mae_dollars": 0.1829,
-    "evaluation_sample_size": 23,
-    "day_1_price": 4.25,
-    "day_2_price": 4.201,
-    "day_3_price": 4.187,
-    "day_4_price": 4.187,
-    "day_5_price": 4.172,
+    "calibration_sample_size": 26,
+    "directional_hit_rate_historical": 0.3077,
+    "historical_mae_dollars": 0.1677,
+    "evaluation_sample_size": 26,
+    "day_1_price": 4.258,
+    "day_2_price": 4.213,
+    "day_3_price": 4.208,
+    "day_4_price": 4.217,
+    "day_5_price": 4.21,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.044,
+        "delta_dollars": -0.027,
         "share_pct": 45.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.025,
+        "delta_dollars": -0.015,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -65,7 +65,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.015,
+        "delta_dollars": -0.009,
         "share_pct": 15.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.004,
         "share_pct": 7.5,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -81,7 +81,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.003,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -96,45 +96,45 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.098/gal (-2.30%): Driven primarily by Futures & Commodity Benchmark ($-0.044/gal), Refining Yield & Crack Spread ($-0.025/gal).",
+      "summary_text": "National forecast $-0.060/gal (-1.41%): Driven primarily by Futures & Commodity Benchmark ($-0.027/gal), Refining Yield & Crack Spread ($-0.015/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.044,
-          "impact_pct": -1.03,
+          "impact_dollars": -0.027,
+          "impact_pct": -0.63,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.025,
-          "impact_pct": -0.59,
+          "impact_dollars": -0.015,
+          "impact_pct": -0.35,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.015,
-          "impact_pct": -0.35,
+          "impact_dollars": -0.009,
+          "impact_pct": -0.21,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
-          "impact_dollars": -0.007,
-          "impact_pct": -0.16,
+          "impact_dollars": -0.004,
+          "impact_pct": -0.09,
           "share_pct": 7.5,
           "direction": "DOWN"
         },
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.005,
-          "impact_pct": -0.12,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.07,
           "share_pct": 5.0,
           "direction": "DOWN"
         },
@@ -153,40 +153,40 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.044,
-      "impact_pct": -1.03,
+      "impact_dollars": -0.027,
+      "impact_pct": -0.63,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.025,
-      "impact_pct": -0.59,
+      "impact_dollars": -0.015,
+      "impact_pct": -0.35,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.015,
-      "impact_pct": -0.35,
+      "impact_dollars": -0.009,
+      "impact_pct": -0.21,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
-      "impact_dollars": -0.007,
-      "impact_pct": -0.16,
+      "impact_dollars": -0.004,
+      "impact_pct": -0.09,
       "share_pct": 7.5,
       "direction": "DOWN"
     },
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.005,
-      "impact_pct": -0.12,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.07,
       "share_pct": 5.0,
       "direction": "DOWN"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.098/gal (-2.30%): Driven primarily by Futures & Commodity Benchmark ($-0.044/gal), Refining Yield & Crack Spread ($-0.025/gal).",
+    "summary_text": "National forecast $-0.060/gal (-1.41%): Driven primarily by Futures & Commodity Benchmark ($-0.027/gal), Refining Yield & Crack Spread ($-0.015/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.044,
+        "delta_dollars": -0.027,
         "share_pct": 45.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.025,
+        "delta_dollars": -0.015,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -221,7 +221,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.015,
+        "delta_dollars": -0.009,
         "share_pct": 15.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.004,
         "share_pct": 7.5,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -237,7 +237,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.003,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
