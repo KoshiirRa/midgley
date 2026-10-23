@@ -243,7 +243,7 @@ def test_firecrawl_scrape_via_cloudflare_browser_run():
     mock_md = "# Refinery Flare Incident\n\nFlaring reported at Baytown petrochemical complex."
 
     with patch.dict(os.environ, {"TESTING": "0"}), \
-         patch.object(global_cache, "get", return_value=None), \
+         patch("src.firecrawl_scraper.global_cache.get", return_value=None), \
          patch("src.cloudflare_browser_run.fetch_markdown_via_browser_run", return_value=mock_md):
         res = connector.scrape_url("https://example.com/baytown-flare-unique-test", force_refresh=True)
         assert res["success"] is True
