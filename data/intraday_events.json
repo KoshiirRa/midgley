@@ -6550,5 +6550,26 @@
       "overall_price_pressure": 0.42
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-23T03:56:01.140997",
+    "headline": "October Marks Highest Number of Strait of Hormuz Attacks",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNOFY0bEpnVEdQSEZwWVo1anhWQjBYOWlIUmFxVnNDeHFaZ25WR2psVU1aOEpoTlhKMl9ubnZyY2ZGb0hrblhfeks0dzZLOTZ3bXUycTFLeG0xSHR1N2paTlNwZ295X1ptX3E1eFdLMWZXUTBqV0tYaHY5YVAtZWNpNHpwNE9SakZTTjR4bkJPNzdlUEE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNOFY0bEpnVEdQSEZwWVo1anhWQjBYOWlIUmFxVnNDeHFaZ25WR2psVU1aOEpoTlhKMl9ubnZyY2ZGb0hrblhfeks0dzZLOTZ3bXUycTFLeG0xSHR1N2paTlNwZ295X1ptX3E1eFdLMWZXUTBqV0tYaHY5YVAtZWNpNHpwNE9SakZTTjR4bkJPNzdlUEE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikwFBVV95cUxNOFY0bEpnVEdQSEZwWVo1anhWQjBYOWlIUmFxVnNDeHFaZ25WR2psVU1aOEpoTlhKMl9ubnZyY2ZGb0hrblhfeks0dzZLOTZ3bXUycTFLeG0xSHR1N2paTlNwZ295X1ptX3E1eFdLMWZXUTBqV0tYaHY5YVAtZWNpNHpwNE9SakZTTjR4bkJPNzdlUEE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.65,
+      "demand_sentiment": 0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.72
+    },
+    "discord_notified": true
   }
 ]
