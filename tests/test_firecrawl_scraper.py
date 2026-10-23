@@ -239,12 +239,12 @@ def test_telemetry_get_all_quota_statuses_includes_firecrawl():
 
 def test_firecrawl_scrape_via_cloudflare_browser_run():
     """Verifies that when FIRECRAWL_API_KEY is unset, FirecrawlScraper uses Cloudflare Browser Run if available."""
-    connector = FirecrawlConnector(api_key=None)
     mock_md = "# Refinery Flare Incident\n\nFlaring reported at Baytown petrochemical complex."
 
-    with patch.dict(os.environ, {"TESTING": "0"}), \
+    with patch.dict(os.environ, {"TESTING": "0", "FIRECRAWL_API_KEY": ""}), \
          patch("src.firecrawl_scraper.global_cache.get", return_value=None), \
          patch("src.cloudflare_browser_run.fetch_markdown_via_browser_run", return_value=mock_md):
+        connector = FirecrawlConnector(api_key="")
         res = connector.scrape_url("https://example.com/baytown-flare-unique-test", force_refresh=True)
         assert res["success"] is True
         assert res["provider"] == "cloudflare_browser_run"
