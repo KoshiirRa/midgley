@@ -68,6 +68,11 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Duplicate & Pending Review Suppression**: Filtered pending reviews and duplicate events in [`src/dashboard_generator.py`](src/dashboard_generator.py) and [`src/data_ingestion.py`](src/data_ingestion.py) to suppress duplicate follow-up catalysts and pending review flags from contaminating intelligence dashboards and regional model inputs.
 - **HMAC Flag Link Signature Resiliency**: Hardened duplicate review action links in [`src/discord_notifier.py`](src/discord_notifier.py) with automatic credential fallbacks (`FLAG_SIGNING_KEY` $\rightarrow$ `ADMIN_TOKEN` $\rightarrow$ `CLOUDFLARE_AUTH_TOKEN`), and added `FLAG_SIGNING_KEY` to [`.env.example`](.env.example).
 
+### 12. Friday Pre-Audit Production Data Sync & Discord Notification
+- **Automated Friday Afternoon Pre-Audit Reconciliation**: Scheduled [`.github/workflows/pre_audit_data_sync.yml`](.github/workflows/pre_audit_data_sync.yml) every Friday at 21:00 UTC (04:00 PM US Central Time, `cron: '0 21 * * 5'`), reconciling all ground-truth prediction records, run manifests, and telemetry from `origin/main` into `dev` prior to Saturday morning's weekly model performance review.
+- **Non-Destructive JSON Merge Engine**: Implemented [`scripts/reconcile_production_sync.py`](scripts/reconcile_production_sync.py) with a 3-way conflict resolver for [`data/intraday_events.json`](data/intraday_events.json) that preserves both newly dispatched production events and qualitative duplicate review decisions made on `dev`.
+- **Discord MLOps Embed Notifications**: Automatically dispatches rich status alerts to `DISCORD_WEBHOOK_URL` confirming merge status, number of production commits reconciled, and Saturday review audit readiness. Added 8 unit tests in [`tests/test_reconcile_production_sync.py`](tests/test_reconcile_production_sync.py).
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
