@@ -430,34 +430,44 @@ class IntradayEventMonitor:
         text = (headline + " " + (enriched_context or "")).lower()
         targets = set()
 
-        # Tulsa / Cushing / West Tulsa
-        if any(k in text for k in ["tulsa", "cushing", "sinclair", "hf sinclair", "west tulsa"]):
+        # Tulsa / Cushing / West Tulsa (PADD 2 Mid-Continent)
+        if any(k in text for k in ["tulsa", "cushing", "sinclair", "hf sinclair", "west tulsa", "oklahoma"]):
             targets.add("Tulsa")
 
         # Newark / Delaware City / PADD 1B
-        if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b"]):
+        if any(k in text for k in ["newark", "delaware city", "delaware", "padd 1b", "padd1b", "new jersey", "pennsylvania"]):
             targets.add("Newark")
 
         # Cincinnati / Catlettsburg / Ohio River (PADD 2 Ohio Valley)
         if any(k in text for k in [
-            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock", "hamilton county", "kenton county"
+            "cincinnati", "catlettsburg", "ohio river", "markland lock", "mcalpine lock", "hamilton county", "kenton county",
+            "ohio", "ohio valley", "kentucky"
         ]):
             targets.add("Cincinnati")
 
         # Chicago / Whiting / Lemont / Joliet / Des Plaines (PADD 2 Great Lakes)
         if any(k in text for k in [
             "chicago", "whiting", "lemont", "joliet", "will county", "cook county",
-            "bp whiting", "citgo lemont", "exxonmobil joliet", "illinois waterway", "chicago cbob", "chicago spot"
+            "bp whiting", "citgo lemont", "exxonmobil joliet", "illinois", "illinois waterway", "chicago cbob", "chicago spot",
+            "indiana", "michigan", "wisconsin", "detroit"
         ]):
             targets.add("Chicago")
+
+        # Midwest / Great Lakes Regional Corridor (PADD 2 Multi-Hub Routing - Issue #659)
+        if any(k in text for k in ["midwest", "midwestern", "great lakes"]):
+            targets.add("Chicago")
+            targets.add("Cincinnati")
 
         # Midcontinent / Group 3 Refining Corridor
         if any(k in text for k in ["midcontinent", "mid-continent", "group 3"]):
             targets.add("Tulsa")
             targets.add("Cincinnati")
 
-        # Greenville & Charlotte / Colonial Pipeline / Selma / Paw Creek
-        if any(k in text for k in ["colonial pipeline", "greenville", "charlotte", "selma", "paw creek"]):
+        # Greenville & Charlotte / Colonial Pipeline / Selma / Paw Creek (PADD 1C Carolinas)
+        if any(k in text for k in [
+            "colonial pipeline", "greenville", "charlotte", "selma", "paw creek",
+            "north carolina", "south carolina", "carolinas"
+        ]):
             targets.add("Greenville")
             targets.add("Charlotte")
 
@@ -469,7 +479,7 @@ class IntradayEventMonitor:
         if any(k in text for k in [
             "los angeles", "el segundo", "torrance", "carson refinery", "wilmington refinery",
             "san pedro bay", "port of long beach", "watson station", "la carbob", "south coast aqmd",
-            "scaqmd", "palos verdes", "newport-inglewood"
+            "scaqmd", "palos verdes", "newport-inglewood", "socal"
         ]):
             targets.add("Los_Angeles")
 
@@ -480,7 +490,7 @@ class IntradayEventMonitor:
         # Houston / USGC Refining Complex / Baytown / Port Arthur / Deer Park / Texas City
         if any(k in text for k in [
             "houston", "baytown", "port arthur", "deer park", "texas city", "houston ship channel",
-            "galveston bay", "harris county", "padd 3", "padd3", "motiva"
+            "galveston bay", "harris county", "padd 3", "padd3", "motiva", "texas", "gulf coast", "usgc"
         ]):
             targets.add("Houston")
 
@@ -508,7 +518,7 @@ class IntradayEventMonitor:
         # Denver / Suncor Commerce City / Rocky Mountain (PADD 4)
         if any(k in text for k in [
             "denver", "commerce city", "suncor", "suncor refinery", "padd 4", "padd4",
-            "rocky mountain", "rockies", "front range", "dj basin"
+            "rocky mountain", "rockies", "front range", "dj basin", "colorado", "wyoming"
         ]):
             targets.add("Denver")
 
@@ -522,15 +532,15 @@ class IntradayEventMonitor:
         # Seattle / Puget Sound / PNW / Olympic Pipeline (PADD 5 Northwest)
         if any(k in text for k in [
             "seattle", "puget sound", "olympic pipeline", "cherry point", "ferndale",
-            "anacortes", "washington state", "pnw", "bp cherry point", "phillips 66 ferndale",
-            "hf sinclair puget sound"
+            "anacortes", "washington state", "pnw", "pacific northwest", "bp cherry point", "phillips 66 ferndale",
+            "hf sinclair puget sound", "oregon"
         ]):
             targets.add("Seattle")
 
         # Phoenix / Desert Southwest / SFPP Pipeline / Maricopa CBG (PADD 5 Southwest)
         if any(k in text for k in [
             "phoenix", "desert southwest", "sfpp", "kinder morgan sfpp", "east line", "west line",
-            "maricopa county", "maricopa cbg", "arizona fuel"
+            "maricopa county", "maricopa cbg", "arizona fuel", "arizona", "nevada"
         ]):
             targets.add("Phoenix")
 
@@ -565,7 +575,8 @@ class IntradayEventMonitor:
         # Boston / New England / Irving Oil / PADD 1A (Issue #619)
         if any(k in text for k in [
             "boston", "new england", "irving oil", "saint john refinery", "chelsea river",
-            "everett terminal", "padd 1a", "massachusetts gasoline", "boston harbor"
+            "everett terminal", "padd 1a", "massachusetts gasoline", "boston harbor",
+            "massachusetts", "maine", "new hampshire", "vermont", "rhode island", "connecticut"
         ]):
             targets.add("Boston")
 

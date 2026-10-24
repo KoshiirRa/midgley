@@ -433,6 +433,33 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertIn("Cincinnati", locs_midcont)
         self.assertIn("Tulsa", locs_midcont)
 
+    def test_resolve_target_locales_issue_659_midwest_refinery_outage(self):
+        """Verifies Issue #659 headline routes to PADD 2 regional metro hubs rather than defaulting to National."""
+        headline = "Michigan, Ohio Gas Prices Jump Again as Illinois Refinery Outage Ripples Through Midwest - marketscreener.com"
+        targets = self.monitor.resolve_target_locales(headline)
+        self.assertIn("Chicago", targets)
+        self.assertIn("Cincinnati", targets)
+        self.assertNotIn("National", targets)
+
+    def test_resolve_target_locales_padd2_state_coverage(self):
+        """Verifies state-level and regional PADD 2 corridor keywords route to Chicago and Cincinnati."""
+        t_il = self.monitor.resolve_target_locales("Illinois refinery flaring halts output")
+        self.assertIn("Chicago", t_il)
+
+        t_mi = self.monitor.resolve_target_locales("Michigan fuel distribution terminals report inventory draw")
+        self.assertIn("Chicago", t_mi)
+
+        t_oh = self.monitor.resolve_target_locales("Ohio retail gasoline averages surge 10 cents")
+        self.assertIn("Cincinnati", t_oh)
+
+        t_gl = self.monitor.resolve_target_locales("Great Lakes fuel supply tightened by seasonal maintenance")
+        self.assertIn("Chicago", t_gl)
+        self.assertIn("Cincinnati", t_gl)
+
+        t_mw = self.monitor.resolve_target_locales("Midwest gas prices jump following regional pipeline delay")
+        self.assertIn("Chicago", t_mw)
+        self.assertIn("Cincinnati", t_mw)
+
     @patch("src.intraday_event_monitor.send_duplicate_review_discord_notification")
     def test_duplicate_holding_for_operator_review(self, mock_discord_review):
         """Verifies potential duplicate events sharing the same facility are held for review."""
