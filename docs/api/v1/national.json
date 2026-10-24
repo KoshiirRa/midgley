@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-24T03:50:20.365450",
+  "timestamp": "2026-10-24T16:54:54.404508",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.293,
+    "current_price_per_gal": 4.296,
     "source": "AAA Web Scraper (National Average, US)",
     "provenance": {
       "source": "AAA Web Scraper (National Average, US)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-24T03:50:20Z"
+      "timestamp": "2026-10-24T16:54:38Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-30",
-    "current_base_price": 4.293,
-    "predicted_price_per_gal": 4.204,
-    "expected_change_dollars": -0.089,
-    "expected_change_percent": -2.07,
+    "current_base_price": 4.296,
+    "predicted_price_per_gal": 4.208,
+    "expected_change_dollars": -0.088,
+    "expected_change_percent": -2.05,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.913,
-    "prediction_upper_95ci": 4.495,
+    "prediction_lower_95ci": 3.917,
+    "prediction_upper_95ci": 4.499,
     "calibration_method": "conformal",
     "calibration_sample_size": 30,
     "directional_hit_rate_historical": 0.3667,
     "historical_mae_dollars": 0.1539,
     "evaluation_sample_size": 30,
-    "day_1_price": 4.286,
-    "day_2_price": 4.254,
-    "day_3_price": 4.225,
-    "day_4_price": 4.212,
-    "day_5_price": 4.204,
+    "day_1_price": 4.289,
+    "day_2_price": 4.265,
+    "day_3_price": 4.233,
+    "day_4_price": 4.216,
+    "day_5_price": 4.208,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -89,14 +89,14 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.003,
+        "delta_dollars": -0.002,
         "share_pct": 2.5,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.089/gal (-2.07%): Driven primarily by Futures & Commodity Benchmark ($-0.040/gal), Refining Yield & Crack Spread ($-0.022/gal).",
+      "summary_text": "National forecast $-0.088/gal (-2.05%): Driven primarily by Futures & Commodity Benchmark ($-0.040/gal), Refining Yield & Crack Spread ($-0.022/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.003,
-          "impact_pct": -0.07,
+          "impact_dollars": -0.002,
+          "impact_pct": -0.05,
           "share_pct": 2.5,
           "direction": "DOWN"
         }
@@ -193,14 +193,14 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.003,
-      "impact_pct": -0.07,
+      "impact_dollars": -0.002,
+      "impact_pct": -0.05,
       "share_pct": 2.5,
       "direction": "DOWN"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.089/gal (-2.07%): Driven primarily by Futures & Commodity Benchmark ($-0.040/gal), Refining Yield & Crack Spread ($-0.022/gal).",
+    "summary_text": "National forecast $-0.088/gal (-2.05%): Driven primarily by Futures & Commodity Benchmark ($-0.040/gal), Refining Yield & Crack Spread ($-0.022/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.003,
+        "delta_dollars": -0.002,
         "share_pct": 2.5,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"

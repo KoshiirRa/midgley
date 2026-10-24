@@ -1,5 +1,17 @@
 [
   {
+    "run_id": "2026-10-24_16-54-50",
+    "timestamp": "2026-10-24 16:48:31",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-24 16:48:31)"
+  },
+  {
+    "run_id": "2026-10-24_16-48-47",
+    "timestamp": "2026-10-24 16:48:31",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-10-24 16:48:31)"
+  },
+  {
     "run_id": "2026-10-24_03-50-05",
     "timestamp": "2026-10-24 00:59:36",
     "run_type": "LIVE_PROSPECTIVE",
@@ -583,18 +595,6 @@
   },
   {
     "run_id": "2026-10-15_20-08-12",
-    "timestamp": "2026-10-15 17:25:36",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-15 17:25:36)"
-  },
-  {
-    "run_id": "2026-10-15_20-08-05",
-    "timestamp": "2026-10-15 17:25:36",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-15 17:25:36)"
-  },
-  {
-    "run_id": "2026-10-15_20-07-58",
     "timestamp": "2026-10-15 17:25:36",
     "run_type": "LIVE_PROSPECTIVE",
     "trigger": "Daily Forecast Batch Execution (2026-10-15 17:25:36)"
