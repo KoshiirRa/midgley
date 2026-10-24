@@ -82,6 +82,13 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Periodic Recap & Summary Suppression**: Introduced [`RETROSPECTIVE_RECAP_PATTERNS`](src/intraday_event_monitor.py) in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py) to filter historical monthly aggregations and retrospective recaps (e.g., `"<Month> marks highest/lowest..."`, `"monthly recap"`, `"year in review"`, `"quarterly summary"`).
 - **False Intraday Impulse Shielding**: Prevents historical statistical roundups from being misclassified as breaking physical disruptions, preserving point-in-time observational integrity without applying spurious new $\Delta P$, $S$, or $G$ shocks. Added unit tests in [`tests/test_intraday_event_monitor.py`](tests/test_intraday_event_monitor.py) and [`tests/test_false_positive_reviewer.py`](tests/test_false_positive_reviewer.py).
 
+### 15. Cross-Repository Catalog Deduplication & UTF-8 Subprocess Safety (Issues #679–#692)
+- **Cross-Repository Issue Deduplication**: Implemented [`get_existing_issues_cache()`](src/catalog_monitor.py) and enhanced [`check_existing_issue()`](src/catalog_monitor.py) in [`src/catalog_monitor.py`](src/catalog_monitor.py) to audit candidate tools across both `KoshiirRa/midgley` and companion repositories (`KoshiirRa/agentic-trading-robinhood`). Prevents duplicate feature requests when issues are moved or tracked in affiliated projects.
+- **Multi-Vector Match Strategy**: Enforces three layers of deduplication matching: exact issue title, normalized tool name (`ingest <tool_name>`), and candidate clean URL in issue bodies.
+- **In-Memory Cache Tiering**: Caches repository issues in-memory per run (`_EXISTING_ISSUES_CACHE`) across target repositories, eliminating redundant CLI and REST API calls.
+- **UTF-8 Subprocess Decoding Guard**: Enforced `encoding="utf-8", errors="replace"` across all `subprocess.run` invocations in `catalog_monitor.py` to prevent Windows `charmap` `UnicodeDecodeError` when decoding GitHub issues with emoji or special characters.
+- **Triage & Cleanup**: Closed duplicate issues #679–#692 with links to their counterparts in `KoshiirRa/agentic-trading-robinhood` (#54–#67), and closed dev review #678 as superseded by production weekly review #693. Added unit tests in [`tests/test_catalog_monitor.py`](tests/test_catalog_monitor.py).
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
@@ -126,6 +133,7 @@ ruff check src/ tests/
 - **`tests/test_discord_notifier.py`**: 16/16 passed (tested duplicate review link signature generation, fallbacks, and test suppression).
 - **`tests/test_dashboard_generator.py`**: 1/1 passed (`test_data_sources_page_generation`).
 - **`tests/test_docs_links.py`**: 2/2 passed (verified zero local `file://` URLs in generated docs).
+- **`tests/test_catalog_monitor.py`**: 6/6 passed (tested multi-repo deduplication, exact title, tool name match, URL matching, and barred tool suppression).
 - **`ruff check src/ tests/`**: All checks passed cleanly with zero linting or formatting errors.
 
 ---
