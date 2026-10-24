@@ -8283,6 +8283,28 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-10-24T03:49:35.478990+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 0.000402,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-24T03:49:52.934929+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 0.000402,
+      "status": "success"
     }
   ]
 }
