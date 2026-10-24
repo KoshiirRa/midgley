@@ -247,6 +247,25 @@ class TestIntradayEventMonitor(unittest.TestCase):
         self.assertFalse(is_anomaly3)
         self.assertEqual(scores3["overall_price_pressure"], 0.0)
 
+    def test_evaluate_headline_retrospective_recap_filtering_issue_658(self):
+        """Verifies Issue #658 monthly retrospective statistical recaps are filtered before triggering LLM inference."""
+        h_658 = "October Marks Highest Number of Strait of Hormuz Attacks"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(h_658)
+        self.assertFalse(is_anomaly, f"Retrospective monthly recap should be filtered: {h_658}")
+        self.assertEqual(scores["overall_price_pressure"], 0.0)
+
+        h_month = "September saw record refinery maintenance across European hubs"
+        is_anomaly_month, _ = self.monitor.evaluate_headline_anomaly(h_month)
+        self.assertFalse(is_anomaly_month)
+
+        h_year = "Year in review: crude oil supply shocks and tanker disruptions of 2026"
+        is_anomaly_year, _ = self.monitor.evaluate_headline_anomaly(h_year)
+        self.assertFalse(is_anomaly_year)
+
+        h_recap = "Monthly recap: gasoline retail pricing trends and pipeline flows"
+        is_anomaly_recap, _ = self.monitor.evaluate_headline_anomaly(h_recap)
+        self.assertFalse(is_anomaly_recap)
+
     def test_evaluate_headline_energy_tariff_inclusion(self):
         # Energy-specific tariff headlines must still trigger Stage 1 evaluation
         h1 = "Trump threatens 25% tariff on Canadian crude oil imports"

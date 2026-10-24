@@ -31,6 +31,7 @@ from src.intraday_event_monitor import (
     TRIGGER_KEYWORDS,
     EXCLUDE_KEYWORDS,
     NON_ENERGY_TARIFF_EXCLUDE,
+    RETROSPECTIVE_RECAP_PATTERNS,
     normalize_headline
 )
 from src.event_analyzer import extract_event_features_rule_based
@@ -85,10 +86,14 @@ def analyze_headline_triggers(headline: str, category: str = "", notes: str = ""
     LOCAL_FACILITY_SPILL_TOKENS = ["data center", "data centre", "backup generator", "generator spill", "building spill"]
     matched_local_spill = [kw for kw in LOCAL_FACILITY_SPILL_TOKENS if kw in norm_headline]
 
+    matched_recap = [pat for pat in RETROSPECTIVE_RECAP_PATTERNS if re.search(pat, norm_headline)]
+    is_retrospective_recap = len(matched_recap) > 0
+
     notes_lower = (notes or "").lower()
     category_lower = (category or "").lower()
     is_geo_scope_issue = (
         has_energy_context
+        and not is_retrospective_recap
         and (
             any(k in notes_lower for k in ["national scope", "not national", "scope", "geographic", "region", "locale", "routing"])
             or any(k in category_lower for k in ["geo", "locale", "scope", "geographic"])
@@ -104,6 +109,11 @@ def analyze_headline_triggers(headline: str, category: str = "", notes: str = ""
         diagnosis = (
             f"Tripped trigger keyword(s) ['spill'] on minor localized facility/generator spill ({matched_local_spill}) "
             f"rather than commercial refining, midstream, or pipeline disruption."
+        )
+    elif is_retrospective_recap:
+        diagnosis = (
+            f"Headline is a non-breaking retrospective monthly/periodic statistical summary "
+            f"rather than an intraday market disruption. Filtered by RETROSPECTIVE_RECAP_PATTERNS."
         )
     elif is_geo_scope_issue:
         diagnosis = (
@@ -124,7 +134,7 @@ def analyze_headline_triggers(headline: str, category: str = "", notes: str = ""
 
     # 6. Formulate recommended code additions
     suggested_exclusions = []
-    if not is_geo_scope_issue:
+    if not is_geo_scope_issue and not is_retrospective_recap:
         words = re.findall(r'\b[a-zA-Z]{4,}\b', norm_headline)
         for word in words:
             if word not in ENERGY_CORE_TOKENS and word not in ["announces", "imposes", "reported", "breaking", "market", "global"]:
@@ -145,6 +155,7 @@ def analyze_headline_triggers(headline: str, category: str = "", notes: str = ""
         "matched_energy_tokens": matched_energy_tokens,
         "has_energy_context": has_energy_context,
         "is_geo_scope_issue": is_geo_scope_issue,
+        "is_retrospective_recap": is_retrospective_recap,
         "rule_based_scores": scores,
         "diagnosis": diagnosis,
         "suggested_exclusions": list(dict.fromkeys(suggested_exclusions))[:5]
@@ -163,7 +174,26 @@ def format_diagnostic_comment(analysis: Dict[str, Any]) -> str:
 
     escaped_headline = headline.replace('"', '\\"')
 
-    if analysis.get("is_geo_scope_issue"):
+    if analysis.get("is_retrospective_recap"):
+        engine_refinement = """#### 🛠️ Recommended Engine Refinement
+Headline is a non-breaking retrospective monthly/periodic statistical summary rather than a live market disruption. It is filtered by `RETROSPECTIVE_RECAP_PATTERNS` in `src/intraday_event_monitor.py`:
+
+```python
+# In RETROSPECTIVE_RECAP_PATTERNS:
+# Filters periodic statistical roundups (e.g., '<Month> marks highest/lowest...', 'monthly recap', 'year in review')
+```"""
+        test_case = f"""#### 🧪 Regression Unit Test Case
+Add this test to `tests/test_intraday_event_monitor.py` to prevent regressions:
+
+```python
+def test_false_positive_retrospective_recap_{abs(hash(headline)) % 100000}():
+    headline = "{escaped_headline}"
+    from src.intraday_event_monitor import IntradayEventMonitor
+    monitor = IntradayEventMonitor()
+    is_anomaly, _ = monitor.evaluate_headline_anomaly(headline)
+    assert not is_anomaly, f"Retrospective recap should be filtered: {{headline}}"
+```"""
+    elif analysis.get("is_geo_scope_issue"):
         engine_refinement = """#### 🛠️ Recommended Engine Refinement
 This is a valid energy supply catalyst rather than a non-energy false positive. Do **not** suppress the catalyst via `NON_ENERGY_TARIFF_EXCLUDE`. Instead, update `resolve_target_locales()` in `src/intraday_event_monitor.py` and `REGIONAL_KEYWORDS` in `src/data_ingestion.py` to route to affected regional metro agents:
 

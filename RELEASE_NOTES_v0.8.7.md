@@ -78,6 +78,10 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Regional Ingestion Keyword Taxonomy Synchronization**: Extended `REGIONAL_KEYWORDS` in [`load_live_regional_intraday_events()`](src/data_ingestion.py) across all 15 modeled hubs (including `chicago`, `houston`, `losangeles`, `denver`, `newyork`, `seattle`, `phoenix`, `boston`, etc.), ensuring regional daily pipeline feature fusion correctly pulls breaking intraday catalysts.
 - **False-Positive Diagnostic Reviewer Disambiguation**: Updated [`scripts/review_false_positive.py`](scripts/review_false_positive.py) to differentiate between true non-energy false positives and **geographic scope misrouting**. When an issue reports regional targeting defects on valid energy disruptions, the agent now recommends extending `resolve_target_locales()` rather than erroneously suppressing legitimate catalysts via `NON_ENERGY_TARIFF_EXCLUDE`. Added regression unit tests across [`tests/test_intraday_event_monitor.py`](tests/test_intraday_event_monitor.py), [`tests/test_false_positive_reviewer.py`](tests/test_false_positive_reviewer.py), and [`tests/test_regional_event_fusion.py`](tests/test_regional_event_fusion.py).
 
+### 14. Non-Breaking Retrospective Statistical Recap Filtering (Issue #658)
+- **Periodic Recap & Summary Suppression**: Introduced [`RETROSPECTIVE_RECAP_PATTERNS`](src/intraday_event_monitor.py) in [`src/intraday_event_monitor.py`](src/intraday_event_monitor.py) to filter historical monthly aggregations and retrospective recaps (e.g., `"<Month> marks highest/lowest..."`, `"monthly recap"`, `"year in review"`, `"quarterly summary"`).
+- **False Intraday Impulse Shielding**: Prevents historical statistical roundups from being misclassified as breaking physical disruptions, preserving point-in-time observational integrity without applying spurious new $\Delta P$, $S$, or $G$ shocks. Added unit tests in [`tests/test_intraday_event_monitor.py`](tests/test_intraday_event_monitor.py) and [`tests/test_false_positive_reviewer.py`](tests/test_false_positive_reviewer.py).
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates

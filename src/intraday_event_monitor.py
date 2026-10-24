@@ -74,6 +74,15 @@ NON_ENERGY_TARIFF_EXCLUDE = [
     "palm oil", "olive oil", "soybean oil"
 ]
 
+# Retrospective Monthly/Periodic Statistical Recaps to Filter Non-Breaking Historical Aggregations (Issue #658)
+RETROSPECTIVE_RECAP_PATTERNS = [
+    r"\b(january|february|march|april|may|june|july|august|september|october|november|december)\s+(marks|saw|recorded|reports?)\s+(highest|lowest|record|most|least)\b",
+    r"\b(month|year|quarter)\s+in\s+review\b",
+    r"\bmonthly\s+(recap|roundup|summary|review|report)\b",
+    r"\bannual\s+(recap|roundup|summary|review|report)\b",
+    r"\bquarterly\s+(recap|roundup|summary|review|report)\b",
+]
+
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate
 TRIGGER_KEYWORDS = [
     "energy tariff", "oil tariff", "fuel tariff", "crude tariff", "gasoline tariff", "retaliatory tariff", "counter-tariff",
@@ -269,6 +278,10 @@ class IntradayEventMonitor:
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
         if any(re.search(rf"\b{re.escape(ex)}\b", text_lower) for ex in NON_ENERGY_TARIFF_EXCLUDE):
+            return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
+        # Filter non-breaking retrospective monthly/periodic statistical recaps (Issue #658)
+        if any(re.search(pat, text_lower) for pat in RETROSPECTIVE_RECAP_PATTERNS):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
 

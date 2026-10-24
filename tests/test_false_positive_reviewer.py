@@ -66,6 +66,19 @@ def test_analyze_headline_triggers_issue_659_geographic_scope():
     assert "NON_ENERGY_TARIFF_EXCLUDE.extend" not in comment
 
 
+def test_analyze_headline_triggers_issue_658_retrospective_recap():
+    headline = "October Marks Highest Number of Strait of Hormuz Attacks"
+    analysis = analyze_headline_triggers(headline, category="Non-Energy Macro Tariff")
+
+    assert analysis["is_retrospective_recap"] is True
+    assert "retrospective monthly/periodic statistical summary" in analysis["diagnosis"]
+    assert len(analysis["suggested_exclusions"]) == 0
+
+    comment = format_diagnostic_comment(analysis)
+    assert "RETROSPECTIVE_RECAP_PATTERNS" in comment
+    assert "NON_ENERGY_TARIFF_EXCLUDE.extend" not in comment
+
+
 def test_parse_headline_from_issue_body():
     body_trigger_block = """## False Positive Anomaly Report (#258)
 
