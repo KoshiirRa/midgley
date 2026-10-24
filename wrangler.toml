@@ -37,6 +37,11 @@ max_batch_timeout = 5
 max_retries = 3
 dead_letter_queue = "intraday-event-dlq"
 
+[[queues.consumers]]
+queue = "intraday-event-dlq"
+max_batch_size = 10
+max_batch_timeout = 30
+
 
 [observability]
 enabled = true

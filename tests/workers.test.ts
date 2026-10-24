@@ -9,6 +9,13 @@ import intradayWorker, {
   handleQueueBatch,
   isHeadlineDispatchedInCache,
   markHeadlineDispatchedInCache,
+  areHeadlinesDispatchedInBatch,
+  markHeadlinesDispatchedInCache,
+  runWithBoundedConcurrency,
+  retryQueueMessage,
+  ensureDlqTableSchema,
+  saveDlqRecord,
+  handleDlqBatch,
   generateEventToken,
   getWorkerSigningSecret,
   timingSafeEqual as intradayTimingSafeEqual,
@@ -46,10 +53,18 @@ function uint8ArrayToHex(arr: Uint8Array): string {
 
 function createMockD1Database(initialColumns: string[] = ["clean_key", "value", "used_at"]) {
   const store = new Map<string, any>();
+  const dlqStore = new Map<string, any>();
   const columns = new Set<string>(initialColumns);
   return {
     store,
+    dlqStore,
     columns,
+    async batch(stmts: any[]) {
+      for (const s of stmts) {
+        if (s && typeof s.run === "function") await s.run();
+      }
+      return stmts.map(() => ({ success: true }));
+    },
     prepare(query: string) {
       if (query.includes("PRAGMA table_info(flag_replay_tokens)")) {
         return {
@@ -64,6 +79,46 @@ function createMockD1Database(initialColumns: string[] = ["clean_key", "value", 
         return {
           async run() {
             columns.add("value");
+            return { success: true };
+          }
+        };
+      }
+      if (query.includes("queue_dlq_records")) {
+        return {
+          bind(...args: any[]) {
+            return {
+              async run() {
+                if (query.includes("INSERT")) {
+                  const [id, queue_name, payload, error_message, attempts] = args;
+                  dlqStore.set(id, { id, queue_name, payload, error_message, attempts, created_at: new Date().toISOString(), replayed_at: null });
+                } else if (query.includes("UPDATE")) {
+                  const id = args[0];
+                  const rec = dlqStore.get(id);
+                  if (rec) rec.replayed_at = new Date().toISOString();
+                }
+                return { success: true };
+              },
+              async all() {
+                if (query.includes("WHERE id =")) {
+                  const id = args[0];
+                  const rec = dlqStore.get(id);
+                  return { results: rec && !rec.replayed_at ? [rec] : [] };
+                }
+                const limit = typeof args[0] === "number" ? args[0] : 50;
+                const active = Array.from(dlqStore.values()).filter(r => !r.replayed_at).slice(0, limit);
+                return { results: active };
+              },
+              async first() {
+                const id = args[0];
+                return dlqStore.get(id) || null;
+              }
+            };
+          },
+          async all() {
+            const active = Array.from(dlqStore.values()).filter(r => !r.replayed_at);
+            return { results: active };
+          },
+          async run() {
             return { success: true };
           }
         };
@@ -106,6 +161,19 @@ function createMockD1Database(initialColumns: string[] = ["clean_key", "value", 
                 return store.get(key);
               }
               return null;
+            },
+            async all() {
+              if (query.includes("seen_rss_headlines")) {
+                const matching = args
+                  .filter((k: string) => store.has(k))
+                  .map((k: string) => ({ clean_key: k }));
+                return { results: matching };
+              }
+              if (query.includes("value") && !columns.has("value")) {
+                throw new Error("no such column: value");
+              }
+              const results = Array.from(store.values());
+              return { results };
             },
             async run() {
               if (query.includes("value") && !columns.has("value")) {
@@ -332,6 +400,377 @@ describe("Cloudflare Intraday Monitor Worker", () => {
       const result = await handleQueueBatch(batch, env);
       expect(result.acked).toBe(1);
       expect(ackSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("Queue Architecture Hardening & Extended CPU Batch Consumption (Issue #643)", () => {
+    const originalFetch = globalThis.fetch;
+
+    beforeEach(() => {
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 204,
+        json: async () => ({})
+      });
+    });
+
+    afterEach(() => {
+      globalThis.fetch = originalFetch;
+    });
+
+    it("bulk queries D1 and returns set of already-dispatched headlines", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const h1 = "Colonial pipeline major leak in Alabama";
+      const h2 = "Port Arthur refinery CDU restart delayed";
+      const h3 = "Valero Texas City FCCU operational update";
+
+      await markHeadlineDispatchedInCache(h1, env);
+      await markHeadlineDispatchedInCache(h2, env);
+
+      const batchHits = await areHeadlinesDispatchedInBatch([h1, h2, h3], env);
+      expect(batchHits.size).toBe(2);
+      expect(batchHits.has(normalizeHeadline(h1))).toBe(true);
+      expect(batchHits.has(normalizeHeadline(h2))).toBe(true);
+      expect(batchHits.has(normalizeHeadline(h3))).toBe(false);
+
+      const emptyHits = await areHeadlinesDispatchedInBatch([], env);
+      expect(emptyHits.size).toBe(0);
+    });
+
+    it("bulk persists multiple headlines via markHeadlinesDispatchedInCache", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const headlines = [
+        "Marathon Galveston Bay unit offline",
+        "ExxonMobil Baytown hydrotreater outage",
+        "Phillips 66 Sweeny alkylation unit maintenance"
+      ];
+
+      await markHeadlinesDispatchedInCache(headlines, env);
+
+      const cached = await areHeadlinesDispatchedInBatch(headlines, env);
+      expect(cached.size).toBe(3);
+      for (const h of headlines) {
+        expect(cached.has(normalizeHeadline(h))).toBe(true);
+      }
+    });
+
+    it("executes tasks with bounded concurrency limit", async () => {
+      let activeCount = 0;
+      let maxActive = 0;
+
+      const items = [1, 2, 3, 4, 5, 6, 7, 8];
+      const results = await runWithBoundedConcurrency(items, 3, async (num) => {
+        activeCount++;
+        maxActive = Math.max(maxActive, activeCount);
+        await new Promise(r => setTimeout(r, 10));
+        activeCount--;
+        return num * 10;
+      });
+
+      expect(maxActive).toBeLessThanOrEqual(3);
+      expect(results.length).toBe(8);
+      expect(results.every(r => r.status === "fulfilled")).toBe(true);
+      expect(results.map(r => (r as any).value)).toEqual([10, 20, 30, 40, 50, 60, 70, 80]);
+    });
+
+    it("processes multi-message batch with bulk dedupe, bounded concurrency, and telemetry", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = {
+        GH_PAT: "mock_gh_pat_token",
+        REPO_OWNER: "KoshiirRa",
+        REPO_NAME: "midgley",
+        DB: mockDb
+      };
+
+      const cachedHeadline = "Already cached refinery alert";
+      await markHeadlineDispatchedInCache(cachedHeadline, env);
+
+      const ackSpies = [vi.fn(), vi.fn(), vi.fn(), vi.fn()];
+      const retrySpies = [vi.fn(), vi.fn(), vi.fn(), vi.fn()];
+
+      const batch: QueueMessageBatch = {
+        queue: "intraday-event-queue",
+        messages: [
+          {
+            id: "msg-empty",
+            timestamp: new Date(),
+            body: { headline: "", url: "" },
+            attempts: 1,
+            ack: ackSpies[0],
+            retry: retrySpies[0]
+          },
+          {
+            id: "msg-cached",
+            timestamp: new Date(),
+            body: { headline: cachedHeadline, url: "https://example.com/cached" },
+            attempts: 1,
+            ack: ackSpies[1],
+            retry: retrySpies[1]
+          },
+          {
+            id: "msg-novel-1",
+            timestamp: new Date(),
+            body: { headline: "Gulf Coast gasoline pipeline shutdown after cyber incident", url: "https://example.com/novel1" },
+            attempts: 1,
+            ack: ackSpies[2],
+            retry: retrySpies[2]
+          },
+          {
+            id: "msg-novel-2",
+            timestamp: new Date(),
+            body: { headline: "Baton Rouge Exxon refinery cat cracker offline", url: "https://example.com/novel2" },
+            attempts: 1,
+            ack: ackSpies[3],
+            retry: retrySpies[3]
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      const res = await handleQueueBatch(batch, env);
+      expect(res.processed).toBe(4);
+      expect(res.acked).toBe(4);
+      expect(res.retried).toBe(0);
+      expect(typeof res.duration_ms).toBe("number");
+
+      expect(ackSpies[0]).toHaveBeenCalled(); // empty acked
+      expect(ackSpies[1]).toHaveBeenCalled(); // cached acked
+      expect(ackSpies[2]).toHaveBeenCalled(); // novel 1 dispatched & acked
+      expect(ackSpies[3]).toHaveBeenCalled(); // novel 2 dispatched & acked
+    });
+
+    it("triggers exponential backoff retry when GitHub dispatch returns error", async () => {
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 503,
+        text: async () => "Service Unavailable"
+      });
+
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = {
+        GH_PAT: "mock_gh_pat_token",
+        REPO_OWNER: "KoshiirRa",
+        REPO_NAME: "midgley",
+        DB: mockDb
+      };
+
+      const ackSpy = vi.fn();
+      const retrySpy = vi.fn();
+
+      const batch: QueueMessageBatch = {
+        queue: "intraday-event-queue",
+        messages: [
+          {
+            id: "msg-fail",
+            timestamp: new Date(),
+            body: { headline: "Colonial pipeline shuts main gasoline line after cyber incident", url: "https://example.com/fail" },
+            attempts: 2,
+            ack: ackSpy,
+            retry: retrySpy
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      const res = await handleQueueBatch(batch, env);
+      expect(res.processed).toBe(1);
+      expect(res.retried).toBe(1);
+      expect(retrySpy).toHaveBeenCalledWith(
+        expect.objectContaining({ delaySeconds: expect.any(Number) })
+      );
+      // attempts=2: 2^2 * 10 = 40 seconds
+      expect(retrySpy).toHaveBeenCalledWith({ delaySeconds: 40 });
+    });
+
+    it("consumes dead-letter queue batches and archives records to D1", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const ackSpy = vi.fn();
+      const retrySpy = vi.fn();
+
+      const dlqBatch: QueueMessageBatch = {
+        queue: "intraday-event-dlq",
+        messages: [
+          {
+            id: "dlq-msg-101",
+            timestamp: new Date(),
+            body: {
+              headline: "Poisoned or unprocessable headline payload",
+              url: "https://example.com/poison"
+            },
+            attempts: 3,
+            ack: ackSpy,
+            retry: retrySpy
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      const res = await handleDlqBatch(dlqBatch, env);
+      expect(res.processed).toBe(1);
+      expect(res.stored).toBe(1);
+      expect(ackSpy).toHaveBeenCalled(); // acked to prevent DLQ loop
+
+      // Verify stored record in D1 mock
+      expect(mockDb.dlqStore.has("dlq-msg-101")).toBe(true);
+      const stored = mockDb.dlqStore.get("dlq-msg-101");
+      expect(stored.queue_name).toBe("intraday-event-dlq");
+      expect(stored.attempts).toBe(3);
+    });
+
+    it("worker queue entrypoint routes dlq queue to handleDlqBatch", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const ackSpy = vi.fn();
+      const retrySpy = vi.fn();
+
+      const dlqBatch: QueueMessageBatch = {
+        queue: "intraday-event-dlq",
+        messages: [
+          {
+            id: "dlq-router-msg",
+            timestamp: new Date(),
+            body: { headline: "Routed DLQ item", url: "https://example.com/dlq" },
+            attempts: 3,
+            ack: ackSpy,
+            retry: retrySpy
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      await intradayWorker.queue(dlqBatch, env, {});
+      expect(ackSpy).toHaveBeenCalled();
+      expect(mockDb.dlqStore.has("dlq-router-msg")).toBe(true);
+    });
+
+    describe("Admin DLQ Triage & Replay Endpoints", () => {
+      it("rejects unauthorized requests to /admin/queues/dlq and /admin/queues/replay-dlq", async () => {
+        const env: IntradayEnv = { ADMIN_TOKEN: "secret_admin_token_xyz" };
+
+        const resGetNoAuth = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/dlq"),
+          env,
+          {}
+        );
+        expect(resGetNoAuth.status).toBe(401);
+
+        const resGetWrongAuth = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/dlq", {
+            headers: { Authorization: "Bearer wrong_token" }
+          }),
+          env,
+          {}
+        );
+        expect(resGetWrongAuth.status).toBe(401);
+
+        const resPostNoAuth = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/replay-dlq", {
+            method: "POST"
+          }),
+          env,
+          {}
+        );
+        expect(resPostNoAuth.status).toBe(401);
+
+        const resPostGetMethod = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/replay-dlq", {
+            method: "GET",
+            headers: { Authorization: "Bearer secret_admin_token_xyz" }
+          }),
+          env,
+          {}
+        );
+        expect(resPostGetMethod.status).toBe(405);
+      });
+
+      it("lists pending DLQ records via GET /admin/queues/dlq when authorized", async () => {
+        const mockDb = createMockD1Database();
+        const env: IntradayEnv = {
+          ADMIN_TOKEN: "secret_admin_token_xyz",
+          DB: mockDb
+        };
+
+        await saveDlqRecord({
+          id: "dlq-item-1",
+          queue_name: "intraday-event-dlq",
+          payload: JSON.stringify({ headline: "DLQ test item 1", url: "https://example.com/1" }),
+          attempts: 3
+        }, env);
+
+        const res = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/dlq", {
+            headers: { Authorization: "Bearer secret_admin_token_xyz" }
+          }),
+          env,
+          {}
+        );
+
+        expect(res.status).toBe(200);
+        const data = await res.json();
+        expect(data.status).toBe("success");
+        expect(data.count).toBe(1);
+        expect(data.records[0].id).toBe("dlq-item-1");
+      });
+
+      it("replays dead-letter messages to INTRADAY_QUEUE via POST /admin/queues/replay-dlq", async () => {
+        const mockDb = createMockD1Database();
+        const queueSendSpy = vi.fn().mockResolvedValue(undefined);
+
+        const env: IntradayEnv = {
+          ADMIN_TOKEN: "secret_admin_token_xyz",
+          DB: mockDb,
+          INTRADAY_QUEUE: {
+            send: queueSendSpy,
+            sendBatch: vi.fn()
+          }
+        };
+
+        await saveDlqRecord({
+          id: "dlq-replay-target",
+          queue_name: "intraday-event-dlq",
+          payload: JSON.stringify({ headline: "Replay me into the queue", url: "https://example.com/replay" }),
+          attempts: 3
+        }, env);
+
+        const res = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/replay-dlq", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer secret_admin_token_xyz"
+            },
+            body: JSON.stringify({ id: "dlq-replay-target" })
+          }),
+          env,
+          {}
+        );
+
+        expect(res.status).toBe(200);
+        const data = await res.json();
+        expect(data.status).toBe("success");
+        expect(data.replayed_count).toBe(1);
+        expect(data.replayed_ids).toContain("dlq-replay-target");
+
+        // Verify sent back to INTRADAY_QUEUE
+        expect(queueSendSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ headline: "Replay me into the queue" })
+        );
+
+        // Verify replayed_at stamped so it does not appear in pending list
+        const stored = mockDb.dlqStore.get("dlq-replay-target");
+        expect(stored.replayed_at).not.toBeNull();
+      });
     });
   });
 
