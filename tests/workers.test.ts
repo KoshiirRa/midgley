@@ -2485,6 +2485,185 @@ Total Orientation PlayWeekMonthYear
       expect(await isEdgar8kSeen("0001193125-26-000002", env)).toBe(true);
     });
   });
+
+  describe("Regional Outage & News Scraper Edge Rendering (Issue #640)", () => {
+    const sampleScaqmdMarkdown = `
+# South Coast AQMD Rule 1118 Flare Event Notifications
+As of 2026-10-24
+
+| Facility / Operator | City / Area | Start Time | End Time | Event Type | Clean Gas (SCF) | SOx (lbs) | Status |
+|---------------------|-------------|------------|----------|------------|-----------------|-----------|--------|
+| Chevron Products Co. | El Segundo | 2026-10-24 04:15 | 2026-10-24 08:30 | Unplanned compressor trip | 450,000 | 185.4 | COMPLETED |
+| Torrance Refining Company | Torrance | 2026-10-24 09:00 | | Unplanned FCC unit upset | 820,000 | 340.2 | ACTIVE |
+| Phillips 66 Carson | Carson | 2026-10-23 12:00 | 2026-10-23 16:00 | Planned maintenance flare | 120,000 | 25.0 | COMPLETED |
+`;
+
+    const sampleNyserdaMarkdown = `
+# New York State Energy Research and Development Authority
+## Weekly Transportation Fuels Price Survey
+Survey Date: October 20, 2026
+
+| Region | Regular Gasoline ($/gal) | Ultra-Low Sulfur Diesel ($/gal) |
+|--------|--------------------------|----------------------------------|
+| Statewide Average | $3.289 | $3.899 |
+| New York City | $3.399 | $4.019 |
+| Long Island | $3.349 | $3.949 |
+| Albany / Capital | $3.229 | $3.819 |
+| Western New York | $3.219 | $3.789 |
+`;
+
+    it("parses SCAQMD Rule 1118 refinery flaring markdown tables", async () => {
+      const { parseScaqmdFlareMarkdown } = await import("../workers/regional_outage_scraper");
+      const result = parseScaqmdFlareMarkdown(sampleScaqmdMarkdown);
+
+      expect(result.total_events).toBe(3);
+      expect(result.unplanned_events_count).toBe(2);
+      expect(result.events?.length).toBe(3);
+
+      const torrance = result.events?.find(e => e.facility_name.includes("Torrance"));
+      expect(torrance).toBeDefined();
+      expect(torrance?.event_type).toBe("unplanned");
+      expect(torrance?.clean_gas_scf).toBe(820000);
+      expect(torrance?.estimated_sox_lbs).toBe(340.2);
+      expect(torrance?.status).toBe("ACTIVE");
+
+      const p66 = result.events?.find(e => e.facility_name.includes("Phillips 66"));
+      expect(p66).toBeDefined();
+      expect(p66?.event_type).toBe("planned");
+    });
+
+    it("parses NYSERDA weekly retail fuel price surveys into structured regions", async () => {
+      const { parseNyserdaFuelMarkdown } = await import("../workers/regional_outage_scraper");
+      const result = parseNyserdaFuelMarkdown(sampleNyserdaMarkdown);
+
+      expect(result.statewide_average_gasoline).toBe(3.289);
+      expect(result.statewide_average_diesel).toBe(3.899);
+      expect(result.regions?.length).toBe(4);
+
+      const nyc = result.regions?.find(r => r.region === "New York City");
+      expect(nyc).toBeDefined();
+      expect(nyc?.regular_gasoline).toBe(3.399);
+      expect(nyc?.diesel).toBe(4.019);
+
+      const albany = result.regions?.find(r => r.region.includes("Albany"));
+      expect(albany).toBeDefined();
+      expect(albany?.regular_gasoline).toBe(3.229);
+    });
+
+    it("fetches SCAQMD flares via Cloudflare browser quickAction", async () => {
+      const { getScaqmdFlareReports, clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(sampleScaqmdMarkdown)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const result = await getScaqmdFlareReports(env, { force_refresh: true });
+      expect(mockBrowser.quickAction).toHaveBeenCalledWith("markdown", expect.objectContaining({
+        url: "https://xappp.aqmd.gov/r1118/"
+      }));
+      expect(result.status).toBe("success");
+      expect(result.source).toBe("CLOUDFLARE_BROWSER_RENDERING");
+      expect(result.total_events).toBe(3);
+      expect(result.unplanned_events_count).toBe(2);
+    });
+
+    it("fetches NYSERDA fuel prices via Cloudflare browser quickAction", async () => {
+      const { getNyserdaWeeklyFuelPrices, clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(sampleNyserdaMarkdown)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const result = await getNyserdaWeeklyFuelPrices(env, { force_refresh: true });
+      expect(mockBrowser.quickAction).toHaveBeenCalledWith("markdown", expect.objectContaining({
+        url: "https://www.nyserda.ny.gov/research-and-development/energy-prices/motor-gasoline/monthly-average-motor-gasoline-prices"
+      }));
+      expect(result.status).toBe("success");
+      expect(result.source).toBe("CLOUDFLARE_BROWSER_RENDERING");
+      expect(result.statewide_average_gasoline).toBe(3.289);
+      expect(result.regions.length).toBe(4);
+    });
+
+    it("scrapes dynamic news URLs to markdown at the edge and extracts title", async () => {
+      const { scrapeNewsMarkdownAtEdge, clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockArticleMd = "# Hydrocracker Shut Down at Delaware City Refinery\nPBF Energy reports an unplanned hydrocracker outage.";
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(mockArticleMd)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const res = await scrapeNewsMarkdownAtEdge(env, "https://energywire.example.com/delaware-hydrocracker-outage", { force_refresh: true });
+      expect(res.status).toBe("success");
+      expect(res.provider).toBe("cloudflare_browser_run");
+      expect(res.title).toBe("Hydrocracker Shut Down at Delaware City Refinery");
+      expect(res.markdown).toContain("PBF Energy reports an unplanned hydrocracker outage.");
+    });
+
+    it("serves SCAQMD flares, NYSERDA prices, and news markdown scraping via worker HTTP endpoints", async () => {
+      const { clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockImplementation((action: string, opts: any) => {
+          if (opts.url.includes("aqmd")) return Promise.resolve(sampleScaqmdMarkdown);
+          if (opts.url.includes("nyserda")) return Promise.resolve(sampleNyserdaMarkdown);
+          return Promise.resolve("# Breaking Energy News\n\nPipeline flow interrupted.");
+        })
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      // 1. Test SCAQMD route
+      const reqScaqmd = new Request("https://worker.local/api/v1/energy/outages/scaqmd");
+      const resScaqmd = await intradayWorker.fetch(reqScaqmd, env, {});
+      expect(resScaqmd.status).toBe(200);
+      const jsonScaqmd = (await resScaqmd.json()) as any;
+      expect(jsonScaqmd.status).toBe("success");
+      expect(jsonScaqmd.unplanned_events_count).toBe(2);
+
+      // 2. Test NYSERDA route
+      const reqNyserda = new Request("https://worker.local/api/v1/energy/prices/nyserda");
+      const resNyserda = await intradayWorker.fetch(reqNyserda, env, {});
+      expect(resNyserda.status).toBe(200);
+      const jsonNyserda = (await resNyserda.json()) as any;
+      expect(jsonNyserda.status).toBe("success");
+      expect(jsonNyserda.statewide_average_gasoline).toBe(3.289);
+
+      // 3. Test News scrape route via POST
+      const reqScrape = new Request("https://worker.local/api/v1/news/scrape-markdown", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: "https://example.com/article" })
+      });
+      const resScrape = await intradayWorker.fetch(reqScrape, env, {});
+      expect(resScrape.status).toBe(200);
+      const jsonScrape = (await resScrape.json()) as any;
+      expect(jsonScrape.status).toBe("success");
+      expect(jsonScrape.title).toBe("Breaking Energy News");
+      expect(jsonScrape.markdown).toContain("Pipeline flow interrupted.");
+    });
+  });
 });
 
 

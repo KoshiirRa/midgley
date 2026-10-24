@@ -9,6 +9,11 @@
 import nacl from "tweetnacl";
 import { getEnverusDailyRigCount, MIDGLEY_AGENT_USER_AGENT as DEFAULT_MIDGLEY_AGENT_UA } from "./enverus_scraper";
 import {
+  getScaqmdFlareReports,
+  getNyserdaWeeklyFuelPrices,
+  scrapeNewsMarkdownAtEdge
+} from "./regional_outage_scraper";
+import {
   ScoredCatalyst,
   SemanticDedupeResult,
   scoreHeadlineAtEdge,
@@ -4033,6 +4038,71 @@ export default {
         });
       }
 
+      // South Coast AQMD Rule 1118 Refinery Flare Route (Issue #640)
+      if (url.pathname === "/api/v1/energy/outages/scaqmd" || url.pathname === "/scraping/scaqmd-flares") {
+        const forceRefresh = url.searchParams.get("force_refresh") === "true";
+        const flareData = await getScaqmdFlareReports(env, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(flareData, null, 2), {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Cache-Control": "public, max-age=1800"
+          }
+        });
+      }
+
+      // NYSERDA Weekly Transportation Fuel Price Survey Route (Issue #640)
+      if (url.pathname === "/api/v1/energy/prices/nyserda" || url.pathname === "/scraping/nyserda-prices") {
+        const forceRefresh = url.searchParams.get("force_refresh") === "true";
+        const nyserdaData = await getNyserdaWeeklyFuelPrices(env, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(nyserdaData, null, 2), {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Cache-Control": "public, max-age=7200"
+          }
+        });
+      }
+
+      // Edge News-to-Markdown Scraper Route via Cloudflare Browser Run (Issue #640)
+      if (url.pathname === "/api/v1/news/scrape-markdown" || url.pathname === "/scraping/markdown") {
+        let targetUrl = url.searchParams.get("url") || "";
+        let forceRefresh = url.searchParams.get("force_refresh") === "true";
+
+        if (request.method === "POST") {
+          try {
+            const body = await request.json() as any;
+            if (body && typeof body.url === "string") {
+              targetUrl = body.url;
+            }
+            if (body && body.force_refresh !== undefined) {
+              forceRefresh = Boolean(body.force_refresh);
+            }
+          } catch {
+            // body parse error non-fatal if url in query
+          }
+        }
+
+        if (!targetUrl) {
+          return new Response(JSON.stringify({
+            status: "error",
+            error: "Missing required 'url' parameter"
+          }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        const scraped = await scrapeNewsMarkdownAtEdge(env, targetUrl, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(scraped, null, 2), {
+          status: scraped.status === "error" ? 502 : 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          }
+        });
+      }
+
       // Dead-Letter Queue Inspection Route (Issue #643)
       if (url.pathname === "/admin/queues/dlq") {
         const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -4173,6 +4243,9 @@ export default {
             "/telemetry/unmapped-zips",
             "/discord/subscriptions",
             "/api/v1/energy/rig-count/enverus",
+            "/api/v1/energy/outages/scaqmd",
+            "/api/v1/energy/prices/nyserda",
+            "/api/v1/news/scrape-markdown",
             "/admin/queues/dlq",
             "/admin/queues/replay-dlq"
           ]

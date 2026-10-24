@@ -13,13 +13,15 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Comprehensive Multi-Grade Extraction**: Automatically parses and normalizes prices across all commercial fuel grades: **Regular Unleaded**, **Midgrade**, **Premium**, and **Diesel** for all tracked metro areas and state averages.
 - **Pipeline Anchor Integration**: Updated [`fetch_live_metro_retail_price()`](src/live_fuel_feed.py) to position the `lykmapipo` daily CSV as Tier-1 primary, cascading to Cloudflare Browser Run, GasBuddy GraphQL, EIA benchmarks, historical last-known, and static PADD anchors.
 
-### 2. Secondary Scraping Fallback via Cloudflare Browser Run (Issue #640)
-- **Edge Headless Chromium Rendering**: Re-engineered the secondary AAA scraping fallback into [`fetch_aaa_cloudflare_browser_run()`](src/live_fuel_feed.py) in [`src/live_fuel_feed.py`](src/live_fuel_feed.py), fulfilling the web scraping objectives of Cloudflare Workers Paid Issue #640.
-- **Dual Execution Pathways**:
-  - **Edge Worker Endpoint**: Dispatches requests via `CLOUDFLARE_BROWSER_RUN_URL` when an edge rendering worker microservice is deployed.
-  - **Direct Cloudflare REST API**: Directly invokes Cloudflare's Browser Rendering endpoint (`https://api.cloudflare.com/client/v4/accounts/{account_id}/browser-rendering/content`) using `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` (or `CLOUDFLARE_AUTH_TOKEN`).
-- **Quota & Memory Protection**: Offloads heavy DOM rendering and dynamic JavaScript table evaluation from local Python processes to Cloudflare's distributed edge infrastructure, preserving Firecrawl quotas (800 calls/month) for unstructured investigative intelligence.
-- **Hermetic Fallback & Backward Compatibility**: Gracefully falls back to an in-process parser if Cloudflare credentials are unset, and exports backward-compatibility alias `fetch_aaa_cloudrun_scraper = fetch_aaa_cloudflare_browser_run`.
+### 2. Edge Browser Rendering for Dynamic News & State Fuel Dashboards (Issue #640)
+- **Edge Headless Chromium News Scraper**: Integrated Cloudflare Browser Rendering API (`@cloudflare/puppeteer` / Quick Actions) to extract full Markdown text from JavaScript-rendered news articles and energy trade publications behind client-side paywalls or Cloudflare Bot Management challenges.
+- **Inverted Scraper Hierarchy & Firecrawl Quota Conservation**: Re-architected [`src/firecrawl_scraper.py`](src/firecrawl_scraper.py) to prioritize zero-cost Cloudflare Browser Run edge rendering ahead of Firecrawl API. Conserves 100% of Midgley's strictly capped Firecrawl quota (30 calls/day, 800 calls/month per `AGENTS.md`) by reserving Firecrawl strictly as a secondary metered fallback.
+- **Dedicated Regional Outage & Survey Scraper**: Built [`workers/regional_outage_scraper.ts`](workers/regional_outage_scraper.ts) and exposed three new edge routes in [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts):
+  - `GET /api/v1/energy/outages/scaqmd`: Monitors South Coast AQMD Rule 1118 refinery flare incident logs for unplanned flaring events across PADD 5 refining complexes (Chevron El Segundo, Torrance, Phillips 66 Carson/Wilmington, Marathon, Valero) with 1-hour TTL.
+  - `GET /api/v1/energy/prices/nyserda`: Scrapes the New York State Energy Research and Development Authority (NYSERDA) weekly transportation fuels price survey across New York regional markets with 12-hour TTL.
+  - `POST /api/v1/news/scrape-markdown`: General edge headless Chromium rendering endpoint for arbitrary incoming news/press release URLs with 24-hour D1 `edge_cache` snapshot persistence.
+- **Unified Python Client Dispatch**: Enhanced [`src/cloudflare_browser_run.py`](src/cloudflare_browser_run.py) to automatically dispatch to either `CLOUDFLARE_BROWSER_RUN_URL` (edge worker microservice) or direct Cloudflare REST API endpoints (`/browser-run/markdown`), seamlessly passing User-Agent `MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)`.
+- **AAA Retail Fallback Integration**: Maintained [`fetch_aaa_cloudflare_browser_run()`](src/live_fuel_feed.py) in [`src/live_fuel_feed.py`](src/live_fuel_feed.py) as the secondary AAA scraping fallback behind daily CSVs.
 
 ### 3. Out-of-Metro & Rural ZIP Code Fallback Cascade (GasBuddy GraphQL First)
 - **Hyper-Local Station Resolution**: Implemented [`fetch_live_out_of_metro_price(zip_code, state_code)`](src/live_fuel_feed.py) in [`src/live_fuel_feed.py`](src/live_fuel_feed.py) to handle non-cluster ZIP codes (`is_metro_cluster_hit == False`):

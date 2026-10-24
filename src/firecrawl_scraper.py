@@ -401,15 +401,19 @@ class FirecrawlConnector:
                 _IN_MEMORY_SCRAPE_CACHE[url_hash] = cached_global
                 return cached_global
 
-        # 4. Check if API key exists and safety quota is available
+        # 4. Attempt zero-cost Cloudflare Browser Run edge rendering first (Issue #640)
+        # Conserves strictly capped Firecrawl API quotas (30 calls/day, 800 calls/month per AGENTS.md)
+        cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
+        if cf_res:
+            _IN_MEMORY_SCRAPE_CACHE[url_hash] = cf_res
+            self._write_disk_cache(url_hash, cf_res)
+            global_cache.set(cache_key, cf_res, ttl_seconds=CACHE_TTL_SECONDS)
+            return cf_res
+
+        # 5. Check if Firecrawl API key exists and safety quota is available
         if not self.api_key:
-            # Attempt Cloudflare Browser Run edge rendering first (Issue #640)
-            cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
-            if cf_res:
-                result = cf_res
-            else:
-                logger.info(f"FIRECRAWL_API_KEY not set. Using zero-cost native HTML fallback for '{url}'.")
-                result = self._extract_fallback_markdown(url, timeout=timeout)
+            logger.info(f"FIRECRAWL_API_KEY not set. Using zero-cost native HTML fallback for '{url}'.")
+            result = self._extract_fallback_markdown(url, timeout=timeout)
             _IN_MEMORY_SCRAPE_CACHE[url_hash] = result
             self._write_disk_cache(url_hash, result)
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_SECONDS)
@@ -417,19 +421,14 @@ class FirecrawlConnector:
 
         quota_ok, quota_status = _check_and_increment_quota()
         if not quota_ok:
-            logger.warning(f"Firecrawl quota safety valve triggered. Falling back to Cloudflare Browser Run / native HTML.")
-            cf_res = self._scrape_via_cloudflare_browser_run(url, timeout=timeout)
-            if cf_res:
-                result = cf_res
-            else:
-                result = self._extract_fallback_markdown(url, timeout=timeout)
+            logger.warning(f"Firecrawl quota safety valve triggered. Falling back to native HTML extractor.")
+            result = self._extract_fallback_markdown(url, timeout=timeout)
             _IN_MEMORY_SCRAPE_CACHE[url_hash] = result
             self._write_disk_cache(url_hash, result)
             global_cache.set(cache_key, result, ttl_seconds=CACHE_TTL_SECONDS)
             return result
 
-
-        # 5. Execute Firecrawl API request
+        # 6. Execute Firecrawl API request (Secondary metered fallback)
         t0 = time.time()
         payload = {
             "url": url,

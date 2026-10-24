@@ -653,32 +653,32 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                     </div>
                 </div>
 
-                <!-- Card 3.2: Firecrawl Web-to-Markdown Scraper -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="firecrawl web scraper markdown html extraction refinery press releases tax portals">
+                <!-- Card 3.2: Cloudflare Browser Rendering & Firecrawl Web Scraper -->
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="cloudflare browser rendering puppeteer firecrawl web scraper markdown html extraction scaqmd flaring nyserda refinery press releases tax portals issue 640">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">
                                 <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                                    <i class="fa-solid fa-fire"></i>
+                                    <i class="fa-solid fa-window-maximize"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-white">Firecrawl Scraper</h4>
-                                    <span class="font-mono text-xs text-amber-400">api.firecrawl.dev</span>
+                                    <h4 class="text-sm font-bold text-white">Browser Rendering &amp; Firecrawl</h4>
+                                    <span class="font-mono text-xs text-amber-400">workers.cloudflare.com &bull; Issue #640</span>
                                 </div>
                             </div>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-medium">On-Demand &bull; Issue #83</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Edge Headless &bull; $0 Quota</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Converts raw HTML from refinery press disclosures, state tax notices, and breaking articles into clean LLM Markdown. Enforces 800 call/mo cap with zero-cost native HTML parser fallback.
+                            Serverless headless Chromium execution at the edge via Cloudflare Browser Rendering API (<code class="text-blue-300">@cloudflare/puppeteer</code> / Quick Actions). Scrapes JavaScript-rendered dynamic news, South Coast AQMD Rule 1118 refinery flare logs, and NYSERDA weekly retail fuel surveys, bypassing bot protection while preserving metered Firecrawl quotas (800 calls/mo).
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Features:</span> 24h URL SHA-256 Cache, JS Rendering</div>
-                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/firecrawl_scraper.py</code></div>
+                            <div class="text-slate-400"><span class="text-slate-500">Endpoints:</span> <code class="text-slate-300">/api/v1/news/scrape-markdown</code>, <code class="text-slate-300">/api/v1/energy/outages/scaqmd</code></div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">workers/regional_outage_scraper.ts</code>, <code class="text-blue-300">src/firecrawl_scraper.py</code></div>
                         </div>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
-                        <span>Provider: Firecrawl API / Native</span>
-                        <span class="text-amber-400 font-semibold">800 Call/Mo Cap</span>
+                        <span>Provider: Cloudflare Browser Rendering / Firecrawl</span>
+                        <span class="text-emerald-400 font-semibold">$0 Edge / Secondary Metered</span>
                     </div>
                 </div>
 
@@ -1407,14 +1407,14 @@ SOURCES_HTML_TEMPLATE = r"""<!DOCTYPE html>
                             <td class="py-3 px-3 text-blue-300 font-sans">src/finlight_feed.py</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40 transition">
-                            <td class="py-3 px-4 font-bold text-white"><span class="text-amber-400">Firecrawl</span> &bull; Web Scraper</td>
-                            <td class="py-3 px-3 text-slate-400">Web Extraction</td>
-                            <td class="py-3 px-3 text-slate-300">api.firecrawl.dev/v1/</td>
-                            <td class="py-3 px-3">Bearer Key</td>
-                            <td class="py-3 px-3 text-emerald-400">24h Disk Cache</td>
-                            <td class="py-3 px-3">On-Demand Breaking</td>
-                            <td class="py-3 px-3 text-amber-400">800 Call/Mo Cap</td>
-                            <td class="py-3 px-3 text-blue-300 font-sans">src/firecrawl_scraper.py</td>
+                            <td class="py-3 px-4 font-bold text-white"><span class="text-amber-400">Browser Rendering</span> &bull; Scraper</td>
+                            <td class="py-3 px-3 text-slate-400">Dynamic Headless / Outages</td>
+                            <td class="py-3 px-3 text-slate-300">workers.cloudflare.com &bull; api.firecrawl.dev</td>
+                            <td class="py-3 px-3">Bearer Token / Edge</td>
+                            <td class="py-3 px-3 text-emerald-400">24h D1/Disk Cache</td>
+                            <td class="py-3 px-3">Edge Scheduled / On-Demand</td>
+                            <td class="py-3 px-3 text-emerald-400">$0 Edge / Secondary Metered</td>
+                            <td class="py-3 px-3 text-blue-300 font-sans">workers/regional_outage_scraper.ts</td>
                         </tr>
                         <tr class="hover:bg-slate-800/40 transition">
                             <td class="py-3 px-4 font-bold text-white"><span class="text-cyan-400">NOAA NWS</span> &bull; Weather Alerts</td>

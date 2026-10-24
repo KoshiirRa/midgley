@@ -251,3 +251,25 @@ def test_firecrawl_scrape_via_cloudflare_browser_run():
         assert res["title"] == "Refinery Flare Incident"
         assert "Flaring reported" in res["markdown"]
 
+
+def test_firecrawl_prioritizes_cloudflare_browser_run_and_preserves_quota():
+    """Verifies that Cloudflare Browser Run is prioritized over Firecrawl API, preserving metered quota (Issue #640)."""
+    mock_md = "# SCAQMD Rule 1118 Flare Event\n\nTorrance Refining Company reports unplanned flaring."
+
+    with patch.dict(os.environ, {"TESTING": "0", "FIRECRAWL_API_KEY": "valid_metered_key"}), \
+         patch("src.firecrawl_scraper.global_cache.get", return_value=None), \
+         patch("src.cloudflare_browser_run.fetch_markdown_via_browser_run", return_value=mock_md), \
+         patch("src.firecrawl_scraper._check_and_increment_quota") as mock_quota, \
+         patch("urllib.request.urlopen") as mock_urlopen:
+        connector = FirecrawlConnector(api_key="valid_metered_key")
+        res = connector.scrape_url("https://example.com/scaqmd-flare-priority-test", force_refresh=True)
+
+        assert res["success"] is True
+        assert res["provider"] == "cloudflare_browser_run"
+        assert res["title"] == "SCAQMD Rule 1118 Flare Event"
+        assert "Torrance Refining Company" in res["markdown"]
+        # Firecrawl quota must NOT be incremented, and no Firecrawl API request must be sent
+        assert mock_quota.call_count == 0
+        assert mock_urlopen.call_count == 0
+
+
