@@ -120,6 +120,11 @@ TRIGGER_KEYWORDS = [
     # PADD 1A New England Refining & Waterborne Supply (Issue #619)
     "irving oil", "saint john refinery", "boston harbor", "chelsea river",
     "everett terminal", "padd 1a", "new england gasoline", "massachusetts fuel tax",
+    # Tier-1/Tier-2 Refinery & Midstream Pipeline Disclosures (Issue #644)
+    "exxonmobil", "chevron", "suncor", "par pacific", "delek", "calumet",
+    "kinder morgan", "enterprise products", "energy transfer",
+    "plantation pipeline", "teppco pipeline", "bsee evacuation", "bsee shut-in",
+    "port condition zulu", "port condition yankee",
 ]
 
 ANOMALY_LOG_FILE = os.path.join("data", "intraday_events.json")
@@ -594,12 +599,50 @@ class IntradayEventMonitor:
             targets.add("Boston")
 
         # Suncor Energy → Denver (Commerce City Refinery, PADD 4 Rocky Mountain)
-        if any(k in text for k in ["suncor 8-k", "suncor energy"]):
+        if any(k in text for k in ["suncor 8-k", "su 8-k", "suncor energy"]):
             targets.add("Denver")
 
-        # Par Pacific → Honolulu (Kapolei Refinery, PADD 5 Hawaii)
-        if any(k in text for k in ["par pacific", "par pacific 8-k", "par hawaii"]):
+        # Par Pacific → Honolulu (Kapolei Refinery, PADD 5 Hawaii) & Seattle (Tacoma)
+        if any(k in text for k in ["par pacific", "par pacific 8-k", "parr 8-k", "par hawaii"]):
             targets.add("Honolulu")
+        if "par tacoma" in text or ("parr 8-k" in text and "tacoma" in text):
+            targets.add("Seattle")
+
+        # Delek US Holdings → Tulsa (PADD 2 Mid-Continent)
+        if any(k in text for k in ["delek 8-k", "dk 8-k", "delek us"]):
+            targets.add("Tulsa")
+
+        # Midstream Operators (Issue #644)
+        # Kinder Morgan → Carolinas (Plantation Pipeline) or Southwest (SFPP)
+        if any(k in text for k in ["kmi 8-k", "kinder morgan 8-k"]):
+            if any(p in text for p in ["sfpp", "calnev", "west line", "east line", "arizona"]):
+                targets.add("Phoenix")
+            elif any(p in text for p in ["plantation", "southeast", "carolinas"]):
+                targets.add("Charlotte")
+                targets.add("Greenville")
+            else:
+                targets.add("National")
+
+        # Enterprise Products / Energy Transfer → Houston (USGC Terminal & Logistics)
+        if any(k in text for k in ["epd 8-k", "enterprise products 8-k", "teppco", "energy transfer 8-k", "et 8-k"]):
+            targets.add("Houston")
+
+        # Supermajors (XOM, CVX) 8-K routing if specific refinery not already caught
+        if any(k in text for k in ["xom 8-k", "exxonmobil 8-k", "exxon 8-k"]):
+            if "joliet" in text:
+                targets.add("Chicago")
+            else:
+                targets.add("Houston")
+
+        if any(k in text for k in ["cvx 8-k", "chevron 8-k"]):
+            if "el segundo" in text:
+                targets.add("Los_Angeles")
+            elif "richmond" in text:
+                targets.add("Oakland")
+            elif "salt lake" in text:
+                targets.add("Denver")
+            else:
+                targets.add("Oakland")
 
         # Valero / Phillips 66 → National (multi-PADD footprint, no single dominant locale)
         if any(k in text for k in ["valero 8-k", "phillips 66 8-k", "sweeny refinery"]):

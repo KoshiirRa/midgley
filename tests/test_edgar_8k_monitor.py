@@ -117,11 +117,23 @@ class TestEDGAR8KCachePersistence(unittest.TestCase):
         self.assertFalse(monitor._is_seen("PBF:0001234567-26-999999"))
         os.unlink(tmp_cache)
 
+    def test_relevant_operational_keywords_expanded(self):
+        """Verifies Issue #644 expanded operational keywords (upset, hurricane) pass relevance gate."""
+        from src.edgar_8k_monitor import EDGAR8KMonitor
+        text_upset = "Valero discloses flaring and refinery process upset at Port Arthur facility."
+        self.assertTrue(EDGAR8KMonitor.is_relevant(text_upset))
+
+        text_hurricane = "Chevron activates storm protocol ahead of Gulf of Mexico hurricane disruption."
+        self.assertTrue(EDGAR8KMonitor.is_relevant(text_hurricane))
+
     def test_sec_edgar_feed_module_shim(self):
-        """Verify backwards compatibility shim for Issue #69."""
+        """Verify backwards compatibility shim for Issue #69 and Issue #644 expanded tickers."""
         import src.sec_edgar_feed as sef
         self.assertTrue(hasattr(sef, "EDGAR8KMonitor"))
-        self.assertEqual(sef.DEFAULT_TICKERS, ["PBF", "DINO", "MPC", "VLO", "PSX"])
+        expected_tickers = [
+            "PBF", "DINO", "MPC", "VLO", "PSX", "XOM", "CVX", "SU", "PARR", "DK", "KMI", "EPD"
+        ]
+        self.assertEqual(sef.DEFAULT_TICKERS, expected_tickers)
 
 
 if __name__ == "__main__":

@@ -892,7 +892,7 @@
                 </div>
 
                 <!-- Card 3.6: SEC EDGAR 8-K Outage Filings -->
-                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="sec edgar 8-k unscheduled refinery outages corporate disclosures material events">
+                <div class="feed-card p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-4" data-tags="sec edgar 8-k unscheduled refinery outages corporate disclosures material events xom cvx suncor par pacific delek kinder morgan enterprise products">
                     <div class="space-y-3">
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2.5">
@@ -907,11 +907,12 @@
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">Real-Time</span>
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Monitors SEC EDGAR 8-K corporate disclosures for unscheduled refinery shutdowns, pipeline force majeure declarations, and material refining equipment failures.
+                            Monitors SEC EDGAR Form 8-K corporate disclosures for unscheduled refinery outages, turnaround delays, pipeline force majeure declarations, and material refining equipment failures across Tier-1/Tier-2 operators. Uses ETag / If-Modified-Since HTTP conditional caching and operational title keyword gating.
                         </p>
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
-                            <div class="text-slate-400"><span class="text-slate-500">Entities:</span> CVR, HF Sinclair, PBF, Valero, Marathon</div>
-                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/edgar_8k_monitor.py</code></div>
+                            <div class="text-slate-400"><span class="text-slate-500">Entities:</span> PBF, DINO, MPC, VLO, PSX, XOM, CVX, SU, PARR, DK, KMI, EPD</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Cadence:</span> 15-min cron, HTTP 304 ETag Cache, &le;10 req/s</div>
+                            <div class="text-slate-400"><span class="text-slate-500">Consumer:</span> <code class="text-blue-300">src/edgar_8k_monitor.py</code>, <code class="text-blue-300">workers/intraday_monitor_worker.ts</code></div>
                         </div>
                     </div>
                     <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">

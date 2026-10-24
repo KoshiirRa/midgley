@@ -142,6 +142,26 @@ class TestIntradayEventMonitor(unittest.TestCase):
         t_la = self.monitor.resolve_target_locales("Chevron El Segundo Refinery reports FCC trip triggering SCAQMD flaring alert in Los Angeles")
         self.assertEqual(t_la, ["Los_Angeles"])
 
+        # Test Denver locale routing via Suncor (Issue #644)
+        t_denver = self.monitor.resolve_target_locales("SU 8-K: Unplanned outage at Commerce City refinery")
+        self.assertEqual(t_denver, ["Denver"])
+
+        # Test Honolulu locale routing via Par Pacific (Issue #644)
+        t_honolulu = self.monitor.resolve_target_locales("PARR 8-K: Crude distillation unit shutdown at Kapolei")
+        self.assertEqual(t_honolulu, ["Honolulu"])
+
+        # Test Tulsa locale routing via Delek (Issue #644)
+        t_delek = self.monitor.resolve_target_locales("DK 8-K: Coker unit explosion at Tyler refinery")
+        self.assertEqual(t_delek, ["Tulsa"])
+
+        # Test Carolinas locale routing via Kinder Morgan Plantation Pipeline (Issue #644)
+        t_kmi = self.monitor.resolve_target_locales("KMI 8-K: Plantation pipeline spill halts line 1 deliveries in Carolinas")
+        self.assertEqual(t_kmi, ["Charlotte", "Greenville"])
+
+        # Test Houston locale routing via Enterprise Products TEPPCO (Issue #644)
+        t_epd = self.monitor.resolve_target_locales("EPD 8-K: TEPPCO pipeline terminal shut-in along USGC")
+        self.assertEqual(t_epd, ["Houston"])
+
         # Test Default National routing
         t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
         self.assertEqual(t_nat, ["National"])
@@ -382,6 +402,33 @@ class TestIntradayEventMonitor(unittest.TestCase):
             for f in rss_feeds:
                 self.assertEqual(f["status"], "HEALTHY")
                 self.assertEqual(f["item_count"], 2)
+
+    @patch("urllib.request.urlopen")
+    def test_edgar_atom_feed_test_isolation_mocking(self, mock_urlopen):
+        """Verifies Issue #644 invariant: in TESTING=1, Atom responses use synthetic fixtures without real network calls."""
+        from src.edgar_8k_monitor import EDGAR8KMonitor
+        mock_atom = b"""<?xml version="1.0" encoding="utf-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>EDGAR 8-K Feed</title>
+            <entry>
+                <id>0001193125-26-000001</id>
+                <title>8-K: Unplanned refinery FCC outage at Commerce City</title>
+                <link href="https://www.sec.gov/Archives/edgar/data/000001/doc.htm"/>
+                <updated>2026-10-24T12:00:00Z</updated>
+            </entry>
+        </feed>"""
+        mock_resp = MagicMock()
+        mock_resp.getcode.return_value = 200
+        mock_resp.read.return_value = mock_atom
+        mock_resp.__enter__.return_value = mock_resp
+        mock_urlopen.return_value = mock_resp
+
+        monitor = EDGAR8KMonitor(tickers=["SU"])
+        entries = monitor._fetch_atom_entries("SU")
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["accession_id"], "0001193125-26-000001")
+        self.assertIn("Commerce City", entries[0]["title"])
+        mock_urlopen.assert_called_once()
 
 
 

@@ -89,6 +89,14 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **UTF-8 Subprocess Decoding Guard**: Enforced `encoding="utf-8", errors="replace"` across all `subprocess.run` invocations in `catalog_monitor.py` to prevent Windows `charmap` `UnicodeDecodeError` when decoding GitHub issues with emoji or special characters.
 - **Triage & Cleanup**: Closed duplicate issues #679–#692 with links to their counterparts in `KoshiirRa/agentic-trading-robinhood` (#54–#67), and closed dev review #678 as superseded by production weekly review #693. Added unit tests in [`tests/test_catalog_monitor.py`](tests/test_catalog_monitor.py).
 
+### 16. Expanded Tier-1/Tier-2 Refinery & Regional Midstream 8-K Feed Coverage (Issue #644)
+- **Comprehensive Domestic Refining Footprint**: Expanded default 8-K monitoring ticker coverage from 5 operators (`PBF, DINO, MPC, VLO, PSX`) to 12 major Tier-1 supermajors, regional single-refinery operators, and midstream pipelines: `PBF, DINO, MPC, VLO, PSX, XOM, CVX, SU, PARR, DK, KMI, EPD`. Covers Front Range (Denver/PADD 4 via Suncor Commerce City `SU`), Pacific Island supply (Hawaii/PADD 5 via Par Pacific Kapolei `PARR`), Gulf Coast/West Coast corridors (ExxonMobil `XOM`, Chevron `CVX`, Delek `DK`), and critical interstate pipelines (Kinder Morgan Plantation/SFPP `KMI`, Enterprise Products TEPPCO `EPD`).
+- **HTTP Conditional GET (ETag & If-Modified-Since Caching)**: Instrumented [`pollEdgar8KFeeds()`](workers/intraday_monitor_worker.ts) in [`workers/intraday_monitor_worker.ts`](workers/intraday_monitor_worker.ts) with ETag and `If-Modified-Since` conditional headers. Unchanged Atom feeds return `304 Not Modified`, skipping expensive XML parsing and bandwidth consumption during routine 15-minute cron cycles.
+- **Fast-Path Title Keyword Pre-Filtering**: Pre-filters raw XML entries on operational title keywords (`fire`, `explosion`, `force majeure`, `outage`, `shutdown`, `flaring`, `upset`, `crude distillation`, `coker`, `fcc`, `pipeline`, `hurricane`) before executing full regexes (`linkRegex`, `updatedRegex`), eliminating ~90% of non-operational corporate noise (earnings, appointments, debt offerings) with sub-millisecond CPU overhead.
+- **Edge Accession Deduplication via D1 `edgar_8k_seen` Table**: Created Cloudflare D1 migration [`scripts/migrations/0004_create_edgar_8k_seen_table.sql`](scripts/migrations/0004_create_edgar_8k_seen_table.sql) with explicit primary key and secondary indexes (`idx_edgar_8k_seen_accession`, `idx_edgar_8k_seen_ticker`, `idx_edgar_8k_seen_filed_at`). Tracks `accession_id` permanently to prevent duplicate event ingestion across worker cycles and Python batch pipelines.
+- **SEC Fair Access Compliance & Test Isolation**: Enforced a 120ms inter-request delay guaranteeing $\le 10\text{ req/s}$ per SEC EDGAR Fair Access policy with compliant `SEC_USER_AGENT` defaults (`Midgley energy-forecasting contact@domain.com`). In `TESTING=1`, all external Atom requests are mocked with synthetic XML fixtures in [`tests/test_intraday_event_monitor.py`](tests/test_intraday_event_monitor.py) and [`tests/workers.test.ts`](tests/workers.test.ts).
+- **Public Data Sources Catalog Updates**: Updated Card 3.6 in [`src/sources_generator.py`](src/sources_generator.py) and regenerated [`docs/sources.html`](docs/sources.html) to document expanded operator entities, HTTP 304 caching, and joint consumers.
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
@@ -96,7 +104,10 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 1. **Data Sources Catalog Card 5.3**:
    - Updated Data Sources Card 5.3 in [`src/sources_generator.py`](src/sources_generator.py) to document the multi-tier retail feed architecture: `lykmapipo` daily CSVs (24h TTL), Cloudflare Browser Run edge rendering, and GasBuddy GraphQL.
    - Regenerated [`docs/sources.html`](docs/sources.html) and [`docs/sources/index.html`](docs/sources/index.html).
-2. **Release Notes Reconciliation**:
+2. **Data Sources Catalog Card 3.6 (SEC EDGAR 8-K Outage Filings)**:
+   - Updated Data Sources Card 3.6 in [`src/sources_generator.py`](src/sources_generator.py) to reflect Tier-1/Tier-2 operator entities (`PBF, DINO, MPC, VLO, PSX, XOM, CVX, SU, PARR, DK, KMI, EPD`), 15-minute cron with HTTP 304 ETag caching, and consumers (`src/edgar_8k_monitor.py`, `workers/intraday_monitor_worker.ts`).
+   - Regenerated [`docs/sources.html`](docs/sources.html) and [`docs/sources/index.html`](docs/sources/index.html).
+3. **Release Notes Reconciliation**:
    - Reconciled [`RELEASE_NOTES_v0.8.6.md`](RELEASE_NOTES_v0.8.6.md) to preserve its official release boundary at `29ae13dc` (reverting intermediate draft notes).
    - Opened this document ([`RELEASE_NOTES_v0.8.7.md`](RELEASE_NOTES_v0.8.7.md)) as the active in-progress draft for v0.8.7.
 
@@ -134,6 +145,9 @@ ruff check src/ tests/
 - **`tests/test_dashboard_generator.py`**: 1/1 passed (`test_data_sources_page_generation`).
 - **`tests/test_docs_links.py`**: 2/2 passed (verified zero local `file://` URLs in generated docs).
 - **`tests/test_catalog_monitor.py`**: 6/6 passed (tested multi-repo deduplication, exact title, tool name match, URL matching, and barred tool suppression).
+- **`tests/test_edgar_8k_monitor.py`**: 9/9 passed (tested operational keyword gates, expanded Tier-1/Tier-2 tickers, accession cache deduplication, and backward-compat shim).
+- **`tests/test_intraday_event_monitor.py`**: 35/35 passed (tested regional routing for XOM, CVX, SU, PARR, DK, KMI, EPD, and synthetic Atom fixture test isolation).
+- **`tests/workers.test.ts`**: 58/58 passed (tested Cloudflare Worker edge polling, ETag 304 skipping, title pre-filtering, and D1 `edgar_8k_seen` deduplication).
 - **`ruff check src/ tests/`**: All checks passed cleanly with zero linting or formatting errors.
 
 ---
@@ -147,8 +161,10 @@ For autonomous AI coding assistants, downstream forks, and self-hosted deploymen
 * **Scraper Fallback Cascade**: Web scraping across intelligence feeds follows Firecrawl API $\rightarrow$ Cloudflare Browser Run (`/browser-run/markdown` and `/browser-rendering/markdown`) $\rightarrow$ native deterministic HTML parser.
 * **ZIP Resolution**: Out-of-metro ZIP requests strictly return authentic local station observations (via GasBuddy) or state-level observations (via AAA state CSV), never falling back to static arbitrary constants.
 * **Edge Intelligence & Vector Mesh**: Cloudflare Workers Paid leverages Workers AI (`@cf/meta/llama-3.2-3b-instruct`) and Vectorize (`midgley-event-embeddings`) for real-time catalyst scoring and sub-10ms semantic deduplication, automatically synchronizing confirmed events into the shared Hindsight SaaS `midgley-event-dedupe` memory bank.
+* **EDGAR 8-K Feed Coverage & Edge Caching (Issue #644)**: Expanded default refinery 8-K polling coverage from 5 to 12 operators (`PBF, DINO, MPC, VLO, PSX, XOM, CVX, SU, PARR, DK, KMI, EPD`), introduced ETag / `If-Modified-Since` HTTP 304 conditional request caching, fast-path title keyword pre-filtering, and permanent edge deduplication via Cloudflare D1 `edgar_8k_seen` table ([`scripts/migrations/0004_create_edgar_8k_seen_table.sql`](scripts/migrations/0004_create_edgar_8k_seen_table.sql)).
 
 ### 2. Environment Variables & Secrets
+* `EDGAR_8K_TICKERS` *(Optional)*: Comma-separated list of refinery operator tickers to poll for 8-K filings (defaults to `"PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD"`).
 * `CLOUDFLARE_ACCOUNT_ID` *(Optional)*: Cloudflare Account ID for edge headless browser rendering.
 * `CLOUDFLARE_API_TOKEN` *(Optional)*: Cloudflare API token with Browser Rendering and Workers permissions.
 * `CLOUDFLARE_BROWSER_RUN_URL` *(Optional)*: URL of a deployed Cloudflare Worker exposing Browser Run capabilities.

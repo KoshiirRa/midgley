@@ -150,11 +150,14 @@ const TRIGGER_KEYWORDS = [
   // Logistics & Infrastructure Hubs
   "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
   "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
-  // Refinery Operator 8-K Signals (Issue #129 & #332)
+  // Refinery Operator & Midstream 8-K Signals (Issue #129, #332, #644)
   "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+  "exxonmobil", "chevron", "suncor", "par pacific", "delek", "calumet",
+  "kinder morgan", "enterprise products", "energy transfer",
+  "plantation pipeline", "teppco pipeline",
   "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
   "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
-  "sweeny refinery", "bayway refinery"
+  "sweeny refinery", "bayway refinery", "commerce city", "kapolei refinery"
 ];
 
 const TRIGGER_REGEX = new RegExp(
@@ -645,55 +648,199 @@ export async function handleQueueBatch(
 }
 
 /**
- * EDGAR 8-K Refinery Operator Monitor (Issue #129)
- * Polls EDGAR ATOM RSS feeds for new 8-K filings from target refinery operators,
- * deduplicates via D1 edgar_8k_seen table, keyword-filters for operational relevance,
- * and enqueues relevant filings to INTRADAY_QUEUE for origin scoring.
+ * EDGAR 8-K Refinery Operator & Midstream Pipeline Monitor (Issue #129, #644)
+ * Polls EDGAR ATOM RSS feeds for new 8-K filings from target refinery & pipeline operators,
+ * uses HTTP conditional GET (ETag / If-Modified-Since) to bypass unchanged feeds,
+ * pre-filters entries on operational title keywords before full regex parsing,
+ * deduplicates via D1 edgar_8k_seen table, and enqueues relevant filings to INTRADAY_QUEUE.
  *
  * D1 Schema (apply once to midgley-cache-d1):
  *   CREATE TABLE IF NOT EXISTS edgar_8k_seen (
  *     accession_id TEXT PRIMARY KEY,
  *     ticker       TEXT NOT NULL,
- *     filed_at     TEXT NOT NULL
+ *     filed_at     TEXT NOT NULL,
+ *     created_at   TEXT NOT NULL DEFAULT (datetime('now'))
  *   );
+ *   CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_accession ON edgar_8k_seen (accession_id);
+ *   CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_ticker ON edgar_8k_seen (ticker);
+ *   CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_filed_at ON edgar_8k_seen (filed_at);
  */
 
-const EDGAR_OPERATIONAL_KEYWORDS: string[] = [
-  "outage", "force majeure", "fire", "explosion", "unplanned",
-  "shutdown", "capacity reduction", "turnaround", "fcc",
-  "crude distillation", "hydrocracker", "coker", "refinery",
-  "pipeline", "leak", "spill", "environmental", "flaring",
-  "evacuation", "accident", "incident", "disruption",
+export const EDGAR_OPERATIONAL_KEYWORDS: string[] = [
+  "fire", "explosion", "force majeure", "outage", "shutdown",
+  "flaring", "upset", "crude distillation", "coker", "fcc",
+  "pipeline", "hurricane", "unplanned", "capacity reduction",
+  "turnaround", "hydrocracker", "refinery", "leak", "spill",
+  "environmental", "evacuation", "accident", "incident", "disruption",
 ];
 
-function isEdgarRelevant(text: string): boolean {
+export function isEdgarRelevant(text: string): boolean {
   const lower = text.toLowerCase();
   return EDGAR_OPERATIONAL_KEYWORDS.some(kw => lower.includes(kw));
 }
 
-async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
-  const tickers = (env.EDGAR_8K_TICKERS ?? "PBF,DINO,MPC,VLO,PSX")
+export const EDGAR_8K_SEEN_IN_MEMORY = new Set<string>();
+export const EDGAR_FEED_ETAG_CACHE = new Map<string, { etag?: string; lastModified?: string }>();
+
+export function clearEdgarCacheForTesting(): void {
+  EDGAR_8K_SEEN_IN_MEMORY.clear();
+  EDGAR_FEED_ETAG_CACHE.clear();
+}
+
+export async function isEdgar8kSeen(accessionId: string, env?: Env): Promise<boolean> {
+  const cleanId = accessionId.trim();
+  if (!cleanId) return false;
+  const bareId = cleanId.replace(/^edgar:/, "");
+  const taggedId = `edgar:${bareId}`;
+
+  if (EDGAR_8K_SEEN_IN_MEMORY.has(bareId) || EDGAR_8K_SEEN_IN_MEMORY.has(taggedId)) {
+    return true;
+  }
+
+  if (env && env.DB) {
+    try {
+      const stmt = env.DB.prepare(
+        "SELECT 1 FROM edgar_8k_seen WHERE accession_id = ? OR accession_id = ? LIMIT 1"
+      );
+      const row = await stmt.bind(bareId, taggedId).first();
+      if (row) {
+        EDGAR_8K_SEEN_IN_MEMORY.add(bareId);
+        EDGAR_8K_SEEN_IN_MEMORY.add(taggedId);
+        return true;
+      }
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS edgar_8k_seen (accession_id TEXT PRIMARY KEY, ticker TEXT NOT NULL, filed_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')))"
+        ).run();
+      } catch {}
+    }
+  }
+
+  return await isHeadlineDispatchedInCache(taggedId, env);
+}
+
+export async function markEdgar8kSeen(
+  accessionId: string,
+  ticker: string,
+  filedAt: string,
+  env?: Env
+): Promise<void> {
+  const cleanId = accessionId.trim();
+  if (!cleanId) return;
+  const bareId = cleanId.replace(/^edgar:/, "");
+  const taggedId = `edgar:${bareId}`;
+
+  EDGAR_8K_SEEN_IN_MEMORY.add(bareId);
+  EDGAR_8K_SEEN_IN_MEMORY.add(taggedId);
+  await markHeadlineDispatchedInCache(taggedId, env);
+
+  if (env && env.DB) {
+    try {
+      await env.DB.prepare(
+        "INSERT OR IGNORE INTO edgar_8k_seen (accession_id, ticker, filed_at) VALUES (?, ?, ?)"
+      ).bind(bareId, ticker, filedAt).run();
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS edgar_8k_seen (accession_id TEXT PRIMARY KEY, ticker TEXT NOT NULL, filed_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')))"
+        ).run();
+        await env.DB.prepare(
+          "INSERT OR IGNORE INTO edgar_8k_seen (accession_id, ticker, filed_at) VALUES (?, ?, ?)"
+        ).bind(bareId, ticker, filedAt).run();
+      } catch {}
+    }
+  }
+}
+
+export async function getEdgarFeedCache(
+  ticker: string,
+  env?: Env
+): Promise<{ etag?: string; lastModified?: string }> {
+  if (EDGAR_FEED_ETAG_CACHE.has(ticker)) {
+    return EDGAR_FEED_ETAG_CACHE.get(ticker)!;
+  }
+  if (env && env.DB) {
+    try {
+      const row = await env.DB.prepare(
+        "SELECT value FROM lookup_cache WHERE key = ? AND expires_at > ?"
+      ).bind(`edgar_etag:${ticker}`, Date.now() / 1000).first();
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value);
+        EDGAR_FEED_ETAG_CACHE.set(ticker, parsed);
+        return parsed;
+      }
+    } catch {}
+  }
+  return {};
+}
+
+export async function setEdgarFeedCache(
+  ticker: string,
+  headers: { etag?: string; lastModified?: string },
+  env?: Env
+): Promise<void> {
+  EDGAR_FEED_ETAG_CACHE.set(ticker, headers);
+  if (env && env.DB && (headers.etag || headers.lastModified)) {
+    try {
+      const now = Date.now() / 1000;
+      const ttl = 86400 * 7; // 7 days
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO lookup_cache (key, value, created_at, expires_at) VALUES (?, ?, ?, ?)"
+      ).bind(`edgar_etag:${ticker}`, JSON.stringify(headers), now, now + ttl).run();
+    } catch {}
+  }
+}
+
+export async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
+  const tickers = (env.EDGAR_8K_TICKERS ?? "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD")
     .split(",")
     .map(t => t.trim().toUpperCase())
     .filter(Boolean);
 
-  const userAgent = env.SEC_USER_AGENT ?? "Midgley contact@example.com";
+  const userAgent = env.SEC_USER_AGENT ?? "Midgley energy-forecasting contact@domain.com";
 
   for (const ticker of tickers) {
     try {
+      // SEC EDGAR Fair Access policy: max 10 requests/second
+      await new Promise(resolve => setTimeout(resolve, 120));
+
       const atomUrl =
         `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany` +
         `&CIK=${ticker}&type=8-K&dateb=&owner=include&count=5&search_text=&output=atom`;
 
-      const resp = await fetch(atomUrl, { headers: { "User-Agent": userAgent } });
+      // Conditional GET headers (ETag / If-Modified-Since)
+      const cachedHeaders = await getEdgarFeedCache(ticker, env);
+      const reqHeaders: Record<string, string> = { "User-Agent": userAgent };
+      if (cachedHeaders.etag) {
+        reqHeaders["If-None-Match"] = cachedHeaders.etag;
+      }
+      if (cachedHeaders.lastModified) {
+        reqHeaders["If-Modified-Since"] = cachedHeaders.lastModified;
+      }
+
+      const resp = await fetch(atomUrl, { headers: reqHeaders });
+
+      if (resp.status === 304) {
+        console.log(`[EDGAR8K] 304 Not Modified for ${ticker}, skipping feed parse`);
+        continue;
+      }
+
       if (!resp.ok) {
         console.warn(`[EDGAR8K] HTTP ${resp.status} fetching feed for ${ticker}`);
         continue;
       }
 
+      // Update cached ETag / Last-Modified
+      const newEtag = resp.headers.get("ETag") || resp.headers.get("etag") || undefined;
+      const newLastMod = resp.headers.get("Last-Modified") || resp.headers.get("last-modified") || undefined;
+      if (newEtag || newLastMod) {
+        await setEdgarFeedCache(ticker, { etag: newEtag, lastModified: newLastMod }, env);
+      }
+
       const xmlText = await resp.text();
 
-      // Parse ATOM entries via simple regex (no DOM parser in Workers)
+      // Parse ATOM entries via regex
       const entryRegex = /<entry[\s\S]*?<\/entry>/gi;
       const idRegex = /<id>([^<]+)<\/id>/i;
       const titleRegex = /<title[^>]*>([^<]+)<\/title>/i;
@@ -703,25 +850,29 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
       const entries = xmlText.match(entryRegex) || [];
 
       for (const entryXml of entries) {
-        const accessionId = (entryXml.match(idRegex)?.[1] ?? "").trim();
+        // Fast-path title extraction and pre-filtering before full regexes
         const title = (entryXml.match(titleRegex)?.[1] ?? "").trim();
+        if (!title) continue;
+
+        // Pre-filter XML entries on operational title keywords before executing remaining regexes
+        if (!isEdgarRelevant(title)) {
+          const accessionId = (entryXml.match(idRegex)?.[1] ?? "").trim();
+          if (accessionId) {
+            await markEdgar8kSeen(accessionId, ticker, new Date().toISOString(), env);
+          }
+          continue;
+        }
+
+        // Relevant title: execute remaining regexes
+        const accessionId = (entryXml.match(idRegex)?.[1] ?? "").trim();
         const link = (entryXml.match(linkRegex)?.[1] ?? "").trim();
         const filedAt = (entryXml.match(updatedRegex)?.[1] ?? new Date().toISOString()).trim();
 
-        if (!accessionId || !title) continue;
+        if (!accessionId) continue;
 
         // D1 deduplication — skip if already seen
-        // Note: D1 binding available via env when [[d1_databases]] edgar_8k_seen table exists
-        // Fallback: use in-memory seen set per invocation if D1 unavailable
-        const alreadyDispatched = await isHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
-        if (alreadyDispatched) continue;
-
-        // Keyword gate on title first (saves HTML fetch round-trip for obvious noise)
-        if (!isEdgarRelevant(title)) {
-          // Mark noise filing as seen so we don't re-check it next cycle
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
-          continue;
-        }
+        const alreadySeen = await isEdgar8kSeen(accessionId, env);
+        if (alreadySeen) continue;
 
         // Enqueue to INTRADAY_QUEUE using existing WebhookRequest-compatible schema
         const headline = `${ticker} 8-K: ${title}`;
@@ -730,7 +881,7 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
         const dedupeRes = await querySemanticDedupe(headline, env);
         if (dedupeRes.status === "duplicate") {
           console.log(`[EDGAR Semantic Dedupe] Suppressed duplicate 8-K (${dedupeRes.source}): "${headline}"`);
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
+          await markEdgar8kSeen(accessionId, ticker, filedAt, env);
           continue;
         }
 
@@ -741,7 +892,7 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
         });
 
         if (enqueued) {
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
+          await markEdgar8kSeen(accessionId, ticker, filedAt, env);
           console.log(`[EDGAR8K] Enqueued relevant 8-K: ${headline}`);
           await logToAxiom(env, ctx, {
             event: "edgar_8k_enqueued",

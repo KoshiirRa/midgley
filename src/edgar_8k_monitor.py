@@ -27,7 +27,9 @@ logger = logging.getLogger(__name__)
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_TICKERS: List[str] = ["PBF", "DINO", "MPC", "VLO", "PSX"]
+DEFAULT_TICKERS: List[str] = [
+    "PBF", "DINO", "MPC", "VLO", "PSX", "XOM", "CVX", "SU", "PARR", "DK", "KMI", "EPD"
+]
 
 EDGAR_ATOM_URL = (
     "https://www.sec.gov/cgi-bin/browse-edgar"
@@ -44,6 +46,7 @@ OPERATIONAL_KEYWORDS: List[str] = [
     "shutdown", "capacity reduction", "unit", "turnaround", "fcc",
     "crude distillation", "hydrocracker", "coker", "refinery",
     "pipeline", "leak", "spill", "environmental", "flaring",
+    "upset", "hurricane",
     "evacuation", "accident", "incident", "disruption",
 ]
 

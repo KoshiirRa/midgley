@@ -14,6 +14,14 @@ import intradayWorker, {
   timingSafeEqual as intradayTimingSafeEqual,
   clearWorkerSubscriptionsMemoryForTesting,
   ensureFlagReplaySchema,
+  isEdgarRelevant,
+  isEdgar8kSeen,
+  markEdgar8kSeen,
+  clearEdgarCacheForTesting,
+  pollEdgar8KFeeds,
+  EDGAR_OPERATIONAL_KEYWORDS,
+  getEdgarFeedCache,
+  setEdgarFeedCache,
   Env as IntradayEnv,
   QueueMessageBatch
 } from "../workers/intraday_monitor_worker";
@@ -56,6 +64,32 @@ function createMockD1Database(initialColumns: string[] = ["clean_key", "value", 
         return {
           async run() {
             columns.add("value");
+            return { success: true };
+          }
+        };
+      }
+      if (query.includes("edgar_8k_seen")) {
+        return {
+          bind(...args: any[]) {
+            return {
+              async first() {
+                const k1 = args[0];
+                const k2 = args[1];
+                if (store.has(k1) || (k2 && store.has(k2))) {
+                  return { found: 1 };
+                }
+                return null;
+              },
+              async run() {
+                const accessionId = args[0];
+                const ticker = args[1];
+                const filedAt = args[2];
+                store.set(accessionId, { accession_id: accessionId, ticker, filed_at: filedAt });
+                return { success: true };
+              }
+            };
+          },
+          async run() {
             return { success: true };
           }
         };
@@ -1889,6 +1923,127 @@ Total Orientation PlayWeekMonthYear
         expect(briefField).toBeDefined();
         expect(briefField.value).toContain("Chicago wholesale basis widened");
       });
+    });
+  });
+
+  describe("EDGAR 8-K Feed Coverage & Edge Deduplication (Issue #644)", () => {
+    beforeEach(() => {
+      clearEdgarCacheForTesting();
+      vi.restoreAllMocks();
+    });
+
+    afterEach(() => {
+      clearEdgarCacheForTesting();
+      vi.restoreAllMocks();
+    });
+
+    it("verifies operational relevance keyword gate detects outages, fires, upsets, and hurricanes", () => {
+      expect(isEdgarRelevant("Unplanned FCC unit outage at refinery")).toBe(true);
+      expect(isEdgarRelevant("Reports refinery flaring and process upset")).toBe(true);
+      expect(isEdgarRelevant("Precautionary shutdown ahead of Gulf hurricane")).toBe(true);
+      expect(isEdgarRelevant("Force majeure declared on pipeline deliveries")).toBe(true);
+      expect(isEdgarRelevant("Crude distillation unit fire contained")).toBe(true);
+
+      // Noise rejection
+      expect(isEdgarRelevant("Quarterly financial results for Q3 2026")).toBe(false);
+      expect(isEdgarRelevant("Board of Directors appoints new Chief Commercial Officer")).toBe(false);
+      expect(isEdgarRelevant("Pricing of $500M Senior Notes due 2036")).toBe(false);
+    });
+
+    it("deduplicates accession IDs in memory and via D1 edgar_8k_seen table", async () => {
+      const mockD1 = createMockD1Database();
+      const env: IntradayEnv = { DB: mockD1 };
+
+      const accessionId = "0001193125-26-098765";
+      expect(await isEdgar8kSeen(accessionId, env)).toBe(false);
+
+      await markEdgar8kSeen(accessionId, "SU", "2026-10-24T12:00:00Z", env);
+      expect(await isEdgar8kSeen(accessionId, env)).toBe(true);
+      expect(await isEdgar8kSeen(`edgar:${accessionId}`, env)).toBe(true);
+    });
+
+    it("handles ETag conditional GETs and skips body parsing on 304 Not Modified", async () => {
+      const mockD1 = createMockD1Database();
+      const env: IntradayEnv = {
+        DB: mockD1,
+        EDGAR_8K_TICKERS: "SU",
+        SEC_USER_AGENT: "Midgley energy-forecasting contact@domain.com"
+      };
+
+      // Populate cached ETag
+      await setEdgarFeedCache("SU", { etag: '"test-etag-12345"' }, env);
+
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+        new Response(null, {
+          status: 304,
+          statusText: "Not Modified"
+        })
+      );
+
+      await pollEdgar8KFeeds(env, {});
+      expect(fetchSpy).toHaveBeenCalled();
+      const calledHeaders = fetchSpy.mock.calls[0][1]?.headers as Record<string, string>;
+      expect(calledHeaders["If-None-Match"]).toBe('"test-etag-12345"');
+    });
+
+    it("pre-filters XML entries on title keywords and enqueues relevant filings", async () => {
+      const mockD1 = createMockD1Database();
+      const sentQueueMessages: any[] = [];
+      const env: IntradayEnv = {
+        DB: mockD1,
+        EDGAR_8K_TICKERS: "PARR",
+        SEC_USER_AGENT: "Midgley energy-forecasting contact@domain.com",
+        INTRADAY_QUEUE: {
+          async send(msg: any) {
+            sentQueueMessages.push(msg);
+          },
+          async sendBatch(msgs: any[]) {
+            sentQueueMessages.push(...msgs.map(m => m.body));
+          }
+        }
+      };
+
+      const syntheticXml = `<?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <title>Par Pacific 8-K Feed</title>
+        <entry>
+          <id>0001193125-26-000001</id>
+          <title>Quarterly Earnings Release Q3</title>
+          <link href="https://www.sec.gov/Archives/edgar/data/parr/earnings.htm"/>
+          <updated>2026-10-24T10:00:00Z</updated>
+        </entry>
+        <entry>
+          <id>0001193125-26-000002</id>
+          <title>Crude distillation unit outage at Kapolei refinery</title>
+          <link href="https://www.sec.gov/Archives/edgar/data/parr/outage.htm"/>
+          <updated>2026-10-24T11:00:00Z</updated>
+        </entry>
+      </feed>`;
+
+      vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+        new Response(syntheticXml, {
+          status: 200,
+          headers: {
+            "Content-Type": "application/atom+xml",
+            "ETag": '"etag-parr-999"'
+          }
+        })
+      );
+
+      await pollEdgar8KFeeds(env, {});
+
+      // Earnings noise entry should NOT be enqueued; relevant Kapolei outage entry MUST be enqueued
+      expect(sentQueueMessages.length).toBe(1);
+      expect(sentQueueMessages[0].headline).toBe("PARR 8-K: Crude distillation unit outage at Kapolei refinery");
+      expect(sentQueueMessages[0].url).toBe("https://www.sec.gov/Archives/edgar/data/parr/outage.htm");
+      expect(sentQueueMessages[0].source).toBe("EDGAR_8K");
+
+      // Verify that ETag was cached
+      const cached = await getEdgarFeedCache("PARR", env);
+      expect(cached.etag).toBe('"etag-parr-999"');
+
+      // Verify that accession ID was marked seen in D1
+      expect(await isEdgar8kSeen("0001193125-26-000002", env)).toBe(true);
     });
   });
 });
