@@ -8000,5 +8000,30 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-24T22:30:49.296015",
+    "headline": "Iran says 7 oil tankers damaged in Strait of Hormuz, and other Middle East news",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTUdQalhkeHV6MjBUcDhWSGNFcUpEcGI2em40Y19zcFB2aVNaMVZveXc1QmMweUx5Mm9yak9ZWUtwSDNPdkVkaWw2NzRlZTZBdkRpQnlXdDBlOVVjN0hfLW9YR3lHR2NFdEU3WktoYzk4M1NGV0RwV25tVjBUUDFjVkJ2b3pMNlc1NG43bUkwcEwxa3JmYk9zMHV3YjhSc1J4WjMtc21tMlRQLVJNT0gwY1JyUdIBuAFBVV95cUxPWHI0VlZ2NlpRSGlRNXdGUFFQZ3J4bFdEdVpBYTY4Vjl6UDZnQS13anNtci1yRGhtdkJHWklnaFc1dGZ0RWt3VGpxczlyT1FUSTBBRWFJUDhUeXdYT29jWjVRYU13NTRZeHR6b2hTOUlLek5PRS03Rl91Rm80eE55MV94TWNZSFNxTkRlQWtrdWI3ZjhfNTJrUElXMWNlREZVdnZTT01aTWJIajdla1BZczBTNXdSb2t4?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTUdQalhkeHV6MjBUcDhWSGNFcUpEcGI2em40Y19zcFB2aVNaMVZveXc1QmMweUx5Mm9yak9ZWUtwSDNPdkVkaWw2NzRlZTZBdkRpQnlXdDBlOVVjN0hfLW9YR3lHR2NFdEU3WktoYzk4M1NGV0RwV25tVjBUUDFjVkJ2b3pMNlc1NG43bUkwcEwxa3JmYk9zMHV3YjhSc1J4WjMtc21tMlRQLVJNT0gwY1JyUdIBuAFBVV95cUxPWHI0VlZ2NlpRSGlRNXdGUFFQZ3J4bFdEdVpBYTY4Vjl6UDZnQS13anNtci1yRGhtdkJHWklnaFc1dGZ0RWt3VGpxczlyT1FUSTBBRWFJUDhUeXdYT29jWjVRYU13NTRZeHR6b2hTOUlLek5PRS03Rl91Rm80eE55MV94TWNZSFNxTkRlQWtrdWI3ZjhfNTJrUElXMWNlREZVdnZTT01aTWJIajdla1BZczBTNXdSb2t4?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxOTUdQalhkeHV6MjBUcDhWSGNFcUpEcGI2em40Y19zcFB2aVNaMVZveXc1QmMweUx5Mm9yak9ZWUtwSDNPdkVkaWw2NzRlZTZBdkRpQnlXdDBlOVVjN0hfLW9YR3lHR2NFdEU3WktoYzk4M1NGV0RwV25tVjBUUDFjVkJ2b3pMNlc1NG43bUkwcEwxa3JmYk9zMHV3YjhSc1J4WjMtc21tMlRQLVJNT0gwY1JyUdIBuAFBVV95cUxPWHI0VlZ2NlpRSGlRNXdGUFFQZ3J4bFdEdVpBYTY4Vjl6UDZnQS13anNtci1yRGhtdkJHWklnaFc1dGZ0RWt3VGpxczlyT1FUSTBBRWFJUDhUeXdYT29jWjVRYU13NTRZeHR6b2hTOUlLek5PRS03Rl91Rm80eE55MV94TWNZSFNxTkRlQWtrdWI3ZjhfNTJrUElXMWNlREZVdnZTT01aTWJIajdla1BZczBTNXdSb2t4?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.42
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran says 7 oil tankers damaged in Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.73,
+    "duplicate_review_notified": false
   }
 ]
