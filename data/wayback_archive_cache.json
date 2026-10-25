@@ -1755,13 +1755,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5": {
-    "timestamp": "2026-10-16T14:41:00.833086+00:00",
+    "timestamp": "2026-10-25T23:57:26.041491+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
     "headline": "THE SHUT DOWN: Canadian Oil Refinery Shut Down Could Crimp Northeast U.S. Supply - EnergyNow",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5": {
     "timestamp": "2026-09-10T15:15:31.152635",
@@ -8406,7 +8406,7 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5": {
-    "timestamp": "2026-10-22T23:03:42.620353+00:00",
+    "timestamp": "2026-10-25T23:57:11.734064+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
@@ -16470,5 +16470,33 @@
     "headline": "Strait of Hormuz crisis: Nearly 500 vessels delayed amid new tanker attack and rising maritime threats",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1gFBVV95cUxOaTRWTVV4ZkpsWXIxUjJDOEFlNWc5ZmtKLU1NeWh5WU9BdHdwdUxGTFJwQmNhc1VGaWZWUVdlektQNVZKVEVhQlprSUNtZ0RUTmpOdEs2U1pmNjh5YnRhZG1UWFFENU5laFhuMW1kcDhONlplcFlTX090RVV1RjJJNnBRLUYyTzU1Zk02NDFKRnJ3blN4TFFYcDBjWnhPdXBqcTJmMmFKSERVODhVeFBaYUlldmlVSk5ZS3R0ZVBfb0E0VjIyaUo4TkNwNy1vTlJjZnZCRWR3?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPVC00bDVZbHRodFpBYWl3U29nbG1ZRmJ5VGJpYV9Qd1lJQWxVaGRyQ0ZUbF9RRHZJaC1rN0NrQUhFekVBTDY1cUlHX1VGUHIzUHFVYWRsYzNsc3pnVExxUm90OWg4UUFIbGVuQnVXYks2M0ZQM3JqMGJwTVNqZlMzY2ZIeGY0eGVJWU9LWTJabnRnN09pRWF5ekZ3LUFPMm0yZ2c3TFNGOGRmQ1dUZFdnNFFfV0plT09GSk56ZG5rR3NJaHk2ZUs0M1BNck9IdzBYTW9wUkZDRTVuSFJuTjdPajlfdTQtZw?oc=5": {
+    "timestamp": "2026-10-25T23:57:18.848503+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPVC00bDVZbHRodFpBYWl3U29nbG1ZRmJ5VGJpYV9Qd1lJQWxVaGRyQ0ZUbF9RRHZJaC1rN0NrQUhFekVBTDY1cUlHX1VGUHIzUHFVYWRsYzNsc3pnVExxUm90OWg4UUFIbGVuQnVXYks2M0ZQM3JqMGJwTVNqZlMzY2ZIeGY0eGVJWU9LWTJabnRnN09pRWF5ekZ3LUFPMm0yZ2c3TFNGOGRmQ1dUZFdnNFFfV0plT09GSk56ZG5rR3NJaHk2ZUs0M1BNck9IdzBYTW9wUkZDRTVuSFJuTjdPajlfdTQtZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPVC00bDVZbHRodFpBYWl3U29nbG1ZRmJ5VGJpYV9Qd1lJQWxVaGRyQ0ZUbF9RRHZJaC1rN0NrQUhFekVBTDY1cUlHX1VGUHIzUHFVYWRsYzNsc3pnVExxUm90OWg4UUFIbGVuQnVXYks2M0ZQM3JqMGJwTVNqZlMzY2ZIeGY0eGVJWU9LWTJabnRnN09pRWF5ekZ3LUFPMm0yZ2c3TFNGOGRmQ1dUZFdnNFFfV0plT09GSk56ZG5rR3NJaHk2ZUs0M1BNck9IdzBYTW9wUkZDRTVuSFJuTjdPajlfdTQtZw?oc=5",
+    "headline": "Where to find the cheapest fuel in Manly - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi5gFBVV95cUxPVC00bDVZbHRodFpBYWl3U29nbG1ZRmJ5VGJpYV9Qd1lJQWxVaGRyQ0ZUbF9RRHZJaC1rN0NrQUhFekVBTDY1cUlHX1VGUHIzUHFVYWRsYzNsc3pnVExxUm90OWg4UUFIbGVuQnVXYks2M0ZQM3JqMGJwTVNqZlMzY2ZIeGY0eGVJWU9LWTJabnRnN09pRWF5ekZ3LUFPMm0yZ2c3TFNGOGRmQ1dUZFdnNFFfV0plT09GSk56ZG5rR3NJaHk2ZUs0M1BNck9IdzBYTW9wUkZDRTVuSFJuTjdPajlfdTQtZw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTkxLNVhEY2o3MVhmdGxiNHhzQ0VLbmJoOTJ2NzdPOGt4UHhNMGF2c3pnbXlMRUFydTRjZzVaVDRobEV1c1JxTHJKaEd6QVoyLUVKdE51bmdUeXRQY0Q1WHJMNmh0bDVjY28xekNvUmZ5Wkw3WmswRi1Odm9IMDJSQU1NOWhhVzMxMHhKVF83LU84M1Z3Yzl3M2p4NEN1eGZ1a1FOYXZ3?oc=5": {
+    "timestamp": "2026-10-25T23:57:33.489289+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTkxLNVhEY2o3MVhmdGxiNHhzQ0VLbmJoOTJ2NzdPOGt4UHhNMGF2c3pnbXlMRUFydTRjZzVaVDRobEV1c1JxTHJKaEd6QVoyLUVKdE51bmdUeXRQY0Q1WHJMNmh0bDVjY28xekNvUmZ5Wkw3WmswRi1Odm9IMDJSQU1NOWhhVzMxMHhKVF83LU84M1Z3Yzl3M2p4NEN1eGZ1a1FOYXZ3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTkxLNVhEY2o3MVhmdGxiNHhzQ0VLbmJoOTJ2NzdPOGt4UHhNMGF2c3pnbXlMRUFydTRjZzVaVDRobEV1c1JxTHJKaEd6QVoyLUVKdE51bmdUeXRQY0Q1WHJMNmh0bDVjY28xekNvUmZ5Wkw3WmswRi1Odm9IMDJSQU1NOWhhVzMxMHhKVF83LU84M1Z3Yzl3M2p4NEN1eGZ1a1FOYXZ3?oc=5",
+    "headline": "President Donald Trump Just Proclaimed, \"Tariffs Don't Cause Inflation, They Cause Wealth,\" but Data From Federal Reserve Economists Show Otherwise - Yahoo Finance",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxPTkxLNVhEY2o3MVhmdGxiNHhzQ0VLbmJoOTJ2NzdPOGt4UHhNMGF2c3pnbXlMRUFydTRjZzVaVDRobEV1c1JxTHJKaEd6QVoyLUVKdE51bmdUeXRQY0Q1WHJMNmh0bDVjY28xekNvUmZ5Wkw3WmswRi1Odm9IMDJSQU1NOWhhVzMxMHhKVF83LU84M1Z3Yzl3M2p4NEN1eGZ1a1FOYXZ3?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNQl90WnlnZ2hKM2VON2ZDVGhBMU5oR3RoZy10OVladjFrNGJIR0FNREwwYkpabFNzZG1heW0yeFo0aUpqWk1uTGtyNjJjV205cmhCcTBuNTdjM3JWaUlRd1MyRWhmS2VfeDdOTjNVUHhfbWp0MTB6UGpMZE14bDN5a2dlTThCYk5MeWMxSFpoRjV0SElxbk8wM2lUclkwcS1nc29ybnVHR1FNV0RaRDBfWk9ZcWdMM1RZTkNIa0hVX1Q0TURHdnRfOXo4WmhETkFvZG5KblBibVc?oc=5": {
+    "timestamp": "2026-10-25T23:57:34.603531+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNQl90WnlnZ2hKM2VON2ZDVGhBMU5oR3RoZy10OVladjFrNGJIR0FNREwwYkpabFNzZG1heW0yeFo0aUpqWk1uTGtyNjJjV205cmhCcTBuNTdjM3JWaUlRd1MyRWhmS2VfeDdOTjNVUHhfbWp0MTB6UGpMZE14bDN5a2dlTThCYk5MeWMxSFpoRjV0SElxbk8wM2lUclkwcS1nc29ybnVHR1FNV0RaRDBfWk9ZcWdMM1RZTkNIa0hVX1Q0TURHdnRfOXo4WmhETkFvZG5KblBibVc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNQl90WnlnZ2hKM2VON2ZDVGhBMU5oR3RoZy10OVladjFrNGJIR0FNREwwYkpabFNzZG1heW0yeFo0aUpqWk1uTGtyNjJjV205cmhCcTBuNTdjM3JWaUlRd1MyRWhmS2VfeDdOTjNVUHhfbWp0MTB6UGpMZE14bDN5a2dlTThCYk5MeWMxSFpoRjV0SElxbk8wM2lUclkwcS1nc29ybnVHR1FNV0RaRDBfWk9ZcWdMM1RZTkNIa0hVX1Q0TURHdnRfOXo4WmhETkFvZG5KblBibVc?oc=5",
+    "headline": "‘Well-known evil empire’: Barack Obama mocks President Trump’s tariff war with Canada - The Lethbridge Herald",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi2AFBVV95cUxNQl90WnlnZ2hKM2VON2ZDVGhBMU5oR3RoZy10OVladjFrNGJIR0FNREwwYkpabFNzZG1heW0yeFo0aUpqWk1uTGtyNjJjV205cmhCcTBuNTdjM3JWaUlRd1MyRWhmS2VfeDdOTjNVUHhfbWp0MTB6UGpMZE14bDN5a2dlTThCYk5MeWMxSFpoRjV0SElxbk8wM2lUclkwcS1nc29ybnVHR1FNV0RaRDBfWk9ZcWdMM1RZTkNIa0hVX1Q0TURHdnRfOXo4WmhETkFvZG5KblBibVc?oc=5",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }
