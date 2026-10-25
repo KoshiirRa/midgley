@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-25T00:06:37.429831",
+  "timestamp": "2026-10-25T00:34:44.774558",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-25T00:06:12Z"
+      "timestamp": "2026-10-25T00:34:29Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,22 +29,22 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-10-30",
     "current_base_price": 6.075,
-    "predicted_price_per_gal": 5.906,
-    "expected_change_dollars": -0.169,
-    "expected_change_percent": -2.78,
+    "predicted_price_per_gal": 5.905,
+    "expected_change_dollars": -0.17,
+    "expected_change_percent": -2.8,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 5.786,
-    "prediction_upper_95ci": 6.026,
+    "prediction_lower_95ci": 5.785,
+    "prediction_upper_95ci": 6.025,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.065,
-    "day_2_price": 6.02,
-    "day_3_price": 5.96,
-    "day_4_price": 5.928,
-    "day_5_price": 5.906,
+    "day_1_price": 6.082,
+    "day_2_price": 6.051,
+    "day_3_price": 5.97,
+    "day_4_price": 5.917,
+    "day_5_price": 5.905,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.042,
+        "delta_dollars": -0.043,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -81,7 +81,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.008,
+        "delta_dollars": -0.009,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -89,14 +89,14 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.009,
+        "delta_dollars": -0.008,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
       }
     },
     "driver_breakdown": {
-      "summary_text": "BayArea CA forecast $-0.169/gal (-2.78%): Driven primarily by Tax & Regulatory Overhead ($-0.059/gal), Refining Yield & Crack Spread ($-0.042/gal).",
+      "summary_text": "BayArea CA forecast $-0.170/gal (-2.80%): Driven primarily by Tax & Regulatory Overhead ($-0.059/gal), Refining Yield & Crack Spread ($-0.043/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -109,8 +109,8 @@
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.042,
-          "impact_pct": -0.69,
+          "impact_dollars": -0.043,
+          "impact_pct": -0.71,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -131,16 +131,16 @@
           "direction": "DOWN"
         },
         {
-          "category": "Regional Logistics & Hub Delivery",
-          "description": "Ecodeveloped pipeline loading flows",
+          "category": "Weather & Environmental Signals",
+          "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.009,
           "impact_pct": -0.15,
           "share_pct": 5.0,
           "direction": "DOWN"
         },
         {
-          "category": "Weather & Environmental Signals",
-          "description": "Favorable multi-basin weather conditions",
+          "category": "Regional Logistics & Hub Delivery",
+          "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.008,
           "impact_pct": -0.13,
           "share_pct": 5.0,
@@ -161,8 +161,8 @@
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.042,
-      "impact_pct": -0.69,
+      "impact_dollars": -0.043,
+      "impact_pct": -0.71,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -183,16 +183,16 @@
       "direction": "DOWN"
     },
     {
-      "category": "Regional Logistics & Hub Delivery",
-      "description": "Ecodeveloped pipeline loading flows",
+      "category": "Weather & Environmental Signals",
+      "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.009,
       "impact_pct": -0.15,
       "share_pct": 5.0,
       "direction": "DOWN"
     },
     {
-      "category": "Weather & Environmental Signals",
-      "description": "Favorable multi-basin weather conditions",
+      "category": "Regional Logistics & Hub Delivery",
+      "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.008,
       "impact_pct": -0.13,
       "share_pct": 5.0,
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "BayArea CA forecast $-0.169/gal (-2.78%): Driven primarily by Tax & Regulatory Overhead ($-0.059/gal), Refining Yield & Crack Spread ($-0.042/gal).",
+    "summary_text": "BayArea CA forecast $-0.170/gal (-2.80%): Driven primarily by Tax & Regulatory Overhead ($-0.059/gal), Refining Yield & Crack Spread ($-0.043/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.042,
+        "delta_dollars": -0.043,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -237,7 +237,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.008,
+        "delta_dollars": -0.009,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -245,7 +245,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.009,
+        "delta_dollars": -0.008,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
