@@ -6780,5 +6780,30 @@
       "overall_price_pressure": 0.82
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-25T07:25:38.398560",
+    "headline": "Iran Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPUXZRVVY1d0VlR3AyMGluV21yZDZiTGhIZW9mR0xLc3lwb3kyNVdwMHFsRjBUSTB5WXJSd3V6c3QxODZHSDZ2a0RTeVhVeWRkWl9JbzRqb3lmT2k1Ujh0UWctczFmTUxpNlFvbWFnYmFvQ1RlRXJRODBjTDlqaUczWUtYaWgzT0FkcGFjS0NGQnNMRE5YTDZhUg?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPUXZRVVY1d0VlR3AyMGluV21yZDZiTGhIZW9mR0xLc3lwb3kyNVdwMHFsRjBUSTB5WXJSd3V6c3QxODZHSDZ2a0RTeVhVeWRkWl9JbzRqb3lmT2k1Ujh0UWctczFmTUxpNlFvbWFnYmFvQ1RlRXJRODBjTDlqaUczWUtYaWgzT0FkcGFjS0NGQnNMRE5YTDZhUg?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimAFBVV95cUxPUXZRVVY1d0VlR3AyMGluV21yZDZiTGhIZW9mR0xLc3lwb3kyNVdwMHFsRjBUSTB5WXJSd3V6c3QxODZHSDZ2a0RTeVhVeWRkWl9JbzRqb3lmT2k1Ujh0UWctczFmTUxpNlFvbWFnYmFvQ1RlRXJRODBjTDlqaUczWUtYaWgzT0FkcGFjS0NGQnNMRE5YTDZhUg?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.65,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.3,
+      "overall_price_pressure": 0.7
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran says 7 oil tankers damaged in Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.38,
+    "duplicate_review_notified": false
   }
 ]
