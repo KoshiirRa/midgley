@@ -6847,5 +6847,26 @@
       "overall_price_pressure": 0.35
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-25T20:35:38.273331",
+    "headline": "Strait of Hormuz crisis: Nearly 500 vessels delayed amid new tanker attack and rising maritime threats",
+    "source": "Geopolitical_Suez_Bab_el_Mandeb",
+    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOaTRWTVV4ZkpsWXIxUjJDOEFlNWc5ZmtKLU1NeWh5WU9BdHdwdUxGTFJwQmNhc1VGaWZWUVdlektQNVZKVEVhQlprSUNtZ0RUTmpOdEs2U1pmNjh5YnRhZG1UWFFENU5laFhuMW1kcDhONlplcFlTX090RVV1RjJJNnBRLUYyTzU1Zk02NDFKRnJ3blN4TFFYcDBjWnhPdXBqcTJmMmFKSERVODhVeFBaYUlldmlVSk5ZS3R0ZVBfb0E0VjIyaUo4TkNwNy1vTlJjZnZCRWR3?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOaTRWTVV4ZkpsWXIxUjJDOEFlNWc5ZmtKLU1NeWh5WU9BdHdwdUxGTFJwQmNhc1VGaWZWUVdlektQNVZKVEVhQlprSUNtZ0RUTmpOdEs2U1pmNjh5YnRhZG1UWFFENU5laFhuMW1kcDhONlplcFlTX090RVV1RjJJNnBRLUYyTzU1Zk02NDFKRnJ3blN4TFFYcDBjWnhPdXBqcTJmMmFKSERVODhVeFBaYUlldmlVSk5ZS3R0ZVBfb0E0VjIyaUo4TkNwNy1vTlJjZnZCRWR3?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1gFBVV95cUxOaTRWTVV4ZkpsWXIxUjJDOEFlNWc5ZmtKLU1NeWh5WU9BdHdwdUxGTFJwQmNhc1VGaWZWUVdlektQNVZKVEVhQlprSUNtZ0RUTmpOdEs2U1pmNjh5YnRhZG1UWFFENU5laFhuMW1kcDhONlplcFlTX090RVV1RjJJNnBRLUYyTzU1Zk02NDFKRnJ3blN4TFFYcDBjWnhPdXBqcTJmMmFKSERVODhVeFBaYUlldmlVSk5ZS3R0ZVBfb0E0VjIyaUo4TkNwNy1vTlJjZnZCRWR3?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.82,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.78
+    },
+    "discord_notified": true
   }
 ]
