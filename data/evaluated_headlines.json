@@ -1,29 +1,5 @@
 [
   {
-    "timestamp": "2026-10-22T23:03:35.272193",
-    "headline": "AAA: Crude Oil on the Rise but Gas Prices Still Lower - Z93 Country",
-    "norm_headline": "aaa: crude oil on the rise but gas prices still lower",
-    "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBkQVlhSloxNUFHd29aZGNfOW1qQlc4bVd3SW1iNUNfSkdob2wtZlRxUV94MFpUaGZaVzZzMEJHWmVZbHp5Q09JQmkyaGNmREE3N1lBbnhjYm5ZYjlPN2g0?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-10-22T23:03:42.643499",
-    "headline": "See How Gas Prices Are Easing Across the U.S. - WSJ",
-    "norm_headline": "see how gas prices are easing across the u.s.",
-    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-10-22T23:03:52.990832",
-    "headline": "Michigan, Ohio Gas Prices Jump Again as Illinois Refinery Outage Ripples Through Midwest - marketscreener.com",
-    "norm_headline": "michigan, ohio gas prices jump again as illinois refinery outage ripples through midwest",
-    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxPaUI2M1JuWG1zNERhWUFSRS1jbHRvNmZwOFZTQUNkQnExLWx1aTNnR1lLbl9TNXBjMXI4UzBoWks4M1FXT0Y2NW9EOW1DbmNPRE5QOV9vdGh5VjNLVUh0VzZyOGpUcm1BQ0pkWGdKSWZxX09kUXVYTkxjVUJFNVpjM0xXRUdZTlhhOFdoMmZraDI0QmVpY3c2VUF6OVBBd3lzRFQzWkxzVXBpTGJqTWs1WjNndDJaQkh2b2xTcjVnNGVlV0tlamJydVBFSEc3ZHdEdXdMZGplbw?oc=5",
-    "is_anomaly": true,
-    "source": "RSS_Feed"
-  },
-  {
     "timestamp": "2026-10-23T03:54:45.373438",
     "headline": "Rosneft stretches refinery repairs from days to months as Ukraine strikes bite - investingLive",
     "norm_headline": "rosneft stretches refinery repairs from days to months as ukraine strikes bite",
@@ -1140,6 +1116,70 @@
     "headline": "Iran says 7 oil tankers attacked in the Strait of Hormuz as fears of a return to war grow",
     "norm_headline": "iran says 7 oil tankers attacked in the strait of hormuz as fears of a return to war grow",
     "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQZHgyWE1ZbFdVQXhyZ0JRTV82cm5HOW1WYUU0b1o3OVlHbTFmSXBpU3dZMkdTTjJLQWZVN1NRdXYwbXNhY3lwR0xLNndCQmtLRTI2aGlnMkdHd1NIdlJjTlRHYWFoNXN4eTB2SzVtQlF3ZHpQMXZmMDd2S1ZsU3R6elpRT1dZRHNEcms2N3pmekFRZmNmSDNLaS1WREpDcTFZdUVYV0VkUEFFQm5YWl9QaVZPc3E?oc=5",
+    "is_anomaly": true,
+    "source": "Geopolitical_Strait_of_Hormuz"
+  },
+  {
+    "timestamp": "2026-10-25T00:05:38.398065",
+    "headline": "Killeen-Fort Hood area gas prices drop by 20 cents - The Killeen Daily Herald",
+    "norm_headline": "killeen-fort hood area gas prices drop by 20 cents",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNUEZWSWYwalNZYTRPQmIxQmF4cHM0c01NR3RJT2tPbFN0anNYaW43RUt6anEtX04tMG9VZ2FJVTZfRWJXQmJqZEtfdGZfbmE1TzFaOU80dmhXT0FST2FmQ21zdWsyRzloRHZHOUNXdTZaS21LZXlaMFNQT29ObGd3dUpUdHpHMW9sWkdHcjVHcGZ5OFlYczM2RC03OThrdHNsRTRCRjBxN3Bha1A1ZVkwdkpPVk52SGxVNFhTTlh1MXlFMktpbVhjMGxhbw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:05:45.614560",
+    "headline": "Taiwan's CPC Freezes Fuel Prices Again Next Week, Absorbing Over NT$11 per Liter and NT$30.37 Billion Cumulatively - finance.biggo.com",
+    "norm_headline": "taiwan's cpc freezes fuel prices again next week, absorbing over nt$11 per liter and nt$30.37 billion cumulatively",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1OZUd5RzBMbGRxTEhRZVR2UWNvTVd0VzlVSzFmWVVZZ0xPcnMwaWFzc3VCNnA4WHcxdkdpdS14bU8tRlVTckNUUG5QUWlRcHZ4REtmSDZsNVVJUWVLVVpTeV8zaHZ2RXVrM1RZbEhKbTFnSHNsU1E?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:05:56.527142",
+    "headline": "Tesla Got Trump Tariff Refunds, and Elon Musk Isn\u2019t Sitting on the Cash \u2014 CFO Says Money Is Going Into... - Yahoo Finance",
+    "norm_headline": "tesla got trump tariff refunds, and elon musk isn\u2019t sitting on the cash \u2014 cfo says money is going into...",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOM0szUWQxV3VDVDFZSFZwT0tEbm5KVmJRaGhLTF9nLUc1bjhzeDZBdVNIMXJRelpJcUtMamkwai1wZzRtTG1kN2JaT3g2NV9meWFiTVFuOUlBWi0wMDdTSGhieVVEUUZPR1MwN0xka0h1UW02N3lUUno4NkdGUzI3Rlk1Uzg1ZDZxbFVGYzg3cUpYR3FxZ3VBOWlTaw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:05:58.004802",
+    "headline": "Marco Rubio signals new energy pivot - Deccan Herald",
+    "norm_headline": "marco rubio signals new energy pivot",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNR1FRX0xLd2FHZmE0STFuV3pfUF9vT25aY1E1YldjeGcwVV9LSkxEUHBxQTI2cWljMDEwOWQ3cFRpNGd0N3ZaRGtjQno3YXNIeFlLYnc1dGdlUEd1TEM5SGl2OEh4dU1JWWRwY0VSd19YcWM4WVpENi1NTk5sYndmaGJHTzhqYjlXcDhzTDlmMUtZMFZWSUQ2ZNIBmAFBVV95cUxNR1FRX0xLd2FHZmE0STFuV3pfUF9vT25aY1E1YldjeGcwVV9LSkxEUHBxQTI2cWljMDEwOWQ3cFRpNGd0N3ZaRGtjQno3YXNIeFlLYnc1dGdlUEd1TEM5SGl2OEh4dU1JWWRwY0VSd19YcWM4WVpENi1NTk5sYndmaGJHTzhqYjlXcDhzTDlmMUtZMFZWSUQ2ZA?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:06:01.342768",
+    "headline": "COMMENTARY: Here\u2019s How to Attract Investment to Newfoundland Despite Trump\u2019s Tariffs - Fraser Institute - EnergyNow",
+    "norm_headline": "commentary: here\u2019s how to attract investment to newfoundland despite trump\u2019s tariffs - fraser institute",
+    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPNWNmOU8tTDZxQlNxa19MS1hjT0J2SHg5RUFiRm96T3RzQ2xaRks4RXhDYzJaUk91cDdKRnJTaDd6R3NlNHhCelFWcEJOOWtvS1luTWUwelZhWnpnSkNJU3BoUDh6M1F0SHZucXZxd25fdDJVNXZvQjJEZXJtZmo4NkRxYkJ1WWZscVBTWmk2T3RHanltd29XNHVPVUg4NTdrd2lHT0hZQ1pUbVhobDF5S3dkbVVBS3RqaUd4QURVODJyQWFacnQ0?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:06:01.757725",
+    "headline": "Trump Is Cutting Tariffs on Canada, 11 Days Before the Midterms - Yahoo Finance",
+    "norm_headline": "trump is cutting tariffs on canada, 11 days before the midterms",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQZWNRZ2lTb3YtQ09aZDE4VHIzc3ZZc3Blbl9WVHk1WVNCUk9Xb2hLZUQzUG4wTFlUNlVCZk9pNlgyYkk5dkJnekF4cy1tZkNwVmQyeHJjYWR0cUNXeHNGbkp6Rnh4OFJGNF9qRW5IZ0RKTXJFcU1hX21CQ0pody1ZY1lwRWJjRjBQWXRoVjZROUVJY3hWRnhpbWZFWVo?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:06:02.161106",
+    "headline": "$11.2M announced for Saskatchewan businesses amid tariff pressures - DiscoverMooseJaw",
+    "norm_headline": "$11.2m announced for saskatchewan businesses amid tariff pressures",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOTExGUWZSTGhhZE5yeTdwOW5mSHRJMjktbVA3Tk5GUW9Yem1JLU5xbURpU3ZLSmJzQ0RHaHB3aW5aUGQ3Q2VVZm9fY3VrcnFkYWFuMXVpcGo1b09idkJQOWpxa25sZkpwN1V2eWg2eHdYek1vXzNaU3lsdWhHclBjR0tkX2NlZW9YenQyVzQ2bTVkeUJkaU83VGVJdXV1U1hvZlRKSTA2M3YyZw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-10-25T00:06:04.390728",
+    "headline": "Shafaq News..Oil supertanker struck while exiting Strait of Hormuz",
+    "norm_headline": "shafaq news..oil supertanker struck while exiting strait of hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWVRiTGhNTlBVdWUxMmcyT1FRTnN2VkNxWmRMbGF6Sk1hNmo1UkVIZ0szOEl5YURkZmVLNFVkLUFLcFkyNjNEb2tTSVpiUUlHQldVVEt5TVpxZENPZUdDMWRRUFJmWHYtNjg3VHBlRTBWLTM2QmJORmZNaFNnc3FOSmZ4b19XSWw2?oc=5",
     "is_anomaly": true,
     "source": "Geopolitical_Strait_of_Hormuz"
   }

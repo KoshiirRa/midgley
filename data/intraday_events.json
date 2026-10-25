@@ -6759,5 +6759,26 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.5,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-10-25T00:06:04.390728",
+    "headline": "Shafaq News..Oil supertanker struck while exiting Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWVRiTGhNTlBVdWUxMmcyT1FRTnN2VkNxWmRMbGF6Sk1hNmo1UkVIZ0szOEl5YURkZmVLNFVkLUFLcFkyNjNEb2tTSVpiUUlHQldVVEt5TVpxZENPZUdDMWRRUFJmWHYtNjg3VHBlRTBWLTM2QmJORmZNaFNnc3FOSmZ4b19XSWw2?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWVRiTGhNTlBVdWUxMmcyT1FRTnN2VkNxWmRMbGF6Sk1hNmo1UkVIZ0szOEl5YURkZmVLNFVkLUFLcFkyNjNEb2tTSVpiUUlHQldVVEt5TVpxZENPZUdDMWRRUFJmWHYtNjg3VHBlRTBWLTM2QmJORmZNaFNnc3FOSmZ4b19XSWw2?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWVRiTGhNTlBVdWUxMmcyT1FRTnN2VkNxWmRMbGF6Sk1hNmo1UkVIZ0szOEl5YURkZmVLNFVkLUFLcFkyNjNEb2tTSVpiUUlHQldVVEt5TVpxZENPZUdDMWRRUFJmWHYtNjg3VHBlRTBWLTM2QmJORmZNaFNnc3FOSmZ4b19XSWw2?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.72,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.82
+    },
+    "discord_notified": true
   }
 ]
