@@ -68,10 +68,9 @@ def validate_price_payload_freshness(payload: dict, max_allowed_hours: float = M
     payload["max_allowed_age_hours"] = max_allowed_hours
 
     if is_stale:
-        src_name = str(payload.get('source', 'Unknown'))
         logger.warning(
             f"STALE RETAIL PRICE WARNING: "
-            f"Data age is {age_hours:.1f} hours (Source: {src_name}), "
+            f"Data age is {age_hours:.1f} hours, "
             f"exceeding max staleness threshold of {max_allowed_hours:.1f} hours."
         )
     return payload
@@ -347,7 +346,7 @@ def fetch_gasbuddy_prices_by_zip(zip_code: str = "74103") -> dict:
                 if station_prices:
                     avg_price = sum(s['regular_price'] for s in station_prices) / len(station_prices)
                     logger.info(f"Fetched {len(station_prices)} GasBuddy stations. Avg Regular: ${avg_price:.3f}/gal")
-                    return {"average_price": round(avg_price, 3), "stations": station_prices, "source": f"GasBuddy GraphQL (Zip {zip_code})"}
+                    return {"average_price": round(avg_price, 3), "stations": station_prices, "source": "GasBuddy GraphQL"}
     except Exception as e:
         logger.debug(f"GasBuddy GraphQL query notice: {type(e).__name__}")
         
@@ -594,7 +593,7 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                                                  if prices:
                                                      val = float(prices[0])
                                                      if 1.50 <= val <= 8.50:
-                                                         logger.info(f"Cloudflare Browser Run matched '{kw}': ${val:.3f}/gal")
+                                                         logger.info(f"Cloudflare Browser Run matched retail price: ${val:.3f}/gal")
                                                          try:
                                                              from src.connector_telemetry import log_connector_event
                                                              log_connector_event("Cloudflare_Browser_Run", target_url, status="SUCCESS")
