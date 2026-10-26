@@ -144,7 +144,10 @@ export async function queryHindsightBank(
   const token = env?.HINDSIGHT_API_TOKEN;
   if (!token) return { matched: false, similarity: 0.0 };
 
-  const apiUrl = (env?.HINDSIGHT_API_URL || DEFAULT_HINDSIGHT_API_URL).replace(/\/+$/, "");
+  let apiUrl = (env?.HINDSIGHT_API_URL || DEFAULT_HINDSIGHT_API_URL).trim();
+  while (apiUrl.endsWith("/")) {
+    apiUrl = apiUrl.slice(0, -1);
+  }
   const bankId = env?.HINDSIGHT_DEDUPE_BANK_ID || DEFAULT_HINDSIGHT_BANK_ID;
 
   try {
@@ -189,7 +192,10 @@ export async function retainHindsightMemory(
   const token = env?.HINDSIGHT_API_TOKEN;
   if (!token || !event.headline) return false;
 
-  const apiUrl = (env?.HINDSIGHT_API_URL || DEFAULT_HINDSIGHT_API_URL).replace(/\/+$/, "");
+  let apiUrl = (env?.HINDSIGHT_API_URL || DEFAULT_HINDSIGHT_API_URL).trim();
+  while (apiUrl.endsWith("/")) {
+    apiUrl = apiUrl.slice(0, -1);
+  }
   const bankId = env?.HINDSIGHT_DEDUPE_BANK_ID || DEFAULT_HINDSIGHT_BANK_ID;
 
   const entity = event.entity || extractMatchedEntityAtEdge(event.headline) || "Energy Facility";

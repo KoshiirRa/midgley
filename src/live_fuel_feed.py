@@ -68,10 +68,9 @@ def validate_price_payload_freshness(payload: dict, max_allowed_hours: float = M
     payload["max_allowed_age_hours"] = max_allowed_hours
 
     if is_stale:
-        region = str(payload.get('region', 'Unknown'))
         src_name = str(payload.get('source', 'Unknown'))
         logger.warning(
-            f"STALE RETAIL PRICE WARNING for {region}: "
+            f"STALE RETAIL PRICE WARNING: "
             f"Data age is {age_hours:.1f} hours (Source: {src_name}), "
             f"exceeding max staleness threshold of {max_allowed_hours:.1f} hours."
         )
@@ -347,10 +346,10 @@ def fetch_gasbuddy_prices_by_zip(zip_code: str = "74103") -> dict:
                         
                 if station_prices:
                     avg_price = sum(s['regular_price'] for s in station_prices) / len(station_prices)
-                    logger.info(f"Fetched {len(station_prices)} GasBuddy stations for zip {zip_code}. Avg Regular: ${avg_price:.3f}/gal")
+                    logger.info(f"Fetched {len(station_prices)} GasBuddy stations. Avg Regular: ${avg_price:.3f}/gal")
                     return {"average_price": round(avg_price, 3), "stations": station_prices, "source": f"GasBuddy GraphQL (Zip {zip_code})"}
     except Exception as e:
-        logger.debug(f"GasBuddy GraphQL query notice for zip {zip_code}: {type(e).__name__}")
+        logger.debug(f"GasBuddy GraphQL query notice: {type(e).__name__}")
         
     return None
 
@@ -511,7 +510,7 @@ def fetch_aaa_csv_prices(region_or_state: str, is_state: bool = False) -> Option
             return fetch_aaa_csv_prices(target_state, is_state=True)
 
     except Exception as parse_err:
-        logger.debug(f"Error parsing AAA CSV for {region_or_state}: {parse_err}")
+        logger.debug(f"Error parsing AAA CSV: {parse_err}")
 
     return None
 
@@ -550,7 +549,7 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                             pass
                         return payload
         except Exception as e:
-            logger.debug(f"Cloudflare Worker Browser Run notice for {region_code}: {e}")
+            logger.debug(f"Cloudflare Worker Browser Run notice: {e}")
 
     # Option 2: Direct Cloudflare Browser Rendering REST API
     account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
@@ -595,7 +594,7 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                                                  if prices:
                                                      val = float(prices[0])
                                                      if 1.50 <= val <= 8.50:
-                                                         logger.info(f"Cloudflare Browser Run matched '{kw}' for {region_code}: ${val:.3f}/gal")
+                                                         logger.info(f"Cloudflare Browser Run matched '{kw}': ${val:.3f}/gal")
                                                          try:
                                                              from src.connector_telemetry import log_connector_event
                                                              log_connector_event("Cloudflare_Browser_Run", target_url, status="SUCCESS")
@@ -626,7 +625,7 @@ def fetch_aaa_cloudflare_browser_run(region_code: str, is_state: bool = False) -
                                                 "granularity": "STATE"
                                             }
         except Exception as e:
-            logger.debug(f"Direct Cloudflare Browser Rendering notice for {region_code}: {e}")
+            logger.debug(f"Direct Cloudflare Browser Rendering notice: {e}")
 
 
     # Local in-process fallback if Cloudflare Browser Run is not configured or failed
@@ -794,7 +793,7 @@ def fetch_live_out_of_metro_price(zip_code: str, state_code: str = "US") -> dict
         price = gb_res["average_price"]
         source = gb_res["source"]
         if not is_price_outlier(state_code, price):
-            logger.info(f"Fetched live out-of-metro observation via GasBuddy for ZIP {zip_code}: ${price:.3f}/gal")
+            logger.info(f"Fetched live out-of-metro observation via GasBuddy: ${price:.3f}/gal")
             return validate_price_payload_freshness({
                 "price": price,
                 "average_price": price,
@@ -811,7 +810,7 @@ def fetch_live_out_of_metro_price(zip_code: str, state_code: str = "US") -> dict
     if csv_res and csv_res.get("average_price") and pd.notna(csv_res.get("average_price")):
         price = csv_res["average_price"]
         if not is_price_outlier(state_code, price):
-            logger.info(f"Fetched out-of-metro fallback via AAA State CSV for {state_code}: ${price:.3f}/gal")
+            logger.info(f"Fetched out-of-metro fallback via AAA State CSV: ${price:.3f}/gal")
             return validate_price_payload_freshness({
                 "price": price,
                 "average_price": price,
@@ -828,7 +827,7 @@ def fetch_live_out_of_metro_price(zip_code: str, state_code: str = "US") -> dict
     if cf_res and cf_res.get("average_price") and pd.notna(cf_res.get("average_price")):
         price = cf_res["average_price"]
         if not is_price_outlier(state_code, price):
-            logger.info(f"Fetched out-of-metro fallback via Cloudflare Browser Run for {state_code}: ${price:.3f}/gal")
+            logger.info(f"Fetched out-of-metro fallback via Cloudflare Browser Run: ${price:.3f}/gal")
             return validate_price_payload_freshness({
                 "price": price,
                 "average_price": price,
@@ -844,7 +843,7 @@ def fetch_live_out_of_metro_price(zip_code: str, state_code: str = "US") -> dict
     eia_res = fetch_eia_or_yfinance_price(state_code)
     if eia_res and eia_res.get("average_price") and pd.notna(eia_res.get("average_price")):
         price = eia_res["average_price"]
-        logger.info(f"Fetched out-of-metro fallback via EIA for {state_code}: ${price:.3f}/gal")
+        logger.info(f"Fetched out-of-metro fallback via EIA: ${price:.3f}/gal")
         return validate_price_payload_freshness({
             "price": price,
             "average_price": price,
@@ -960,7 +959,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
             price = csv_res["average_price"]
             source = csv_res["source"]
             if not is_price_outlier(region_code, price):
-                logger.info(f"Fetched live fuel observation via AAA Daily CSV for {region_code}: ${price:.3f}/gal")
+                logger.info(f"Fetched live fuel observation via AAA Daily CSV: ${price:.3f}/gal")
                 payload = {"region": region_code, "price": price, "source": source, "timestamp": timestamp_str}
                 if csv_res.get("grades"):
                     payload["grades"] = csv_res["grades"]
@@ -973,7 +972,7 @@ def fetch_live_metro_retail_price(region_code: str = "Tulsa_OK", use_cache: bool
                 price = cf_res["average_price"]
                 source = cf_res.get("source", f"AAA Cloudflare Browser Run ({region_code})")
                 if not is_price_outlier(region_code, price):
-                    logger.info(f"Fetched live fuel observation via Cloudflare Browser Run for {region_code}: ${price:.3f}/gal")
+                    logger.info(f"Fetched live fuel observation via Cloudflare Browser Run: ${price:.3f}/gal")
                     payload = {"region": region_code, "price": price, "source": source, "timestamp": timestamp_str}
                     if cf_res.get("grades"):
                         payload["grades"] = cf_res["grades"]
