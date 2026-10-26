@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-26T05:31:50.289305",
+  "timestamp": "2026-10-26T12:33:12.954261",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,17 +8,17 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.436,
-    "source": "AAA Metro Daily CSV (Cincinnati (OH only), OH)",
+    "current_price_per_gal": 4.417,
+    "source": "AAA Web Scraper (Cincinnati, OH)",
     "provenance": {
-      "source": "AAA Metro Daily CSV (Cincinnati (OH only), OH)",
+      "source": "AAA Web Scraper (Cincinnati, OH)",
       "region_id": "Cincinnati_OH",
       "padd": "PADD 2",
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-26T05:31:09Z"
+      "timestamp": "2026-10-26T12:32:54Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-30",
-    "current_base_price": 4.436,
-    "predicted_price_per_gal": 4.436,
+    "current_base_price": 4.417,
+    "predicted_price_per_gal": 4.417,
     "expected_change_dollars": 0.0,
     "expected_change_percent": 0.0,
     "projected_direction": "FLAT",
-    "prediction_lower_95ci": 4.316,
-    "prediction_upper_95ci": 4.556,
+    "prediction_lower_95ci": 4.297,
+    "prediction_upper_95ci": 4.537,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 4.436,
-    "day_2_price": 4.436,
-    "day_3_price": 4.436,
-    "day_4_price": 4.436,
-    "day_5_price": 4.436,
+    "day_1_price": 4.417,
+    "day_2_price": 4.417,
+    "day_3_price": 4.417,
+    "day_4_price": 4.417,
+    "day_5_price": 4.417,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
