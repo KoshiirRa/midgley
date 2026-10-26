@@ -90,6 +90,8 @@ def save_catalog_state(state: dict):
 
 def fetch_catalog_content(url: str) -> str:
     """Fetches raw text content from the catalog URL."""
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_ALLOW_NETWORK") != "1":
+        return ""
     try:
         headers = {"User-Agent": "Midgley-Catalog-Monitor/1.0"}
         req = urllib.request.Request(url, headers=headers)
@@ -313,44 +315,112 @@ def infer_issue_domain_labels(eval_res: dict, item: dict) -> list:
     return list(dict.fromkeys(labels))
 
 
-def check_existing_issue(title: str, item_url: str) -> bool:
-    """Checks if an issue (open or closed) for this item/title or URL already exists on the repo."""
+AUDIT_REPOSITORIES = [
+    "KoshiirRa/midgley",
+    "KoshiirRa/agentic-trading-robinhood",
+]
+
+_EXISTING_ISSUES_CACHE = None
+
+
+def clear_existing_issues_cache():
+    """Clears the existing issues in-memory cache (useful for testing or after issue creation)."""
+    global _EXISTING_ISSUES_CACHE
+    _EXISTING_ISSUES_CACHE = None
+
+
+def get_existing_issues_cache(force_refresh: bool = False) -> list:
+    """
+    Fetches and caches open and closed issues across target repositories
+    (KoshiirRa/midgley and companion repos like KoshiirRa/agentic-trading-robinhood)
+    to prevent duplicate issue creation across runs or when issues are moved.
+    """
+    global _EXISTING_ISSUES_CACHE
+    if _EXISTING_ISSUES_CACHE is not None and not force_refresh:
+        return _EXISTING_ISSUES_CACHE
+
+    if os.environ.get("TESTING") == "1" and os.environ.get("TEST_ALLOW_SUBPROCESS") != "1":
+        _EXISTING_ISSUES_CACHE = []
+        return _EXISTING_ISSUES_CACHE
+
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    all_issues = []
+
+    for repo in AUDIT_REPOSITORIES:
+        fetched_for_repo = False
+        try:
+            cmd = ["gh", "issue", "list", "--repo", repo, "--state", "all", "--limit", "1000", "--json", "number,title,state,body"]
+            env = dict(os.environ)
+            if token:
+                env["GH_TOKEN"] = token
+                env["GITHUB_TOKEN"] = token
+            res = subprocess.run(
+                cmd, capture_output=True, text=True, check=True, env=env, encoding="utf-8", errors="replace"
+            )
+            issues = json.loads(res.stdout.strip())
+            for iss in issues:
+                iss["repo"] = repo
+            all_issues.extend(issues)
+            fetched_for_repo = True
+        except Exception as e:
+            logger.debug(f"Notice checking existing issues via gh CLI for {repo} ({e}).")
+
+        if fetched_for_repo or not token:
+            continue
+
+        try:
+            api_url = f"https://api.github.com/repos/{repo}/issues?state=all&per_page=100"
+            headers = {
+                "Accept": "application/vnd.github.v3+json",
+                "Authorization": f"Bearer {token}",
+                "User-Agent": "Midgley-Catalog-Monitor"
+            }
+            req = urllib.request.Request(api_url, headers=headers)
+            with urllib.request.urlopen(req, timeout=15) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                for iss in res_data:
+                    iss["repo"] = repo
+                all_issues.extend(res_data)
+        except Exception as e:
+            logger.debug(f"Notice checking existing issues via REST API for {repo} ({e}).")
+
+    _EXISTING_ISSUES_CACHE = all_issues
+    return _EXISTING_ISSUES_CACHE
+
+
+def check_existing_issue(title: str, item_url: str, item_title: str = "") -> bool:
+    """Checks if an issue (open or closed) for this item/title or URL already exists across midgley and companion repos."""
     clean_title = title.lower().strip()
-    try:
-        cmd = ["gh", "issue", "list", "--repo", "KoshiirRa/midgley", "--state", "all", "--limit", "300", "--json", "number,title,state"]
-        env = dict(os.environ)
-        if token:
-            env["GH_TOKEN"] = token
-            env["GITHUB_TOKEN"] = token
-        res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
-        issues = json.loads(res.stdout.strip())
-        for iss in issues:
-            if clean_title == iss.get("title", "").lower().strip():
-                logger.info(f"Existing issue ({iss.get('state')}) found matching '{title}': #{iss['number']}. Skipping creation.")
-                return True
-    except Exception as e:
-        logger.debug(f"Notice checking existing issues via gh CLI ({e}).")
+    clean_url = (item_url or "").rstrip("/").lower()
 
-    if not token:
-        return False
+    tool_name = item_title.lower().strip() if item_title else ""
+    if not tool_name:
+        match = re.search(r"ingest\s+([^\(\n]+)", clean_title)
+        if match:
+            tool_name = match.group(1).strip()
 
-    try:
-        api_url = "https://api.github.com/repos/KoshiirRa/midgley/issues?state=all&per_page=100"
-        headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": f"Bearer {token}",
-            "User-Agent": "Midgley-Catalog-Monitor"
-        }
-        req = urllib.request.Request(api_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=15) as response:
-            res_data = json.loads(response.read().decode("utf-8"))
-            for iss in res_data:
-                if clean_title == iss.get("title", "").lower().strip():
-                    logger.info(f"Existing issue ({iss.get('state')}) found matching '{title}' via REST API: #{iss.get('number')}. Skipping creation.")
-                    return True
-    except Exception as e:
-        logger.debug(f"Notice checking existing issues via REST API ({e}).")
+    issues = get_existing_issues_cache()
+    for iss in issues:
+        iss_title = (iss.get("title") or "").lower().strip()
+        iss_body = (iss.get("body") or "").lower()
+        repo = iss.get("repo", "KoshiirRa/midgley")
+        num = iss.get("number")
+        state = iss.get("state")
+
+        # 1. Exact title match
+        if clean_title == iss_title:
+            logger.info(f"Existing issue ({state}) found on {repo} matching title '{title}': #{num}. Skipping creation.")
+            return True
+
+        # 2. Tool name match in ingestion title
+        if tool_name and f"ingest {tool_name}" in iss_title:
+            logger.info(f"Existing issue ({state}) found on {repo} matching tool '{tool_name}' in title '{iss.get('title')}': #{num}. Skipping creation.")
+            return True
+
+        # 3. Item URL match in issue body or title
+        if clean_url and (clean_url in iss_body or clean_url in iss_title):
+            logger.info(f"Existing issue ({state}) found on {repo} matching URL '{item_url}' in #{num}: '{iss.get('title')}'. Skipping creation.")
+            return True
 
     return False
 
@@ -364,7 +434,7 @@ def open_github_issue_for_item(item: dict, eval_res: dict, dry_run: bool = False
     labels_str = ",".join(labels)
     title = f"[Feature Request] Ingest {item['title']} ({eval_res['category']})"
 
-    if not dry_run and check_existing_issue(title, item['url']):
+    if not dry_run and check_existing_issue(title, item.get('url', ''), item.get('title', '')):
         return ""
 
     body = f"""## Summary
@@ -402,11 +472,21 @@ Automatically discovered new candidate tool **[{item['title']}]({item['url']})**
             env["GITHUB_TOKEN"] = token
 
         cmd = ["gh", "issue", "create", "--repo", "KoshiirRa/midgley", "--title", title, "--body-file", issue_file, "--label", labels_str]
-        res = subprocess.run(cmd, capture_output=True, text=True, check=True, env=env)
+        res = subprocess.run(
+            cmd, capture_output=True, text=True, check=True, env=env, encoding="utf-8", errors="replace"
+        )
         url = res.stdout.strip()
         if os.path.exists(issue_file):
             os.remove(issue_file)
         logger.info(f"GitHub issue created via gh CLI: {url} with labels [{labels_str}]")
+        if _EXISTING_ISSUES_CACHE is not None:
+            _EXISTING_ISSUES_CACHE.append({
+                "number": int(url.split("/")[-1]) if "/" in url and url.split("/")[-1].isdigit() else None,
+                "title": title,
+                "body": body,
+                "state": "OPEN",
+                "repo": "KoshiirRa/midgley"
+            })
         return url
     except Exception as e:
         logger.warning(f"gh CLI issue creation notice ({e}). Trying REST API fallback...")

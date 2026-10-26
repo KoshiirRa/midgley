@@ -255,20 +255,36 @@ def load_live_regional_intraday_events(region_name: str, max_age_days: int = 30,
         reg_key = region_name.lower().replace("_", "").replace("metro", "").strip()
         is_national = (reg_key == "national")
 
-        # Regional geographic and refining hub keyword taxonomy (Issue #428)
+        # Regional geographic and refining hub keyword taxonomy (Issue #428, #659)
         REGIONAL_KEYWORDS = {
             "tulsa": ["tulsa", "oklahoma", "cushing", "hollyfrontier", "hf sinclair", "midcontinent"],
-            "newark": ["newark", "delaware", "padd 1b", "delaware city", "philadelphia", "paulsboro", "pbf energy"],
-            "cincinnati": ["cincinnati", "ohio", "kentucky", "tri-state", "marathon catlettsburg", "ohio river"],
-            "greenville": ["greenville", "north carolina", "colonial pipeline", "padd 1c", "plantation pipeline"],
-            "charlotte": ["charlotte", "north carolina", "colonial pipeline", "padd 1c", "plantation pipeline"],
-            "oakland": ["oakland", "san francisco", "bay area", "richmond", "chevron richmond", "martinez", "valero benicia", "padd 5", "carbob", "phillips 66 rodeo"],
-            "bayarea": ["oakland", "san francisco", "bay area", "richmond", "chevron richmond", "martinez", "valero benicia", "padd 5", "carbob", "phillips 66 rodeo"],
-            "portstlucie": ["port st lucie", "florida", "port everglades", "tampa", "straits of florida", "waterborne terminal"]
+            "newark": ["newark", "delaware", "padd 1b", "delaware city", "philadelphia", "paulsboro", "pbf energy", "new jersey", "pennsylvania"],
+            "cincinnati": ["cincinnati", "ohio", "kentucky", "tri-state", "marathon catlettsburg", "ohio river", "midwest", "ohio valley"],
+            "chicago": ["chicago", "illinois", "indiana", "michigan", "wisconsin", "detroit", "whiting", "lemont", "joliet", "great lakes", "midwest", "bp whiting", "citgo lemont"],
+            "greenville": ["greenville", "north carolina", "south carolina", "colonial pipeline", "padd 1c", "plantation pipeline"],
+            "charlotte": ["charlotte", "north carolina", "south carolina", "colonial pipeline", "padd 1c", "plantation pipeline", "carolinas"],
+            "oakland": ["oakland", "san francisco", "bay area", "richmond", "chevron richmond", "martinez", "valero benicia", "padd 5", "carbob", "phillips 66 rodeo", "california"],
+            "bayarea": ["oakland", "san francisco", "bay area", "richmond", "chevron richmond", "martinez", "valero benicia", "padd 5", "carbob", "phillips 66 rodeo", "california"],
+            "portstlucie": ["port st lucie", "florida", "port everglades", "tampa", "straits of florida", "waterborne terminal"],
+            "houston": ["houston", "texas", "gulf coast", "baytown", "port arthur", "deer park", "texas city", "motiva", "padd 3", "usgc"],
+            "losangeles": ["los angeles", "el segundo", "torrance", "carson", "wilmington", "socal", "scaqmd", "california", "carbob"],
+            "denver": ["denver", "colorado", "suncor", "commerce city", "padd 4", "rocky mountain", "wyoming"],
+            "newyork": ["new york", "ny harbor", "bayway", "long island", "buckeye", "padd 1b"],
+            "seattle": ["seattle", "washington", "puget sound", "olympic pipeline", "cherry point", "ferndale", "pnw", "pacific northwest", "oregon"],
+            "phoenix": ["phoenix", "arizona", "maricopa", "sfpp", "desert southwest", "nevada"],
+            "anchorage": ["anchorage", "alaska", "kenai", "taps", "cook inlet"],
+            "honolulu": ["honolulu", "hawaii", "oahu", "kapolei", "par hawaii"],
+            "guam": ["guam", "mops", "apra harbor", "marianas"],
+            "sanjuan": ["san juan", "puerto rico", "daco", "caribbean", "capeco"],
+            "boston": ["boston", "massachusetts", "new england", "irving oil", "padd 1a", "maine", "new hampshire", "vermont", "rhode island", "connecticut"]
         }
         regional_tokens = REGIONAL_KEYWORDS.get(reg_key, [reg_key])
 
         for ev in events:
+            # Issue #258 / #623: Suppress duplicate follow-up catalysts and pending reviews
+            if ev.get("pending_review") or ev.get("review_decision") == "duplicate" or ev.get("is_duplicate"):
+                continue
+
             ts_str = ev.get("timestamp", "")
             try:
                 dt = datetime.fromisoformat(ts_str).replace(tzinfo=None) if ts_str else now

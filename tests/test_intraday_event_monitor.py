@@ -142,6 +142,26 @@ class TestIntradayEventMonitor(unittest.TestCase):
         t_la = self.monitor.resolve_target_locales("Chevron El Segundo Refinery reports FCC trip triggering SCAQMD flaring alert in Los Angeles")
         self.assertEqual(t_la, ["Los_Angeles"])
 
+        # Test Denver locale routing via Suncor (Issue #644)
+        t_denver = self.monitor.resolve_target_locales("SU 8-K: Unplanned outage at Commerce City refinery")
+        self.assertEqual(t_denver, ["Denver"])
+
+        # Test Honolulu locale routing via Par Pacific (Issue #644)
+        t_honolulu = self.monitor.resolve_target_locales("PARR 8-K: Crude distillation unit shutdown at Kapolei")
+        self.assertEqual(t_honolulu, ["Honolulu"])
+
+        # Test Tulsa locale routing via Delek (Issue #644)
+        t_delek = self.monitor.resolve_target_locales("DK 8-K: Coker unit explosion at Tyler refinery")
+        self.assertEqual(t_delek, ["Tulsa"])
+
+        # Test Carolinas locale routing via Kinder Morgan Plantation Pipeline (Issue #644)
+        t_kmi = self.monitor.resolve_target_locales("KMI 8-K: Plantation pipeline spill halts line 1 deliveries in Carolinas")
+        self.assertEqual(t_kmi, ["Charlotte", "Greenville"])
+
+        # Test Houston locale routing via Enterprise Products TEPPCO (Issue #644)
+        t_epd = self.monitor.resolve_target_locales("EPD 8-K: TEPPCO pipeline terminal shut-in along USGC")
+        self.assertEqual(t_epd, ["Houston"])
+
         # Test Default National routing
         t_nat = self.monitor.resolve_target_locales("OPEC Announces Emergency Production Quota Cut")
         self.assertEqual(t_nat, ["National"])
@@ -246,6 +266,25 @@ class TestIntradayEventMonitor(unittest.TestCase):
         is_anomaly3, scores3 = self.monitor.evaluate_headline_anomaly(h3)
         self.assertFalse(is_anomaly3)
         self.assertEqual(scores3["overall_price_pressure"], 0.0)
+
+    def test_evaluate_headline_retrospective_recap_filtering_issue_658(self):
+        """Verifies Issue #658 monthly retrospective statistical recaps are filtered before triggering LLM inference."""
+        h_658 = "October Marks Highest Number of Strait of Hormuz Attacks"
+        is_anomaly, scores = self.monitor.evaluate_headline_anomaly(h_658)
+        self.assertFalse(is_anomaly, f"Retrospective monthly recap should be filtered: {h_658}")
+        self.assertEqual(scores["overall_price_pressure"], 0.0)
+
+        h_month = "September saw record refinery maintenance across European hubs"
+        is_anomaly_month, _ = self.monitor.evaluate_headline_anomaly(h_month)
+        self.assertFalse(is_anomaly_month)
+
+        h_year = "Year in review: crude oil supply shocks and tanker disruptions of 2026"
+        is_anomaly_year, _ = self.monitor.evaluate_headline_anomaly(h_year)
+        self.assertFalse(is_anomaly_year)
+
+        h_recap = "Monthly recap: gasoline retail pricing trends and pipeline flows"
+        is_anomaly_recap, _ = self.monitor.evaluate_headline_anomaly(h_recap)
+        self.assertFalse(is_anomaly_recap)
 
     def test_evaluate_headline_energy_tariff_inclusion(self):
         # Energy-specific tariff headlines must still trigger Stage 1 evaluation
@@ -364,6 +403,33 @@ class TestIntradayEventMonitor(unittest.TestCase):
                 self.assertEqual(f["status"], "HEALTHY")
                 self.assertEqual(f["item_count"], 2)
 
+    @patch("urllib.request.urlopen")
+    def test_edgar_atom_feed_test_isolation_mocking(self, mock_urlopen):
+        """Verifies Issue #644 invariant: in TESTING=1, Atom responses use synthetic fixtures without real network calls."""
+        from src.edgar_8k_monitor import EDGAR8KMonitor
+        mock_atom = b"""<?xml version="1.0" encoding="utf-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>EDGAR 8-K Feed</title>
+            <entry>
+                <id>0001193125-26-000001</id>
+                <title>8-K: Unplanned refinery FCC outage at Commerce City</title>
+                <link href="https://www.sec.gov/Archives/edgar/data/000001/doc.htm"/>
+                <updated>2026-10-24T12:00:00Z</updated>
+            </entry>
+        </feed>"""
+        mock_resp = MagicMock()
+        mock_resp.getcode.return_value = 200
+        mock_resp.read.return_value = mock_atom
+        mock_resp.__enter__.return_value = mock_resp
+        mock_urlopen.return_value = mock_resp
+
+        monitor = EDGAR8KMonitor(tickers=["SU"])
+        entries = monitor._fetch_atom_entries("SU")
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["accession_id"], "0001193125-26-000001")
+        self.assertIn("Commerce City", entries[0]["title"])
+        mock_urlopen.assert_called_once()
+
 
 
     @patch("src.intraday_event_monitor.extract_event_features_llm")
@@ -432,6 +498,33 @@ class TestIntradayEventMonitor(unittest.TestCase):
         locs_midcont = self.monitor.resolve_target_locales("Midcontinent refinery outage threatens regional fuel stocks")
         self.assertIn("Cincinnati", locs_midcont)
         self.assertIn("Tulsa", locs_midcont)
+
+    def test_resolve_target_locales_issue_659_midwest_refinery_outage(self):
+        """Verifies Issue #659 headline routes to PADD 2 regional metro hubs rather than defaulting to National."""
+        headline = "Michigan, Ohio Gas Prices Jump Again as Illinois Refinery Outage Ripples Through Midwest - marketscreener.com"
+        targets = self.monitor.resolve_target_locales(headline)
+        self.assertIn("Chicago", targets)
+        self.assertIn("Cincinnati", targets)
+        self.assertNotIn("National", targets)
+
+    def test_resolve_target_locales_padd2_state_coverage(self):
+        """Verifies state-level and regional PADD 2 corridor keywords route to Chicago and Cincinnati."""
+        t_il = self.monitor.resolve_target_locales("Illinois refinery flaring halts output")
+        self.assertIn("Chicago", t_il)
+
+        t_mi = self.monitor.resolve_target_locales("Michigan fuel distribution terminals report inventory draw")
+        self.assertIn("Chicago", t_mi)
+
+        t_oh = self.monitor.resolve_target_locales("Ohio retail gasoline averages surge 10 cents")
+        self.assertIn("Cincinnati", t_oh)
+
+        t_gl = self.monitor.resolve_target_locales("Great Lakes fuel supply tightened by seasonal maintenance")
+        self.assertIn("Chicago", t_gl)
+        self.assertIn("Cincinnati", t_gl)
+
+        t_mw = self.monitor.resolve_target_locales("Midwest gas prices jump following regional pipeline delay")
+        self.assertIn("Chicago", t_mw)
+        self.assertIn("Cincinnati", t_mw)
 
     @patch("src.intraday_event_monitor.send_duplicate_review_discord_notification")
     def test_duplicate_holding_for_operator_review(self, mock_discord_review):

@@ -9,7 +9,7 @@ profiles under data/regional_metadata/.
 import os
 import json
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -113,16 +113,48 @@ def get_regional_metadata(region_id: str) -> Dict[str, Any]:
 def list_all_regional_metadata() -> Dict[str, Dict[str, Any]]:
     """
     Scans data/regional_metadata/ and returns a dictionary mapping region_id -> metadata profile.
+    Excludes non-metro reference catalogs (such as EIA-820 refinery registries).
     """
     result = {}
     if not os.path.exists(REGIONAL_METADATA_DIR):
         return result
 
     for fname in os.listdir(REGIONAL_METADATA_DIR):
-        if fname.endswith(".json"):
+        if fname.endswith(".json") and not fname.startswith("eia_") and not fname.startswith("refiner"):
             region_id = fname[:-5]
             result[region_id] = get_regional_metadata(region_id)
     return result
+
+
+def get_padd3_refineries() -> List[Dict[str, Any]]:
+    """
+    Loads and returns the list of EIA-820 PADD 3 Gulf Coast operating refineries,
+    including geographic coordinates (latitude, longitude), company, facility name,
+    subregion, and operable crude distillation capacity (bpd).
+    """
+    json_path = os.path.join(REGIONAL_METADATA_DIR, "eia_820_padd3_refineries.json")
+    if not os.path.exists(json_path):
+        logger.warning(f"EIA-820 PADD 3 refinery catalog not found at {json_path}.")
+        return []
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            catalog = json.load(f)
+            return catalog.get("refineries", [])
+    except Exception as e:
+        logger.error(f"Error loading EIA-820 PADD 3 refinery catalog: {e}")
+        return []
+
+
+def get_padd3_total_refinery_capacity_bpd() -> int:
+    """
+    Returns the total operable crude distillation capacity (bpd) for all registered
+    PADD 3 Gulf Coast refineries in the EIA-820 catalog.
+    """
+    refineries = get_padd3_refineries()
+    if refineries:
+        return sum(r.get("operable_capacity_bpd", 0) for r in refineries)
+    return 7818100
+
 
 
 def render_regional_driver_cards_html(region_id: str) -> str:

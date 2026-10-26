@@ -45,6 +45,15 @@ def mock_intraday_events(tmp_path):
             "supply_disruption": 0.60,
             "geopolitical_risk": 0.80,
             "target_locales": ["National"]
+        },
+        {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "headline": "Michigan, Ohio Gas Prices Jump Again as Illinois Refinery Outage Ripples Through Midwest",
+            "source": "RSS_Feed",
+            "overall_price_pressure": 0.42,
+            "supply_disruption": 0.55,
+            "geopolitical_risk": 0.0,
+            "target_locales": ["Chicago", "Cincinnati"]
         }
     ]
     
@@ -64,9 +73,15 @@ def test_load_live_regional_intraday_events(mock_intraday_events):
     
     events_cincinnati = load_live_regional_intraday_events(region_name="Cincinnati", events_path=mock_intraday_events)
     assert isinstance(events_cincinnati, pd.DataFrame)
-    assert len(events_cincinnati) == 1  # Cincinnati-specific
+    assert len(events_cincinnati) == 2  # Cincinnati-specific Ohio River + Midwest/Ohio shock
     headlines_cincinnati = events_cincinnati["headline"].tolist()
     assert any("Ohio River" in h for h in headlines_cincinnati)
+    assert any("Illinois Refinery Outage" in h for h in headlines_cincinnati)
+
+    events_chicago = load_live_regional_intraday_events(region_name="Chicago", events_path=mock_intraday_events)
+    assert isinstance(events_chicago, pd.DataFrame)
+    assert len(events_chicago) == 1  # Chicago gets Midwest/Illinois shock
+    assert "Illinois Refinery Outage" in events_chicago.iloc[0]["headline"]
     
     events_national = load_live_regional_intraday_events(region_name="National", events_path=mock_intraday_events)
     assert isinstance(events_national, pd.DataFrame)

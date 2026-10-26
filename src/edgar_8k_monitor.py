@@ -16,6 +16,7 @@ import json
 import logging
 import defusedxml.ElementTree as ET
 from html.parser import HTMLParser
+import urllib.request
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 from typing import Dict, List, Optional, Any
@@ -27,7 +28,9 @@ logger = logging.getLogger(__name__)
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_TICKERS: List[str] = ["PBF", "DINO", "MPC", "VLO", "PSX"]
+DEFAULT_TICKERS: List[str] = [
+    "PBF", "DINO", "MPC", "VLO", "PSX", "XOM", "CVX", "SU", "PARR", "DK", "KMI", "EPD"
+]
 
 EDGAR_ATOM_URL = (
     "https://www.sec.gov/cgi-bin/browse-edgar"
@@ -44,6 +47,7 @@ OPERATIONAL_KEYWORDS: List[str] = [
     "shutdown", "capacity reduction", "unit", "turnaround", "fcc",
     "crude distillation", "hydrocracker", "coker", "refinery",
     "pipeline", "leak", "spill", "environmental", "flaring",
+    "upset", "hurricane",
     "evacuation", "accident", "incident", "disruption",
 ]
 
@@ -144,7 +148,7 @@ class EDGAR8KMonitor:
         """Fetch a URL with the SEC User-Agent header."""
         req = Request(url, headers={"User-Agent": self.user_agent})
         try:
-            with urlopen(req, timeout=15) as resp:
+            with urllib.request.urlopen(req, timeout=15) as resp:
                 return resp.read().decode("utf-8", errors="replace")
         except HTTPError as e:
             logger.warning(f"[EDGAR8K] HTTP {e.code} fetching {url}")

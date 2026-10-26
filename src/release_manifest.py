@@ -83,6 +83,48 @@ def generate_release_manifest() -> Dict[str, Any]:
                     "default": "data/subscribers.sqlite",
                     "required": False,
                     "description": "Optional override path for the SQLite subscriber database."
+                },
+                {
+                    "name": "EDGAR_8K_TICKERS",
+                    "default": "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD",
+                    "required": False,
+                    "description": "Comma-separated list of refinery and midstream operator stock tickers for SEC EDGAR 8-K monitoring."
+                },
+                {
+                    "name": "CLOUDFLARE_ACCOUNT_ID",
+                    "default": "",
+                    "required": False,
+                    "description": "Cloudflare account identifier for Workers Browser Rendering and Browser Run operations."
+                },
+                {
+                    "name": "CLOUDFLARE_API_TOKEN",
+                    "default": "",
+                    "required": False,
+                    "description": "Cloudflare API token with Browser Rendering, Workers, D1, and Vectorize permissions."
+                },
+                {
+                    "name": "CLOUDFLARE_BROWSER_RUN_URL",
+                    "default": "",
+                    "required": False,
+                    "description": "Optional deployed Cloudflare Worker endpoint for edge browser rendering."
+                },
+                {
+                    "name": "FLAG_SIGNING_KEY",
+                    "default": "",
+                    "required": False,
+                    "description": "HMAC secret key for signing Discord review button callback URLs."
+                },
+                {
+                    "name": "HINDSIGHT_API_TOKEN",
+                    "default": "",
+                    "required": False,
+                    "description": "Bearer token for authenticating with Hindsight SaaS episodic memory banks."
+                },
+                {
+                    "name": "HINDSIGHT_DEDUPE_BANK_ID",
+                    "default": "midgley-event-dedupe",
+                    "required": False,
+                    "description": "Hindsight episodic memory bank identifier for cross-environment deduplication."
                 }
             ],
             "deprecated": []
@@ -128,6 +170,16 @@ def generate_release_manifest() -> Dict[str, Any]:
                 "id": "20261012_add_unmapped_zip_telemetry",
                 "description": "Adds persistent cross-run out-of-metro ZIP code query demand tracking table",
                 "automatic": True
+            },
+            {
+                "id": "20261022_create_edgar_8k_seen_table",
+                "description": "Adds permanent edge deduplication table for SEC EDGAR 8-K filings in Cloudflare D1",
+                "automatic": True
+            },
+            {
+                "id": "20261024_create_queue_dlq_records_table",
+                "description": "Adds dead-letter queue records table for Cloudflare Queue batch consumption triage in Cloudflare D1",
+                "automatic": True
             }
         ],
         "agent_action_items": [
@@ -140,12 +192,19 @@ def generate_release_manifest() -> Dict[str, Any]:
 
 
 def save_release_manifest(filepath: str = MANIFEST_FILE_PATH) -> str:
-    """Compiles and writes RELEASE_MANIFEST.json to disk."""
+    """Compiles and writes RELEASE_MANIFEST.json and docs/api/v1/system/releases/latest.json to disk."""
     manifest = generate_release_manifest()
     try:
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(manifest, f, indent=2)
         logger.info(f"Generated release manifest at {filepath}")
+
+        # Also write static endpoint for GitHub Pages / docs
+        static_api_path = os.path.join(PROJECT_ROOT, "docs", "api", "v1", "system", "releases", "latest.json")
+        os.makedirs(os.path.dirname(static_api_path), exist_ok=True)
+        with open(static_api_path, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2)
+        logger.info(f"Generated static API release manifest at {static_api_path}")
     except Exception as e:
         logger.error(f"Failed to write release manifest to {filepath}: {e}")
     return filepath

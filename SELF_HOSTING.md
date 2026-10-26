@@ -189,10 +189,12 @@ CARTO_API_KEY=""
 MIDGLEY_BASEMAP_TILE_URL=""
 
 # Comma-separated list of refinery operator tickers to monitor for 8-K filings.
-# Default covers PBF Energy, HF Sinclair, Marathon Petroleum, Valero, Phillips 66.
+# Default covers Tier-1 & Tier-2 operators and midstream pipelines: PBF Energy, HF Sinclair,
+# Marathon Petroleum, Valero, Phillips 66, ExxonMobil, Chevron, Suncor, Par Pacific, Delek,
+# Kinder Morgan, Enterprise Products.
 # Cloudflare Worker production: set EDGAR_8K_TICKERS in wrangler.toml [vars].
 # Add additional tickers for non-default supplying refineries (see §7 Prompt 3).
-EDGAR_8K_TICKERS="PBF,DINO,MPC,VLO,PSX"
+EDGAR_8K_TICKERS="PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD"
 ```
 
 ---
@@ -255,6 +257,32 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    ```bash
    python3 -m src.lookup_cache --test-cloudflare
    ```
+
+
+### Option C: Direct Database TCP Connections via Cloudflare Hyperdrive (Issue #641)
+For high-performance prediction ledger lookups, distributed rate-limit advisory locking, and sub-15ms edge database latency, connect edge workers directly to a centralized PostgreSQL instance (such as self-hosted PostgreSQL on `dev-vm`, Supabase, or Neon) using **Cloudflare Hyperdrive**:
+
+1. Create a Hyperdrive connection configuration pointing to your origin PostgreSQL database:
+   ```bash
+   npx wrangler hyperdrive create midgley-postgres-hyperdrive \
+     --connection-string="postgres://USER:PASSWORD@HOST:5432/DBNAME"
+   ```
+2. Bind Hyperdrive in `wrangler.cache.toml`:
+   ```toml
+   compatibility_flags = ["nodejs_compat"]
+
+   [[hyperdrive]]
+   binding = "PROD_DB"
+   id = "<HYPERDRIVE_ID>"
+   ```
+3. Deploy the worker:
+   ```bash
+   npx wrangler deploy --config wrangler.cache.toml
+   ```
+4. **Defensive Multi-Tier Fallback**:
+   The worker transparently manages connection lifecycle:
+   $\\text{Client Request} \\longrightarrow \\text{Hyperdrive (Direct TCP / postgres.js)} \\xrightarrow{\\text{Socket Failure / Timeout}} \\text{Cloudflare D1 (env.DB)} \\xrightarrow{\\text{Offline}} \\text{In-Memory}$
+   If TCP connection fails or times out (>5s), the worker automatically falls back to Cloudflare D1 without throwing 500 errors to callers, logging telemetry to Axiom and Sentry.
 
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
 1. Validate TypeScript types and run automated Worker test suite:
@@ -854,7 +882,7 @@ Research and specify:
 4. Logistics & Power Grid Risk Factors: Historical vulnerability to pipeline leaks, refinery fires, marine congestion, and electric power grid vulnerability—specifically identifying the EIA-930 Electric Grid Balancing Authority (BA) / RTO (e.g., ERCOT, MISO, PJM, CAISO, SWPP, SOCO, TVA, NYIS, ISNE) powering the supplying refineries and pipeline pump stations.
 5. Metro Centroid & Spatial Buffer Anchor: Representative metro geographic coordinates (WGS84 latitude, longitude), primary 5-digit ZIP code, and approximate pipeline/haul distance (miles) to the primary supplying refinery or distribution rack hub (for GeoPandas spatial distance-decay modeling in `src/spatial_refinery.py`).
 6. Fence-Line Air Quality & Industrial Emissions Monitoring (PurpleAir & OpenAQ): Identify fence-line air quality monitoring networks within a 15 km radius downwind of supplying refineries (e.g. PurpleAir optical sensor groups, OpenAQ municipal stations, EPA AirNow station ID) monitoring PM2.5, PM10, SO2, and NO2 to capture early flaring and unplanned FCC unit outage signals in `src/aqi_feed.py`.
-7. SEC EDGAR Refinery Operator Monitoring (Issue #129): Identify the publicly traded refinery operators (NYSE/NASDAQ tickers) whose refinery assets directly supply [TARGET METRO CITY, STATE]. Cross-reference against the default `EDGAR_8K_TICKERS` list (`PBF`, `DINO`, `MPC`, `VLO`, `PSX`). If the primary supplying refinery is owned by an operator NOT in the default list (e.g., Delek Group `DKL`, Calumet `CLMT`, Par Pacific `PARR`, or Ergon for a mid-continent or rural region), document the ticker so it can be appended to `EDGAR_8K_TICKERS` in `wrangler.toml` (Cloudflare Worker production) or `.env` (local deployment). This ensures the EDGAR 8-K Refinery Operator Monitor (`src/edgar_8k_monitor.py` / `workers/intraday_monitor_worker.ts`) captures unplanned operational disclosures from the refineries directly supplying the new metro region.
+7. SEC EDGAR Refinery Operator Monitoring (Issue #129, #644): Identify the publicly traded refinery operators (NYSE/NASDAQ tickers) whose refinery assets directly supply [TARGET METRO CITY, STATE]. Cross-reference against the default `EDGAR_8K_TICKERS` list (`PBF`, `DINO`, `MPC`, `VLO`, `PSX`, `XOM`, `CVX`, `SU`, `PARR`, `DK`, `KMI`, `EPD`). If the primary supplying refinery is owned by an operator NOT in the default list (e.g., Delek Group `DKL`, Calumet `CLMT`, or Ergon for a mid-continent or rural region), document the ticker so it can be appended to `EDGAR_8K_TICKERS` in `wrangler.toml` (Cloudflare Worker production) or `.env` (local deployment). This ensures the EDGAR 8-K Refinery Operator Monitor (`src/edgar_8k_monitor.py` / `workers/intraday_monitor_worker.ts`) captures unplanned operational disclosures from the refineries directly supplying the new metro region.
 
 Format the output clearly for integration into a machine learning feature engineering pipeline.
 ```

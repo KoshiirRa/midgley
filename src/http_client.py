@@ -113,11 +113,15 @@ def http_get(
     headers: Optional[Dict[str, str]] = None,
     timeout: Optional[Union[float, Tuple[float, float]]] = None,
     session: Optional[requests.Session] = None,
+    user_agent: Optional[str] = None,
     **kwargs
 ) -> requests.Response:
     """Convenience wrapper for performant GET requests using unified session."""
     s = session or get_global_session()
     req_headers = dict(headers or {})
+    ua = user_agent or kwargs.pop("user_agent", None)
+    if ua:
+        req_headers["User-Agent"] = ua
     return s.get(url, params=params, headers=req_headers, timeout=timeout or DEFAULT_TIMEOUT, **kwargs)
 
 
@@ -128,9 +132,14 @@ def http_post(
     headers: Optional[Dict[str, str]] = None,
     timeout: Optional[Union[float, Tuple[float, float]]] = None,
     session: Optional[requests.Session] = None,
+    user_agent: Optional[str] = None,
     **kwargs
 ) -> requests.Response:
     """Convenience wrapper for performant POST requests using unified session."""
     s = session or get_global_session()
     req_headers = dict(headers or {})
+    ua = user_agent or kwargs.pop("user_agent", None)
+    if ua:
+        req_headers["User-Agent"] = ua
     return s.post(url, data=data, json=json, headers=req_headers, timeout=timeout or DEFAULT_TIMEOUT, **kwargs)
+

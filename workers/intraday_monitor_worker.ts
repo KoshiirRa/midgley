@@ -8,6 +8,21 @@
 
 import nacl from "tweetnacl";
 import { getEnverusDailyRigCount, MIDGLEY_AGENT_USER_AGENT as DEFAULT_MIDGLEY_AGENT_UA } from "./enverus_scraper";
+import {
+  getScaqmdFlareReports,
+  getNyserdaWeeklyFuelPrices,
+  scrapeNewsMarkdownAtEdge
+} from "./regional_outage_scraper";
+import {
+  ScoredCatalyst,
+  SemanticDedupeResult,
+  scoreHeadlineAtEdge,
+  querySemanticDedupe,
+  indexHeadlineVector,
+  retainHindsightMemory,
+  synthesizeAnalystBrief,
+  getHeadlineEmbedding
+} from "./ai_event_scorer";
 
 export interface Env {
   GH_PAT?: string;
@@ -28,6 +43,16 @@ export interface Env {
   FLAG_SIGNING_KEY?: string;
   DB?: any;
   MYBROWSER?: any;
+  AI?: any;
+  EVENT_INDEX?: {
+    query(vector: number[], options: { topK?: number; returnMetadata?: string }): Promise<{
+      matches: Array<{ id: string; score: number; metadata?: Record<string, any> }>;
+    }>;
+    insert(vectors: Array<{ id: string; values: number[]; metadata?: Record<string, any> }>): Promise<any>;
+  };
+  HINDSIGHT_API_URL?: string;
+  HINDSIGHT_DEDUPE_BANK_ID?: string;
+  HINDSIGHT_API_TOKEN?: string;
   INTRADAY_QUEUE?: {
     send(message: any, options?: any): Promise<void>;
     sendBatch(messages: { body: any }[], options?: any): Promise<void>;
@@ -40,7 +65,7 @@ export interface QueueMessage<T = any> {
   body: T;
   attempts: number;
   ack(): void;
-  retry(): void;
+  retry(options?: { delaySeconds?: number }): void;
 }
 
 export interface QueueMessageBatch<T = any> {
@@ -130,11 +155,14 @@ const TRIGGER_KEYWORDS = [
   // Logistics & Infrastructure Hubs
   "colonial pipeline", "keystone pipeline", "refinery explosion", "refinery fire", "cushing inventory", "barge congestion",
   "catlettsburg", "delaware city", "west tulsa", "richmond refinery",
-  // Refinery Operator 8-K Signals (Issue #129 & #332)
+  // Refinery Operator & Midstream 8-K Signals (Issue #129, #332, #644)
   "pbf energy", "hf sinclair", "holly frontier", "marathon petroleum", "valero", "phillips 66",
+  "exxonmobil", "chevron", "suncor", "par pacific", "delek", "calumet",
+  "kinder morgan", "enterprise products", "energy transfer",
+  "plantation pipeline", "teppco pipeline",
   "force majeure", "unplanned outage", "crude distillation unit", "fcc unit",
   "hydrocracker", "coker unit", "capacity reduction", "el dorado refinery",
-  "sweeny refinery", "bayway refinery"
+  "sweeny refinery", "bayway refinery", "commerce city", "kapolei refinery"
 ];
 
 const TRIGGER_REGEX = new RegExp(
@@ -437,6 +465,153 @@ export async function markHeadlineDispatchedInCache(headline: string, env?: Env)
   }
 }
 
+/**
+ * Bulk D1 and edge cache deduplication query (Issue #643).
+ * Resolves an entire batch of headlines in a single round-trip query against seen_rss_headlines.
+ */
+export async function areHeadlinesDispatchedInBatch(
+  headlines: string[],
+  env?: Env
+): Promise<Set<string>> {
+  const result = new Set<string>();
+  if (!headlines || headlines.length === 0) return result;
+
+  const cleanMap = new Map<string, string>();
+  for (const h of headlines) {
+    const k = normalizeHeadline(h);
+    if (k) cleanMap.set(k, h);
+  }
+
+  const cleanKeys = Array.from(cleanMap.keys());
+  if (cleanKeys.length === 0) return result;
+
+  // 1. Bulk check D1 Persistent Database
+  if (env && env.DB) {
+    try {
+      const placeholders = cleanKeys.map(() => "?").join(", ");
+      const stmt = env.DB.prepare(
+        `SELECT clean_key FROM seen_rss_headlines WHERE clean_key IN (${placeholders}) AND datetime(created_at, '+72 hours') > datetime('now')`
+      );
+      const bound = stmt.bind(...cleanKeys);
+      let rows: any = null;
+      if (typeof bound.all === "function") {
+        rows = await bound.all();
+      } else if (typeof stmt.all === "function") {
+        rows = await stmt.all();
+      }
+      const items = rows?.results || (Array.isArray(rows) ? rows : []);
+      for (const row of items) {
+        if (row && row.clean_key) {
+          result.add(row.clean_key);
+        }
+      }
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS seen_rss_headlines (clean_key TEXT PRIMARY KEY, raw_headline TEXT, created_at TEXT NOT NULL)"
+        ).run();
+      } catch {
+        // ignore fallback
+      }
+      console.warn(`[D1 Batch Query Warning] ${d1Err?.message || String(d1Err)}`);
+    }
+  }
+
+  // 2. Check local Edge Cache (caches.default) fallback for items not yet confirmed in D1
+  if (typeof caches !== "undefined" && caches.default) {
+    const remainingKeys = cleanKeys.filter(k => !result.has(k));
+    await Promise.all(
+      remainingKeys.map(async (k) => {
+        try {
+          const dummyUrl = `https://midgley-cache.internal/dispatched/${k}`;
+          const req = new Request(dummyUrl);
+          const cachedResp = await caches.default.match(req);
+          if (cachedResp) {
+            result.add(k);
+          }
+        } catch {
+          // ignore cache errors
+        }
+      })
+    );
+  }
+
+  return result;
+}
+
+/**
+ * Bulk D1 and edge cache persistence (Issue #643).
+ * Uses env.DB.batch(...) if available for transactional bulk inserts.
+ */
+export async function markHeadlinesDispatchedInCache(headlines: string[], env?: Env): Promise<void> {
+  if (!headlines || headlines.length === 0) return;
+  const validHeadlines = headlines.filter(h => Boolean(normalizeHeadline(h)));
+  if (validHeadlines.length === 0) return;
+
+  if (env && env.DB && typeof env.DB.batch === "function") {
+    try {
+      const stmts = validHeadlines.map(h => {
+        const cleanKey = normalizeHeadline(h);
+        return env.DB.prepare(
+          "INSERT OR REPLACE INTO seen_rss_headlines (clean_key, raw_headline, created_at) VALUES (?, ?, datetime('now'))"
+        ).bind(cleanKey, h);
+      });
+      await env.DB.batch(stmts);
+      return;
+    } catch {
+      // Fallback to individual inserts on error
+    }
+  }
+
+  for (const h of validHeadlines) {
+    await markHeadlineDispatchedInCache(h, env);
+  }
+}
+
+/**
+ * Executes async tasks with bounded concurrency pool (Issue #643).
+ */
+export async function runWithBoundedConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>
+): Promise<PromiseSettledResult<R>[]> {
+  const results: PromiseSettledResult<R>[] = new Array(items.length);
+  let currentIndex = 0;
+
+  async function worker() {
+    while (currentIndex < items.length) {
+      const idx = currentIndex++;
+      try {
+        const val = await fn(items[idx]);
+        results[idx] = { status: "fulfilled", value: val };
+      } catch (err) {
+        results[idx] = { status: "rejected", reason: err };
+      }
+    }
+  }
+
+  const workerCount = Math.min(Math.max(1, limit), items.length);
+  const workers = Array.from({ length: workerCount }, () => worker());
+  await Promise.all(workers);
+  return results;
+}
+
+/**
+ * Dispatches message retry with exponential delaySeconds if supported by runtime (Issue #643).
+ */
+export function retryQueueMessage(message: QueueMessage, delaySeconds?: number): void {
+  try {
+    if (typeof delaySeconds === "number" && delaySeconds > 0) {
+      (message as any).retry({ delaySeconds });
+    } else {
+      message.retry();
+    }
+  } catch {
+    message.retry();
+  }
+}
+
 async function dispatchGitHubEvent(env: Env, headline: string, url: string): Promise<DispatchResult> {
   const owner = env.REPO_OWNER || "KoshiirRa";
   const repo = env.REPO_NAME || "midgley";
@@ -517,112 +692,459 @@ export async function handleQueueBatch(
   batch: QueueMessageBatch<QueueEventPayload>,
   env: Env,
   ctx?: any
-): Promise<{ processed: number; acked: number; retried: number }> {
+): Promise<{ processed: number; acked: number; retried: number; duration_ms?: number }> {
+  const startTime = Date.now();
   console.log(`[Queue Consumer Batch] Processing ${batch.messages.length} messages from queue "${batch.queue}"`);
 
   let processed = 0;
   let acked = 0;
   let retried = 0;
+  let cachedHits = 0;
+  let semanticDupes = 0;
+  let scoredNoise = 0;
+  let dispatched = 0;
 
+  // 1. Separate malformed messages without headline
+  const validMessages: QueueMessage<QueueEventPayload>[] = [];
   for (const message of batch.messages) {
-    processed++;
-    const { headline, url } = message.body || {};
-    if (!headline) {
+    const { headline } = message.body || {};
+    if (!headline || !headline.trim()) {
+      processed++;
       message.ack();
       acked++;
-      continue;
-    }
-
-    try {
-      const alreadyDispatched = await isHeadlineDispatchedInCache(headline, env);
-      if (alreadyDispatched) {
-        console.log(`[Queue Consumer Cache HIT] Skipping already dispatched event: "${headline}"`);
-        message.ack();
-        acked++;
-        continue;
-      }
-
-      const res = await dispatchGitHubEvent(env, headline, url);
-      if (res.dispatched) {
-        console.log(`[Queue Consumer Dispatch Success] Event dispatched for: "${headline}"`);
-        await markHeadlineDispatchedInCache(headline, env);
-        message.ack();
-        acked++;
-      } else {
-        console.error(`[Queue Consumer Dispatch Failed] Error: ${res.error}`);
-        await captureSentryException(env, ctx, new Error(res.error || "Queue Consumer Dispatch Failed"), { headline });
-        message.retry();
-        retried++;
-      }
-    } catch (err: any) {
-      console.error(`[Queue Consumer Exception] ${err.message || String(err)}`);
-      await captureSentryException(env, ctx, err, { headline });
-      message.retry();
-      retried++;
+    } else {
+      validMessages.push(message);
     }
   }
 
+  if (validMessages.length === 0) {
+    const duration_ms = Date.now() - startTime;
+    await logToAxiom(env, ctx, {
+      event: "intraday_queue_batch_processed",
+      total: batch.messages.length,
+      processed,
+      acked,
+      retried,
+      duration_ms
+    });
+    return { processed, acked, retried, duration_ms };
+  }
+
+  // 2. Bulk D1 & edge cache deduplication query
+  const headlines = validMessages.map(m => m.body.headline);
+  const cachedKeys = await areHeadlinesDispatchedInBatch(headlines, env);
+
+  const novelMessages: QueueMessage<QueueEventPayload>[] = [];
+  for (const message of validMessages) {
+    const cleanKey = normalizeHeadline(message.body.headline);
+    if (cleanKey && cachedKeys.has(cleanKey)) {
+      console.log(`[Queue Consumer Cache HIT] Skipping already dispatched event: "${message.body.headline}"`);
+      processed++;
+      message.ack();
+      acked++;
+      cachedHits++;
+    } else {
+      novelMessages.push(message);
+    }
+  }
+
+  // 3. Process novel messages concurrently with bounded concurrency pool (pool = 4)
+  if (novelMessages.length > 0) {
+    await runWithBoundedConcurrency(novelMessages, 4, async (message) => {
+      processed++;
+      const { headline, url } = message.body;
+
+      try {
+        // Multi-tier semantic deduplication (Vectorize & Hindsight)
+        const dedupeRes = await querySemanticDedupe(headline, env);
+        if (dedupeRes.status === "duplicate") {
+          console.log(`[Queue Semantic Dedupe] Suppressing duplicate event (${dedupeRes.source}): "${headline}"`);
+          await markHeadlineDispatchedInCache(headline, env);
+          message.ack();
+          acked++;
+          semanticDupes++;
+          return;
+        }
+
+        // Zero-shot catalyst scoring at edge via Workers AI
+        const scored = await scoreHeadlineAtEdge(headline, env);
+        if (!scored.is_anomaly) {
+          console.log(`[Queue Catalyst Filter] Noise classified by ${scored.model}: "${headline}"`);
+          await markHeadlineDispatchedInCache(headline, env);
+          message.ack();
+          acked++;
+          scoredNoise++;
+          return;
+        }
+
+        // Dispatch GitHub repository dispatch workflow
+        const res = await dispatchGitHubEvent(env, headline, url);
+        if (res.dispatched) {
+          console.log(`[Queue Consumer Dispatch Success] Event dispatched for: "${headline}"`);
+          await markHeadlineDispatchedInCache(headline, env);
+
+          // Background multi-store persistence
+          const persistTask = async () => {
+            try {
+              const embedding = await getHeadlineEmbedding(headline, env);
+              if (embedding) {
+                await indexHeadlineVector(headline, embedding, {
+                  domain: scored.catalyst_domain,
+                  hub: scored.affected_hub,
+                  magnitude: scored.magnitude,
+                  model: scored.model
+                }, env);
+              }
+              await retainHindsightMemory({
+                headline,
+                url,
+                source: message.body?.source || "QueueConsumer",
+                magnitude: scored.magnitude,
+                locales: [scored.affected_hub]
+              }, env);
+            } catch (pErr: any) {
+              console.warn(`[Background Persistence Notice] ${pErr?.message || String(pErr)}`);
+            }
+          };
+
+          if (ctx && typeof ctx.waitUntil === "function") {
+            ctx.waitUntil(persistTask());
+          } else {
+            await persistTask();
+          }
+
+          message.ack();
+          acked++;
+          dispatched++;
+        } else {
+          console.error(`[Queue Consumer Dispatch Failed] Error: ${res.error}`);
+          await captureSentryException(env, ctx, new Error(res.error || "Queue Consumer Dispatch Failed"), { headline });
+          const delaySeconds = Math.min(300, Math.max(10, Math.pow(2, message.attempts || 1) * 10));
+          retryQueueMessage(message, delaySeconds);
+          retried++;
+        }
+      } catch (err: any) {
+        console.error(`[Queue Consumer Exception] ${err.message || String(err)}`);
+        await captureSentryException(env, ctx, err, { headline });
+        const delaySeconds = Math.min(300, Math.max(10, Math.pow(2, message.attempts || 1) * 10));
+        retryQueueMessage(message, delaySeconds);
+        retried++;
+      }
+    });
+  }
+
+  const duration_ms = Date.now() - startTime;
   await logToAxiom(env, ctx, {
     event: "intraday_queue_batch_processed",
     total: batch.messages.length,
     processed,
     acked,
-    retried
+    retried,
+    duration_ms,
+    cached_hits: cachedHits,
+    semantic_dupes: semanticDupes,
+    scored_noise: scoredNoise,
+    dispatched
   });
 
-  return { processed, acked, retried };
+  return { processed, acked, retried, duration_ms };
 }
 
 /**
- * EDGAR 8-K Refinery Operator Monitor (Issue #129)
- * Polls EDGAR ATOM RSS feeds for new 8-K filings from target refinery operators,
- * deduplicates via D1 edgar_8k_seen table, keyword-filters for operational relevance,
- * and enqueues relevant filings to INTRADAY_QUEUE for origin scoring.
+ * Ensures dead-letter queue D1 table schema exists (Issue #643).
+ */
+export async function ensureDlqTableSchema(db: any): Promise<void> {
+  if (!db || typeof db.prepare !== "function") return;
+  try {
+    await db.prepare(`
+      CREATE TABLE IF NOT EXISTS queue_dlq_records (
+        id TEXT PRIMARY KEY,
+        queue_name TEXT NOT NULL,
+        payload TEXT NOT NULL,
+        error_message TEXT,
+        attempts INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        replayed_at TEXT
+      )
+    `).run();
+  } catch (err: any) {
+    console.warn(`[DLQ Schema Init Warning] ${err.message || String(err)}`);
+  }
+}
+
+/**
+ * Saves a dead-letter message to D1 storage for triage and replay (Issue #643).
+ */
+export async function saveDlqRecord(
+  record: {
+    id: string;
+    queue_name: string;
+    payload: string;
+    error_message?: string;
+    attempts?: number;
+  },
+  env: Env
+): Promise<boolean> {
+  if (!env || !env.DB) return false;
+  await ensureDlqTableSchema(env.DB);
+  try {
+    await env.DB.prepare(
+      "INSERT OR REPLACE INTO queue_dlq_records (id, queue_name, payload, error_message, attempts, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))"
+    ).bind(
+      record.id,
+      record.queue_name,
+      record.payload,
+      record.error_message || "",
+      record.attempts || 0
+    ).run();
+    return true;
+  } catch (err: any) {
+    console.error(`[DLQ Save Error] ${err.message || String(err)}`);
+    return false;
+  }
+}
+
+/**
+ * Consumes and archives dead-letter queue batches from intraday-event-dlq (Issue #643).
+ */
+export async function handleDlqBatch(
+  batch: QueueMessageBatch<any>,
+  env: Env,
+  ctx?: any
+): Promise<{ processed: number; stored: number }> {
+  console.warn(`[DLQ Consumer Batch] Processing ${batch.messages.length} dead-letter messages from queue "${batch.queue}"`);
+  let processed = 0;
+  let stored = 0;
+
+  for (const message of batch.messages) {
+    processed++;
+    const payloadStr = typeof message.body === "string" ? message.body : JSON.stringify(message.body);
+    const msgId = message.id || `dlq_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+    const saved = await saveDlqRecord({
+      id: msgId,
+      queue_name: batch.queue,
+      payload: payloadStr,
+      error_message: (message as any).error || "Max retries exceeded or queue processing failure",
+      attempts: message.attempts || 0
+    }, env);
+
+    if (saved) stored++;
+
+    await logToAxiom(env, ctx, {
+      event: "intraday_dlq_capture",
+      id: msgId,
+      queue: batch.queue,
+      attempts: message.attempts
+    });
+
+    await captureSentryException(
+      env,
+      ctx,
+      new Error(`DLQ message captured from ${batch.queue}: id=${msgId}`),
+      { queue: batch.queue, id: msgId }
+    );
+
+    message.ack();
+  }
+
+  return { processed, stored };
+}
+
+/**
+ * EDGAR 8-K Refinery Operator & Midstream Pipeline Monitor (Issue #129, #644)
+ * Polls EDGAR ATOM RSS feeds for new 8-K filings from target refinery & pipeline operators,
+ * uses HTTP conditional GET (ETag / If-Modified-Since) to bypass unchanged feeds,
+ * pre-filters entries on operational title keywords before full regex parsing,
+ * deduplicates via D1 edgar_8k_seen table, and enqueues relevant filings to INTRADAY_QUEUE.
  *
  * D1 Schema (apply once to midgley-cache-d1):
  *   CREATE TABLE IF NOT EXISTS edgar_8k_seen (
  *     accession_id TEXT PRIMARY KEY,
  *     ticker       TEXT NOT NULL,
- *     filed_at     TEXT NOT NULL
+ *     filed_at     TEXT NOT NULL,
+ *     created_at   TEXT NOT NULL DEFAULT (datetime('now'))
  *   );
+ *   CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_accession ON edgar_8k_seen (accession_id);
+ *   CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_ticker ON edgar_8k_seen (ticker);
+ *   CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_filed_at ON edgar_8k_seen (filed_at);
  */
 
-const EDGAR_OPERATIONAL_KEYWORDS: string[] = [
-  "outage", "force majeure", "fire", "explosion", "unplanned",
-  "shutdown", "capacity reduction", "turnaround", "fcc",
-  "crude distillation", "hydrocracker", "coker", "refinery",
-  "pipeline", "leak", "spill", "environmental", "flaring",
-  "evacuation", "accident", "incident", "disruption",
+export const EDGAR_OPERATIONAL_KEYWORDS: string[] = [
+  "fire", "explosion", "force majeure", "outage", "shutdown",
+  "flaring", "upset", "crude distillation", "coker", "fcc",
+  "pipeline", "hurricane", "unplanned", "capacity reduction",
+  "turnaround", "hydrocracker", "refinery", "leak", "spill",
+  "environmental", "evacuation", "accident", "incident", "disruption",
 ];
 
-function isEdgarRelevant(text: string): boolean {
+export function isEdgarRelevant(text: string): boolean {
   const lower = text.toLowerCase();
   return EDGAR_OPERATIONAL_KEYWORDS.some(kw => lower.includes(kw));
 }
 
-async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
-  const tickers = (env.EDGAR_8K_TICKERS ?? "PBF,DINO,MPC,VLO,PSX")
+export const EDGAR_8K_SEEN_IN_MEMORY = new Set<string>();
+export const EDGAR_FEED_ETAG_CACHE = new Map<string, { etag?: string; lastModified?: string }>();
+
+export function clearEdgarCacheForTesting(): void {
+  EDGAR_8K_SEEN_IN_MEMORY.clear();
+  EDGAR_FEED_ETAG_CACHE.clear();
+}
+
+export async function isEdgar8kSeen(accessionId: string, env?: Env): Promise<boolean> {
+  const cleanId = accessionId.trim();
+  if (!cleanId) return false;
+  const bareId = cleanId.replace(/^edgar:/, "");
+  const taggedId = `edgar:${bareId}`;
+
+  if (EDGAR_8K_SEEN_IN_MEMORY.has(bareId) || EDGAR_8K_SEEN_IN_MEMORY.has(taggedId)) {
+    return true;
+  }
+
+  if (env && env.DB) {
+    try {
+      const stmt = env.DB.prepare(
+        "SELECT 1 FROM edgar_8k_seen WHERE accession_id = ? OR accession_id = ? LIMIT 1"
+      );
+      const row = await stmt.bind(bareId, taggedId).first();
+      if (row) {
+        EDGAR_8K_SEEN_IN_MEMORY.add(bareId);
+        EDGAR_8K_SEEN_IN_MEMORY.add(taggedId);
+        return true;
+      }
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS edgar_8k_seen (accession_id TEXT PRIMARY KEY, ticker TEXT NOT NULL, filed_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')))"
+        ).run();
+      } catch {}
+    }
+  }
+
+  return await isHeadlineDispatchedInCache(taggedId, env);
+}
+
+export async function markEdgar8kSeen(
+  accessionId: string,
+  ticker: string,
+  filedAt: string,
+  env?: Env
+): Promise<void> {
+  const cleanId = accessionId.trim();
+  if (!cleanId) return;
+  const bareId = cleanId.replace(/^edgar:/, "");
+  const taggedId = `edgar:${bareId}`;
+
+  EDGAR_8K_SEEN_IN_MEMORY.add(bareId);
+  EDGAR_8K_SEEN_IN_MEMORY.add(taggedId);
+  await markHeadlineDispatchedInCache(taggedId, env);
+
+  if (env && env.DB) {
+    try {
+      await env.DB.prepare(
+        "INSERT OR IGNORE INTO edgar_8k_seen (accession_id, ticker, filed_at) VALUES (?, ?, ?)"
+      ).bind(bareId, ticker, filedAt).run();
+    } catch (d1Err: any) {
+      try {
+        await env.DB.prepare(
+          "CREATE TABLE IF NOT EXISTS edgar_8k_seen (accession_id TEXT PRIMARY KEY, ticker TEXT NOT NULL, filed_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (datetime('now')))"
+        ).run();
+        await env.DB.prepare(
+          "INSERT OR IGNORE INTO edgar_8k_seen (accession_id, ticker, filed_at) VALUES (?, ?, ?)"
+        ).bind(bareId, ticker, filedAt).run();
+      } catch {}
+    }
+  }
+}
+
+export async function getEdgarFeedCache(
+  ticker: string,
+  env?: Env
+): Promise<{ etag?: string; lastModified?: string }> {
+  if (EDGAR_FEED_ETAG_CACHE.has(ticker)) {
+    return EDGAR_FEED_ETAG_CACHE.get(ticker)!;
+  }
+  if (env && env.DB) {
+    try {
+      const row = await env.DB.prepare(
+        "SELECT value FROM lookup_cache WHERE key = ? AND expires_at > ?"
+      ).bind(`edgar_etag:${ticker}`, Date.now() / 1000).first();
+      if (row && (row as any).value) {
+        const parsed = JSON.parse((row as any).value);
+        EDGAR_FEED_ETAG_CACHE.set(ticker, parsed);
+        return parsed;
+      }
+    } catch {}
+  }
+  return {};
+}
+
+export async function setEdgarFeedCache(
+  ticker: string,
+  headers: { etag?: string; lastModified?: string },
+  env?: Env
+): Promise<void> {
+  EDGAR_FEED_ETAG_CACHE.set(ticker, headers);
+  if (env && env.DB && (headers.etag || headers.lastModified)) {
+    try {
+      const now = Date.now() / 1000;
+      const ttl = 86400 * 7; // 7 days
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO lookup_cache (key, value, created_at, expires_at) VALUES (?, ?, ?, ?)"
+      ).bind(`edgar_etag:${ticker}`, JSON.stringify(headers), now, now + ttl).run();
+    } catch {}
+  }
+}
+
+export async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
+  const tickers = (env.EDGAR_8K_TICKERS ?? "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD")
     .split(",")
     .map(t => t.trim().toUpperCase())
     .filter(Boolean);
 
-  const userAgent = env.SEC_USER_AGENT ?? "Midgley contact@example.com";
+  const userAgent = env.SEC_USER_AGENT ?? "Midgley energy-forecasting contact@domain.com";
 
   for (const ticker of tickers) {
     try {
+      // SEC EDGAR Fair Access policy: max 10 requests/second
+      await new Promise(resolve => setTimeout(resolve, 120));
+
       const atomUrl =
         `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany` +
         `&CIK=${ticker}&type=8-K&dateb=&owner=include&count=5&search_text=&output=atom`;
 
-      const resp = await fetch(atomUrl, { headers: { "User-Agent": userAgent } });
+      // Conditional GET headers (ETag / If-Modified-Since)
+      const cachedHeaders = await getEdgarFeedCache(ticker, env);
+      const reqHeaders: Record<string, string> = { "User-Agent": userAgent };
+      if (cachedHeaders.etag) {
+        reqHeaders["If-None-Match"] = cachedHeaders.etag;
+      }
+      if (cachedHeaders.lastModified) {
+        reqHeaders["If-Modified-Since"] = cachedHeaders.lastModified;
+      }
+
+      const resp = await fetch(atomUrl, { headers: reqHeaders });
+
+      if (resp.status === 304) {
+        console.log(`[EDGAR8K] 304 Not Modified for ${ticker}, skipping feed parse`);
+        continue;
+      }
+
       if (!resp.ok) {
         console.warn(`[EDGAR8K] HTTP ${resp.status} fetching feed for ${ticker}`);
         continue;
       }
 
+      // Update cached ETag / Last-Modified
+      const newEtag = resp.headers.get("ETag") || resp.headers.get("etag") || undefined;
+      const newLastMod = resp.headers.get("Last-Modified") || resp.headers.get("last-modified") || undefined;
+      if (newEtag || newLastMod) {
+        await setEdgarFeedCache(ticker, { etag: newEtag, lastModified: newLastMod }, env);
+      }
+
       const xmlText = await resp.text();
 
-      // Parse ATOM entries via simple regex (no DOM parser in Workers)
+      // Parse ATOM entries via regex
       const entryRegex = /<entry[\s\S]*?<\/entry>/gi;
       const idRegex = /<id>([^<]+)<\/id>/i;
       const titleRegex = /<title[^>]*>([^<]+)<\/title>/i;
@@ -632,28 +1154,41 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
       const entries = xmlText.match(entryRegex) || [];
 
       for (const entryXml of entries) {
-        const accessionId = (entryXml.match(idRegex)?.[1] ?? "").trim();
+        // Fast-path title extraction and pre-filtering before full regexes
         const title = (entryXml.match(titleRegex)?.[1] ?? "").trim();
-        const link = (entryXml.match(linkRegex)?.[1] ?? "").trim();
-        const filedAt = (entryXml.match(updatedRegex)?.[1] ?? new Date().toISOString()).trim();
+        if (!title) continue;
 
-        if (!accessionId || !title) continue;
-
-        // D1 deduplication — skip if already seen
-        // Note: D1 binding available via env when [[d1_databases]] edgar_8k_seen table exists
-        // Fallback: use in-memory seen set per invocation if D1 unavailable
-        const alreadyDispatched = await isHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
-        if (alreadyDispatched) continue;
-
-        // Keyword gate on title first (saves HTML fetch round-trip for obvious noise)
+        // Pre-filter XML entries on operational title keywords before executing remaining regexes
         if (!isEdgarRelevant(title)) {
-          // Mark noise filing as seen so we don't re-check it next cycle
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
+          const accessionId = (entryXml.match(idRegex)?.[1] ?? "").trim();
+          if (accessionId) {
+            await markEdgar8kSeen(accessionId, ticker, new Date().toISOString(), env);
+          }
           continue;
         }
 
+        // Relevant title: execute remaining regexes
+        const accessionId = (entryXml.match(idRegex)?.[1] ?? "").trim();
+        const link = (entryXml.match(linkRegex)?.[1] ?? "").trim();
+        const filedAt = (entryXml.match(updatedRegex)?.[1] ?? new Date().toISOString()).trim();
+
+        if (!accessionId) continue;
+
+        // D1 deduplication — skip if already seen
+        const alreadySeen = await isEdgar8kSeen(accessionId, env);
+        if (alreadySeen) continue;
+
         // Enqueue to INTRADAY_QUEUE using existing WebhookRequest-compatible schema
         const headline = `${ticker} 8-K: ${title}`;
+
+        // Multi-tier semantic deduplication check (Vectorize + Hindsight)
+        const dedupeRes = await querySemanticDedupe(headline, env);
+        if (dedupeRes.status === "duplicate") {
+          console.log(`[EDGAR Semantic Dedupe] Suppressed duplicate 8-K (${dedupeRes.source}): "${headline}"`);
+          await markEdgar8kSeen(accessionId, ticker, filedAt, env);
+          continue;
+        }
+
         const enqueued = await enqueueIntradayEvent(env, ctx, {
           headline,
           url: link,
@@ -661,7 +1196,7 @@ async function pollEdgar8KFeeds(env: Env, ctx: any): Promise<void> {
         });
 
         if (enqueued) {
-          await markHeadlineDispatchedInCache(`edgar:${accessionId}`, env);
+          await markEdgar8kSeen(accessionId, ticker, filedAt, env);
           console.log(`[EDGAR8K] Enqueued relevant 8-K: ${headline}`);
           await logToAxiom(env, ctx, {
             event: "edgar_8k_enqueued",
@@ -746,6 +1281,14 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
         continue;
       }
 
+      // Check Vectorize & Hindsight multi-tier semantic deduplication
+      const dedupeRes = await querySemanticDedupe(anomaly.title, env);
+      if (dedupeRes.status === "duplicate") {
+        console.log(`[RSS Semantic Dedupe] Suppressed duplicate anomaly (${dedupeRes.source}): "${anomaly.title}"`);
+        await markHeadlineDispatchedInCache(anomaly.title, env);
+        continue;
+      }
+
       if (env.INTRADAY_QUEUE) {
         const enqueued = await enqueueIntradayEvent(env, ctx, {
           headline: anomaly.title,
@@ -768,6 +1311,31 @@ export async function runMonitoringCycle(env: Env, ctx?: any): Promise<CycleSumm
       if (res.dispatched) {
         console.log(`[GitHub Dispatch Success] Event dispatched for: "${anomaly.title}"`);
         await markHeadlineDispatchedInCache(anomaly.title, env);
+
+        const persistTask = async () => {
+          try {
+            const embedding = await getHeadlineEmbedding(anomaly.title, env);
+            if (embedding) {
+              await indexHeadlineVector(anomaly.title, embedding, {
+                source: "RSS",
+                as_of: new Date().toISOString()
+              }, env);
+            }
+            await retainHindsightMemory({
+              headline: anomaly.title,
+              url: anomaly.link,
+              source: "RSS"
+            }, env);
+          } catch (pErr: any) {
+            console.warn(`[Background Persistence Notice] ${pErr?.message || String(pErr)}`);
+          }
+        };
+
+        if (ctx && typeof ctx.waitUntil === "function") {
+          ctx.waitUntil(persistTask());
+        } else {
+          await persistTask();
+        }
       } else {
         console.error(`[GitHub Dispatch Failed] Error: ${res.error}`);
         await captureSentryException(env, ctx, new Error(res.error || "GitHub Dispatch Failed"), { anomalyTitle: anomaly.title });
@@ -2340,6 +2908,21 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
         }
       }
 
+      const analystBrief = await synthesizeAnalystBrief({
+        hub_name: targetDisplayName,
+        current_price: effectiveBasePrice,
+        predicted_shift: effectiveDelta,
+        direction: effectiveDelta > 0.005 ? "UP" : (effectiveDelta < -0.005 ? "DOWN" : "FLAT"),
+        confidence_interval: [effectiveLower95, effectiveUpper95],
+        active_catalysts: zipRes?.is_significant_departure ? [`State tax wedge: ${zipRes.tax_delta_per_gal.toFixed(3)}$/gal`] : []
+      }, env);
+
+      forecastFields.push({
+        name: "📝 Institutional Analyst Brief",
+        value: analystBrief,
+        inline: false
+      });
+
       forecastFields.push({
         name: "🔗 Live Interactive Views",
         value: `[📊 Regional Dashboard](${dashboardUrl}) • [📈 Technical Attribution](https://koshiirRa.github.io/midgley/technical_breakdown.html) • [🗺️ ZIP Demand Heatmap](https://koshiirRa.github.io/midgley/telemetry.html)`,
@@ -3373,12 +3956,16 @@ export default {
     }
   },
 
-  async queue(batch: QueueMessageBatch<QueueEventPayload>, env: Env, ctx: any): Promise<void> {
+  async queue(batch: QueueMessageBatch<any>, env: Env, ctx: any): Promise<void> {
     try {
-      await handleQueueBatch(batch, env, ctx);
+      if (batch.queue === "intraday-event-dlq" || (batch.queue && batch.queue.endsWith("-dlq"))) {
+        await handleDlqBatch(batch, env, ctx);
+      } else {
+        await handleQueueBatch(batch, env, ctx);
+      }
     } catch (err: any) {
       console.error(`[Queue Exception] ${err.message || String(err)}`);
-      await captureSentryException(env, ctx, err, { trigger: "queue" });
+      await captureSentryException(env, ctx, err, { trigger: "queue", queue: batch?.queue });
     }
   },
 
@@ -3451,6 +4038,181 @@ export default {
         });
       }
 
+      // South Coast AQMD Rule 1118 Refinery Flare Route (Issue #640)
+      if (url.pathname === "/api/v1/energy/outages/scaqmd" || url.pathname === "/scraping/scaqmd-flares") {
+        const forceRefresh = url.searchParams.get("force_refresh") === "true";
+        const flareData = await getScaqmdFlareReports(env, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(flareData, null, 2), {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Cache-Control": "public, max-age=1800"
+          }
+        });
+      }
+
+      // NYSERDA Weekly Transportation Fuel Price Survey Route (Issue #640)
+      if (url.pathname === "/api/v1/energy/prices/nyserda" || url.pathname === "/scraping/nyserda-prices") {
+        const forceRefresh = url.searchParams.get("force_refresh") === "true";
+        const nyserdaData = await getNyserdaWeeklyFuelPrices(env, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(nyserdaData, null, 2), {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Cache-Control": "public, max-age=7200"
+          }
+        });
+      }
+
+      // Edge News-to-Markdown Scraper Route via Cloudflare Browser Run (Issue #640)
+      if (url.pathname === "/api/v1/news/scrape-markdown" || url.pathname === "/scraping/markdown") {
+        let targetUrl = url.searchParams.get("url") || "";
+        let forceRefresh = url.searchParams.get("force_refresh") === "true";
+
+        if (request.method === "POST") {
+          try {
+            const body = await request.json() as any;
+            if (body && typeof body.url === "string") {
+              targetUrl = body.url;
+            }
+            if (body && body.force_refresh !== undefined) {
+              forceRefresh = Boolean(body.force_refresh);
+            }
+          } catch {
+            // body parse error non-fatal if url in query
+          }
+        }
+
+        if (!targetUrl) {
+          return new Response(JSON.stringify({
+            status: "error",
+            error: "Missing required 'url' parameter"
+          }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        const scraped = await scrapeNewsMarkdownAtEdge(env, targetUrl, { force_refresh: forceRefresh });
+        return new Response(JSON.stringify(scraped, null, 2), {
+          status: scraped.status === "error" ? 502 : 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          }
+        });
+      }
+
+      // Dead-Letter Queue Inspection Route (Issue #643)
+      if (url.pathname === "/admin/queues/dlq") {
+        const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
+        const expectedToken = env.ADMIN_TOKEN;
+        if (!expectedToken || !authHeader || !timingSafeEqual(authHeader, expectedToken)) {
+          return new Response(JSON.stringify({ error: "Unauthorized: Valid ADMIN_TOKEN Authorization header required" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        if (!env.DB) {
+          return new Response(JSON.stringify({ status: "success", count: 0, records: [] }), {
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        await ensureDlqTableSchema(env.DB);
+        const rows = await env.DB.prepare(
+          "SELECT id, queue_name, payload, error_message, attempts, created_at, replayed_at FROM queue_dlq_records WHERE replayed_at IS NULL ORDER BY created_at DESC LIMIT 50"
+        ).all();
+        const records = rows?.results || (Array.isArray(rows) ? rows : []);
+        return new Response(JSON.stringify({
+          status: "success",
+          count: records.length,
+          records
+        }, null, 2), {
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      // Dead-Letter Queue Replay Route (Issue #643)
+      if (url.pathname === "/admin/queues/replay-dlq") {
+        if (request.method !== "POST") {
+          return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+            status: 405,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
+        const expectedToken = env.ADMIN_TOKEN;
+        if (!expectedToken || !authHeader || !timingSafeEqual(authHeader, expectedToken)) {
+          return new Response(JSON.stringify({ error: "Unauthorized: Valid ADMIN_TOKEN Authorization header required" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        if (!env.DB) {
+          return new Response(JSON.stringify({ status: "error", message: "D1 database not bound" }), {
+            status: 503,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+
+        await ensureDlqTableSchema(env.DB);
+
+        let reqBody: any = {};
+        try {
+          reqBody = await request.json();
+        } catch {
+          reqBody = {};
+        }
+
+        const targetId = reqBody?.id;
+        const limit = Math.min(50, Math.max(1, Number(reqBody?.limit) || 10));
+
+        let rows: any;
+        if (targetId) {
+          rows = await env.DB.prepare(
+            "SELECT id, payload FROM queue_dlq_records WHERE id = ? AND replayed_at IS NULL"
+          ).bind(targetId).all();
+        } else {
+          rows = await env.DB.prepare(
+            "SELECT id, payload FROM queue_dlq_records WHERE replayed_at IS NULL ORDER BY created_at ASC LIMIT ?"
+          ).bind(limit).all();
+        }
+
+        const records = rows?.results || (Array.isArray(rows) ? rows : []);
+        const replayedIds: string[] = [];
+
+        for (const record of records) {
+          let eventPayload: any;
+          try {
+            eventPayload = JSON.parse(record.payload);
+          } catch {
+            eventPayload = record.payload;
+          }
+
+          if (env.INTRADAY_QUEUE) {
+            await env.INTRADAY_QUEUE.send(eventPayload);
+          }
+
+          await env.DB.prepare(
+            "UPDATE queue_dlq_records SET replayed_at = datetime('now') WHERE id = ?"
+          ).bind(record.id).run();
+
+          replayedIds.push(record.id);
+        }
+
+        return new Response(JSON.stringify({
+          status: "success",
+          replayed_count: replayedIds.length,
+          replayed_ids: replayedIds
+        }, null, 2), {
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
       // Secure manual run & trigger endpoints (Fail-Closed, Issues #438, #574)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -3480,7 +4242,12 @@ export default {
             "/discord/interactions",
             "/telemetry/unmapped-zips",
             "/discord/subscriptions",
-            "/api/v1/energy/rig-count/enverus"
+            "/api/v1/energy/rig-count/enverus",
+            "/api/v1/energy/outages/scaqmd",
+            "/api/v1/energy/prices/nyserda",
+            "/api/v1/news/scrape-markdown",
+            "/admin/queues/dlq",
+            "/admin/queues/replay-dlq"
           ]
         }, null, 2),
         { headers: { "Content-Type": "application/json" } }

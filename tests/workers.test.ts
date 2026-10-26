@@ -9,15 +9,41 @@ import intradayWorker, {
   handleQueueBatch,
   isHeadlineDispatchedInCache,
   markHeadlineDispatchedInCache,
+  areHeadlinesDispatchedInBatch,
+  markHeadlinesDispatchedInCache,
+  runWithBoundedConcurrency,
+  retryQueueMessage,
+  ensureDlqTableSchema,
+  saveDlqRecord,
+  handleDlqBatch,
   generateEventToken,
   getWorkerSigningSecret,
   timingSafeEqual as intradayTimingSafeEqual,
   clearWorkerSubscriptionsMemoryForTesting,
   ensureFlagReplaySchema,
+  isEdgarRelevant,
+  isEdgar8kSeen,
+  markEdgar8kSeen,
+  clearEdgarCacheForTesting,
+  pollEdgar8KFeeds,
+  EDGAR_OPERATIONAL_KEYWORDS,
+  getEdgarFeedCache,
+  setEdgarFeedCache,
   Env as IntradayEnv,
   QueueMessageBatch
 } from "../workers/intraday_monitor_worker";
 import cacheWorker, { timingSafeEqual as cacheTimingSafeEqual, Env as CacheEnv } from "../workers/cache_worker";
+import {
+  scoreHeadlineAtEdge,
+  querySemanticDedupe,
+  indexHeadlineVector,
+  retainHindsightMemory,
+  queryHindsightBank,
+  synthesizeAnalystBrief,
+  getHeadlineEmbedding,
+  fallbackRegexScore,
+  extractMatchedEntityAtEdge
+} from "../workers/ai_event_scorer";
 
 function uint8ArrayToHex(arr: Uint8Array): string {
   return Array.from(arr)
@@ -27,10 +53,18 @@ function uint8ArrayToHex(arr: Uint8Array): string {
 
 function createMockD1Database(initialColumns: string[] = ["clean_key", "value", "used_at"]) {
   const store = new Map<string, any>();
+  const dlqStore = new Map<string, any>();
   const columns = new Set<string>(initialColumns);
   return {
     store,
+    dlqStore,
     columns,
+    async batch(stmts: any[]) {
+      for (const s of stmts) {
+        if (s && typeof s.run === "function") await s.run();
+      }
+      return stmts.map(() => ({ success: true }));
+    },
     prepare(query: string) {
       if (query.includes("PRAGMA table_info(flag_replay_tokens)")) {
         return {
@@ -49,6 +83,72 @@ function createMockD1Database(initialColumns: string[] = ["clean_key", "value", 
           }
         };
       }
+      if (query.includes("queue_dlq_records")) {
+        return {
+          bind(...args: any[]) {
+            return {
+              async run() {
+                if (query.includes("INSERT")) {
+                  const [id, queue_name, payload, error_message, attempts] = args;
+                  dlqStore.set(id, { id, queue_name, payload, error_message, attempts, created_at: new Date().toISOString(), replayed_at: null });
+                } else if (query.includes("UPDATE")) {
+                  const id = args[0];
+                  const rec = dlqStore.get(id);
+                  if (rec) rec.replayed_at = new Date().toISOString();
+                }
+                return { success: true };
+              },
+              async all() {
+                if (query.includes("WHERE id =")) {
+                  const id = args[0];
+                  const rec = dlqStore.get(id);
+                  return { results: rec && !rec.replayed_at ? [rec] : [] };
+                }
+                const limit = typeof args[0] === "number" ? args[0] : 50;
+                const active = Array.from(dlqStore.values()).filter(r => !r.replayed_at).slice(0, limit);
+                return { results: active };
+              },
+              async first() {
+                const id = args[0];
+                return dlqStore.get(id) || null;
+              }
+            };
+          },
+          async all() {
+            const active = Array.from(dlqStore.values()).filter(r => !r.replayed_at);
+            return { results: active };
+          },
+          async run() {
+            return { success: true };
+          }
+        };
+      }
+      if (query.includes("edgar_8k_seen")) {
+        return {
+          bind(...args: any[]) {
+            return {
+              async first() {
+                const k1 = args[0];
+                const k2 = args[1];
+                if (store.has(k1) || (k2 && store.has(k2))) {
+                  return { found: 1 };
+                }
+                return null;
+              },
+              async run() {
+                const accessionId = args[0];
+                const ticker = args[1];
+                const filedAt = args[2];
+                store.set(accessionId, { accession_id: accessionId, ticker, filed_at: filedAt });
+                return { success: true };
+              }
+            };
+          },
+          async run() {
+            return { success: true };
+          }
+        };
+      }
       return {
         bind(...args: any[]) {
           return {
@@ -61,6 +161,19 @@ function createMockD1Database(initialColumns: string[] = ["clean_key", "value", 
                 return store.get(key);
               }
               return null;
+            },
+            async all() {
+              if (query.includes("seen_rss_headlines")) {
+                const matching = args
+                  .filter((k: string) => store.has(k))
+                  .map((k: string) => ({ clean_key: k }));
+                return { results: matching };
+              }
+              if (query.includes("value") && !columns.has("value")) {
+                throw new Error("no such column: value");
+              }
+              const results = Array.from(store.values());
+              return { results };
             },
             async run() {
               if (query.includes("value") && !columns.has("value")) {
@@ -287,6 +400,377 @@ describe("Cloudflare Intraday Monitor Worker", () => {
       const result = await handleQueueBatch(batch, env);
       expect(result.acked).toBe(1);
       expect(ackSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("Queue Architecture Hardening & Extended CPU Batch Consumption (Issue #643)", () => {
+    const originalFetch = globalThis.fetch;
+
+    beforeEach(() => {
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 204,
+        json: async () => ({})
+      });
+    });
+
+    afterEach(() => {
+      globalThis.fetch = originalFetch;
+    });
+
+    it("bulk queries D1 and returns set of already-dispatched headlines", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const h1 = "Colonial pipeline major leak in Alabama";
+      const h2 = "Port Arthur refinery CDU restart delayed";
+      const h3 = "Valero Texas City FCCU operational update";
+
+      await markHeadlineDispatchedInCache(h1, env);
+      await markHeadlineDispatchedInCache(h2, env);
+
+      const batchHits = await areHeadlinesDispatchedInBatch([h1, h2, h3], env);
+      expect(batchHits.size).toBe(2);
+      expect(batchHits.has(normalizeHeadline(h1))).toBe(true);
+      expect(batchHits.has(normalizeHeadline(h2))).toBe(true);
+      expect(batchHits.has(normalizeHeadline(h3))).toBe(false);
+
+      const emptyHits = await areHeadlinesDispatchedInBatch([], env);
+      expect(emptyHits.size).toBe(0);
+    });
+
+    it("bulk persists multiple headlines via markHeadlinesDispatchedInCache", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const headlines = [
+        "Marathon Galveston Bay unit offline",
+        "ExxonMobil Baytown hydrotreater outage",
+        "Phillips 66 Sweeny alkylation unit maintenance"
+      ];
+
+      await markHeadlinesDispatchedInCache(headlines, env);
+
+      const cached = await areHeadlinesDispatchedInBatch(headlines, env);
+      expect(cached.size).toBe(3);
+      for (const h of headlines) {
+        expect(cached.has(normalizeHeadline(h))).toBe(true);
+      }
+    });
+
+    it("executes tasks with bounded concurrency limit", async () => {
+      let activeCount = 0;
+      let maxActive = 0;
+
+      const items = [1, 2, 3, 4, 5, 6, 7, 8];
+      const results = await runWithBoundedConcurrency(items, 3, async (num) => {
+        activeCount++;
+        maxActive = Math.max(maxActive, activeCount);
+        await new Promise(r => setTimeout(r, 10));
+        activeCount--;
+        return num * 10;
+      });
+
+      expect(maxActive).toBeLessThanOrEqual(3);
+      expect(results.length).toBe(8);
+      expect(results.every(r => r.status === "fulfilled")).toBe(true);
+      expect(results.map(r => (r as any).value)).toEqual([10, 20, 30, 40, 50, 60, 70, 80]);
+    });
+
+    it("processes multi-message batch with bulk dedupe, bounded concurrency, and telemetry", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = {
+        GH_PAT: "mock_gh_pat_token",
+        REPO_OWNER: "KoshiirRa",
+        REPO_NAME: "midgley",
+        DB: mockDb
+      };
+
+      const cachedHeadline = "Already cached refinery alert";
+      await markHeadlineDispatchedInCache(cachedHeadline, env);
+
+      const ackSpies = [vi.fn(), vi.fn(), vi.fn(), vi.fn()];
+      const retrySpies = [vi.fn(), vi.fn(), vi.fn(), vi.fn()];
+
+      const batch: QueueMessageBatch = {
+        queue: "intraday-event-queue",
+        messages: [
+          {
+            id: "msg-empty",
+            timestamp: new Date(),
+            body: { headline: "", url: "" },
+            attempts: 1,
+            ack: ackSpies[0],
+            retry: retrySpies[0]
+          },
+          {
+            id: "msg-cached",
+            timestamp: new Date(),
+            body: { headline: cachedHeadline, url: "https://example.com/cached" },
+            attempts: 1,
+            ack: ackSpies[1],
+            retry: retrySpies[1]
+          },
+          {
+            id: "msg-novel-1",
+            timestamp: new Date(),
+            body: { headline: "Gulf Coast gasoline pipeline shutdown after cyber incident", url: "https://example.com/novel1" },
+            attempts: 1,
+            ack: ackSpies[2],
+            retry: retrySpies[2]
+          },
+          {
+            id: "msg-novel-2",
+            timestamp: new Date(),
+            body: { headline: "Baton Rouge Exxon refinery cat cracker offline", url: "https://example.com/novel2" },
+            attempts: 1,
+            ack: ackSpies[3],
+            retry: retrySpies[3]
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      const res = await handleQueueBatch(batch, env);
+      expect(res.processed).toBe(4);
+      expect(res.acked).toBe(4);
+      expect(res.retried).toBe(0);
+      expect(typeof res.duration_ms).toBe("number");
+
+      expect(ackSpies[0]).toHaveBeenCalled(); // empty acked
+      expect(ackSpies[1]).toHaveBeenCalled(); // cached acked
+      expect(ackSpies[2]).toHaveBeenCalled(); // novel 1 dispatched & acked
+      expect(ackSpies[3]).toHaveBeenCalled(); // novel 2 dispatched & acked
+    });
+
+    it("triggers exponential backoff retry when GitHub dispatch returns error", async () => {
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 503,
+        text: async () => "Service Unavailable"
+      });
+
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = {
+        GH_PAT: "mock_gh_pat_token",
+        REPO_OWNER: "KoshiirRa",
+        REPO_NAME: "midgley",
+        DB: mockDb
+      };
+
+      const ackSpy = vi.fn();
+      const retrySpy = vi.fn();
+
+      const batch: QueueMessageBatch = {
+        queue: "intraday-event-queue",
+        messages: [
+          {
+            id: "msg-fail",
+            timestamp: new Date(),
+            body: { headline: "Colonial pipeline shuts main gasoline line after cyber incident", url: "https://example.com/fail" },
+            attempts: 2,
+            ack: ackSpy,
+            retry: retrySpy
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      const res = await handleQueueBatch(batch, env);
+      expect(res.processed).toBe(1);
+      expect(res.retried).toBe(1);
+      expect(retrySpy).toHaveBeenCalledWith(
+        expect.objectContaining({ delaySeconds: expect.any(Number) })
+      );
+      // attempts=2: 2^2 * 10 = 40 seconds
+      expect(retrySpy).toHaveBeenCalledWith({ delaySeconds: 40 });
+    });
+
+    it("consumes dead-letter queue batches and archives records to D1", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const ackSpy = vi.fn();
+      const retrySpy = vi.fn();
+
+      const dlqBatch: QueueMessageBatch = {
+        queue: "intraday-event-dlq",
+        messages: [
+          {
+            id: "dlq-msg-101",
+            timestamp: new Date(),
+            body: {
+              headline: "Poisoned or unprocessable headline payload",
+              url: "https://example.com/poison"
+            },
+            attempts: 3,
+            ack: ackSpy,
+            retry: retrySpy
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      const res = await handleDlqBatch(dlqBatch, env);
+      expect(res.processed).toBe(1);
+      expect(res.stored).toBe(1);
+      expect(ackSpy).toHaveBeenCalled(); // acked to prevent DLQ loop
+
+      // Verify stored record in D1 mock
+      expect(mockDb.dlqStore.has("dlq-msg-101")).toBe(true);
+      const stored = mockDb.dlqStore.get("dlq-msg-101");
+      expect(stored.queue_name).toBe("intraday-event-dlq");
+      expect(stored.attempts).toBe(3);
+    });
+
+    it("worker queue entrypoint routes dlq queue to handleDlqBatch", async () => {
+      const mockDb = createMockD1Database();
+      const env: IntradayEnv = { DB: mockDb };
+
+      const ackSpy = vi.fn();
+      const retrySpy = vi.fn();
+
+      const dlqBatch: QueueMessageBatch = {
+        queue: "intraday-event-dlq",
+        messages: [
+          {
+            id: "dlq-router-msg",
+            timestamp: new Date(),
+            body: { headline: "Routed DLQ item", url: "https://example.com/dlq" },
+            attempts: 3,
+            ack: ackSpy,
+            retry: retrySpy
+          }
+        ],
+        ackAll: vi.fn(),
+        retryAll: vi.fn()
+      };
+
+      await intradayWorker.queue(dlqBatch, env, {});
+      expect(ackSpy).toHaveBeenCalled();
+      expect(mockDb.dlqStore.has("dlq-router-msg")).toBe(true);
+    });
+
+    describe("Admin DLQ Triage & Replay Endpoints", () => {
+      it("rejects unauthorized requests to /admin/queues/dlq and /admin/queues/replay-dlq", async () => {
+        const env: IntradayEnv = { ADMIN_TOKEN: "secret_admin_token_xyz" };
+
+        const resGetNoAuth = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/dlq"),
+          env,
+          {}
+        );
+        expect(resGetNoAuth.status).toBe(401);
+
+        const resGetWrongAuth = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/dlq", {
+            headers: { Authorization: "Bearer wrong_token" }
+          }),
+          env,
+          {}
+        );
+        expect(resGetWrongAuth.status).toBe(401);
+
+        const resPostNoAuth = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/replay-dlq", {
+            method: "POST"
+          }),
+          env,
+          {}
+        );
+        expect(resPostNoAuth.status).toBe(401);
+
+        const resPostGetMethod = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/replay-dlq", {
+            method: "GET",
+            headers: { Authorization: "Bearer secret_admin_token_xyz" }
+          }),
+          env,
+          {}
+        );
+        expect(resPostGetMethod.status).toBe(405);
+      });
+
+      it("lists pending DLQ records via GET /admin/queues/dlq when authorized", async () => {
+        const mockDb = createMockD1Database();
+        const env: IntradayEnv = {
+          ADMIN_TOKEN: "secret_admin_token_xyz",
+          DB: mockDb
+        };
+
+        await saveDlqRecord({
+          id: "dlq-item-1",
+          queue_name: "intraday-event-dlq",
+          payload: JSON.stringify({ headline: "DLQ test item 1", url: "https://example.com/1" }),
+          attempts: 3
+        }, env);
+
+        const res = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/dlq", {
+            headers: { Authorization: "Bearer secret_admin_token_xyz" }
+          }),
+          env,
+          {}
+        );
+
+        expect(res.status).toBe(200);
+        const data: any = await res.json();
+        expect(data.status).toBe("success");
+        expect(data.count).toBe(1);
+        expect(data.records[0].id).toBe("dlq-item-1");
+      });
+
+      it("replays dead-letter messages to INTRADAY_QUEUE via POST /admin/queues/replay-dlq", async () => {
+        const mockDb = createMockD1Database();
+        const queueSendSpy = vi.fn().mockResolvedValue(undefined);
+
+        const env: IntradayEnv = {
+          ADMIN_TOKEN: "secret_admin_token_xyz",
+          DB: mockDb,
+          INTRADAY_QUEUE: {
+            send: queueSendSpy,
+            sendBatch: vi.fn()
+          }
+        };
+
+        await saveDlqRecord({
+          id: "dlq-replay-target",
+          queue_name: "intraday-event-dlq",
+          payload: JSON.stringify({ headline: "Replay me into the queue", url: "https://example.com/replay" }),
+          attempts: 3
+        }, env);
+
+        const res = await intradayWorker.fetch(
+          new Request("https://worker.internal/admin/queues/replay-dlq", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer secret_admin_token_xyz"
+            },
+            body: JSON.stringify({ id: "dlq-replay-target" })
+          }),
+          env,
+          {}
+        );
+
+        expect(res.status).toBe(200);
+        const data: any = await res.json();
+        expect(data.status).toBe("success");
+        expect(data.replayed_count).toBe(1);
+        expect(data.replayed_ids).toContain("dlq-replay-target");
+
+        // Verify sent back to INTRADAY_QUEUE
+        expect(queueSendSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ headline: "Replay me into the queue" })
+        );
+
+        // Verify replayed_at stamped so it does not appear in pending list
+        const stored = mockDb.dlqStore.get("dlq-replay-target");
+        expect(stored.replayed_at).not.toBeNull();
+      });
     });
   });
 
@@ -1383,7 +1867,1001 @@ Total Orientation PlayWeekMonthYear
       expect(md).toBeNull();
     });
   });
+
+  describe("Cloudflare Workers AI & Vectorize Edge Intelligence (Issue #645)", () => {
+    describe("Zero-Shot Catalyst & Severity Scoring at the Edge", () => {
+      it("scores refinery outages accurately with Workers AI structured output", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: JSON.stringify({
+              is_anomaly: true,
+              catalyst_domain: "refinery_pipeline",
+              affected_hub: "Houston_TX",
+              direction: "spike",
+              magnitude: "critical",
+              half_life_days: 6.5,
+              confidence: 0.94,
+              reasoning: "Port Arthur CDU shutdown tightens Gulf Coast supply"
+            })
+          })
+        };
+
+        const result = await scoreHeadlineAtEdge(
+          "Valero Port Arthur CDU restart delay tightens Gulf Coast RBOB supply",
+          { AI: mockAi }
+        );
+
+        expect(result.is_anomaly).toBe(true);
+        expect(result.catalyst_domain).toBe("refinery_pipeline");
+        expect(result.affected_hub).toBe("Houston_TX");
+        expect(result.direction).toBe("spike");
+        expect(result.magnitude).toBe("critical");
+        expect(result.confidence).toBe(0.94);
+        expect(result.model).toContain("llama-3.2");
+        expect(mockAi.run).toHaveBeenCalled();
+      });
+
+      it("classifies non-energy macroeconomic trade discussions as noise", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: JSON.stringify({
+              is_anomaly: false,
+              catalyst_domain: "noise",
+              affected_hub: "None",
+              direction: "neutral",
+              magnitude: "low",
+              half_life_days: 0.0,
+              confidence: 0.98,
+              reasoning: "Timber and soft lumber tariff debate without fuel implications"
+            })
+          })
+        };
+
+        const result = await scoreHeadlineAtEdge(
+          "Senate debate intensifies over softwood lumber tariffs",
+          { AI: mockAi }
+        );
+
+        expect(result.is_anomaly).toBe(false);
+        expect(result.catalyst_domain).toBe("noise");
+        expect(result.direction).toBe("neutral");
+      });
+
+      it("falls back to deterministic regex heuristic when AI is unconfigured or times out", async () => {
+        // 1. Unconfigured AI
+        const fallbackRes = await scoreHeadlineAtEdge(
+          "Colonial Pipeline outage shuts Line 1 gasoline transmission",
+          {}
+        );
+        expect(fallbackRes.is_anomaly).toBe(true);
+        expect(fallbackRes.catalyst_domain).toBe("refinery_pipeline");
+        expect(fallbackRes.model).toBe("regex_heuristic_fallback");
+
+        // 2. Timeout simulation
+        const slowAi = {
+          run: vi.fn().mockImplementation(() => new Promise(resolve => setTimeout(resolve, 200)))
+        };
+        const timeoutRes = await scoreHeadlineAtEdge(
+          "Hurricane threatens Gulf of Mexico offshore platforms",
+          { AI: slowAi },
+          50 // 50ms timeout
+        );
+        expect(timeoutRes.is_anomaly).toBe(true);
+        expect(timeoutRes.catalyst_domain).toBe("weather_hurricane");
+        expect(timeoutRes.model).toBe("regex_heuristic_fallback");
+      });
+
+      it("correctly identifies noise commodities via regex fallback", () => {
+        const noiseRes = fallbackRegexScore("Soybean and canola cooking oil prices drop across Midwest grocery stores");
+        expect(noiseRes.is_anomaly).toBe(false);
+        expect(noiseRes.catalyst_domain).toBe("noise");
+      });
+    });
+
+    describe("Vectorize Dense Embedding & Semantic Deduplication", () => {
+      it("computes 384-dimensional dense vector embeddings", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            shape: [1, 384],
+            data: [new Array(384).fill(0.05)]
+          })
+        };
+
+        const embedding = await getHeadlineEmbedding("Colonial Pipeline outage", { AI: mockAi });
+        expect(embedding).toHaveLength(384);
+        expect(embedding?.[0]).toBe(0.05);
+      });
+
+      it("suppresses redundant events when Vectorize cosine similarity >= 0.88", async () => {
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [
+              {
+                id: "vec-123",
+                score: 0.93,
+                metadata: { headline: "Colonial Pipeline shuts Line 1 after leak" }
+              }
+            ]
+          }),
+          insert: vi.fn()
+        };
+
+        const res = await querySemanticDedupe(
+          "Colonial Pipeline Line 1 closed due to pipeline spill",
+          { EVENT_INDEX: mockIndex },
+          { embedding: new Array(384).fill(0.01) }
+        );
+
+        expect(res.status).toBe("duplicate");
+        expect(res.similarity).toBe(0.93);
+        expect(res.source).toBe("vectorize");
+        expect(res.matched_id).toBe("vec-123");
+      });
+
+      it("flags evolving incident status when Vectorize similarity is in [0.70, 0.88)", async () => {
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [
+              {
+                id: "vec-flaring-456",
+                score: 0.77,
+                metadata: { headline: "Port Arthur refinery reports flaring" }
+              }
+            ]
+          }),
+          insert: vi.fn()
+        };
+
+        const res = await querySemanticDedupe(
+          "Port Arthur refinery initiates full unit shutdown following flaring",
+          { EVENT_INDEX: mockIndex },
+          { embedding: new Array(384).fill(0.01) }
+        );
+
+        expect(res.status).toBe("evolving");
+        expect(res.similarity).toBe(0.77);
+        expect(res.source).toBe("vectorize");
+        expect(res.matched_id).toBe("vec-flaring-456");
+      });
+
+      it("marks event as novel and inserts into Vectorize when similarity < 0.70", async () => {
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [
+              {
+                id: "vec-old",
+                score: 0.42,
+                metadata: { headline: "Denver airport jet fuel deliveries normal" }
+              }
+            ]
+          }),
+          insert: vi.fn().mockResolvedValue({ count: 1 })
+        };
+
+        const res = await querySemanticDedupe(
+          "Major refinery fire reported at Joliet refinery",
+          { EVENT_INDEX: mockIndex },
+          { embedding: new Array(384).fill(0.01) }
+        );
+
+        expect(res.status).toBe("novel");
+        expect(res.source).toBe("none");
+
+        const inserted = await indexHeadlineVector(
+          "Major refinery fire reported at Joliet refinery",
+          new Array(384).fill(0.01),
+          { domain: "refinery_pipeline" },
+          { EVENT_INDEX: mockIndex }
+        );
+        expect(inserted).toBe(true);
+        expect(mockIndex.insert).toHaveBeenCalled();
+      });
+    });
+
+    describe("Cross-Environment Hindsight Memory Bank (midgley-event-dedupe)", () => {
+      const originalFetch = globalThis.fetch;
+
+      afterEach(() => {
+        globalThis.fetch = originalFetch;
+      });
+
+      it("recalls prior memories from Hindsight SaaS when Vectorize is empty", async () => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            results: [
+              {
+                document_id: "hs-doc-999",
+                score: 0.91,
+                text: "Joliet refinery CDU shutdown due to power failure",
+                entities: ["Joliet"]
+              }
+            ]
+          })
+        } as any);
+
+        const env = {
+          HINDSIGHT_API_TOKEN: "mock_hindsight_key",
+          HINDSIGHT_DEDUPE_BANK_ID: "midgley-event-dedupe"
+        };
+
+        const hsRes = await queryHindsightBank(
+          "Power failure forces Joliet refinery CDU unit offline",
+          env
+        );
+
+        expect(hsRes.matched).toBe(true);
+        expect(hsRes.similarity).toBe(0.91);
+        expect(hsRes.docId).toBe("hs-doc-999");
+      });
+
+      it("retains confirmed anomalies into Hindsight midgley-event-dedupe with entity extraction", async () => {
+        let sentBody: any = null;
+        globalThis.fetch = vi.fn().mockImplementation((url, opts) => {
+          sentBody = JSON.parse(opts.body);
+          return Promise.resolve({
+            ok: true,
+            status: 201,
+            json: async () => ({ success: true })
+          });
+        });
+
+        const env = {
+          HINDSIGHT_API_TOKEN: "mock_hindsight_key",
+          HINDSIGHT_DEDUPE_BANK_ID: "midgley-event-dedupe"
+        };
+
+        const retained = await retainHindsightMemory(
+          {
+            headline: "ExxonMobil Baytown refinery unit tripped after severe storm",
+            url: "https://example.com/baytown-trip",
+            source: "TestFeed",
+            magnitude: "high",
+            locales: ["Houston_TX"]
+          },
+          env
+        );
+
+        expect(retained).toBe(true);
+        expect(sentBody).toBeDefined();
+        expect(sentBody.items[0].entities[0].text).toBe("Baytown");
+        expect(sentBody.items[0].tags).toContain("edge_worker");
+      });
+
+      it("extracts recognized physical facilities and operators reliably", () => {
+        expect(extractMatchedEntityAtEdge("Fire reported at Joliet refinery unit")).toBe("Joliet");
+        expect(extractMatchedEntityAtEdge("Colonial pipeline shutdown after leak")).toBe("Colonial Pipeline");
+        expect(extractMatchedEntityAtEdge("Valero reports mechanical failure")).toBe("Valero");
+        expect(extractMatchedEntityAtEdge("General interest article")).toBeNull();
+      });
+    });
+
+    describe("Grounded Institutional Analyst Briefing Synthesis", () => {
+      it("synthesizes grounded institutional briefs via Workers AI", async () => {
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: "Chicago spot gasoline margins widened +4.2¢/gal following Joliet CDU restart delays. Retail stations are expected to absorb wholesale spikes over a 4-day pass-through horizon."
+          })
+        };
+
+        const brief = await synthesizeAnalystBrief(
+          {
+            hub_name: "Chicago (IL)",
+            current_price: 3.450,
+            predicted_shift: 0.085,
+            direction: "UP",
+            confidence_interval: [3.410, 3.590],
+            active_catalysts: ["Joliet CDU restart delayed"]
+          },
+          { AI: mockAi }
+        );
+
+        expect(brief).toContain("Chicago spot gasoline margins");
+        expect(mockAi.run).toHaveBeenCalled();
+      });
+
+      it("falls back to deterministic template when Workers AI is unconfigured or times out", async () => {
+        const brief = await synthesizeAnalystBrief(
+          {
+            hub_name: "Denver (CO)",
+            current_price: 3.120,
+            predicted_shift: -0.045,
+            direction: "DOWN",
+            confidence_interval: [3.050, 3.200]
+          },
+          {}
+        );
+
+        expect(brief).toContain("Denver (CO) fuel forecast projects a DOWN trajectory");
+        expect(brief).toContain("-0.045 $/gal");
+      });
+    });
+
+    describe("Queue Consumer Integration with Edge Deduplication & Scoring", () => {
+      const originalFetch = globalThis.fetch;
+
+      beforeEach(() => {
+        globalThis.fetch = vi.fn().mockResolvedValue({
+          ok: true,
+          status: 204,
+          json: async () => ({})
+        });
+      });
+
+      afterEach(() => {
+        globalThis.fetch = originalFetch;
+      });
+
+      it("suppresses queue batch dispatch when semantic deduplication finds an exact duplicate", async () => {
+        const ackSpy = vi.fn();
+        const retrySpy = vi.fn();
+        const mockDb = createMockD1Database();
+
+        const mockIndex = {
+          query: vi.fn().mockResolvedValue({
+            matches: [{ id: "vec-dup-99", score: 0.95, metadata: { headline: "Existing refinery fire" } }]
+          }),
+          insert: vi.fn()
+        };
+
+        const batch: QueueMessageBatch = {
+          queue: "intraday-events",
+          messages: [
+            {
+              id: "msg-dup",
+              timestamp: new Date(),
+              body: {
+                headline: "Existing refinery fire in Port Arthur",
+                url: "https://example.com/port-arthur",
+                source: "Test_Queue"
+              },
+              attempts: 1,
+              ack: ackSpy,
+              retry: retrySpy
+            }
+          ],
+          ackAll: vi.fn(),
+          retryAll: vi.fn()
+        };
+
+        const env: IntradayEnv = {
+          GH_PAT: "mock_gh_pat_token",
+          REPO_OWNER: "KoshiirRa",
+          REPO_NAME: "midgley",
+          DB: mockDb,
+          EVENT_INDEX: mockIndex
+        };
+
+        const result = await handleQueueBatch(batch, env);
+        expect(result.processed).toBe(1);
+        expect(result.acked).toBe(1);
+        expect(ackSpy).toHaveBeenCalled();
+        expect(globalThis.fetch).not.toHaveBeenCalledWith(
+          expect.stringContaining("dispatches"),
+          expect.anything()
+        );
+      });
+
+      it("suppresses queue batch dispatch when edge scoring classifies headline as noise", async () => {
+        const ackSpy = vi.fn();
+        const retrySpy = vi.fn();
+        const mockDb = createMockD1Database();
+
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: JSON.stringify({
+              is_anomaly: false,
+              catalyst_domain: "noise",
+              affected_hub: "None",
+              direction: "neutral",
+              magnitude: "low",
+              confidence: 0.99
+            })
+          })
+        };
+
+        const batch: QueueMessageBatch = {
+          queue: "intraday-events",
+          messages: [
+            {
+              id: "msg-noise",
+              timestamp: new Date(),
+              body: {
+                headline: "Palm oil imports hit record in Southeast Asia",
+                url: "https://example.com/palm-oil",
+                source: "Test_Queue"
+              },
+              attempts: 1,
+              ack: ackSpy,
+              retry: retrySpy
+            }
+          ],
+          ackAll: vi.fn(),
+          retryAll: vi.fn()
+        };
+
+        const env: IntradayEnv = {
+          GH_PAT: "mock_gh_pat_token",
+          REPO_OWNER: "KoshiirRa",
+          REPO_NAME: "midgley",
+          DB: mockDb,
+          AI: mockAi
+        };
+
+        const result = await handleQueueBatch(batch, env);
+        expect(result.processed).toBe(1);
+        expect(result.acked).toBe(1);
+        expect(ackSpy).toHaveBeenCalled();
+        expect(globalThis.fetch).not.toHaveBeenCalledWith(
+          expect.stringContaining("dispatches"),
+          expect.anything()
+        );
+      });
+    });
+
+    describe("Discord /midgley forecast Dynamic Briefing Integration", () => {
+      it("includes the Institutional Analyst Brief field in /midgley forecast embed responses", async () => {
+        const secretKey = nacl.sign.keyPair().secretKey;
+        const publicKeyHex = uint8ArrayToHex(secretKey.slice(32));
+        const timestamp = String(Math.floor(Date.now() / 1000));
+
+        const body = JSON.stringify({
+          type: 2, // APPLICATION_COMMAND
+          id: "interaction_forecast_brief",
+          token: "mock_token_brief",
+          user: { id: "test_trader_456", username: "quant_trader" },
+          data: {
+            name: "midgley",
+            options: [
+              {
+                name: "forecast",
+                type: 1,
+                options: [
+                  { name: "locale", value: "Chicago_IL" },
+                  { name: "horizon", value: 5 }
+                ]
+              }
+            ]
+          }
+        });
+
+        const message = new TextEncoder().encode(timestamp + body);
+        const signature = nacl.sign.detached(message, secretKey);
+        const signatureHex = uint8ArrayToHex(signature);
+
+        const req = new Request("https://worker.local/discord/interactions", {
+          method: "POST",
+          headers: {
+            "X-Signature-Ed25519": signatureHex,
+            "X-Signature-Timestamp": timestamp,
+            "Content-Type": "application/json"
+          },
+          body
+        });
+
+        const mockAi = {
+          run: vi.fn().mockResolvedValue({
+            response: "Chicago wholesale basis widened due to pipeline maintenance. Expect localized retail price support through day 5."
+          })
+        };
+
+        const env: IntradayEnv = {
+          DISCORD_PUBLIC_KEY: publicKeyHex,
+          AI: mockAi
+        };
+
+        const res = await handleDiscordInteraction(req, env, {});
+        expect(res.status).toBe(200);
+        const data = (await res.json()) as any;
+        expect(data.type).toBe(4); // CHANNEL_MESSAGE_WITH_SOURCE
+        const embed = data.data.embeds[0];
+        expect(embed.title).toContain("Midgley 5D Forecast");
+
+        const briefField = embed.fields.find((f: any) => f.name.includes("Institutional Analyst Brief"));
+        expect(briefField).toBeDefined();
+        expect(briefField.value).toContain("Chicago wholesale basis widened");
+      });
+    });
+  });
+
+  describe("EDGAR 8-K Feed Coverage & Edge Deduplication (Issue #644)", () => {
+    beforeEach(() => {
+      clearEdgarCacheForTesting();
+      vi.restoreAllMocks();
+    });
+
+    afterEach(() => {
+      clearEdgarCacheForTesting();
+      vi.restoreAllMocks();
+    });
+
+    it("verifies operational relevance keyword gate detects outages, fires, upsets, and hurricanes", () => {
+      expect(isEdgarRelevant("Unplanned FCC unit outage at refinery")).toBe(true);
+      expect(isEdgarRelevant("Reports refinery flaring and process upset")).toBe(true);
+      expect(isEdgarRelevant("Precautionary shutdown ahead of Gulf hurricane")).toBe(true);
+      expect(isEdgarRelevant("Force majeure declared on pipeline deliveries")).toBe(true);
+      expect(isEdgarRelevant("Crude distillation unit fire contained")).toBe(true);
+
+      // Noise rejection
+      expect(isEdgarRelevant("Quarterly financial results for Q3 2026")).toBe(false);
+      expect(isEdgarRelevant("Board of Directors appoints new Chief Commercial Officer")).toBe(false);
+      expect(isEdgarRelevant("Pricing of $500M Senior Notes due 2036")).toBe(false);
+    });
+
+    it("deduplicates accession IDs in memory and via D1 edgar_8k_seen table", async () => {
+      const mockD1 = createMockD1Database();
+      const env: IntradayEnv = { DB: mockD1 };
+
+      const accessionId = "0001193125-26-098765";
+      expect(await isEdgar8kSeen(accessionId, env)).toBe(false);
+
+      await markEdgar8kSeen(accessionId, "SU", "2026-10-24T12:00:00Z", env);
+      expect(await isEdgar8kSeen(accessionId, env)).toBe(true);
+      expect(await isEdgar8kSeen(`edgar:${accessionId}`, env)).toBe(true);
+    });
+
+    it("handles ETag conditional GETs and skips body parsing on 304 Not Modified", async () => {
+      const mockD1 = createMockD1Database();
+      const env: IntradayEnv = {
+        DB: mockD1,
+        EDGAR_8K_TICKERS: "SU",
+        SEC_USER_AGENT: "Midgley energy-forecasting contact@domain.com"
+      };
+
+      // Populate cached ETag
+      await setEdgarFeedCache("SU", { etag: '"test-etag-12345"' }, env);
+
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+        new Response(null, {
+          status: 304,
+          statusText: "Not Modified"
+        })
+      );
+
+      await pollEdgar8KFeeds(env, {});
+      expect(fetchSpy).toHaveBeenCalled();
+      const calledHeaders = fetchSpy.mock.calls[0][1]?.headers as Record<string, string>;
+      expect(calledHeaders["If-None-Match"]).toBe('"test-etag-12345"');
+    });
+
+    it("pre-filters XML entries on title keywords and enqueues relevant filings", async () => {
+      const mockD1 = createMockD1Database();
+      const sentQueueMessages: any[] = [];
+      const env: IntradayEnv = {
+        DB: mockD1,
+        EDGAR_8K_TICKERS: "PARR",
+        SEC_USER_AGENT: "Midgley energy-forecasting contact@domain.com",
+        INTRADAY_QUEUE: {
+          async send(msg: any) {
+            sentQueueMessages.push(msg);
+          },
+          async sendBatch(msgs: any[]) {
+            sentQueueMessages.push(...msgs.map(m => m.body));
+          }
+        }
+      };
+
+      const syntheticXml = `<?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <title>Par Pacific 8-K Feed</title>
+        <entry>
+          <id>0001193125-26-000001</id>
+          <title>Quarterly Earnings Release Q3</title>
+          <link href="https://www.sec.gov/Archives/edgar/data/parr/earnings.htm"/>
+          <updated>2026-10-24T10:00:00Z</updated>
+        </entry>
+        <entry>
+          <id>0001193125-26-000002</id>
+          <title>Crude distillation unit outage at Kapolei refinery</title>
+          <link href="https://www.sec.gov/Archives/edgar/data/parr/outage.htm"/>
+          <updated>2026-10-24T11:00:00Z</updated>
+        </entry>
+      </feed>`;
+
+      vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+        new Response(syntheticXml, {
+          status: 200,
+          headers: {
+            "Content-Type": "application/atom+xml",
+            "ETag": '"etag-parr-999"'
+          }
+        })
+      );
+
+      await pollEdgar8KFeeds(env, {});
+
+      // Earnings noise entry should NOT be enqueued; relevant Kapolei outage entry MUST be enqueued
+      expect(sentQueueMessages.length).toBe(1);
+      expect(sentQueueMessages[0].headline).toBe("PARR 8-K: Crude distillation unit outage at Kapolei refinery");
+      expect(sentQueueMessages[0].url).toBe("https://www.sec.gov/Archives/edgar/data/parr/outage.htm");
+      expect(sentQueueMessages[0].source).toBe("EDGAR_8K");
+
+      // Verify that ETag was cached
+      const cached = await getEdgarFeedCache("PARR", env);
+      expect(cached.etag).toBe('"etag-parr-999"');
+
+      // Verify that accession ID was marked seen in D1
+      expect(await isEdgar8kSeen("0001193125-26-000002", env)).toBe(true);
+    });
+  });
+
+  describe("Regional Outage & News Scraper Edge Rendering (Issue #640)", () => {
+    const sampleScaqmdMarkdown = `
+# South Coast AQMD Rule 1118 Flare Event Notifications
+As of 2026-10-24
+
+| Facility / Operator | City / Area | Start Time | End Time | Event Type | Clean Gas (SCF) | SOx (lbs) | Status |
+|---------------------|-------------|------------|----------|------------|-----------------|-----------|--------|
+| Chevron Products Co. | El Segundo | 2026-10-24 04:15 | 2026-10-24 08:30 | Unplanned compressor trip | 450,000 | 185.4 | COMPLETED |
+| Torrance Refining Company | Torrance | 2026-10-24 09:00 | | Unplanned FCC unit upset | 820,000 | 340.2 | ACTIVE |
+| Phillips 66 Carson | Carson | 2026-10-23 12:00 | 2026-10-23 16:00 | Planned maintenance flare | 120,000 | 25.0 | COMPLETED |
+`;
+
+    const sampleNyserdaMarkdown = `
+# New York State Energy Research and Development Authority
+## Weekly Transportation Fuels Price Survey
+Survey Date: October 20, 2026
+
+| Region | Regular Gasoline ($/gal) | Ultra-Low Sulfur Diesel ($/gal) |
+|--------|--------------------------|----------------------------------|
+| Statewide Average | $3.289 | $3.899 |
+| New York City | $3.399 | $4.019 |
+| Long Island | $3.349 | $3.949 |
+| Albany / Capital | $3.229 | $3.819 |
+| Western New York | $3.219 | $3.789 |
+`;
+
+    it("parses SCAQMD Rule 1118 refinery flaring markdown tables", async () => {
+      const { parseScaqmdFlareMarkdown } = await import("../workers/regional_outage_scraper");
+      const result = parseScaqmdFlareMarkdown(sampleScaqmdMarkdown);
+
+      expect(result.total_events).toBe(3);
+      expect(result.unplanned_events_count).toBe(2);
+      expect(result.events?.length).toBe(3);
+
+      const torrance = result.events?.find(e => e.facility_name.includes("Torrance"));
+      expect(torrance).toBeDefined();
+      expect(torrance?.event_type).toBe("unplanned");
+      expect(torrance?.clean_gas_scf).toBe(820000);
+      expect(torrance?.estimated_sox_lbs).toBe(340.2);
+      expect(torrance?.status).toBe("ACTIVE");
+
+      const p66 = result.events?.find(e => e.facility_name.includes("Phillips 66"));
+      expect(p66).toBeDefined();
+      expect(p66?.event_type).toBe("planned");
+    });
+
+    it("parses NYSERDA weekly retail fuel price surveys into structured regions", async () => {
+      const { parseNyserdaFuelMarkdown } = await import("../workers/regional_outage_scraper");
+      const result = parseNyserdaFuelMarkdown(sampleNyserdaMarkdown);
+
+      expect(result.statewide_average_gasoline).toBe(3.289);
+      expect(result.statewide_average_diesel).toBe(3.899);
+      expect(result.regions?.length).toBe(4);
+
+      const nyc = result.regions?.find(r => r.region === "New York City");
+      expect(nyc).toBeDefined();
+      expect(nyc?.regular_gasoline).toBe(3.399);
+      expect(nyc?.diesel).toBe(4.019);
+
+      const albany = result.regions?.find(r => r.region.includes("Albany"));
+      expect(albany).toBeDefined();
+      expect(albany?.regular_gasoline).toBe(3.229);
+    });
+
+    it("fetches SCAQMD flares via Cloudflare browser quickAction", async () => {
+      const { getScaqmdFlareReports, clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(sampleScaqmdMarkdown)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const result = await getScaqmdFlareReports(env, { force_refresh: true });
+      expect(mockBrowser.quickAction).toHaveBeenCalledWith("markdown", expect.objectContaining({
+        url: "https://xappp.aqmd.gov/r1118/"
+      }));
+      expect(result.status).toBe("success");
+      expect(result.source).toBe("CLOUDFLARE_BROWSER_RENDERING");
+      expect(result.total_events).toBe(3);
+      expect(result.unplanned_events_count).toBe(2);
+    });
+
+    it("fetches NYSERDA fuel prices via Cloudflare browser quickAction", async () => {
+      const { getNyserdaWeeklyFuelPrices, clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(sampleNyserdaMarkdown)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const result = await getNyserdaWeeklyFuelPrices(env, { force_refresh: true });
+      expect(mockBrowser.quickAction).toHaveBeenCalledWith("markdown", expect.objectContaining({
+        url: "https://www.nyserda.ny.gov/research-and-development/energy-prices/motor-gasoline/monthly-average-motor-gasoline-prices"
+      }));
+      expect(result.status).toBe("success");
+      expect(result.source).toBe("CLOUDFLARE_BROWSER_RENDERING");
+      expect(result.statewide_average_gasoline).toBe(3.289);
+      expect(result.regions.length).toBe(4);
+    });
+
+    it("scrapes dynamic news URLs to markdown at the edge and extracts title", async () => {
+      const { scrapeNewsMarkdownAtEdge, clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockArticleMd = "# Hydrocracker Shut Down at Delaware City Refinery\nPBF Energy reports an unplanned hydrocracker outage.";
+      const mockBrowser = {
+        quickAction: vi.fn().mockResolvedValue(mockArticleMd)
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      const res = await scrapeNewsMarkdownAtEdge(env, "https://energywire.example.com/delaware-hydrocracker-outage", { force_refresh: true });
+      expect(res.status).toBe("success");
+      expect(res.provider).toBe("cloudflare_browser_run");
+      expect(res.title).toBe("Hydrocracker Shut Down at Delaware City Refinery");
+      expect(res.markdown).toContain("PBF Energy reports an unplanned hydrocracker outage.");
+    });
+
+    it("serves SCAQMD flares, NYSERDA prices, and news markdown scraping via worker HTTP endpoints", async () => {
+      const { clearRegionalScraperMemoryCacheForTesting } = await import("../workers/regional_outage_scraper");
+      clearRegionalScraperMemoryCacheForTesting();
+
+      const mockBrowser = {
+        quickAction: vi.fn().mockImplementation((action: string, opts: any) => {
+          if (opts.url.includes("aqmd")) return Promise.resolve(sampleScaqmdMarkdown);
+          if (opts.url.includes("nyserda")) return Promise.resolve(sampleNyserdaMarkdown);
+          return Promise.resolve("# Breaking Energy News\n\nPipeline flow interrupted.");
+        })
+      };
+
+      const env: IntradayEnv = {
+        MYBROWSER: mockBrowser,
+        MIDGLEY_AGENT_USER_AGENT: "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
+      };
+
+      // 1. Test SCAQMD route
+      const reqScaqmd = new Request("https://worker.local/api/v1/energy/outages/scaqmd");
+      const resScaqmd = await intradayWorker.fetch(reqScaqmd, env, {});
+      expect(resScaqmd.status).toBe(200);
+      const jsonScaqmd = (await resScaqmd.json()) as any;
+      expect(jsonScaqmd.status).toBe("success");
+      expect(jsonScaqmd.unplanned_events_count).toBe(2);
+
+      // 2. Test NYSERDA route
+      const reqNyserda = new Request("https://worker.local/api/v1/energy/prices/nyserda");
+      const resNyserda = await intradayWorker.fetch(reqNyserda, env, {});
+      expect(resNyserda.status).toBe(200);
+      const jsonNyserda = (await resNyserda.json()) as any;
+      expect(jsonNyserda.status).toBe("success");
+      expect(jsonNyserda.statewide_average_gasoline).toBe(3.289);
+
+      // 3. Test News scrape route via POST
+      const reqScrape = new Request("https://worker.local/api/v1/news/scrape-markdown", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: "https://example.com/article" })
+      });
+      const resScrape = await intradayWorker.fetch(reqScrape, env, {});
+      expect(resScrape.status).toBe(200);
+      const jsonScrape = (await resScrape.json()) as any;
+      expect(jsonScrape.status).toBe("success");
+      expect(jsonScrape.title).toBe("Breaking Energy News");
+      expect(jsonScrape.markdown).toContain("Pipeline flow interrupted.");
+    });
+  });
+
+
+  describe("Direct Database TCP Connections & Multi-Tier Storage Adapter (Issue #641)", () => {
+    function createMockSql() {
+      const executedQueries: any[] = [];
+      const mockStore = new Map<string, any>();
+
+      const sqlMock: any = (strings: any, ...values: any[]) => {
+        const queryText = Array.isArray(strings) ? strings.join("?") : String(strings);
+        executedQueries.push({ strings: Array.from(strings), values });
+
+        if (queryText.includes("SELECT value, created_at, expires_at")) {
+          const key = values[0];
+          const row = mockStore.get(key);
+          if (row) return Promise.resolve([row]);
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("INSERT INTO lookup_cache")) {
+          const [key, valStr, cAt, eAt] = values;
+          mockStore.set(key, { value: valStr, created_at: cAt, expires_at: eAt });
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("DELETE FROM lookup_cache WHERE key =")) {
+          mockStore.delete(values[0]);
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("DELETE FROM lookup_cache")) {
+          mockStore.clear();
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("SELECT pg_try_advisory_lock")) {
+          return Promise.resolve([{ acquired: true }]);
+        }
+
+        if (queryText.includes("SELECT pg_advisory_unlock")) {
+          return Promise.resolve([{ unlocked: true }]);
+        }
+
+        return Promise.resolve([]);
+      };
+
+      sqlMock.end = vi.fn().mockResolvedValue(undefined);
+      return { sqlMock, executedQueries, mockStore };
+    }
+
+    it("performs cache get, set, delete, and advisory locking using PostgresAdapter", async () => {
+      const { PostgresAdapter } = await import("../workers/db_adapter");
+      const { sqlMock, executedQueries, mockStore } = createMockSql();
+
+      const adapter = new PostgresAdapter("postgres://mock:secret@127.0.0.1:5432/mockdb", sqlMock);
+      expect(adapter.tier).toBe("hyperdrive");
+
+      // 1. setCache
+      await adapter.setCache("test_key_1", { price: 3.45 }, 1700000000, 1700086400);
+      expect(mockStore.has("test_key_1")).toBe(true);
+
+      // 2. getCache
+      const entry = await adapter.getCache("test_key_1");
+      expect(entry).not.toBeNull();
+      expect(entry?.value).toEqual({ price: 3.45 });
+      expect(entry?.created_at).toBe(1700000000);
+
+      // 3. deleteCache
+      await adapter.deleteCache("test_key_1");
+      expect(mockStore.has("test_key_1")).toBe(false);
+
+      // 4. advisory locks
+      const locked = await adapter.acquireAdvisoryLock?.("firecrawl_quota");
+      expect(locked).toBe(true);
+      await adapter.releaseAdvisoryLock?.("firecrawl_quota");
+
+      // 5. close
+      await adapter.close();
+      expect(sqlMock.end).toHaveBeenCalled();
+    });
+
+    it("syncs prediction records via PostgresAdapter upsert", async () => {
+      const { PostgresAdapter } = await import("../workers/db_adapter");
+      const { sqlMock, executedQueries } = createMockSql();
+      const adapter = new PostgresAdapter("postgres://mock:secret@127.0.0.1:5432/mockdb", sqlMock);
+
+      const records = [
+        {
+          forecast_id: "2026-10-26_bayarea_5d",
+          log_timestamp: "2026-10-26T00:00:00Z",
+          forecast_target_date: "2026-10-31",
+          forecast_horizon_days: 5,
+          region: "bayarea",
+          model_version: "v0.8.5",
+          predicted_5d_price: 4.85,
+          actual_5d_price: 4.82
+        }
+      ];
+
+      const result = await adapter.syncPredictions(records);
+      expect(result.synced_rows).toBe(1);
+
+      const insertCall = executedQueries.find((q: any) => q.strings.join("?").includes("INSERT INTO prediction_history"));
+      expect(insertCall).toBeDefined();
+      expect(insertCall?.values).toContain("2026-10-26_bayarea_5d");
+    });
+
+    it("transparently falls back from Hyperdrive to D1 on connection failure", async () => {
+      const { PostgresAdapter, D1Adapter, ResilientStorageAdapter } = await import("../workers/db_adapter");
+      const mockD1 = createMockD1Database();
+      const d1Adapter = new D1Adapter(mockD1);
+
+      // Failing sql mock simulating socket timeout / connection refusal
+      const failingSql: any = vi.fn().mockRejectedValue(new Error("connect ECONNREFUSED 10.42.42.54:5432"));
+      failingSql.end = vi.fn().mockResolvedValue(undefined);
+
+      const postgresAdapter = new PostgresAdapter("postgres://mock:secret@10.42.42.54:5432/midgley", failingSql);
+
+      const resilientAdapter = new ResilientStorageAdapter(postgresAdapter, d1Adapter, {}, {});
+      expect(resilientAdapter.tier).toBe("hyperdrive");
+
+      // Calling setCache triggers primary failure, which logs warning and falls back to D1
+      await resilientAdapter.setCache("fallback_key", { fallback: true }, 1700000000, 1700086400);
+
+      // After fallback, tier should now be d1
+      expect(resilientAdapter.tier).toBe("d1");
+
+      // Value should be stored in D1
+      const d1Entry = await d1Adapter.getCache("fallback_key");
+      expect(d1Entry).not.toBeNull();
+      expect(d1Entry?.value).toEqual({ fallback: true });
+    });
+
+    it("serves cache worker health check with active storage tier", async () => {
+      const mockD1 = createMockD1Database();
+      const env: CacheEnv = {
+        DB: mockD1,
+        CLOUDFLARE_AUTH_TOKEN: "test_secret_token"
+      };
+
+      const res = await cacheWorker.fetch(
+        new Request("https://cache.internal/health"),
+        env,
+        {}
+      );
+
+      expect(res.status).toBe(200);
+      const json: any = await res.json();
+      expect(json.status).toBe("healthy");
+      expect(json.storage_tier).toBe("d1");
+    });
+
+    it("reports provider as hyperdrive_postgres when PROD_DB is active", async () => {
+      const { PostgresAdapter } = await import("../workers/db_adapter");
+      const { sqlMock } = createMockSql();
+      const pgAdapter = new PostgresAdapter("postgres://mock", sqlMock);
+
+      const dbAdapterMod = await import("../workers/db_adapter");
+      vi.spyOn(dbAdapterMod, "getStorageAdapter").mockReturnValue(pgAdapter);
+
+      try {
+        const env: CacheEnv = {
+          PROD_DB: { connectionString: "postgres://mock" },
+          CLOUDFLARE_AUTH_TOKEN: "auth_token_abc"
+        };
+
+        const res = await cacheWorker.fetch(
+          new Request("https://cache.internal/api/v1/sync/predictions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer auth_token_abc"
+            },
+            body: JSON.stringify({
+              predictions: [
+                {
+                  forecast_id: "test_forecast_hyperdrive_1",
+                  log_timestamp: "2026-10-26T00:00:00Z",
+                  forecast_target_date: "2026-10-31",
+                  forecast_horizon_days: 5,
+                  region: "national",
+                  model_version: "v0.8.5"
+                }
+              ]
+            })
+          }),
+          env,
+          {}
+        );
+
+        expect(res.status).toBe(200);
+        const json: any = await res.json();
+        expect(json.status).toBe("synced");
+        expect(json.provider).toBe("hyperdrive_postgres");
+        expect(json.synced_rows).toBe(1);
+      } finally {
+        vi.restoreAllMocks();
+      }
+    });
+  });
+
 });
-
-
-

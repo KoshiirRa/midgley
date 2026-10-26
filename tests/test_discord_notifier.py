@@ -290,6 +290,59 @@ class TestDiscordNotifier(unittest.TestCase):
         self.assertIn("⚡ Confirm New Incident", labels)
         self.assertIn("🚩 Flag False Positive", labels)
 
+    def test_duplicate_review_link_signature_generation_and_fallback(self):
+        """Verifies that duplicate review action links contain valid HMAC signatures with fallback."""
+        from src.discord_notifier import format_duplicate_review_discord_payload
+        new_event = {
+            "headline": "Refinery Fire in Baytown",
+            "source": "Feed",
+            "url": "https://example.com/new",
+            "scores": {"overall_price_pressure": 0.30, "supply_disruption": 0.40}
+        }
+        prior_event = {
+            "headline": "Refinery Explosion in Baytown",
+            "url": "https://example.com/old",
+            "age_hours": 2.0
+        }
+
+        # 1. With FLAG_SIGNING_KEY
+        with patch.dict(os.environ, {"FLAG_SIGNING_KEY": "test_key_123"}, clear=True):
+            payload = format_duplicate_review_discord_payload(
+                new_event, prior_event, "Baytown Refinery", 0.70, include_components=True
+            )
+            dup_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(dup_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+            self.assertEqual(qs.get("decision", [""])[0], "duplicate")
+
+        # 2. Fallback to ADMIN_TOKEN
+        with patch.dict(os.environ, {"ADMIN_TOKEN": "test_admin_token"}, clear=True):
+            payload = format_duplicate_review_discord_payload(
+                new_event, prior_event, "Baytown Refinery", 0.70, include_components=True
+            )
+            dup_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(dup_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+
+        # 3. Fallback to CLOUDFLARE_AUTH_TOKEN
+        with patch.dict(os.environ, {"CLOUDFLARE_AUTH_TOKEN": "test_cf_auth"}, clear=True):
+            payload = format_duplicate_review_discord_payload(
+                new_event, prior_event, "Baytown Refinery", 0.70, include_components=True
+            )
+            dup_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(dup_url).query)
+            self.assertTrue(bool(qs.get("sig", [""])[0]))
+
+        # 4. Without any key - logs warning and sig is empty
+        with patch.dict(os.environ, {}, clear=True), self.assertLogs("src.discord_notifier", level="WARNING") as cm:
+            payload = format_duplicate_review_discord_payload(
+                new_event, prior_event, "Baytown Refinery", 0.70, include_components=True
+            )
+            dup_url = payload["components"][0]["components"][0]["url"]
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(dup_url).query)
+            self.assertEqual(qs.get("sig", [""])[0], "")
+            self.assertTrue(any("Duplicate review links will be generated without HMAC signature" in log for log in cm.output))
+
     def test_send_duplicate_review_notification_testing_suppression(self):
         """Verifies duplicate review notification is safely suppressed under TESTING=1."""
         from src.discord_notifier import send_duplicate_review_discord_notification
