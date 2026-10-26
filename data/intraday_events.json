@@ -6868,5 +6868,26 @@
       "overall_price_pressure": 0.78
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-26T12:32:51.504941",
+    "headline": "Inside the worst month for ships in the Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE0tNTVnUzVyMmExWFFYaU9rN25jZDZJaFZ3cF9ZeW1jSllXT3ZVeEJxNHNZRUVEU1hWdHpPMGdyczd6SFFRQTJCZFNJX1p1dW42WkIyMWJfN0c3ZERSQ2dzS3QwanlPbmg2Nk95bTdGZmZnV1pVR0E?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE0tNTVnUzVyMmExWFFYaU9rN25jZDZJaFZ3cF9ZeW1jSllXT3ZVeEJxNHNZRUVEU1hWdHpPMGdyczd6SFFRQTJCZFNJX1p1dW42WkIyMWJfN0c3ZERSQ2dzS3QwanlPbmg2Nk95bTdGZmZnV1pVR0E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidkFVX3lxTE0tNTVnUzVyMmExWFFYaU9rN25jZDZJaFZ3cF9ZeW1jSllXT3ZVeEJxNHNZRUVEU1hWdHpPMGdyczd6SFFRQTJCZFNJX1p1dW42WkIyMWJfN0c3ZERSQ2dzS3QwanlPbmg2Nk95bTdGZmZnV1pVR0E?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.65,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]

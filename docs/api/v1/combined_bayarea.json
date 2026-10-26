@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-26T00:35:38.799658",
+  "timestamp": "2026-10-26T12:33:13.997171",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 6.078,
+    "current_price_per_gal": 6.076,
     "source": "AAA Web Scraper (San Francisco, CA)",
     "provenance": {
       "source": "AAA Web Scraper (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-26T00:35:21Z"
+      "timestamp": "2026-10-26T12:32:56Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-30",
-    "current_base_price": 6.078,
-    "predicted_price_per_gal": 5.847,
+    "current_base_price": 6.076,
+    "predicted_price_per_gal": 5.845,
     "expected_change_dollars": -0.231,
     "expected_change_percent": -3.8,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 5.727,
-    "prediction_upper_95ci": 5.967,
+    "prediction_lower_95ci": 5.725,
+    "prediction_upper_95ci": 5.965,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 6.032,
-    "day_2_price": 5.982,
-    "day_3_price": 5.975,
-    "day_4_price": 5.984,
-    "day_5_price": 5.847,
+    "day_1_price": 6.03,
+    "day_2_price": 5.98,
+    "day_3_price": 5.973,
+    "day_4_price": 5.982,
+    "day_5_price": 5.845,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

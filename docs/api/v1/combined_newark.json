@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-26T00:35:37.715760",
+  "timestamp": "2026-10-26T12:33:12.655731",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.91,
+    "current_price_per_gal": 3.898,
     "source": "AAA Web Scraper (Wilmington, DE)",
     "provenance": {
       "source": "AAA Web Scraper (Wilmington, DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-26T00:35:20Z"
+      "timestamp": "2026-10-26T12:32:54Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-10-30",
-    "current_base_price": 3.91,
-    "predicted_price_per_gal": 3.763,
+    "current_base_price": 3.898,
+    "predicted_price_per_gal": 3.751,
     "expected_change_dollars": -0.147,
-    "expected_change_percent": -3.76,
+    "expected_change_percent": -3.77,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.561,
-    "prediction_upper_95ci": 3.965,
+    "prediction_lower_95ci": 3.549,
+    "prediction_upper_95ci": 3.953,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 2,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.881,
-    "day_2_price": 3.849,
-    "day_3_price": 3.845,
-    "day_4_price": 3.851,
-    "day_5_price": 3.763,
+    "day_1_price": 3.869,
+    "day_2_price": 3.837,
+    "day_3_price": 3.833,
+    "day_4_price": 3.839,
+    "day_5_price": 3.751,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast $-0.147/gal (-3.76%): Driven primarily by Refining Yield & Crack Spread ($-0.051/gal), Regional Logistics & Hub Delivery ($-0.037/gal).",
+      "summary_text": "Newark DE forecast $-0.147/gal (-3.77%): Driven primarily by Refining Yield & Crack Spread ($-0.051/gal), Regional Logistics & Hub Delivery ($-0.037/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.051,
-          "impact_pct": -1.3,
+          "impact_pct": -1.31,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -134,7 +134,7 @@
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.008,
-          "impact_pct": -0.2,
+          "impact_pct": -0.21,
           "share_pct": 5.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.051,
-      "impact_pct": -1.3,
+      "impact_pct": -1.31,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -186,7 +186,7 @@
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.008,
-      "impact_pct": -0.2,
+      "impact_pct": -0.21,
       "share_pct": 5.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast $-0.147/gal (-3.76%): Driven primarily by Refining Yield & Crack Spread ($-0.051/gal), Regional Logistics & Hub Delivery ($-0.037/gal).",
+    "summary_text": "Newark DE forecast $-0.147/gal (-3.77%): Driven primarily by Refining Yield & Crack Spread ($-0.051/gal), Regional Logistics & Hub Delivery ($-0.037/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
