@@ -796,7 +796,13 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
             with open(intraday_json, "r", encoding="utf-8") as f:
                 events = json.load(f)
                 if isinstance(events, list) and len(events) > 0:
-                    anomalies = [e for e in events if e.get("is_anomaly")]
+                    anomalies = [
+                        e for e in events
+                        if e.get("is_anomaly")
+                        and not e.get("pending_review")
+                        and e.get("review_decision") != "duplicate"
+                        and not e.get("is_duplicate")
+                    ]
                     latest_evt = anomalies[-1] if anomalies else events[-1]
 
                     if run_type == "INTRADAY_REVISION" or bool(headline_trigger):
@@ -819,7 +825,13 @@ def parse_last_run_intelligence(history_path: str = None, intraday_path: str = N
                 with open(intraday_json, "r", encoding="utf-8") as f:
                     events = json.load(f)
                     if isinstance(events, list):
-                        anomalies = [e for e in events if e.get("is_anomaly")]
+                        anomalies = [
+                            e for e in events
+                            if e.get("is_anomaly")
+                            and not e.get("pending_review")
+                            and e.get("review_decision") != "duplicate"
+                            and not e.get("is_duplicate")
+                        ]
                         target_evts = anomalies if anomalies else events
                         for evt in reversed(target_evts):
                             h_text = evt.get("headline", "")
@@ -956,6 +968,15 @@ def build_metro_narrative_card_html(
     outage_exposure: float = None,
 ) -> str:
     """Renders dynamic plain-English automated narrative synthesis card for a regional metro (Issue #493)."""
+    if outage_exposure is None:
+        try:
+            from src.nhc_hurricane import get_nhc_vintages_as_of
+            latest_nhc = get_nhc_vintages_as_of(datetime.now().strftime("%Y-%m-%d"))
+            if latest_nhc and "nhc_gulf_refinery_exposure_score" in latest_nhc:
+                outage_exposure = float(latest_nhc.get("nhc_gulf_refinery_exposure_score", 0.0))
+        except Exception:
+            pass
+
     narrative_data = generate_metro_narrative(
         metro_key=metro_key,
         current_price=current_price,
@@ -971,23 +992,45 @@ def build_metro_narrative_card_html(
 def build_national_narrative_card_html(
     current_price: float,
     forecast_price: float,
+    outage_exposure: float = None,
 ) -> str:
     """Renders dynamic plain-English automated narrative synthesis card for National Wholesale RBOB (Issue #493)."""
+    if outage_exposure is None:
+        try:
+            from src.nhc_hurricane import get_nhc_vintages_as_of
+            latest_nhc = get_nhc_vintages_as_of(datetime.now().strftime("%Y-%m-%d"))
+            if latest_nhc and "nhc_gulf_refinery_exposure_score" in latest_nhc:
+                outage_exposure = float(latest_nhc.get("nhc_gulf_refinery_exposure_score", 0.0))
+        except Exception:
+            pass
+
     narrative_data = generate_national_wholesale_narrative(
         current_price=current_price,
         forecast_price=forecast_price,
         horizon_days=5,
+        outage_exposure=outage_exposure,
     )
     return render_narrative_card_html(narrative_data, variant="national")
 
 
 def build_macro_narrative_card_html(
     prices_map: dict,
+    outage_exposure: float = None,
 ) -> str:
     """Renders dynamic plain-English automated macro synthesis narrative card for the main index dashboard (Issue #493)."""
+    if outage_exposure is None:
+        try:
+            from src.nhc_hurricane import get_nhc_vintages_as_of
+            latest_nhc = get_nhc_vintages_as_of(datetime.now().strftime("%Y-%m-%d"))
+            if latest_nhc and "nhc_gulf_refinery_exposure_score" in latest_nhc:
+                outage_exposure = float(latest_nhc.get("nhc_gulf_refinery_exposure_score", 0.0))
+        except Exception:
+            pass
+
     narrative_data = generate_macro_synthesis_narrative(
         prices_map=prices_map,
         horizon_days=5,
+        outage_exposure=outage_exposure,
     )
     return render_narrative_card_html(narrative_data, variant="macro")
 
@@ -6234,6 +6277,18 @@ def generate_public_dashboard():
                     <strong>Tier 2 (Chicago IL/IN):</strong> Cook County (<code class="text-amber-300">ILZ104</code> / Zip <code class="text-amber-300">60601</code>) and Lake County IN (<code class="text-amber-300">INZ001</code>) Lake Michigan polar vortex freezes, summer severe convective derechos, and BP Whiting/CITGO Lemont cooling water intake loops.<br>
                     <strong>Tier 2 (Houston TX):</strong> Harris County (<code class="text-amber-300">TXZ213</code> / Zip <code class="text-amber-300">77002</code>) and Galveston/Jefferson Counties Gulf hurricane storm surges, tropical convective inundation (Harvey-style), winter freeze-offs, and Houston Ship Channel marine draft restrictions across Baytown (560 kbpd) and Port Arthur (630 kbpd).<br>
                     <strong>Tier 2 (Los Angeles CA):</strong> Los Angeles County (<code class="text-amber-300">CAZ041</code> / Zip <code class="text-amber-300">90012</code>) Santa Ana Red Flag / SCE PSPS wind events, Pacific atmospheric river inundation, San Pedro Bay marine swell closures, and Newport-Inglewood seismic shutoffs across Carson/Wilmington (363 kbpd), El Segundo (269 kbpd), and Torrance (166 kbpd).
+                </p>
+            </div>
+
+            <!-- Equation 5.2: NOAA NHC Tropical Cyclone Wind Swaths & EIA-820 Refining Capacity Intersect (Issue #634) -->
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.2: Capacity-Weighted PADD 3 Refining Exposure Score</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\text{Exposure Score} = \frac{\sum_{i \in \text{Hazard Zone}} \text{Capacity}_i}{\sum_{i \in \text{PADD 3}} \text{Capacity}_i} = \frac{\sum_{i=1}^N \mathbf{1}_{(\text{lat}_i, \text{lon}_i) \in \mathcal{P}_{\text{cone}}} \cdot C_i}{\sum_{i=1}^N C_i}$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Spatial Point-in-Polygon Containment:</strong> Rather than uniform text keyword matching across the entire Gulf of Mexico, <code class="text-blue-300">src/nhc_hurricane.py</code> parses NOAA NHC active 34-knot tropical storm and 64-knot hurricane wind swath boundaries (\(\mathcal{P}_{\text{cone}}\)) and performs ray-casting containment tests against exact geographic coordinates and operable crude distillation capacities (\(C_i\)) from EIA Form 820.<br>
+                    <strong>Geographic Asymmetry Calibration:</strong> Captures critical spatial supply divergence across \(7.82\text{M bpd}\) of PADD 3 refining assets. Eastern Gulf landfalls (e.g. Florida Panhandle / Destin) impact only Mississippi Sound and Mobile Bay facilities (Chevron Pascagoula, Vertex Mobile), yielding low exposure (\(&lt;15\%\)), while Western Gulf tracks targeting the Upper Texas Coast and Southwest Louisiana directly intersect the dense refining epicenter (Houston Ship Channel, Galveston Bay, Port Arthur, Lake Charles), yielding proportional high exposure (\(&gt;50\%\)).
                 </p>
             </div>
         </section>

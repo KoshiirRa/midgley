@@ -75,25 +75,8 @@ def resolve_cloudflare_api_token(api_token: Optional[str] = None) -> Optional[st
     if token and token.strip():
         return token.strip()
 
-    # Check local wrangler config paths defensively (Linux / Windows)
-    candidate_paths = [
-        os.path.expanduser("~/.config/.wrangler/config/default.toml"),
-        os.path.expandvars(r"%APPDATA%\xdg.config\.wrangler\config\default.toml"),
-    ]
-    for cfg_path in candidate_paths:
-        if os.path.exists(cfg_path):
-            try:
-                with open(cfg_path, "r", encoding="utf-8") as f:
-                    for line in f:
-                        if line.strip().startswith("oauth_token"):
-                            parts = line.split("=")
-                            if len(parts) >= 2:
-                                extracted = parts[1].strip().strip('"').strip("'")
-                                if extracted:
-                                    return extracted
-            except Exception:
-                pass
     return None
+
 
 
 class CloudflareBrowserRunClient:
@@ -115,18 +98,59 @@ class CloudflareBrowserRunClient:
 
     @property
     def is_configured(self) -> bool:
-        """Returns True if both Account ID and API Token are available."""
-        return bool(self.account_id and self.api_token)
+        """Returns True if worker URL or both Account ID and API Token are available."""
+        worker_url = os.getenv("CLOUDFLARE_BROWSER_RUN_URL") or os.getenv("CLOUDFLARE_BROWSER_URL")
+        if worker_url:
+            return True
+        acc_id = self.account_id or resolve_cloudflare_account_id()
+        token = self.api_token or resolve_cloudflare_api_token()
+        return bool(acc_id and token)
 
     def fetch_markdown(self, url: str, timeout: Optional[float] = None) -> Optional[str]:
         """
         Executes a headless Browser Run session to render a page to Markdown.
+        Supports:
+        1. Dedicated Cloudflare Worker edge endpoint (CLOUDFLARE_BROWSER_RUN_URL).
+        2. Direct Cloudflare Browser Run REST API (/browser-run/markdown).
         Returns the markdown text on success, or None on failure or missing credentials.
         """
         if not url:
             return None
 
-        # Re-resolve in case env vars were set after client initialization
+        effective_timeout = timeout or self.timeout
+        t0 = time.time()
+
+        # 1. Try dedicated edge worker endpoint if configured
+        worker_url = os.getenv("CLOUDFLARE_BROWSER_RUN_URL") or os.getenv("CLOUDFLARE_BROWSER_URL")
+        if worker_url:
+            try:
+                worker_endpoint = f"{worker_url.rstrip('/')}/api/v1/news/scrape-markdown"
+                token = self.api_token or resolve_cloudflare_api_token()
+                headers = {
+                    "Content-Type": "application/json",
+                    "User-Agent": self.user_agent
+                }
+                if token:
+                    headers["Authorization"] = f"Bearer {token}"
+                payload = {"url": url}
+                worker_resp = http_post(worker_endpoint, json=payload, headers=headers, timeout=effective_timeout)
+                if worker_resp is not None and worker_resp.status_code == 200:
+                    data = worker_resp.json()
+                    md = data.get("markdown") if isinstance(data, dict) else None
+                    if md and isinstance(md, str) and len(md.strip()) > 0:
+                        latency_ms = (time.time() - t0) * 1000.0
+                        log_connector_event(
+                            "Cloudflare_Browser_Run_Worker",
+                            url,
+                            status="SUCCESS",
+                            latency_ms=latency_ms,
+                            details=f"Extracted {len(md)} chars"
+                        )
+                        return md
+            except Exception as e:
+                logger.debug("Edge Worker Browser Run notice for %s: %s", url, e)
+
+        # 2. Try direct Cloudflare Browser Run REST API
         acc_id = self.account_id or resolve_cloudflare_account_id()
         token = self.api_token or resolve_cloudflare_api_token()
 
@@ -137,18 +161,27 @@ class CloudflareBrowserRunClient:
             )
             return None
 
-        endpoint = f"https://api.cloudflare.com/client/v4/accounts/{acc_id}/browser-run/markdown"
+        endpoints = [
+            f"https://api.cloudflare.com/client/v4/accounts/{acc_id}/browser-run/markdown",
+            f"https://api.cloudflare.com/client/v4/accounts/{acc_id}/browser-rendering/markdown",
+        ]
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
             "User-Agent": self.user_agent
         }
         payload = {"url": url}
-        t0 = time.time()
-        effective_timeout = timeout or self.timeout
 
         try:
-            resp = http_post(endpoint, json=payload, headers=headers, timeout=effective_timeout)
+            resp = None
+            for ep in endpoints:
+                resp = http_post(ep, json=payload, headers=headers, timeout=effective_timeout)
+                if resp is not None and resp.status_code == 200:
+                    break
+                if resp is not None and resp.status_code != 404:
+                    # Non-404 error (e.g. 401, 403, 500), no need to try alternate path
+                    break
+
             latency_ms = (time.time() - t0) * 1000.0
 
             if resp is not None and resp.status_code == 200:
@@ -183,6 +216,7 @@ class CloudflareBrowserRunClient:
                 )
                 logger.debug("Cloudflare Browser Run returned status %s for %s", status_code, url)
                 return None
+
         except Exception as e:
             latency_ms = (time.time() - t0) * 1000.0
             log_connector_event(

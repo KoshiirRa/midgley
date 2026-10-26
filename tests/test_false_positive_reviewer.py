@@ -50,6 +50,35 @@ def test_analyze_headline_triggers_data_center_spill():
     assert "minor localized facility/generator spill" in analysis["diagnosis"]
 
 
+def test_analyze_headline_triggers_issue_659_geographic_scope():
+    headline = "Michigan, Ohio Gas Prices Jump Again as Illinois Refinery Outage Ripples Through Midwest - marketscreener.com"
+    analysis = analyze_headline_triggers(headline, category="Non-Energy Macro Tariff", notes="Need to fix it so it isn't national scope")
+
+    assert analysis["has_energy_context"] is True
+    assert analysis["is_geo_scope_issue"] is True
+    assert "refinery outage" in analysis["matched_triggers"]
+    assert "geographic/scope targeting defect" in analysis["diagnosis"]
+    assert len(analysis["suggested_exclusions"]) == 0
+
+    comment = format_diagnostic_comment(analysis)
+    assert "Do **not** suppress the catalyst" in comment
+    assert "resolve_target_locales" in comment
+    assert "NON_ENERGY_TARIFF_EXCLUDE.extend" not in comment
+
+
+def test_analyze_headline_triggers_issue_658_retrospective_recap():
+    headline = "October Marks Highest Number of Strait of Hormuz Attacks"
+    analysis = analyze_headline_triggers(headline, category="Non-Energy Macro Tariff")
+
+    assert analysis["is_retrospective_recap"] is True
+    assert "retrospective monthly/periodic statistical summary" in analysis["diagnosis"]
+    assert len(analysis["suggested_exclusions"]) == 0
+
+    comment = format_diagnostic_comment(analysis)
+    assert "RETROSPECTIVE_RECAP_PATTERNS" in comment
+    assert "NON_ENERGY_TARIFF_EXCLUDE.extend" not in comment
+
+
 def test_parse_headline_from_issue_body():
     body_trigger_block = """## False Positive Anomaly Report (#258)
 

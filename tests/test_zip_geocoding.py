@@ -229,6 +229,20 @@ def test_api_server_zip_code_query_integration():
     assert "total_unmapped_queries" in data_tele
 
 
+def test_api_server_out_of_metro_zip_live_prices():
+    """Verifies that an out-of-metro ZIP returns live price resolution without hardcoded 3.89 fallback."""
+    resp = client.get("/api/v1/prices/live?zip_code=95814")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "success"
+    assert data["zip_code"] == "95814"
+    assert data["zip_code_resolution"]["is_metro_cluster_hit"] is False
+    assert data["price_per_gal"] > 0
+    assert "provenance" in data
+    assert data["provenance"]["requested_granularity"] == "ZIP"
+    assert data["source"] is not None
+
+
 def test_leading_zero_zip_resolution():
     """Verifies that integer and short string ZIP codes with leading zeros (e.g. NJ 07001, MA 02138) are zero-padded correctly (Issue #335)."""
     # 1. New Jersey ZIP passed as 4-digit int/string (should resolve to NJ / PADD 1B Newark, not LA 700)

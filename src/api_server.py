@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field, model_validator
 from src.live_fuel_feed import (
     fetch_live_metro_retail_price,
     fetch_gasbuddy_prices_by_zip,
+    fetch_live_out_of_metro_price,
     REGION_METADATA
 )
 from src.lookup_cache import global_cache
@@ -774,15 +775,18 @@ def _get_live_prices_impl(
         locale = loc_res.get("locale_code", locale or "national")
 
     if zip_code and not loc_res.get("is_metro_cluster_hit", False):
-        gb_data = fetch_gasbuddy_prices_by_zip(zip_code)
-        if not gb_data:
-            gb_data = {
-                "average_price": 3.890,
-                "stations": [],
-                "source": f"GasBuddy Fallback (Zip {zip_code})"
-            }
+        out_res = fetch_live_out_of_metro_price(zip_code, state_code=loc_res.get("state", "US"))
         region_code = _normalize_locale(locale)
         meta = PADD_METADATA.get(region_code, PADD_METADATA["National"])
+        served_gran = out_res.get("granularity", "STATE")
+        provenance_meta = global_cache.build_provenance_chain(
+            source=out_res.get("source", "UNKNOWN"),
+            region_id=region_code,
+            padd=loc_res.get("padd_region", meta.get("padd", "PADD 2")),
+            requested_granularity="ZIP",
+            served_granularity=served_gran,
+            cache_status="MISS"
+        )
         res_data = {
             "status": "success",
             "timestamp": datetime.now().isoformat(),
@@ -794,9 +798,10 @@ def _get_live_prices_impl(
                 "name": meta["name"],
                 "padd_region": loc_res.get("padd_region", meta["padd"])
             },
-            "price_per_gal": gb_data.get("average_price"),
-            "source": gb_data.get("source"),
-            "data": gb_data,
+            "price_per_gal": out_res.get("price") or out_res.get("average_price"),
+            "source": out_res.get("source"),
+            "provenance": provenance_meta,
+            "data": out_res,
             "carb_tax_regulatory_burden_per_gal": loc_res.get("state_tax_rate_per_gal", meta["carb_tax"])
         }
         if loc_res:

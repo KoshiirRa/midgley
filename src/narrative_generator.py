@@ -490,6 +490,31 @@ def generate_metro_narrative(
 
     driver_tags = [d.get("factor", str(d)) for d in driver_list]
 
+    # Incorporate EIA-820 spatial tropical cyclone refining exposure (Issue #634)
+    active_exposure = outage_exposure
+    if active_exposure is None and context:
+        active_exposure = context.get("nhc_gulf_refinery_exposure_score")
+
+    if active_exposure is not None and active_exposure > 0.0:
+        pct_exp = active_exposure * 100.0
+        if active_exposure >= 0.50:
+            badges.append(f"USGC Hazard Cone ({pct_exp:.1f}% Exposure)")
+            detailed_prose += (
+                f" Active NOAA NHC tropical cyclone forecast cone intersects the Western Gulf refining epicenter, "
+                f"placing {pct_exp:.1f}% of PADD 3 operable distillation capacity directly within the wind and surge hazard zone."
+            )
+        elif active_exposure < 0.15:
+            badges.append(f"Eastern Gulf Track ({pct_exp:.1f}% Minor)")
+            detailed_prose += (
+                f" Active tropical cyclone track remains confined to the Eastern Gulf (Destin/Panhandle), "
+                f"limiting PADD 3 operable refining exposure to {pct_exp:.1f}% and completely sparing Western Gulf hubs."
+            )
+        else:
+            badges.append(f"PADD 3 Hazard Zone ({pct_exp:.1f}%)")
+            detailed_prose += (
+                f" Active NOAA NHC tropical cyclone hazard zone covers {pct_exp:.1f}% of operable PADD 3 refining capacity."
+            )
+
     return {
         "region_id": actual_region,
         "metro_key": actual_region,
@@ -517,6 +542,7 @@ def generate_macro_synthesis_narrative(
     prices_map: Optional[Dict[str, Any]] = None,
     horizon_days: int = 5,
     macro_catalysts: Optional[List[str]] = None,
+    outage_exposure: Optional[float] = None,
 ) -> Dict[str, Any]:
     """
     Generates high-level executive summary narrative for the main dashboard (index.html),
@@ -563,12 +589,29 @@ def generate_macro_synthesis_narrative(
         f"backed by nominal refinery operations and Cushing inventory parity."
     )
 
+    # Incorporate EIA-820 spatial tropical cyclone refining exposure (Issue #634)
+    if outage_exposure is not None and outage_exposure > 0.0:
+        pct_exp = outage_exposure * 100.0
+        if outage_exposure >= 0.50:
+            badges.append(f"USGC Hazard Cone ({pct_exp:.1f}% Exposure)")
+            prose += (
+                f" In the Gulf Coast refining corridor, active NOAA NHC forecast cones directly threaten the Western Gulf refining epicenter, "
+                f"exposing {pct_exp:.1f}% (>4.4M bpd) of PADD 3 operable distillation capacity."
+            )
+        elif outage_exposure < 0.15:
+            badges.append(f"Eastern Gulf Asymmetry ({pct_exp:.1f}%)")
+            prose += (
+                f" In the Gulf of Mexico, storm exposure is geographically asymmetric ({pct_exp:.1f}% of PADD 3 capacity), "
+                f"with Eastern Gulf landfall tracks sparing the dense Texas and Southwest Louisiana refining complex."
+            )
+
     divergence_note = f"PADD regional divergence: {len(gaining_regions)} markets projecting gains, {len(declining_regions)} easing."
 
     return {
         "badges": badges,
         "headline": headline,
         "prose": prose,
+        "narrative": prose,
         "macro_summary": prose,
         "divergence_note": divergence_note,
         "total_gaining_markets": len(gaining_regions),
@@ -588,6 +631,7 @@ def generate_national_wholesale_narrative(
     horizon_days: int = 5,
     top_drivers: Optional[List[Dict[str, Any]]] = None,
     model_family: str = "ElasticNet + Shock Memory Fusion",
+    outage_exposure: Optional[float] = None,
 ) -> Dict[str, Any]:
     """
     Generates national wholesale RBOB futures narrative for national.html.
@@ -627,6 +671,22 @@ def generate_national_wholesale_narrative(
             f"U.S. refinery utilization and finished gasoline commercial inventories remain in equilibrium against WTI crude oil (${wti_price:.2f}/bbl). "
             f"Multi-scale quantitative modeling ({model_family}) projects stable wholesale prices over the {horizon_days}-day horizon."
         )
+
+    # Incorporate EIA-820 spatial tropical cyclone refining exposure (Issue #634)
+    if outage_exposure is not None and outage_exposure > 0.0:
+        pct_exp = outage_exposure * 100.0
+        if outage_exposure >= 0.50:
+            badges.append(f"USGC Hazard Cone ({pct_exp:.1f}% Exposure)")
+            prose += (
+                f" Spatial tropical cyclone wind swaths directly intersect the Western Gulf refining epicenter, "
+                f"exposing {pct_exp:.1f}% (>4.4M bpd) of PADD 3 operable crude distillation capacity to potential shut-ins."
+            )
+        elif outage_exposure < 0.15:
+            badges.append(f"Eastern Gulf Track ({pct_exp:.1f}% Minor)")
+            prose += (
+                f" Tropical cyclone track remains confined to the Eastern Gulf (Florida Panhandle), "
+                f"limiting total PADD 3 refining capacity exposure to {pct_exp:.1f}% and sparing the Texas/SW Louisiana refining complex."
+            )
 
     def _format_impact(amt: float) -> str:
         if amt > 0:

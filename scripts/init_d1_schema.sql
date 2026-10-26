@@ -64,3 +64,15 @@ CREATE TABLE IF NOT EXISTS flag_replay_tokens (
     used_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_flag_replay_used_at ON flag_replay_tokens (used_at);
+
+-- 5. EDGAR 8-K Outage Ingestion Deduplication Ledger (Issue #129, #644)
+CREATE TABLE IF NOT EXISTS edgar_8k_seen (
+    accession_id TEXT PRIMARY KEY,
+    ticker TEXT NOT NULL,
+    filed_at TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_accession ON edgar_8k_seen (accession_id);
+CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_ticker ON edgar_8k_seen (ticker);
+CREATE INDEX IF NOT EXISTS idx_edgar_8k_seen_filed_at ON edgar_8k_seen (filed_at);
+

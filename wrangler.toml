@@ -1,14 +1,25 @@
 name = "midgley-intraday-monitor"
 main = "workers/intraday_monitor_worker.ts"
 compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
 
 [vars]
 AXIOM_DATASET = "midgley-workers"
-EDGAR_8K_TICKERS = "PBF,DINO,MPC,VLO,PSX"
+EDGAR_8K_TICKERS = "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD"
 MIDGLEY_AGENT_USER_AGENT = "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
-# SEC_USER_AGENT is sensitive — set as a Worker secret (never commit to wrangler.toml):
+HINDSIGHT_API_URL = "https://api.hindsight.vectorize.io"
+HINDSIGHT_DEDUPE_BANK_ID = "midgley-event-dedupe"
+# SEC_USER_AGENT and HINDSIGHT_API_TOKEN are sensitive — set as Worker secrets (never commit to wrangler.toml):
 # wrangler secret put SEC_USER_AGENT
+# wrangler secret put HINDSIGHT_API_TOKEN
 # Value format: "Midgley your@email.com" (per EDGAR robots.txt policy)
+
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "EVENT_INDEX"
+index_name = "midgley-event-embeddings"
 
 [browser]
 binding = "MYBROWSER"
@@ -27,6 +38,11 @@ max_batch_timeout = 5
 max_retries = 3
 dead_letter_queue = "intraday-event-dlq"
 
+[[queues.consumers]]
+queue = "intraday-event-dlq"
+max_batch_size = 10
+max_batch_timeout = 30
+
 
 [observability]
 enabled = true
@@ -41,4 +57,3 @@ invocation_logs = true
 binding = "DB"
 database_name = "midgley-cache-d1"
 database_id = "bd1954f1-33b6-4adb-9219-ea5ec43fe2b7"
-

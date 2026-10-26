@@ -1,6 +1,6 @@
 {
   "benchmark_key": "baker_hughes",
-  "last_refreshed_utc": "2026-10-17 16:45:52",
+  "last_refreshed_utc": "2026-10-24 16:54:21",
   "records_count": 9,
   "data": [
     {
@@ -11,7 +11,10 @@
       "baker_hughes_us_rig_count": 481,
       "baker_hughes_gas_rigs": 96,
       "baker_hughes_rig_delta_1w": 0.0,
-      "baker_hughes_rig_delta_4w": 0.0
+      "baker_hughes_rig_delta_4w": 0.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2022-06-03",
@@ -21,7 +24,10 @@
       "baker_hughes_us_rig_count": 574,
       "baker_hughes_gas_rigs": 114,
       "baker_hughes_rig_delta_1w": 93.0,
-      "baker_hughes_rig_delta_4w": 0.0
+      "baker_hughes_rig_delta_4w": 0.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2022-12-02",
@@ -31,7 +37,10 @@
       "baker_hughes_us_rig_count": 627,
       "baker_hughes_gas_rigs": 125,
       "baker_hughes_rig_delta_1w": 53.0,
-      "baker_hughes_rig_delta_4w": 0.0
+      "baker_hughes_rig_delta_4w": 0.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2023-06-02",
@@ -41,7 +50,10 @@
       "baker_hughes_us_rig_count": 555,
       "baker_hughes_gas_rigs": 111,
       "baker_hughes_rig_delta_1w": -72.0,
-      "baker_hughes_rig_delta_4w": 0.0
+      "baker_hughes_rig_delta_4w": 0.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2023-12-01",
@@ -51,7 +63,10 @@
       "baker_hughes_us_rig_count": 505,
       "baker_hughes_gas_rigs": 101,
       "baker_hughes_rig_delta_1w": -50.0,
-      "baker_hughes_rig_delta_4w": 24.0
+      "baker_hughes_rig_delta_4w": 24.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2024-06-07",
@@ -61,7 +76,10 @@
       "baker_hughes_us_rig_count": 492,
       "baker_hughes_gas_rigs": 98,
       "baker_hughes_rig_delta_1w": -13.0,
-      "baker_hughes_rig_delta_4w": -82.0
+      "baker_hughes_rig_delta_4w": -82.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2024-12-06",
@@ -71,7 +89,10 @@
       "baker_hughes_us_rig_count": 484,
       "baker_hughes_gas_rigs": 96,
       "baker_hughes_rig_delta_1w": -8.0,
-      "baker_hughes_rig_delta_4w": -143.0
+      "baker_hughes_rig_delta_4w": -143.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2025-06-06",
@@ -81,7 +102,10 @@
       "baker_hughes_us_rig_count": 478,
       "baker_hughes_gas_rigs": 95,
       "baker_hughes_rig_delta_1w": -6.0,
-      "baker_hughes_rig_delta_4w": -77.0
+      "baker_hughes_rig_delta_4w": -77.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     },
     {
       "date": "2026-01-09",
@@ -91,7 +115,10 @@
       "baker_hughes_us_rig_count": 472,
       "baker_hughes_gas_rigs": 94,
       "baker_hughes_rig_delta_1w": -6.0,
-      "baker_hughes_rig_delta_4w": -33.0
+      "baker_hughes_rig_delta_4w": -33.0,
+      "enverus_permian_rigs": 254,
+      "enverus_gulf_coast_rigs": 72,
+      "enverus_total_rigs": 656
     }
   ]
 }

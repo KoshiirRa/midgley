@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@sentry/cloudflare": "^8.0.0",
+    "postgres": "^3.4.9",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
@@ -22,5 +23,3 @@
     "@cloudflare/workers-types": "$@cloudflare/workers-types"
   }
 }
-
-

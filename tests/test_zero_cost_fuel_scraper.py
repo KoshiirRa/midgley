@@ -64,8 +64,9 @@ class TestZeroCostFuelScraper(unittest.TestCase):
         self.assertIn("regular", res["grades"])
         self.assertEqual(res["grades"]["regular"], 3.890)
 
+    @patch("src.live_fuel_feed.fetch_aaa_csv_prices", return_value=None)
     @patch("src.live_fuel_feed.urllib.request.urlopen")
-    def test_fetch_aaa_fuel_prices_all_grades_html_parsing(self, mock_urlopen):
+    def test_fetch_aaa_fuel_prices_all_grades_html_parsing(self, mock_urlopen, mock_csv):
         """Verify multi-grade HTML parsing extracts Regular, Midgrade, Premium, Diesel prices."""
         mock_response = MagicMock()
         mock_response.status = 200
