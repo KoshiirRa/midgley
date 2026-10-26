@@ -258,6 +258,32 @@ Midgley includes a 3-tier caching system (`src/lookup_cache.py`) that eliminates
    python3 -m src.lookup_cache --test-cloudflare
    ```
 
+
+### Option C: Direct Database TCP Connections via Cloudflare Hyperdrive (Issue #641)
+For high-performance prediction ledger lookups, distributed rate-limit advisory locking, and sub-15ms edge database latency, connect edge workers directly to a centralized PostgreSQL instance (such as self-hosted PostgreSQL on `dev-vm`, Supabase, or Neon) using **Cloudflare Hyperdrive**:
+
+1. Create a Hyperdrive connection configuration pointing to your origin PostgreSQL database:
+   ```bash
+   npx wrangler hyperdrive create midgley-postgres-hyperdrive \
+     --connection-string="postgres://USER:PASSWORD@HOST:5432/DBNAME"
+   ```
+2. Bind Hyperdrive in `wrangler.cache.toml`:
+   ```toml
+   compatibility_flags = ["nodejs_compat"]
+
+   [[hyperdrive]]
+   binding = "PROD_DB"
+   id = "<HYPERDRIVE_ID>"
+   ```
+3. Deploy the worker:
+   ```bash
+   npx wrangler deploy --config wrangler.cache.toml
+   ```
+4. **Defensive Multi-Tier Fallback**:
+   The worker transparently manages connection lifecycle:
+   $\\text{Client Request} \\longrightarrow \\text{Hyperdrive (Direct TCP / postgres.js)} \\xrightarrow{\\text{Socket Failure / Timeout}} \\text{Cloudflare D1 (env.DB)} \\xrightarrow{\\text{Offline}} \\text{In-Memory}$
+   If TCP connection fails or times out (>5s), the worker automatically falls back to Cloudflare D1 without throwing 500 errors to callers, logging telemetry to Axiom and Sentry.
+
 ### Deploying the Intraday RSS Monitoring Worker (`midgley-intraday-monitor`)
 1. Validate TypeScript types and run automated Worker test suite:
    ```bash

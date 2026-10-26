@@ -1,9 +1,15 @@
 name = "midgley-cache-worker"
 main = "workers/cache_worker.ts"
 compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
 
 [vars]
 AXIOM_DATASET = "midgley-workers"
+
+# Optional Hyperdrive binding for Issue #641 direct PostgreSQL TCP connections
+# [[hyperdrive]]
+# binding = "PROD_DB"
+# id = "midgley-postgres-hyperdrive"
 
 [observability]
 enabled = true

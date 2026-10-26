@@ -2,12 +2,17 @@
  * Cloudflare Worker for Midgley Tier 2 Edge Cache & Quota Synchronization
  * (workers/cache_worker.ts)
  *
- * Implements REST endpoints for key-value caching (D1 / KV binding) and quota sync
+ * Implements REST endpoints for key-value caching (Hyperdrive / D1 / KV binding) and quota sync
  * with Bearer authentication and Option A2 telemetry instrumentation (Axiom & Sentry).
+ * Supports Issue #641 direct database TCP connections via Cloudflare Hyperdrive and cloudflare:sockets.
  */
 
+import { getStorageAdapter, StorageAdapter, CacheEntry } from "./db_adapter";
+
 export interface Env {
-  DB?: any; // Cloudflare D1 Binding
+  DB?: any;               // Cloudflare D1 Binding
+  PROD_DB?: any;          // Cloudflare Hyperdrive Binding (Issue #641)
+  DATABASE_URL?: string;  // Direct PostgreSQL Connection URL secret (Issue #641)
   CLOUDFLARE_AUTH_TOKEN?: string;
   SENTRY_DSN?: string;
   AXIOM_TOKEN?: string;
@@ -111,11 +116,18 @@ export default {
     const authHeader = request.headers.get("Authorization");
 
     try {
+      const storageAdapter = getStorageAdapter(env, ctx);
+
       // Public health check endpoint
       if (url.pathname === "/health" || url.pathname === "/status") {
         console.log(`[Cache Health Check] Status requested`);
         return new Response(
-          JSON.stringify({ status: "healthy", service: "midgley-cache-worker", timestamp: new Date().toISOString() }),
+          JSON.stringify({
+            status: "healthy",
+            service: "midgley-cache-worker",
+            storage_tier: storageAdapter.tier,
+            timestamp: new Date().toISOString()
+          }),
           { headers: { "Content-Type": "application/json" } }
         );
       }
@@ -141,31 +153,24 @@ export default {
         });
       }
 
-
       // GET /api/v1/cache/:key
       if (request.method === "GET" && url.pathname.startsWith("/api/v1/cache/")) {
         const key = decodeURIComponent(url.pathname.replace("/api/v1/cache/", ""));
         console.log(`[Cache Worker GET] Request for key: "${key}"`);
         try {
-          if (env.DB) {
-            const result = await env.DB.prepare(
-              "SELECT value, created_at, expires_at FROM lookup_cache WHERE key = ?"
-            ).bind(key).first();
+          const entry = await storageAdapter.getCache(key);
 
-            if (result) {
-              console.log(`[Cache Worker HIT] Found entry for key: "${key}"`);
-              let parsedVal: any;
-              try { parsedVal = JSON.parse(result.value); } catch { parsedVal = result.value; }
-
-              await logToAxiom(env, ctx, { event: "cache_get_hit", key });
-              return new Response(
-                JSON.stringify({ value: parsedVal, created_at: result.created_at, expires_at: result.expires_at }),
-                { headers: { "Content-Type": "application/json" } }
-              );
-            }
+          if (entry) {
+            console.log(`[Cache Worker HIT] Found entry for key: "${key}"`);
+            await logToAxiom(env, ctx, { event: "cache_get_hit", key, storage_tier: storageAdapter.tier });
+            return new Response(
+              JSON.stringify({ value: entry.value, created_at: entry.created_at, expires_at: entry.expires_at }),
+              { headers: { "Content-Type": "application/json" } }
+            );
           }
+
           console.log(`[Cache Worker MISS] No entry found for key: "${key}"`);
-          await logToAxiom(env, ctx, { event: "cache_get_miss", key });
+          await logToAxiom(env, ctx, { event: "cache_get_miss", key, storage_tier: storageAdapter.tier });
           return new Response(JSON.stringify({ error: "Key not found" }), {
             status: 404,
             headers: { "Content-Type": "application/json" }
@@ -180,7 +185,7 @@ export default {
         }
       }
 
-      // POST /api/v1/sync/predictions (Issue #302: Batch prediction sync to D1)
+      // POST /api/v1/sync/predictions (Issue #302 & Issue #641: Direct/Batch prediction sync)
       if (request.method === "POST" && (url.pathname === "/api/v1/sync/predictions" || url.pathname === "/api/v1/sync/predictions/")) {
         console.log(`[Cache Worker SYNC] Batch prediction sync requested`);
         try {
@@ -192,104 +197,15 @@ export default {
             });
           }
 
-          if (env.DB) {
-            // Ensure table exists
-            await env.DB.prepare(`
-              CREATE TABLE IF NOT EXISTS prediction_history (
-                forecast_id TEXT PRIMARY KEY,
-                issued_at_utc TEXT,
-                log_timestamp TEXT,
-                forecast_target_date TEXT,
-                forecast_horizon_days INTEGER,
-                region TEXT,
-                model_version TEXT,
-                run_type TEXT,
-                headline_trigger TEXT,
-                current_base_price REAL,
-                predicted_5d_price REAL,
-                predicted_direction TEXT,
-                actual_5d_price REAL,
-                actual_direction TEXT,
-                error_dollars REAL,
-                directional_hit REAL,
-                llm_price_pressure REAL,
-                llm_supply_disruption REAL,
-                quant_baseline_5d_price REAL,
-                llm_augmentation_delta REAL,
-                prediction_lower_95ci REAL,
-                prediction_upper_95ci REAL,
-                within_95ci_hit REAL,
-                data_source_provenance TEXT,
-                is_retroactive_backtest INTEGER
-              )
-            `).run();
+          const syncRes = await storageAdapter.syncPredictions(predictions);
 
-            // Run migration for existing installations lacking forecast_id (Issue #471)
-            try {
-              const tableInfo = await env.DB.prepare("PRAGMA table_info(prediction_history)").all();
-              const existingCols = new Set(((tableInfo && tableInfo.results) || []).map((c: any) => c.name));
-              if (existingCols.size > 0 && !existingCols.has("forecast_id")) {
-                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN forecast_id TEXT").run();
-                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN issued_at_utc TEXT").run();
-                await env.DB.prepare("ALTER TABLE prediction_history ADD COLUMN is_retroactive_backtest INTEGER DEFAULT 0").run();
-                await env.DB.prepare("UPDATE prediction_history SET forecast_id = log_timestamp || '_' || region || '_' || COALESCE(forecast_horizon_days, 5) WHERE forecast_id IS NULL OR forecast_id = ''").run();
-                await env.DB.prepare("UPDATE prediction_history SET issued_at_utc = log_timestamp WHERE issued_at_utc IS NULL OR issued_at_utc = ''").run();
-              }
-            } catch (migErr) {
-              console.warn("Prediction history migration notice:", migErr);
-            }
-
-            // Prepare batch statements
-            const statements = predictions.map((row: any) => {
-              return env.DB.prepare(`
-                INSERT OR REPLACE INTO prediction_history (
-                  forecast_id, issued_at_utc, log_timestamp, forecast_target_date, forecast_horizon_days, region, model_version, run_type,
-                  headline_trigger, current_base_price, predicted_5d_price, predicted_direction,
-                  actual_5d_price, actual_direction, error_dollars, directional_hit,
-                  llm_price_pressure, llm_supply_disruption, quant_baseline_5d_price,
-                  llm_augmentation_delta, prediction_lower_95ci, prediction_upper_95ci,
-                  within_95ci_hit, data_source_provenance, is_retroactive_backtest
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-              `).bind(
-                String(row.forecast_id || (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()))),
-                String(row.issued_at_utc || new Date().toISOString()),
-                String(row.log_timestamp || ""),
-                String(row.forecast_target_date || ""),
-                Number(row.forecast_horizon_days || 5),
-                String(row.region || ""),
-                String(row.model_version || ""),
-                String(row.run_type || ""),
-                String(row.headline_trigger || ""),
-                Number(row.current_base_price || 0.0),
-                Number(row.predicted_5d_price || 0.0),
-                String(row.predicted_direction || ""),
-                row.actual_5d_price !== undefined && row.actual_5d_price !== null && !isNaN(row.actual_5d_price) ? Number(row.actual_5d_price) : null,
-                String(row.actual_direction || ""),
-                row.error_dollars !== undefined && row.error_dollars !== null && !isNaN(row.error_dollars) ? Number(row.error_dollars) : null,
-                row.directional_hit !== undefined && row.directional_hit !== null && !isNaN(row.directional_hit) ? Number(row.directional_hit) : null,
-                Number(row.llm_price_pressure || 0.0),
-                Number(row.llm_supply_disruption || 0.0),
-                Number(row.quant_baseline_5d_price || 0.0),
-                Number(row.llm_augmentation_delta || 0.0),
-                Number(row.prediction_lower_95ci || 0.0),
-                Number(row.prediction_upper_95ci || 0.0),
-                row.within_95ci_hit !== undefined && row.within_95ci_hit !== null && !isNaN(row.within_95ci_hit) ? Number(row.within_95ci_hit) : null,
-                String(row.data_source_provenance || "yfinance"),
-                row.is_retroactive_backtest ? 1 : 0
-              );
-            });
-
-            // Execute batch statements in chunks of 50 to respect Cloudflare D1's 100-statement limit (Issue #333)
-            const CHUNK_SIZE = 50;
-            for (let i = 0; i < statements.length; i += CHUNK_SIZE) {
-              const chunk = statements.slice(i, i + CHUNK_SIZE);
-              await env.DB.batch(chunk);
-            }
-          }
-
-          console.log(`[Cache Worker SYNC SUCCESS] Synced ${predictions.length} records`);
-          await logToAxiom(env, ctx, { event: "prediction_sync_success", count: predictions.length });
-          return new Response(JSON.stringify({ status: "synced", synced_rows: predictions.length, provider: "cloudflare_d1" }), {
+          console.log(`[Cache Worker SYNC SUCCESS] Synced ${syncRes.synced_rows} records (tier: ${storageAdapter.tier})`);
+          await logToAxiom(env, ctx, { event: "prediction_sync_success", count: syncRes.synced_rows, storage_tier: storageAdapter.tier });
+          return new Response(JSON.stringify({
+            status: "synced",
+            synced_rows: syncRes.synced_rows,
+            provider: storageAdapter.tier === "hyperdrive" ? "hyperdrive_postgres" : "cloudflare_d1"
+          }), {
             status: 200,
             headers: { "Content-Type": "application/json" }
           });
@@ -321,17 +237,13 @@ export default {
             });
           }
           console.log(`[Cache Worker STORE] Writing entry for key: "${key}"`);
-          if (env.DB) {
-            const valStr = typeof body.value === "string" ? body.value : JSON.stringify(body.value);
-            const createdAt = body.created_at || Date.now() / 1000;
-            const expiresAt = body.expires_at || Date.now() / 1000 + 86400;
+          const createdAt = body.created_at || Date.now() / 1000;
+          const expiresAt = body.expires_at || Date.now() / 1000 + 86400;
 
-            await env.DB.prepare(
-              "INSERT OR REPLACE INTO lookup_cache (key, value, created_at, expires_at) VALUES (?, ?, ?, ?)"
-            ).bind(key, valStr, createdAt, expiresAt).run();
-          }
-          console.log(`[Cache Worker STORE SUCCESS] Key stored: "${key}"`);
-          await logToAxiom(env, ctx, { event: "cache_store_success", key });
+          await storageAdapter.setCache(key, body.value, createdAt, expiresAt);
+
+          console.log(`[Cache Worker STORE SUCCESS] Key stored: "${key}" (tier: ${storageAdapter.tier})`);
+          await logToAxiom(env, ctx, { event: "cache_store_success", key, storage_tier: storageAdapter.tier });
           return new Response(JSON.stringify({ status: "stored", key }), {
             headers: { "Content-Type": "application/json" }
           });
@@ -348,9 +260,7 @@ export default {
       // DELETE /api/v1/cache
       if (request.method === "DELETE" && (url.pathname === "/api/v1/cache" || url.pathname === "/api/v1/cache/")) {
         try {
-          if (env.DB) {
-            await env.DB.prepare("DELETE FROM lookup_cache").run();
-          }
+          await storageAdapter.deleteCache();
           return new Response(JSON.stringify({ status: "cleared" }), {
             headers: { "Content-Type": "application/json" }
           });

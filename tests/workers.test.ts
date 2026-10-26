@@ -717,7 +717,7 @@ describe("Cloudflare Intraday Monitor Worker", () => {
         );
 
         expect(res.status).toBe(200);
-        const data = await res.json();
+        const data: any = await res.json();
         expect(data.status).toBe("success");
         expect(data.count).toBe(1);
         expect(data.records[0].id).toBe("dlq-item-1");
@@ -757,7 +757,7 @@ describe("Cloudflare Intraday Monitor Worker", () => {
         );
 
         expect(res.status).toBe(200);
-        const data = await res.json();
+        const data: any = await res.json();
         expect(data.status).toBe("success");
         expect(data.replayed_count).toBe(1);
         expect(data.replayed_ids).toContain("dlq-replay-target");
@@ -2664,7 +2664,204 @@ Survey Date: October 20, 2026
       expect(jsonScrape.markdown).toContain("Pipeline flow interrupted.");
     });
   });
+
+
+  describe("Direct Database TCP Connections & Multi-Tier Storage Adapter (Issue #641)", () => {
+    function createMockSql() {
+      const executedQueries: any[] = [];
+      const mockStore = new Map<string, any>();
+
+      const sqlMock: any = (strings: any, ...values: any[]) => {
+        const queryText = Array.isArray(strings) ? strings.join("?") : String(strings);
+        executedQueries.push({ strings: Array.from(strings), values });
+
+        if (queryText.includes("SELECT value, created_at, expires_at")) {
+          const key = values[0];
+          const row = mockStore.get(key);
+          if (row) return Promise.resolve([row]);
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("INSERT INTO lookup_cache")) {
+          const [key, valStr, cAt, eAt] = values;
+          mockStore.set(key, { value: valStr, created_at: cAt, expires_at: eAt });
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("DELETE FROM lookup_cache WHERE key =")) {
+          mockStore.delete(values[0]);
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("DELETE FROM lookup_cache")) {
+          mockStore.clear();
+          return Promise.resolve([]);
+        }
+
+        if (queryText.includes("SELECT pg_try_advisory_lock")) {
+          return Promise.resolve([{ acquired: true }]);
+        }
+
+        if (queryText.includes("SELECT pg_advisory_unlock")) {
+          return Promise.resolve([{ unlocked: true }]);
+        }
+
+        return Promise.resolve([]);
+      };
+
+      sqlMock.end = vi.fn().mockResolvedValue(undefined);
+      return { sqlMock, executedQueries, mockStore };
+    }
+
+    it("performs cache get, set, delete, and advisory locking using PostgresAdapter", async () => {
+      const { PostgresAdapter } = await import("../workers/db_adapter");
+      const { sqlMock, executedQueries, mockStore } = createMockSql();
+
+      const adapter = new PostgresAdapter("postgres://mock:secret@127.0.0.1:5432/mockdb", sqlMock);
+      expect(adapter.tier).toBe("hyperdrive");
+
+      // 1. setCache
+      await adapter.setCache("test_key_1", { price: 3.45 }, 1700000000, 1700086400);
+      expect(mockStore.has("test_key_1")).toBe(true);
+
+      // 2. getCache
+      const entry = await adapter.getCache("test_key_1");
+      expect(entry).not.toBeNull();
+      expect(entry?.value).toEqual({ price: 3.45 });
+      expect(entry?.created_at).toBe(1700000000);
+
+      // 3. deleteCache
+      await adapter.deleteCache("test_key_1");
+      expect(mockStore.has("test_key_1")).toBe(false);
+
+      // 4. advisory locks
+      const locked = await adapter.acquireAdvisoryLock?.("firecrawl_quota");
+      expect(locked).toBe(true);
+      await adapter.releaseAdvisoryLock?.("firecrawl_quota");
+
+      // 5. close
+      await adapter.close();
+      expect(sqlMock.end).toHaveBeenCalled();
+    });
+
+    it("syncs prediction records via PostgresAdapter upsert", async () => {
+      const { PostgresAdapter } = await import("../workers/db_adapter");
+      const { sqlMock, executedQueries } = createMockSql();
+      const adapter = new PostgresAdapter("postgres://mock:secret@127.0.0.1:5432/mockdb", sqlMock);
+
+      const records = [
+        {
+          forecast_id: "2026-10-26_bayarea_5d",
+          log_timestamp: "2026-10-26T00:00:00Z",
+          forecast_target_date: "2026-10-31",
+          forecast_horizon_days: 5,
+          region: "bayarea",
+          model_version: "v0.8.5",
+          predicted_5d_price: 4.85,
+          actual_5d_price: 4.82
+        }
+      ];
+
+      const result = await adapter.syncPredictions(records);
+      expect(result.synced_rows).toBe(1);
+
+      const insertCall = executedQueries.find((q: any) => q.strings.join("?").includes("INSERT INTO prediction_history"));
+      expect(insertCall).toBeDefined();
+      expect(insertCall?.values).toContain("2026-10-26_bayarea_5d");
+    });
+
+    it("transparently falls back from Hyperdrive to D1 on connection failure", async () => {
+      const { PostgresAdapter, D1Adapter, ResilientStorageAdapter } = await import("../workers/db_adapter");
+      const mockD1 = createMockD1Database();
+      const d1Adapter = new D1Adapter(mockD1);
+
+      // Failing sql mock simulating socket timeout / connection refusal
+      const failingSql: any = vi.fn().mockRejectedValue(new Error("connect ECONNREFUSED 10.42.42.54:5432"));
+      failingSql.end = vi.fn().mockResolvedValue(undefined);
+
+      const postgresAdapter = new PostgresAdapter("postgres://mock:secret@10.42.42.54:5432/midgley", failingSql);
+
+      const resilientAdapter = new ResilientStorageAdapter(postgresAdapter, d1Adapter, {}, {});
+      expect(resilientAdapter.tier).toBe("hyperdrive");
+
+      // Calling setCache triggers primary failure, which logs warning and falls back to D1
+      await resilientAdapter.setCache("fallback_key", { fallback: true }, 1700000000, 1700086400);
+
+      // After fallback, tier should now be d1
+      expect(resilientAdapter.tier).toBe("d1");
+
+      // Value should be stored in D1
+      const d1Entry = await d1Adapter.getCache("fallback_key");
+      expect(d1Entry).not.toBeNull();
+      expect(d1Entry?.value).toEqual({ fallback: true });
+    });
+
+    it("serves cache worker health check with active storage tier", async () => {
+      const mockD1 = createMockD1Database();
+      const env: CacheEnv = {
+        DB: mockD1,
+        CLOUDFLARE_AUTH_TOKEN: "test_secret_token"
+      };
+
+      const res = await cacheWorker.fetch(
+        new Request("https://cache.internal/health"),
+        env,
+        {}
+      );
+
+      expect(res.status).toBe(200);
+      const json: any = await res.json();
+      expect(json.status).toBe("healthy");
+      expect(json.storage_tier).toBe("d1");
+    });
+
+    it("reports provider as hyperdrive_postgres when PROD_DB is active", async () => {
+      const { PostgresAdapter } = await import("../workers/db_adapter");
+      const { sqlMock } = createMockSql();
+      const pgAdapter = new PostgresAdapter("postgres://mock", sqlMock);
+
+      const dbAdapterMod = await import("../workers/db_adapter");
+      vi.spyOn(dbAdapterMod, "getStorageAdapter").mockReturnValue(pgAdapter);
+
+      try {
+        const env: CacheEnv = {
+          PROD_DB: { connectionString: "postgres://mock" },
+          CLOUDFLARE_AUTH_TOKEN: "auth_token_abc"
+        };
+
+        const res = await cacheWorker.fetch(
+          new Request("https://cache.internal/api/v1/sync/predictions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer auth_token_abc"
+            },
+            body: JSON.stringify({
+              predictions: [
+                {
+                  forecast_id: "test_forecast_hyperdrive_1",
+                  log_timestamp: "2026-10-26T00:00:00Z",
+                  forecast_target_date: "2026-10-31",
+                  forecast_horizon_days: 5,
+                  region: "national",
+                  model_version: "v0.8.5"
+                }
+              ]
+            })
+          }),
+          env,
+          {}
+        );
+
+        expect(res.status).toBe(200);
+        const json: any = await res.json();
+        expect(json.status).toBe("synced");
+        expect(json.provider).toBe("hyperdrive_postgres");
+        expect(json.synced_rows).toBe(1);
+      } finally {
+        vi.restoreAllMocks();
+      }
+    });
+  });
+
 });
-
-
-

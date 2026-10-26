@@ -109,6 +109,16 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 
 ---
 
+
+### 18. Direct Edge Database TCP Connections via `cloudflare:sockets` & Hyperdrive (Issue #641)
+- **Direct PostgreSQL Socket Connectivity**: Implemented [`PostgresAdapter`](workers/db_adapter.ts) in [`workers/db_adapter.ts`](workers/db_adapter.ts) utilizing `postgres.js` and Node compatibility (`nodejs_compat`), mapping directly to native `cloudflare:sockets` TCP connections in Cloudflare Workers isolates.
+- **Hyperdrive Edge Connection Pooling**: Added support for Cloudflare Hyperdrive bindings (`env.PROD_DB`) in [`workers/cache_worker.ts`](workers/cache_worker.ts), enabling sub-15ms low-latency global query routing, connection pooling, and edge read-caching to centralized PostgreSQL instances (self-hosted on `dev-vm` / `LAB-HOST`, Supabase, or Neon).
+- **Multi-Tier Defensive Fallback Architecture**: Built [`ResilientStorageAdapter`](workers/db_adapter.ts) to transparently route operations across storage tiers (`Hyperdrive TCP -> Cloudflare D1 -> In-Memory`), ensuring that network drops, TCP connection timeouts (>5s), or socket refusals automatically fail over to Cloudflare D1 (`env.DB`) while emitting Axiom and Sentry telemetry warnings.
+- **Dialect Invariant Decoupling**: Standardized key-value lookups, prediction history batch sync, and distributed advisory locking (`pg_try_advisory_lock` for provider rate-limit mutexes) behind the unified `StorageAdapter` interface, isolating Postgres vs SQLite SQL dialect differences.
+- **Pure Test Isolation & Test Suite**: Added 5 automated unit and integration tests in [`tests/workers.test.ts`](tests/workers.test.ts) covering cache operations, batch prediction ingestion, advisory locking, and transparent connection failover under pure mock isolation without opening network sockets.
+
+---
+
 ## 🛠️ Data Catalog & Documentation Updates
 
 1. **Data Sources Catalog Card 5.3**:
