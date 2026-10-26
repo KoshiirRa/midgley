@@ -117,6 +117,17 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Dialect Invariant Decoupling**: Standardized key-value lookups, prediction history batch sync, and distributed advisory locking (`pg_try_advisory_lock` for provider rate-limit mutexes) behind the unified `StorageAdapter` interface, isolating Postgres vs SQLite SQL dialect differences.
 - **Pure Test Isolation & Test Suite**: Added 5 automated unit and integration tests in [`tests/workers.test.ts`](tests/workers.test.ts) covering cache operations, batch prediction ingestion, advisory locking, and transparent connection failover under pure mock isolation without opening network sockets.
 
+### 19. Spatial Wind Swaths & EIA-820 Refinery Geographic Intersect (Issue #634)
+- **EIA-820 Refining Capacity & Coordinates Registry**: Formatted and integrated 26 major PADD 3 Gulf Coast operating refineries with exact geographic coordinates (latitude, longitude), operating company, facility name, subregion, and operable crude distillation capacities ($7,818,100\text{ bpd}$ total) under [`data/regional_metadata/eia_820_padd3_refineries.json`](data/regional_metadata/eia_820_padd3_refineries.json) and exposed via [`src/regional_metadata.py`](src/regional_metadata.py).
+- **Spatial Wind Swath & Forecast Cone Intersect**: Replaced the legacy coarse text keyword heuristic (`"gulf of mexico"`, `"texas"`, `"florida"`) in [`NHCHurricaneConnector`](src/nhc_hurricane.py) with a pure-Python, zero-dependency ray-casting (Jordan curve theorem) point-in-polygon containment solver. Ingests NOAA NHC 34-knot tropical storm and 64-knot hurricane wind swaths, 4-quadrant wind radii, and 5-day forecast cone polygons across GeoJSON, KML, and XML formats.
+- **Capacity-Weighted Exposure Scoring**:
+  $$\text{Exposure Score} = \frac{\sum_{i \in \text{Hazard Zone}} \text{Capacity}_i}{\sum_{\text{all PADD 3}} \text{Capacity}_i}$$
+- **Resolution of Hurricane Isaias Spatial Asymmetry**: Correctly models geographic supply divergence:
+  - Eastern Gulf / Florida Panhandle tracks (e.g. Hurricane Isaias Destin FL landfall) impact only Mississippi Sound and Mobile Bay facilities (Chevron Pascagoula, Vertex Mobile), yielding low exposure ($<15\%$, specifically $5.52\%$).
+  - Western Gulf tracks targeting the Upper Texas Coast and Southwest Louisiana directly intersect the dense refining epicenter (Houston Ship Channel, Galveston Bay, Port Arthur, Lake Charles), yielding proportional high exposure ($>50\%$, specifically $57.28\%$).
+- **Offline Deterministic Synthetic Testing**: Added deterministic test fixtures (`EASTERN_GULF_ISAIAS_POLYGON`, `WESTERN_GULF_HURRICANE_POLYGON`, quiescent) and full regression test coverage in [`tests/test_nhc_spatial_refineries.py`](tests/test_nhc_spatial_refineries.py) for offline execution under `TESTING=1`.
+- **Public Math Documentation**: Synchronized **Equation 5.2** on [`docs/math.html`](docs/math.html), [`src/dashboard_generator.py`](src/dashboard_generator.py), and Card 4.3 on [`docs/sources.html`](docs/sources.html) / [`src/sources_generator.py`](src/sources_generator.py).
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
@@ -127,7 +138,12 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 2. **Data Sources Catalog Card 3.6 (SEC EDGAR 8-K Outage Filings)**:
    - Updated Data Sources Card 3.6 in [`src/sources_generator.py`](src/sources_generator.py) to reflect Tier-1/Tier-2 operator entities (`PBF, DINO, MPC, VLO, PSX, XOM, CVX, SU, PARR, DK, KMI, EPD`), 15-minute cron with HTTP 304 ETag caching, and consumers (`src/edgar_8k_monitor.py`, `workers/intraday_monitor_worker.ts`).
    - Regenerated [`docs/sources.html`](docs/sources.html) and [`docs/sources/index.html`](docs/sources/index.html).
-3. **Release Notes Reconciliation**:
+3. **Data Sources Catalog Card 4.3 (NOAA NHC Tropical Cones & Wind Swaths)**:
+   - Updated Data Sources Card 4.3 in [`src/sources_generator.py`](src/sources_generator.py) to document 34kt/64kt wind radii swaths, forecast cones, EIA-820 refinery coordinate intersection, and capacity-weighted exposure scoring.
+   - Regenerated [`docs/sources.html`](docs/sources.html) and [`docs/sources/index.html`](docs/sources/index.html).
+4. **Public Math Documentation (Equation 5.2)**:
+   - Added Equation 5.2 to [`src/dashboard_generator.py`](src/dashboard_generator.py) and regenerated [`docs/math.html`](docs/math.html) with exact ray-casting point-in-polygon containment formulas and geographic asymmetry documentation.
+5. **Release Notes Reconciliation**:
    - Reconciled [`RELEASE_NOTES_v0.8.6.md`](RELEASE_NOTES_v0.8.6.md) to preserve its official release boundary at `29ae13dc` (reverting intermediate draft notes).
    - Opened this document ([`RELEASE_NOTES_v0.8.7.md`](RELEASE_NOTES_v0.8.7.md)) as the active in-progress draft for v0.8.7.
 
@@ -167,6 +183,7 @@ ruff check src/ tests/
 - **`tests/test_catalog_monitor.py`**: 6/6 passed (tested multi-repo deduplication, exact title, tool name match, URL matching, and barred tool suppression).
 - **`tests/test_edgar_8k_monitor.py`**: 9/9 passed (tested operational keyword gates, expanded Tier-1/Tier-2 tickers, accession cache deduplication, and backward-compat shim).
 - **`tests/test_intraday_event_monitor.py`**: 35/35 passed (tested regional routing for XOM, CVX, SU, PARR, DK, KMI, EPD, and synthetic Atom fixture test isolation).
+- **`tests/test_nhc_spatial_refineries.py`**: 11/11 passed (tested EIA-820 refinery catalog integrity, point-in-polygon ray-casting, GeoJSON/KML cone parsing, Hurricane Isaias Eastern Gulf <15% low exposure, Western Gulf >50% high exposure, and offline deterministic execution).
 - **`tests/workers.test.ts`**: 58/58 passed (tested Cloudflare Worker edge polling, ETag 304 skipping, title pre-filtering, and D1 `edgar_8k_seen` deduplication).
 - **`ruff check src/ tests/`**: All checks passed cleanly with zero linting or formatting errors.
 

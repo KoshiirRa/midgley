@@ -369,6 +369,18 @@
                     <strong>Tier 2 (Los Angeles CA):</strong> Los Angeles County (<code class="text-amber-300">CAZ041</code> / Zip <code class="text-amber-300">90012</code>) Santa Ana Red Flag / SCE PSPS wind events, Pacific atmospheric river inundation, San Pedro Bay marine swell closures, and Newport-Inglewood seismic shutoffs across Carson/Wilmington (363 kbpd), El Segundo (269 kbpd), and Torrance (166 kbpd).
                 </p>
             </div>
+
+            <!-- Equation 5.2: NOAA NHC Tropical Cyclone Wind Swaths & EIA-820 Refining Capacity Intersect (Issue #634) -->
+            <div class="math-box p-6 rounded-r-2xl space-y-4 border-l-amber-500">
+                <h4 class="text-sm uppercase tracking-wider text-amber-400 font-bold">Equation 5.2: Capacity-Weighted PADD 3 Refining Exposure Score</h4>
+                <div class="text-center text-base sm:text-lg font-mono py-4 px-2 bg-slate-950 rounded-xl border border-slate-800 text-amber-200 overflow-x-auto">
+                    $$\text{Exposure Score} = \frac{\sum_{i \in \text{Hazard Zone}} \text{Capacity}_i}{\sum_{i \in \text{PADD 3}} \text{Capacity}_i} = \frac{\sum_{i=1}^N \mathbf{1}_{(\text{lat}_i, \text{lon}_i) \in \mathcal{P}_{\text{cone}}} \cdot C_i}{\sum_{i=1}^N C_i}$$
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    <strong>Spatial Point-in-Polygon Containment:</strong> Rather than uniform text keyword matching across the entire Gulf of Mexico, <code class="text-blue-300">src/nhc_hurricane.py</code> parses NOAA NHC active 34-knot tropical storm and 64-knot hurricane wind swath boundaries (\(\mathcal{P}_{\text{cone}}\)) and performs ray-casting containment tests against exact geographic coordinates and operable crude distillation capacities (\(C_i\)) from EIA Form 820.<br>
+                    <strong>Geographic Asymmetry Calibration:</strong> Captures critical spatial supply divergence across \(7.82\text{M bpd}\) of PADD 3 refining assets. Eastern Gulf landfalls (e.g. Florida Panhandle / Destin) impact only Mississippi Sound and Mobile Bay facilities (Chevron Pascagoula, Vertex Mobile), yielding low exposure (\(&lt;15\%\)), while Western Gulf tracks targeting the Upper Texas Coast and Southwest Louisiana directly intersect the dense refining epicenter (Houston Ship Channel, Galveston Bay, Port Arthur, Lake Charles), yielding proportional high exposure (\(&gt;50\%\)).
+                </p>
+            </div>
         </section>
 
         <!-- Section 06: Global & Regional Maritime Chokepoints, Inland River Barging & Waterborne Terminals -->
