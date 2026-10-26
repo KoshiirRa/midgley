@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 import functools
 import sys
 
-FALLBACK_PACKAGE_VERSION = "0.8.6"
+FALLBACK_PACKAGE_VERSION = "0.8.7"
 FALLBACK_MODEL_VERSION = "v1.6 Ipatieff"
 
 

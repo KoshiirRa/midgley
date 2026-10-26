@@ -1,8 +1,8 @@
 {
-  "version": "0.8.6",
+  "version": "0.8.7",
   "model_version": "v1.6 Ipatieff",
   "schema_version": 3,
-  "release_date": "2026-10-16",
+  "release_date": "2026-10-26",
   "compatibility": {
     "minimum_compatible_client": "0.5.0",
     "breaking_changes": false,
@@ -51,6 +51,48 @@
         "default": "data/subscribers.sqlite",
         "required": false,
         "description": "Optional override path for the SQLite subscriber database."
+      },
+      {
+        "name": "EDGAR_8K_TICKERS",
+        "default": "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD",
+        "required": false,
+        "description": "Comma-separated list of refinery and midstream operator stock tickers for SEC EDGAR 8-K monitoring."
+      },
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "default": "",
+        "required": false,
+        "description": "Cloudflare account identifier for Workers Browser Rendering and Browser Run operations."
+      },
+      {
+        "name": "CLOUDFLARE_API_TOKEN",
+        "default": "",
+        "required": false,
+        "description": "Cloudflare API token with Browser Rendering, Workers, D1, and Vectorize permissions."
+      },
+      {
+        "name": "CLOUDFLARE_BROWSER_RUN_URL",
+        "default": "",
+        "required": false,
+        "description": "Optional deployed Cloudflare Worker endpoint for edge browser rendering."
+      },
+      {
+        "name": "FLAG_SIGNING_KEY",
+        "default": "",
+        "required": false,
+        "description": "HMAC secret key for signing Discord review button callback URLs."
+      },
+      {
+        "name": "HINDSIGHT_API_TOKEN",
+        "default": "",
+        "required": false,
+        "description": "Bearer token for authenticating with Hindsight SaaS episodic memory banks."
+      },
+      {
+        "name": "HINDSIGHT_DEDUPE_BANK_ID",
+        "default": "midgley-event-dedupe",
+        "required": false,
+        "description": "Hindsight episodic memory bank identifier for cross-environment deduplication."
       }
     ],
     "deprecated": []
@@ -95,6 +137,16 @@
     {
       "id": "20261012_add_unmapped_zip_telemetry",
       "description": "Adds persistent cross-run out-of-metro ZIP code query demand tracking table",
+      "automatic": true
+    },
+    {
+      "id": "20261022_create_edgar_8k_seen_table",
+      "description": "Adds permanent edge deduplication table for SEC EDGAR 8-K filings in Cloudflare D1",
+      "automatic": true
+    },
+    {
+      "id": "20261024_create_queue_dlq_records_table",
+      "description": "Adds dead-letter queue records table for Cloudflare Queue batch consumption triage in Cloudflare D1",
       "automatic": true
     }
   ],

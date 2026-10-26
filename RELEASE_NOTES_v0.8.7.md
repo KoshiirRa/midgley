@@ -1,4 +1,4 @@
-# Release Notes - v0.8.7 (Draft)
+# Release Notes - v0.8.7
 
 Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-metro geographic routing release. It establishes [`lykmapipo/US-Gas-Prices`](https://github.com/lykmapipo/US-Gas-Prices) daily metro and state CSV archives as the primary source for AAA fuel prices, re-engineers the secondary scraping fallback to execute headless Chromium on **Cloudflare Browser Run / Browser Rendering** (Issue #640), establishes a hyper-local **GasBuddy GraphQL-first fallback cascade** for rural and out-of-metro ZIP code queries, enforces California state physical feasibility bounds, and documents architectural governance decisions including the closure of Issue #531 (*FuelRipple*).
 
@@ -145,7 +145,7 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
    - Added Equation 5.2 to [`src/dashboard_generator.py`](src/dashboard_generator.py) and regenerated [`docs/math.html`](docs/math.html) with exact ray-casting point-in-polygon containment formulas and geographic asymmetry documentation.
 5. **Release Notes Reconciliation**:
    - Reconciled [`RELEASE_NOTES_v0.8.6.md`](RELEASE_NOTES_v0.8.6.md) to preserve its official release boundary at `29ae13dc` (reverting intermediate draft notes).
-   - Opened this document ([`RELEASE_NOTES_v0.8.7.md`](RELEASE_NOTES_v0.8.7.md)) as the active in-progress draft for v0.8.7.
+   - Finalized this document ([`RELEASE_NOTES_v0.8.7.md`](RELEASE_NOTES_v0.8.7.md)) as the official release record for v0.8.7.
 
 ---
 
