@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-10-26T12:33:13.998993",
+  "timestamp": "2026-10-26T19:51:09.629037",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:11.728812",
+      "timestamp": "2026-10-26T19:51:08.011737",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:33:11Z"
+          "timestamp": "2026-10-26T19:51:07Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -259,7 +259,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:12.031196",
+      "timestamp": "2026-10-26T19:51:08.186462",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -277,7 +277,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:54Z"
+          "timestamp": "2026-10-26T19:50:49Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -514,7 +514,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:12.338193",
+      "timestamp": "2026-10-26T19:51:08.361011",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -532,7 +532,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:56Z"
+          "timestamp": "2026-10-26T19:50:52Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -769,7 +769,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:12.655731",
+      "timestamp": "2026-10-26T19:51:08.555520",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -787,7 +787,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:54Z"
+          "timestamp": "2026-10-26T19:50:49Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1024,7 +1024,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:12.954261",
+      "timestamp": "2026-10-26T19:51:08.740072",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1042,7 +1042,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:54Z"
+          "timestamp": "2026-10-26T19:50:49Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1279,7 +1279,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:13.104461",
+      "timestamp": "2026-10-26T19:51:08.835133",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1297,7 +1297,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:54Z"
+          "timestamp": "2026-10-26T19:50:50Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1534,7 +1534,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:13.404347",
+      "timestamp": "2026-10-26T19:51:09.026332",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1552,7 +1552,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:55Z"
+          "timestamp": "2026-10-26T19:50:50Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1789,7 +1789,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:13.706540",
+      "timestamp": "2026-10-26T19:51:09.216816",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1807,7 +1807,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:55Z"
+          "timestamp": "2026-10-26T19:50:50Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2044,7 +2044,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-10-26T12:33:13.997171",
+      "timestamp": "2026-10-26T19:51:09.627427",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2062,7 +2062,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-10-26T12:32:56Z"
+          "timestamp": "2026-10-26T19:50:52Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,

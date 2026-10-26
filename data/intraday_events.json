@@ -6889,5 +6889,26 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-26T19:50:43.172255",
+    "headline": "Iran \u2018disables\u2019 tanker as US commander flies victory lap over Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPYnJGOWZia2RFaHl3U1pQeDJBeGlyazJWQ0dQZEU5U1hZUWhEV3JnTWl6T01lLTd3eWV2MlhGUlQwYkxfVC1SWmNvZGFHRUpsd3V3bEY3dlU5d0dfdXlYdjdjbmIyME96NXp0RkVnMTJtYWJpV3A5OGtwck9leEk5SnhiVkJUZWJhbldob2ZVVTAxZF85YzdXZmVua0o1aXkybmFhZmdNR05UeGxRYV81d0pudnZrVTRfWkYwMl9jcFdxZmJuM0EzSHRB?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPYnJGOWZia2RFaHl3U1pQeDJBeGlyazJWQ0dQZEU5U1hZUWhEV3JnTWl6T01lLTd3eWV2MlhGUlQwYkxfVC1SWmNvZGFHRUpsd3V3bEY3dlU5d0dfdXlYdjdjbmIyME96NXp0RkVnMTJtYWJpV3A5OGtwck9leEk5SnhiVkJUZWJhbldob2ZVVTAxZF85YzdXZmVua0o1aXkybmFhZmdNR05UeGxRYV81d0pudnZrVTRfWkYwMl9jcFdxZmJuM0EzSHRB?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxPYnJGOWZia2RFaHl3U1pQeDJBeGlyazJWQ0dQZEU5U1hZUWhEV3JnTWl6T01lLTd3eWV2MlhGUlQwYkxfVC1SWmNvZGFHRUpsd3V3bEY3dlU5d0dfdXlYdjdjbmIyME96NXp0RkVnMTJtYWJpV3A5OGtwck9leEk5SnhiVkJUZWJhbldob2ZVVTAxZF85YzdXZmVua0o1aXkybmFhZmdNR05UeGxRYV81d0pudnZrVTRfWkYwMl9jcFdxZmJuM0EzSHRB?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.55,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.68
+    },
+    "discord_notified": true
   }
 ]
