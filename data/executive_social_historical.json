@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-10-25 00:34:02",
-  "records_count": 24,
+  "last_refreshed_utc": "2026-10-26 00:35:02",
+  "records_count": 29,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -194,52 +194,102 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-25 00:20:55",
+      "date": "2026-10-26 00:23:58",
+      "platform": "Google News RSS",
+      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-26 00:23:58",
       "platform": "Google News RSS",
       "post_text": "Why Trump and Carney Haven't Touched Energy in Their Tariff War - Crude Oil Prices Today | OilPrice.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-25 00:20:55",
-      "platform": "Google News RSS",
-      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-10-25 00:20:55",
+      "date": "2026-10-26 00:23:58",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-25 00:20:55",
+      "date": "2026-10-26 00:23:58",
       "platform": "Google News RSS",
-      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-25 00:20:55",
+      "date": "2026-10-26 00:23:58",
       "platform": "Google News RSS",
       "post_text": "Crude Oil Prices Rise as Speculation Increases About Possible US Strike on Iran Post Election - inkl",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-26 00:23:58",
+      "platform": "Google News RSS",
+      "post_text": "Japan, US Reach $36 Billion of Gas, Mineral Deals in Trump Pact - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-26 00:23:58",
+      "platform": "Google News RSS",
+      "post_text": "Why Trump and Carney Haven't Touched Energy in Their Tariff War - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-26 00:23:58",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-26 00:23:58",
+      "platform": "Google News RSS",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-26 00:23:58",
+      "platform": "Google News RSS",
+      "post_text": "Crude Oil Prices Rise as Speculation Increases About Possible US Strike on Iran Post Election - inkl",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     }
