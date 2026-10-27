@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-10-26 19:51 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-10-27 22:00 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,11 +10,11 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 58 | `$0.0673/gal` | `$0.0675/gal` | **`+0.33%`** | **`68.97%`** | `43.1%` | 🟢 Optimal |
-| **14-Day Window** | 86 | `$0.0869/gal` | `$0.0803/gal` | `-8.18%` | **`56.98%`** | `37.2%` | ⚠️ Calibration Active |
-| **30-Day Window** | 202 | `$0.1222/gal` | `$0.0971/gal` | `-25.81%` | **`49.01%`** | `33.2%` | ⚠️ Calibration Active |
-| **90-Day Window** | 402 | `$0.1429/gal` | `$0.1146/gal` | `-24.68%` | **`46.52%`** | `53.2%` | ⚠️ Calibration Active |
-| **All-Time Window** | 1339 | `$0.1190/gal` | `$0.1012/gal` | `-17.65%` | **`48.39%`** | `51.9%` | ⚠️ Calibration Active |
+| **7-Day Window** | 57 | `$0.0653/gal` | `$0.0668/gal` | **`+2.18%`** | **`68.42%`** | `38.6%` | 🟢 Optimal |
+| **14-Day Window** | 90 | `$0.0805/gal` | `$0.0728/gal` | `-10.55%` | **`56.67%`** | `38.9%` | ⚠️ Calibration Active |
+| **30-Day Window** | 196 | `$0.1171/gal` | `$0.0952/gal` | `-22.95%` | **`48.47%`** | `30.6%` | ⚠️ Calibration Active |
+| **90-Day Window** | 406 | `$0.1423/gal` | `$0.1135/gal` | `-25.38%` | **`45.57%`** | `52.7%` | ⚠️ Calibration Active |
+| **All-Time Window** | 1348 | `$0.1188/gal` | `$0.1008/gal` | `-17.81%` | **`48.29%`** | `51.8%` | ⚠️ Calibration Active |
 
 ---
 

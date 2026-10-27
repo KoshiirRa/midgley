@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-26T19:51:08.361011",
+  "timestamp": "2026-10-27T22:00:37.001002",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -9,16 +9,16 @@
   },
   "live_lookup": {
     "current_price_per_gal": 6.043,
-    "source": "AAA Web Scraper (Oakland, CA)",
+    "source": "AAA Metro Daily CSV (Oakland, CA)",
     "provenance": {
-      "source": "AAA Web Scraper (Oakland, CA)",
+      "source": "AAA Metro Daily CSV (Oakland, CA)",
       "region_id": "Oakland_CA",
       "padd": "PADD 2",
       "requested_granularity": "METRO",
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-26T19:50:52Z"
+      "timestamp": "2026-10-27T22:00:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-10-30",
+    "target_date": "2026-11-02",
     "current_base_price": 6.043,
     "predicted_price_per_gal": 6.043,
     "expected_change_dollars": 0.0,

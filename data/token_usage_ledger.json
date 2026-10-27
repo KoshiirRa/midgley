@@ -8635,6 +8635,215 @@
       "total_tokens": 206,
       "cost_usd": 0.000394,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-10-26T21:15:10.957017+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-26T23:40:32.339837+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 128,
+      "output_tokens": 80,
+      "total_tokens": 208,
+      "cost_usd": 0.000396,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-26T23:40:54.469680+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 130,
+      "output_tokens": 80,
+      "total_tokens": 210,
+      "cost_usd": 0.000398,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T01:29:31.195127+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T04:14:51.329037+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 126,
+      "output_tokens": 80,
+      "total_tokens": 206,
+      "cost_usd": 0.000394,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T11:48:41.105659+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 142,
+      "output_tokens": 80,
+      "total_tokens": 222,
+      "cost_usd": 0.000407,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T11:48:45.005938+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 124,
+      "output_tokens": 80,
+      "total_tokens": 204,
+      "cost_usd": 0.000393,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T11:48:47.841219+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 122,
+      "output_tokens": 80,
+      "total_tokens": 202,
+      "cost_usd": 0.000392,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T11:48:51.363326+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 0.000402,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T11:48:53.867658+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 128,
+      "output_tokens": 80,
+      "total_tokens": 208,
+      "cost_usd": 0.000396,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T17:43:15.845321+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 178,
+      "output_tokens": 80,
+      "total_tokens": 258,
+      "cost_usd": 0.000434,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:58:17.580498+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 124,
+      "output_tokens": 80,
+      "total_tokens": 204,
+      "cost_usd": 0.000393,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:58:27.209404+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 132,
+      "output_tokens": 80,
+      "total_tokens": 212,
+      "cost_usd": 0.000399,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:58:40.331654+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 124,
+      "output_tokens": 80,
+      "total_tokens": 204,
+      "cost_usd": 0.000393,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:59:08.293767+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 0.000402,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:59:38.681761+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 122,
+      "output_tokens": 80,
+      "total_tokens": 202,
+      "cost_usd": 0.000392,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:59:56.195462+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 128,
+      "output_tokens": 80,
+      "total_tokens": 208,
+      "cost_usd": 0.000396,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T21:59:59.560827+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 118,
+      "output_tokens": 80,
+      "total_tokens": 198,
+      "cost_usd": 0.000389,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-27T22:00:02.958375+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 126,
+      "output_tokens": 80,
+      "total_tokens": 206,
+      "cost_usd": 0.000394,
+      "status": "success"
     }
   ]
 }
