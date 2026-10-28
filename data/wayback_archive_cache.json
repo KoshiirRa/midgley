@@ -1754,13 +1754,14 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5": {
-    "timestamp": "2026-10-25T23:57:26.041491+00:00",
+    "timestamp": "2026-10-28T01:04:49.809786+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
     "headline": "THE SHUT DOWN: Canadian Oil Refinery Shut Down Could Crimp Northeast U.S. Supply - EnergyNow",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
-    "error": "The read operation timed out"
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5OallDX1JqMFZJaUdzTmhxdUtKQWR5cHFEQXBFSUFxSWowNXVNYUFWMDVEVjJmTjdxdXItQy1RaUlMWEtUV3R4cFdUZVBDbHhiaTBEUWgzbDk1UQ?oc=5": {
     "timestamp": "2026-09-10T15:15:31.152635",
@@ -17312,5 +17313,41 @@
     "headline": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/4345823",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMiigFBVV95cUxOUkNXbnM3RzA4RXNUY2k5dFo3VVJXVlNkRXlicWx5UEMyREhTU3U5VVh5X05PMGN4ZXlTQ1ZJRVM3bkhvM0l5ejctV0dZRmk2QlJqbFZGa1BVWFdXTldOblFWM3pOOTdGSkVJMl82Y2p4endKd1FsQUVEeWhLVGRQcDVLZ0dpd3ZUaFE?oc=5": {
+    "timestamp": "2026-10-28T01:04:26.001323+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOUkNXbnM3RzA4RXNUY2k5dFo3VVJXVlNkRXlicWx5UEMyREhTU3U5VVh5X05PMGN4ZXlTQ1ZJRVM3bkhvM0l5ejctV0dZRmk2QlJqbFZGa1BVWFdXTldOblFWM3pOOTdGSkVJMl82Y2p4endKd1FsQUVEeWhLVGRQcDVLZ0dpd3ZUaFE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOUkNXbnM3RzA4RXNUY2k5dFo3VVJXVlNkRXlicWx5UEMyREhTU3U5VVh5X05PMGN4ZXlTQ1ZJRVM3bkhvM0l5ejctV0dZRmk2QlJqbFZGa1BVWFdXTldOblFWM3pOOTdGSkVJMl82Y2p4endKd1FsQUVEeWhLVGRQcDVLZ0dpd3ZUaFE?oc=5",
+    "headline": "Prices are rising, but Gov. Mike DeWine says Ohio’s gas tax break is still working - WOUB Public Media -",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiigFBVV95cUxOUkNXbnM3RzA4RXNUY2k5dFo3VVJXVlNkRXlicWx5UEMyREhTU3U5VVh5X05PMGN4ZXlTQ1ZJRVM3bkhvM0l5ejctV0dZRmk2QlJqbFZGa1BVWFdXTldOblFWM3pOOTdGSkVJMl82Y2p4endKd1FsQUVEeWhLVGRQcDVLZ0dpd3ZUaFE?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSXNRUnRzaDlWVG5za1NkQU9SQlNTeTMtMXM5dDBPUHdickpvZ3dZNGhyMTVKU3NkYzVSc0stMWdUQzcxVlJyQ2VSX29MUEQ1RlFEYkdTdlEtbl9OV29OYWdDMW1MVWM4ZThYNHEtWHY0R1h0YWV4Rjd3bmdidnVaN3NVa18?oc=5": {
+    "timestamp": "2026-10-28T01:04:34.563267+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSXNRUnRzaDlWVG5za1NkQU9SQlNTeTMtMXM5dDBPUHdickpvZ3dZNGhyMTVKU3NkYzVSc0stMWdUQzcxVlJyQ2VSX29MUEQ1RlFEYkdTdlEtbl9OV29OYWdDMW1MVWM4ZThYNHEtWHY0R1h0YWV4Rjd3bmdidnVaN3NVa18?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSXNRUnRzaDlWVG5za1NkQU9SQlNTeTMtMXM5dDBPUHdickpvZ3dZNGhyMTVKU3NkYzVSc0stMWdUQzcxVlJyQ2VSX29MUEQ1RlFEYkdTdlEtbl9OV29OYWdDMW1MVWM4ZThYNHEtWHY0R1h0YWV4Rjd3bmdidnVaN3NVa18?oc=5",
+    "headline": "Trump’s energy secretary said president is about ‘driving energy prices down’ as Iran war continues to keep them high - Yahoo News UK",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxQSXNRUnRzaDlWVG5za1NkQU9SQlNTeTMtMXM5dDBPUHdickpvZ3dZNGhyMTVKU3NkYzVSc0stMWdUQzcxVlJyQ2VSX29MUEQ1RlFEYkdTdlEtbl9OV29OYWdDMW1MVWM4ZThYNHEtWHY0R1h0YWV4Rjd3bmdidnVaN3NVa18?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMijwFBVV95cUxQTFJ5Vjh5Zzh6LVRSS3U2ZUtENFlBV1RCZGtETlczdGVJa3BBY2FmS28tX2lvWGJkLUFfRklqdUJCU0c1T1hUVDJWQkRkeERKVkFwSXVzUnppRVdwVEhIY3JleVZOQ0xIbXB2cjVHX2ZJWTNYc2E1ZGhreDFvbXJnZmNTVDhyUW1HS1N4REhRRQ?oc=5": {
+    "timestamp": "2026-10-28T01:04:41.694355+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQTFJ5Vjh5Zzh6LVRSS3U2ZUtENFlBV1RCZGtETlczdGVJa3BBY2FmS28tX2lvWGJkLUFfRklqdUJCU0c1T1hUVDJWQkRkeERKVkFwSXVzUnppRVdwVEhIY3JleVZOQ0xIbXB2cjVHX2ZJWTNYc2E1ZGhreDFvbXJnZmNTVDhyUW1HS1N4REhRRQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQTFJ5Vjh5Zzh6LVRSS3U2ZUtENFlBV1RCZGtETlczdGVJa3BBY2FmS28tX2lvWGJkLUFfRklqdUJCU0c1T1hUVDJWQkRkeERKVkFwSXVzUnppRVdwVEhIY3JleVZOQ0xIbXB2cjVHX2ZJWTNYc2E1ZGhreDFvbXJnZmNTVDhyUW1HS1N4REhRRQ?oc=5",
+    "headline": "In Illinois, a new backup generator is still in its box, and commenters say that's a mistake - The Cool Down",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijwFBVV95cUxQTFJ5Vjh5Zzh6LVRSS3U2ZUtENFlBV1RCZGtETlczdGVJa3BBY2FmS28tX2lvWGJkLUFfRklqdUJCU0c1T1hUVDJWQkRkeERKVkFwSXVzUnppRVdwVEhIY3JleVZOQ0xIbXB2cjVHX2ZJWTNYc2E1ZGhreDFvbXJnZmNTVDhyUW1HS1N4REhRRQ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPWWQwU1NuZXNKMlFUaXBCNXNSb0lfRjZ3VV82SEpDakdvaTlZSGVoMWFoWFREVnZ6XzFlakYzX2FzSENqMzlicmd6dTllS3VsQTRtbEtCdk9MczduaTBwNHYwRlVybFRjNHhFV0JWMV9HVE1qelVrWkx1Y3NEaXltUTRFT3hKY2JCTG50MDlWem9nUjYxLTVfUWEwX0ZOZXR4QmN4ak1QdUFveERBTmlpbGtuNlZqZnc4RGtNRjNxOWp6Sjl2TXpfU2JKVkxWZVNobkNEdg?oc=5": {
+    "timestamp": "2026-10-28T01:04:48.694195+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPWWQwU1NuZXNKMlFUaXBCNXNSb0lfRjZ3VV82SEpDakdvaTlZSGVoMWFoWFREVnZ6XzFlakYzX2FzSENqMzlicmd6dTllS3VsQTRtbEtCdk9MczduaTBwNHYwRlVybFRjNHhFV0JWMV9HVE1qelVrWkx1Y3NEaXltUTRFT3hKY2JCTG50MDlWem9nUjYxLTVfUWEwX0ZOZXR4QmN4ak1QdUFveERBTmlpbGtuNlZqZnc4RGtNRjNxOWp6Sjl2TXpfU2JKVkxWZVNobkNEdg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPWWQwU1NuZXNKMlFUaXBCNXNSb0lfRjZ3VV82SEpDakdvaTlZSGVoMWFoWFREVnZ6XzFlakYzX2FzSENqMzlicmd6dTllS3VsQTRtbEtCdk9MczduaTBwNHYwRlVybFRjNHhFV0JWMV9HVE1qelVrWkx1Y3NEaXltUTRFT3hKY2JCTG50MDlWem9nUjYxLTVfUWEwX0ZOZXR4QmN4ak1QdUFveERBTmlpbGtuNlZqZnc4RGtNRjNxOWp6Sjl2TXpfU2JKVkxWZVNobkNEdg?oc=5",
+    "headline": "Exxon Joliet refinery restarts reformer after outage, IIR Energy says - TradingView",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1AFBVV95cUxPWWQwU1NuZXNKMlFUaXBCNXNSb0lfRjZ3VV82SEpDakdvaTlZSGVoMWFoWFREVnZ6XzFlakYzX2FzSENqMzlicmd6dTllS3VsQTRtbEtCdk9MczduaTBwNHYwRlVybFRjNHhFV0JWMV9HVE1qelVrWkx1Y3NEaXltUTRFT3hKY2JCTG50MDlWem9nUjYxLTVfUWEwX0ZOZXR4QmN4ak1QdUFveERBTmlpbGtuNlZqZnc4RGtNRjNxOWp6Sjl2TXpfU2JKVkxWZVNobkNEdg?oc=5",
+    "error": "<urlopen error timed out>"
   }
 }
