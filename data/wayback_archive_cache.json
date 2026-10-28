@@ -3664,13 +3664,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-10-26T19:48:19.296104+00:00",
+    "timestamp": "2026-10-28T22:21:26.069745+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Crosses $4 - Forbes",
+    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Above $4 - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -17476,6 +17476,43 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPMlBKUldSU1RmbVVaSV9CRkJUVVdOd3p0YzlmWllxVmJPMGs2REl3MVQ0SUpMc3BSRFNyUGJJbVVIQlBsckVNQzRvMlJBTkZURVFzNURPTllobzQwSDZnZ194T2hKMWhMelptcWNyejRtS2ZEUEtlVlNlMzVyWEVRc0ZubnBzY1gwbWZOblV0NFluWFdzT3dEZFMtTHdFLXQxQlFrMVpIWnhZaFdIanVWZjdHQkxSNXUxZHpFYmFQYzIwMUIxMXlaZ1lhVHJkbnhLM1FldWlWd1o0dzFyY0lNbE8wd1VFdUFUVV9rU1NvTldRdjJjNTZF?oc=5",
     "headline": "Where to find the cheapest fuel in Port Macquarie - The Daily Telegraph",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9wFBVV95cUxPMlBKUldSU1RmbVVaSV9CRkJUVVdOd3p0YzlmWllxVmJPMGs2REl3MVQ0SUpMc3BSRFNyUGJJbVVIQlBsckVNQzRvMlJBTkZURVFzNURPTllobzQwSDZnZ194T2hKMWhMelptcWNyejRtS2ZEUEtlVlNlMzVyWEVRc0ZubnBzY1gwbWZOblV0NFluWFdzT3dEZFMtTHdFLXQxQlFrMVpIWnhZaFdIanVWZjdHQkxSNXUxZHpFYmFQYzIwMUIxMXlaZ1lhVHJkbnhLM1FldWlWd1o0dzFyY0lNbE8wd1VFdUFUVV9rU1NvTldRdjJjNTZF?oc=5",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMiekFVX3lxTE9JSjRJaFRuWVo1RXlMX04yZDIxWVJtMXJnSmRLSXptNHpLZ241ZkZFdzJUN3E0S2xvV0dNZGh6d013RzgxdUs0dzdma2pUN211UkJzUGQ1eGdVdTF2X3B3OGNSZzFWUWdwYXlqZ1ItNVhpU0hZenlseWF3?oc=5": {
+    "timestamp": "2026-10-28T22:21:05.465976+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9JSjRJaFRuWVo1RXlMX04yZDIxWVJtMXJnSmRLSXptNHpLZ241ZkZFdzJUN3E0S2xvV0dNZGh6d013RzgxdUs0dzdma2pUN211UkJzUGQ1eGdVdTF2X3B3OGNSZzFWUWdwYXlqZ1ItNVhpU0hZenlseWF3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9JSjRJaFRuWVo1RXlMX04yZDIxWVJtMXJnSmRLSXptNHpLZ241ZkZFdzJUN3E0S2xvV0dNZGh6d013RzgxdUs0dzdma2pUN211UkJzUGQ1eGdVdTF2X3B3OGNSZzFWUWdwYXlqZ1ItNVhpU0hZenlseWF3?oc=5",
+    "headline": "CMSD school bus fuel costs surge - Axios",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiekFVX3lxTE9JSjRJaFRuWVo1RXlMX04yZDIxWVJtMXJnSmRLSXptNHpLZ241ZkZFdzJUN3E0S2xvV0dNZGh6d013RzgxdUs0dzdma2pUN211UkJzUGQ1eGdVdTF2X3B3OGNSZzFWUWdwYXlqZ1ItNVhpU0hZenlseWF3?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMigAFBVV95cUxNZ1AxbmEzeXk1bFJBV1paWGlPWks1bjNjZy1vLU5wbXllVVJiTVNmQkQxQmZ0ZTZoUkxGRVh6ZHg0bDJSM2h3emlZaHA4bUFlTjlYNEozcGtRSl9lWllYRmE3TkJkUG1qZ0dUeVppamdHQ0NiQkJKcDlqeTcyVmtOdA?oc=5": {
+    "timestamp": "2026-10-28T22:21:12.337140+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNZ1AxbmEzeXk1bFJBV1paWGlPWks1bjNjZy1vLU5wbXllVVJiTVNmQkQxQmZ0ZTZoUkxGRVh6ZHg0bDJSM2h3emlZaHA4bUFlTjlYNEozcGtRSl9lWllYRmE3TkJkUG1qZ0dUeVppamdHQ0NiQkJKcDlqeTcyVmtOdA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNZ1AxbmEzeXk1bFJBV1paWGlPWks1bjNjZy1vLU5wbXllVVJiTVNmQkQxQmZ0ZTZoUkxGRVh6ZHg0bDJSM2h3emlZaHA4bUFlTjlYNEozcGtRSl9lWllYRmE3TkJkUG1qZ0dUeVppamdHQ0NiQkJKcDlqeTcyVmtOdA?oc=5",
+    "headline": "Gas prices fall in Idaho - Bonner County Daily Bee",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigAFBVV95cUxNZ1AxbmEzeXk1bFJBV1paWGlPWks1bjNjZy1vLU5wbXllVVJiTVNmQkQxQmZ0ZTZoUkxGRVh6ZHg0bDJSM2h3emlZaHA4bUFlTjlYNEozcGtRSl9lWllYRmE3TkJkUG1qZ0dUeVppamdHQ0NiQkJKcDlqeTcyVmtOdA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPS2d3Nldaa3ZCaHp3YWxoTWEzb2dLSGhXQVN6UmpCTVlacl9mN0doN3Q4Q1IydEQtS3lobGRXV3FOWHk4YXNZNVFmd3ljQ1lHV2I2UFhpYkd2V2U2UUozRDdmNm5tVnIxR08zaHB5SDZkSE1oZTVtMV9tdGRJcmpWNHozRFUtZDhPeFVSczZXV0cxQ21VemZ0TV91R3RMNjRLd2dDYUFMNk54UFRvME5RUnc5emlWSU1rSEkzMXZRZG9hLVFhdTBsSXEwaTJSQUVULWZORk5EUVlJMlRfWEpmbElHNlhmZms1TldYTVNwbXZZekpCOE83NmFDOA?oc=5": {
+    "timestamp": "2026-10-28T22:21:19.256629+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPS2d3Nldaa3ZCaHp3YWxoTWEzb2dLSGhXQVN6UmpCTVlacl9mN0doN3Q4Q1IydEQtS3lobGRXV3FOWHk4YXNZNVFmd3ljQ1lHV2I2UFhpYkd2V2U2UUozRDdmNm5tVnIxR08zaHB5SDZkSE1oZTVtMV9tdGRJcmpWNHozRFUtZDhPeFVSczZXV0cxQ21VemZ0TV91R3RMNjRLd2dDYUFMNk54UFRvME5RUnc5emlWSU1rSEkzMXZRZG9hLVFhdTBsSXEwaTJSQUVULWZORk5EUVlJMlRfWEpmbElHNlhmZms1TldYTVNwbXZZekpCOE83NmFDOA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPS2d3Nldaa3ZCaHp3YWxoTWEzb2dLSGhXQVN6UmpCTVlacl9mN0doN3Q4Q1IydEQtS3lobGRXV3FOWHk4YXNZNVFmd3ljQ1lHV2I2UFhpYkd2V2U2UUozRDdmNm5tVnIxR08zaHB5SDZkSE1oZTVtMV9tdGRJcmpWNHozRFUtZDhPeFVSczZXV0cxQ21VemZ0TV91R3RMNjRLd2dDYUFMNk54UFRvME5RUnc5emlWSU1rSEkzMXZRZG9hLVFhdTBsSXEwaTJSQUVULWZORk5EUVlJMlRfWEpmbElHNlhmZms1TldYTVNwbXZZekpCOE83NmFDOA?oc=5",
+    "headline": "Missouri gas prices are falling, but October's average is still a record high - KOMU 8",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi-wFBVV95cUxPS2d3Nldaa3ZCaHp3YWxoTWEzb2dLSGhXQVN6UmpCTVlacl9mN0doN3Q4Q1IydEQtS3lobGRXV3FOWHk4YXNZNVFmd3ljQ1lHV2I2UFhpYkd2V2U2UUozRDdmNm5tVnIxR08zaHB5SDZkSE1oZTVtMV9tdGRJcmpWNHozRFUtZDhPeFVSczZXV0cxQ21VemZ0TV91R3RMNjRLd2dDYUFMNk54UFRvME5RUnc5emlWSU1rSEkzMXZRZG9hLVFhdTBsSXEwaTJSQUVULWZORk5EUVlJMlRfWEpmbElHNlhmZms1TldYTVNwbXZZekpCOE83NmFDOA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMingFBVV95cUxOcDFGZF9BMWJuS19DOV9aajhQeHBGQUZpZGVOTTVyejhIUjhsUGNCWGo2TVloZzh4cFFvUV91RTZPQmtyN2xBOWJkeVV1REl3V0NHTXdFZmlodkZlcVBaTzd4aWZ4ZFIwSGhsM2NyMlFRYVRZbHRsZjRSd1NpTEp3cDJWNXoxdnIydmI5SGlYZEdjODdJaTBfbjVXUmg3dw?oc=5": {
+    "timestamp": "2026-10-28T22:21:27.020573+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOcDFGZF9BMWJuS19DOV9aajhQeHBGQUZpZGVOTTVyejhIUjhsUGNCWGo2TVloZzh4cFFvUV91RTZPQmtyN2xBOWJkeVV1REl3V0NHTXdFZmlodkZlcVBaTzd4aWZ4ZFIwSGhsM2NyMlFRYVRZbHRsZjRSd1NpTEp3cDJWNXoxdnIydmI5SGlYZEdjODdJaTBfbjVXUmg3dw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOcDFGZF9BMWJuS19DOV9aajhQeHBGQUZpZGVOTTVyejhIUjhsUGNCWGo2TVloZzh4cFFvUV91RTZPQmtyN2xBOWJkeVV1REl3V0NHTXdFZmlodkZlcVBaTzd4aWZ4ZFIwSGhsM2NyMlFRYVRZbHRsZjRSd1NpTEp3cDJWNXoxdnIydmI5SGlYZEdjODdJaTBfbjVXUmg3dw?oc=5",
+    "headline": "Opinion: Voters want lower fuel costs. We have a solution - Agri-Pulse Communications, Inc.",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMingFBVV95cUxOcDFGZF9BMWJuS19DOV9aajhQeHBGQUZpZGVOTTVyejhIUjhsUGNCWGo2TVloZzh4cFFvUV91RTZPQmtyN2xBOWJkeVV1REl3V0NHTXdFZmlodkZlcVBaTzd4aWZ4ZFIwSGhsM2NyMlFRYVRZbHRsZjRSd1NpTEp3cDJWNXoxdnIydmI5SGlYZEdjODdJaTBfbjVXUmg3dw?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }
