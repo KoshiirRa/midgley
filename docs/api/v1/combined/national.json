@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-28T01:05:37.159081",
+  "timestamp": "2026-10-28T01:43:06.919807",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-28T01:05:36Z"
+      "timestamp": "2026-10-28T01:43:06Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-02",
+    "target_date": "2026-11-03",
     "current_base_price": 4.307,
-    "predicted_price_per_gal": 4.193,
-    "expected_change_dollars": -0.114,
-    "expected_change_percent": -2.65,
+    "predicted_price_per_gal": 4.189,
+    "expected_change_dollars": -0.118,
+    "expected_change_percent": -2.74,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.899,
-    "prediction_upper_95ci": 4.487,
+    "prediction_lower_95ci": 3.893,
+    "prediction_upper_95ci": 4.485,
     "calibration_method": "conformal",
-    "calibration_sample_size": 31,
-    "directional_hit_rate_historical": 0.3548,
-    "historical_mae_dollars": 0.1514,
-    "evaluation_sample_size": 31,
-    "day_1_price": 4.284,
-    "day_2_price": 4.261,
-    "day_3_price": 4.214,
-    "day_4_price": 4.196,
-    "day_5_price": 4.193,
+    "calibration_sample_size": 32,
+    "directional_hit_rate_historical": 0.3438,
+    "historical_mae_dollars": 0.1487,
+    "evaluation_sample_size": 32,
+    "day_1_price": 4.283,
+    "day_2_price": 4.257,
+    "day_3_price": 4.235,
+    "day_4_price": 4.206,
+    "day_5_price": 4.189,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.051,
+        "delta_dollars": -0.053,
         "share_pct": 45.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -65,7 +65,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.018,
         "share_pct": 15.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -89,20 +89,20 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.003,
         "share_pct": 2.5,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.114/gal (-2.65%): Driven primarily by Futures & Commodity Benchmark ($-0.051/gal), Refining Yield & Crack Spread ($-0.029/gal).",
+      "summary_text": "National forecast $-0.118/gal (-2.74%): Driven primarily by Futures & Commodity Benchmark ($-0.053/gal), Refining Yield & Crack Spread ($-0.029/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.051,
-          "impact_pct": -1.18,
+          "impact_dollars": -0.053,
+          "impact_pct": -1.23,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
@@ -117,8 +117,8 @@
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.017,
-          "impact_pct": -0.39,
+          "impact_dollars": -0.018,
+          "impact_pct": -0.42,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.07,
           "share_pct": 2.5,
           "direction": "DOWN"
         }
@@ -153,8 +153,8 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.051,
-      "impact_pct": -1.18,
+      "impact_dollars": -0.053,
+      "impact_pct": -1.23,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
@@ -169,8 +169,8 @@
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.017,
-      "impact_pct": -0.39,
+      "impact_dollars": -0.018,
+      "impact_pct": -0.42,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
@@ -193,19 +193,19 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.07,
       "share_pct": 2.5,
       "direction": "DOWN"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.114/gal (-2.65%): Driven primarily by Futures & Commodity Benchmark ($-0.051/gal), Refining Yield & Crack Spread ($-0.029/gal).",
+    "summary_text": "National forecast $-0.118/gal (-2.74%): Driven primarily by Futures & Commodity Benchmark ($-0.053/gal), Refining Yield & Crack Spread ($-0.029/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.051,
+        "delta_dollars": -0.053,
         "share_pct": 45.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -221,7 +221,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.017,
+        "delta_dollars": -0.018,
         "share_pct": 15.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.003,
         "share_pct": 2.5,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
