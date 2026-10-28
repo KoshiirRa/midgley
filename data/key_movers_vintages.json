@@ -24,18 +24,6 @@
     "valid_date": "2026-04-28"
   },
   {
-    "date": "2026-03-18",
-    "entity": "Jerome_Powell",
-    "person": "Jerome Powell",
-    "headline": "Jerome Powell Says He\u2019s Sticking Around - Bloomberg",
-    "impact_category": "Jerome_Powell_Statement",
-    "category": "Jerome_Powell_Statement",
-    "source": "Key Movers Live RSS (Jerome_Powell)",
-    "market_reaction_pct": 0.0,
-    "as_of": "2026-10-24 20:26:53",
-    "valid_date": "2026-03-18"
-  },
-  {
     "date": "2022-06-17",
     "entity": "US_Energy_Secretary_DOE",
     "person": "US Energy Secretary DOE",
@@ -57,6 +45,18 @@
     "source": "Key Movers Live RSS (Jerome_Powell)",
     "market_reaction_pct": 0.0,
     "as_of": "2026-10-28 08:02:45",
+    "valid_date": "2026-03-18"
+  },
+  {
+    "date": "2026-03-18",
+    "entity": "Jerome_Powell",
+    "person": "Jerome Powell",
+    "headline": "Jerome Powell Says He\u2019s Sticking Around - Bloomberg",
+    "impact_category": "Jerome_Powell_Statement",
+    "category": "Jerome_Powell_Statement",
+    "source": "Key Movers Live RSS (Jerome_Powell)",
+    "market_reaction_pct": 0.0,
+    "as_of": "2026-10-28 16:29:51",
     "valid_date": "2026-03-18"
   }
 ]
