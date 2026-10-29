@@ -185,13 +185,13 @@
     "error": "<urlopen error [Errno 111] Connection refused>"
   },
   "https://news.google.com/rss/articles/CBMinAFBVV95cUxQaWhzVko0bmhCcjJfeC1OQ0VXT2lYRUVVRHdya2FlZVFQQXFjNzZEYmhISF83eVJWUS1GM0FpLUZ3Z19GRTZUaFBuSXgtZ3FsbUYyQk04bmhfV0VhVFhYX2ZFcTBvd29sd1hrWmZFQ0RYMFBzcTNYVXU5Tmg5SEROTUpqS2RiOHptSDlOLVBSUzNlajNCRVpfVmdqc1c?oc=5": {
-    "timestamp": "2026-10-26T04:12:26.255552+00:00",
+    "timestamp": "2026-10-29T19:28:43.402803+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQaWhzVko0bmhCcjJfeC1OQ0VXT2lYRUVVRHdya2FlZVFQQXFjNzZEYmhISF83eVJWUS1GM0FpLUZ3Z19GRTZUaFBuSXgtZ3FsbUYyQk04bmhfV0VhVFhYX2ZFcTBvd29sd1hrWmZFQ0RYMFBzcTNYVXU5Tmg5SEROTUpqS2RiOHptSDlOLVBSUzNlajNCRVpfVmdqc1c?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQaWhzVko0bmhCcjJfeC1OQ0VXT2lYRUVVRHdya2FlZVFQQXFjNzZEYmhISF83eVJWUS1GM0FpLUZ3Z19GRTZUaFBuSXgtZ3FsbUYyQk04bmhfV0VhVFhYX2ZFcTBvd29sd1hrWmZFQ0RYMFBzcTNYVXU5Tmg5SEROTUpqS2RiOHptSDlOLVBSUzNlajNCRVpfVmdqc1c?oc=5",
     "headline": "US Summer Driving Season Hits as Gasoline Supplies Squeezed Tight - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinAFBVV95cUxQaWhzVko0bmhCcjJfeC1OQ0VXT2lYRUVVRHdya2FlZVFQQXFjNzZEYmhISF83eVJWUS1GM0FpLUZ3Z19GRTZUaFBuSXgtZ3FsbUYyQk04bmhfV0VhVFhYX2ZFcTBvd29sd1hrWmZFQ0RYMFBzcTNYVXU5Tmg5SEROTUpqS2RiOHptSDlOLVBSUzNlajNCRVpfVmdqc1c?oc=5",
-    "error": "The read operation timed out"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMiogFBVV95cUxPQ3lUYXQyR0psUVZTUWpmT0pHcTZPdjFhNTdzTGVZTElLV2pneGdXZFo4d2xCeHpJWkdQVjlrU2ZvSGZMYXk1VDJlSld2VllSSF9kNVhZWV9KMGhTaWRrQTVDOFVMTzJVVjMwSUJfLXdCbWpOdGRkTDYybkc3OXMwaWpCNHd1dDBEQ1RkQlhQZF9ielQwUU1vS2RjUm1DZWtxZmc?oc=5": {
     "timestamp": "2026-09-04T01:45:26.384577",
@@ -17810,6 +17810,78 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQS28zR1N2NV9UZE0xSU1CXzUyNTlOX2U4Y2xEQ0dISE9MeG43clhDMXV3ZC02NmM0Q1Y1TkFQSzh2MHo2UlgxVkVNM1dDWUxnZGJGNkNfWXpTeDRLME1OYTVTN25wWUJwdGsyalJGaTAyOU92NmxvYl9SZ1lIbU9rU2xMb0FqcDloMWszN3ZqRkNTdkRNQ0h1azJfbmtsbmJJTWdwN3RxZmhtVEt0VVdlRElCaE1jOGJzV3BLZUoza3g?oc=5",
     "headline": "Iran’s Revolutionary Guards say three oil tankers hit mines in Strait of Hormuz",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxQS28zR1N2NV9UZE0xSU1CXzUyNTlOX2U4Y2xEQ0dISE9MeG43clhDMXV3ZC02NmM0Q1Y1TkFQSzh2MHo2UlgxVkVNM1dDWUxnZGJGNkNfWXpTeDRLME1OYTVTN25wWUJwdGsyalJGaTAyOU92NmxvYl9SZ1lIbU9rU2xMb0FqcDloMWszN3ZqRkNTdkRNQ0h1azJfbmtsbmJJTWdwN3RxZmhtVEt0VVdlRElCaE1jOGJzV3BLZUoza3g?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMikgFBVV95cUxNSWUzRWxVUFpYb2xhd1RmdC1wMU15eVM5cGhWaW9NUmp2NmFsQ1pGRDVzbDdQdXZDVWJjdmR5Vnk1em1MdEVuZGdMbFdKODJlc1djM3hNdGVpLWZDSGd4elVZV1dZeHBDX3dMdGZHTVVuN3RGOUtpU3paTlVObFIxdEhnd2lybzlYY05GN1Rna0FlQdIBpgFBVV95cUxOYV80b2d5ZTR2Yk95dTZZVW5DdUlMNzlCbTFiRXFFcl9KeEVyaGlseU4wMGc4Z3NXVzZSdWs3Y0xNX25ZbEJSRFZEOVc2Y3EtN1hNZE1CSFY5dWNBdWtQd2s4aHZYZ3V0MEhmNWJTRFBjLUdacnB4TjlmYVJvWXczSXlnTDlCbVdWNUtGMXVPVVo4VzJqOTVnNGZHenNEV1JmRXRMZDlB?oc=5": {
+    "timestamp": "2026-10-29T19:27:56.914700+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNSWUzRWxVUFpYb2xhd1RmdC1wMU15eVM5cGhWaW9NUmp2NmFsQ1pGRDVzbDdQdXZDVWJjdmR5Vnk1em1MdEVuZGdMbFdKODJlc1djM3hNdGVpLWZDSGd4elVZV1dZeHBDX3dMdGZHTVVuN3RGOUtpU3paTlVObFIxdEhnd2lybzlYY05GN1Rna0FlQdIBpgFBVV95cUxOYV80b2d5ZTR2Yk95dTZZVW5DdUlMNzlCbTFiRXFFcl9KeEVyaGlseU4wMGc4Z3NXVzZSdWs3Y0xNX25ZbEJSRFZEOVc2Y3EtN1hNZE1CSFY5dWNBdWtQd2s4aHZYZ3V0MEhmNWJTRFBjLUdacnB4TjlmYVJvWXczSXlnTDlCbVdWNUtGMXVPVVo4VzJqOTVnNGZHenNEV1JmRXRMZDlB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNSWUzRWxVUFpYb2xhd1RmdC1wMU15eVM5cGhWaW9NUmp2NmFsQ1pGRDVzbDdQdXZDVWJjdmR5Vnk1em1MdEVuZGdMbFdKODJlc1djM3hNdGVpLWZDSGd4elVZV1dZeHBDX3dMdGZHTVVuN3RGOUtpU3paTlVObFIxdEhnd2lybzlYY05GN1Rna0FlQdIBpgFBVV95cUxOYV80b2d5ZTR2Yk95dTZZVW5DdUlMNzlCbTFiRXFFcl9KeEVyaGlseU4wMGc4Z3NXVzZSdWs3Y0xNX25ZbEJSRFZEOVc2Y3EtN1hNZE1CSFY5dWNBdWtQd2s4aHZYZ3V0MEhmNWJTRFBjLUdacnB4TjlmYVJvWXczSXlnTDlCbVdWNUtGMXVPVVo4VzJqOTVnNGZHenNEV1JmRXRMZDlB?oc=5",
+    "headline": "Arkansas gas average falls 8 cents to $3.80 a gallon, AAA says - K8 News | Jonesboro, Arkansas",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxNSWUzRWxVUFpYb2xhd1RmdC1wMU15eVM5cGhWaW9NUmp2NmFsQ1pGRDVzbDdQdXZDVWJjdmR5Vnk1em1MdEVuZGdMbFdKODJlc1djM3hNdGVpLWZDSGd4elVZV1dZeHBDX3dMdGZHTVVuN3RGOUtpU3paTlVObFIxdEhnd2lybzlYY05GN1Rna0FlQdIBpgFBVV95cUxOYV80b2d5ZTR2Yk95dTZZVW5DdUlMNzlCbTFiRXFFcl9KeEVyaGlseU4wMGc4Z3NXVzZSdWs3Y0xNX25ZbEJSRFZEOVc2Y3EtN1hNZE1CSFY5dWNBdWtQd2s4aHZYZ3V0MEhmNWJTRFBjLUdacnB4TjlmYVJvWXczSXlnTDlCbVdWNUtGMXVPVVo4VzJqOTVnNGZHenNEV1JmRXRMZDlB?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVzFKQUptcTY3c1QyeDdVbzJmTVFaeTFKZDV4UjJwaEJxZVlHVEtJN3RiRFVWd3lSZ3FHcmJTXzBmOHZtTG9xeFptanJuSUFwcEg3eVZ6bUI1ZWV3LUlEMjlvSXhELTFoR2RzVnUxZ0YyV2lxXzYzU1h3Zjc4YXFodXZfZ05scEpxMmJMcDlOckJPbk1laU9SRl9wbURWbmQ2aU15cWNXZ3HSAbwBQVVfeXFMTy1tUjU2aElTUE8wVmFhZTg4NXFHQ3FLaGNPbmdzeWw2Vmp0a0dLSkRlMThQN1A4TS1ENmJaWlF1aHZNaktNQnlWZFh2ejZ3Y1ZRU0ZPSkVzaTVvYUllUXQ4aUt5QnNXbEhIRWVVSVB3MWp4UTJHVjB3akZuSm44dmVSOUh1cjhnS1E2NDI3TXlJQzM4WlJ2U0pFNlYwSldrUXhyRHV3SlIwUXpCSngzSmc2YWZxRVMxU241ZGg?oc=5": {
+    "timestamp": "2026-10-29T19:28:04.092614+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVzFKQUptcTY3c1QyeDdVbzJmTVFaeTFKZDV4UjJwaEJxZVlHVEtJN3RiRFVWd3lSZ3FHcmJTXzBmOHZtTG9xeFptanJuSUFwcEg3eVZ6bUI1ZWV3LUlEMjlvSXhELTFoR2RzVnUxZ0YyV2lxXzYzU1h3Zjc4YXFodXZfZ05scEpxMmJMcDlOckJPbk1laU9SRl9wbURWbmQ2aU15cWNXZ3HSAbwBQVVfeXFMTy1tUjU2aElTUE8wVmFhZTg4NXFHQ3FLaGNPbmdzeWw2Vmp0a0dLSkRlMThQN1A4TS1ENmJaWlF1aHZNaktNQnlWZFh2ejZ3Y1ZRU0ZPSkVzaTVvYUllUXQ4aUt5QnNXbEhIRWVVSVB3MWp4UTJHVjB3akZuSm44dmVSOUh1cjhnS1E2NDI3TXlJQzM4WlJ2U0pFNlYwSldrUXhyRHV3SlIwUXpCSngzSmc2YWZxRVMxU241ZGg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVzFKQUptcTY3c1QyeDdVbzJmTVFaeTFKZDV4UjJwaEJxZVlHVEtJN3RiRFVWd3lSZ3FHcmJTXzBmOHZtTG9xeFptanJuSUFwcEg3eVZ6bUI1ZWV3LUlEMjlvSXhELTFoR2RzVnUxZ0YyV2lxXzYzU1h3Zjc4YXFodXZfZ05scEpxMmJMcDlOckJPbk1laU9SRl9wbURWbmQ2aU15cWNXZ3HSAbwBQVVfeXFMTy1tUjU2aElTUE8wVmFhZTg4NXFHQ3FLaGNPbmdzeWw2Vmp0a0dLSkRlMThQN1A4TS1ENmJaWlF1aHZNaktNQnlWZFh2ejZ3Y1ZRU0ZPSkVzaTVvYUllUXQ4aUt5QnNXbEhIRWVVSVB3MWp4UTJHVjB3akZuSm44dmVSOUh1cjhnS1E2NDI3TXlJQzM4WlJ2U0pFNlYwSldrUXhyRHV3SlIwUXpCSngzSmc2YWZxRVMxU241ZGg?oc=5",
+    "headline": "Gas prices for 10/29/26: National average down to $4.22 per gallon - Cleveland.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxNVzFKQUptcTY3c1QyeDdVbzJmTVFaeTFKZDV4UjJwaEJxZVlHVEtJN3RiRFVWd3lSZ3FHcmJTXzBmOHZtTG9xeFptanJuSUFwcEg3eVZ6bUI1ZWV3LUlEMjlvSXhELTFoR2RzVnUxZ0YyV2lxXzYzU1h3Zjc4YXFodXZfZ05scEpxMmJMcDlOckJPbk1laU9SRl9wbURWbmQ2aU15cWNXZ3HSAbwBQVVfeXFMTy1tUjU2aElTUE8wVmFhZTg4NXFHQ3FLaGNPbmdzeWw2Vmp0a0dLSkRlMThQN1A4TS1ENmJaWlF1aHZNaktNQnlWZFh2ejZ3Y1ZRU0ZPSkVzaTVvYUllUXQ4aUt5QnNXbEhIRWVVSVB3MWp4UTJHVjB3akZuSm44dmVSOUh1cjhnS1E2NDI3TXlJQzM4WlJ2U0pFNlYwSldrUXhyRHV3SlIwUXpCSngzSmc2YWZxRVMxU241ZGg?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBsLW9Zbkd4amt3Ul8talhuVXJnazhGdzdlV0p3anhvRW9zYVZHYnhwWFBhQlVqN05fX3p2OUkwaHJqeDVPMnFyQVNIcmFRcVlOTHc?oc=5": {
+    "timestamp": "2026-10-29T19:28:14.826790+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBsLW9Zbkd4amt3Ul8talhuVXJnazhGdzdlV0p3anhvRW9zYVZHYnhwWFBhQlVqN05fX3p2OUkwaHJqeDVPMnFyQVNIcmFRcVlOTHc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBsLW9Zbkd4amt3Ul8talhuVXJnazhGdzdlV0p3anhvRW9zYVZHYnhwWFBhQlVqN05fX3p2OUkwaHJqeDVPMnFyQVNIcmFRcVlOTHc?oc=5",
+    "headline": "Weekly Fuel Report - KWBG Radio | Boone, Iowa",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiUkFVX3lxTFBsLW9Zbkd4amt3Ul8talhuVXJnazhGdzdlV0p3anhvRW9zYVZHYnhwWFBhQlVqN05fX3p2OUkwaHJqeDVPMnFyQVNIcmFRcVlOTHc?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMilwFBVV95cUxOcHlJS3VsM0R5eDYxbkw5Z1JtSWk2a0VGaGR3cUJOU0ZjcWlQMkRHbW5MaXQxVUh0c0tCOV85Zk9OTUV4eUVBN0hsOExaZVI2aklQTE1ZZjVJd3N6OXVOdnZxVVVKTWdtdUlXaHZ0V2J5b0pKM3l4THgxdHhrdTRJZ3VCYWRySERLU3EyS0JtUWNfRFZVd084?oc=5": {
+    "timestamp": "2026-10-29T19:28:22.066912+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOcHlJS3VsM0R5eDYxbkw5Z1JtSWk2a0VGaGR3cUJOU0ZjcWlQMkRHbW5MaXQxVUh0c0tCOV85Zk9OTUV4eUVBN0hsOExaZVI2aklQTE1ZZjVJd3N6OXVOdnZxVVVKTWdtdUlXaHZ0V2J5b0pKM3l4THgxdHhrdTRJZ3VCYWRySERLU3EyS0JtUWNfRFZVd084?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOcHlJS3VsM0R5eDYxbkw5Z1JtSWk2a0VGaGR3cUJOU0ZjcWlQMkRHbW5MaXQxVUh0c0tCOV85Zk9OTUV4eUVBN0hsOExaZVI2aklQTE1ZZjVJd3N6OXVOdnZxVVVKTWdtdUlXaHZ0V2J5b0pKM3l4THgxdHhrdTRJZ3VCYWRySERLU3EyS0JtUWNfRFZVd084?oc=5",
+    "headline": "What San Diego officials will do — or not — with the nation’s worst lead-polluting airport - inewsource",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilwFBVV95cUxOcHlJS3VsM0R5eDYxbkw5Z1JtSWk2a0VGaGR3cUJOU0ZjcWlQMkRHbW5MaXQxVUh0c0tCOV85Zk9OTUV4eUVBN0hsOExaZVI2aklQTE1ZZjVJd3N6OXVOdnZxVVVKTWdtdUlXaHZ0V2J5b0pKM3l4THgxdHhrdTRJZ3VCYWRySERLU3EyS0JtUWNfRFZVd084?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMikgFBVV95cUxQX0lwdnU0VmhKU1NiNnM5cmRaVzV2Tm1RTEJCeWZGSUZ2UDd5RU51Y2VOOUJsci0yRnYzSDFLbndGR0tka3RXc0hwVnJFMzBLaWxtdEgxbDhFX0h2dF9sbWU0ejBXRFZLRGxzNmJLbWVJeXA4Ym5lSEVfOWxfem9mczVVU2MyalUzMGlxSDJOR3Jodw?oc=5": {
+    "timestamp": "2026-10-29T19:28:29.103049+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQX0lwdnU0VmhKU1NiNnM5cmRaVzV2Tm1RTEJCeWZGSUZ2UDd5RU51Y2VOOUJsci0yRnYzSDFLbndGR0tka3RXc0hwVnJFMzBLaWxtdEgxbDhFX0h2dF9sbWU0ejBXRFZLRGxzNmJLbWVJeXA4Ym5lSEVfOWxfem9mczVVU2MyalUzMGlxSDJOR3Jodw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQX0lwdnU0VmhKU1NiNnM5cmRaVzV2Tm1RTEJCeWZGSUZ2UDd5RU51Y2VOOUJsci0yRnYzSDFLbndGR0tka3RXc0hwVnJFMzBLaWxtdEgxbDhFX0h2dF9sbWU0ejBXRFZLRGxzNmJLbWVJeXA4Ym5lSEVfOWxfem9mczVVU2MyalUzMGlxSDJOR3Jodw?oc=5",
+    "headline": "Fed's preferred inflation measure comes in hot at 3.6% - American Banker",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxQX0lwdnU0VmhKU1NiNnM5cmRaVzV2Tm1RTEJCeWZGSUZ2UDd5RU51Y2VOOUJsci0yRnYzSDFLbndGR0tka3RXc0hwVnJFMzBLaWxtdEgxbDhFX0h2dF9sbWU0ejBXRFZLRGxzNmJLbWVJeXA4Ym5lSEVfOWxfem9mczVVU2MyalUzMGlxSDJOR3Jodw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMif0FVX3lxTE84MUZBMVRfN3BISUUyU1lzbUdKdVlLZnpCdi1jbk8zWWhIUC0zTlhUYmZGWHhMRHpMWW5QSVdSNVlmN3czdzhSZk13aTZCMlJWMWVTS2dlSjd1d21UYmktVE1yX0Z3aTBYdmNVUUV3cmZtVXl5SXEtMzdIY3FzcWM?oc=5": {
+    "timestamp": "2026-10-29T19:28:36.334343+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE84MUZBMVRfN3BISUUyU1lzbUdKdVlLZnpCdi1jbk8zWWhIUC0zTlhUYmZGWHhMRHpMWW5QSVdSNVlmN3czdzhSZk13aTZCMlJWMWVTS2dlSjd1d21UYmktVE1yX0Z3aTBYdmNVUUV3cmZtVXl5SXEtMzdIY3FzcWM?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE84MUZBMVRfN3BISUUyU1lzbUdKdVlLZnpCdi1jbk8zWWhIUC0zTlhUYmZGWHhMRHpMWW5QSVdSNVlmN3czdzhSZk13aTZCMlJWMWVTS2dlSjd1d21UYmktVE1yX0Z3aTBYdmNVUUV3cmZtVXl5SXEtMzdIY3FzcWM?oc=5",
+    "headline": "Texas Airport Weighs $500 Self-Fueling Permit - AVweb",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMif0FVX3lxTE84MUZBMVRfN3BISUUyU1lzbUdKdVlLZnpCdi1jbk8zWWhIUC0zTlhUYmZGWHhMRHpMWW5QSVdSNVlmN3czdzhSZk13aTZCMlJWMWVTS2dlSjd1d21UYmktVE1yX0Z3aTBYdmNVUUV3cmZtVXl5SXEtMzdIY3FzcWM?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMitgFBVV95cUxPZnlmdFJLakFEMERMRzVsZno0dTIybzM1X1I1SVhTZFdGbzh1cDItUkZQY3M5TVdzTHR0U1RFbkhvMGNndlhSTk5KcmpwbVB4TURJa2NaSjlOMHIyUTdYVTBVOEYzalNZRjl6Yzh1dGlyVUdNaGtSc1VydWY1aHB0RXJZUDFSbHF2QTNFUzNlNU9ZallJc0JKaG9ZXzBJdmx1ZFZWOGhsWnY0aGdrT1NTYXAzc2paZw?oc=5": {
+    "timestamp": "2026-10-29T19:28:51.594253+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPZnlmdFJLakFEMERMRzVsZno0dTIybzM1X1I1SVhTZFdGbzh1cDItUkZQY3M5TVdzTHR0U1RFbkhvMGNndlhSTk5KcmpwbVB4TURJa2NaSjlOMHIyUTdYVTBVOEYzalNZRjl6Yzh1dGlyVUdNaGtSc1VydWY1aHB0RXJZUDFSbHF2QTNFUzNlNU9ZallJc0JKaG9ZXzBJdmx1ZFZWOGhsWnY0aGdrT1NTYXAzc2paZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPZnlmdFJLakFEMERMRzVsZno0dTIybzM1X1I1SVhTZFdGbzh1cDItUkZQY3M5TVdzTHR0U1RFbkhvMGNndlhSTk5KcmpwbVB4TURJa2NaSjlOMHIyUTdYVTBVOEYzalNZRjl6Yzh1dGlyVUdNaGtSc1VydWY1aHB0RXJZUDFSbHF2QTNFUzNlNU9ZallJc0JKaG9ZXzBJdmx1ZFZWOGhsWnY0aGdrT1NTYXAzc2paZw?oc=5",
+    "headline": "US Cyclohexanone Market Faces a Demand-Supply Tug-of-War Amid Refinery Constraints - ChemAnalyst",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitgFBVV95cUxPZnlmdFJLakFEMERMRzVsZno0dTIybzM1X1I1SVhTZFdGbzh1cDItUkZQY3M5TVdzTHR0U1RFbkhvMGNndlhSTk5KcmpwbVB4TURJa2NaSjlOMHIyUTdYVTBVOEYzalNZRjl6Yzh1dGlyVUdNaGtSc1VydWY1aHB0RXJZUDFSbHF2QTNFUzNlNU9ZallJc0JKaG9ZXzBJdmx1ZFZWOGhsWnY0aGdrT1NTYXAzc2paZw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5": {
+    "timestamp": "2026-10-29T19:29:02.678979+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5",
+    "headline": "Ontario projects bigger deficit, cites U.S. tariffs and higher oil prices - The Globe and Mail",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5",
     "error": "<urlopen error timed out>"
   }
 }

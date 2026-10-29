@@ -8679,5 +8679,26 @@
       "overall_price_pressure": 0.9
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-29T19:29:02.709752",
+    "headline": "Ontario projects bigger deficit, cites U.S. tariffs and higher oil prices - The Globe and Mail",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdWRRRlB2NzZrdjJEWktyMFRpTUJSbzEwLW1wNmdwWHFvdERTSC1NSWU4TGhjUlQwdFZyZFE1czFEbGgwVUpuNFdUSHUwV0dXX3E2bUxVdVpHZFQya1dhUm84emZ5d3l1bjEtaGxRc3JDMG9qY0tNaUI5WnhJbkcxdXpINEtySDU2cFhvdmkxV1Ffb1NPbk50blJ6cVFIZDNBdUpQbzYtVWhOWVFDN3VrTS1Gc3JBa084?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
