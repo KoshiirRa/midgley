@@ -8658,5 +8658,26 @@
       "overall_price_pressure": 0.92
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-29T12:34:16.231246",
+    "headline": "Iran\u2019s Revolutionary Guards say three oil tankers hit mines in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQS28zR1N2NV9UZE0xSU1CXzUyNTlOX2U4Y2xEQ0dISE9MeG43clhDMXV3ZC02NmM0Q1Y1TkFQSzh2MHo2UlgxVkVNM1dDWUxnZGJGNkNfWXpTeDRLME1OYTVTN25wWUJwdGsyalJGaTAyOU92NmxvYl9SZ1lIbU9rU2xMb0FqcDloMWszN3ZqRkNTdkRNQ0h1azJfbmtsbmJJTWdwN3RxZmhtVEt0VVdlRElCaE1jOGJzV3BLZUoza3g?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQS28zR1N2NV9UZE0xSU1CXzUyNTlOX2U4Y2xEQ0dISE9MeG43clhDMXV3ZC02NmM0Q1Y1TkFQSzh2MHo2UlgxVkVNM1dDWUxnZGJGNkNfWXpTeDRLME1OYTVTN25wWUJwdGsyalJGaTAyOU92NmxvYl9SZ1lIbU9rU2xMb0FqcDloMWszN3ZqRkNTdkRNQ0h1azJfbmtsbmJJTWdwN3RxZmhtVEt0VVdlRElCaE1jOGJzV3BLZUoza3g?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwAFBVV95cUxQS28zR1N2NV9UZE0xSU1CXzUyNTlOX2U4Y2xEQ0dISE9MeG43clhDMXV3ZC02NmM0Q1Y1TkFQSzh2MHo2UlgxVkVNM1dDWUxnZGJGNkNfWXpTeDRLME1OYTVTN25wWUJwdGsyalJGaTAyOU92NmxvYl9SZ1lIbU9rU2xMb0FqcDloMWszN3ZqRkNTdkRNQ0h1azJfbmtsbmJJTWdwN3RxZmhtVEt0VVdlRElCaE1jOGJzV3BLZUoza3g?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.2,
+      "overall_price_pressure": 0.9
+    },
+    "discord_notified": true
   }
 ]
