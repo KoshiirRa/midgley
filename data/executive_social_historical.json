@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-10-28 01:42:22",
-  "records_count": 49,
+  "last_refreshed_utc": "2026-10-29 02:01:28",
+  "records_count": 54,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -444,9 +444,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-28 01:37:40",
+      "date": "2026-10-29 01:48:40",
       "platform": "Google News RSS",
-      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -454,9 +454,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-28 01:37:40",
+      "date": "2026-10-29 01:48:40",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "post_text": "FAVORING PUTIN OVER UKRAINE: Trump Waives Many Russia-Related Sanctions, Tariffs Before They Were to Take Effect Under New Law - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -464,7 +464,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-28 01:37:40",
+      "date": "2026-10-29 01:48:40",
       "platform": "Google News RSS",
       "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
@@ -474,9 +474,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-28 01:37:40",
+      "date": "2026-10-29 01:48:40",
       "platform": "Google News RSS",
-      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -484,9 +484,59 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-10-28 01:37:40",
+      "date": "2026-10-29 01:48:40",
       "platform": "Google News RSS",
-      "post_text": "COMMENTARY: Here\u2019s How to Attract Investment to Newfoundland Despite Trump\u2019s Tariffs - Fraser Institute - EnergyNow",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-29 01:48:40",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-29 01:48:40",
+      "platform": "Google News RSS",
+      "post_text": "FAVORING PUTIN OVER UKRAINE: Trump Waives Many Russia-Related Sanctions, Tariffs Before They Were to Take Effect Under New Law - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-29 01:48:40",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-29 01:48:40",
+      "platform": "Google News RSS",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-10-29 01:48:40",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,

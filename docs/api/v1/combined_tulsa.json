@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-10-28T22:22:14.072801",
+  "timestamp": "2026-10-29T02:02:12.132317",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.833,
+    "current_price_per_gal": 3.835,
     "source": "AAA Metro Daily CSV (Tulsa, OK)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-10-28T22:21:56Z"
+      "timestamp": "2026-10-29T02:01:52Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-03",
-    "current_base_price": 3.833,
-    "predicted_price_per_gal": 3.833,
+    "target_date": "2026-11-04",
+    "current_base_price": 3.835,
+    "predicted_price_per_gal": 3.835,
     "expected_change_dollars": 0.0,
     "expected_change_percent": 0.0,
     "projected_direction": "FLAT",
-    "prediction_lower_95ci": 3.713,
-    "prediction_upper_95ci": 3.953,
+    "prediction_lower_95ci": 3.715,
+    "prediction_upper_95ci": 3.955,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.833,
-    "day_2_price": 3.833,
-    "day_3_price": 3.833,
-    "day_4_price": 3.833,
-    "day_5_price": 3.833,
+    "day_1_price": 3.835,
+    "day_2_price": 3.835,
+    "day_3_price": 3.835,
+    "day_4_price": 3.835,
+    "day_5_price": 3.835,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
