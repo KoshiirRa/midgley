@@ -8742,5 +8742,26 @@
       "overall_price_pressure": 0.4
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-30T12:30:47.628030",
+    "headline": "IRGC says two tankers stopped south of Strait of Hormuz after ignoring radio warnings from Iran",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9FN19qNVpkSWVjY2pVNDNYMUhjWWd2b1V2UFhETlBUOWI4aUJ0UGNMVi1WQjZMQWxUM2F5b2tlNHpWYVdIcGxDM1lhckhzVGFxME5HMU5xMFlIYThUaFh6V2NzSzFVdUI3UEE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9FN19qNVpkSWVjY2pVNDNYMUhjWWd2b1V2UFhETlBUOWI4aUJ0UGNMVi1WQjZMQWxUM2F5b2tlNHpWYVdIcGxDM1lhckhzVGFxME5HMU5xMFlIYThUaFh6V2NzSzFVdUI3UEE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTE9FN19qNVpkSWVjY2pVNDNYMUhjWWd2b1V2UFhETlBUOWI4aUJ0UGNMVi1WQjZMQWxUM2F5b2tlNHpWYVdIcGxDM1lhckhzVGFxME5HMU5xMFlIYThUaFh6V2NzSzFVdUI3UEE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.82,
+      "supply_disruption": 0.52,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.58
+    },
+    "discord_notified": true
   }
 ]
