@@ -8721,5 +8721,26 @@
       "overall_price_pressure": 0.65
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-10-30T04:57:31.357801",
+    "headline": "Tankers Pass Strait of Hormuz on First Day of US Blockade, Data Shows",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQSDhQN2x1THE4VEhycTZKbWQ3RE9qeXVHZE9oVkkwWGhTeUNUZ1JxQ3ZtMTZFa3o5RW1HS2VUWGg0d0hrSFZQVjRTOUVrX004MWJKQkN5U0Q1SVZWM3NPVUl5N1pYYmNiYVdrRkFVRVFRYjZQQVZuSmwzOS1DNWk1U2pEc1R3dExFbW5CYVVlQURYY1ZhV0JOalNhYUUyZkZY?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQSDhQN2x1THE4VEhycTZKbWQ3RE9qeXVHZE9oVkkwWGhTeUNUZ1JxQ3ZtMTZFa3o5RW1HS2VUWGg0d0hrSFZQVjRTOUVrX004MWJKQkN5U0Q1SVZWM3NPVUl5N1pYYmNiYVdrRkFVRVFRYjZQQVZuSmwzOS1DNWk1U2pEc1R3dExFbW5CYVVlQURYY1ZhV0JOalNhYUUyZkZY?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMioAFBVV95cUxQSDhQN2x1THE4VEhycTZKbWQ3RE9qeXVHZE9oVkkwWGhTeUNUZ1JxQ3ZtMTZFa3o5RW1HS2VUWGg0d0hrSFZQVjRTOUVrX004MWJKQkN5U0Q1SVZWM3NPVUl5N1pYYmNiYVdrRkFVRVFRYjZQQVZuSmwzOS1DNWk1U2pEc1R3dExFbW5CYVVlQURYY1ZhV0JOalNhYUUyZkZY?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.35,
+      "demand_sentiment": 0.05,
+      "opec_action": 0.1,
+      "overall_price_pressure": 0.4
+    },
+    "discord_notified": true
   }
 ]
