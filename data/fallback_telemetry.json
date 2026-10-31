@@ -1,17 +1,31 @@
 {
-  "total_zero_cost_invocations": 801,
+  "total_zero_cost_invocations": 803,
   "basic_tier_routed_count": 74,
   "provider_breakdown": {
-    "lexicon": 801,
+    "lexicon": 803,
     "kaggle_llm_hook": 0,
     "spc_weather": 0,
     "physical_feed": 0
   },
-  "tokens_saved": 280350,
-  "estimated_usd_saved": 0.0801,
+  "tokens_saved": 281050,
+  "estimated_usd_saved": 0.0803,
   "avg_zero_cost_latency_ms": 0.12,
-  "last_updated": "2026-10-31T02:08:34.543478+00:00",
+  "last_updated": "2026-10-31T04:42:43.084234+00:00",
   "history_log": [
+    {
+      "timestamp": "2026-10-31T04:42:43.084130+00:00",
+      "provider": "lexicon",
+      "is_basic_tier": false,
+      "tokens_saved": 350,
+      "latency_ms": 0.08
+    },
+    {
+      "timestamp": "2026-10-31T04:41:57.554055+00:00",
+      "provider": "lexicon",
+      "is_basic_tier": false,
+      "tokens_saved": 350,
+      "latency_ms": 0.13
+    },
     {
       "timestamp": "2026-10-31T02:08:34.543158+00:00",
       "provider": "lexicon",
@@ -345,20 +359,6 @@
       "timestamp": "2026-10-02T20:33:23.152992+00:00",
       "provider": "lexicon",
       "is_basic_tier": false,
-      "tokens_saved": 350,
-      "latency_ms": 0.08
-    },
-    {
-      "timestamp": "2026-10-02T20:33:21.839847+00:00",
-      "provider": "lexicon",
-      "is_basic_tier": false,
-      "tokens_saved": 350,
-      "latency_ms": 0.09
-    },
-    {
-      "timestamp": "2026-10-02T20:32:00.528505+00:00",
-      "provider": "lexicon",
-      "is_basic_tier": true,
       "tokens_saved": 350,
       "latency_ms": 0.08
     }
