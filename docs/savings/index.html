@@ -32,7 +32,7 @@
                 </a>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 flex-wrap">
-                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.7</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-normal" title="MiroFish Multi-Agent Simulation Cohort Active"><i class="fa-solid fa-users-gear text-[10px] mr-1"></i>Multi-Agent Cohort: ON</span>
+                        midgley <span class="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-normal">Release v0.8.7</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-normal">Model v1.6 Ipatieff</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 font-normal" title="Standard Linear Scenario Engine Active"><i class="fa-solid fa-users-slash text-[10px] mr-1"></i>Multi-Agent Cohort: OFF</span>
                     </h1>
                     <p class="text-xs text-slate-400">LLM-Augmented Unleaded Gasoline, NOAA Weather & Alternative Physical Data Engine</p>
                 </div>
@@ -171,18 +171,18 @@
                 <div class="space-y-2">
                     <label for="regionPreset" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Target Market / Metro Region</label>
                     <select id="regionPreset" aria-label="Target Market or Metro Region" onchange="applyRegionPreset()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500">
-                        <option value="Cincinnati_OH" selected>Cincinnati, OH/KY Retail ($4.275/gal)</option>
-                        <option value="National">National Wholesale RBOB ($3.114/gal)</option>
-                        <option value="Tulsa_OK">Tulsa, OK Retail ($3.803/gal)</option>
-                        <option value="Newark_DE">Newark, DE Retail ($3.992/gal)</option>
+                        <option value="Cincinnati_OH" selected>Cincinnati, OH/KY Retail ($4.208/gal)</option>
+                        <option value="National">National Wholesale RBOB ($3.312/gal)</option>
+                        <option value="Tulsa_OK">Tulsa, OK Retail ($3.801/gal)</option>
+                        <option value="Newark_DE">Newark, DE Retail ($3.986/gal)</option>
                         <option value="Greenville_NC">Greenville, NC Retail ($3.705/gal)</option>
-                        <option value="Charlotte_NC">Charlotte, NC Retail ($3.447/gal)</option>
-                        <option value="Port_St_Lucie_FL">Port St. Lucie, FL Retail ($3.969/gal)</option>
-                        <option value="Chicago_IL">Chicago, IL/IN Retail ($4.949/gal)</option>
-                        <option value="Houston_TX">Houston, TX Retail ($3.671/gal)</option>
-                        <option value="Los_Angeles_CA">Los Angeles, CA Retail ($6.021/gal)</option>
-                        <option value="Oakland_CA">Oakland, CA Retail ($5.965/gal)</option>
-                        <option value="BayArea_CA">SF Bay Area Region ($6.003/gal)</option>
+                        <option value="Charlotte_NC">Charlotte, NC Retail ($3.429/gal)</option>
+                        <option value="Port_St_Lucie_FL">Port St. Lucie, FL Retail ($3.916/gal)</option>
+                        <option value="Chicago_IL">Chicago, IL/IN Retail ($4.920/gal)</option>
+                        <option value="Houston_TX">Houston, TX Retail ($3.659/gal)</option>
+                        <option value="Los_Angeles_CA">Los Angeles, CA Retail ($5.997/gal)</option>
+                        <option value="Oakland_CA">Oakland, CA Retail ($5.943/gal)</option>
+                        <option value="BayArea_CA">SF Bay Area Region ($5.975/gal)</option>
                         <option value="custom">Custom Local Pump Price...</option>
                     </select>
                 </div>
@@ -289,7 +289,7 @@
 
     <!-- Interactive Calculation Script -->
     <script>
-        const REGIONAL_TRAJECTORIES = {"Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 4.275, "trajectory": [4.275, 4.275, 4.275, 4.275, 4.275, 4.275]}, "National": {"name": "National Wholesale RBOB", "base": 3.114, "trajectory": [3.114, 3.086, 3.06, 3.047, 3.054, 3.05]}, "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 3.803, "trajectory": [3.803, 3.803, 3.803, 3.803, 3.803, 3.803]}, "Newark_DE": {"name": "Newark, DE Retail", "base": 3.992, "trajectory": [3.992, 3.955, 3.923, 3.906, 3.915, 3.91]}, "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.705, "trajectory": [3.705, 3.677, 3.652, 3.639, 3.645, 3.642]}, "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.447, "trajectory": [3.447, 3.409, 3.375, 3.358, 3.366, 3.362]}, "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.969, "trajectory": [3.969, 3.929, 3.893, 3.875, 3.884, 3.88]}, "Chicago_IL": {"name": "Chicago, IL/IN Retail", "base": 4.949, "trajectory": [4.949, 4.949, 4.949, 4.949, 4.949, 4.949]}, "Houston_TX": {"name": "Houston, TX Retail", "base": 3.671, "trajectory": [3.671, 3.671, 3.671, 3.671, 3.671, 3.671]}, "Los_Angeles_CA": {"name": "Los Angeles, CA Retail", "base": 6.021, "trajectory": [6.021, 6.021, 6.021, 6.021, 6.021, 6.021]}, "Oakland_CA": {"name": "Oakland, CA Retail", "base": 5.965, "trajectory": [5.965, 5.965, 5.965, 5.965, 5.965, 5.965]}, "BayArea_CA": {"name": "SF Bay Area Region", "base": 6.003, "trajectory": [6.003, 5.946, 5.895, 5.869, 5.882, 5.875]}};
+        const REGIONAL_TRAJECTORIES = {"Cincinnati_OH": {"name": "Cincinnati, OH/KY Retail", "base": 4.208, "trajectory": [4.208, 4.208, 4.208, 4.208, 4.208, 4.208]}, "National": {"name": "National Wholesale RBOB", "base": 3.312, "trajectory": [3.312, 3.293, 3.276, 3.267, 3.271, 3.269]}, "Tulsa_OK": {"name": "Tulsa, OK Retail", "base": 3.801, "trajectory": [3.801, 3.801, 3.801, 3.801, 3.801, 3.801]}, "Newark_DE": {"name": "Newark, DE Retail", "base": 3.986, "trajectory": [3.986, 3.963, 3.943, 3.932, 3.937, 3.935]}, "Greenville_NC": {"name": "Greenville, NC Retail", "base": 3.705, "trajectory": [3.705, 3.677, 3.652, 3.639, 3.645, 3.642]}, "Charlotte_NC": {"name": "Charlotte, NC Retail", "base": 3.429, "trajectory": [3.429, 3.402, 3.378, 3.367, 3.372, 3.369]}, "Port_St_Lucie_FL": {"name": "Port St. Lucie, FL Retail", "base": 3.916, "trajectory": [3.916, 3.889, 3.864, 3.852, 3.858, 3.855]}, "Chicago_IL": {"name": "Chicago, IL/IN Retail", "base": 4.92, "trajectory": [4.92, 4.92, 4.92, 4.92, 4.92, 4.92]}, "Houston_TX": {"name": "Houston, TX Retail", "base": 3.659, "trajectory": [3.659, 3.659, 3.659, 3.659, 3.659, 3.659]}, "Los_Angeles_CA": {"name": "Los Angeles, CA Retail", "base": 5.997, "trajectory": [5.997, 5.997, 5.997, 5.997, 5.997, 5.997]}, "Oakland_CA": {"name": "Oakland, CA Retail", "base": 5.943, "trajectory": [5.943, 5.943, 5.943, 5.943, 5.943, 5.943]}, "BayArea_CA": {"name": "SF Bay Area Region", "base": 5.975, "trajectory": [5.975, 5.938, 5.905, 5.888, 5.897, 5.893]}};
 
         function applyVehiclePreset() {
             const val = document.getElementById('vehiclePreset').value;
