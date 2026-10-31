@@ -10659,6 +10659,39 @@
       "total_tokens": 0,
       "cost_usd": 0.0,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-10-31T21:12:43.840793+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
+    },
+    {
+      "timestamp": "2026-10-31T21:14:29.628692+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 128,
+      "output_tokens": 80,
+      "total_tokens": 208,
+      "cost_usd": 0.000396,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-10-31T21:14:49.294850+00:00",
+      "provider": "zero_cost_hook",
+      "model_name": "zero_cost_hook",
+      "call_type": "event_extraction",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "fallback"
     }
   ]
 }
