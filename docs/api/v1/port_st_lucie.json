@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-01T01:25:57.220397",
+  "timestamp": "2026-11-01T16:49:33.082927",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.915,
+    "current_price_per_gal": 3.88,
     "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-01T01:25:37Z"
+      "timestamp": "2026-11-01T16:49:13Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-06",
-    "current_base_price": 3.915,
-    "predicted_price_per_gal": 3.858,
+    "current_base_price": 3.88,
+    "predicted_price_per_gal": 3.823,
     "expected_change_dollars": -0.057,
-    "expected_change_percent": -1.46,
+    "expected_change_percent": -1.47,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.738,
-    "prediction_upper_95ci": 3.978,
+    "prediction_lower_95ci": 3.703,
+    "prediction_upper_95ci": 3.943,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.905,
-    "day_2_price": 3.895,
-    "day_3_price": 3.87,
-    "day_4_price": 3.863,
-    "day_5_price": 3.858,
+    "day_1_price": 3.87,
+    "day_2_price": 3.86,
+    "day_3_price": 3.835,
+    "day_4_price": 3.828,
+    "day_5_price": 3.823,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast $-0.057/gal (-1.46%): Driven primarily by Regional Logistics & Hub Delivery ($-0.020/gal), Futures & Commodity Benchmark ($-0.014/gal).",
+      "summary_text": "Port St Lucie FL forecast $-0.057/gal (-1.47%): Driven primarily by Regional Logistics & Hub Delivery ($-0.020/gal), Futures & Commodity Benchmark ($-0.014/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.02,
-          "impact_pct": -0.51,
+          "impact_pct": -0.52,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.02,
-      "impact_pct": -0.51,
+      "impact_pct": -0.52,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast $-0.057/gal (-1.46%): Driven primarily by Regional Logistics & Hub Delivery ($-0.020/gal), Futures & Commodity Benchmark ($-0.014/gal).",
+    "summary_text": "Port St Lucie FL forecast $-0.057/gal (-1.47%): Driven primarily by Regional Logistics & Hub Delivery ($-0.020/gal), Futures & Commodity Benchmark ($-0.014/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
