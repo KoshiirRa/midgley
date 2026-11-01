@@ -15,7 +15,7 @@
 An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualitative real-world news feeds, **NOAA Weather Models**, **Global Maritime & Inland Waterway Chokepoints (Hormuz/Suez/Rivers/Waterborne Terminals)**, **Agent-Reach Multi-Protocol Reachability Adapters**, **AIHawk Self-Healing State Tax Portals**, **Alternative Physical Feeds (Cboe OVX & Baker Hughes Rigs)**, **Vectorize Hindsight Episodic Memory Synchronization**, and **Tulsa Regional Refining Dynamics** with quantitative commodity futures (`RB=F`, `CL=F`, `BZ=F`) to predict wholesale and retail unleaded gasoline prices.
 
 <!-- START_LIVE_FORECAST -->
-### 📢 Live 5-Day Price Forecasts (Updated: 2026-10-31 19:02 UTC)
+### 📢 Live 5-Day Price Forecasts (Updated: 2026-11-01 01:26 UTC)
 
 | Region / Market | Current Price | 5-Day Forecast | Projected Direction | Target Date | Model Version |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -24,10 +24,10 @@ An **LLM Multi-Agent Time-Series Forecasting Framework** that integrates qualita
 | **Newark, DE Metro Retail** | `$3.986`/gal | **`$3.935`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-Newark-Ridge` |
 | **Cincinnati, OH Retail** | `$4.208`/gal | **`$4.208`/gal** | **UP 📈** | `2026-11-06` | `v1.6-Ipatieff-CincinnatiOH-Ridge` |
 | **Northern Kentucky Retail** | `$4.265`/gal | **`$4.208`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-CincinnatiKY-Ridge` |
-| **Charlotte, NC Metro Retail (Carolinas Hub)** | `$3.429`/gal | **`$3.369`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-Charlotte-Ridge` |
-| **Port St. Lucie, FL Waterborne** | `$3.916`/gal | **`$3.855`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-PortStLucie-Ridge` |
+| **Charlotte, NC Metro Retail (Carolinas Hub)** | `$3.429`/gal | **`$3.381`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-Charlotte-Ridge` |
+| **Port St. Lucie, FL Waterborne** | `$3.916`/gal | **`$3.859`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-PortStLucie-Ridge` |
 | **Oakland, CA Metro Retail** | `$5.943`/gal | **`$5.943`/gal** | **UP 📈** | `2026-11-06` | `v1.6-Ipatieff-Oakland-Ridge` |
-| **SF Bay Area 9-County Avg** | `$5.975`/gal | **`$5.893`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-BayArea-Ridge` |
+| **SF Bay Area 9-County Avg** | `$5.975`/gal | **`$5.894`/gal** | **DOWN 📉** | `2026-11-06` | `v1.6-Ipatieff-BayArea-Ridge` |
 
 *🌐 View Interactive Web Dashboard & Public Visual Analytics at [koshiirra.github.io/midgley](https://koshiirra.github.io/midgley/)*
 <!-- END_LIVE_FORECAST -->
