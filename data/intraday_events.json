@@ -8914,5 +8914,26 @@
       "overall_price_pressure": 0.88
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-01T21:50:43.690037",
+    "headline": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOLU9JN2Vlb2FpV0NGUnlXTklZb1V0RHdWVnB6TWk1NEdqa3dYMGs0WXAwQkpmWk1NTi1nRHJwWHE4Y0RUYm1rVHJkNGpoWjBQRVQ0NEFtRzByTWFzTjlzQ1pLUExmX0NlSXNkNVA5YWxZX0FDbWhzTDhWcDZTSTY2U2p3Y25FbUcyVVdwc1dWRlpobnhn?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOLU9JN2Vlb2FpV0NGUnlXTklZb1V0RHdWVnB6TWk1NEdqa3dYMGs0WXAwQkpmWk1NTi1nRHJwWHE4Y0RUYm1rVHJkNGpoWjBQRVQ0NEFtRzByTWFzTjlzQ1pLUExmX0NlSXNkNVA5YWxZX0FDbWhzTDhWcDZTSTY2U2p3Y25FbUcyVVdwc1dWRlpobnhn?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxOLU9JN2Vlb2FpV0NGUnlXTklZb1V0RHdWVnB6TWk1NEdqa3dYMGs0WXAwQkpmWk1NTi1nRHJwWHE4Y0RUYm1rVHJkNGpoWjBQRVQ0NEFtRzByTWFzTjlzQ1pLUExmX0NlSXNkNVA5YWxZX0FDbWhzTDhWcDZTSTY2U2p3Y25FbUcyVVdwc1dWRlpobnhn?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.8,
+      "supply_disruption": 0.8,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.52
+    },
+    "discord_notified": true
   }
 ]
