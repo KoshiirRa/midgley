@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-02 01:31:01",
+  "last_updated": "2026-11-02 09:03:38",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 01:46:13",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 25.55,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-10-01 01:46:15",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 26.12,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-10-01 01:46:16",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 26.64,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-10-01 01:46:18",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 26.53,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-10-01 01:46:19",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9962,46 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-02 09:01:38",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 373.14,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-02 09:03:28",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 965.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 351 docs, 246 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-02 09:03:36",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3085.9,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 0987e15c-9e56-4fb1-9438-241de535dc32 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-02 09:03:38",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1720.33,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge e9b450d2-8d56-4b75-9aff-41ed35e3ca5f already predicted (HTTP 400)"
     }
   ]
 }
