@@ -8977,5 +8977,30 @@
       "overall_price_pressure": 0.18
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-02T20:05:33.385571",
+    "headline": "Phillips 66 stock faces Freeport outage after record refining quarter - ad-hoc-news.de",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQUFlfRUVOUmxMNEdZblo3NFUxZG0wS0dLTGZQMmZOQTNZN3pLeV9NMmwtS1VxektuZFpXV0M0TFhPakw0clFGdm45eU9rdVR1YlpvX0FDSXgwZW9YSXh0N3ZwSU5ac09iWXBKRnZlOTU5eGtFc0ZTTktRLXRNTndBQVhzS2NGa2hFclhaRHNmVXhxTklsLWE0bERvMTV2SjVkd2VndFlKYk5fZDFtQnhMQThhbXlsYkhORGJCMjZRUUJkaEZHdHZRcEpycUI?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQUFlfRUVOUmxMNEdZblo3NFUxZG0wS0dLTGZQMmZOQTNZN3pLeV9NMmwtS1VxektuZFpXV0M0TFhPakw0clFGdm45eU9rdVR1YlpvX0FDSXgwZW9YSXh0N3ZwSU5ac09iWXBKRnZlOTU5eGtFc0ZTTktRLXRNTndBQVhzS2NGa2hFclhaRHNmVXhxTklsLWE0bERvMTV2SjVkd2VndFlKYk5fZDFtQnhMQThhbXlsYkhORGJCMjZRUUJkaEZHdHZRcEpycUI?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizAFBVV95cUxQUFlfRUVOUmxMNEdZblo3NFUxZG0wS0dLTGZQMmZOQTNZN3pLeV9NMmwtS1VxektuZFpXV0M0TFhPakw0clFGdm45eU9rdVR1YlpvX0FDSXgwZW9YSXh0N3ZwSU5ac09iWXBKRnZlOTU5eGtFc0ZTTktRLXRNTndBQVhzS2NGa2hFclhaRHNmVXhxTklsLWE0bERvMTV2SjVkd2VndFlKYk5fZDFtQnhMQThhbXlsYkhORGJCMjZRUUJkaEZHdHZRcEpycUI?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Phillips 66 (PSX) Declares Force Majeure On Freeport Butane Exports After Outage - Simply Wall St",
+    "matched_entity": "Phillips 66",
+    "similarity": 0.19,
+    "duplicate_review_notified": false
   }
 ]
