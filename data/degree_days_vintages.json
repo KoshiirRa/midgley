@@ -11204,5 +11204,31 @@
       "cost_per_query": 0.0,
       "timestamp": "2026-11-01 01:25:19"
     }
+  },
+  {
+    "as_of": "2026-11-02 01:30:57",
+    "valid_date": "2026-11-02",
+    "hub_code": "gulf_coast_houston",
+    "mean_temp_f": 66.0,
+    "heating_degree_days_hdd": 0.0,
+    "cooling_degree_days_cdd": 1.0,
+    "freeze_warning": false,
+    "extreme_heat_warning": false,
+    "source": "Open-Meteo Weather API (Zero-Cost)",
+    "data": {
+      "hub_code": "gulf_coast_houston",
+      "name": "West Tulsa HF Sinclair & Cushing Hub",
+      "mean_temp_f": 66.0,
+      "max_temp_f": 69.9,
+      "min_temp_f": 62.0,
+      "heating_degree_days_hdd": 0.0,
+      "cooling_degree_days_cdd": 1.0,
+      "freeze_warning": false,
+      "extreme_heat_warning": false,
+      "source": "Open-Meteo Weather API (Zero-Cost)",
+      "is_free_alternative": true,
+      "cost_per_query": 0.0,
+      "timestamp": "2026-11-02 01:30:56"
+    }
   }
 ]
