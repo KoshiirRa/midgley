@@ -1756,7 +1756,7 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5": {
-    "timestamp": "2026-11-01T16:40:03.408011+00:00",
+    "timestamp": "2026-11-03T19:16:49.750503+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
@@ -3665,13 +3665,14 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-10-31T04:41:24.843608+00:00",
+    "timestamp": "2026-11-03T19:16:00.599092+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 520,
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Crosses $4 - Forbes",
+    "headline": "Today’s Gas Prices By State: Gas Tops $4 Nationwide - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "HTTP Error 520: UNKNOWN"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -19714,6 +19715,87 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOQjZmUFhqLUVDdThack1lTS0xa0E4TzdHalZScnY5bk1IUWc1MUI1bUNQcTRlMHBfTWtqcTRnWmdvc21MMDhzWDRZQU5XaElOSmJ3Vlh5bWNkd09EOHdlR214MEpGSU9GQ3g5RmgxTXdWcEtfRkNMQ1ozOUZCRmJnR0VVMWpGaXZtS2tlbFhHSm1PaWhEV0ZadFlya1dhaDh5akNRVzZvQkt4UGotSzN0MWRxZkhycElzbGtST1NNUFp5d1MxcXhyQ2dMdmU3bVZpeFZQcmZaVXFCaWZUWkpiZdIB4AFBVV95cUxOQjZmUFhqLUVDdThack1lTS0xa0E4TzdHalZScnY5bk1IUWc1MUI1bUNQcTRlMHBfTWtqcTRnWmdvc21MMDhzWDRZQU5XaElOSmJ3Vlh5bWNkd09EOHdlR214MEpGSU9GQ3g5RmgxTXdWcEtfRkNMQ1ozOUZCRmJnR0VVMWpGaXZtS2tlbFhHSm1PaWhEV0ZadFlya1dhaDh5akNRVzZvQkt4UGotSzN0MWRxZkhycElzbGtST1NNUFp5d1MxcXhyQ2dMdmU3bVZpeFZQcmZaVXFCaWZUWkpiZQ?oc=5",
     "headline": "HPCL Malkapuram refinery fire triggered by sulfur pitch, no casualties reported - The Economic Times",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4AFBVV95cUxOQjZmUFhqLUVDdThack1lTS0xa0E4TzdHalZScnY5bk1IUWc1MUI1bUNQcTRlMHBfTWtqcTRnWmdvc21MMDhzWDRZQU5XaElOSmJ3Vlh5bWNkd09EOHdlR214MEpGSU9GQ3g5RmgxTXdWcEtfRkNMQ1ozOUZCRmJnR0VVMWpGaXZtS2tlbFhHSm1PaWhEV0ZadFlya1dhaDh5akNRVzZvQkt4UGotSzN0MWRxZkhycElzbGtST1NNUFp5d1MxcXhyQ2dMdmU3bVZpeFZQcmZaVXFCaWZUWkpiZdIB4AFBVV95cUxOQjZmUFhqLUVDdThack1lTS0xa0E4TzdHalZScnY5bk1IUWc1MUI1bUNQcTRlMHBfTWtqcTRnWmdvc21MMDhzWDRZQU5XaElOSmJ3Vlh5bWNkd09EOHdlR214MEpGSU9GQ3g5RmgxTXdWcEtfRkNMQ1ozOUZCRmJnR0VVMWpGaXZtS2tlbFhHSm1PaWhEV0ZadFlya1dhaDh5akNRVzZvQkt4UGotSzN0MWRxZkhycElzbGtST1NNUFp5d1MxcXhyQ2dMdmU3bVZpeFZQcmZaVXFCaWZUWkpiZQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMijAFBVV95cUxNSU82aV82a2NUSFZXZ0tha0ZBMl9iTTF2UFQ0N2txRi1UZXR1WmlieGE4T3JsUF9hY2FDYzk5VHlvUHhlQVFwNDZBQ1l2SWkzeDFhRUJrUmEySXVhdTZXYndRamdQTmk0V3otZWM4Qm5ldGxYalp6YXhDbmFZOUVpNk5OYkxweF9KVnpoMNIBoAFBVV95cUxQTHFJaDh4a1g4NjEwakVtRWJFNDdZOE1JalF6Z2hyTW5Nc1JVUHlZdnQ2dXVtdjU2NnlZNUhRMlFtTUstSlg4SjhwcmQyT1VSaWVUZXY2RjFUbUdCUWJHVE9DSU5HaU11bllaY3dlR3YzTVdRckNsb3h6SFF5UEp0TW1sRUtjZEVIWHlNN2VfMllTWDN3TWk4LVQ4Wm1TNlYy?oc=5": {
+    "timestamp": "2026-11-03T19:15:49.041749+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNSU82aV82a2NUSFZXZ0tha0ZBMl9iTTF2UFQ0N2txRi1UZXR1WmlieGE4T3JsUF9hY2FDYzk5VHlvUHhlQVFwNDZBQ1l2SWkzeDFhRUJrUmEySXVhdTZXYndRamdQTmk0V3otZWM4Qm5ldGxYalp6YXhDbmFZOUVpNk5OYkxweF9KVnpoMNIBoAFBVV95cUxQTHFJaDh4a1g4NjEwakVtRWJFNDdZOE1JalF6Z2hyTW5Nc1JVUHlZdnQ2dXVtdjU2NnlZNUhRMlFtTUstSlg4SjhwcmQyT1VSaWVUZXY2RjFUbUdCUWJHVE9DSU5HaU11bllaY3dlR3YzTVdRckNsb3h6SFF5UEp0TW1sRUtjZEVIWHlNN2VfMllTWDN3TWk4LVQ4Wm1TNlYy?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNSU82aV82a2NUSFZXZ0tha0ZBMl9iTTF2UFQ0N2txRi1UZXR1WmlieGE4T3JsUF9hY2FDYzk5VHlvUHhlQVFwNDZBQ1l2SWkzeDFhRUJrUmEySXVhdTZXYndRamdQTmk0V3otZWM4Qm5ldGxYalp6YXhDbmFZOUVpNk5OYkxweF9KVnpoMNIBoAFBVV95cUxQTHFJaDh4a1g4NjEwakVtRWJFNDdZOE1JalF6Z2hyTW5Nc1JVUHlZdnQ2dXVtdjU2NnlZNUhRMlFtTUstSlg4SjhwcmQyT1VSaWVUZXY2RjFUbUdCUWJHVE9DSU5HaU11bllaY3dlR3YzTVdRckNsb3h6SFF5UEp0TW1sRUtjZEVIWHlNN2VfMllTWDN3TWk4LVQ4Wm1TNlYy?oc=5",
+    "headline": "As Election Day arrives, gas prices down over the past week - WIBW",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijAFBVV95cUxNSU82aV82a2NUSFZXZ0tha0ZBMl9iTTF2UFQ0N2txRi1UZXR1WmlieGE4T3JsUF9hY2FDYzk5VHlvUHhlQVFwNDZBQ1l2SWkzeDFhRUJrUmEySXVhdTZXYndRamdQTmk0V3otZWM4Qm5ldGxYalp6YXhDbmFZOUVpNk5OYkxweF9KVnpoMNIBoAFBVV95cUxQTHFJaDh4a1g4NjEwakVtRWJFNDdZOE1JalF6Z2hyTW5Nc1JVUHlZdnQ2dXVtdjU2NnlZNUhRMlFtTUstSlg4SjhwcmQyT1VSaWVUZXY2RjFUbUdCUWJHVE9DSU5HaU11bllaY3dlR3YzTVdRckNsb3h6SFF5UEp0TW1sRUtjZEVIWHlNN2VfMllTWDN3TWk4LVQ4Wm1TNlYy?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQajc4czM0VThwU0NJN0Q5OE1WUE5QemFtSGE2MEJlTlpfSlhGd2RKcnJWd0pMakstOW1zMHctX3hoNnJtdkRlR0hHd0FlblI1akJSTENXbEVCbEh0d3ZINlV4ZHVCbXFaTFpET0JMNTBKNnNvOWlKNXVwYmJNMm9zMGFSZ3M3WVUt?oc=5": {
+    "timestamp": "2026-11-03T19:15:56.376283+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQajc4czM0VThwU0NJN0Q5OE1WUE5QemFtSGE2MEJlTlpfSlhGd2RKcnJWd0pMakstOW1zMHctX3hoNnJtdkRlR0hHd0FlblI1akJSTENXbEVCbEh0d3ZINlV4ZHVCbXFaTFpET0JMNTBKNnNvOWlKNXVwYmJNMm9zMGFSZ3M3WVUt?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQajc4czM0VThwU0NJN0Q5OE1WUE5QemFtSGE2MEJlTlpfSlhGd2RKcnJWd0pMakstOW1zMHctX3hoNnJtdkRlR0hHd0FlblI1akJSTENXbEVCbEh0d3ZINlV4ZHVCbXFaTFpET0JMNTBKNnNvOWlKNXVwYmJNMm9zMGFSZ3M3WVUt?oc=5",
+    "headline": "GAO Seeks Alaska Pilots’ Input on Unleaded Avgas - AVweb",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiiAFBVV95cUxQajc4czM0VThwU0NJN0Q5OE1WUE5QemFtSGE2MEJlTlpfSlhGd2RKcnJWd0pMakstOW1zMHctX3hoNnJtdkRlR0hHd0FlblI1akJSTENXbEVCbEh0d3ZINlV4ZHVCbXFaTFpET0JMNTBKNnNvOWlKNXVwYmJNMm9zMGFSZ3M3WVUt?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMitwFBVV95cUxNVjR4cHdWbmpKTktELW4zNVIyMld2VU9OZWJ6R2ZTenZPVWlySTFxMHBoRDJzbGF5YlJNRnVGRnZDXzZzZ1F4dDRBeE1IbFNMaFBBeWF3Wm1BV08wcUVNYi1MUkc4M0FMeHN5b2pBal9KVHhlczU1Z2FmYS1hbk53VEU2OWRXTUZiU2xEZjZ2bkZwRWdNMkpLaDZNNmFWenVieUNPUk9ocGthUjFfM2syMjh6S2hjNkE?oc=5": {
+    "timestamp": "2026-11-03T19:16:13.678318+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNVjR4cHdWbmpKTktELW4zNVIyMld2VU9OZWJ6R2ZTenZPVWlySTFxMHBoRDJzbGF5YlJNRnVGRnZDXzZzZ1F4dDRBeE1IbFNMaFBBeWF3Wm1BV08wcUVNYi1MUkc4M0FMeHN5b2pBal9KVHhlczU1Z2FmYS1hbk53VEU2OWRXTUZiU2xEZjZ2bkZwRWdNMkpLaDZNNmFWenVieUNPUk9ocGthUjFfM2syMjh6S2hjNkE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNVjR4cHdWbmpKTktELW4zNVIyMld2VU9OZWJ6R2ZTenZPVWlySTFxMHBoRDJzbGF5YlJNRnVGRnZDXzZzZ1F4dDRBeE1IbFNMaFBBeWF3Wm1BV08wcUVNYi1MUkc4M0FMeHN5b2pBal9KVHhlczU1Z2FmYS1hbk53VEU2OWRXTUZiU2xEZjZ2bkZwRWdNMkpLaDZNNmFWenVieUNPUk9ocGthUjFfM2syMjh6S2hjNkE?oc=5",
+    "headline": "AAA: National Average Tumbles as Crude Oil Prices Decline - exploreJefferson",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitwFBVV95cUxNVjR4cHdWbmpKTktELW4zNVIyMld2VU9OZWJ6R2ZTenZPVWlySTFxMHBoRDJzbGF5YlJNRnVGRnZDXzZzZ1F4dDRBeE1IbFNMaFBBeWF3Wm1BV08wcUVNYi1MUkc4M0FMeHN5b2pBal9KVHhlczU1Z2FmYS1hbk53VEU2OWRXTUZiU2xEZjZ2bkZwRWdNMkpLaDZNNmFWenVieUNPUk9ocGthUjFfM2syMjh6S2hjNkE?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMid0FVX3lxTE8zVjRZSVYyaFd2UUxGNlhCOG5MUVhnZ1FsREZaMkNjWDROLVl1WVBHQU04cTJkQU9sdElGbGZkRU5hTUhJRk5DTmFRdlhzbjBXQ2FWbUVzQlNrWmh3NWdUSzB2RmwwZmdoU3dmMnAtal8yUEFlcUVR?oc=5": {
+    "timestamp": "2026-11-03T19:16:20.994919+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE8zVjRZSVYyaFd2UUxGNlhCOG5MUVhnZ1FsREZaMkNjWDROLVl1WVBHQU04cTJkQU9sdElGbGZkRU5hTUhJRk5DTmFRdlhzbjBXQ2FWbUVzQlNrWmh3NWdUSzB2RmwwZmdoU3dmMnAtal8yUEFlcUVR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE8zVjRZSVYyaFd2UUxGNlhCOG5MUVhnZ1FsREZaMkNjWDROLVl1WVBHQU04cTJkQU9sdElGbGZkRU5hTUhJRk5DTmFRdlhzbjBXQ2FWbUVzQlNrWmh3NWdUSzB2RmwwZmdoU3dmMnAtal8yUEFlcUVR?oc=5",
+    "headline": "Petrol is going down… by one cent - The Citizen",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTE8zVjRZSVYyaFd2UUxGNlhCOG5MUVhnZ1FsREZaMkNjWDROLVl1WVBHQU04cTJkQU9sdElGbGZkRU5hTUhJRk5DTmFRdlhzbjBXQ2FWbUVzQlNrWmh3NWdUSzB2RmwwZmdoU3dmMnAtal8yUEFlcUVR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNeExvMXd2dG5zVW04a1FFNjlWSEZQVUV6Z3c3ZUlHNGZIRk43R3REQWdrenVSVUkzdzNveU5KMXR6OXRPY1AxbktDRndnRmh2aTV0VHEweS1PSkNkM0JXLVFtYXZYb3VwVnphRVIzV0ROZUhFWEFkcU9QelFCakNVcHdjSXdQd3B2OVZHaVVOX2tWM1p5LXAtcXJob0FCYzFnSGRvRkt6YjN5RU1OY3hfd0R3V1E1SzJmVW1FM1lzSk0zbXBOMW9xZlE5VGt5alVfelREd050OA?oc=5": {
+    "timestamp": "2026-11-03T19:16:28.243925+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNeExvMXd2dG5zVW04a1FFNjlWSEZQVUV6Z3c3ZUlHNGZIRk43R3REQWdrenVSVUkzdzNveU5KMXR6OXRPY1AxbktDRndnRmh2aTV0VHEweS1PSkNkM0JXLVFtYXZYb3VwVnphRVIzV0ROZUhFWEFkcU9QelFCakNVcHdjSXdQd3B2OVZHaVVOX2tWM1p5LXAtcXJob0FCYzFnSGRvRkt6YjN5RU1OY3hfd0R3V1E1SzJmVW1FM1lzSk0zbXBOMW9xZlE5VGt5alVfelREd050OA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNeExvMXd2dG5zVW04a1FFNjlWSEZQVUV6Z3c3ZUlHNGZIRk43R3REQWdrenVSVUkzdzNveU5KMXR6OXRPY1AxbktDRndnRmh2aTV0VHEweS1PSkNkM0JXLVFtYXZYb3VwVnphRVIzV0ROZUhFWEFkcU9QelFCakNVcHdjSXdQd3B2OVZHaVVOX2tWM1p5LXAtcXJob0FCYzFnSGRvRkt6YjN5RU1OY3hfd0R3V1E1SzJmVW1FM1lzSk0zbXBOMW9xZlE5VGt5alVfelREd050OA?oc=5",
+    "headline": "Car catches fire at Jet Point in Nadi after driver allegedly lights match while carrying unleaded fuel - Fijivillage",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1wFBVV95cUxNeExvMXd2dG5zVW04a1FFNjlWSEZQVUV6Z3c3ZUlHNGZIRk43R3REQWdrenVSVUkzdzNveU5KMXR6OXRPY1AxbktDRndnRmh2aTV0VHEweS1PSkNkM0JXLVFtYXZYb3VwVnphRVIzV0ROZUhFWEFkcU9QelFCakNVcHdjSXdQd3B2OVZHaVVOX2tWM1p5LXAtcXJob0FCYzFnSGRvRkt6YjN5RU1OY3hfd0R3V1E1SzJmVW1FM1lzSk0zbXBOMW9xZlE5VGt5alVfelREd050OA?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPQnhkSFpENXB4dW44Z094MDhOclJCcXpRZTIwMjdpUGNkX0JSTklVS0dVOUE0SjRGa1UyZGZoeFFDQ0hpT2dwTkxHNEdRQ18ySFI0N2w2TUJXNk01TUs5MVdNT01pcTRQdW5DVVoyeVdzSjZIUzgtTFY0enhoYmI4dElRSEV1VkRjTXI0LVA1RVZWM1lSMUpXdzBFMnc0eWFGV3BMRllhRHpBQXBveE1MMVczeG5zSzVwUmJ2UG91X3A1YzlvZVczRzZoSG15b0tXQ0VTU3pFNkJsZm1YSXowamN4Z3VUdDdYWFM1bEQ5LURxbEdhUFFyVmEwaw?oc=5": {
+    "timestamp": "2026-11-03T19:16:35.176260+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPQnhkSFpENXB4dW44Z094MDhOclJCcXpRZTIwMjdpUGNkX0JSTklVS0dVOUE0SjRGa1UyZGZoeFFDQ0hpT2dwTkxHNEdRQ18ySFI0N2w2TUJXNk01TUs5MVdNT01pcTRQdW5DVVoyeVdzSjZIUzgtTFY0enhoYmI4dElRSEV1VkRjTXI0LVA1RVZWM1lSMUpXdzBFMnc0eWFGV3BMRllhRHpBQXBveE1MMVczeG5zSzVwUmJ2UG91X3A1YzlvZVczRzZoSG15b0tXQ0VTU3pFNkJsZm1YSXowamN4Z3VUdDdYWFM1bEQ5LURxbEdhUFFyVmEwaw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPQnhkSFpENXB4dW44Z094MDhOclJCcXpRZTIwMjdpUGNkX0JSTklVS0dVOUE0SjRGa1UyZGZoeFFDQ0hpT2dwTkxHNEdRQ18ySFI0N2w2TUJXNk01TUs5MVdNT01pcTRQdW5DVVoyeVdzSjZIUzgtTFY0enhoYmI4dElRSEV1VkRjTXI0LVA1RVZWM1lSMUpXdzBFMnc0eWFGV3BMRllhRHpBQXBveE1MMVczeG5zSzVwUmJ2UG91X3A1YzlvZVczRzZoSG15b0tXQ0VTU3pFNkJsZm1YSXowamN4Z3VUdDdYWFM1bEQ5LURxbEdhUFFyVmEwaw?oc=5",
+    "headline": "Where to find the cheapest fuel in The Hills Shire - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi-wFBVV95cUxPQnhkSFpENXB4dW44Z094MDhOclJCcXpRZTIwMjdpUGNkX0JSTklVS0dVOUE0SjRGa1UyZGZoeFFDQ0hpT2dwTkxHNEdRQ18ySFI0N2w2TUJXNk01TUs5MVdNT01pcTRQdW5DVVoyeVdzSjZIUzgtTFY0enhoYmI4dElRSEV1VkRjTXI0LVA1RVZWM1lSMUpXdzBFMnc0eWFGV3BMRllhRHpBQXBveE1MMVczeG5zSzVwUmJ2UG91X3A1YzlvZVczRzZoSG15b0tXQ0VTU3pFNkJsZm1YSXowamN4Z3VUdDdYWFM1bEQ5LURxbEdhUFFyVmEwaw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilAFBVV95cUxQUVh2YnVzR1RYMW5EcjlNTGdYaFU1R0FWNXdkQmZYLTlObTgxNHRDMDdfelFBc0kwVUtwdXMtVW9wWlFuV01LdWNrMjJja2RhVmNnclFBWks4ZV9RZDZKdkU2aVk3ejZtR0VsVTJlRVVxMWQ5Zk1QdmZTcXBQSTlLMHFlMkVhUkVzRWtXOHhjVW1hMGs2?oc=5": {
+    "timestamp": "2026-11-03T19:16:42.558597+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQUVh2YnVzR1RYMW5EcjlNTGdYaFU1R0FWNXdkQmZYLTlObTgxNHRDMDdfelFBc0kwVUtwdXMtVW9wWlFuV01LdWNrMjJja2RhVmNnclFBWks4ZV9RZDZKdkU2aVk3ejZtR0VsVTJlRVVxMWQ5Zk1QdmZTcXBQSTlLMHFlMkVhUkVzRWtXOHhjVW1hMGs2?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQUVh2YnVzR1RYMW5EcjlNTGdYaFU1R0FWNXdkQmZYLTlObTgxNHRDMDdfelFBc0kwVUtwdXMtVW9wWlFuV01LdWNrMjJja2RhVmNnclFBWks4ZV9RZDZKdkU2aVk3ejZtR0VsVTJlRVVxMWQ5Zk1QdmZTcXBQSTlLMHFlMkVhUkVzRWtXOHhjVW1hMGs2?oc=5",
+    "headline": "Petroperu's Talara refinery hit by power outage - Quantum Commodity Intelligence",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxQUVh2YnVzR1RYMW5EcjlNTGdYaFU1R0FWNXdkQmZYLTlObTgxNHRDMDdfelFBc0kwVUtwdXMtVW9wWlFuV01LdWNrMjJja2RhVmNnclFBWks4ZV9RZDZKdkU2aVk3ejZtR0VsVTJlRVVxMWQ5Zk1QdmZTcXBQSTlLMHFlMkVhUkVzRWtXOHhjVW1hMGs2?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNazJESGQwcm5tR0M0N2IxRkhyMWlwMTRhb2Fxb004V0NDUmQ5MGZoMDNTb3AwV1Bqd1VTeXlxYXZLZ016TC0zdUpVZUdWcnRyWVZmbmtscklpb0ZPZFVxX2dmQWhaTEZJS1QxRUlTcVdWN3NVOHBfUzZJS0RoeVVvRkVocDM1NlBDSjV3WktvcHN3cGY1ZFRUOE43VzRtbjRGUVBfYzRnS0NwcGNnVnNGaTlldGtUV1NIU2NnX1Z4Vm5iQQ?oc=5": {
+    "timestamp": "2026-11-03T19:16:56.908826+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNazJESGQwcm5tR0M0N2IxRkhyMWlwMTRhb2Fxb004V0NDUmQ5MGZoMDNTb3AwV1Bqd1VTeXlxYXZLZ016TC0zdUpVZUdWcnRyWVZmbmtscklpb0ZPZFVxX2dmQWhaTEZJS1QxRUlTcVdWN3NVOHBfUzZJS0RoeVVvRkVocDM1NlBDSjV3WktvcHN3cGY1ZFRUOE43VzRtbjRGUVBfYzRnS0NwcGNnVnNGaTlldGtUV1NIU2NnX1Z4Vm5iQQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNazJESGQwcm5tR0M0N2IxRkhyMWlwMTRhb2Fxb004V0NDUmQ5MGZoMDNTb3AwV1Bqd1VTeXlxYXZLZ016TC0zdUpVZUdWcnRyWVZmbmtscklpb0ZPZFVxX2dmQWhaTEZJS1QxRUlTcVdWN3NVOHBfUzZJS0RoeVVvRkVocDM1NlBDSjV3WktvcHN3cGY1ZFRUOE43VzRtbjRGUVBfYzRnS0NwcGNnVnNGaTlldGtUV1NIU2NnX1Z4Vm5iQQ?oc=5",
+    "headline": "Voters Head to the Polls With the Highest Election Day Gas Price on Record in Dollar Terms - Energy News Beat",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiwgFBVV95cUxNazJESGQwcm5tR0M0N2IxRkhyMWlwMTRhb2Fxb004V0NDUmQ5MGZoMDNTb3AwV1Bqd1VTeXlxYXZLZ016TC0zdUpVZUdWcnRyWVZmbmtscklpb0ZPZFVxX2dmQWhaTEZJS1QxRUlTcVdWN3NVOHBfUzZJS0RoeVVvRkVocDM1NlBDSjV3WktvcHN3cGY1ZFRUOE43VzRtbjRGUVBfYzRnS0NwcGNnVnNGaTlldGtUV1NIU2NnX1Z4Vm5iQQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMixAFBVV95cUxQR01mQWJCdWd0aVJGWVd2QXpYWG9sTks3dzZ0NGJqNGJHcWVfMFVJNklITnRPdWxRU3hPck9rak5iRkdFWVphdnZWLXpOV0xUN2xyei1OTlJCWG1KM1VSeVlXNTRMeXU0YW9LNGI0NWlaVkg4TGREWGtQX2xxTFlPZ0lSbWlNOUhWcXBzLXp0M1pxb1JFS2R3NEdGYUJheEhYSHF2S2dYd0lRejl5T2R4SDFERE8yajFPOXpIV29NQVc0TjRs?oc=5": {
+    "timestamp": "2026-11-03T19:17:07.550249+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQR01mQWJCdWd0aVJGWVd2QXpYWG9sTks3dzZ0NGJqNGJHcWVfMFVJNklITnRPdWxRU3hPck9rak5iRkdFWVphdnZWLXpOV0xUN2xyei1OTlJCWG1KM1VSeVlXNTRMeXU0YW9LNGI0NWlaVkg4TGREWGtQX2xxTFlPZ0lSbWlNOUhWcXBzLXp0M1pxb1JFS2R3NEdGYUJheEhYSHF2S2dYd0lRejl5T2R4SDFERE8yajFPOXpIV29NQVc0TjRs?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQR01mQWJCdWd0aVJGWVd2QXpYWG9sTks3dzZ0NGJqNGJHcWVfMFVJNklITnRPdWxRU3hPck9rak5iRkdFWVphdnZWLXpOV0xUN2xyei1OTlJCWG1KM1VSeVlXNTRMeXU0YW9LNGI0NWlaVkg4TGREWGtQX2xxTFlPZ0lSbWlNOUhWcXBzLXp0M1pxb1JFS2R3NEdGYUJheEhYSHF2S2dYd0lRejl5T2R4SDFERE8yajFPOXpIV29NQVc0TjRs?oc=5",
+    "headline": "Phillips 66 stock faces fresh risk after Freeport export outage - ad-hoc-news.de",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMixAFBVV95cUxQR01mQWJCdWd0aVJGWVd2QXpYWG9sTks3dzZ0NGJqNGJHcWVfMFVJNklITnRPdWxRU3hPck9rak5iRkdFWVphdnZWLXpOV0xUN2xyei1OTlJCWG1KM1VSeVlXNTRMeXU0YW9LNGI0NWlaVkg4TGREWGtQX2xxTFlPZ0lSbWlNOUhWcXBzLXp0M1pxb1JFS2R3NEdGYUJheEhYSHF2S2dYd0lRejl5T2R4SDFERE8yajFPOXpIV29NQVc0TjRs?oc=5",
     "error": "<urlopen error timed out>"
   }
 }

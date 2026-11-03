@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-03 11:45:29",
+  "last_updated": "2026-11-03 19:15:40",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 01:46:32",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 26.59,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
     {
       "timestamp": "2026-10-01 01:46:33",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9992,16 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 7ad0e959-4d1e-4bf8-bd87-8ec96a26b900 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-03 19:15:40",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 351.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
     }
   ]
 }
