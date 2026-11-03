@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-02T09:03:31.564790",
+  "timestamp": "2026-11-03T03:46:54.527464",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.86,
+    "current_price_per_gal": 3.845,
     "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-02T09:03:06Z"
+      "timestamp": "2026-11-03T03:46:35Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-06",
-    "current_base_price": 3.86,
-    "predicted_price_per_gal": 3.803,
+    "current_base_price": 3.845,
+    "predicted_price_per_gal": 3.788,
     "expected_change_dollars": -0.057,
     "expected_change_percent": -1.48,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.683,
-    "prediction_upper_95ci": 3.923,
+    "prediction_lower_95ci": 3.668,
+    "prediction_upper_95ci": 3.908,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.849,
-    "day_2_price": 3.84,
-    "day_3_price": 3.815,
-    "day_4_price": 3.808,
-    "day_5_price": 3.803,
+    "day_1_price": 3.834,
+    "day_2_price": 3.822,
+    "day_3_price": 3.8,
+    "day_4_price": 3.793,
+    "day_5_price": 3.788,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
