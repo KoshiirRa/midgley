@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-03T11:45:21.759786",
+  "timestamp": "2026-11-04T12:33:16.338468",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.392,
+    "current_price_per_gal": 3.386,
     "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-03T11:44:58Z"
+      "timestamp": "2026-11-04T12:32:56Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-06",
-    "current_base_price": 3.392,
-    "predicted_price_per_gal": 3.344,
+    "current_base_price": 3.386,
+    "predicted_price_per_gal": 3.338,
     "expected_change_dollars": -0.048,
     "expected_change_percent": -1.42,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.224,
-    "prediction_upper_95ci": 3.464,
+    "prediction_lower_95ci": 3.218,
+    "prediction_upper_95ci": 3.458,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.382,
-    "day_2_price": 3.373,
-    "day_3_price": 3.355,
-    "day_4_price": 3.349,
-    "day_5_price": 3.344,
+    "day_1_price": 3.376,
+    "day_2_price": 3.367,
+    "day_3_price": 3.357,
+    "day_4_price": 3.343,
+    "day_5_price": 3.338,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

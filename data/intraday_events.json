@@ -9069,5 +9069,26 @@
     "matched_entity": "Phillips 66",
     "similarity": 0.19,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-04T12:32:46.180048",
+    "headline": "India's MRPL sees limited impact from refinery fire - Quantum Commodity Intelligence",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPOWpXUnByLThkams1X3JwNlMzUXpMeS1BVUFOTmtrV1l1VnlKWHdfVUJ1MjU1b0RsWE1PSXVfS0xvaU5VVkQ1Q241MHlyYUVsU2JZVUtFaUpBTE1xbFdJc3N3N1hKOHlqUjFuOE5kUVdkWVZXUmtxQnd4LTh5ZTZsX296SGo1MkdNdGVkN2dlOHRRSl9oMk1melhB?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPOWpXUnByLThkams1X3JwNlMzUXpMeS1BVUFOTmtrV1l1VnlKWHdfVUJ1MjU1b0RsWE1PSXVfS0xvaU5VVkQ1Q241MHlyYUVsU2JZVUtFaUpBTE1xbFdJc3N3N1hKOHlqUjFuOE5kUVdkWVZXUmtxQnd4LTh5ZTZsX296SGo1MkdNdGVkN2dlOHRRSl9oMk1melhB?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimgFBVV95cUxPOWpXUnByLThkams1X3JwNlMzUXpMeS1BVUFOTmtrV1l1VnlKWHdfVUJ1MjU1b0RsWE1PSXVfS0xvaU5VVkQ1Q241MHlyYUVsU2JZVUtFaUpBTE1xbFdJc3N3N1hKOHlqUjFuOE5kUVdkWVZXUmtxQnd4LTh5ZTZsX296SGo1MkdNdGVkN2dlOHRRSl9oMk1melhB?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    },
+    "discord_notified": true
   }
 ]
