@@ -9132,5 +9132,26 @@
       "overall_price_pressure": 0.52
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-05T05:46:57.619436",
+    "headline": "Pemex reports outages at Deer Park refinery after power glitch - Quantum Commodity Intelligence",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPZ0otMzlwaWpxYkhkY2V4MDlZdXFtcnNFb09BVDNGdzVBOUJsV3RoVnNVNVBUbXdhaWZIWV9PSXB4eE4zZjRpRFE3V3dQSGhFTi0zMmMyWDBXTVQ1YkljS1p1NFZuNl9FWUJyRmV2bmRySzNSQ2tZeG16Y0ROVUlFUWhNM0N2SDJXRGthOW9Id2FvYWFCQ3gySjkyUzM5aTB2LV9MeVVtaXc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPZ0otMzlwaWpxYkhkY2V4MDlZdXFtcnNFb09BVDNGdzVBOUJsV3RoVnNVNVBUbXdhaWZIWV9PSXB4eE4zZjRpRFE3V3dQSGhFTi0zMmMyWDBXTVQ1YkljS1p1NFZuNl9FWUJyRmV2bmRySzNSQ2tZeG16Y0ROVUlFUWhNM0N2SDJXRGthOW9Id2FvYWFCQ3gySjkyUzM5aTB2LV9MeVVtaXc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxPZ0otMzlwaWpxYkhkY2V4MDlZdXFtcnNFb09BVDNGdzVBOUJsV3RoVnNVNVBUbXdhaWZIWV9PSXB4eE4zZjRpRFE3V3dQSGhFTi0zMmMyWDBXTVQ1YkljS1p1NFZuNl9FWUJyRmV2bmRySzNSQ2tZeG16Y0ROVUlFUWhNM0N2SDJXRGthOW9Id2FvYWFCQ3gySjkyUzM5aTB2LV9MeVVtaXc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "Houston"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.5,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.18
+    },
+    "discord_notified": true
   }
 ]
