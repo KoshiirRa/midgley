@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-05T21:50:59.040230",
+  "timestamp": "2026-11-06T02:07:22.468470",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 4.172,
+    "current_price_per_gal": 4.147,
     "source": "AAA National Daily CSV (US Average)",
     "provenance": {
       "source": "AAA National Daily CSV (US Average)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-05T21:50:58Z"
+      "timestamp": "2026-11-06T02:07:22Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-11",
-    "current_base_price": 4.172,
-    "predicted_price_per_gal": 4.241,
+    "current_base_price": 4.147,
+    "predicted_price_per_gal": 4.216,
     "expected_change_dollars": 0.069,
-    "expected_change_percent": 1.65,
+    "expected_change_percent": 1.66,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.937,
-    "prediction_upper_95ci": 4.545,
+    "prediction_lower_95ci": 3.912,
+    "prediction_upper_95ci": 4.52,
     "calibration_method": "conformal",
     "calibration_sample_size": 42,
     "directional_hit_rate_historical": 0.4595,
     "historical_mae_dollars": 0.131,
     "evaluation_sample_size": 37,
-    "day_1_price": 4.186,
+    "day_1_price": 4.161,
     "day_2_price": 4.175,
-    "day_3_price": 4.196,
-    "day_4_price": 4.225,
-    "day_5_price": 4.241,
+    "day_3_price": 4.171,
+    "day_4_price": 4.2,
+    "day_5_price": 4.216,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.069/gal (+1.65%): Driven primarily by Futures & Commodity Benchmark (+$0.031/gal), Refining Yield & Crack Spread (+$0.017/gal).",
+      "summary_text": "National forecast +$0.069/gal (+1.66%): Driven primarily by Futures & Commodity Benchmark (+$0.031/gal), Refining Yield & Crack Spread (+$0.017/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.031,
-          "impact_pct": 0.74,
+          "impact_pct": 0.75,
           "share_pct": 45.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.031,
-      "impact_pct": 0.74,
+      "impact_pct": 0.75,
       "share_pct": 45.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.069/gal (+1.65%): Driven primarily by Futures & Commodity Benchmark (+$0.031/gal), Refining Yield & Crack Spread (+$0.017/gal).",
+    "summary_text": "National forecast +$0.069/gal (+1.66%): Driven primarily by Futures & Commodity Benchmark (+$0.031/gal), Refining Yield & Crack Spread (+$0.017/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",

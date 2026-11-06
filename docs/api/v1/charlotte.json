@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-05T21:51:00.198272",
+  "timestamp": "2026-11-06T02:07:23.606386",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.368,
+    "current_price_per_gal": 3.348,
     "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-05T21:50:41Z"
+      "timestamp": "2026-11-06T02:06:57Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-11",
-    "current_base_price": 3.368,
-    "predicted_price_per_gal": 3.459,
+    "current_base_price": 3.348,
+    "predicted_price_per_gal": 3.439,
     "expected_change_dollars": 0.091,
-    "expected_change_percent": 2.7,
+    "expected_change_percent": 2.72,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.339,
-    "prediction_upper_95ci": 3.579,
+    "prediction_lower_95ci": 3.319,
+    "prediction_upper_95ci": 3.559,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.386,
-    "day_2_price": 3.376,
-    "day_3_price": 3.401,
-    "day_4_price": 3.439,
-    "day_5_price": 3.459,
+    "day_1_price": 3.366,
+    "day_2_price": 3.384,
+    "day_3_price": 3.381,
+    "day_4_price": 3.419,
+    "day_5_price": 3.439,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast +$0.091/gal (+2.70%): Driven primarily by Regional Logistics & Hub Delivery (+$0.036/gal), Futures & Commodity Benchmark (+$0.023/gal).",
+      "summary_text": "Charlotte NC forecast +$0.091/gal (+2.72%): Driven primarily by Regional Logistics & Hub Delivery (+$0.036/gal), Futures & Commodity Benchmark (+$0.023/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.036,
-          "impact_pct": 1.07,
+          "impact_pct": 1.08,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.023,
-          "impact_pct": 0.68,
+          "impact_pct": 0.69,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.036,
-      "impact_pct": 1.07,
+      "impact_pct": 1.08,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.023,
-      "impact_pct": 0.68,
+      "impact_pct": 0.69,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast +$0.091/gal (+2.70%): Driven primarily by Regional Logistics & Hub Delivery (+$0.036/gal), Futures & Commodity Benchmark (+$0.023/gal).",
+    "summary_text": "Charlotte NC forecast +$0.091/gal (+2.72%): Driven primarily by Regional Logistics & Hub Delivery (+$0.036/gal), Futures & Commodity Benchmark (+$0.023/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

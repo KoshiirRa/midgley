@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-05T21:50:59.680360",
+  "timestamp": "2026-11-06T02:07:23.074674",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.945,
+    "current_price_per_gal": 3.933,
     "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-05T21:50:41Z"
+      "timestamp": "2026-11-06T02:06:56Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-11",
-    "current_base_price": 3.945,
-    "predicted_price_per_gal": 4.047,
+    "current_base_price": 3.933,
+    "predicted_price_per_gal": 4.035,
     "expected_change_dollars": 0.102,
     "expected_change_percent": 2.59,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.845,
-    "prediction_upper_95ci": 4.249,
+    "prediction_lower_95ci": 3.833,
+    "prediction_upper_95ci": 4.237,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 2,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
-    "day_1_price": 3.965,
-    "day_2_price": 3.952,
-    "day_3_price": 3.982,
-    "day_4_price": 4.026,
-    "day_5_price": 4.047,
+    "day_1_price": 3.953,
+    "day_2_price": 3.974,
+    "day_3_price": 3.97,
+    "day_4_price": 4.014,
+    "day_5_price": 4.035,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -102,7 +102,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.036,
-          "impact_pct": 0.91,
+          "impact_pct": 0.92,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.025,
-          "impact_pct": 0.63,
+          "impact_pct": 0.64,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.036,
-      "impact_pct": 0.91,
+      "impact_pct": 0.92,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.025,
-      "impact_pct": 0.63,
+      "impact_pct": 0.64,
       "share_pct": 25.0,
       "direction": "UP"
     },
