@@ -98,3 +98,41 @@ def test_format_arxiv_markdown_section_with_articles():
         assert "Deep Learning for Energy Commodity Price Forecasting" in section
         assert "J. Smith, A. Johnson, C. Lee et al." in section
         assert "[Download](https://arxiv.org/pdf/2608.12345v1.pdf)" in section
+
+
+def test_fetch_recent_arxiv_articles_filters_off_domain_medical_and_robotics():
+    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    mixed_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <entry>
+    <id>http://arxiv.org/abs/2610.38558v1</id>
+    <published>{now_iso}</published>
+    <title>From Brainwaves to Brain-States: EEG Time Series Analysis</title>
+    <summary>We analyze electroencephalography (EEG) brain-state transitions using time series models.</summary>
+    <author><name>M. Neuro</name></author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.38508v1</id>
+    <published>{now_iso}</published>
+    <title>Vision-Language-Action Models for Robotic Manipulation</title>
+    <summary>A time series trajectory planner for robotic manipulation in cluttered scenes.</summary>
+    <author><name>R. Bot</name></author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.39100v1</id>
+    <published>{now_iso}</published>
+    <title>Asymmetric Error Correction and Conformal Prediction for RBOB Gasoline Futures</title>
+    <summary>We model crude oil and RBOB gasoline crack spreads using regime-aware time series forecasting.</summary>
+    <author><name>E. Quant</name></author>
+  </entry>
+</feed>"""
+    mock_response = MagicMock()
+    mock_response.read.return_value = mixed_xml.encode("utf-8")
+    mock_response.__enter__.return_value = mock_response
+
+    with patch("urllib.request.urlopen", return_value=mock_response):
+        articles = fetch_recent_arxiv_articles(days_back=7, max_results=10)
+        assert len(articles) == 1
+        assert articles[0]["id"] == "2610.39100v1"
+        assert "RBOB Gasoline" in articles[0]["title"]
+

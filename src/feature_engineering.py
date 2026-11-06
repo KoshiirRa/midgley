@@ -19,14 +19,19 @@ from src.cospot_spectral_engine import compute_rolling_spectral_features
 
 logger = logging.getLogger(__name__)
 
-# Econometric Event Category Decay Half-Lives (Issue #168)
-# Maps event shock taxonomies to empirical persistence half-lives (in days)
+# Econometric Event Category Decay Half-Lives (Issue #168, #579, #631)
+# Maps event shock taxonomies to empirical persistence half-lives (in days).
+# Issue #631 bifurcates physical supply shocks into:
+# - upstream_offshore_shutin (t_1/2 = 3.5 days): Precautionary offshore platform evacuations & BSEE wellhead shut-ins
+# - downstream_refinery_damage (t_1/2 = 14.0 days): Catastrophic physical flood, wind, fire, or pipeline rupture damage
 CATEGORY_HALF_LIVES_DAYS = {
-    'supply_disruption': 14.0,     # Structural physical outages (refineries, pipelines, hurricane damage)
-    'geopolitical_risk': 7.0,      # Geopolitical escalation / sanctions / maritime chokepoints
-    'opec_action': 5.0,            # OPEC+ production quota policy shifts
-    'demand_sentiment': 4.0,       # Macroeconomic / demand expectations
-    'overall_price_pressure': 2.5  # Short-term executive posts / news sentiment shocks
+    'supply_disruption': 14.0,          # Structural physical outages (aggregate/legacy)
+    'upstream_offshore_shutin': 3.5,    # Precautionary offshore platform evacuations & wellhead shut-ins (Issue #631)
+    'downstream_refinery_damage': 14.0, # Catastrophic physical flood, wind, fire, or turnaround damage (Issue #631)
+    'geopolitical_risk': 7.0,           # Geopolitical escalation / sanctions / maritime chokepoints
+    'opec_action': 5.0,                 # OPEC+ production quota policy shifts
+    'demand_sentiment': 4.0,            # Macroeconomic / demand expectations
+    'overall_price_pressure': 2.5       # Short-term executive posts / news sentiment shocks
 }
 
 
@@ -1121,8 +1126,16 @@ def create_feature_matrix(
         df['firms_flaring_anomaly_z_score'] = 0.0
     df = df.copy()
 
-    # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issue #355)
-    llm_feature_cols = ['geopolitical_risk', 'supply_disruption', 'demand_sentiment', 'opec_action', 'overall_price_pressure']
+    # 3. Event Feature Fusion with Exponential Decay Memory (Paper 2608.25128v1 Diagnostic Routing & Issues #355, #631)
+    llm_feature_cols = [
+        'geopolitical_risk',
+        'supply_disruption',
+        'upstream_offshore_shutin',
+        'downstream_refinery_damage',
+        'demand_sentiment',
+        'opec_action',
+        'overall_price_pressure'
+    ]
     
     diagnostic = compute_context_routing_diagnostic(df, target_col='gasoline_rbob', horizon=forecast_horizon, threshold=0.95)
     logger.info(f"Context Routing Diagnostic (Paper 2608.25128v1): rho_{forecast_horizon}={diagnostic['rho_h']:.4f} -> Recommendation: {diagnostic['recommendation']}")
@@ -1146,10 +1159,33 @@ def create_feature_matrix(
             if len(events) > 0:
                 events['date'] = trading_dates[indices[valid_mask]]
                 
-                # Ensure qualitative feature columns exist in events before aggregation
+                # Issue #631: If upstream_offshore_shutin / downstream_refinery_damage are not explicitly populated,
+                # route supply_disruption into upstream vs downstream based on headline semantics
+                has_explicit_up = 'upstream_offshore_shutin' in events.columns and events['upstream_offshore_shutin'].notna().any()
+                has_explicit_down = 'downstream_refinery_damage' in events.columns and events['downstream_refinery_damage'].notna().any()
                 for col in llm_feature_cols:
                     if col not in events.columns:
                         events[col] = 0.0
+                    else:
+                        events[col] = pd.to_numeric(events[col], errors='coerce').fillna(0.0)
+
+                if not (has_explicit_up or has_explicit_down) and 'supply_disruption' in events.columns:
+                    headlines_s = events['headline'].fillna('').astype(str).str.lower() if 'headline' in events.columns else pd.Series('', index=events.index)
+                    upstream_mask = headlines_s.str.contains(
+                        r'bsee|offshore|platform|evacuat|shut-in|shutin|wellhead|rig evacuat',
+                        regex=True
+                    ) & ~headlines_s.str.contains(
+                        r'refinery fire|refinery explosion|flooded refinery|unit damage|coker fire|fcc outage|pipeline rupture',
+                        regex=True
+                    )
+                    events['upstream_offshore_shutin'] = np.where(upstream_mask, events['supply_disruption'], 0.0)
+                    events['downstream_refinery_damage'] = np.where(~upstream_mask, events['supply_disruption'], 0.0)
+                elif 'supply_disruption' in events.columns:
+                    # Ensure aggregate supply_disruption reflects the envelope of bifurcated components when only bifurcated columns are supplied
+                    events['supply_disruption'] = np.maximum(
+                        events['supply_disruption'],
+                        np.maximum(events['upstream_offshore_shutin'], events['downstream_refinery_damage'])
+                    )
                 
                 # Aggregate multiple qualitative shocks occurring on the same trading session (Issue #355)
                 agg_events = events.groupby('date', as_index=False)[llm_feature_cols].sum()

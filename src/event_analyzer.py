@@ -76,7 +76,7 @@ _LLM_SCORE_CACHE = {}
 
 from src.knowledge_graph import kg_engine
 
-# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093 / Hindsight Episodic Memory)
+# Single-Headline Prompt Contract (Fallback / Scenario Testing / CoSPOT arXiv:2609.02093 / Hindsight Episodic Memory / Issue #631)
 LLM_SINGLE_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following energy news headline/event description and extract structured numerical impact scores regarding unleaded gasoline and crude oil prices.
@@ -87,7 +87,9 @@ Headline/Event: "{headline}"
 {hindsight_context}
 Return ONLY a raw JSON object with the following fields:
 - "geopolitical_risk": float between -1.0 (de-escalation/peace) and +1.0 (war/sanctions/conflict)
-- "supply_disruption": float between 0.0 (no disruption) and +1.0 (major refinery/pipeline/shipping shutdown)
+- "supply_disruption": float between 0.0 (no disruption) and +1.0 (major refinery/pipeline/shipping/offshore shutdown)
+- "upstream_offshore_shutin": float between 0.0 and +1.0 (precautionary offshore platform evacuations, BSEE wellhead shut-ins without structural refinery damage; decays fast t_1/2=3.5d)
+- "downstream_refinery_damage": float between 0.0 and +1.0 (structural refinery fire, explosion, flood/wind damage, coker/FCC outage, pipeline rupture; decays slow t_1/2=14.0d)
 - "demand_sentiment": float between -1.0 (severe economic slowdown/recession) and +1.0 (booming demand/driving season)
 - "opec_action": float between -1.0 (production surge/price war) and +1.0 (steep supply cuts)
 - "overall_price_pressure": float between -1.0 (strong downward price pressure) and +1.0 (strong upward price pressure)
@@ -95,7 +97,7 @@ Return ONLY a raw JSON object with the following fields:
 JSON Output:
 """
 
-# Ultra-Fast Single-Batch System Prompt Contract (CoSPOT arXiv:2609.02093)
+# Ultra-Fast Single-Batch System Prompt Contract (CoSPOT arXiv:2609.02093 / Issue #631)
 LLM_BATCH_PROMPT = """
 You are an expert energy market economist and oil commodities analyst.
 Analyze the following JSON list of energy news headlines/event descriptions and extract structured numerical impact scores for each item.
@@ -107,6 +109,8 @@ Input Headlines:
 Return ONLY a raw JSON array of objects in the EXACT SAME ORDER, where each object has:
 - "geopolitical_risk": float between -1.0 and +1.0
 - "supply_disruption": float between 0.0 and +1.0
+- "upstream_offshore_shutin": float between 0.0 and +1.0
+- "downstream_refinery_damage": float between 0.0 and +1.0
 - "demand_sentiment": float between -1.0 and +1.0
 - "opec_action": float between -1.0 and +1.0
 - "overall_price_pressure": float between -1.0 and +1.0
@@ -272,9 +276,20 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 text = text.split("```")[1].split("```")[0].strip()
                 
             parsed = json.loads(text)
+            sup_val = float(parsed.get("supply_disruption", 0.0))
+            up_val = float(parsed.get("upstream_offshore_shutin", 0.0))
+            down_val = float(parsed.get("downstream_refinery_damage", 0.0))
+            if up_val == 0.0 and down_val == 0.0 and sup_val > 0.0:
+                rb = extract_event_features_rule_based(headline)
+                if rb.get("upstream_offshore_shutin", 0.0) > rb.get("downstream_refinery_damage", 0.0):
+                    up_val = sup_val
+                else:
+                    down_val = sup_val
             scores = {
                 "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
-                "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
+                "supply_disruption": max(sup_val, up_val, down_val),
+                "upstream_offshore_shutin": up_val,
+                "downstream_refinery_damage": down_val,
                 "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
                 "opec_action": float(parsed.get("opec_action", 0.0)),
                 "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
@@ -405,9 +420,20 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
                 
                 if isinstance(parsed_list, list) and len(parsed_list) == len(uncached):
                     for h, parsed in zip(uncached, parsed_list):
+                        sup_val = float(parsed.get("supply_disruption", 0.0))
+                        up_val = float(parsed.get("upstream_offshore_shutin", 0.0))
+                        down_val = float(parsed.get("downstream_refinery_damage", 0.0))
+                        if up_val == 0.0 and down_val == 0.0 and sup_val > 0.0:
+                            rb = extract_event_features_rule_based(h)
+                            if rb.get("upstream_offshore_shutin", 0.0) > rb.get("downstream_refinery_damage", 0.0):
+                                up_val = sup_val
+                            else:
+                                down_val = sup_val
                         scores = {
                             "geopolitical_risk": float(parsed.get("geopolitical_risk", 0.0)),
-                            "supply_disruption": float(parsed.get("supply_disruption", 0.0)),
+                            "supply_disruption": max(sup_val, up_val, down_val),
+                            "upstream_offshore_shutin": up_val,
+                            "downstream_refinery_damage": down_val,
                             "demand_sentiment": float(parsed.get("demand_sentiment", 0.0)),
                             "opec_action": float(parsed.get("opec_action", 0.0)),
                             "overall_price_pressure": float(parsed.get("overall_price_pressure", 0.0))
@@ -477,6 +503,35 @@ def extract_event_features_rule_based(headline: str) -> dict:
     if any(p in text for p in supply_cut_patterns) or any(p in text for p in weather_patterns):
         supply_score = 0.8 if ("hurricane" in text or "explosion" in text or "tornado" in text or "halt" in text or "shutdown" in text or "cut" in text or "ban" in text or "tariff" in text or "retaliat" in text or "spc high risk" in text) else 0.5
 
+    # Issue #631: Bifurcate physical supply shock into upstream offshore shut-ins (t_1/2 = 3.5d)
+    # vs downstream structural refinery/pipeline damage (t_1/2 = 14.0d)
+    upstream_patterns = [
+        "bsee", "offshore platform", "platform evacuat", "rig evacuat", "wellhead",
+        "shut-in", "shutin", "gulf of mexico platform", "precautionary evacuat", "offshore shut"
+    ]
+    downstream_damage_patterns = [
+        "refinery fire", "refinery explosion", "flooded refinery", "unit shutdown", "coker", "fcc",
+        "hydrocracker", "crude distillation", "pipeline leak", "pipeline rupture", "structural damage",
+        "force majeure", "power outage at refinery", "delaware city", "catlettsburg", "richmond refinery",
+        "west tulsa", "turnaround"
+    ]
+    is_upstream = any(p in text for p in upstream_patterns)
+    is_downstream_damage = any(p in text for p in downstream_damage_patterns)
+
+    if supply_score > 0.0:
+        if is_upstream and not is_downstream_damage:
+            upstream_shutin_score = supply_score
+            downstream_damage_score = 0.0
+        elif is_upstream and is_downstream_damage:
+            upstream_shutin_score = supply_score
+            downstream_damage_score = supply_score
+        else:
+            upstream_shutin_score = 0.0
+            downstream_damage_score = supply_score
+    else:
+        upstream_shutin_score = 0.0
+        downstream_damage_score = 0.0
+
     demand_score = -0.6 if any(p in text for p in demand_weak_patterns) else (0.4 if "driving demand" in text or "record highs" in text or any(p in text for p in social_trump_dovish) else 0.0)
     
     opec_score = 0.0
@@ -492,6 +547,8 @@ def extract_event_features_rule_based(headline: str) -> dict:
     return {
         "geopolitical_risk": round(geo_score, 2),
         "supply_disruption": round(supply_score, 2),
+        "upstream_offshore_shutin": round(upstream_shutin_score, 2),
+        "downstream_refinery_damage": round(downstream_damage_score, 2),
         "demand_sentiment": round(demand_score, 2),
         "opec_action": round(opec_score, 2),
         "overall_price_pressure": round(price_pressure, 2)
@@ -736,6 +793,8 @@ def normalize_event_shocks(
     cat_cols = categories or [
         "geopolitical_risk",
         "supply_disruption",
+        "upstream_offshore_shutin",
+        "downstream_refinery_damage",
         "demand_sentiment",
         "opec_action",
         "overall_price_pressure"
