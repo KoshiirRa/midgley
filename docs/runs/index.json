@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "2026-11-06_02-43-41",
+    "timestamp": "2026-11-06 02:43:26",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-06 02:43:26)"
+  },
+  {
     "run_id": "2026-11-06_02-06-58",
     "timestamp": "2026-11-05 02:55:09",
     "run_type": "LIVE_PROSPECTIVE",
@@ -589,12 +595,6 @@
   },
   {
     "run_id": "2026-10-16_18-21-44",
-    "timestamp": "2026-10-16 00:32:44",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-16 00:32:44)"
-  },
-  {
-    "run_id": "2026-10-16_18-21-38",
     "timestamp": "2026-10-16 00:32:44",
     "run_type": "LIVE_PROSPECTIVE",
     "trigger": "Daily Forecast Batch Execution (2026-10-16 00:32:44)"
