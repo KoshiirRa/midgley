@@ -917,13 +917,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5": {
-    "timestamp": "2026-10-26T12:30:48.303931+00:00",
+    "timestamp": "2026-11-06T11:55:41.469687+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMib0FVX3lxTE1YSnN3Sjd3ei04TUhDMUstTWhfWGR0R19aR0Y1SWJxWlZSenNpR0NzYko5bmhqbEQ4amd5M1RtVkFvRldNbjNzOGJxOXdTaGRGRGRxUXd5OHFfaXFyZnhNSUQ1TUJHZlpZb2hnaTdaNA?oc=5": {
     "timestamp": "2026-09-06T04:45:22.815148",
@@ -12904,7 +12904,7 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5": {
-    "timestamp": "2026-11-01T16:41:16.880283+00:00",
+    "timestamp": "2026-11-06T11:57:05.172844+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
@@ -16827,7 +16827,7 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMizgFBVV95cUxNbWVpWU1aazVlMlhNczhWQjVXajY0U00zdU5WZzZwMFFNdkxDZEgwQnhjRVFaLUNYc0czY3h5QzdkOXdMajkyVVByaURNOFQ4dVEwTk9yaWtIQ2ZFTkpCNTA5OWxvQTVxcEluMzU5T0ZRZElRay11eC1LWmY3ZllYQUFFTGplQ2hDanVJZ3NSTEFJbnhMTDAybkQ5SnFQZTZlbS1pR1B3VXFCb2RqNkJUXzI5WGxxVmdWSU1HTEwtZTJlbXhwR3l2YWdOOUd4dw?oc=5": {
-    "timestamp": "2026-10-26T19:49:52.184501+00:00",
+    "timestamp": "2026-11-06T11:56:05.951503+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNbWVpWU1aazVlMlhNczhWQjVXajY0U00zdU5WZzZwMFFNdkxDZEgwQnhjRVFaLUNYc0czY3h5QzdkOXdMajkyVVByaURNOFQ4dVEwTk9yaWtIQ2ZFTkpCNTA5OWxvQTVxcEluMzU5T0ZRZElRay11eC1LWmY3ZllYQUFFTGplQ2hDanVJZ3NSTEFJbnhMTDAybkQ5SnFQZTZlbS1pR1B3VXFCb2RqNkJUXzI5WGxxVmdWSU1HTEwtZTJlbXhwR3l2YWdOOUd4dw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNbWVpWU1aazVlMlhNczhWQjVXajY0U00zdU5WZzZwMFFNdkxDZEgwQnhjRVFaLUNYc0czY3h5QzdkOXdMajkyVVByaURNOFQ4dVEwTk9yaWtIQ2ZFTkpCNTA5OWxvQTVxcEluMzU5T0ZRZElRay11eC1LWmY3ZllYQUFFTGplQ2hDanVJZ3NSTEFJbnhMTDAybkQ5SnFQZTZlbS1pR1B3VXFCb2RqNkJUXzI5WGxxVmdWSU1HTEwtZTJlbXhwR3l2YWdOOUd4dw?oc=5",
@@ -20374,6 +20374,159 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQS25WaGR6RHltaldweFlqblRLWTQwanRGbVY4Vm5YZXBVdUVacG5DSTU3SXd1N00zTDROTTlYaGlnQzZPQUlmeUNPRlExc01kSUUwTFkwQUpWTWlXZEtkdTZmQktpWXUwcGt6dVBHbjkyb25ISjB1N0tOaWNJRHBoNk9iSzBJMURrM2dlemVvVnU5aHplVko3aGlQc296enRpdDlLNWJDWGtLWDZZVWc?oc=5",
     "headline": "Tankers hit in Hormuz as Iran keeps up pressure after US vote",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxQS25WaGR6RHltaldweFlqblRLWTQwanRGbVY4Vm5YZXBVdUVacG5DSTU3SXd1N00zTDROTTlYaGlnQzZPQUlmeUNPRlExc01kSUUwTFkwQUpWTWlXZEtkdTZmQktpWXUwcGt6dVBHbjkyb25ISjB1N0tOaWNJRHBoNk9iSzBJMURrM2dlemVvVnU5aHplVko3aGlQc296enRpdDlLNWJDWGtLWDZZVWc?oc=5",
+    "error": "<urlopen error _ssl.c:1018: The handshake operation timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOTF9uTldsQUZlTy1zWVcycXFSRDV2RWpHN29FUGJiY0M5ZjRFWFNCNEp6RDQ3NEJUb2xycHVQZVlXcFdZUVc0aEJ6bUdfakJxbGpsQmtLOWk4cWIwaGhjMWxMVW1rbDMwcTBTaEEwN3U4UGQ5NXlKM19qWVJnS2dsSjNlcUQ0NEdabF9iMy10OFVwcnBfcGM0SC1jWnJmbm84YVF3VXJRMVRjcUFjZnhDN3dSZmp6MXlKQ0wxd2lIMDRDemZNek9FMkxzaVIzcjNlQnkyRjhqaGlPVkJ1NjFPZFY0T3dOdw?oc=5": {
+    "timestamp": "2026-11-06T11:55:34.348766+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOTF9uTldsQUZlTy1zWVcycXFSRDV2RWpHN29FUGJiY0M5ZjRFWFNCNEp6RDQ3NEJUb2xycHVQZVlXcFdZUVc0aEJ6bUdfakJxbGpsQmtLOWk4cWIwaGhjMWxMVW1rbDMwcTBTaEEwN3U4UGQ5NXlKM19qWVJnS2dsSjNlcUQ0NEdabF9iMy10OFVwcnBfcGM0SC1jWnJmbm84YVF3VXJRMVRjcUFjZnhDN3dSZmp6MXlKQ0wxd2lIMDRDemZNek9FMkxzaVIzcjNlQnkyRjhqaGlPVkJ1NjFPZFY0T3dOdw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxOTF9uTldsQUZlTy1zWVcycXFSRDV2RWpHN29FUGJiY0M5ZjRFWFNCNEp6RDQ3NEJUb2xycHVQZVlXcFdZUVc0aEJ6bUdfakJxbGpsQmtLOWk4cWIwaGhjMWxMVW1rbDMwcTBTaEEwN3U4UGQ5NXlKM19qWVJnS2dsSjNlcUQ0NEdabF9iMy10OFVwcnBfcGM0SC1jWnJmbm84YVF3VXJRMVRjcUFjZnhDN3dSZmp6MXlKQ0wxd2lIMDRDemZNek9FMkxzaVIzcjNlQnkyRjhqaGlPVkJ1NjFPZFY0T3dOdw?oc=5",
+    "headline": "Where to find the cheapest fuel in Wagga Wagga - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi5gFBVV95cUxOTF9uTldsQUZlTy1zWVcycXFSRDV2RWpHN29FUGJiY0M5ZjRFWFNCNEp6RDQ3NEJUb2xycHVQZVlXcFdZUVc0aEJ6bUdfakJxbGpsQmtLOWk4cWIwaGhjMWxMVW1rbDMwcTBTaEEwN3U4UGQ5NXlKM19qWVJnS2dsSjNlcUQ0NEdabF9iMy10OFVwcnBfcGM0SC1jWnJmbm84YVF3VXJRMVRjcUFjZnhDN3dSZmp6MXlKQ0wxd2lIMDRDemZNek9FMkxzaVIzcjNlQnkyRjhqaGlPVkJ1NjFPZFY0T3dOdw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdTl0bXhtSmg5aHMzaTFzRmRtSVBJVVZGczNwSGxYYmxmQmJGcmtlaWs1OUluczRtMFJXWmxVZlhzOTBQNlBpUHhxejNoUkR6QVhHdm9hRWFpbHNvOWtELXF3cEloN2JJVjFfMk95SmhuaFc5dW5KYUJCcGJ5c2x6ajZMVFJtOGpubUFKSnJJRnE3d0NLa0pRVA?oc=5": {
+    "timestamp": "2026-11-06T11:55:52.230363+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdTl0bXhtSmg5aHMzaTFzRmRtSVBJVVZGczNwSGxYYmxmQmJGcmtlaWs1OUluczRtMFJXWmxVZlhzOTBQNlBpUHhxejNoUkR6QVhHdm9hRWFpbHNvOWtELXF3cEloN2JJVjFfMk95SmhuaFc5dW5KYUJCcGJ5c2x6ajZMVFJtOGpubUFKSnJJRnE3d0NLa0pRVA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdTl0bXhtSmg5aHMzaTFzRmRtSVBJVVZGczNwSGxYYmxmQmJGcmtlaWs1OUluczRtMFJXWmxVZlhzOTBQNlBpUHhxejNoUkR6QVhHdm9hRWFpbHNvOWtELXF3cEloN2JJVjFfMk95SmhuaFc5dW5KYUJCcGJ5c2x6ajZMVFJtOGpubUFKSnJJRnE3d0NLa0pRVA?oc=5",
+    "headline": "Saskatchewan gas prices drop as oil markets show improvement - 650 CKOM",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimAFBVV95cUxOdTl0bXhtSmg5aHMzaTFzRmRtSVBJVVZGczNwSGxYYmxmQmJGcmtlaWs1OUluczRtMFJXWmxVZlhzOTBQNlBpUHhxejNoUkR6QVhHdm9hRWFpbHNvOWtELXF3cEloN2JJVjFfMk95SmhuaFc5dW5KYUJCcGJ5c2x6ajZMVFJtOGpubUFKSnJJRnE3d0NLa0pRVA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMikgJBVV95cUxOUU1CVWNGRDJtNHBMMktuNlhnbEdHTWhsaC14NWdXSnROWDU0REVBVFlncWRfYlNZQmlKVjVUc1AwUGt6R1J0eER4YktjM1FDM3FnX2JKVG90UjlqZjFoN1FqUjJITDhUQ3FoWjhrUHl6SGYwd1VSQUxhazFDcDMyZ1pORVVyNTRVSHh2OEdZUm1CMV93bWVhempxT3VVYVhPZk53QUQtRFlNVmtRRUhHSmJCUk1tZ0gyRk1GSjdhT0xVcVludm5rX1lldE5lWlZHZE1mUGFiVEtvR2VIQjV1MEtDTVBUQndlbTRPTVE3WU1IY25GdkE4ZzBDbnRKejVEUG5UbHhIWXk4NDdVcThmc0NB?oc=5": {
+    "timestamp": "2026-11-06T11:56:12.754506+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMikgJBVV95cUxOUU1CVWNGRDJtNHBMMktuNlhnbEdHTWhsaC14NWdXSnROWDU0REVBVFlncWRfYlNZQmlKVjVUc1AwUGt6R1J0eER4YktjM1FDM3FnX2JKVG90UjlqZjFoN1FqUjJITDhUQ3FoWjhrUHl6SGYwd1VSQUxhazFDcDMyZ1pORVVyNTRVSHh2OEdZUm1CMV93bWVhempxT3VVYVhPZk53QUQtRFlNVmtRRUhHSmJCUk1tZ0gyRk1GSjdhT0xVcVludm5rX1lldE5lWlZHZE1mUGFiVEtvR2VIQjV1MEtDTVBUQndlbTRPTVE3WU1IY25GdkE4ZzBDbnRKejVEUG5UbHhIWXk4NDdVcThmc0NB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMikgJBVV95cUxOUU1CVWNGRDJtNHBMMktuNlhnbEdHTWhsaC14NWdXSnROWDU0REVBVFlncWRfYlNZQmlKVjVUc1AwUGt6R1J0eER4YktjM1FDM3FnX2JKVG90UjlqZjFoN1FqUjJITDhUQ3FoWjhrUHl6SGYwd1VSQUxhazFDcDMyZ1pORVVyNTRVSHh2OEdZUm1CMV93bWVhempxT3VVYVhPZk53QUQtRFlNVmtRRUhHSmJCUk1tZ0gyRk1GSjdhT0xVcVludm5rX1lldE5lWlZHZE1mUGFiVEtvR2VIQjV1MEtDTVBUQndlbTRPTVE3WU1IY25GdkE4ZzBDbnRKejVEUG5UbHhIWXk4NDdVcThmc0NB?oc=5",
+    "headline": "Shifting expectations - UBS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgJBVV95cUxOUU1CVWNGRDJtNHBMMktuNlhnbEdHTWhsaC14NWdXSnROWDU0REVBVFlncWRfYlNZQmlKVjVUc1AwUGt6R1J0eER4YktjM1FDM3FnX2JKVG90UjlqZjFoN1FqUjJITDhUQ3FoWjhrUHl6SGYwd1VSQUxhazFDcDMyZ1pORVVyNTRVSHh2OEdZUm1CMV93bWVhempxT3VVYVhPZk53QUQtRFlNVmtRRUhHSmJCUk1tZ0gyRk1GSjdhT0xVcVludm5rX1lldE5lWlZHZE1mUGFiVEtvR2VIQjV1MEtDTVBUQndlbTRPTVE3WU1IY25GdkE4ZzBDbnRKejVEUG5UbHhIWXk4NDdVcThmc0NB?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UdIB_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UQ?oc=5": {
+    "timestamp": "2026-11-06T11:56:19.875761+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UdIB_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UdIB_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UQ?oc=5",
+    "headline": "US midterm verdict: Oil prices to AI trade, 5 things that matter for India after Democrats’ sweep - ET EnergyWorld",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UdIB_gFBVV95cUxQYVc3ZHY3SndacWxVNEphWDB0emNzRTNhaEM5cG43MDVTRHh0RW1rd0MtcDNpemJ6emhZaHJlZHg0SVVzY0g2cGJ1d3IzY2JMeTVvNnlQU2RZa3ZycmJaWWtWWFNwYmhjQncxMGY2Q0d4SE80OTFLQ3ZDMkc3bGp4X0lyZnY3cERTcnpOMGpXOEkyTnpkby01MnhycEZfbG5HMEpmbGJYRmR5QVBPejZYa293X1pMVTh6czlLbWtfREpObE1PS2ZxeHVnWDNBZHZqMi05Z2R1SGxqaG9JMi13UkFxd3JaMnlHSTNVNVh1S3NXV1JKYlB2SFF1dDA3UQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9INmY4eXJTWFdiWC1PRVpzQThISUJwLUJ5LUpOc3ZCajZmNFVaR2NEN3FBb3VCb212RjlKRVotZjhXSENwWGwzeTk4dktZUjJmVHljNm96RFF2M28?oc=5": {
+    "timestamp": "2026-11-06T11:56:26.806812+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9INmY4eXJTWFdiWC1PRVpzQThISUJwLUJ5LUpOc3ZCajZmNFVaR2NEN3FBb3VCb212RjlKRVotZjhXSENwWGwzeTk4dktZUjJmVHljNm96RFF2M28?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9INmY4eXJTWFdiWC1PRVpzQThISUJwLUJ5LUpOc3ZCajZmNFVaR2NEN3FBb3VCb212RjlKRVotZjhXSENwWGwzeTk4dktZUjJmVHljNm96RFF2M28?oc=5",
+    "headline": "Canada's federal budget includes billions for sovereignty and tackling homelessness - BBC",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiW0FVX3lxTE9INmY4eXJTWFdiWC1PRVpzQThISUJwLUJ5LUpOc3ZCajZmNFVaR2NEN3FBb3VCb212RjlKRVotZjhXSENwWGwzeTk4dktZUjJmVHljNm96RFF2M28?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMihAFBVV95cUxOUVYtRW55TDktS0lnOVdnRmpPSkxHYUUyQ0c3MEduWkRKQnVXOGhnRU5yVk9PdjhiV01wNXNzNE9od1dUUGpkak1OQ1c0V1hyQVdSWDRpWXhFT25tLTdoWWxHR29qM2lDcnFsOUp5WEFOLWpXMkhGZjcwZjBadDJPbUlSdkk?oc=5": {
+    "timestamp": "2026-11-06T11:56:33.734210+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOUVYtRW55TDktS0lnOVdnRmpPSkxHYUUyQ0c3MEduWkRKQnVXOGhnRU5yVk9PdjhiV01wNXNzNE9od1dUUGpkak1OQ1c0V1hyQVdSWDRpWXhFT25tLTdoWWxHR29qM2lDcnFsOUp5WEFOLWpXMkhGZjcwZjBadDJPbUlSdkk?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOUVYtRW55TDktS0lnOVdnRmpPSkxHYUUyQ0c3MEduWkRKQnVXOGhnRU5yVk9PdjhiV01wNXNzNE9od1dUUGpkak1OQ1c0V1hyQVdSWDRpWXhFT25tLTdoWWxHR29qM2lDcnFsOUp5WEFOLWpXMkhGZjcwZjBadDJPbUlSdkk?oc=5",
+    "headline": "China Links US Farm Purchases to Tariff Reduction Deal - News and Statistics - IndexBox",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxOUVYtRW55TDktS0lnOVdnRmpPSkxHYUUyQ0c3MEduWkRKQnVXOGhnRU5yVk9PdjhiV01wNXNzNE9od1dUUGpkak1OQ1c0V1hyQVdSWDRpWXhFT25tLTdoWWxHR29qM2lDcnFsOUp5WEFOLWpXMkhGZjcwZjBadDJPbUlSdkk?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMitwFBVV95cUxQTWdQWlBpaVl0VmVTVGlPTVpqck5yNmJPUG1KMGZfdVkxVmpIZHlxZm03bEt2TEJPVjIwYXZsVkd0T0FfbW5hLUoteGlueXVFTm5WSjdNRlNreWFwOWYwaGNjVmtrelBfWkRUZWMzOGN2YVhLLWp6UWVPUU12TGdZSkl3Ui13SWUxUlJYbGQ1b1BOOF9nbGNFZUpkay1NZ19CUlM3c3d2LTVMTFpOdWQxVGozN09ndTQ?oc=5": {
+    "timestamp": "2026-11-06T11:56:41.213017+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQTWdQWlBpaVl0VmVTVGlPTVpqck5yNmJPUG1KMGZfdVkxVmpIZHlxZm03bEt2TEJPVjIwYXZsVkd0T0FfbW5hLUoteGlueXVFTm5WSjdNRlNreWFwOWYwaGNjVmtrelBfWkRUZWMzOGN2YVhLLWp6UWVPUU12TGdZSkl3Ui13SWUxUlJYbGQ1b1BOOF9nbGNFZUpkay1NZ19CUlM3c3d2LTVMTFpOdWQxVGozN09ndTQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQTWdQWlBpaVl0VmVTVGlPTVpqck5yNmJPUG1KMGZfdVkxVmpIZHlxZm03bEt2TEJPVjIwYXZsVkd0T0FfbW5hLUoteGlueXVFTm5WSjdNRlNreWFwOWYwaGNjVmtrelBfWkRUZWMzOGN2YVhLLWp6UWVPUU12TGdZSkl3Ui13SWUxUlJYbGQ1b1BOOF9nbGNFZUpkay1NZ19CUlM3c3d2LTVMTFpOdWQxVGozN09ndTQ?oc=5",
+    "headline": "Democrats sweep US Congress: what does it mean for Australian mortgages? - Mortgage Professional America",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitwFBVV95cUxQTWdQWlBpaVl0VmVTVGlPTVpqck5yNmJPUG1KMGZfdVkxVmpIZHlxZm03bEt2TEJPVjIwYXZsVkd0T0FfbW5hLUoteGlueXVFTm5WSjdNRlNreWFwOWYwaGNjVmtrelBfWkRUZWMzOGN2YVhLLWp6UWVPUU12TGdZSkl3Ui13SWUxUlJYbGQ1b1BOOF9nbGNFZUpkay1NZ19CUlM3c3d2LTVMTFpOdWQxVGozN09ndTQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMizwFBVV95cUxQWG9EVkRURmJEWXFoNFlYdHhRMlM3X0Zld3lDSm9mcGZrTUQwU2tVRkx5RFlPTVBEWlVWaTdTVUh6Z1llelcwODdZQ1dBZVRtalhRQzV0M3JmSEw2d3BHV0lvN2hsSnBIWXJnMXVzOFhETGJmN2puUkxDZTdqOU1CNVJSWXd6VkgxUXFVeXBFaHRjclpjb0ctOFU2UmFwTHY0NXBXRWZMaGVsTnctR2tCYmFxXzBzQU5INl8ycDllQTE3VTVJdEpsSDFMZlMzMHfSAdQBQVVfeXFMT1NyVk01d01TRTZ5SWlncEl0REtiTElMaGZFSXdzWGFkQmhKaDdkQWdWa09DNGMwaEt1MUJCMlNpamdkMmQ2MGQ2dkVDc19Tb3ktek5UbXFvSHJETFBqNHNMZU1WbzhEVVlsY1BQbTBLRWpLR3dDOWRsVV9TZW9Gc3pVWGQwcnJRWDBuTUZwOFBiZW5YdEplRVFLUUh5X2NNaXdKZnFHdXF1R0V3a3UwUldTRm9HU0tUckcyeW1DazRGSjBPWWQ1RzVuZGpQVnA5V1dEbkQ?oc=5": {
+    "timestamp": "2026-11-06T11:56:48.258049+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQWG9EVkRURmJEWXFoNFlYdHhRMlM3X0Zld3lDSm9mcGZrTUQwU2tVRkx5RFlPTVBEWlVWaTdTVUh6Z1llelcwODdZQ1dBZVRtalhRQzV0M3JmSEw2d3BHV0lvN2hsSnBIWXJnMXVzOFhETGJmN2puUkxDZTdqOU1CNVJSWXd6VkgxUXFVeXBFaHRjclpjb0ctOFU2UmFwTHY0NXBXRWZMaGVsTnctR2tCYmFxXzBzQU5INl8ycDllQTE3VTVJdEpsSDFMZlMzMHfSAdQBQVVfeXFMT1NyVk01d01TRTZ5SWlncEl0REtiTElMaGZFSXdzWGFkQmhKaDdkQWdWa09DNGMwaEt1MUJCMlNpamdkMmQ2MGQ2dkVDc19Tb3ktek5UbXFvSHJETFBqNHNMZU1WbzhEVVlsY1BQbTBLRWpLR3dDOWRsVV9TZW9Gc3pVWGQwcnJRWDBuTUZwOFBiZW5YdEplRVFLUUh5X2NNaXdKZnFHdXF1R0V3a3UwUldTRm9HU0tUckcyeW1DazRGSjBPWWQ1RzVuZGpQVnA5V1dEbkQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQWG9EVkRURmJEWXFoNFlYdHhRMlM3X0Zld3lDSm9mcGZrTUQwU2tVRkx5RFlPTVBEWlVWaTdTVUh6Z1llelcwODdZQ1dBZVRtalhRQzV0M3JmSEw2d3BHV0lvN2hsSnBIWXJnMXVzOFhETGJmN2puUkxDZTdqOU1CNVJSWXd6VkgxUXFVeXBFaHRjclpjb0ctOFU2UmFwTHY0NXBXRWZMaGVsTnctR2tCYmFxXzBzQU5INl8ycDllQTE3VTVJdEpsSDFMZlMzMHfSAdQBQVVfeXFMT1NyVk01d01TRTZ5SWlncEl0REtiTElMaGZFSXdzWGFkQmhKaDdkQWdWa09DNGMwaEt1MUJCMlNpamdkMmQ2MGQ2dkVDc19Tb3ktek5UbXFvSHJETFBqNHNMZU1WbzhEVVlsY1BQbTBLRWpLR3dDOWRsVV9TZW9Gc3pVWGQwcnJRWDBuTUZwOFBiZW5YdEplRVFLUUh5X2NNaXdKZnFHdXF1R0V3a3UwUldTRm9HU0tUckcyeW1DazRGSjBPWWQ1RzVuZGpQVnA5V1dEbkQ?oc=5",
+    "headline": "AI chip stocks drag Wall Street toward worst day since Trump's tariff announcements in 2025 - The Korea Times",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizwFBVV95cUxQWG9EVkRURmJEWXFoNFlYdHhRMlM3X0Zld3lDSm9mcGZrTUQwU2tVRkx5RFlPTVBEWlVWaTdTVUh6Z1llelcwODdZQ1dBZVRtalhRQzV0M3JmSEw2d3BHV0lvN2hsSnBIWXJnMXVzOFhETGJmN2puUkxDZTdqOU1CNVJSWXd6VkgxUXFVeXBFaHRjclpjb0ctOFU2UmFwTHY0NXBXRWZMaGVsTnctR2tCYmFxXzBzQU5INl8ycDllQTE3VTVJdEpsSDFMZlMzMHfSAdQBQVVfeXFMT1NyVk01d01TRTZ5SWlncEl0REtiTElMaGZFSXdzWGFkQmhKaDdkQWdWa09DNGMwaEt1MUJCMlNpamdkMmQ2MGQ2dkVDc19Tb3ktek5UbXFvSHJETFBqNHNMZU1WbzhEVVlsY1BQbTBLRWpLR3dDOWRsVV9TZW9Gc3pVWGQwcnJRWDBuTUZwOFBiZW5YdEplRVFLUUh5X2NNaXdKZnFHdXF1R0V3a3UwUldTRm9HU0tUckcyeW1DazRGSjBPWWQ1RzVuZGpQVnA5V1dEbkQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilAFBVV95cUxPbzRrUXFZYUZBZGNqWmlQSlgyNTktNWxfMVFva1JFRDFEZkFNU0JUMnhoQkhSZkxVdnJZblVRdzlMZ1QySFAxTVdIdDdWeU5IT2E1RDhlejJKalI3WUo0cTlKd1JVZUdMNmM2M1lYMmZaV3dqVkIxbTZ5Umh5NEctd0ZBc25QQzBaTkpfUGVvQmExY2di?oc=5": {
+    "timestamp": "2026-11-06T11:56:55.090097+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPbzRrUXFZYUZBZGNqWmlQSlgyNTktNWxfMVFva1JFRDFEZkFNU0JUMnhoQkhSZkxVdnJZblVRdzlMZ1QySFAxTVdIdDdWeU5IT2E1RDhlejJKalI3WUo0cTlKd1JVZUdMNmM2M1lYMmZaV3dqVkIxbTZ5Umh5NEctd0ZBc25QQzBaTkpfUGVvQmExY2di?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPbzRrUXFZYUZBZGNqWmlQSlgyNTktNWxfMVFva1JFRDFEZkFNU0JUMnhoQkhSZkxVdnJZblVRdzlMZ1QySFAxTVdIdDdWeU5IT2E1RDhlejJKalI3WUo0cTlKd1JVZUdMNmM2M1lYMmZaV3dqVkIxbTZ5Umh5NEctd0ZBc25QQzBaTkpfUGVvQmExY2di?oc=5",
+    "headline": "Can Washington’s Power Shift Hurt India’s Economy? - StratNews Global",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxPbzRrUXFZYUZBZGNqWmlQSlgyNTktNWxfMVFva1JFRDFEZkFNU0JUMnhoQkhSZkxVdnJZblVRdzlMZ1QySFAxTVdIdDdWeU5IT2E1RDhlejJKalI3WUo0cTlKd1JVZUdMNmM2M1lYMmZaV3dqVkIxbTZ5Umh5NEctd0ZBc25QQzBaTkpfUGVvQmExY2di?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTUNiVkI5RnhYME9VLXNsNWhVbUNuR2FxSEI3emNjYWlhQTZnTGN6cFo5eWVtMEItcXYweFhYcFVKRlRKNVkyVWUwb0lsTjZrTnNlWDAyQlRkM09CemRJTUdmUlR3NjlRSkpMTnI0RXFRWFdEaDcteU5DaVFucThPXzBqTjBTak51dTI2SG03TVA4Q08wOWJUQVVrWEdPZ3Jmb3NWMjJ5WnFxelY2Qno5WWdXU3RySENQOWxPclpxRkpXOGJaUjZ5RQ?oc=5": {
+    "timestamp": "2026-11-06T11:57:14.264893+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTUNiVkI5RnhYME9VLXNsNWhVbUNuR2FxSEI3emNjYWlhQTZnTGN6cFo5eWVtMEItcXYweFhYcFVKRlRKNVkyVWUwb0lsTjZrTnNlWDAyQlRkM09CemRJTUdmUlR3NjlRSkpMTnI0RXFRWFdEaDcteU5DaVFucThPXzBqTjBTak51dTI2SG03TVA4Q08wOWJUQVVrWEdPZ3Jmb3NWMjJ5WnFxelY2Qno5WWdXU3RySENQOWxPclpxRkpXOGJaUjZ5RQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTUNiVkI5RnhYME9VLXNsNWhVbUNuR2FxSEI3emNjYWlhQTZnTGN6cFo5eWVtMEItcXYweFhYcFVKRlRKNVkyVWUwb0lsTjZrTnNlWDAyQlRkM09CemRJTUdmUlR3NjlRSkpMTnI0RXFRWFdEaDcteU5DaVFucThPXzBqTjBTak51dTI2SG03TVA4Q08wOWJUQVVrWEdPZ3Jmb3NWMjJ5WnFxelY2Qno5WWdXU3RySENQOWxPclpxRkpXOGJaUjZ5RQ?oc=5",
+    "headline": "Electricity tariff deferred until March 2027, fuel surcharge to continue until Dec 2026 - Fijivillage",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTUNiVkI5RnhYME9VLXNsNWhVbUNuR2FxSEI3emNjYWlhQTZnTGN6cFo5eWVtMEItcXYweFhYcFVKRlRKNVkyVWUwb0lsTjZrTnNlWDAyQlRkM09CemRJTUdmUlR3NjlRSkpMTnI0RXFRWFdEaDcteU5DaVFucThPXzBqTjBTak51dTI2SG03TVA4Q08wOWJUQVVrWEdPZ3Jmb3NWMjJ5WnFxelY2Qno5WWdXU3RySENQOWxPclpxRkpXOGJaUjZ5RQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://www.nytimes.com/2026/11/06/climate/fema-grants-cuts-resilience.html": {
+    "timestamp": "2026-11-06T11:57:14.324307+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/06/climate/fema-grants-cuts-resilience.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/06/climate/fema-grants-cuts-resilience.html",
+    "headline": "Disaster-Prone Communities Face Cuts and Slowdowns in Federal Help",
+    "archive_url": "http://web.archive.org/web/20261106101101/https://www.nytimes.com/2026/11/06/climate/fema-grants-cuts-resilience.html"
+  },
+  "https://truthsocial.com/post/5738865": {
+    "timestamp": "2026-11-06T11:57:23.732174+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/5738865",
+    "canonical_url": "https://truthsocial.com/post/5738865",
+    "headline": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/5738865",
+    "error": "<urlopen error timed out>"
+  },
+  "https://truthsocial.com/post/886570": {
+    "timestamp": "2026-11-06T11:57:30.346278+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/886570",
+    "canonical_url": "https://truthsocial.com/post/886570",
+    "headline": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/886570",
+    "error": "<urlopen error timed out>"
+  },
+  "https://truthsocial.com/post/1040437": {
+    "timestamp": "2026-11-06T11:57:37.908147+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/1040437",
+    "canonical_url": "https://truthsocial.com/post/1040437",
+    "headline": "Democratic midterm wins cloud outlook for OPEC, Nigeria’s oil income - Business News Nigeria",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/1040437",
+    "error": "<urlopen error timed out>"
+  },
+  "https://truthsocial.com/post/3871567": {
+    "timestamp": "2026-11-06T11:57:47.255701+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/3871567",
+    "canonical_url": "https://truthsocial.com/post/3871567",
+    "headline": "Trump Says Iran Should not Charge Fees to Tankers Going Through Strait of Hormuz - EnergyNow",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/3871567",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/search?q=3355645": {
+    "timestamp": "2026-11-06T11:58:00.317841+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/search?q=3355645",
+    "canonical_url": "https://news.google.com/search?q=3355645",
+    "headline": "The US is depleting its strategic petroleum reserve faster than it looks - TimesLIVE",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/search?q=3355645",
+    "error": "<urlopen error _ssl.c:1018: The handshake operation timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5nTzlhOGZTS180cWNtVG91c2VWRVJFYlk0cW5Ba1RHUEFOSEtldU15QktQT0EzRVY1ZVdZZ0VTRHVWTVhyN1IzeU1wbmlDMUhrQ3Roc1YxcmdMUQ?oc=5": {
+    "timestamp": "2026-11-06T11:58:09.612991+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5nTzlhOGZTS180cWNtVG91c2VWRVJFYlk0cW5Ba1RHUEFOSEtldU15QktQT0EzRVY1ZVdZZ0VTRHVWTVhyN1IzeU1wbmlDMUhrQ3Roc1YxcmdMUQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5nTzlhOGZTS180cWNtVG91c2VWRVJFYlk0cW5Ba1RHUEFOSEtldU15QktQT0EzRVY1ZVdZZ0VTRHVWTVhyN1IzeU1wbmlDMUhrQ3Roc1YxcmdMUQ?oc=5",
+    "headline": "2026 Iran war | Oil, Explained, United States, Israel, Strait of Hormuz, Map, & Conflict",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiWkFVX3lxTE5nTzlhOGZTS180cWNtVG91c2VWRVJFYlk0cW5Ba1RHUEFOSEtldU15QktQT0EzRVY1ZVdZZ0VTRHVWTVhyN1IzeU1wbmlDMUhrQ3Roc1YxcmdMUQ?oc=5",
     "error": "<urlopen error _ssl.c:1018: The handshake operation timed out>"
   }
 }
