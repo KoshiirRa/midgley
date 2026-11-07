@@ -1581,5 +1581,32 @@
     "latest_us_total_rigs": 472,
     "permian_rigs": 298,
     "is_vintage_reconstructed": false
+  },
+  {
+    "source": "Baker Hughes Rig Count (Zero-Cost / FRED / Web)",
+    "as_of": "2026-10-30 02:01:52",
+    "valid_date": "2026-01-09",
+    "latest_us_active_oil_rigs": 472,
+    "latest_us_total_rigs": 472,
+    "permian_rigs": 298,
+    "is_vintage_reconstructed": false
+  },
+  {
+    "source": "Baker Hughes Rig Count (Zero-Cost / FRED / Web)",
+    "as_of": "2026-10-31 19:02:11",
+    "valid_date": "2026-01-09",
+    "latest_us_active_oil_rigs": 472,
+    "latest_us_total_rigs": 472,
+    "permian_rigs": 298,
+    "is_vintage_reconstructed": false
+  },
+  {
+    "source": "Baker Hughes Rig Count (Zero-Cost / FRED / Web)",
+    "as_of": "2026-11-06 02:28:59",
+    "valid_date": "2026-01-09",
+    "latest_us_active_oil_rigs": 472,
+    "latest_us_total_rigs": 472,
+    "permian_rigs": 298,
+    "is_vintage_reconstructed": false
   }
 ]
