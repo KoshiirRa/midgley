@@ -9258,5 +9258,26 @@
       "overall_price_pressure": 0.55
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-07T00:02:57.465805",
+    "headline": "Two oil tankers struck by mines in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5ybjUtX3JLMmFGeWNyN0JmTU9xUm5MbGhKb2FjMXAwM3NZM2FxUUN4Sk1oZnowbkswSVBVMDlZMjBrZTJHTjFERVhHOERmcXBaUm1kTlJSOUItQVlFczE1Y2hKSF9mR1NPcHo1dndWTXRtQWlycGs0amZLVdIBgAFBVV95cUxPUVpoWGtMRVYzVjFBaWNLLXhWWUo0cFRJTl82bzFwM3YyU040MWRPMF96dmJNU1VkNEVEczVXWFpyeWFXaEM1SFU0bUd5aTBQcjlQV1laSlBwckpnQmxwV1l0MmpRTU00Zl9Dd1J2MmNqOTBlTnI5NmpoUDNndVFRYw?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5ybjUtX3JLMmFGeWNyN0JmTU9xUm5MbGhKb2FjMXAwM3NZM2FxUUN4Sk1oZnowbkswSVBVMDlZMjBrZTJHTjFERVhHOERmcXBaUm1kTlJSOUItQVlFczE1Y2hKSF9mR1NPcHo1dndWTXRtQWlycGs0amZLVdIBgAFBVV95cUxPUVpoWGtMRVYzVjFBaWNLLXhWWUo0cFRJTl82bzFwM3YyU040MWRPMF96dmJNU1VkNEVEczVXWFpyeWFXaEM1SFU0bUd5aTBQcjlQV1laSlBwckpnQmxwV1l0MmpRTU00Zl9Dd1J2MmNqOTBlTnI5NmpoUDNndVFRYw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMie0FVX3lxTE5ybjUtX3JLMmFGeWNyN0JmTU9xUm5MbGhKb2FjMXAwM3NZM2FxUUN4Sk1oZnowbkswSVBVMDlZMjBrZTJHTjFERVhHOERmcXBaUm1kTlJSOUItQVlFczE1Y2hKSF9mR1NPcHo1dndWTXRtQWlycGs0amZLVdIBgAFBVV95cUxPUVpoWGtMRVYzVjFBaWNLLXhWWUo0cFRJTl82bzFwM3YyU040MWRPMF96dmJNU1VkNEVEczVXWFpyeWFXaEM1SFU0bUd5aTBQcjlQV1laSlBwckpnQmxwV1l0MmpRTU00Zl9Dd1J2MmNqOTBlTnI5NmpoUDNndVFRYw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.88
+    },
+    "discord_notified": true
   }
 ]
