@@ -20034,13 +20034,13 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMipAFBVV95cUxQcUdlVjRuTFJMTUY5YUozc29raGpuNE9IZndZMjBYNzR2VlZranVuRkk2V2xhVGFjLWZ1R2RYWXdxQ0hleXVVZ2E1NmY5SndrLW1VM3VJX3M4MXNLYWE3YjJjUE1LQmgySnpjZWRxVno0aXRmZlVYM2RKdGhzRGFpQW9jQUFfd3dkZml6Rk0zTy1uZlFWdWZQQmVGRUp4ckR6aG0wMQ?oc=5": {
-    "timestamp": "2026-11-04T23:24:40.209976+00:00",
+    "timestamp": "2026-11-07T05:48:25.258266+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQcUdlVjRuTFJMTUY5YUozc29raGpuNE9IZndZMjBYNzR2VlZranVuRkk2V2xhVGFjLWZ1R2RYWXdxQ0hleXVVZ2E1NmY5SndrLW1VM3VJX3M4MXNLYWE3YjJjUE1LQmgySnpjZWRxVno0aXRmZlVYM2RKdGhzRGFpQW9jQUFfd3dkZml6Rk0zTy1uZlFWdWZQQmVGRUp4ckR6aG0wMQ?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQcUdlVjRuTFJMTUY5YUozc29raGpuNE9IZndZMjBYNzR2VlZranVuRkk2V2xhVGFjLWZ1R2RYWXdxQ0hleXVVZ2E1NmY5SndrLW1VM3VJX3M4MXNLYWE3YjJjUE1LQmgySnpjZWRxVno0aXRmZlVYM2RKdGhzRGFpQW9jQUFfd3dkZml6Rk0zTy1uZlFWdWZQQmVGRUp4ckR6aG0wMQ?oc=5",
     "headline": "SM Energy May Shift Drilling in Early 2027 Amid Uinta Basin Constraints - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipAFBVV95cUxQcUdlVjRuTFJMTUY5YUozc29raGpuNE9IZndZMjBYNzR2VlZranVuRkk2V2xhVGFjLWZ1R2RYWXdxQ0hleXVVZ2E1NmY5SndrLW1VM3VJX3M4MXNLYWE3YjJjUE1LQmgySnpjZWRxVno0aXRmZlVYM2RKdGhzRGFpQW9jQUFfd3dkZml6Rk0zTy1uZlFWdWZQQmVGRUp4ckR6aG0wMQ?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMixwFBVV95cUxPQzNqWVVoaUwxcEQzdXdHbTJfOFNscnA3QjdCWTZyaURKbTQtUk8wclA1Nlg4Yk1KTzA5NW95VTNaRDYyYVBvMjlUald5LWE4aE1IQ1EtNzd2ZlE2WkpEZ3JnR19FaFhnM0pBSmZfQVYzeVFtejh2Q1JGcjlkcGxKMnAzeURVNUpoM2k3UEZTS1RVTlVZVWVoMUxlcWFmQ2t3R3ZEWVA4NTFXMW5hdWJUb1h1ZmVwVlE2dG4zZEh5NzA2NEQzbHRR?oc=5": {
     "timestamp": "2026-11-04T23:24:48.731278+00:00",
@@ -20780,5 +20780,104 @@
     "headline": "Two oil tankers struck by mines in Strait of Hormuz",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMie0FVX3lxTE5ybjUtX3JLMmFGeWNyN0JmTU9xUm5MbGhKb2FjMXAwM3NZM2FxUUN4Sk1oZnowbkswSVBVMDlZMjBrZTJHTjFERVhHOERmcXBaUm1kTlJSOUItQVlFczE1Y2hKSF9mR1NPcHo1dndWTXRtQWlycGs0amZLVdIBgAFBVV95cUxPUVpoWGtMRVYzVjFBaWNLLXhWWUo0cFRJTl82bzFwM3YyU040MWRPMF96dmJNU1VkNEVEczVXWFpyeWFXaEM1SFU0bUd5aTBQcjlQV1laSlBwckpnQmxwV1l0MmpRTU00Zl9Dd1J2MmNqOTBlTnI5NmpoUDNndVFRYw?oc=5",
     "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPS09uSTBLbDcyQ2MwamJtLTBBVG1OVWttME1TVnk2WWVRYTM1Vzh0eU1JU2xXcnJEVWF4eHp0c2RjQWg2clpPd3lMSjdhWkdnTTJlRTg4YnhWb2MxeDV4YnJmdVMtb1AydlVtX1B4LXFRTVVpMXljX3VGVUYtUjZOQUhjclMxVEpfamNMMlI0VEdtRlI3aFlkWkMxX1l0SUFsTE10VVNQa2FTVm1qOE4yU3l0eFVMWTFBbXpaR3YxTmdvZ0F2clF2OU1pTEFLWW5nMjZaaXlLNTFMaTBOMEVhTE5vMW4tSF9qa1MzZ0VjaFVNRVJIN3c?oc=5": {
+    "timestamp": "2026-11-07T05:47:52.266286+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPS09uSTBLbDcyQ2MwamJtLTBBVG1OVWttME1TVnk2WWVRYTM1Vzh0eU1JU2xXcnJEVWF4eHp0c2RjQWg2clpPd3lMSjdhWkdnTTJlRTg4YnhWb2MxeDV4YnJmdVMtb1AydlVtX1B4LXFRTVVpMXljX3VGVUYtUjZOQUhjclMxVEpfamNMMlI0VEdtRlI3aFlkWkMxX1l0SUFsTE10VVNQa2FTVm1qOE4yU3l0eFVMWTFBbXpaR3YxTmdvZ0F2clF2OU1pTEFLWW5nMjZaaXlLNTFMaTBOMEVhTE5vMW4tSF9qa1MzZ0VjaFVNRVJIN3c?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPS09uSTBLbDcyQ2MwamJtLTBBVG1OVWttME1TVnk2WWVRYTM1Vzh0eU1JU2xXcnJEVWF4eHp0c2RjQWg2clpPd3lMSjdhWkdnTTJlRTg4YnhWb2MxeDV4YnJmdVMtb1AydlVtX1B4LXFRTVVpMXljX3VGVUYtUjZOQUhjclMxVEpfamNMMlI0VEdtRlI3aFlkWkMxX1l0SUFsTE10VVNQa2FTVm1qOE4yU3l0eFVMWTFBbXpaR3YxTmdvZ0F2clF2OU1pTEFLWW5nMjZaaXlLNTFMaTBOMEVhTE5vMW4tSF9qa1MzZ0VjaFVNRVJIN3c?oc=5",
+    "headline": "Where to find the cheapest fuel in South Coast - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9gFBVV95cUxPS09uSTBLbDcyQ2MwamJtLTBBVG1OVWttME1TVnk2WWVRYTM1Vzh0eU1JU2xXcnJEVWF4eHp0c2RjQWg2clpPd3lMSjdhWkdnTTJlRTg4YnhWb2MxeDV4YnJmdVMtb1AydlVtX1B4LXFRTVVpMXljX3VGVUYtUjZOQUhjclMxVEpfamNMMlI0VEdtRlI3aFlkWkMxX1l0SUFsTE10VVNQa2FTVm1qOE4yU3l0eFVMWTFBbXpaR3YxTmdvZ0F2clF2OU1pTEFLWW5nMjZaaXlLNTFMaTBOMEVhTE5vMW4tSF9qa1MzZ0VjaFVNRVJIN3c?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNaWNPbXF3RnlLNGRJOTdrUmlWRjR2Uy1EVkt4Mnd0bVpOQkNWZ0lYdXpNaTluTXlEQ0ZXQUtzYk02b0NHb2c0Y0FnZEhEemphZlZVOFlOeGRrNGoxV0JtYmdCWl9RSmFxdFMxMXpHZEpvWVNXaEF5bFR4WnQ2V0FjQ2FLLUlpdkdVVkl2R2VmbURHdUo1am9CajhXTGd6OTNhdDE3RlExcHZJMVh1Qzl6dzZidTZpVmdhSGZYVVEyZ3FaQndpTnRhQUc2bVMtdHFRcnFsMmxQNndUZmR4QnZ4VjktMzhadWNtVUZyVElFY0k?oc=5": {
+    "timestamp": "2026-11-07T05:47:59.561862+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNaWNPbXF3RnlLNGRJOTdrUmlWRjR2Uy1EVkt4Mnd0bVpOQkNWZ0lYdXpNaTluTXlEQ0ZXQUtzYk02b0NHb2c0Y0FnZEhEemphZlZVOFlOeGRrNGoxV0JtYmdCWl9RSmFxdFMxMXpHZEpvWVNXaEF5bFR4WnQ2V0FjQ2FLLUlpdkdVVkl2R2VmbURHdUo1am9CajhXTGd6OTNhdDE3RlExcHZJMVh1Qzl6dzZidTZpVmdhSGZYVVEyZ3FaQndpTnRhQUc2bVMtdHFRcnFsMmxQNndUZmR4QnZ4VjktMzhadWNtVUZyVElFY0k?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNaWNPbXF3RnlLNGRJOTdrUmlWRjR2Uy1EVkt4Mnd0bVpOQkNWZ0lYdXpNaTluTXlEQ0ZXQUtzYk02b0NHb2c0Y0FnZEhEemphZlZVOFlOeGRrNGoxV0JtYmdCWl9RSmFxdFMxMXpHZEpvWVNXaEF5bFR4WnQ2V0FjQ2FLLUlpdkdVVkl2R2VmbURHdUo1am9CajhXTGd6OTNhdDE3RlExcHZJMVh1Qzl6dzZidTZpVmdhSGZYVVEyZ3FaQndpTnRhQUc2bVMtdHFRcnFsMmxQNndUZmR4QnZ4VjktMzhadWNtVUZyVElFY0k?oc=5",
+    "headline": "Where to find the cheapest fuel in The Shire - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi8AFBVV95cUxNaWNPbXF3RnlLNGRJOTdrUmlWRjR2Uy1EVkt4Mnd0bVpOQkNWZ0lYdXpNaTluTXlEQ0ZXQUtzYk02b0NHb2c0Y0FnZEhEemphZlZVOFlOeGRrNGoxV0JtYmdCWl9RSmFxdFMxMXpHZEpvWVNXaEF5bFR4WnQ2V0FjQ2FLLUlpdkdVVkl2R2VmbURHdUo1am9CajhXTGd6OTNhdDE3RlExcHZJMVh1Qzl6dzZidTZpVmdhSGZYVVEyZ3FaQndpTnRhQUc2bVMtdHFRcnFsMmxQNndUZmR4QnZ4VjktMzhadWNtVUZyVElFY0k?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQMFZYbHZzcmFudzBla1QxRElHcHVOajlDMGRnVzBSTUMwNzljVFJzUmVBTWpQTnZyVnF1MVdjUWMtTXFnVmNHSlNuNllFNFRCR0lnWnB5TkszbjEtZExtV2czRGVrWkpvUDJLM1F6SFZOQnFyRFRjZEVYUGZYdHJtdDNzTDNrdDFFRjgyZzJOUXVGSTNvTm9UeUNRS0Flc0dpZFRWMzlaNnF4QlhCQXh4eXhldDNYYkpCRDVXX1dmN0NCblZHQkVZb1VVcTFfRldDeEZ5NzdXSGF1dUxJaVBjUUVRU2ZVZS10R2ZZ?oc=5": {
+    "timestamp": "2026-11-07T05:48:10.260649+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQMFZYbHZzcmFudzBla1QxRElHcHVOajlDMGRnVzBSTUMwNzljVFJzUmVBTWpQTnZyVnF1MVdjUWMtTXFnVmNHSlNuNllFNFRCR0lnWnB5TkszbjEtZExtV2czRGVrWkpvUDJLM1F6SFZOQnFyRFRjZEVYUGZYdHJtdDNzTDNrdDFFRjgyZzJOUXVGSTNvTm9UeUNRS0Flc0dpZFRWMzlaNnF4QlhCQXh4eXhldDNYYkpCRDVXX1dmN0NCblZHQkVZb1VVcTFfRldDeEZ5NzdXSGF1dUxJaVBjUUVRU2ZVZS10R2ZZ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQMFZYbHZzcmFudzBla1QxRElHcHVOajlDMGRnVzBSTUMwNzljVFJzUmVBTWpQTnZyVnF1MVdjUWMtTXFnVmNHSlNuNllFNFRCR0lnWnB5TkszbjEtZExtV2czRGVrWkpvUDJLM1F6SFZOQnFyRFRjZEVYUGZYdHJtdDNzTDNrdDFFRjgyZzJOUXVGSTNvTm9UeUNRS0Flc0dpZFRWMzlaNnF4QlhCQXh4eXhldDNYYkpCRDVXX1dmN0NCblZHQkVZb1VVcTFfRldDeEZ5NzdXSGF1dUxJaVBjUUVRU2ZVZS10R2ZZ?oc=5",
+    "headline": "Where to find the cheapest fuel in Parramatta - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi6wFBVV95cUxQMFZYbHZzcmFudzBla1QxRElHcHVOajlDMGRnVzBSTUMwNzljVFJzUmVBTWpQTnZyVnF1MVdjUWMtTXFnVmNHSlNuNllFNFRCR0lnWnB5TkszbjEtZExtV2czRGVrWkpvUDJLM1F6SFZOQnFyRFRjZEVYUGZYdHJtdDNzTDNrdDFFRjgyZzJOUXVGSTNvTm9UeUNRS0Flc0dpZFRWMzlaNnF4QlhCQXh4eXhldDNYYkpCRDVXX1dmN0NCblZHQkVZb1VVcTFfRldDeEZ5NzdXSGF1dUxJaVBjUUVRU2ZVZS10R2ZZ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMivgFBVV95cUxPcEJhTWZ2OTI3U3U5LUVvOVYwdUtMOENUbUkzdmo5NFA2cGZRSjd3VUlOeUp2RzJWYmE1ZmZXaTMzOWIzSm1TNWRqaUFlSEdPMHB1ZWlsVWJjQ2tIYVE2bHphd0J1V3hYUUxSV2RKODNiWklndUNCaS0zZk03aC1zeW1FQTZDUXRISGxqb29VVldlaHM3d0l3eFR3ZjhRQUpUR0FNXzI0RGxMS1l5Q0tKblFKbjZiRFVfeFNUaDFR?oc=5": {
+    "timestamp": "2026-11-07T05:48:17.452676+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPcEJhTWZ2OTI3U3U5LUVvOVYwdUtMOENUbUkzdmo5NFA2cGZRSjd3VUlOeUp2RzJWYmE1ZmZXaTMzOWIzSm1TNWRqaUFlSEdPMHB1ZWlsVWJjQ2tIYVE2bHphd0J1V3hYUUxSV2RKODNiWklndUNCaS0zZk03aC1zeW1FQTZDUXRISGxqb29VVldlaHM3d0l3eFR3ZjhRQUpUR0FNXzI0RGxMS1l5Q0tKblFKbjZiRFVfeFNUaDFR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPcEJhTWZ2OTI3U3U5LUVvOVYwdUtMOENUbUkzdmo5NFA2cGZRSjd3VUlOeUp2RzJWYmE1ZmZXaTMzOWIzSm1TNWRqaUFlSEdPMHB1ZWlsVWJjQ2tIYVE2bHphd0J1V3hYUUxSV2RKODNiWklndUNCaS0zZk03aC1zeW1FQTZDUXRISGxqb29VVldlaHM3d0l3eFR3ZjhRQUpUR0FNXzI0RGxMS1l5Q0tKblFKbjZiRFVfeFNUaDFR?oc=5",
+    "headline": "AlumaSafway Wins Multiple Canadian Industrial Safety Awards - Construction Owners",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxPcEJhTWZ2OTI3U3U5LUVvOVYwdUtMOENUbUkzdmo5NFA2cGZRSjd3VUlOeUp2RzJWYmE1ZmZXaTMzOWIzSm1TNWRqaUFlSEdPMHB1ZWlsVWJjQ2tIYVE2bHphd0J1V3hYUUxSV2RKODNiWklndUNCaS0zZk03aC1zeW1FQTZDUXRISGxqb29VVldlaHM3d0l3eFR3ZjhRQUpUR0FNXzI0RGxMS1l5Q0tKblFKbjZiRFVfeFNUaDFR?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMirgFBVV95cUxQWGFEbGRmRDB0Y0xNRE0taVBaRlM3Sy1HSE1FN0FjekZhSUY5aFJ4N2oySXM4TW1IaVp0NGNBUTNqdEwxOFExOXZNVG9LdGRIdll0aXhsYllGM1ZVR1Rka3BsTW5EU2ZDR2wtX1EyWFNHck0xeV96NEh2UW01aGY0SndJdXBNZkFFZzR2UGxxXzZIdkpPZDIwclF4Mm5GNzhOQWViRDJEMjNkTUlaVXc?oc=5": {
+    "timestamp": "2026-11-07T05:48:32.403159+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQWGFEbGRmRDB0Y0xNRE0taVBaRlM3Sy1HSE1FN0FjekZhSUY5aFJ4N2oySXM4TW1IaVp0NGNBUTNqdEwxOFExOXZNVG9LdGRIdll0aXhsYllGM1ZVR1Rka3BsTW5EU2ZDR2wtX1EyWFNHck0xeV96NEh2UW01aGY0SndJdXBNZkFFZzR2UGxxXzZIdkpPZDIwclF4Mm5GNzhOQWViRDJEMjNkTUlaVXc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQWGFEbGRmRDB0Y0xNRE0taVBaRlM3Sy1HSE1FN0FjekZhSUY5aFJ4N2oySXM4TW1IaVp0NGNBUTNqdEwxOFExOXZNVG9LdGRIdll0aXhsYllGM1ZVR1Rka3BsTW5EU2ZDR2wtX1EyWFNHck0xeV96NEh2UW01aGY0SndJdXBNZkFFZzR2UGxxXzZIdkpPZDIwclF4Mm5GNzhOQWViRDJEMjNkTUlaVXc?oc=5",
+    "headline": "Opinion: Why Democrats should use their new power to embrace Trump’s tariffs - MarketWatch",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxQWGFEbGRmRDB0Y0xNRE0taVBaRlM3Sy1HSE1FN0FjekZhSUY5aFJ4N2oySXM4TW1IaVp0NGNBUTNqdEwxOFExOXZNVG9LdGRIdll0aXhsYllGM1ZVR1Rka3BsTW5EU2ZDR2wtX1EyWFNHck0xeV96NEh2UW01aGY0SndJdXBNZkFFZzR2UGxxXzZIdkpPZDIwclF4Mm5GNzhOQWViRDJEMjNkTUlaVXc?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMirgFBVV95cUxPd01xYzBuWXpWZGI1aTJDcVdjdVp6T0dUclpTWmZKN0pMeFZMWEdLR3BhSnBmUDlHOUszS3JRWWtVTzMxM2dTSElCRkhVTTZjbHBJdmsxZGF6cHd2N2lIUnBOdGswNmZVaUdYMXNxS0ViQW8xMTFjMHFUcURZUl9tNlNhQTBXbENvOEhlOW9fWldCeTBfOVdIaG5fOW1FanBFMWJUM0JJQ3Vuc1JRMnc?oc=5": {
+    "timestamp": "2026-11-07T05:48:39.767780+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPd01xYzBuWXpWZGI1aTJDcVdjdVp6T0dUclpTWmZKN0pMeFZMWEdLR3BhSnBmUDlHOUszS3JRWWtVTzMxM2dTSElCRkhVTTZjbHBJdmsxZGF6cHd2N2lIUnBOdGswNmZVaUdYMXNxS0ViQW8xMTFjMHFUcURZUl9tNlNhQTBXbENvOEhlOW9fWldCeTBfOVdIaG5fOW1FanBFMWJUM0JJQ3Vuc1JRMnc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPd01xYzBuWXpWZGI1aTJDcVdjdVp6T0dUclpTWmZKN0pMeFZMWEdLR3BhSnBmUDlHOUszS3JRWWtVTzMxM2dTSElCRkhVTTZjbHBJdmsxZGF6cHd2N2lIUnBOdGswNmZVaUdYMXNxS0ViQW8xMTFjMHFUcURZUl9tNlNhQTBXbENvOEhlOW9fWldCeTBfOVdIaG5fOW1FanBFMWJUM0JJQ3Vuc1JRMnc?oc=5",
+    "headline": "Nepra raises industrial tariff to Rs25.30 per unit, despite dissent - Investify",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxPd01xYzBuWXpWZGI1aTJDcVdjdVp6T0dUclpTWmZKN0pMeFZMWEdLR3BhSnBmUDlHOUszS3JRWWtVTzMxM2dTSElCRkhVTTZjbHBJdmsxZGF6cHd2N2lIUnBOdGswNmZVaUdYMXNxS0ViQW8xMTFjMHFUcURZUl9tNlNhQTBXbENvOEhlOW9fWldCeTBfOVdIaG5fOW1FanBFMWJUM0JJQ3Vuc1JRMnc?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiowFBVV95cUxOUDZhZVRtUlkyQmM0dTJpOTRVbWgxWlhRNGt3UUliUDVFRGhNM2RoQUpVLU1TTVVMbDRJbnBSaW83UTF1d0JkVVZvRXl1Ylk0RldXUDdlWW1KSmd4dkI5YWJQbEFHX1ZNbEdMSmFFTEQxZ1FnTl82anlQazNfUElVVkgxUHlzcXZxSy1tWWFUdjFQYWZHaEVMYjZKRWFqN1VPSVpR?oc=5": {
+    "timestamp": "2026-11-07T05:48:46.629718+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOUDZhZVRtUlkyQmM0dTJpOTRVbWgxWlhRNGt3UUliUDVFRGhNM2RoQUpVLU1TTVVMbDRJbnBSaW83UTF1d0JkVVZvRXl1Ylk0RldXUDdlWW1KSmd4dkI5YWJQbEFHX1ZNbEdMSmFFTEQxZ1FnTl82anlQazNfUElVVkgxUHlzcXZxSy1tWWFUdjFQYWZHaEVMYjZKRWFqN1VPSVpR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOUDZhZVRtUlkyQmM0dTJpOTRVbWgxWlhRNGt3UUliUDVFRGhNM2RoQUpVLU1TTVVMbDRJbnBSaW83UTF1d0JkVVZvRXl1Ylk0RldXUDdlWW1KSmd4dkI5YWJQbEFHX1ZNbEdMSmFFTEQxZ1FnTl82anlQazNfUElVVkgxUHlzcXZxSy1tWWFUdjFQYWZHaEVMYjZKRWFqN1VPSVpR?oc=5",
+    "headline": "US Democrats Seek Republican Support to Repeal Trump's Canada Tariffs - Tempo.co English",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiowFBVV95cUxOUDZhZVRtUlkyQmM0dTJpOTRVbWgxWlhRNGt3UUliUDVFRGhNM2RoQUpVLU1TTVVMbDRJbnBSaW83UTF1d0JkVVZvRXl1Ylk0RldXUDdlWW1KSmd4dkI5YWJQbEFHX1ZNbEdMSmFFTEQxZ1FnTl82anlQazNfUElVVkgxUHlzcXZxSy1tWWFUdjFQYWZHaEVMYjZKRWFqN1VPSVpR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://truthsocial.com/post/9473585": {
+    "timestamp": "2026-11-07T05:48:56.459888+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/9473585",
+    "canonical_url": "https://truthsocial.com/post/9473585",
+    "headline": "FEATURE STORY: Trump Drains America’s Emergency Oil Reserve as Canada Supplies 63% of US Crude Imports - EnergyNow.com",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/9473585",
+    "error": "<urlopen error timed out>"
+  },
+  "https://truthsocial.com/post/9461063": {
+    "timestamp": "2026-11-07T05:49:02.980131+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/9461063",
+    "canonical_url": "https://truthsocial.com/post/9461063",
+    "headline": "Midterms are bad for incumbents – and even worse when energy prices are high - The Conversation",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/9461063",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMihwFBVV95cUxPNk1KUEc4UEU2TzQ4eFRSaUozNGM0LWxCeXNJYUpzWmtSUkxOWW53a2M3ekpFTzRiTElScWJfUHFWM2FoNDkzSTQwTXB3bmkzYVNFa0liaG40T29Kcld6RHdkQnNHbWZETTZlZFVRYXNuenFZR3NLZ2l5WUtrTjRSc1dEVXRIMGfSAYcBQVVfeXFMTy1wLTlEdy1RajY3bE1BdjllT1RmQktJOXF6MXppQUxfVUd5QXVIWTYyQTJZTG5fR0p1QUY4Ql9YSklLdlBDZ3BCbzZfZDJ3cE1sb2o3M0U4cHhZQy1TRG9rREczTnQ5b1dPYi1OZFduNmRKQ3A3VkxFWkNYS1Z5TlFHMF9pc1lB?oc=5": {
+    "timestamp": "2026-11-07T05:49:10.003722+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPNk1KUEc4UEU2TzQ4eFRSaUozNGM0LWxCeXNJYUpzWmtSUkxOWW53a2M3ekpFTzRiTElScWJfUHFWM2FoNDkzSTQwTXB3bmkzYVNFa0liaG40T29Kcld6RHdkQnNHbWZETTZlZFVRYXNuenFZR3NLZ2l5WUtrTjRSc1dEVXRIMGfSAYcBQVVfeXFMTy1wLTlEdy1RajY3bE1BdjllT1RmQktJOXF6MXppQUxfVUd5QXVIWTYyQTJZTG5fR0p1QUY4Ql9YSklLdlBDZ3BCbzZfZDJ3cE1sb2o3M0U4cHhZQy1TRG9rREczTnQ5b1dPYi1OZFduNmRKQ3A3VkxFWkNYS1Z5TlFHMF9pc1lB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPNk1KUEc4UEU2TzQ4eFRSaUozNGM0LWxCeXNJYUpzWmtSUkxOWW53a2M3ekpFTzRiTElScWJfUHFWM2FoNDkzSTQwTXB3bmkzYVNFa0liaG40T29Kcld6RHdkQnNHbWZETTZlZFVRYXNuenFZR3NLZ2l5WUtrTjRSc1dEVXRIMGfSAYcBQVVfeXFMTy1wLTlEdy1RajY3bE1BdjllT1RmQktJOXF6MXppQUxfVUd5QXVIWTYyQTJZTG5fR0p1QUY4Ql9YSklLdlBDZ3BCbzZfZDJ3cE1sb2o3M0U4cHhZQy1TRG9rREczTnQ5b1dPYi1OZFduNmRKQ3A3VkxFWkNYS1Z5TlFHMF9pc1lB?oc=5",
+    "headline": "Iran war: Gulf tanker attacked, 1 seaferer killed",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihwFBVV95cUxPNk1KUEc4UEU2TzQ4eFRSaUozNGM0LWxCeXNJYUpzWmtSUkxOWW53a2M3ekpFTzRiTElScWJfUHFWM2FoNDkzSTQwTXB3bmkzYVNFa0liaG40T29Kcld6RHdkQnNHbWZETTZlZFVRYXNuenFZR3NLZ2l5WUtrTjRSc1dEVXRIMGfSAYcBQVVfeXFMTy1wLTlEdy1RajY3bE1BdjllT1RmQktJOXF6MXppQUxfVUd5QXVIWTYyQTJZTG5fR0p1QUY4Ql9YSklLdlBDZ3BCbzZfZDJ3cE1sb2o3M0U4cHhZQy1TRG9rREczTnQ5b1dPYi1OZFduNmRKQ3A3VkxFWkNYS1Z5TlFHMF9pc1lB?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilAFBVV95cUxNc1RZenJuTHRESkRiYzhIMkFyUDktdjQzLTRjZlZrMUt4TVBkOFVsZVZ0NnZwRzQzend4WjFTS2h5ZHNFMTNhUExzaDNZYTV1RlY5QVo3XzRkVGMwYndmWkVHN1VaNkdzdTJFWmtxN0V0Sng5Wm1vaXZDelhoNFVoQTNDRjU5RllSMVZjSzFiX2swQlBP?oc=5": {
+    "timestamp": "2026-11-07T05:49:22.506956+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNc1RZenJuTHRESkRiYzhIMkFyUDktdjQzLTRjZlZrMUt4TVBkOFVsZVZ0NnZwRzQzend4WjFTS2h5ZHNFMTNhUExzaDNZYTV1RlY5QVo3XzRkVGMwYndmWkVHN1VaNkdzdTJFWmtxN0V0Sng5Wm1vaXZDelhoNFVoQTNDRjU5RllSMVZjSzFiX2swQlBP?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNc1RZenJuTHRESkRiYzhIMkFyUDktdjQzLTRjZlZrMUt4TVBkOFVsZVZ0NnZwRzQzend4WjFTS2h5ZHNFMTNhUExzaDNZYTV1RlY5QVo3XzRkVGMwYndmWkVHN1VaNkdzdTJFWmtxN0V0Sng5Wm1vaXZDelhoNFVoQTNDRjU5RllSMVZjSzFiX2swQlBP?oc=5",
+    "headline": "Two Tankers Carrying Saudi Oil Attacked in Strait of Hormuz",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxNc1RZenJuTHRESkRiYzhIMkFyUDktdjQzLTRjZlZrMUt4TVBkOFVsZVZ0NnZwRzQzend4WjFTS2h5ZHNFMTNhUExzaDNZYTV1RlY5QVo3XzRkVGMwYndmWkVHN1VaNkdzdTJFWmtxN0V0Sng5Wm1vaXZDelhoNFVoQTNDRjU5RllSMVZjSzFiX2swQlBP?oc=5",
+    "error": "<urlopen error timed out>"
   }
 }
