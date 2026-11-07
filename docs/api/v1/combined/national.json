@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-07T12:43:38.748332",
+  "timestamp": "2026-11-07T18:21:45.087590",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -17,8 +17,8 @@
       "requested_granularity": "NATIONAL",
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
-      "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-07T12:43:38Z"
+      "cache_status": "HIT_STALE",
+      "timestamp": "2026-11-07T18:16:34Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-11-13",
     "current_base_price": 4.117,
-    "predicted_price_per_gal": 4.121,
-    "expected_change_dollars": 0.004,
-    "expected_change_percent": 0.1,
+    "predicted_price_per_gal": 4.12,
+    "expected_change_dollars": 0.003,
+    "expected_change_percent": 0.07,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.765,
-    "prediction_upper_95ci": 4.477,
+    "prediction_lower_95ci": 3.764,
+    "prediction_upper_95ci": 4.476,
     "calibration_method": "conformal",
     "calibration_sample_size": 46,
     "directional_hit_rate_historical": 0.525,
     "historical_mae_dollars": 0.155,
     "evaluation_sample_size": 40,
-    "day_1_price": 4.11,
-    "day_2_price": 4.118,
-    "day_3_price": 4.115,
-    "day_4_price": 4.118,
-    "day_5_price": 4.121,
+    "day_1_price": 4.109,
+    "day_2_price": 4.115,
+    "day_3_price": 4.113,
+    "day_4_price": 4.117,
+    "day_5_price": 4.12,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.001,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -65,10 +65,10 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 15.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
@@ -89,20 +89,20 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.001,
         "share_pct": 2.5,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.004/gal (+0.10%): Driven primarily by Futures & Commodity Benchmark (+$0.002/gal), Refining Yield & Crack Spread (+$0.001/gal).",
+      "summary_text": "National forecast +$0.003/gal (+0.07%): Driven primarily by Futures & Commodity Benchmark (+$0.001/gal), Refining Yield & Crack Spread (+$0.001/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.05,
+          "impact_dollars": 0.001,
+          "impact_pct": 0.02,
           "share_pct": 45.0,
           "direction": "UP"
         },
@@ -115,12 +115,20 @@
           "direction": "UP"
         },
         {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "Geopolitical supply risk news & executive social media hawkish posts",
+          "category": "Tax & Regulatory Overhead",
+          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.001,
           "impact_pct": 0.02,
-          "share_pct": 15.0,
+          "share_pct": 2.5,
           "direction": "UP"
+        },
+        {
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "Neutral news sentiment",
+          "impact_dollars": 0.0,
+          "impact_pct": 0.0,
+          "share_pct": 15.0,
+          "direction": "FLAT"
         },
         {
           "category": "Weather & Environmental Signals",
@@ -137,14 +145,6 @@
           "impact_pct": 0.0,
           "share_pct": 5.0,
           "direction": "FLAT"
-        },
-        {
-          "category": "Tax & Regulatory Overhead",
-          "description": "Fixed statutory tax overhead",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
-          "share_pct": 2.5,
-          "direction": "FLAT"
         }
       ]
     }
@@ -153,8 +153,8 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.002,
-      "impact_pct": 0.05,
+      "impact_dollars": 0.001,
+      "impact_pct": 0.02,
       "share_pct": 45.0,
       "direction": "UP"
     },
@@ -167,12 +167,20 @@
       "direction": "UP"
     },
     {
-      "category": "Unstructured Intelligence & Sentiment",
-      "description": "Geopolitical supply risk news & executive social media hawkish posts",
+      "category": "Tax & Regulatory Overhead",
+      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.001,
       "impact_pct": 0.02,
-      "share_pct": 15.0,
+      "share_pct": 2.5,
       "direction": "UP"
+    },
+    {
+      "category": "Unstructured Intelligence & Sentiment",
+      "description": "Neutral news sentiment",
+      "impact_dollars": 0.0,
+      "impact_pct": 0.0,
+      "share_pct": 15.0,
+      "direction": "FLAT"
     },
     {
       "category": "Weather & Environmental Signals",
@@ -189,23 +197,15 @@
       "impact_pct": 0.0,
       "share_pct": 5.0,
       "direction": "FLAT"
-    },
-    {
-      "category": "Tax & Regulatory Overhead",
-      "description": "Fixed statutory tax overhead",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
-      "share_pct": 2.5,
-      "direction": "FLAT"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.004/gal (+0.10%): Driven primarily by Futures & Commodity Benchmark (+$0.002/gal), Refining Yield & Crack Spread (+$0.001/gal).",
+    "summary_text": "National forecast +$0.003/gal (+0.07%): Driven primarily by Futures & Commodity Benchmark (+$0.001/gal), Refining Yield & Crack Spread (+$0.001/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.001,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -221,10 +221,10 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.001,
+        "delta_dollars": 0.0,
         "share_pct": 15.0,
-        "direction": "UP",
-        "description": "Geopolitical supply risk news & executive social media hawkish posts"
+        "direction": "FLAT",
+        "description": "Neutral news sentiment"
       },
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": 0.001,
         "share_pct": 2.5,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "UP",
+        "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     }
   }
