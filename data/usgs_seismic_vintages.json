@@ -6570,7 +6570,7 @@
     }
   },
   {
-    "as_of": "2026-11-07 02:15:13",
+    "as_of": "2026-11-07 12:43:31",
     "valid_date": "2026-11-07",
     "corridor_key": "bay_area",
     "composite_seismic_risk_index": 0.0,
@@ -6579,7 +6579,7 @@
     "data": {
       "status": "SUCCESS",
       "source": "USGS Earthquake Hazards Program (earthquake.usgs.gov)",
-      "timestamp": "2026-11-07 02:15:13",
+      "timestamp": "2026-11-07 12:43:31",
       "filtered_corridor": "bay_area",
       "temporal_window_days": 30,
       "events": [],
