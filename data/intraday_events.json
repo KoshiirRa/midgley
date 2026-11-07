@@ -9325,5 +9325,30 @@
       "overall_price_pressure": -0.7
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-07T18:32:17.178451",
+    "headline": "Strait of Hormuz could reopen under Qatari plan to end US war with Iran",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOOGFzU0dxR3pvaFVXa1VWS1dIM1FoRi1YUkpTWDM0V0lENWprRF9BcWlEeDNGTU16Z1BkSFVrR0Fsek9wTjgtZEV6cWJ4N0lfNk5ONkZWQm5BdkJLNHVNTUNFRWwxdURDWDE4d2tCTVI4WWs2cXhhNDRYem9vX19YNkNWVEVHU2VDSHQxYTc1S1hXeFZWVUFteDh3?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOOGFzU0dxR3pvaFVXa1VWS1dIM1FoRi1YUkpTWDM0V0lENWprRF9BcWlEeDNGTU16Z1BkSFVrR0Fsek9wTjgtZEV6cWJ4N0lfNk5ONkZWQm5BdkJLNHVNTUNFRWwxdURDWDE4d2tCTVI4WWs2cXhhNDRYem9vX19YNkNWVEVHU2VDSHQxYTc1S1hXeFZWVUFteDh3?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimgFBVV95cUxOOGFzU0dxR3pvaFVXa1VWS1dIM1FoRi1YUkpTWDM0V0lENWprRF9BcWlEeDNGTU16Z1BkSFVrR0Fsek9wTjgtZEV6cWJ4N0lfNk5ONkZWQm5BdkJLNHVNTUNFRWwxdURDWDE4d2tCTVI4WWs2cXhhNDRYem9vX19YNkNWVEVHU2VDSHQxYTc1S1hXeFZWVUFteDh3?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": -0.85,
+      "supply_disruption": 0.15,
+      "demand_sentiment": 0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": -0.8
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Strait of Hormuz could reopen as part of Qatari plan for Iran nuclear inspections",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.5,
+    "duplicate_review_notified": false
   }
 ]
