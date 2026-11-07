@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-07T12:43:40.482404",
+  "timestamp": "2026-11-07T18:21:47.159338",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-07T12:43:21Z"
+      "timestamp": "2026-11-07T18:21:23Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-11-13",
     "current_base_price": 3.784,
-    "predicted_price_per_gal": 3.782,
-    "expected_change_dollars": -0.002,
-    "expected_change_percent": -0.05,
+    "predicted_price_per_gal": 3.779,
+    "expected_change_dollars": -0.005,
+    "expected_change_percent": -0.13,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.662,
-    "prediction_upper_95ci": 3.902,
+    "prediction_lower_95ci": 3.659,
+    "prediction_upper_95ci": 3.899,
     "calibration_method": "gaussian_scaled",
     "calibration_sample_size": 0,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.0,
     "evaluation_sample_size": 0,
     "day_1_price": 3.777,
-    "day_2_price": 3.789,
-    "day_3_price": 3.781,
-    "day_4_price": 3.782,
-    "day_5_price": 3.782,
+    "day_2_price": 3.785,
+    "day_3_price": 3.777,
+    "day_4_price": 3.78,
+    "day_5_price": 3.779,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.001,
+        "delta_dollars": -0.002,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -65,18 +65,18 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 15.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "DOWN",
+        "description": "Favorable multi-basin weather conditions"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 12.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "DOWN",
+        "description": "Tax relief or off-peak RVP specification"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Port St Lucie FL forecast $-0.002/gal (-0.05%): Driven primarily by Regional Logistics & Hub Delivery ($-0.001/gal), Futures & Commodity Benchmark ($-0.001/gal).",
+      "summary_text": "Port St Lucie FL forecast $-0.005/gal (-0.13%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.001,
-          "impact_pct": -0.03,
+          "impact_dollars": -0.002,
+          "impact_pct": -0.05,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -116,19 +116,19 @@
         },
         {
           "category": "Weather & Environmental Signals",
-          "description": "Neutral weather impact",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "description": "Favorable multi-basin weather conditions",
+          "impact_dollars": -0.001,
+          "impact_pct": -0.03,
           "share_pct": 15.0,
-          "direction": "FLAT"
+          "direction": "DOWN"
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Fixed statutory tax overhead",
-          "impact_dollars": -0.0,
-          "impact_pct": -0.0,
+          "description": "Tax relief or off-peak RVP specification",
+          "impact_dollars": -0.001,
+          "impact_pct": -0.03,
           "share_pct": 12.0,
-          "direction": "FLAT"
+          "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
@@ -153,8 +153,8 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.001,
-      "impact_pct": -0.03,
+      "impact_dollars": -0.002,
+      "impact_pct": -0.05,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -168,19 +168,19 @@
     },
     {
       "category": "Weather & Environmental Signals",
-      "description": "Neutral weather impact",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "description": "Favorable multi-basin weather conditions",
+      "impact_dollars": -0.001,
+      "impact_pct": -0.03,
       "share_pct": 15.0,
-      "direction": "FLAT"
+      "direction": "DOWN"
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Fixed statutory tax overhead",
-      "impact_dollars": -0.0,
-      "impact_pct": -0.0,
+      "description": "Tax relief or off-peak RVP specification",
+      "impact_dollars": -0.001,
+      "impact_pct": -0.03,
       "share_pct": 12.0,
-      "direction": "FLAT"
+      "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Port St Lucie FL forecast $-0.002/gal (-0.05%): Driven primarily by Regional Logistics & Hub Delivery ($-0.001/gal), Futures & Commodity Benchmark ($-0.001/gal).",
+    "summary_text": "Port St Lucie FL forecast $-0.005/gal (-0.13%): Driven primarily by Regional Logistics & Hub Delivery ($-0.002/gal), Futures & Commodity Benchmark ($-0.001/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.001,
+        "delta_dollars": -0.002,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -221,18 +221,18 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 15.0,
-        "direction": "FLAT",
-        "description": "Neutral weather impact"
+        "direction": "DOWN",
+        "description": "Favorable multi-basin weather conditions"
       },
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.0,
+        "delta_dollars": -0.001,
         "share_pct": 12.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "DOWN",
+        "description": "Tax relief or off-peak RVP specification"
       },
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
