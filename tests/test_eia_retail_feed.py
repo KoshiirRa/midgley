@@ -128,6 +128,33 @@ class TestEIARetailFeed(unittest.TestCase):
             if os.path.exists(test_path):
                 os.remove(test_path)
 
+    def test_eia_dnav_leafhandler_parsing_fallback(self):
+        """Verify zero-API-key EIA DNAV LeafHandler HTML parsing and alias resolution."""
+        sample_dnav_html = b"""
+        <table><tbody>
+        <tr><td class='B6'>&nbsp;&nbsp;2026-Oct</td><td class='B5'>10/19&nbsp;</td><td class='B3'>4.145&nbsp;&nbsp;&nbsp;</td><td class='B5'>10/26&nbsp;</td><td class='B3'>4.269&nbsp;&nbsp;&nbsp;</td></tr>
+        <tr><td class='B6'>&nbsp;&nbsp;2026-Nov</td><td class='B5'>11/02&nbsp;</td><td class='B3'>4.102&nbsp;&nbsp;&nbsp;</td></tr>
+        </tbody></table>
+        """
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_resp.read.return_value = sample_dnav_html
+        mock_resp.__enter__.return_value = mock_resp
+
+        feed = EIARetailFeed()
+        with patch.dict(os.environ, {"TESTING": "1", "TEST_EIA_FORCE": "1", "EIA_API_KEY": ""}), \
+             patch("src.lookup_cache.global_cache.get", return_value=None), \
+             patch("src.lookup_cache.global_cache.set"), \
+             patch("urllib.request.urlopen", return_value=mock_resp) as mock_url:
+            history = feed.fetch_series_history("GASREGWCHI")
+            self.assertEqual(history.get("2026-10-19"), 4.145)
+            self.assertEqual(history.get("2026-10-26"), 4.269)
+            self.assertEqual(history.get("2026-11-02"), 4.102)
+            called_req = mock_url.call_args[0][0]
+            # Verify Chicago Y03CH alias resolved to YORD on EIA DNAV
+            self.assertIn("EMM_EPMR_PTE_YORD_DPG", called_req.full_url)
+
+
 
 if __name__ == "__main__":
     unittest.main()

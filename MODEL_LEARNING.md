@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-10-27 22:00 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-11-07 23:31 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,18 +10,18 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 57 | `$0.0653/gal` | `$0.0668/gal` | **`+2.18%`** | **`68.42%`** | `38.6%` | 🟢 Optimal |
-| **14-Day Window** | 90 | `$0.0805/gal` | `$0.0728/gal` | `-10.55%` | **`56.67%`** | `38.9%` | ⚠️ Calibration Active |
-| **30-Day Window** | 196 | `$0.1171/gal` | `$0.0952/gal` | `-22.95%` | **`48.47%`** | `30.6%` | ⚠️ Calibration Active |
-| **90-Day Window** | 406 | `$0.1423/gal` | `$0.1135/gal` | `-25.38%` | **`45.57%`** | `52.7%` | ⚠️ Calibration Active |
-| **All-Time Window** | 1348 | `$0.1188/gal` | `$0.1008/gal` | `-17.81%` | **`48.29%`** | `51.8%` | ⚠️ Calibration Active |
+| **7-Day Window** | 37 | `$0.2260/gal` | `$0.2561/gal` | **`+11.74%`** | **`86.49%`** | `35.1%` | 🟢 Optimal |
+| **14-Day Window** | 81 | `$0.1422/gal` | `$0.1456/gal` | **`+2.32%`** | **`64.20%`** | `45.7%` | 🟢 Optimal |
+| **30-Day Window** | 175 | `$0.1189/gal` | `$0.1127/gal` | `-5.48%` | **`58.86%`** | `37.7%` | ⚠️ Calibration Active |
+| **90-Day Window** | 425 | `$0.1434/gal` | `$0.1142/gal` | `-25.60%` | **`45.88%`** | `52.0%` | ⚠️ Calibration Active |
+| **All-Time Window** | 1412 | `$0.1206/gal` | `$0.1040/gal` | `-15.97%` | **`49.36%`** | `51.6%` | ⚠️ Calibration Active |
 
 ---
 
 ## 🔬 Sapient PRAXIST Parameter Evolution & Hypothesis Ledger
 
-- **Total Hypotheses Evaluated:** `14`
-- **Accepted Hypotheses in Production:** `8`
+- **Total Hypotheses Evaluated:** `16`
+- **Accepted Hypotheses in Production:** `10`
 - **Active Calibrated Baseline Parameters:**
   - Exogenous Shock Half-Life ($t_{1/2}$): **`4.5 days`**
   - Geopolitical Shock Weight: **`0.35`**
@@ -47,6 +47,8 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 | `2026-10-10` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 | `2026-10-17` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 | `2026-10-24` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
+| `2026-10-31` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
+| `2026-11-07` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 
 ---
 

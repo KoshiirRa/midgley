@@ -16,10 +16,35 @@ ARXIV_API_URL = "http://export.arxiv.org/api/query"
 ATOM_NS = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
 
 DEFAULT_QUERY = (
-    '(cat:q-fin.PR OR cat:econ.EM OR cat:cs.LG OR cat:cs.AI) AND '
-    '(ti:gasoline OR ti:commodity OR ti:"crude oil" OR ti:"futures" OR '
-    'abs:"energy forecasting" OR abs:"price prediction" OR abs:"time series")'
+    '(cat:q-fin.PR OR cat:q-fin.EC OR cat:econ.EM OR cat:stat.ML OR cat:cs.LG) AND '
+    '(ti:gasoline OR ti:"crude oil" OR ti:commodity OR ti:petroleum OR ti:refinery OR '
+    'ti:"energy forecasting" OR ti:"price forecasting" OR ti:"time series forecasting" OR '
+    'abs:"commodity price" OR abs:"crude oil" OR abs:"energy forecasting" OR abs:"time series forecasting")'
 )
+
+OFF_DOMAIN_EXCLUDE_TERMS = (
+    "eeg", "electroencephalogr", "ecg", "electrocardiogr", "atrial fibrillation", "afib",
+    "brain-state", "brainwaves", "car-t", "immunotherapy", "clinical trial", "biomedical conclusions",
+    "robotic manipulation", "vision-language-action", "vulnerable road user", "pedestrian trajectory"
+)
+
+ENERGY_ECONOMETRIC_ALLOW_TERMS = (
+    "gasoline", "crude oil", "petroleum", "rbob", "refinery", "commodity", "futures",
+    "energy market", "energy price", "oil price", "crack spread", "cointegration",
+    "error correction", "conformal prediction", "quantile", "econometric"
+)
+
+
+def _is_domain_relevant_arxiv_entry(title: str, summary: str) -> bool:
+    """
+    Filters out off-domain medical, clinical, and robotics papers unless they explicitly
+    target energy/commodity markets or econometric forecasting methods.
+    """
+    combined = f"{title} {summary}".lower()
+    if any(term in combined for term in OFF_DOMAIN_EXCLUDE_TERMS):
+        if not any(allow in combined for allow in ENERGY_ECONOMETRIC_ALLOW_TERMS):
+            return False
+    return True
 
 
 def fetch_recent_arxiv_articles(days_back: int = 7, max_results: int = 10) -> List[Dict[str, Any]]:
@@ -58,9 +83,11 @@ def fetch_recent_arxiv_articles(days_back: int = 7, max_results: int = 10) -> Li
             title = title_elem.text.strip().replace("\n", " ") if title_elem is not None and title_elem.text else "Untitled"
 
             summary_elem = entry.find("atom:summary", ATOM_NS)
-            summary = summary_elem.text.strip().replace("\n", " ") if summary_elem is not None and summary_elem.text else ""
-            if len(summary) > 250:
-                summary = summary[:247] + "..."
+            full_summary = summary_elem.text.strip().replace("\n", " ") if summary_elem is not None and summary_elem.text else ""
+            if not _is_domain_relevant_arxiv_entry(title, full_summary):
+                continue
+
+            summary = full_summary[:247] + "..." if len(full_summary) > 250 else full_summary
 
             authors = []
             for author in entry.findall("atom:author", ATOM_NS):

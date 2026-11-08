@@ -647,21 +647,29 @@ def log_predictions(
         db = get_db()
         db_stmts = []
         for rec in new_records:
+            pit_meta = json.dumps({
+                "current_base_price": rec.get("current_base_price"),
+                "predicted_direction": rec.get("predicted_direction"),
+                "quant_baseline_5d_price": rec.get("quant_baseline_5d_price"),
+                "data_source_provenance": rec.get("data_source_provenance")
+            })
             sql = """
             INSERT INTO forecasts (
                 forecast_id, region, model_version, origin_date, horizon, target_date,
-                predicted_price, ci_lower_95, ci_upper_95, llm_price_pressure, llm_supply_disruption, run_type
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                predicted_price, ci_lower_95, ci_upper_95, llm_price_pressure, llm_supply_disruption,
+                point_in_time_features, run_type
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(forecast_id) DO UPDATE SET
                 predicted_price = excluded.predicted_price,
                 ci_lower_95 = excluded.ci_lower_95,
-                ci_upper_95 = excluded.ci_upper_95;
+                ci_upper_95 = excluded.ci_upper_95,
+                point_in_time_features = COALESCE(excluded.point_in_time_features, forecasts.point_in_time_features);
             """
             db_stmts.append((sql, (
                 rec["forecast_id"], rec["region"], rec["model_version"], rec["log_timestamp"][:10],
                 rec["forecast_horizon_days"], rec["forecast_target_date"], rec["predicted_5d_price"],
                 rec["prediction_lower_95ci"], rec["prediction_upper_95ci"], rec["llm_price_pressure"],
-                rec["llm_supply_disruption"], rec["run_type"]
+                rec["llm_supply_disruption"], pit_meta, rec["run_type"]
             )))
         db.execute_batch(db_stmts)
     except Exception as db_err:
