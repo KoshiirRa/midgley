@@ -97,5 +97,25 @@
     "delta_tax_dollars": 0.385,
     "description": "Ohio statutory gas-tax holiday expiration and restoration (HB 519; +38.5¢/gal restored on 3 Jan 2027)",
     "source_url": "https://tax.ohio.gov/help-center/faqs/motor-fuel-tax"
+  },
+  {
+    "effective_date": "2026-10-09",
+    "expiration_date": "2026-10-23",
+    "announced_on": "2026-10-08",
+    "region": "Charlotte_NC",
+    "event_type": "EMERGENCY_TAX_HOLIDAY",
+    "delta_tax_dollars": -0.410,
+    "description": "North Carolina Hurricane Isaias State of Emergency motor fuel tax suspension (Executive Order 315; 41.0¢/gal suspended through Oct 23, 2026)",
+    "source_url": "https://governor.nc.gov/news/executive-orders/executive-order-315"
+  },
+  {
+    "effective_date": "2026-10-09",
+    "expiration_date": "2026-10-23",
+    "announced_on": "2026-10-08",
+    "region": "Greenville_NC",
+    "event_type": "EMERGENCY_TAX_HOLIDAY",
+    "delta_tax_dollars": -0.410,
+    "description": "North Carolina Hurricane Isaias State of Emergency motor fuel tax suspension (Executive Order 315; 41.0¢/gal suspended through Oct 23, 2026)",
+    "source_url": "https://governor.nc.gov/news/executive-orders/executive-order-315"
   }
 ]

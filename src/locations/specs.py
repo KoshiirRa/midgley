@@ -30,6 +30,29 @@ class RegionSpec:
     has_dedicated_page: bool = True
     dedicated_page_url: str = ""
 
+    def get_effective_tax_rate(
+        self,
+        target_date: Optional[str] = None,
+        as_of_date: Optional[str] = None,
+        events_path: Optional[str] = None
+    ) -> float:
+        """
+        Resolves the point-in-time statutory motor fuel tax rate for target_date,
+        incorporating any active emergency motor fuel tax suspensions or tax holidays
+        (Issue #632).
+
+        Enforces point-in-time safety: tax suspensions are only applied if their
+        announcement was made on or before as_of_date (as_of_date <= forecast_origin).
+        """
+        from src.rvp_regulations import resolve_point_in_time_tax_rate
+        return resolve_point_in_time_tax_rate(
+            region=self.region_key,
+            baseline_tax_rate=self.baseline_tax_rate,
+            target_date=target_date,
+            as_of_date=as_of_date,
+            events_path=events_path
+        )
+
 
 REGIONAL_SPECS: Dict[str, RegionSpec] = {
     "tulsa": RegionSpec(

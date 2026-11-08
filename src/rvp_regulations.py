@@ -509,6 +509,14 @@ def get_known_future_tax_deltas(
             if as_of_dt < eff_dt <= target_dt:
                 delta = float(ev.get("delta_tax_dollars", 0.0))
                 total_delta += delta
+
+            # Also check expiration_date for dynamic emergency tax holidays (Issue #632)
+            exp_str = ev.get("expiration_date")
+            if exp_str:
+                exp_dt = pd.to_datetime(exp_str).date()
+                if as_of_dt < exp_dt <= target_dt:
+                    # When a holiday expires, the statutory tax is restored (+abs(delta))
+                    total_delta += abs(float(ev.get("delta_tax_dollars", 0.0)))
         except Exception:
             continue
 
@@ -533,4 +541,132 @@ def get_forward_regulatory_covariates(
             "has_forward_tax_event": 1.0 if abs(tax_delta) > 0.001 else 0.0
         })
     return pd.DataFrame(records)
+
+
+def resolve_point_in_time_tax_rate(
+    region: str,
+    baseline_tax_rate: float,
+    target_date: Optional[str] = None,
+    as_of_date: Optional[str] = None,
+    events_path: Optional[str] = None
+) -> float:
+    """
+    Resolves the point-in-time statutory motor fuel tax rate for target_date,
+    incorporating any active emergency motor fuel tax suspensions or tax holidays (Issue #632).
+
+    Enforces point-in-time observational safety:
+    1. Only considers events whose announcement date is on or before as_of_date
+       (announced_on <= as_of_date <= forecast_origin).
+    2. Validates that target_date falls within the active window:
+       effective_date <= target_date <= expiration_date.
+    3. Handles both single-entry range specifications (with expiration_date) and paired
+       HOLIDAY / RESTORATION events.
+    4. Guarantees non-negative tax output (clamped at 0.0).
+    """
+    if events_path is None:
+        events_path = DEFAULT_EVENTS_PATH
+    elif not os.path.isabs(events_path) and not os.path.exists(events_path):
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        candidate = os.path.join(repo_root, events_path)
+        if os.path.exists(candidate):
+            events_path = candidate
+
+    if not os.path.exists(events_path):
+        return round(float(baseline_tax_rate), 4)
+
+    try:
+        with open(events_path, "r", encoding="utf-8") as f:
+            events = json.load(f)
+    except Exception as e:
+        logger.debug(f"Could not load known future events: {e}")
+        return round(float(baseline_tax_rate), 4)
+
+    if not isinstance(events, list):
+        return round(float(baseline_tax_rate), 4)
+
+    try:
+        t_dt = pd.to_datetime(target_date).date() if target_date else pd.Timestamp.now().date()
+        as_of_dt = pd.to_datetime(as_of_date).date() if as_of_date else t_dt
+    except Exception:
+        return round(float(baseline_tax_rate), 4)
+
+    reg_clean = region.lower().strip()
+    for suffix in ["_diesel", "_ulsd", "_carb_diesel"]:
+        if reg_clean.endswith(suffix):
+            reg_clean = reg_clean[:-len(suffix)]
+            break
+
+    # Look for active tax holiday / emergency suspension events
+    applicable_relief = 0.0
+
+    for ev in events:
+        ev_reg = str(ev.get("region", "")).lower().strip()
+        # Direct match, national/all match, or state/hub alias match (e.g. NC -> Charlotte_NC, Greenville_NC)
+        matches_region = (
+            ev_reg in ["national", "all", reg_clean]
+            or (len(reg_clean) == 2 and ev_reg.endswith(f"_{reg_clean}"))
+            or (ev_reg.endswith(f"_{reg_clean}") or ev_reg.startswith(f"{reg_clean}_"))
+            or (reg_clean in ev_reg)
+        )
+        if not matches_region:
+            continue
+
+        # Point-in-time check: event announcement must not be in the future relative to as_of
+        announced_on = ev.get("announced_on")
+        if announced_on:
+            try:
+                ann_dt = pd.to_datetime(announced_on).date()
+                if ann_dt > as_of_dt:
+                    continue  # Leakage prevention: unannounced future event
+            except Exception:
+                pass
+
+        ev_type = str(ev.get("event_type", "")).upper()
+        delta_val = float(ev.get("delta_tax_dollars", 0.0))
+
+        # Check 1: Explicit Date-Bounded Holiday / Emergency Suspension
+        # Supports events with effective_date and expiration_date
+        eff_str = ev.get("effective_date")
+        exp_str = ev.get("expiration_date")
+
+        if eff_str and exp_str:
+            try:
+                eff_dt = pd.to_datetime(eff_str).date()
+                exp_dt = pd.to_datetime(exp_str).date()
+                if eff_dt <= t_dt <= exp_dt:
+                    # Target falls within active holiday window
+                    relief = abs(delta_val)
+                    if relief > applicable_relief:
+                        applicable_relief = relief
+            except Exception:
+                pass
+        elif eff_str and ("HOLIDAY" in ev_type or "SUSPENSION" in ev_type):
+            try:
+                eff_dt = pd.to_datetime(eff_str).date()
+                # If target is on or after effective date, check if a restoration event exists
+                if t_dt >= eff_dt:
+                    # Check paired restoration in events list
+                    is_restored = False
+                    for rest_ev in events:
+                        rest_reg = str(rest_ev.get("region", "")).lower().strip()
+                        if rest_reg not in ["national", "all", reg_clean]:
+                            continue
+                        if "RESTORATION" in str(rest_ev.get("event_type", "")).upper():
+                            try:
+                                rest_eff = pd.to_datetime(rest_ev.get("effective_date")).date()
+                                if t_dt >= rest_eff:
+                                    is_restored = True
+                                    break
+                            except Exception:
+                                pass
+                    if not is_restored:
+                        relief = abs(delta_val)
+                        if relief > applicable_relief:
+                            applicable_relief = relief
+            except Exception:
+                pass
+
+    effective_rate = max(0.0, float(baseline_tax_rate) - applicable_relief)
+    return round(effective_rate, 4)
+
 
