@@ -170,3 +170,70 @@ def test_truncation_invariance_cutoff_row(synthetic_multimodal_dataset):
                         err_msg=f"Cutoff row lookahead mismatch in feature column '{col}' at {cutoff_date}!"
                     )
 
+
+def test_bifurcated_supply_shock_decay_half_lives_issue_631():
+    """
+    Verifies Issue #631 bifurcation of physical supply shocks:
+    - upstream_offshore_shutin decays rapidly with half-life t_1/2 = 3.5 days
+    - downstream_refinery_damage decays slowly with half-life t_1/2 = 14.0 days
+    """
+    from src.feature_engineering import CATEGORY_HALF_LIVES_DAYS
+    from src.event_analyzer import extract_event_features_rule_based
+
+    assert CATEGORY_HALF_LIVES_DAYS["upstream_offshore_shutin"] == 3.5
+    assert CATEGORY_HALF_LIVES_DAYS["downstream_refinery_damage"] == 14.0
+    assert CATEGORY_HALF_LIVES_DAYS["supply_disruption"] == 14.0
+
+    # Rule-based classification check
+    up_scores = extract_event_features_rule_based("BSEE reports precautionary offshore platform evacuations and shut-in in Gulf of Mexico")
+    assert up_scores["upstream_offshore_shutin"] > 0.0
+    assert up_scores["downstream_refinery_damage"] == 0.0
+
+    down_scores = extract_event_features_rule_based("Major refinery fire and coker unit shutdown at Baytown complex")
+    assert down_scores["downstream_refinery_damage"] > 0.0
+    assert down_scores["upstream_offshore_shutin"] == 0.0
+
+    # Construct 30-day daily market series with a single impulse at Day 5
+    dates = pd.date_range(start="2026-06-01", periods=30, freq="D")
+    np.random.seed(7)
+    # Use moderate autocorrelation series so context routing diagnostic recommends TRY_FUSION (fusion_weight = 1.0)
+    rbob = 2.50 + 0.08 * np.sin(np.linspace(0, 8 * np.pi, len(dates)))
+    market_df = pd.DataFrame({
+        "date": dates,
+        "gasoline_rbob": rbob,
+        "wti_crude": 75.0 + np.cos(np.linspace(0, 6 * np.pi, len(dates))),
+        "brent_crude": 79.0 + np.cos(np.linspace(0, 6 * np.pi, len(dates))),
+        "heating_oil": rbob + 0.15
+    })
+    events_df = pd.DataFrame([{
+        "date": dates[5],
+        "headline": "Combined offshore shut-in and refinery outage test",
+        "geopolitical_risk": 0.0,
+        "supply_disruption": 0.8,
+        "upstream_offshore_shutin": 0.8,
+        "downstream_refinery_damage": 0.8,
+        "demand_sentiment": 0.0,
+        "opec_action": 0.0,
+        "overall_price_pressure": 0.3
+    }])
+
+    with patch("src.feature_engineering.fetch_cboe_crude_volatility_ovx", return_value=pd.DataFrame()), \
+         patch("src.feature_engineering.fetch_baker_hughes_rig_counts", return_value=pd.DataFrame()):
+        lbl_df, _ = create_feature_matrix(market_df, events_df, region="National", return_unlabelled_frame=True)
+        full_df = lbl_df.attrs["full_feature_matrix"]
+
+    # At Day 5 (index 5), both receive the 0.8 impulse
+    val_up_0 = full_df.loc[5, "event_upstream_offshore_shutin"]
+    val_down_0 = full_df.loc[5, "event_downstream_refinery_damage"]
+    assert np.isclose(val_up_0, 0.8, atol=1e-6)
+    assert np.isclose(val_down_0, 0.8, atol=1e-6)
+
+    # 7 days later (index 12 = 2 half-lives for 3.5d, 0.5 half-lives for 14.0d):
+    # upstream should be 0.8 * (0.5)^2 = 0.20; downstream should be 0.8 * (0.5)^0.5 = 0.565685
+    val_up_7d = full_df.loc[12, "event_upstream_offshore_shutin"]
+    val_down_7d = full_df.loc[12, "event_downstream_refinery_damage"]
+    assert np.isclose(val_up_7d, 0.8 * 0.25, atol=1e-5)
+    assert np.isclose(val_down_7d, 0.8 * (0.5 ** 0.5), atol=1e-5)
+    assert val_up_7d < val_down_7d
+
+

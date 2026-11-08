@@ -332,16 +332,30 @@ def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
         issues = []
         for raw in raw_issues:
             title_text = raw.get("title", "")
-            if "Weekly Model Review" in title_text or "Weekly Model Performance" in title_text:
-                continue  # Skip automated weekly review report issues from self-review evaluation
+            body_text = raw.get("body", "") or ""
+            html_url = raw.get("url", f"https://github.com/{repo}/issues/{raw.get('number')}")
+            if (
+                "Weekly Model Review" in title_text
+                or "Weekly Model Performance" in title_text
+                or "[False Positive]" in title_text
+            ):
+                continue  # Skip automated weekly review report and false-positive review issues
+            # Skip cross-repository issues pointing outside the target repo
+            if repo.lower() not in html_url.lower() or (
+                "koshiirra/agentic-trading-robinhood" in body_text.lower()
+                and repo.lower() != "koshiirra/agentic-trading-robinhood"
+            ):
+                continue
             label_names = [l.get("name", "") if isinstance(l, dict) else str(l) for l in raw.get("labels", [])]
+            if "false-positive" in [lbl.lower() for lbl in label_names]:
+                continue
             issues.append({
                 "number": raw.get("number"),
                 "title": title_text,
-                "body": raw.get("body", "") or "",
+                "body": body_text,
                 "labels": label_names,
                 "created_at": raw.get("createdAt", ""),
-                "html_url": raw.get("url", f"https://github.com/{repo}/issues/{raw.get('number')}")
+                "html_url": html_url
             })
         logger.info(f"Fetched {len(issues)} open issue(s) via gh CLI.")
         return issues
@@ -367,16 +381,29 @@ def fetch_open_github_issues(repo: str = "KoshiirRa/midgley") -> list:
                 if "pull_request" in item:
                     continue  # skip PRs returned in issue list
                 title_text = item.get("title", "")
-                if "Weekly Model Review" in title_text or "Weekly Model Performance" in title_text:
+                body_text = item.get("body", "") or ""
+                html_url = item.get("html_url", f"https://github.com/{repo}/issues/{item.get('number')}")
+                if (
+                    "Weekly Model Review" in title_text
+                    or "Weekly Model Performance" in title_text
+                    or "[False Positive]" in title_text
+                ):
+                    continue
+                if repo.lower() not in html_url.lower() or (
+                    "koshiirra/agentic-trading-robinhood" in body_text.lower()
+                    and repo.lower() != "koshiirra/agentic-trading-robinhood"
+                ):
                     continue
                 label_names = [l.get("name", "") if isinstance(l, dict) else str(l) for l in item.get("labels", [])]
+                if "false-positive" in [lbl.lower() for lbl in label_names]:
+                    continue
                 issues.append({
                     "number": item.get("number"),
                     "title": title_text,
-                    "body": item.get("body", "") or "",
+                    "body": body_text,
                     "labels": label_names,
                     "created_at": item.get("created_at", ""),
-                    "html_url": item.get("html_url", f"https://github.com/{repo}/issues/{item.get('number')}")
+                    "html_url": html_url
                 })
             logger.info(f"Fetched {len(issues)} open issue(s) via GitHub REST API.")
             return issues
@@ -534,41 +561,77 @@ def _build_issue_eval_markdown(top_issue: dict, ranked: list, reasoning: str, re
 def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -> dict:
     """
     Deterministic domain-specific keyword scoring fallback to rank open issues by modeling impact.
+    Separates title weighting from body weighting with diminishing returns to avoid score saturation,
+    and excludes false-positive / cross-repo issues.
     """
     keywords_high = [
         "refinery", "noaa", "weather", "cushing", "chokepoint", "ovx", "baker hughes",
         "crack spread", "feature", "mae", "accuracy", "calibration", "decay", "ridge",
-        "xgboost", "model", "predict", "forecast", "outage", "supply", "rbob"
+        "xgboost", "model", "predict", "forecast", "outage", "supply", "rbob",
+        "ecm", "cointegration", "half-life", "shutin", "shut-in", "bsee"
     ]
     keywords_med = [
         "data", "api", "feed", "ingestion", "cache", "gasbuddy", "pipeline", "bot",
-        "logger", "scrap", "margin", "tax", "regional"
+        "logger", "scrap", "margin", "tax", "regional", "spatial"
     ]
 
     ranked = []
     for issue in issues:
-        text = (issue["title"] + " " + issue["body"]).lower()
+        title_str = str(issue.get("title", ""))
+        body_str = str(issue.get("body", "") or "")
+        html_url = str(issue.get("html_url", ""))
+        labels_lower = [str(lbl).lower() for lbl in issue.get("labels", [])]
+
+        # Skip false-positive review tickets and cross-repository issues
+        if "[false positive]" in title_str.lower() or "false-positive" in labels_lower:
+            continue
+        if "koshiirra/agentic-trading-robinhood" in html_url.lower() or "koshiirra/agentic-trading-robinhood" in body_str.lower():
+            continue
+
+        title_lower = title_str.lower()
+        body_lower = body_str.lower()
+        text = f"{title_lower} {body_lower}"
+
         if "apify" in text:
             ranked.append({
                 "number": issue["number"],
-                "title": issue["title"],
-                "html_url": issue["html_url"],
+                "title": title_str,
+                "html_url": html_url,
                 "impact_score": 0.0,
                 "category": "Barred Platform",
-                "body": issue["body"]
+                "body": body_str
             })
             continue
 
         score = 2.0
         category = "General Improvement"
 
-        high_hits = sum(1 for k in keywords_high if k in text)
-        med_hits = sum(1 for k in keywords_med if k in text)
+        title_high_hits = sum(1 for k in keywords_high if k in title_lower)
+        body_only_high_hits = sum(1 for k in keywords_high if k in body_lower and k not in title_lower)
+        title_med_hits = sum(1 for k in keywords_med if k in title_lower)
+        body_only_med_hits = sum(1 for k in keywords_med if k in body_lower and k not in title_lower)
 
-        score += high_hits * 1.5 + med_hits * 0.8
-        score = min(round(score, 1), 9.8)
+        # Title matches carry primary signal; body matches provide bounded context without saturating 9.8+
+        score += min(title_high_hits * 1.35, 4.2)
+        score += min(body_only_high_hits * 0.45, 2.2)
+        score += min(title_med_hits * 0.55, 1.1)
+        score += min(body_only_med_hits * 0.20, 0.8)
 
-        if any(k in text for k in ["refinery", "cushing", "noaa", "weather", "chokepoint"]):
+        # Core modeling / feature-engineering label bonus vs infrastructure / UI penalty
+        if any(lbl in labels_lower for lbl in ("modeling", "feature-engineering", "econometrics")):
+            score += 0.6
+        if title_lower.startswith("feat(features):") or title_lower.startswith("feat(models):"):
+            score += 0.4
+        elif any(k in title_lower for k in ["cloudflare", "worker", "queue", "hyperdrive", "socket", "ui", "readme", "typo"]):
+            score -= 0.7
+
+        if any(k in title_lower for k in ["ridge", "xgboost", "decay", "calibration", "mae", "accuracy", "ecm", "cointegration", "half-life"]):
+            category = "Model Calibration & Loss"
+        elif any(k in title_lower for k in ["refinery", "cushing", "noaa", "weather", "chokepoint", "shutin", "shut-in", "outage"]):
+            category = "Refining & Physical Feeds"
+        elif any(k in title_lower for k in ["feature", "ovx", "baker hughes", "crack spread"]):
+            category = "Feature Engineering"
+        elif any(k in text for k in ["refinery", "cushing", "noaa", "weather", "chokepoint"]):
             category = "Refining & Physical Feeds"
         elif any(k in text for k in ["ridge", "xgboost", "decay", "calibration", "mae", "accuracy"]):
             category = "Model Calibration & Loss"
@@ -577,41 +640,41 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
         elif any(k in text for k in ["data", "feed", "api", "cache", "gasbuddy"]):
             category = "Data & Feed Ingestion"
 
-        # Seasonal Plausibility Priority Boost (Issue #300)
+        # Seasonal Plausibility Priority Boost (Issue #300) — only when the issue title/topic itself targets that seasonal driver
         try:
             from src.scenario_engine import get_all_scenarios_with_plausibility
             active_scens = get_all_scenarios_with_plausibility(active_only=True).get("scenarios", [])
             for asc in active_scens:
                 cat_name = asc.get("category", "")
                 sid_name = asc.get("scenario_id", "")
-                if ("hurricane" in text or "tropical" in text) and ("hurricane" in sid_name or "meteorological" in cat_name):
-                    score += 1.8
+                if ("hurricane" in title_lower or "tropical" in title_lower or "shut-in" in title_lower or "shutin" in title_lower) and ("hurricane" in sid_name or "meteorological" in cat_name):
+                    score += 0.7
                     category = "Seasonal Priority: Tropical & Weather Shock"
                     break
-                elif ("freeze" in text or "polar vortex" in text or "winter" in text) and ("freeze" in sid_name or "vortex" in sid_name):
-                    score += 1.8
+                elif ("freeze" in title_lower or "polar vortex" in title_lower or "winter" in title_lower) and ("freeze" in sid_name or "vortex" in sid_name):
+                    score += 0.7
                     category = "Seasonal Priority: Winter Freeze & Grid Outage"
                     break
-                elif ("drought" in text or "low water" in text or "barge" in text or "river" in text) and ("water" in sid_name or "hydrological" in cat_name):
-                    score += 1.8
+                elif ("drought" in title_lower or "low water" in title_lower or "barge" in title_lower or "river" in title_lower) and ("water" in sid_name or "hydrological" in cat_name):
+                    score += 0.7
                     category = "Seasonal Priority: River Drought & Waterway Restriction"
                     break
-                elif ("rvp" in text or "carb" in text or "summer blend" in text or "transition" in text) and ("transition" in sid_name or "spec" in cat_name):
-                    score += 1.8
+                elif ("rvp" in title_lower or "carb" in title_lower or "summer blend" in title_lower or "transition" in title_lower) and ("transition" in sid_name or "spec" in cat_name):
+                    score += 0.7
                     category = "Seasonal Priority: Regulatory Fuel Spec Switchover"
                     break
         except Exception:
             pass
 
-        score = min(round(score, 1), 9.9)
+        score = max(0.5, min(round(score, 1), 9.9))
 
         ranked.append({
             "number": issue["number"],
-            "title": issue["title"],
-            "html_url": issue["html_url"],
+            "title": title_str,
+            "html_url": html_url,
             "impact_score": score,
             "category": category,
-            "body": issue["body"]
+            "body": body_str
         })
 
     ranked.sort(key=lambda x: x["impact_score"], reverse=True)
@@ -896,14 +959,22 @@ def format_feature_leakage_audit_markdown_section() -> str:
         tot = summary.get("total_features", 0)
         passes = summary.get("pass_count", 0)
         fails = summary.get("fail_count", 0)
+        warns = summary.get("warn_count", max(0, tot - passes - fails))
         pbo_pct = pbo.get("pbo_pct", 0.0)
+
+        if fails > 0:
+            pit_status = "⚠️ Leakage Detected"
+        elif warns > 0 or passes < tot:
+            pit_status = f"⚠️ Warnings Present ({warns} Warn)"
+        else:
+            pit_status = "✅ Clean Point-in-Time"
 
         section = f"""## 🔬 Quantitative Research Validation & Feature Leakage Audit (Issue #146)
 
 | Metric / Dimension | Value | Standard / Target | Status |
 | :--- | :---: | :---: | :---: |
 | **Total Features Audited** | **`{tot}`** | All Unified Matrix Columns | 🟢 Evaluated |
-| **Point-in-Time Temporal Pass Rate** | **`{passes}/{tot}`** | `100% Zero Leakage` | {"✅ Clean Point-in-Time" if fails == 0 else "⚠️ Leakage Detected"} |
+| **Point-in-Time Temporal Pass Rate** | **`{passes}/{tot}`** | `100% Zero Leakage` | {pit_status} |
 | **Probability of Backtest Overfitting (PBO)** | **`{pbo_pct:.1f}%`** | `< 50.0% CSCV Threshold` | {"✅ Robust (Low PBO)" if pbo_pct < 50 else "⚠️ Overfitting Risk"} |
 | **Qualitative Factors Audited** | **`{summary.get('qualitative_factor_count', 0)}`** | Multi-Horizon $t_{{1/2}}$ Fit | 🟢 Monitored |
 """
@@ -1120,7 +1191,7 @@ def format_scenario_plausibility_markdown_section() -> str:
                     base_p = base_res.get("price", 3.184)
                     dol_imp = round(base_p * custom_pct, 3)
                     sim_p = round(base_p + dol_imp, 3)
-                    lines.append(f"| **{ps.get('name')}** | `{target_loc}` | `${base_p:.3f}` | **`${sim_p:.3f}`** | `+{dol_imp:+.3f}` | `+{custom_pct*100:.1f}%` | 🟣 Prospective Forward Synthesis |")
+                    lines.append(f"| **{ps.get('name')}** | `{target_loc}` | `${base_p:.3f}` | **`${sim_p:.3f}`** | `{dol_imp:+.3f}` | `{custom_pct*100:+.1f}%` | 🟣 Prospective Forward Synthesis |")
                     stress_count += 1
                 else:
                     req = SimulateRequest(scenario_id=sid, locale=target_loc, target_date=today_str)
@@ -1152,6 +1223,8 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
     """
     Loads prediction and evaluation records from unified database (Turso libSQL / SQLite),
     with graceful fallback to prediction_history.csv when offline or in test environments.
+    Enriches database records with current_base_price, predicted_direction, and evaluated actuals
+    from prediction_history.csv when available.
     """
     # 1. Attempt database query
     try:
@@ -1170,6 +1243,7 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
             f.ci_upper_95 AS prediction_upper_95ci,
             f.llm_price_pressure,
             f.llm_supply_disruption,
+            f.point_in_time_features,
             f.run_type,
             e.actual_price AS actual_5d_price,
             e.absolute_error AS error_dollars,
@@ -1189,8 +1263,81 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
                     df[col] = pd.to_numeric(df[col], errors='coerce')
             if 'forecast_horizon_days' in df.columns:
                 df['forecast_horizon_days'] = pd.to_numeric(df['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
-            if 'current_base_price' not in df.columns and 'predicted_5d_price' in df.columns:
-                df['current_base_price'] = df['predicted_5d_price']
+
+            # Extract base_price from point_in_time_features JSON if stored in DB
+            if 'current_base_price' not in df.columns and 'point_in_time_features' in df.columns:
+                def _extract_pit_base(val):
+                    if not val or pd.isna(val):
+                        return np.nan
+                    try:
+                        parsed = json.loads(val) if isinstance(val, str) else val
+                        if isinstance(parsed, dict):
+                            bp = parsed.get('current_base_price', parsed.get('base_price'))
+                            return float(bp) if bp is not None else np.nan
+                    except Exception:
+                        pass
+                    return np.nan
+                df['current_base_price'] = df['point_in_time_features'].apply(_extract_pit_base)
+
+            # Enrich from CSV ledger if present (supplies current_base_price, predicted_direction, and CSV-evaluated rows)
+            if csv_path and os.path.exists(csv_path):
+                try:
+                    from src.prediction_logger import read_prediction_history
+                    csv_df = read_prediction_history(csv_path)
+                    if not csv_df.empty and 'forecast_id' in csv_df.columns and 'forecast_id' in df.columns:
+                        csv_dedup = csv_df.dropna(subset=['forecast_id']).drop_duplicates(subset=['forecast_id'], keep='last')
+                        enrich_cols = [
+                            c for c in [
+                                'current_base_price', 'predicted_direction', 'quant_baseline_5d_price',
+                                'is_retroactive_backtest', 'actual_5d_price', 'error_dollars',
+                                'directional_hit', 'within_95ci_hit', 'data_source_provenance'
+                            ]
+                            if c in csv_dedup.columns
+                        ]
+                        if enrich_cols:
+                            csv_map = csv_dedup.set_index('forecast_id')[enrich_cols]
+                            for col in enrich_cols:
+                                mapped_s = df['forecast_id'].map(csv_map[col])
+                                if col not in df.columns:
+                                    df[col] = mapped_s
+                                else:
+                                    df[col] = df[col].combine_first(mapped_s)
+                    # Also fallback match on (region, forecast_target_date, forecast_horizon_days) for current_base_price if forecast_id differed
+                    if 'current_base_price' in df.columns and df['current_base_price'].isna().any() and not csv_df.empty:
+                        if all(k in csv_df.columns for k in ['region', 'forecast_target_date', 'current_base_price']):
+                            comp_dedup = csv_df.dropna(subset=['region', 'forecast_target_date', 'current_base_price']).drop_duplicates(
+                                subset=['region', 'forecast_target_date'], keep='last'
+                            )
+                            comp_map = comp_dedup.set_index(['region', 'forecast_target_date'])['current_base_price']
+                            idx_tuples = list(zip(df['region'], df['forecast_target_date']))
+                            fallback_bp = pd.Series([comp_map.get(t, np.nan) for t in idx_tuples], index=df.index)
+                            df['current_base_price'] = df['current_base_price'].combine_first(fallback_bp)
+                except Exception as csv_err:
+                    logger.debug(f"CSV enrichment notice in load_prediction_records: {csv_err}")
+
+            # Purge corrupted regional evaluations (e.g. legacy_ledger $3.061 National prices in CA/DE or Test_Region)
+            if 'region' in df.columns:
+                df = df[~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)].copy()
+            if 'region' in df.columns and 'actual_5d_price' in df.columns:
+                from src.prediction_logger import validate_price_plausibility
+                invalid_eval_mask = df.apply(
+                    lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
+                        r.get('actual_5d_price'),
+                        str(r.get('region', 'National')),
+                        is_retail=(str(r.get('region', 'National')) != 'National')
+                    ),
+                    axis=1
+                )
+                if invalid_eval_mask.any():
+                    for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
+                        if c in df.columns:
+                            df.loc[invalid_eval_mask, c] = np.nan
+
+            if 'current_base_price' not in df.columns:
+                df['current_base_price'] = df['predicted_5d_price'] if 'predicted_5d_price' in df.columns else 0.0
+            elif 'predicted_5d_price' in df.columns:
+                df['current_base_price'] = pd.to_numeric(df['current_base_price'], errors='coerce').fillna(df['predicted_5d_price'])
+
             logger.info(f"Loaded {len(df)} prediction records directly from unified database.")
             return df
     except Exception as e:
@@ -1213,6 +1360,14 @@ def generate_weekly_markdown_report() -> str:
     today_str = now_utc.strftime("%Y-%m-%d")
     timestamp_utc = now_utc.strftime("%Y-%m-%d %H:%M UTC")
     branch = get_current_git_branch()
+
+    # Ensure matured actuals are backfilled in CSV & DB before loading weekly audit records (when not in TESTING)
+    if os.environ.get("TESTING") != "1":
+        try:
+            from src.prediction_logger import backfill_actual_prices_and_evaluate
+            backfill_actual_prices_and_evaluate()
+        except Exception as bf_err:
+            logger.debug(f"Pre-report backfill notice: {bf_err}")
     
     df = load_prediction_records(HISTORY_CSV)
     if df.empty:
@@ -1220,12 +1375,30 @@ def generate_weekly_markdown_report() -> str:
         
     df = df.dropna(subset=['region']).copy()
     eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
+    # Exclude retroactive backtest rows from active performance summary when prospective rows exist (AGENTS.md Data Integrity)
+    if not eval_df.empty:
+        prospective_mask = pd.Series(True, index=eval_df.index)
+        if 'run_type' in eval_df.columns:
+            prospective_mask &= ~eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)
+        if 'is_retroactive_backtest' in eval_df.columns:
+            prospective_mask &= (eval_df['is_retroactive_backtest'].fillna(False).astype(bool) == False)
+        if prospective_mask.any():
+            eval_df = eval_df[prospective_mask].copy()
     
     nat_sub = eval_df[eval_df['region'] == 'National'] if not eval_df.empty else pd.DataFrame()
     tulsa_sub = eval_df[eval_df['region'] == 'Tulsa_OK'] if not eval_df.empty else pd.DataFrame()
     
     nat_mae = round(float(nat_sub['error_dollars'].mean()), 4) if not nat_sub.empty else 0.1069
-    tulsa_mae = round(float(tulsa_sub['error_dollars'].mean()), 4) if not tulsa_sub.empty else 0.5611
+    tulsa_mae = round(float(tulsa_sub['error_dollars'].mean()), 4) if not tulsa_sub.empty else None
+
+    # Evaluate Model Degradation & Baseline Underperformance Alerts upfront so top table & recommendations align
+    degradation_res = evaluate_model_degradation_alerts(window_days=30)
+    degradation_section_md = format_degradation_markdown_section(degradation_res)
+    degraded_map = {
+        r.get("region"): r
+        for r in degradation_res.get("degraded_regions", [])
+        if isinstance(r, dict) and r.get("region")
+    }
 
     # Dynamic Rolling Accuracy Summary Table across ALL Regions
     summary_rows = ""
@@ -1241,7 +1414,13 @@ def generate_weekly_markdown_report() -> str:
             rmse = round(float(np.sqrt((reg_eval['error_dollars'] ** 2).mean())), 4)
             hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
             n_days = len(reg_eval)
-            status_str = "🟢 Optimal" if mae < (0.25 if reg == "National" else 0.70) else "⚠️ Calibrating"
+            if reg in degraded_map:
+                uplift_pct = degraded_map[reg].get("model_uplift_mae_pct", 0.0)
+                status_str = f"🚨 Degraded ({uplift_pct:+.1f}% vs Naive)"
+            elif mae < (0.25 if reg == "National" else 0.70):
+                status_str = "🟢 Optimal"
+            else:
+                status_str = "⚠️ Calibrating"
             summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | {n_days} | **`${mae:.4f}/gal`** | **`{hit_rate:.2f}%`** | {status_str} |\n"
             regions_summary[reg] = {
                 "mae": mae,
@@ -1254,26 +1433,49 @@ def generate_weekly_markdown_report() -> str:
             n_total = len(df[df['region'] == reg])
             summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | 0 / {n_total} (Pending) | *Pending Horizon* | *Pending Horizon* | ⏳ New Region |\n"
 
-    # Latest forecast predictions per region
-    latest_df = df.groupby('region', as_index=False).last()
+    # Latest forecast predictions per region (prefer 5-day horizon prospective forecasts)
+    df_for_latest = df
+    if 'forecast_horizon_days' in df.columns and (df['forecast_horizon_days'] == 5).any():
+        df_for_latest = df[df['forecast_horizon_days'] == 5]
+    latest_df = df_for_latest.groupby('region', as_index=False).last()
     latest_rows = ""
     for _, row in latest_df.iterrows():
         region = row.get('region', 'N/A')
         curr_p = float(row.get('current_base_price', row.get('current_price', 0.0)))
         fore_p = float(row.get('predicted_5d_price', 0.0))
         target_d = row.get('forecast_target_date', 'N/A')
-        dir_str = "DOWN 📉" if fore_p < curr_p else "UP 📈"
+        if fore_p < curr_p - 1e-4:
+            dir_str = "DOWN 📉"
+        elif fore_p > curr_p + 1e-4:
+            dir_str = "UP 📈"
+        else:
+            dir_str = "FLAT ➡️"
         latest_rows += f"| **{region}** | `${curr_p:.3f}/gal` | **`${fore_p:.3f}/gal`** | {dir_str} | `{target_d}` |\n"
 
-    # Automated Recommendations
+    # Automated Recommendations (aligned with degradation check and actual regional sample availability)
     recommendations = []
-    if nat_mae < 0.12:
-        recommendations.append("✅ **National Model Calibration:** Ridge $\\alpha=10.0$ parameter is performing in optimal range ($MAE < \\$0.12/gal$). Maintain baseline feature weights.")
+    if "National" in degraded_map:
+        deg_nat = degraded_map["National"]
+        recommendations.append(
+            f"🚨 **National Model Calibration Alert:** Rolling 30-day Model MAE (`${deg_nat['model_mae']:.4f}/gal`) is underperforming "
+            f"the naive persistence baseline (`${deg_nat['naive_mae']:.4f}/gal`, uplift `{deg_nat['model_uplift_mae_pct']:+.2f}%`). "
+            "Prioritize bifurcating physical supply shock decay half-lives (Issue #631) and retuning Ridge regularization $\\alpha$."
+        )
+    elif nat_mae < 0.12:
+        recommendations.append("✅ **National Model Calibration:** Ridge $\\alpha=10.0$ parameter is performing in optimal range ($MAE < \\$0.12/gal$) and outperforming persistence. Maintain baseline feature weights.")
     else:
-        recommendations.append("⚠️ **National Model Calibration:** Consider retuning Ridge regularization parameter $\\alpha$ or increasing LLM news decay half-life.")
+        recommendations.append("⚠️ **National Model Calibration:** Consider retuning Ridge regularization parameter $\\alpha$ or calibrating LLM news decay half-lives.")
         
-    if tulsa_mae < 0.60:
-        recommendations.append("✅ **Tulsa Regional Calibration:** Cushing WTI Crack Spread proxy is successfully anchoring retail pump prices within expected rack margin boundaries.")
+    if tulsa_sub.empty or tulsa_mae is None:
+        recommendations.append("⏳ **Tulsa Regional Calibration:** Pending mature EIA PADD 2 / Oklahoma weekly retail ground-truth evaluation observations.")
+    elif "Tulsa_OK" in degraded_map:
+        deg_tul = degraded_map["Tulsa_OK"]
+        recommendations.append(
+            f"🚨 **Tulsa Regional Calibration Alert:** Rolling 30-day Model MAE (`${deg_tul['model_mae']:.4f}/gal`) is underperforming "
+            f"naive persistence (`${deg_tul['naive_mae']:.4f}/gal`, uplift `{deg_tul['model_uplift_mae_pct']:+.2f}%`). Inspect Cushing WTI Crack Spread and local refinery turnaround schedules."
+        )
+    elif tulsa_mae < 0.60:
+        recommendations.append(f"✅ **Tulsa Regional Calibration:** Cushing WTI Crack Spread proxy is anchoring retail pump prices within expected rack margin boundaries (`MAE = ${tulsa_mae:.4f}/gal`).")
     else:
         recommendations.append("⚠️ **Tulsa Regional Calibration:** Inspect local HF Sinclair refinery maintenance schedules for unmodeled regional supply bottlenecks.")
 
@@ -1284,7 +1486,7 @@ def generate_weekly_markdown_report() -> str:
     # Open GitHub Issues Self-Review & Modeling Evaluation
     issues = fetch_open_github_issues()
     tagged_records = audit_and_tag_open_issues(issues=issues)
-    issue_eval = evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=tulsa_mae)
+    issue_eval = evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=(tulsa_mae if tulsa_mae is not None else 0.5611))
     issue_analysis_md = issue_eval.get("summary_markdown", "")
 
     tagging_summary_md = "✅ All open repository issues are fully tagged with standard domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`)."
@@ -1319,10 +1521,6 @@ def generate_weekly_markdown_report() -> str:
 
     # Fetch MLOps Observability Section
     mlops_obs_md = format_mlops_observability_markdown_section()
-
-    # Evaluate Model Degradation & Baseline Underperformance Alerts
-    degradation_res = evaluate_model_degradation_alerts(window_days=30)
-    degradation_section_md = format_degradation_markdown_section(degradation_res)
 
     # Refresh Historical Benchmarks & Fallback Datasets (Issue #297)
     benchmark_summary_md = "✅ *All historical benchmarks up-to-date.*"

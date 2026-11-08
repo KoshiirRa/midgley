@@ -118,6 +118,33 @@ FRED_TO_EIA_V2_SERIES: Dict[str, str] = {
     "GASDESWPR": "GASDESWPR",
 }
 
+# Mapping of Midgley internal series / EIA v2 codes to official EIA DNAV LeafHandler series codes
+# and canonical St. Louis FRED CSV graph series IDs when EIA_API_KEY is not configured.
+EIA_DNAV_SERIES_ALIASES: Dict[str, str] = {
+    "EMM_EPMR_PTE_Y03CH_DPG": "EMM_EPMR_PTE_YORD_DPG",   # Chicago EIA DNAV code is YORD
+    "EMM_EPMR_PTE_Y35DE_DPG": "EMM_EPMR_PTE_YDEN_DPG",   # Denver EIA DNAV code is YDEN
+    "EMM_EPMR_PTE_Y01BO_DPG": "EMM_EPMR_PTE_YBOS_DPG",   # Boston EIA DNAV code is YBOS
+    "EMM_EPMR_PTE_R50XCA_DPG": "EMM_EPMR_PTE_R5XCA_DPG", # PADD 5 Excl CA DNAV code is R5XCA
+    "EMD_EPD2D_PTE_R50XCA_DPG": "EMD_EPD2D_PTE_R5XCA_DPG",
+}
+
+CANONICAL_FRED_CSV_SERIES: Dict[str, str] = {
+    "GASREGW": "GASREGW",
+    "GASREGWMW": "GASREGMWW",
+    "GASREGWGC": "GASREGGCW",
+    "GASREGWRM": "GASREGRMW",
+    "GASREGW01A": "GASREGECW",
+    "GASREGW01B": "GASREGECW",
+    "GASREGW01C": "GASREGECW",
+    "GASDESW": "GASDESW",
+    "GASDESWMW": "GASDESMWW",
+    "GASDESWGC": "GASDESGCW",
+    "GASDESWRM": "GASDESRMW",
+    "GASDESW01A": "GASDESECW",
+    "GASDESW01B": "GASDESECW",
+    "GASDESW01C": "GASDESECW",
+}
+
 # Mapping of Midgley regional metro identifier to primary & fallback EIA / FRED series
 # Strictly NO cross-geography national fallbacks for regional targets (Issue #608)
 REGION_TO_EIA_SERIES: Dict[str, List[Tuple[str, str]]] = {
@@ -321,7 +348,7 @@ class EIARetailFeed:
             pass
 
         # 1. Attempt official EIA API v2 client first (Section 4.1)
-        eia_v2_id = FRED_TO_EIA_V2_SERIES.get(series_id, series_id if series_id.startswith("EMM_") else None)
+        eia_v2_id = FRED_TO_EIA_V2_SERIES.get(series_id, series_id if series_id.startswith(("EMM_", "EMD_")) else None)
         if eia_v2_id:
             try:
                 from src.eia_api_client import get_eia_client
@@ -332,18 +359,47 @@ class EIARetailFeed:
             except Exception as e:
                 logger.debug(f"Direct EIA API v2 query for {eia_v2_id} failed: {e}")
 
-        # 2. Query FRED CSV endpoint if EIA v2 is unavailable or unconfigured
+        # 2. Query official U.S. EIA DNAV public historical series page (zero-API-key required)
+        if not date_map and eia_v2_id and eia_v2_id.startswith(("EMM_", "EMD_")):
+            import re
+            dnav_candidates = [EIA_DNAV_SERIES_ALIASES.get(eia_v2_id, eia_v2_id)]
+            if eia_v2_id not in dnav_candidates:
+                dnav_candidates.append(eia_v2_id)
+            for dnav_sid in dnav_candidates:
+                try:
+                    dnav_url = f"https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s={dnav_sid}&f=W"
+                    req = urllib.request.Request(dnav_url, headers={"User-Agent": "Midgley-EIARetailFeed/1.0"})
+                    with urllib.request.urlopen(req, timeout=8) as resp:
+                        if resp.status == 200:
+                            html = resp.read().decode("utf-8", errors="ignore")
+                            for row_match in re.finditer(r"<td class=['\"]B6['\"]>[^<]*?(\d{4})-[A-Za-z]{3}</td>(.*?)</tr>", html, re.S):
+                                yr = row_match.group(1)
+                                cells = row_match.group(2)
+                                for m in re.finditer(r"<td class=['\"]B5['\"]>\s*(\d{2})/(\d{2})[^<]*</td>\s*<td class=['\"]B3['\"]>\s*([0-9.]+)[^<]*</td>", cells):
+                                    mm, dd, val_s = m.group(1), m.group(2), m.group(3)
+                                    try:
+                                        val = float(val_s)
+                                        if val > 0:
+                                            date_map[f"{yr}-{mm}-{dd}"] = round(val, 3)
+                                    except ValueError:
+                                        continue
+                    if date_map:
+                        break
+                except Exception as e:
+                    logger.debug(f"EIA DNAV LeafHandler fetch failed for {dnav_sid} ({e}), trying fallback.")
+
+        # 3. Query FRED CSV endpoint if EIA v2 / DNAV are unavailable
         if not date_map:
-            fred_id = series_id if not series_id.startswith("EMM_") else None
+            fred_id = series_id if not series_id.startswith(("EMM_", "EMD_")) else None
             if not fred_id:
-                # Find reverse mapping
                 for k, v in FRED_TO_EIA_V2_SERIES.items():
-                    if v == series_id and not k.startswith("EMM_"):
+                    if v == series_id and not k.startswith(("EMM_", "EMD_")):
                         fred_id = k
                         break
             if fred_id:
+                fred_query_id = CANONICAL_FRED_CSV_SERIES.get(fred_id, fred_id)
                 try:
-                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={fred_id}"
+                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={fred_query_id}"
                     req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIARetailFeed/1.0"})
                     with urllib.request.urlopen(req, timeout=4) as resp:
                         if resp.status == 200:
@@ -359,22 +415,72 @@ class EIARetailFeed:
                                     except ValueError:
                                         continue
                 except Exception as e:
-                    logger.debug(f"FRED fetch failed for {fred_id} ({e}), trying fallback.")
+                    logger.debug(f"FRED fetch failed for {fred_query_id} ({e}), trying fallback.")
 
-        # Fallback to stored vintages
+        # 4. Fallback to VintageStore (data_vintages table where feed='eia_retail')
+        if not date_map:
+            try:
+                from src.db.client import get_db
+                db = get_db()
+                target_entities = [series_id]
+                if eia_v2_id and eia_v2_id not in target_entities:
+                    target_entities.append(eia_v2_id)
+                for ent in target_entities:
+                    v_rows = db.execute(
+                        "SELECT obs_date, values_json FROM data_vintages WHERE feed = 'eia_retail' AND entity = ? AND quality IN ('LIVE', 'CACHED', 'BENCHMARK') ORDER BY obs_date ASC, as_of ASC",
+                        (ent,)
+                    )
+                    for r in (v_rows or []):
+                        od = str(r.get("obs_date", ""))[:10]
+                        vj = r.get("values_json")
+                        if od and vj:
+                            try:
+                                parsed_v = json.loads(vj) if isinstance(vj, str) else vj
+                                p_val = float(parsed_v.get("price", 0.0)) if isinstance(parsed_v, dict) else 0.0
+                                if p_val > 0:
+                                    date_map[od] = round(p_val, 3)
+                            except Exception:
+                                continue
+            except Exception as e:
+                logger.debug(f"VintageStore fallback notice for {series_id}: {e}")
+
+        # 5. Fallback to stored JSON vintages (data/eia_retail_vintages.json)
         if not date_map:
             vintages = self.load_eia_retail_vintages()
+            # Map series_id back to regions that use it as primary series
+            matching_regions = [
+                reg for reg, s_list in REGION_TO_EIA_SERIES.items()
+                if s_list and (s_list[0][0] == series_id or FRED_TO_EIA_V2_SERIES.get(s_list[0][0]) == series_id)
+            ]
             for rec in vintages:
-                if rec.get("series_id") == series_id and "history" in rec:
-                    date_map.update(rec["history"])
+                if not isinstance(rec, dict):
+                    continue
+                if rec.get("series_id") == series_id and isinstance(rec.get("history"), dict):
+                    for d_k, p_v in rec["history"].items():
+                        if isinstance(p_v, (int, float)) and not isinstance(p_v, bool) and float(p_v) > 0:
+                            date_map[str(d_k)[:10]] = round(float(p_v), 3)
+                # Also parse snapshot format {"valid_date": "YYYY-MM-DD", "regional_retail_prices": {...}}
+                v_date = str(rec.get("valid_date", rec.get("timestamp", "")))[:10]
+                reg_prices = rec.get("regional_retail_prices")
+                if v_date and len(v_date) == 10 and isinstance(reg_prices, dict):
+                    for reg_k in matching_regions:
+                        raw_p = reg_prices.get(reg_k)
+                        if isinstance(raw_p, (int, float)) and not isinstance(raw_p, bool):
+                            f_p = float(raw_p)
+                            # Reject synthetic fallback constants stored in offline snapshots
+                            fallback_const = FALLBACK_RETAIL_PRICES.get(series_id)
+                            if f_p > 0 and (fallback_const is None or abs(f_p - fallback_const) > 1e-4):
+                                date_map[v_date] = round(f_p, 3)
+                                break
 
         self._series_cache[series_id] = date_map
 
-        try:
-            from src.lookup_cache import global_cache
-            global_cache.set(cache_key, date_map, ttl_seconds=86400)
-        except Exception:
-            pass
+        if date_map:
+            try:
+                from src.lookup_cache import global_cache
+                global_cache.set(cache_key, date_map, ttl_seconds=86400)
+            except Exception:
+                pass
 
         return date_map
 

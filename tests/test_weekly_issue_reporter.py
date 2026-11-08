@@ -210,3 +210,90 @@ def test_load_prediction_records_db_and_csv(tmp_path):
         assert len(df_csv) == 1
         assert df_csv.iloc[0]["forecast_id"] == "f456"
 
+
+def test_load_prediction_records_enriches_current_base_price_from_csv(tmp_path):
+    from src.weekly_issue_reporter import load_prediction_records
+    import pandas as pd
+
+    csv_file = tmp_path / "enrich_history.csv"
+    pd.DataFrame([{
+        "forecast_id": "f_nat_5d",
+        "region": "National",
+        "forecast_target_date": "2026-11-05",
+        "forecast_horizon_days": 5,
+        "current_base_price": 2.912,
+        "predicted_5d_price": 2.946,
+        "predicted_direction": "UP",
+        "is_retroactive_backtest": False
+    }]).to_csv(csv_file, index=False)
+
+    mock_db = MagicMock()
+    mock_db.execute.return_value = [{
+        "forecast_id": "f_nat_5d",
+        "region": "National",
+        "model_version": "v1.6-Ipatieff",
+        "log_timestamp": "2026-10-31",
+        "forecast_target_date": "2026-11-05",
+        "forecast_horizon_days": 5,
+        "predicted_5d_price": 2.946,
+        "prediction_lower_95ci": 2.81,
+        "prediction_upper_95ci": 3.08,
+        "llm_price_pressure": 0.02,
+        "llm_supply_disruption": 0.01,
+        "point_in_time_features": None,
+        "run_type": "LIVE_PROSPECTIVE",
+        "actual_5d_price": None,
+        "error_dollars": None,
+        "directional_hit": None,
+        "within_95ci_hit": None
+    }]
+    with patch("src.db.client.get_db", return_value=mock_db):
+        df = load_prediction_records(str(csv_file))
+        assert len(df) == 1
+        assert abs(float(df.iloc[0]["current_base_price"]) - 2.912) < 1e-6
+        assert abs(float(df.iloc[0]["predicted_5d_price"]) - 2.946) < 1e-6
+
+
+def test_heuristic_filters_false_positive_and_cross_repo_and_avoids_saturation():
+    issues = [
+        {
+            "number": 631,
+            "title": "feat(features): Bifurcate physical supply shock decay half-lives into upstream shut-ins vs structural refinery damage",
+            "body": "Split supply_disruption half-life into upstream_offshore_shutin (3.5d) and downstream_refinery_damage (14.0d).",
+            "labels": ["modeling", "feature-engineering"],
+            "created_at": "2026-10-10T00:00:00Z",
+            "html_url": "https://github.com/KoshiirRa/midgley/issues/631"
+        },
+        {
+            "number": 640,
+            "title": "feat(ingestion): Integrate Cloudflare Browser Run for edge headless Chromium scraping",
+            "body": "Scrape dynamic energy news articles and refinery outage notifications with weather and crack spread context.",
+            "labels": ["data-ingestion", "infrastructure"],
+            "created_at": "2026-10-12T00:00:00Z",
+            "html_url": "https://github.com/KoshiirRa/midgley/issues/640"
+        },
+        {
+            "number": 698,
+            "title": "[False Positive] Incorrectly matched non-energy headline (#698)",
+            "body": "Flagged false positive news item.",
+            "labels": ["false-positive"],
+            "created_at": "2026-10-30T00:00:00Z",
+            "html_url": "https://github.com/KoshiirRa/midgley/issues/698"
+        },
+        {
+            "number": 699,
+            "title": "feat(options): Add options chain Greek surface solver",
+            "body": "Tracked in KoshiirRa/agentic-trading-robinhood.",
+            "labels": ["enhancement"],
+            "created_at": "2026-10-30T00:00:00Z",
+            "html_url": "https://github.com/KoshiirRa/agentic-trading-robinhood/issues/699"
+        }
+    ]
+    res = _evaluate_issues_heuristic(issues, nat_mae=0.0569, tulsa_mae=0.5611)
+    ranked_nums = [r["number"] for r in res["ranking"]]
+    assert 698 not in ranked_nums
+    assert 699 not in ranked_nums
+    assert res["top_issue"]["number"] == 631
+    assert res["ranking"][0]["impact_score"] > res["ranking"][1]["impact_score"]
+
+
