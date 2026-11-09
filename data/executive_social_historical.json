@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-08 03:32:14",
-  "records_count": 28,
+  "last_refreshed_utc": "2026-11-09 02:06:53",
+  "records_count": 38,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -234,52 +234,152 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-08 03:17:52",
-      "platform": "Google News RSS",
-      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-08 03:17:52",
+      "date": "2026-11-09 01:44:44",
       "platform": "Google News RSS",
       "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-08 03:17:52",
+      "date": "2026-11-09 01:44:44",
       "platform": "Google News RSS",
-      "post_text": "OH CANADA! Love, Hate or Indifferent: Why Trump Is the Best Thing That Ever Happened to Canada and Its Oil and Gas Industry - EnergyNow",
+      "post_text": "A U.S. Canada Trade Deal May Be Close - The Institute for Energy Research",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-08 03:17:52",
+      "date": "2026-11-09 01:44:44",
       "platform": "Google News RSS",
-      "post_text": "Democratic midterm wins cloud outlook for OPEC, Nigeria\u2019s oil income - Business News Nigeria",
+      "post_text": "Trump Tariff Reversal Could Cut Costs for US Energy Firms But Will Likely Leave Broader Flows Unchanged - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-08 03:17:52",
+      "date": "2026-11-09 01:44:44",
       "platform": "Google News RSS",
       "post_text": "FEATURE STORY: Trump Drains America\u2019s Emergency Oil Reserve as Canada Supplies 63% of US Crude Imports - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 01:44:44",
+      "platform": "Google News RSS",
+      "post_text": "Democratic midterm wins cloud outlook for OPEC, Nigeria\u2019s oil income - Business News Nigeria",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "A U.S. Canada Trade Deal May Be Close - The Institute for Energy Research",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "FEATURE STORY: Trump Drains America\u2019s Emergency Oil Reserve as Canada Supplies 63% of US Crude Imports - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "Democratic midterm wins cloud outlook for OPEC, Nigeria\u2019s oil income - Business News Nigeria",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "A U.S. Canada Trade Deal May Be Close - The Institute for Energy Research",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "FEATURE STORY: Trump Drains America\u2019s Emergency Oil Reserve as Canada Supplies 63% of US Crude Imports - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-09 02:01:27",
+      "platform": "Google News RSS",
+      "post_text": "Democratic midterm wins cloud outlook for OPEC, Nigeria\u2019s oil income - Business News Nigeria",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     }

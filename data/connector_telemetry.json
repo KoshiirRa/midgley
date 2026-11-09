@@ -1,228 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-08 23:29:28",
+  "last_updated": "2026-11-09 02:07:51",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 01:49:22",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 27.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-10-01 02:01:26",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 251.15,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-01 02:32:27",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 250.73,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-01 02:53:31",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 266.56,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-01 03:13:04",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 253.31,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-01 03:24:10",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 218.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 328 docs, 203 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-01 04:53:17",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 5023.86,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:53:17",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 49.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:53:17",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 119.87,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:53:56",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5023.06,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:53:56",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 30.61,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:53:56",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 63.19,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:54:01",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5025.74,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:54:01",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 26.36,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:54:01",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 45.53,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:54:07",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5024.85,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:54:07",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 22.28,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 04:54:07",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 63.58,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 12:42:55",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 212.6,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-01 12:44:09",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 291.14,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 328 docs, 203 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-01 14:44:45",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5025.8,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 14:44:45",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 23.07,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-01 14:44:46",
       "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
@@ -10002,6 +9782,226 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-09 01:44:44",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 245.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-09 01:53:30",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 49.72,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 01:53:34",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 156.2,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 01:54:00",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 58.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 01:54:19",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 155.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 01:54:58",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 54.01,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 01:55:22",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 51.55,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:01:17",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 59.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:01:27",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 275.8,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-09 02:02:17",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 79.21,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:02:36",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 165.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:03:14",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 54.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:03:59",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 56.49,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:04:31",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 58.16,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:05:13",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 65.81,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:05:39",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 83.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:06:09",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 32.53,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:06:49",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 60.92,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:07:11",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 53.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-09 02:07:32",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 1491.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 375 docs, 276 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-09 02:07:48",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 2640.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge c849db02-abe3-466a-96f5-06ff59553130): direction=bullish, confidence=0.7373, scored=True"
+    },
+    {
+      "timestamp": "2026-11-09 02:07:51",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 3249.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge e189173f-510a-46fa-905f-9b4d50b353a7): direction=bullish, confidence=0.6625, scored=True"
     }
   ]
 }
