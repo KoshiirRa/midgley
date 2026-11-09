@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-09 05:20:31",
+  "last_updated": "2026-11-09 15:35:04",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 14:44:56",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5025.08,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-01 14:44:56",
       "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
@@ -10002,6 +9992,16 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge e189173f-510a-46fa-905f-9b4d50b353a7 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-09 15:35:04",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 288.28,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
     }
   ]
 }
