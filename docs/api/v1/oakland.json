@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-09T05:20:25.210758",
+  "timestamp": "2026-11-10T00:01:36.039337",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-09T05:20:05Z"
+      "timestamp": "2026-11-10T00:01:20Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -41,7 +41,7 @@
     "historical_mae_dollars": 0.2655,
     "evaluation_sample_size": 31,
     "day_1_price": 5.731,
-    "day_2_price": 5.71,
+    "day_2_price": 5.717,
     "day_3_price": 5.695,
     "day_4_price": 5.674,
     "day_5_price": 5.676,

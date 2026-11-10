@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-09T05:20:24.985536",
+  "timestamp": "2026-11-10T00:01:35.860690",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-09T05:20:05Z"
+      "timestamp": "2026-11-10T00:01:19Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -41,7 +41,7 @@
     "historical_mae_dollars": 0.2666,
     "evaluation_sample_size": 31,
     "day_1_price": 3.555,
-    "day_2_price": 3.52,
+    "day_2_price": 3.527,
     "day_3_price": 3.493,
     "day_4_price": 3.467,
     "day_5_price": 3.443,

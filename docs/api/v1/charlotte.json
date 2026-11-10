@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-09T05:20:25.965398",
+  "timestamp": "2026-11-10T00:01:36.643779",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-09T05:20:05Z"
+      "timestamp": "2026-11-10T00:01:20Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -41,7 +41,7 @@
     "historical_mae_dollars": 0.287,
     "evaluation_sample_size": 31,
     "day_1_price": 3.321,
-    "day_2_price": 3.315,
+    "day_2_price": 3.36,
     "day_3_price": 3.387,
     "day_4_price": 3.34,
     "day_5_price": 3.476,
