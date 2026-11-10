@@ -2488,14 +2488,13 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5": {
-    "timestamp": "2026-10-26T12:32:49.137429+00:00",
+    "timestamp": "2026-11-10T22:58:52.508593+00:00",
     "status": "FALLBACK_PENDING",
-    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
     "headline": "States Sue Over Latest Trump Tariff Attempt - Energy News, Top Headlines, Commentaries, Features & Events - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMif0FVX3lxTFBuZFZGNjRycXRRS3BFX1FUMi1VTk5icTlUYlJzWE1JS01NT2NCZl9aajJ6VmtZcElZcGQtekx5SmxkMFA0a0hUamlIUzl4UDhDMGJSTk1JaXhWa19GSnI4RFc1Ull4ZUtkRTV5VUJNRGMwaG90a3BFRFZjVnE1LVE?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPSWJqMzFzOU9acEFZVjg4U0p2Q00zRERlbEZBeUFRS01jNE5YOURSWEVsWG1rVGZSN0JnUk9vcFJ6UDZ6VlQzcWJGS2o5MkdNcmhrcHFKWlFxT2R6aEt5OHAyakQ5V2p6NVVCbmhqZHN0bXUwLWV1OFFJVV8xalNvNmRZcEMwUFJGQWsyNmE2ZzFsQjhWZnlUb3pLRGZDVnJfekNaWVlpdzc4eHZsbVpSVFFvOU92bTNPRjZuYjNybDVSSVE0RGhlOWZsSzlMenNmRzdSMzhIdlJ3Z0N0WGlCN3FNUEtDSkNFTmFkZDFWcERPMm_SAfMBQVVfeXFMT0liajMxczlPWnBBWVY4OFNKdkNNM0REZWxGQXlBUUtNYzROWDlEUlhFbFhta1RmUjdCZ1JPb3BSelA2elZUM3FiRktqOTJHTXJoa3BxSlpRcU9kemhLeThwMmpEOVdqejVVQm5oamRzdG11MC1ldThRSVVfMWpTbzZkWXBDMFBSRkFrMjZhNmcxbEI4VmZ5VG96S0RmQ1ZyX3pDWllZaXc3OHh2bG1aUlRRbzlPdm0zT0Y2bmIzcmw1UklRNERoZTlmbEs5THpzZkc3UjM4SHZSd2dDdFhpQjdxTVBLQ0pDRU5hZGQxVnBETzJv?oc=5": {
     "timestamp": "2026-09-15T14:44:24.921583",
@@ -22106,6 +22105,34 @@
     "canonical_url": "https://truthsocial.com/post/1659636",
     "headline": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/1659636",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMi9AFBVV95cUxOQXBXMnhxZmZuMlVMNU5FZmVXcG9zZW5vdE5sTkZCN21aZmRhWFd0cDhXT2w5RG00cWEzWHIwRTN3SmVuVTYtbjdsWmI0c2xxUFJxeElUaXA5RC1TNGRmQktpWGtoM25HWTYyeldVS0VaWkZBb2pVUEtudG1uMGhUYzlNczNmZW1FQkx4dlZ2TG96ZzJudlJhNlczdExDZEUtSEFhczBBbDNlNVNhWGI4ZmpXaUZtYlhHVEJIMFNGbkJNd3ZNNWN6czNNdGpCUE9nYUN0SWZqZzhVVDZjTjI5NVJXS0N0VjNxdU5DRkZfX1Jma1JM?oc=5": {
+    "timestamp": "2026-11-10T22:58:33.648372+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxOQXBXMnhxZmZuMlVMNU5FZmVXcG9zZW5vdE5sTkZCN21aZmRhWFd0cDhXT2w5RG00cWEzWHIwRTN3SmVuVTYtbjdsWmI0c2xxUFJxeElUaXA5RC1TNGRmQktpWGtoM25HWTYyeldVS0VaWkZBb2pVUEtudG1uMGhUYzlNczNmZW1FQkx4dlZ2TG96ZzJudlJhNlczdExDZEUtSEFhczBBbDNlNVNhWGI4ZmpXaUZtYlhHVEJIMFNGbkJNd3ZNNWN6czNNdGpCUE9nYUN0SWZqZzhVVDZjTjI5NVJXS0N0VjNxdU5DRkZfX1Jma1JM?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxOQXBXMnhxZmZuMlVMNU5FZmVXcG9zZW5vdE5sTkZCN21aZmRhWFd0cDhXT2w5RG00cWEzWHIwRTN3SmVuVTYtbjdsWmI0c2xxUFJxeElUaXA5RC1TNGRmQktpWGtoM25HWTYyeldVS0VaWkZBb2pVUEtudG1uMGhUYzlNczNmZW1FQkx4dlZ2TG96ZzJudlJhNlczdExDZEUtSEFhczBBbDNlNVNhWGI4ZmpXaUZtYlhHVEJIMFNGbkJNd3ZNNWN6czNNdGpCUE9nYUN0SWZqZzhVVDZjTjI5NVJXS0N0VjNxdU5DRkZfX1Jma1JM?oc=5",
+    "headline": "Where to find the cheapest fuel in Blacktown - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9AFBVV95cUxOQXBXMnhxZmZuMlVMNU5FZmVXcG9zZW5vdE5sTkZCN21aZmRhWFd0cDhXT2w5RG00cWEzWHIwRTN3SmVuVTYtbjdsWmI0c2xxUFJxeElUaXA5RC1TNGRmQktpWGtoM25HWTYyeldVS0VaWkZBb2pVUEtudG1uMGhUYzlNczNmZW1FQkx4dlZ2TG96ZzJudlJhNlczdExDZEUtSEFhczBBbDNlNVNhWGI4ZmpXaUZtYlhHVEJIMFNGbkJNd3ZNNWN6czNNdGpCUE9nYUN0SWZqZzhVVDZjTjI5NVJXS0N0VjNxdU5DRkZfX1Jma1JM?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMie0FVX3lxTE1ocllXbHdJMlhnV0dWZjdienppdW9Wazd3TnRscERKRTgwT3lOd2xIT3Ywc2lvM3dESjN6M29tOS1oUUdubWVzVEJrSTBCeTk5WjBhVnVKMTE0V0tnbU9ET1ZvV1J4QVlwclUwamZCVl9LaTh2Snl1Z2N3OA?oc=5": {
+    "timestamp": "2026-11-10T22:58:40.706235+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1ocllXbHdJMlhnV0dWZjdienppdW9Wazd3TnRscERKRTgwT3lOd2xIT3Ywc2lvM3dESjN6M29tOS1oUUdubWVzVEJrSTBCeTk5WjBhVnVKMTE0V0tnbU9ET1ZvV1J4QVlwclUwamZCVl9LaTh2Snl1Z2N3OA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1ocllXbHdJMlhnV0dWZjdienppdW9Wazd3TnRscERKRTgwT3lOd2xIT3Ywc2lvM3dESjN6M29tOS1oUUdubWVzVEJrSTBCeTk5WjBhVnVKMTE0V0tnbU9ET1ZvV1J4QVlwclUwamZCVl9LaTh2Snl1Z2N3OA?oc=5",
+    "headline": "Why Colombian roses pay a 12.5% U.S. tariff while Ecuadorian flowers enter duty-free - Latin Times",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMie0FVX3lxTE1ocllXbHdJMlhnV0dWZjdienppdW9Wazd3TnRscERKRTgwT3lOd2xIT3Ywc2lvM3dESjN6M29tOS1oUUdubWVzVEJrSTBCeTk5WjBhVnVKMTE0V0tnbU9ET1ZvV1J4QVlwclUwamZCVl9LaTh2Snl1Z2N3OA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5": {
+    "timestamp": "2026-11-10T22:58:53.935386+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5",
+    "headline": "Maine Republican Sen. Susan Collins and Democrat Troy Jackson spar over Trump, trade and abortion in Senate Debate - ABC News - Breaking News, Latest News and Videos",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }
