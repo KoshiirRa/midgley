@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-10 04:27:22",
+  "last_updated": "2026-11-10 07:07:20",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 15:02:31",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5021.78,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:31",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 10.81,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:31",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 128.37,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:37",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 5025.45,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-01 15:02:37",
       "connector_name": "Reachability_EXECUTIVE_SOCIAL",
@@ -9999,6 +9959,46 @@
       "target": "CL",
       "status": "ALREADY_SUBMITTED_TODAY",
       "latency_ms": 3348.79,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 1209a08c-4a87-4b96-bb5a-8db762dca755 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-10 07:06:05",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 273.1,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-10 07:07:07",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 1118.72,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 377 docs, 278 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-10 07:07:16",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3486.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 3e4dedbe-79df-41c3-bfb1-4adabd86c25e already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-10 07:07:20",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3567.42,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 1209a08c-4a87-4b96-bb5a-8db762dca755 already predicted (HTTP 400)"
