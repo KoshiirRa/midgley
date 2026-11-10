@@ -1,78 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-10 00:01:44",
+  "last_updated": "2026-11-10 04:27:22",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 14:45:06",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 127.48,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:19",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5024.67,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:19",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 38.06,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:20",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 244.67,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:25",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5023.53,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:25",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 15.34,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:02:25",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 124.05,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-01 15:02:31",
       "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
@@ -10002,6 +9932,76 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Submitted CL (challenge 1209a08c-4a87-4b96-bb5a-8db762dca755): direction=bullish, confidence=0.8159, scored=True"
+    },
+    {
+      "timestamp": "2026-11-10 04:07:22",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 225.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-10 04:10:46",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 131.81,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-10 04:10:50",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 127.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-10 04:22:28",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 322.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-10 04:27:01",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 624.7,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 377 docs, 278 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-10 04:27:19",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3465.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 3e4dedbe-79df-41c3-bfb1-4adabd86c25e already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-10 04:27:22",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3348.79,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 1209a08c-4a87-4b96-bb5a-8db762dca755 already predicted (HTTP 400)"
     }
   ]
 }

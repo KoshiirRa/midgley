@@ -11011,29 +11011,13 @@
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 26179,
+    "retain_count": 26181,
     "recall_count": 10,
     "reflect_count": 16,
-    "cloud_calls": 10912,
+    "cloud_calls": 10914,
     "local_fallback_calls": 15275
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-30 19:46:24",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:46:26",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-30 19:46:27",
       "environment": "prod",
@@ -19012,6 +18996,22 @@
     },
     {
       "timestamp": "2026-11-09 02:07:13",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-10 04:10:50",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-10 04:10:52",
       "environment": "prod",
       "operation": "retain",
       "backend": "hindsight_cloud",
