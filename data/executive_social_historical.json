@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-10 04:26:30",
-  "records_count": 48,
+  "last_refreshed_utc": "2026-11-11 02:07:56",
+  "records_count": 51,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -434,9 +434,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-10 04:22:28",
+      "date": "2026-11-11 01:56:41",
       "platform": "Google News RSS",
-      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "post_text": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -444,9 +444,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-10 04:22:28",
+      "date": "2026-11-11 01:56:41",
       "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow",
+      "post_text": "Oil hits lowest since August as Trump holds off on Iran strikes - Gulf News",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -454,17 +454,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-10 04:22:28",
-      "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-10 04:22:28",
+      "date": "2026-11-11 01:56:41",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -474,9 +464,49 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-10 04:22:28",
+      "date": "2026-11-11 01:56:41",
       "platform": "Google News RSS",
-      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-11 01:56:41",
+      "platform": "Google News RSS",
+      "post_text": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-11 01:56:41",
+      "platform": "Google News RSS",
+      "post_text": "Oil hits lowest since August as Trump holds off on Iran strikes - Gulf News",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-11 01:56:41",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-11 01:56:41",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
