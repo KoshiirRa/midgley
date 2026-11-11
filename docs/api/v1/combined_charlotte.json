@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-11T02:17:49.752373",
+  "timestamp": "2026-11-11T05:19:17.401991",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.282,
+    "current_price_per_gal": 3.245,
     "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-11T02:17:33Z"
+      "timestamp": "2026-11-11T05:18:54Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-17",
-    "current_base_price": 3.282,
-    "predicted_price_per_gal": 3.389,
-    "expected_change_dollars": 0.107,
-    "expected_change_percent": 3.26,
+    "current_base_price": 3.245,
+    "predicted_price_per_gal": 3.353,
+    "expected_change_dollars": 0.108,
+    "expected_change_percent": 3.33,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.038,
-    "prediction_upper_95ci": 3.74,
+    "prediction_lower_95ci": 3.002,
+    "prediction_upper_95ci": 3.704,
     "calibration_method": "conformal",
     "calibration_sample_size": 47,
     "directional_hit_rate_historical": 0.1562,
     "historical_mae_dollars": 0.2827,
     "evaluation_sample_size": 32,
-    "day_1_price": 3.303,
-    "day_2_price": 3.33,
-    "day_3_price": 3.364,
-    "day_4_price": 3.375,
-    "day_5_price": 3.389,
+    "day_1_price": 3.267,
+    "day_2_price": 3.293,
+    "day_3_price": 3.327,
+    "day_4_price": 3.338,
+    "day_5_price": 3.353,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -89,20 +89,20 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.005,
+        "delta_dollars": 0.006,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast +$0.107/gal (+3.26%): Driven primarily by Regional Logistics & Hub Delivery (+$0.043/gal), Futures & Commodity Benchmark (+$0.027/gal).",
+      "summary_text": "Charlotte NC forecast +$0.108/gal (+3.33%): Driven primarily by Regional Logistics & Hub Delivery (+$0.043/gal), Futures & Commodity Benchmark (+$0.027/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.043,
-          "impact_pct": 1.31,
+          "impact_pct": 1.33,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.027,
-          "impact_pct": 0.82,
+          "impact_pct": 0.83,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -131,16 +131,16 @@
           "direction": "UP"
         },
         {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.005,
-          "impact_pct": 0.15,
+          "category": "Tax & Regulatory Overhead",
+          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+          "impact_dollars": 0.006,
+          "impact_pct": 0.18,
           "share_pct": 5.0,
           "direction": "UP"
         },
         {
-          "category": "Tax & Regulatory Overhead",
-          "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.005,
           "impact_pct": 0.15,
           "share_pct": 5.0,
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.043,
-      "impact_pct": 1.31,
+      "impact_pct": 1.33,
       "share_pct": 40.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.027,
-      "impact_pct": 0.82,
+      "impact_pct": 0.83,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -183,16 +183,16 @@
       "direction": "UP"
     },
     {
-      "category": "Unstructured Intelligence & Sentiment",
-      "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.005,
-      "impact_pct": 0.15,
+      "category": "Tax & Regulatory Overhead",
+      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+      "impact_dollars": 0.006,
+      "impact_pct": 0.18,
       "share_pct": 5.0,
       "direction": "UP"
     },
     {
-      "category": "Tax & Regulatory Overhead",
-      "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
+      "category": "Unstructured Intelligence & Sentiment",
+      "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.005,
       "impact_pct": 0.15,
       "share_pct": 5.0,
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast +$0.107/gal (+3.26%): Driven primarily by Regional Logistics & Hub Delivery (+$0.043/gal), Futures & Commodity Benchmark (+$0.027/gal).",
+    "summary_text": "Charlotte NC forecast +$0.108/gal (+3.33%): Driven primarily by Regional Logistics & Hub Delivery (+$0.043/gal), Futures & Commodity Benchmark (+$0.027/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.005,
+        "delta_dollars": 0.006,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
