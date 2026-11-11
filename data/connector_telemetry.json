@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-11 05:19:25",
+  "last_updated": "2026-11-11 13:48:33",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 15:38:25",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5024.68,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:38:25",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 28.68,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:38:25",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 133.6,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-01 15:38:30",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5030.97,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-01 15:38:30",
       "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
@@ -10002,6 +9962,46 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 1b83ef78-099e-44e6-a061-3a1413387bc7 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-11 13:46:58",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 301.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-11 13:47:54",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 2031.43,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 391 docs, 292 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-11 13:48:13",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 16091.9,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 7888f71a-bc57-49c0-a41f-0fbe6c27ca31 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-11 13:48:33",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 19199.82,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
     }
   ]
 }
