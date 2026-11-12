@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-12 12:20:44",
+  "last_updated": "2026-11-12 21:25:21",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 16:14:19",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 342.17,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 328 docs, 203 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-01 16:14:28",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 1580.16,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for RB on Headline Arena."
-    },
-    {
-      "timestamp": "2026-10-01 16:14:29",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 437.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for CL on Headline Arena."
-    },
-    {
-      "timestamp": "2026-10-01 17:26:51",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 307.14,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
     {
       "timestamp": "2026-10-01 17:29:00",
       "connector_name": "HindsightHosted",
@@ -10002,6 +9962,46 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-12 21:21:38",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 327.54,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-12 21:25:14",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 339.11,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 403 docs, 306 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-12 21:25:20",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1326.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-12 21:25:21",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 673.35,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
     }
   ]
 }
