@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-11 21:08:29",
+  "last_updated": "2026-11-12 02:46:46",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-01 15:47:40",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 137.36,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-01 15:47:45",
       "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
@@ -10002,6 +9992,16 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-12 02:46:46",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 371.84,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
     }
   ]
 }

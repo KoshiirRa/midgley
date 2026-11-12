@@ -1,205 +1,5 @@
 [
   {
-    "timestamp": "2026-11-10T00:00:26.564515",
-    "headline": "California gas prices down, but still up over $1 from 2025 - NBC Bay Area",
-    "norm_headline": "california gas prices down, but still up over $1 from 2025",
-    "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNSDFYSWh2NEZIeEJRd2VLbFBrbnU0WDR0UVJpY3pQZ252azk2UE52MnBqZ2xLa214RnBkdHp1RHJuNU5XVmZWX0lsQmc0MmNIaUFuSXZvb3MwTUNnekxndE5KcVltWW9FZXI4TWV3cno0aW5CdGx1N3A0cHA5ZjhZSTB30gGKAUFVX3lxTE4wUTlhbW1wOVRBemJfeDZ0ck02NnpXMkk0Z01nWi1MaEZ3UnBwaTlOdHp6b0V5VFVqa01PTjlsM0lmOWN6QVZhb1FaLVBUdDdzVmtfVDNyVFFmU3dNaE9pQnRkOE9BaVhQOFFibHVvM0RGXzI4dTNIRlFITFZKbmF5UFFtQjZIa05DQQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:33.666407",
-    "headline": "R.I., Mass. gas prices fall as domestic oil production breaks records - Providence Business News",
-    "norm_headline": "r.i., mass. gas prices fall as domestic oil production breaks records",
-    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQYXBmYmFrSDlTWkVMUXpkMkJvYlhpbmd0aWpEN0RIUFBQcEtLbFpVZFZiR3RHSW5hUjVqc0xVNGhidjNYUDdOc0NkMzdHM0RtdFhJUTQwTERYM3c2NXJkWnJhc0pRMDFORndpUExSMmc0ZE1GaFhvTzJ0cjlueFN1NGpFTnNEOU9JTHJVOFVUMExYVUnSAZMBQVVfeXFMUGFwZmJha0g5U1pFTFF6ZDJCb2JYaW5ndGlqRDdESFBQUHBLS2xaVWRWYkd0R0luYVI1anNMVTRoYnYzWFA3TnNDZDM3RzNEbXRYSVE0MExEWDN3NjVyZFpyYXNKUTAxTkZ3aVBMUjJnNGRNRmhYb08ydHI5bnhTdTRqRU5zRDlPSUxyVThVVDBMWFVJ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:42.974938",
-    "headline": "Where to find the cheapest fuel in Bowral - The Daily Telegraph",
-    "norm_headline": "where to find the cheapest fuel in bowral",
-    "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOSmgzTWs0MVZVeE95SG4zdTI0VExFZHM5Z0k4MUhjU2JXeEpVUi1nR1hsRnRXeVgwaEtGY3JQUkFJbldDR2R3eVVKZ1FlMGVOTU9ERHJaVUlhbDVfNkRBX1pXdEJISWt1MHZaSTRhQWVYMmFxa2pDZ1kxbExxMy1xaWp4WmtqMFhWVVE3SWM3NTRVVGVPbS1tbEVUbkltbkZQcXJtdDdRZWp4QkpYdEI2VGpKdTNHMHVxRlNndGNJWVBHMDl3U0NqanFQVUM2TE5iRWVKa1dUODZvUS04cGJJcw?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:50.164691",
-    "headline": "Gas prices decline in Michigan. Here\u2019s where prices are cheapest this week - MLive.com",
-    "norm_headline": "gas prices decline in michigan. here\u2019s where prices are cheapest this week",
-    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNakpKckNMbVRJVDg2VW9TZmhQOS1Ecl80Zi12bmd1QVdvZURJYmNkWmh6MTZZS0hwNGx6WVY1b1ZrUGYwSWpmTHlIMk13c3lVZlZ5R2FINjNPVDVoOXI0UFRYeGZuUk5jSGRZWWZNemZqbnBSS1pGRmd5aU1nTEVON0tpaTN2dm90bjlqVGVUTFVfV2g4WC1iYTJFVUlOV1BDeW1qRW40aHExVmtzc0lHUXpn?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:51.548155",
-    "headline": "Where to find the cheapest fuel in Liverpool - The Daily Telegraph",
-    "norm_headline": "where to find the cheapest fuel in liverpool",
-    "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxOZVBXM1A4ZXpqdVNWQmxPQTJ3U1NMSmRhWW1mSjZwX3NIV0NxSlZjaEdjbThDTVV5M3NWRmhkWVp1cjdUTzRKNzBmUXF6aF80dTlDOFU0d1NyQldZR3BvTGxBaHdRbHhaODVzMnEwMkU4N2ZndFZyampJb1ZaYzRsODVYcDVQNU5CWHV0MG1MbGF5TUZrREN2UzhJQkk0SjcxaGEyb3cyVGhlMjgxX0RQQVFKc2VuM0ZBelpFQnFRUTZxQXFKTG1ycmJrSHRwdnlWMUJUUEVIYUlxQkl2dzV0aEc1YkIyX3VPRkJTck5kU0ZXQQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:51.915503",
-    "headline": "Crude Oil Outlook: Tight US Fuel Stocks Clash with Supply Recovery - FXEmpire",
-    "norm_headline": "crude oil outlook: tight us fuel stocks clash with supply recovery",
-    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPWjhibFEzR010VVluV093OVlYa3R1UVZCMDNVU1JBWlFDN1RleDhQM2hQUC0xQWxvUm4yMEZSSTdrVlVrVTJLMG4ydjNNOWJEbW9mY01UUXJ1aHI0TjlaRFgwRmp1YVN2LWpSbDJpMFk3cXBIRl9na3ZEbFFLMWtZcHktZTNBbnFVR3FyRFp6dWxoWklBVU05VHgxTkJQWTV5bHNSM3RkUzhjc3lSUTlMTUpfN25JVHM?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:52.462891",
-    "headline": "Power failure halts nearly 80% of units at Burgas refinery - BurgasMedia",
-    "norm_headline": "power failure halts nearly 80% of units at burgas refinery",
-    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOS25TdzZBVW9oNUFvc1dpQV85TVpVQ3M2bF9reDBCZkFpTnNickUzMDllR2lsSW0wZzBuNDdZMy1RNnMzYVhfZzJLRE9vd2ZIVXlKWDJEVnpScjk0RFJ4MTdTZC1rWWUxcXpRS25rNGxJXzloV2dNZkNqXzlXVWhUdjFaTGU0Nk1ORmxxUzlUR3ZuUzB3MDlUcmxDM2NSa213dXd1QU9fX09ZMTV6RFphT1NR0gG3AUFVX3lxTE0wLUF6VUdUZXFDR1Q5Y2tPUW41RlhXQ2YyaW1xMHdqdFo1bmpaMGZFWUg1YUx4VE1CdndPMjUzdGxhNHpxdkpKRWpGVS05VDRfc29CNGJ4UUgzUmh1UmJJYS05UW1ZTlMxLWMwZ1Zubm42M085OGhSRm1VckhBcXNQNm1PalVrRkNYLTRvOHVpeGpzQVdHdFM0VGFMZF9nYjVaRUVBd2RyQ3ZVSzNneVcxdTlNbFYwdw?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:57.768996",
-    "headline": "Sable Offshore dives after refinery outage disrupts crude purchases - TipRanks",
-    "norm_headline": "sable offshore dives after refinery outage disrupts crude purchases",
-    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQZ1paVUNVYnRkUm9zdjlWd2hBRUk0VGtTQ2VzU1hmcE1ZTjNiMnlmVWNwaWM1cTNEMHRpSWJmcUtfeXRCVTFPNFJna1NYVkc0WWFKNENXWUlUM1lWeHc4cW5WWjA1T0xfVW5RNGt2bzd4XzdRUFlLQ3lpMlZPbHVvRi1KT0ZnWTR2bXJYWjJyUWFxZ2Z3Y2Vza0dDZ0FuMnpWaGQ5eHJEZURDNmJHLXdoMEZLeWtCWHhW?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:58.126874",
-    "headline": "Why Sable Offshore Stock Is Crashing 70% Today \u2014 and What JPMorgan Sees Next - TipRanks",
-    "norm_headline": "why sable offshore stock is crashing 70% today \u2014 and what jpmorgan sees next",
-    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQNlNxS01lcjJEdkYwUXpWS19Yc0FSdHF0VzdRRjFnaHo1clF5UEJXVUhUSUV1cnRRRFEzYmxYRUZtXzU5Vk04Tno4LWVZc2lONTJMQnlRRWpObmlVYWQ4WU45NmtwNm9XaHp5M3lFZmdJcEF6bWpKU0FjZkQ4ZTdQbkpnMTVGUVc4ZTVjZ2VzT3RCdEp5T1RmVUFLUTg5a1ZrRXNWbTd3?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:00:58.454502",
-    "headline": "Canada says it is extending tariff relief on some US imports - Kansas City Star",
-    "norm_headline": "canada says it is extending tariff relief on some us imports",
-    "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE01dGZGM1AyQ3RIWjZWc1oxdGo5djJjc1hKb3QxVG5Ed240LW5jSlFPaVphaWNfQnlsWWlkVkVtX2hGdk02eEpaZHp0ZTlZNFh5RXQ4UldzdHJzdjBpZjA1LVo2d2trYWxfQ1o2M2l2UQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:01.040954",
-    "headline": "US, Canada Trade Negotiators Meet After Trump Sets New Tariff Deadline - EnergyNow.com",
-    "norm_headline": "us, canada trade negotiators meet after trump sets new tariff deadline",
-    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZFFXR09yZWZFb0g0RTUycGVURG83NHFKR2xGZm96U2lzT000cnRTMmplcnIxd2h5QXU5cEtwdUpreWg1NlZpWXg4TnBDWEs1UjgzT3VIeXNZMnljUTdkR0Z1djZtMTFaODBVOWJIZ1hsZVUxREx5TkVIcmtQLWFOTnJtbGZFVzZUWUQ0SFNCV3prNl9odjlBQ2pJQk14N1BhZ2c?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:01.389565",
-    "headline": "Plains to expand Midland Basin gathering for 225,000 bpd under 10-yr deal - Pipeline and Gas Journal",
-    "norm_headline": "plains to expand midland basin gathering for 225,000 bpd under 10-yr deal",
-    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOWkhWRjluUGJodDQ4OW5CQWdyQkk5aUJjdkQ2MEpJNWY3aGxzQkkwRTV6VDVZZ2V5WExKbHdGQmtEVm0wa3M3Qk5pazFTNGpvTUxhdmxIUmNVbkQyQVgzOTl1OHFOb2xCNVNDa044MHhtaDJ4ZTJDNENfZUMzcGNKWElTNXJ5UGVaMnU1a3lEOUE3UC1wSnRFcjh0a2FHanVTOWstRlo2YlA1elZfWHlGU1piWkc?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:01.736169",
-    "headline": "A price tag - Business Standard",
-    "norm_headline": "a price tag",
-    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOWmY5NmVaVGZoNk5oVXlTSlM3VW1seU4xdWR0WjBSbXZDb0w2Z2NUX0lMM2l4c1VxT2FoNklWbVFsLXpyVkMyTHNBU0x2eG9MNDlEVDRFRlAyczd3UE13X1pBSm9WZktKTHB1RTdMZEk2WjJOLU5RR3BjMWZVRlJJSzRMbVp6UFZja1pLQ2FrRURZWkxVU1lzVWRXQXBxWURrNnfSAacBQVVfeXFMTjNWZzZ1VjRTTDNJekY0ZGpaSFdQZDNJQl9FTnpUQWZzamdySnFCNnNNNWlIVWRhb3Q0YXBVcTZGVVU5d1EzbEtRcGJ2WlhKWHdJRWtIa215Y3R1ZGJnd2pUSnIxMmMyMlM3WnpNdWNUOUtMbXFSQUxjYmxiUEpUbDlIVk5UYzFXMDdwQkd2Q2lkbmRWdTdXUzdLV3RzYjlRS1FfeU1WMUU?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:04.039520",
-    "headline": "THE WORLD BRACES as Trump\u2019s Canada Tariff Stand-Off Escalates: McGeever - EnergyNow.com",
-    "norm_headline": "the world braces as trump\u2019s canada tariff stand-off escalates: mcgeever",
-    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRWpzaEpnek5fcFpta0gwTlVaUVVqVW9NQmdKMHhIYXp4dkc3NUt6NEw0bUxaUXhQSjBvWFhiMVR5QTRzWEREYzc5ek4xR2FMZEYzeUpDTlkxQkZJVVVlTTlDa0J3bWtxYktqZ2xjT05ZNEU4dU9mUmFHWFdEakZqcHV6R1dBUDhZdFluSUFVTEd6MGRpTkxjQnU0a3AzUFpXU0E?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:04.371704",
-    "headline": "Ottawa amends, extends tariff relief program beyond U.S. steel imports - battlefordsNOW",
-    "norm_headline": "ottawa amends, extends tariff relief program beyond u.s. steel imports",
-    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQN25jT0VxSl9URW93MnFKenRDNG9vSlNJUE9oNzR0dlhFYmF2MXJXYUhLY012Mmptb1Bld1prMjI4NTg2OGNnUXZpWHpLbGZsRGZ0cDZyU1dwMFJRa2VqUndhejhxcDJkM2VSb1RpWW1INjdBeUN0UFp6S0R1NkxIQ0F3cVJ5bU01eDI1MWljS2FOcE5Mc2xuR3pwRW5telRrc0JZUXpKZWlCV2c?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:04.758371",
-    "headline": "As China extends tariff relief, Ottawa urged to unlock domestic fuel demand for canola - RealAgriculture",
-    "norm_headline": "as china extends tariff relief, ottawa urged to unlock domestic fuel demand for canola",
-    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQWWV6SjAyZXlWNDFJVnZqRnRWaVV2QklGazdvWEtqNVZQa0FQTXlGMHUxZW9qMkV2Y204TjJSXzZTOG9kNzAteGZQei00NEZwVkVBRTBjaGFDVWwyei1oWkF1cUswc1pFeC11Q0E3YlZXTmpzbzR0UVg5S2FfWUZoR1pmQ1RZVjF5TFJGYmZWM1hmN0FMeEotbDR5SFRuczNxc1M5RnJ5emY2STA0MWZicFFXZ2wzTEpFYUZGU01LNnM1VkJr?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:05.108689",
-    "headline": "Taiwan's Central Union Oil Halt Creates Salad Oil Shortage; Ministry of Economic Affairs Coordinates Three Plants to Boost Output, 15,000 Tons to Be Replenished by Year-End - BigGo Finance",
-    "norm_headline": "taiwan's central union oil halt creates salad oil shortage; ministry of economic affairs coordinates three plants to boost output, 15,000 tons to be replenished by year-end",
-    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE00R3Y5N0otMkJmeWgxWGZvM0ppUjdDMnpxOFE5ZkFBT2NTSlA0dTByY3hRWHJHOTF5cWdDZHJWZHlrYk9nYkxCSFRsbThfR0NDZF9ZamQ2QXowRWZEVy0wQTd6cjBWMnpHN2Rqa2FSZDBJcDYxNmc?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:05.456440",
-    "headline": "Oil prices slide over 5% as Trump signals no fresh Iran strikes amid talks - Business Standard",
-    "norm_headline": "oil prices slide over 5% as trump signals no fresh iran strikes amid talks",
-    "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOVzN5VV8wRVVETlM1eUFJaU41emp5bU9sUHFfMWtIZVpuY2N2UlNUMUFScmticXpwVmhZNkowQXBTMnN0TkxMWEl4UXhVRnoxZEtBSFJ4dTdOU1BVd0xmczU5bTI4ZElGMmEzdEE4b1Vab0VWUl9BaUQ1UmMyRDhicVA3cG9wTlJfZTJFSkJua2xvamxVcGFzSnF0bGxCSjhmZEhhMVVtQVg3YjBBZG0tZ29tWkVOVVQ2NzZhNUFsTnp3MHE4ZUZqQWVUMUJqNjl1WGZDUdIB2gFBVV95cUxPOUZ6VlI0bjVpYm9IZWhCTU5FaFRYVjBSOE9tVXlkVzlXWl81VXpIVC1kQzRoUkZCQ2RwM25EZnFDczA3ZzRyVm1jTlk1ODhMRVBETmZsaFphVWVlU0Z4UEVlVm5SNy01dmxjS1Y2X3c5UnFwLTJpU3EyUzZpc2Fxczh4blNDVXBIMGNpUWFtQW1hdkJlUkNfX2Z3QXpLWDZIMkJBQzZndmY2OEpYaktnR2lnYXhsUGxIc2x1OHEzaWxxcVdwTzA3aE5iWldlczNXWVhaNnJVbUR5UQ?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:05.820306",
-    "headline": "China extends US trade truce by two months, keeps 24% tariff hike suspended - Profit by Pakistan Today",
-    "norm_headline": "china extends us trade truce by two months, keeps 24% tariff hike suspended",
-    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPc05EMmtvWXpRX2tLMjRleVFfZW12aUlmRUc1WlN6S3JrVkZKV253WlliZFZoOV9sSWpsb2g0ZFdNei1CSklJdFdpVFByOFkyTlBiN2xmS0t4ajY1Qmczb2YyZE9WQ2lNdEk0VGhESGJVUi1LV0dpQmJkemZMUXJiR2xCWDJQa25LZjQ4bFJwQ1JoNFU3ancxM0E2NFFFMWxCZ3FJYUZyN2g1NF9zZ2dyTTJGaGh1WkRJZWxXVWVZZzg0bEVxUmc?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:06.215630",
-    "headline": "Saudi oil pipeline attacked, operations unaffected - Profit by Pakistan Today",
-    "norm_headline": "saudi oil pipeline attacked, operations unaffected",
-    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNazJ4anRqSzdhV2FUUXVOYTJEdW05dG0zSkVLeE5fanRmTW9saUEyOFZxbGNHaTBFbzNCeU5RTTlQZHE0TjBIYV84NU9Hd1UyaWN3TldtN1RaM2pKaDA4eUw0d1cxbUF1a0FIUVJvZ1lNZzZNaFF1WHc1bXp4MWt4Wmx4QXhrTGxHdlFtWTFXYW5zaXg0cVdUQkpoalMwVlotZWxXV0ZyN3dzUnFlV2o2MXAwc28?oc=5",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:06.230430",
-    "headline": "What Is Congress\u2019s Plan to Speed Up Energy Permits?",
-    "norm_headline": "what is congress\u2019s plan to speed up energy permits?",
-    "url": "https://www.nytimes.com/2026/11/09/climate/congress-energy-permitting-reform-vote.html",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:06.245600",
-    "headline": "Oil Prices Fall on Hopes for Peace Between U.S. and Iran",
-    "norm_headline": "oil prices fall on hopes for peace between u.s. and iran",
-    "url": "https://www.nytimes.com/2026/11/09/business/energy-environment/oil-price-iran-trump-war.html",
-    "is_anomaly": false,
-    "source": "RSS_Feed"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:08.024252",
-    "headline": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
-    "norm_headline": "trump pauses 50% tariffs on canada as trade talks advance \u2013 keystone xl back in spotlight",
-    "url": "https://truthsocial.com/post/9320784",
-    "is_anomaly": false,
-    "source": "Executive_Social_Media"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:10.348282",
-    "headline": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
-    "norm_headline": "u.s. asks to keep collecting trump\u2019s tariffs after court loss",
-    "url": "https://truthsocial.com/post/797421",
-    "is_anomaly": false,
-    "source": "Executive_Social_Media"
-  },
-  {
-    "timestamp": "2026-11-10T00:01:13.081515",
-    "headline": "Trump calls Strait of Hormuz blockade \u2018history\u2019s greatest\u2019",
-    "norm_headline": "trump calls strait of hormuz blockade \u2018history\u2019s greatest",
-    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNX1EwcGhxVzFLQ2xYSG83alZmVUVTZ2RLcmt3MWJnQ3ZJUGlaVlY5R3J5MXc5V2dDNXpiellVM2FUc0pxREhwN21YVThZcGtDNXlLWjJGY1YwQkxwRkRnM0ViaXh6LW5SN2Nic2FFSG4yYlN5Y1BtRFhDUEwtVDY0TzZBRTBNaVdfbFhZUHJyZ1rSAZYBQVVfeXFMTVFjZFhFSVFPbU10STk2TWFhRnIyRVdERllEWEt0eXpiMUdfLWpNUzllcXY3TVh0bnlPb3BIYnJXRThXZWgxcTJVd0JZMWIwX21CZmMwRldZQVB5Q3VNRXpBd25LQU05UHVmMW8xVkNTWGkyd0xlOWpVUDZtaXFiaW9SVzdCM2QtZEEyeVZBWXF3bGlrVFRB?oc=5",
-    "is_anomaly": true,
-    "source": "Geopolitical_Strait_of_Hormuz"
-  },
-  {
     "timestamp": "2026-11-10T07:06:15.075649",
     "headline": "Florida gas prices fall to four-month low as AAA sees potential for more relief - The Apopka Voice",
     "norm_headline": "florida gas prices fall to four-month low as aaa sees potential for more relief",
@@ -1052,6 +852,134 @@
     "headline": "2026 Iran war | Oil, Explained, United States, Israel, Strait of Hormuz, Map, & Conflict",
     "norm_headline": "2026 iran war",
     "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5nTzlhOGZTS180cWNtVG91c2VWRVJFYlk0cW5Ba1RHUEFOSEtldU15QktQT0EzRVY1ZVdZZ0VTRHVWTVhyN1IzeU1wbmlDMUhrQ3Roc1YxcmdMUQ?oc=5",
+    "is_anomaly": true,
+    "source": "Geopolitical_Strait_of_Hormuz"
+  },
+  {
+    "timestamp": "2026-11-12T02:46:57.051808",
+    "headline": "Michigan gasoline, diesel prices continue post-election slide - Michigan Public",
+    "norm_headline": "michigan gasoline, diesel prices continue post-election slide",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOWFNMeXZZMUhqLXh3dEVGYnR0T1dDVlIzeWtfbklxSmRfazZfSTZ6SlNELTZOczBLcDhsdWVFVVgySm1fR0piT3NpTlhXNGozbjhMVEpuU3FOYWY0QVBRM3hXbFRsWmMxYXJNS0RRTWU3UTdRYkxKakVNQ2dTd29HNWh0cm1YNDFlOElBal80MVM3Y3RBbWtGZENSTTduUDIwaUt1Y3ZjMXVJVDhwUXJR?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:04.193660",
+    "headline": "See How Gas Prices Are Easing Across the U.S. - WSJ",
+    "norm_headline": "see how gas prices are easing across the u.s.",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQVWs2dEhDRlNqdXFYck1MVXJaUnR0LUwyNTVvLUlvYTZTdnI0OE9HSGNiaEduTVdWQjdyTVgwdXJWLVNzRDRIaXpFYXJyQXBGcURJdHZWLVBfSm5TVlJ5ZktIS2pSNVpYSmJIMUJadlhOUzlKbVd1aHF2ZE1KQkEyNzZPSQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:11.747549",
+    "headline": "How High Are Gas Prices Where You Live? - The New York Times",
+    "norm_headline": "how high are gas prices where you live?",
+    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:18.810043",
+    "headline": "Where to find the cheapest fuel in Liverpool - The Daily Telegraph",
+    "norm_headline": "where to find the cheapest fuel in liverpool",
+    "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxNazFueTRYb0hvemZPTUJ3bF9NdHZEakxaaTY4eER5MVdaZU1VRkRJWU43YlpaNWpFN29LUW1zenZNTWJqNElBZ3M3WEVkMklGNWY5b3JXb1p0WHluQjhPOFBCay1xWXpLb2xuWUxEVjVLOEVvWlFGMlhwb2kxQ04xRHRyMmdfbFBrTi1WSU9zVjdyVUY3aUs3VTBtS3dwVDk1Q1RQa1h2cHVta2ptMTFTbnJHZ192OFZ3U2o1N0hHaFVGU3lVUUd6NU12ZnlxXzZBQWZWUUlnYlJCWE5KcDZGb21xVzBtWUE2Y0pWbTVBYnNzQQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:25.824070",
+    "headline": "Where to find the cheapest fuel in Hornsby - The Daily Telegraph",
+    "norm_headline": "where to find the cheapest fuel in hornsby",
+    "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxObGM0VWYwQkgxazAyWGtELUlEd1dLMGtMSUo2c0lUYl9qT2dWa0JDc0NBdlRFM0xTdXQzT1NyRzFhcm4zWUpSYlZFYkNzbzduVm5TcXlWLVhJbE90QnlfaFNqVE5yb05Mblc5Rk80MFdMdE1QVlpocV9kOW15VDdQTXJfWkNqWEw1bjdlNE9MVjRvdjk3V192bEpsaUQxRWJSaXU4Q2ZRX29USFRiUW5hNktHSUlNX2lzOGttVU1ZVDJyTnNEWmlzaUhra0I2WmNBNVo5TFZEX0JYS1M3eGQ1UVBZMVhEclpRSHlrQ0hfdw?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:33.110019",
+    "headline": "Where to find the cheapest fuel in Fairfield - The Daily Telegraph",
+    "norm_headline": "where to find the cheapest fuel in fairfield",
+    "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxQWWtCdEdiUmdPRXMxbk1Wenh6bzJMVllIMkNXZmFZS01nTmdPeUhyN0VObkZPeTlrTHptbW5JejgwdDctdWZ1Zng1Z3hNZFlLZ3EwTWNubHVPa0JaczNfTGtySEg4V0FxNDg0dlIwemctZzAzZFZTZ2lOaUFVemtDOUROQW5lbTEteXNJTnNpUFJGLVFFSDBMN1ZhRGJySVY3bThFS2c4SUtEblFHc2ttYnFkbmhnczVFZmQxR2xhdm9LeFRFYlZNdjY0WHBqT25UWDgwYlpubTVtTDZtR00zYzltNUF1UjJWYUg4WDJ2X1JsS2c?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:43.685116",
+    "headline": "Netherland's Zeeland refinery to start 3 week turnaround - Quantum Commodity Intelligence",
+    "norm_headline": "netherland's zeeland refinery to start 3 week turnaround",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQZVkwWF8xU3ZYU2gwRjVWU1M5d0owZkliRGI3VzdFemhFQkdhN3hrZUltRmQ1M0k1WkdMZ3U5aDBtYTJra3EwUE5oVGVPY3RSMW9LVi16bUZZbTZKLXlLaXVxenl6bUdjRkZLclZ6MlZWdDFGaGJ0MWZsb1cyMGlRWFl0RWNZaVVKeHRuSzNQVUdCSWhzdFdhTlZmODJDMjRu?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:50.484367",
+    "headline": "Japan refinery runs hit 3-month low amid tighter crude supplies - Quantum Commodity Intelligence",
+    "norm_headline": "japan refinery runs hit 3-month low amid tighter crude supplies",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOTmltQk43Zy1tdjZaN0NZV3BYejdrdllYZ2E5ZUIwZ00zVHhhdUF0ZFptX0FGRGhkX2pORUYwc1o2TXowWXppaHFKRS1BeTM1TzQ0X3dCSUI4M1JxYzlrUUJHMTlRZ21pUHBEdG94ZW82LWVOc09TaG9fTlpuZmRnMDZpX1Zad3kyME8xS21Rb3hmRmJfZTg4NzhHRlNhLXVHbmxiR21kSk85UQ?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:47:57.456210",
+    "headline": "CARNEY RESPONDS - \u201cThey Asked Too Much and Offered Too Little\u201d: Carney Draws a Line as Canada - U.S. Trade Talks Collapse - EnergyNow",
+    "norm_headline": "carney responds - \u201cthey asked too much and offered too little\u201d: carney draws a line as canada - u.s. trade talks collapse",
+    "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPMVJvRFo4QWtkQ0M2bDZLdVI0aHg5T0N1c0RGQjdfR1EweE5UZXVBcm1tWG1WZGVOdUVXSlVJczZSM0NOSkVnaVV4d0ZoX0o0WGR1UG9MOFZYd2NPeUdfY2kxRVRzUnQyVFhTX1QtenV0bWMzR2dOaFJtZ2E4b3E1VFdOTFIxSU0ySTVHR2xmUDEtVXVUeVlWWWRnMHpBYU9uSmFGSXBsR2xCdndkNnJkZEFTNTI5akxwclFJSGx1elgwbW1pendLb2FYR2tzTXhnd2RsTDdtOGRxNUk?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:05.097898",
+    "headline": "Saudi Arabia Raises Power and Water Tariffs for 2027, Approves SAR 500 Allowance - https://houseofsaud.com/",
+    "norm_headline": "saudi arabia raises power and water tariffs for 2027, approves sar 500 allowance",
+    "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFAwY19oUXk5QlNUcW1Jb2xCOXB5NXcyOEZSSDh2SVRWYXlCODBOQm1UN2FoUTVBd0ZacjNIbHhBT3hFR0dsS09QRjBTR3hFSDAwQU9taERZSXI1c3BFOGc?oc=5",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:05.586694",
+    "headline": "What Is Congress\u2019s Plan to Speed Up Energy Permits?",
+    "norm_headline": "what is congress\u2019s plan to speed up energy permits?",
+    "url": "https://www.nytimes.com/2026/11/09/climate/congress-energy-permitting-reform-vote.html",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:12.140132",
+    "headline": "Oil Prices Have Tumbled in November. Here\u2019s Why.",
+    "norm_headline": "oil prices have tumbled in november. here\u2019s why.",
+    "url": "https://www.nytimes.com/2026/11/09/business/energy-environment/oil-price-iran-trump-war.html",
+    "is_anomaly": false,
+    "source": "RSS_Feed"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:19.217341",
+    "headline": "Hormuz Strait will \u2018never return\u2019 to pre-war status, Iran\u2019s Ghalibaf says",
+    "norm_headline": "hormuz strait will \u2018never return\u2019 to pre-war status, iran\u2019s ghalibaf says",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQWGxvd2hwTGtyaGlUa3hIS3BUSkdPYXJVNUd2Wnl1V0M1enhlSVdnUU9UN091S0JPLThfTTk3QVkwUmhPR212enhUWDUxRGdqZ0RtVXVJY3Ruc0podzdET0QtX0VCbGMwRzY5ZHMtTEQtMHNSaGtVQmVueGdCWTJ1SXFTVUlZRzVzZXdDUTZwcXo3cHdyTzlfS3gyTzMySDBmNlctcHNR0gGrAUFVX3lxTE9ETk94YXFQVXpLTFZnMUFLWDJEYWlLR2pDSkkyUTdtSFNKcXdfQUtHUkNTcnBNc05LYk4xR09nZ0ctUDVvakxYejhwT18xVURRUHA3TUdWLWpIOUVpTnFkQmRFWXhaaWpadTNOLVpxdTMzUUl6OVhuQ25sSmRUMXJfMmJiTEtHbFpMSzVaNXpTU1lRTlkwWmFyUHZQb2Q5TENUMUh1ejZVZS1jVQ?oc=5",
+    "is_anomaly": false,
+    "source": "Geopolitical_Strait_of_Hormuz"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:29.706583",
+    "headline": "Chinese-Owned Oil Tanker Hit Near Hormuz as US Pauses Ship-Protection Plan, Report Says",
+    "norm_headline": "chinese-owned oil tanker hit near hormuz as us pauses ship-protection plan, report says",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPTlRucG8yb2pMNHB4bHpSOFR4cGVaSF9yMGpoNGtvdDZEUXBpSktYYTl2blJrcWk5RFdhUndoay1vT0F4bjJGWXVkQTJpWTU5b05oZVgzNWNEd0NZMWxXZ3RsREZycVRhZHplaXhIS0lqRjB0ZDJQMlVKYW8tWEtZcTVZT0Z5bnc2UE9uWDlBZEJQYzN6LVQ4VXpobllLU01VMkZQcVlzVXV6anp1SE1YMnlEbVFLRVhu?oc=5",
+    "is_anomaly": false,
+    "source": "Geopolitical_Strait_of_Hormuz"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:36.707454",
+    "headline": "Iran escalates in Hormuz, claims strike on Omani island it says 'enemy' uses for US military ops",
+    "norm_headline": "iran escalates in hormuz, claims strike on omani island it says 'enemy' uses for us military ops",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPQ05QYWVnRGU4aV9FS1pCczA3dU9VY3U4VnVoeVNLLUg2aC1XQndBUlozb1FtaXZFRndfcjVYS2dRTG1LS3JxUFcyX2ZQNlJtZlVBRElmZkZyZFZUYUw1TkdQdEtRWURZd1B3a0VWV1FCTzVrYm5MWmdtbkxYNmNNTlF5d2hiNTJCQ2pGbVBfZktVczBXZHBfUU5YOVZQaXRuemh6SjFJX3jSAa4BQVVfeXFMT1hVZFdKM2dWV2kzRkVWazJIUmlZekZhM1RpVnhMc0ZBWTNYa0Q0THpRRVM5VmhPcGdrdTNLLVhfYVhtekFSbDhJUG4wRWQteEdNcGJjVlZaVURvdTlFRGdSWDY0NjB1dVlxQ2ZzV283NmFzdGJGNFJOSGpxLUJ6R2w0QXhXMWREMjlJYzFnUk4tSElzdDJBakFKLTFnOWVyTFBYRTJzZGlFN1ZwREFn?oc=5",
+    "is_anomaly": false,
+    "source": "Geopolitical_Strait_of_Hormuz"
+  },
+  {
+    "timestamp": "2026-11-12T02:48:47.442145",
+    "headline": "Iran claims tanker hit mine in Strait of Hormuz",
+    "norm_headline": "iran claims tanker hit mine in strait of hormuz",
+    "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1PY3h1VEhEY3FvQ2p3Um1zd0VoWnNGSlpPNHU2MlhjXzViZW9GbFI1VkJiYzVaaGxXMzhYSHBRRlhrYi1iT2piaVF5WWNQR0RzaF9jQnM0ZkNrcm5uU003dFZwOFE1dTZWREUxVE9yV05ZdDFKc3I1dURNQQ?oc=5",
     "is_anomaly": true,
     "source": "Geopolitical_Strait_of_Hormuz"
   }
