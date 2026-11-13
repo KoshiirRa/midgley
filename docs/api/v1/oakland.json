@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-13T02:31:19.924022",
+  "timestamp": "2026-11-13T03:21:43.107198",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-13T02:30:53Z"
+      "timestamp": "2026-11-13T03:21:18Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-18",
+    "target_date": "2026-11-19",
     "current_base_price": 5.626,
-    "predicted_price_per_gal": 5.573,
-    "expected_change_dollars": -0.053,
-    "expected_change_percent": -0.94,
+    "predicted_price_per_gal": 5.57,
+    "expected_change_dollars": -0.056,
+    "expected_change_percent": -1.0,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 5.451,
+    "prediction_lower_95ci": 5.445,
     "prediction_upper_95ci": 5.695,
     "calibration_method": "conformal",
-    "calibration_sample_size": 48,
-    "directional_hit_rate_historical": 0.0,
-    "historical_mae_dollars": 0.2744,
-    "evaluation_sample_size": 32,
+    "calibration_sample_size": 52,
+    "directional_hit_rate_historical": 0.0556,
+    "historical_mae_dollars": 0.2788,
+    "evaluation_sample_size": 36,
     "day_1_price": 5.615,
-    "day_2_price": 5.605,
-    "day_3_price": 5.589,
-    "day_4_price": 5.581,
-    "day_5_price": 5.573,
+    "day_2_price": 5.594,
+    "day_3_price": 5.583,
+    "day_4_price": 5.577,
+    "day_5_price": 5.57,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.019,
+        "delta_dollars": -0.02,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.013,
+        "delta_dollars": -0.014,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -73,7 +73,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.006,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -96,21 +96,21 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast $-0.053/gal (-0.94%): Driven primarily by Tax & Regulatory Overhead ($-0.019/gal), Refining Yield & Crack Spread ($-0.013/gal).",
+      "summary_text": "Oakland CA forecast $-0.056/gal (-1.00%): Driven primarily by Tax & Regulatory Overhead ($-0.020/gal), Refining Yield & Crack Spread ($-0.014/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.019,
-          "impact_pct": -0.34,
+          "impact_dollars": -0.02,
+          "impact_pct": -0.36,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.013,
-          "impact_pct": -0.23,
+          "impact_dollars": -0.014,
+          "impact_pct": -0.25,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -125,8 +125,8 @@
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.005,
-          "impact_pct": -0.09,
+          "impact_dollars": -0.006,
+          "impact_pct": -0.11,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -153,16 +153,16 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.019,
-      "impact_pct": -0.34,
+      "impact_dollars": -0.02,
+      "impact_pct": -0.36,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.013,
-      "impact_pct": -0.23,
+      "impact_dollars": -0.014,
+      "impact_pct": -0.25,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -177,8 +177,8 @@
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.005,
-      "impact_pct": -0.09,
+      "impact_dollars": -0.006,
+      "impact_pct": -0.11,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast $-0.053/gal (-0.94%): Driven primarily by Tax & Regulatory Overhead ($-0.019/gal), Refining Yield & Crack Spread ($-0.013/gal).",
+    "summary_text": "Oakland CA forecast $-0.056/gal (-1.00%): Driven primarily by Tax & Regulatory Overhead ($-0.020/gal), Refining Yield & Crack Spread ($-0.014/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.019,
+        "delta_dollars": -0.02,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.013,
+        "delta_dollars": -0.014,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -229,7 +229,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.005,
+        "delta_dollars": -0.006,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"

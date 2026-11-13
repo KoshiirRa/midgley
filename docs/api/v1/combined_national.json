@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-13T02:31:19.276487",
+  "timestamp": "2026-11-13T03:21:42.448228",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-13T02:31:18Z"
+      "timestamp": "2026-11-13T03:21:41Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-18",
+    "target_date": "2026-11-19",
     "current_base_price": 3.956,
-    "predicted_price_per_gal": 4.195,
-    "expected_change_dollars": 0.239,
-    "expected_change_percent": 6.04,
+    "predicted_price_per_gal": 4.197,
+    "expected_change_dollars": 0.241,
+    "expected_change_percent": 6.09,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.852,
-    "prediction_upper_95ci": 4.538,
+    "prediction_lower_95ci": 3.855,
+    "prediction_upper_95ci": 4.539,
     "calibration_method": "conformal",
-    "calibration_sample_size": 47,
-    "directional_hit_rate_historical": 0.625,
-    "historical_mae_dollars": 0.1293,
+    "calibration_sample_size": 48,
+    "directional_hit_rate_historical": 0.6562,
+    "historical_mae_dollars": 0.1286,
     "evaluation_sample_size": 32,
     "day_1_price": 4.004,
-    "day_2_price": 4.052,
-    "day_3_price": 4.096,
-    "day_4_price": 4.146,
-    "day_5_price": 4.195,
+    "day_2_price": 4.059,
+    "day_3_price": 4.095,
+    "day_4_price": 4.149,
+    "day_5_price": 4.197,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -89,14 +89,14 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.005,
+        "delta_dollars": 0.007,
         "share_pct": 2.5,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.239/gal (+6.04%): Driven primarily by Futures & Commodity Benchmark (+$0.108/gal), Refining Yield & Crack Spread (+$0.060/gal).",
+      "summary_text": "National forecast +$0.241/gal (+6.09%): Driven primarily by Futures & Commodity Benchmark (+$0.108/gal), Refining Yield & Crack Spread (+$0.060/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
@@ -141,8 +141,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-          "impact_dollars": 0.005,
-          "impact_pct": 0.13,
+          "impact_dollars": 0.007,
+          "impact_pct": 0.18,
           "share_pct": 2.5,
           "direction": "UP"
         }
@@ -193,14 +193,14 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
-      "impact_dollars": 0.005,
-      "impact_pct": 0.13,
+      "impact_dollars": 0.007,
+      "impact_pct": 0.18,
       "share_pct": 2.5,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.239/gal (+6.04%): Driven primarily by Futures & Commodity Benchmark (+$0.108/gal), Refining Yield & Crack Spread (+$0.060/gal).",
+    "summary_text": "National forecast +$0.241/gal (+6.09%): Driven primarily by Futures & Commodity Benchmark (+$0.108/gal), Refining Yield & Crack Spread (+$0.060/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -245,7 +245,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.005,
+        "delta_dollars": 0.007,
         "share_pct": 2.5,
         "direction": "UP",
         "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead"

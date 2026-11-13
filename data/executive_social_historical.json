@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-12 03:22:30",
-  "records_count": 62,
+  "last_refreshed_utc": "2026-11-13 03:20:49",
+  "records_count": 77,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -574,27 +574,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-12 03:17:16",
-      "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-12 03:17:16",
-      "platform": "Google News RSS",
-      "post_text": "OPEC crude production rises by nearly 2 million bpd in October - Anadolu Ajans\u0131",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-12 03:17:16",
+      "date": "2026-11-13 02:39:04",
       "platform": "Google News RSS",
       "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
       "target": "Energy_Market",
@@ -604,7 +584,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-12 03:17:16",
+      "date": "2026-11-13 02:39:04",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -614,9 +594,179 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-12 03:17:16",
+      "date": "2026-11-13 02:39:04",
       "platform": "Google News RSS",
-      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "post_text": "Current price of oil as of November 11, 2026 - Fortune",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:39:04",
+      "platform": "Google News RSS",
+      "post_text": "OPEC crude production rises by nearly 2 million bpd in October - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:39:04",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:59:39",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:59:39",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:59:39",
+      "platform": "Google News RSS",
+      "post_text": "Current price of oil as of November 11, 2026 - Fortune",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:59:39",
+      "platform": "Google News RSS",
+      "post_text": "OPEC crude production rises by nearly 2 million bpd in October - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 02:59:39",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "Current price of oil as of November 11, 2026 - Fortune",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "OPEC crude production rises by nearly 2 million bpd in October - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "Current price of oil as of November 11, 2026 - Fortune",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "OPEC crude production rises by nearly 2 million bpd in October - Anadolu Ajans\u0131",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-13 03:15:11",
+      "platform": "Google News RSS",
+      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,

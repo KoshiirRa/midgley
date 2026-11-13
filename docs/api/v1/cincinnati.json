@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-13T02:31:20.564168",
+  "timestamp": "2026-11-13T03:21:43.775268",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-13T02:30:52Z"
+      "timestamp": "2026-11-13T03:21:17Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-18",
+    "target_date": "2026-11-19",
     "current_base_price": 3.602,
-    "predicted_price_per_gal": 3.441,
-    "expected_change_dollars": -0.161,
-    "expected_change_percent": -4.47,
+    "predicted_price_per_gal": 3.443,
+    "expected_change_dollars": -0.159,
+    "expected_change_percent": -4.41,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.012,
-    "prediction_upper_95ci": 3.87,
+    "prediction_lower_95ci": 3.025,
+    "prediction_upper_95ci": 3.861,
     "calibration_method": "conformal",
-    "calibration_sample_size": 45,
-    "directional_hit_rate_historical": 0.4688,
-    "historical_mae_dollars": 0.157,
-    "evaluation_sample_size": 32,
+    "calibration_sample_size": 49,
+    "directional_hit_rate_historical": 0.4722,
+    "historical_mae_dollars": 0.1569,
+    "evaluation_sample_size": 36,
     "day_1_price": 3.57,
-    "day_2_price": 3.538,
-    "day_3_price": 3.501,
-    "day_4_price": 3.467,
-    "day_5_price": 3.441,
+    "day_2_price": 3.524,
+    "day_3_price": 3.491,
+    "day_4_price": 3.463,
+    "day_5_price": 3.443,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -89,14 +89,14 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.009,
+        "delta_dollars": -0.007,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast $-0.161/gal (-4.47%): Driven primarily by Regional Logistics & Hub Delivery ($-0.056/gal), Refining Yield & Crack Spread ($-0.040/gal).",
+      "summary_text": "Cincinnati OH forecast $-0.159/gal (-4.41%): Driven primarily by Regional Logistics & Hub Delivery ($-0.056/gal), Refining Yield & Crack Spread ($-0.040/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -131,18 +131,18 @@
           "direction": "DOWN"
         },
         {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.009,
-          "impact_pct": -0.25,
-          "share_pct": 5.0,
-          "direction": "DOWN"
-        },
-        {
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.008,
           "impact_pct": -0.22,
+          "share_pct": 5.0,
+          "direction": "DOWN"
+        },
+        {
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "OPEC price pressure talkdown & dovish geopolitical news",
+          "impact_dollars": -0.007,
+          "impact_pct": -0.19,
           "share_pct": 5.0,
           "direction": "DOWN"
         }
@@ -183,24 +183,24 @@
       "direction": "DOWN"
     },
     {
-      "category": "Unstructured Intelligence & Sentiment",
-      "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.009,
-      "impact_pct": -0.25,
-      "share_pct": 5.0,
-      "direction": "DOWN"
-    },
-    {
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.008,
       "impact_pct": -0.22,
       "share_pct": 5.0,
       "direction": "DOWN"
+    },
+    {
+      "category": "Unstructured Intelligence & Sentiment",
+      "description": "OPEC price pressure talkdown & dovish geopolitical news",
+      "impact_dollars": -0.007,
+      "impact_pct": -0.19,
+      "share_pct": 5.0,
+      "direction": "DOWN"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast $-0.161/gal (-4.47%): Driven primarily by Regional Logistics & Hub Delivery ($-0.056/gal), Refining Yield & Crack Spread ($-0.040/gal).",
+    "summary_text": "Cincinnati OH forecast $-0.159/gal (-4.41%): Driven primarily by Regional Logistics & Hub Delivery ($-0.056/gal), Refining Yield & Crack Spread ($-0.040/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -245,7 +245,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.009,
+        "delta_dollars": -0.007,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
