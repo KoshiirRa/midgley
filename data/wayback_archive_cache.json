@@ -917,13 +917,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5": {
-    "timestamp": "2026-11-10T16:16:08.855174+00:00",
+    "timestamp": "2026-11-13T02:29:04.926791+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMib0FVX3lxTE1YSnN3Sjd3ei04TUhDMUstTWhfWGR0R19aR0Y1SWJxWlZSenNpR0NzYko5bmhqbEQ4amd5M1RtVkFvRldNbjNzOGJxOXdTaGRGRGRxUXd5OHFfaXFyZnhNSUQ1TUJHZlpZb2hnaTdaNA?oc=5": {
     "timestamp": "2026-09-06T04:45:22.815148",
@@ -14339,13 +14339,13 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5": {
-    "timestamp": "2026-11-06T02:06:47.597915+00:00",
+    "timestamp": "2026-11-13T02:30:48.669925+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5",
-    "headline": "Strait of Hormuz Watch: Negotiations Continue as Vessel Attacks Persist",
+    "headline": "Strait of Hormuz Watch: Negotiations Uncertain as Vessel Attacks Continue",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5",
-    "error": "The read operation timed out"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMitwFBVV95cUxPWC1aamQ0cEFuMHBxTzNWWWZFcVd0SVBCUmhtQTFiRjA1aGlVMU9aaUhrU0dNVUZ2R2IyNFk3Sjk4VGFsVy1FUlFycHdGTTNaZy1oZlNXbzhtVEpxVmROUkh4cVplaDJidFZ5eW0zcmVEM0x2VnpKazlmQi1leXl3Q0FOa1oyNEh3X0dIZkhkdi1ackJfTFpWUkJNeE5aSWI5TWl0TXZJWnVMR0VpVzlUMmdXUHUyQVXSAcsBQVVfeXFMTUhvTi1ETmZKcnFYeWhGNnlTbmtGMUF3enBIbkpnVVdseTlPaXVnSi1mcWUtbkhNdFBBOUZ5TWRPYXFRNnpQTVZwZUR4UGdvQlBXRDI1UDVEOGRhbkdmX0RXQUNfd3FIYXFYbUE1c1cxM0RhQnB0TjV5dFRvSVMxbkUwaWtHOXlON0VxenV3a0xvTThzbVlqcDVlSGpQMUZkUXZIVV90VWdqSGxZTDhtTUhuQmt4MUhReEpqbGs4OUxnLUJUQWJzY1UtRms?oc=5": {
     "timestamp": "2026-10-20T16:33:46.683251+00:00",
@@ -22126,14 +22126,13 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5": {
-    "timestamp": "2026-11-10T22:58:53.935386+00:00",
+    "timestamp": "2026-11-13T02:30:15.049333+00:00",
     "status": "FALLBACK_PENDING",
-    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5",
     "headline": "Maine Republican Sen. Susan Collins and Democrat Troy Jackson spar over Trump, trade and abortion in Senate Debate - ABC News - Breaking News, Latest News and Videos",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipwFBVV95cUxNNnBlMktCX0l6dTFDZjI3eDd0aXgyVjJVcUNubVNCb1VpQXNSWDdQV1p5SDI0WHBabDdfUmJJSWlPZUZVV1htYk5tTzB4YkFqOWJNM09zVWdVeEdzYVlyeU56OFVDT1Q1d3dxanUwVVkzbjZHQ2dtdmZ6YnhJU3lCT0pWdnhyNGFDZU1Jemd0aFl0Vlh6WjB0clRZSFBzblA2TDlhbjY0SdIBrAFBVV95cUxPZ3B0WU1fQzRCZlowU1dNVTFRRlFnVmMzT09yakxhN2RWamFrUmwtcjdsTXR1OHFvcTZ0N0ROdENJeGhkUEh0RFVZQlprczJwSU5kTWZsOXBzWnpxWVJCX2NtUlFJR2JyNGh3NVhhemthYndrQm9kb0JxWEwxaG5NSW9mQmtqVXhoNmRYaTM5X2xpbWJ5a0FuZUY5TVc2Ylp6NkNOQWZUdnNVWXpK?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOWktiWUJpRnNKYnpjemdxaEVNbmFKTkx4REVnc3JwMDhQT2J0MHJKd3FyRUJQU09kNVVVWW1rN3dEN0piRHRRSWRYTjIzUFpZU3hmNVNjQThMZzJTZVpsWnVmOHJBSnJESTVvekN0cDN5WFA1emJIZE9RQXkzaDVVaDNCZl9MbDJMRU9BYmFXVjhBSFF1bGY4MjRLbDVfT3lsUlJMOXA1ODdpZUJ6VXROeExrRVhodGZzOU82Z09xMUtvUEdfVUp6SjhHY1hYWlI3?oc=5": {
     "timestamp": "2026-11-11T05:18:26.562788+00:00",
@@ -22695,5 +22694,113 @@
     "headline": "Four tankers struck by explosions in Strait of Hormuz, Iran says",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMitwFBVV95cUxQcDQ2cWxyeTFpazFaX1ZNM2RoS0t2ZVpEa0JpMElTZVFMUElROEF5c20tMlU0dEszWFlEdkhfR2VOb3hEQmo3MjRtdVlSaEhkZnpKXzExbE5QcXItQ3Z6REoyY1Fpak9IUUplYWp6NTQ2UjBiNVk1WDN0MmJjaFRkOHNLdDYxMU9xOWhuMnVaTlNiVXJNTlhLYV9EZEpnd1oxYmF0cG82b2VkMURkYnkzZkZBX0hhWHM?oc=5",
     "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOS255WVF4THR5N2NadjVHR09TV0VtNVZOZTI3cS1aZUFua0dFSmd3TjRjTFpxSmZ1alFtZUIyVXJ5eWdxTjVvMW5COS1Vbmlwd2UtU3FjMlFaMl9McENKUVQ4Qld0ajlTUTltVTI2OVVxeGhZbktPSUF2a2U2dWd3S0UwcExOQnpma3VSNEMtQzkxQnl1c2d2NXVmMElYdVhlcTh5RDhXYl9vTzNGd0psVS1YX05oNk5TQVFJ?oc=5": {
+    "timestamp": "2026-11-13T02:28:50.810993+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOS255WVF4THR5N2NadjVHR09TV0VtNVZOZTI3cS1aZUFua0dFSmd3TjRjTFpxSmZ1alFtZUIyVXJ5eWdxTjVvMW5COS1Vbmlwd2UtU3FjMlFaMl9McENKUVQ4Qld0ajlTUTltVTI2OVVxeGhZbktPSUF2a2U2dWd3S0UwcExOQnpma3VSNEMtQzkxQnl1c2d2NXVmMElYdVhlcTh5RDhXYl9vTzNGd0psVS1YX05oNk5TQVFJ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOS255WVF4THR5N2NadjVHR09TV0VtNVZOZTI3cS1aZUFua0dFSmd3TjRjTFpxSmZ1alFtZUIyVXJ5eWdxTjVvMW5COS1Vbmlwd2UtU3FjMlFaMl9McENKUVQ4Qld0ajlTUTltVTI2OVVxeGhZbktPSUF2a2U2dWd3S0UwcExOQnpma3VSNEMtQzkxQnl1c2d2NXVmMElYdVhlcTh5RDhXYl9vTzNGd0psVS1YX05oNk5TQVFJ?oc=5",
+    "headline": "WA fuel retailer accused of selling unleaded 91 as premium petrol - Carsales",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuwFBVV95cUxOS255WVF4THR5N2NadjVHR09TV0VtNVZOZTI3cS1aZUFua0dFSmd3TjRjTFpxSmZ1alFtZUIyVXJ5eWdxTjVvMW5COS1Vbmlwd2UtU3FjMlFaMl9McENKUVQ4Qld0ajlTUTltVTI2OVVxeGhZbktPSUF2a2U2dWd3S0UwcExOQnpma3VSNEMtQzkxQnl1c2d2NXVmMElYdVhlcTh5RDhXYl9vTzNGd0psVS1YX05oNk5TQVFJ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi9AFBVV95cUxNYXloS1RVangwNTltakJfcmtOLTB1MURSNjhLM19ZVFJKN19PSTZ2ZTd6alVlRHY0QzNkWUFUaTdaZGtXaTlraGg1TGFCOFZHeGZySV81VGo2UmpHYk8xLUZnSktDOHlQd2tuXzlpTmlpZjg5OU95SVJtZGpMZkJ5eU1zSkd4S1lSQWFQR1Y4SHUxb3Qza25ZQ0U4TEpOMWtMMzZWSmRuR2Z4ajhmVG1iNTFTdHhoRXhYNk5oMjZWUFpDbGVEUzlVWTdwd0JtemdjY3hfMzhFUVp2SWQtYm9jQi03cHVNYUhqYTBOZmZDX1JBTnQ1?oc=5": {
+    "timestamp": "2026-11-13T02:28:57.937084+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxNYXloS1RVangwNTltakJfcmtOLTB1MURSNjhLM19ZVFJKN19PSTZ2ZTd6alVlRHY0QzNkWUFUaTdaZGtXaTlraGg1TGFCOFZHeGZySV81VGo2UmpHYk8xLUZnSktDOHlQd2tuXzlpTmlpZjg5OU95SVJtZGpMZkJ5eU1zSkd4S1lSQWFQR1Y4SHUxb3Qza25ZQ0U4TEpOMWtMMzZWSmRuR2Z4ajhmVG1iNTFTdHhoRXhYNk5oMjZWUFpDbGVEUzlVWTdwd0JtemdjY3hfMzhFUVp2SWQtYm9jQi03cHVNYUhqYTBOZmZDX1JBTnQ1?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxNYXloS1RVangwNTltakJfcmtOLTB1MURSNjhLM19ZVFJKN19PSTZ2ZTd6alVlRHY0QzNkWUFUaTdaZGtXaTlraGg1TGFCOFZHeGZySV81VGo2UmpHYk8xLUZnSktDOHlQd2tuXzlpTmlpZjg5OU95SVJtZGpMZkJ5eU1zSkd4S1lSQWFQR1Y4SHUxb3Qza25ZQ0U4TEpOMWtMMzZWSmRuR2Z4ajhmVG1iNTFTdHhoRXhYNk5oMjZWUFpDbGVEUzlVWTdwd0JtemdjY3hfMzhFUVp2SWQtYm9jQi03cHVNYUhqYTBOZmZDX1JBTnQ1?oc=5",
+    "headline": "Where to find the cheapest fuel in Blacktown - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9AFBVV95cUxNYXloS1RVangwNTltakJfcmtOLTB1MURSNjhLM19ZVFJKN19PSTZ2ZTd6alVlRHY0QzNkWUFUaTdaZGtXaTlraGg1TGFCOFZHeGZySV81VGo2UmpHYk8xLUZnSktDOHlQd2tuXzlpTmlpZjg5OU95SVJtZGpMZkJ5eU1zSkd4S1lSQWFQR1Y4SHUxb3Qza25ZQ0U4TEpOMWtMMzZWSmRuR2Z4ajhmVG1iNTFTdHhoRXhYNk5oMjZWUFpDbGVEUzlVWTdwd0JtemdjY3hfMzhFUVp2SWQtYm9jQi03cHVNYUhqYTBOZmZDX1JBTnQ1?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNHNBakhVMHk2U1IzMTBxMk9EMXRia1g0b0dNallQcFBFcHJOQlFpUHZEVEF3MHYzWHFPaXVNYzUxTlFPUWxkZnVyaHBvbnJrQ2pZRFBvY2dEenJWUUY4Vkg0bzk0M2hoSmZWNE9sT0RuS1pYMDlITkVDOWozQTRDMTlUUE1Nanp2SGNoQ09oeWl6MG11Njg4d3FTemTSAZsBQVVfeXFMTUFWUlNnNVd1OEZaUVlMVFRKRFlMY1JXRzhNZHoxbDZ0clYzQmFtMXFzbE54d2dxQ2p3eEpvb2QwUkhsRnp5UEMtWDlhSlNSY0haYjBQTFlaX0xKeGhSZzJTeUtWZktlLVVfMU5faFdFNTd2MnIyVEJCSTBSQ2o5RHlEVm8zYXBQZ29Bc25VejlVdU01MnNPVEc4R28?oc=5": {
+    "timestamp": "2026-11-13T02:29:12.324713+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNHNBakhVMHk2U1IzMTBxMk9EMXRia1g0b0dNallQcFBFcHJOQlFpUHZEVEF3MHYzWHFPaXVNYzUxTlFPUWxkZnVyaHBvbnJrQ2pZRFBvY2dEenJWUUY4Vkg0bzk0M2hoSmZWNE9sT0RuS1pYMDlITkVDOWozQTRDMTlUUE1Nanp2SGNoQ09oeWl6MG11Njg4d3FTemTSAZsBQVVfeXFMTUFWUlNnNVd1OEZaUVlMVFRKRFlMY1JXRzhNZHoxbDZ0clYzQmFtMXFzbE54d2dxQ2p3eEpvb2QwUkhsRnp5UEMtWDlhSlNSY0haYjBQTFlaX0xKeGhSZzJTeUtWZktlLVVfMU5faFdFNTd2MnIyVEJCSTBSQ2o5RHlEVm8zYXBQZ29Bc25VejlVdU01MnNPVEc4R28?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQNHNBakhVMHk2U1IzMTBxMk9EMXRia1g0b0dNallQcFBFcHJOQlFpUHZEVEF3MHYzWHFPaXVNYzUxTlFPUWxkZnVyaHBvbnJrQ2pZRFBvY2dEenJWUUY4Vkg0bzk0M2hoSmZWNE9sT0RuS1pYMDlITkVDOWozQTRDMTlUUE1Nanp2SGNoQ09oeWl6MG11Njg4d3FTemTSAZsBQVVfeXFMTUFWUlNnNVd1OEZaUVlMVFRKRFlMY1JXRzhNZHoxbDZ0clYzQmFtMXFzbE54d2dxQ2p3eEpvb2QwUkhsRnp5UEMtWDlhSlNSY0haYjBQTFlaX0xKeGhSZzJTeUtWZktlLVVfMU5faFdFNTd2MnIyVEJCSTBSQ2o5RHlEVm8zYXBQZ29Bc25VejlVdU01MnNPVEc4R28?oc=5",
+    "headline": "An oil refinery caught fire in Russia's Volgograd following a drone attack - Українські Національні Новини (УНН)",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinAFBVV95cUxQNHNBakhVMHk2U1IzMTBxMk9EMXRia1g0b0dNallQcFBFcHJOQlFpUHZEVEF3MHYzWHFPaXVNYzUxTlFPUWxkZnVyaHBvbnJrQ2pZRFBvY2dEenJWUUY4Vkg0bzk0M2hoSmZWNE9sT0RuS1pYMDlITkVDOWozQTRDMTlUUE1Nanp2SGNoQ09oeWl6MG11Njg4d3FTemTSAZsBQVVfeXFMTUFWUlNnNVd1OEZaUVlMVFRKRFlMY1JXRzhNZHoxbDZ0clYzQmFtMXFzbE54d2dxQ2p3eEpvb2QwUkhsRnp5UEMtWDlhSlNSY0haYjBQTFlaX0xKeGhSZzJTeUtWZktlLVVfMU5faFdFNTd2MnIyVEJCSTBSQ2o5RHlEVm8zYXBQZ29Bc25VejlVdU01MnNPVEc4R28?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiswFBVV95cUxOdmozX2dPTW1sbDc3amVwd3FkeThCSFE0SWFTLWxiaUoyV2FGTjR5MGVpSUg2cW1aUGVoMGRPNmJxX19rc0U1anpnSDh5YUlVWnNidFNiLXVtemRMd0JrLVk3RGhtb0NnY3E0OFphWnhBR0RBejFVSEREc2o5YmsxcTRfcW5yUVl4QjFKdzBxbVhIZkFPcHlySkZvS190UFY4aVF5UG4yY1NZSm1mZWMzckp0aw?oc=5": {
+    "timestamp": "2026-11-13T02:29:19.276158+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOdmozX2dPTW1sbDc3amVwd3FkeThCSFE0SWFTLWxiaUoyV2FGTjR5MGVpSUg2cW1aUGVoMGRPNmJxX19rc0U1anpnSDh5YUlVWnNidFNiLXVtemRMd0JrLVk3RGhtb0NnY3E0OFphWnhBR0RBejFVSEREc2o5YmsxcTRfcW5yUVl4QjFKdzBxbVhIZkFPcHlySkZvS190UFY4aVF5UG4yY1NZSm1mZWMzckp0aw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOdmozX2dPTW1sbDc3amVwd3FkeThCSFE0SWFTLWxiaUoyV2FGTjR5MGVpSUg2cW1aUGVoMGRPNmJxX19rc0U1anpnSDh5YUlVWnNidFNiLXVtemRMd0JrLVk3RGhtb0NnY3E0OFphWnhBR0RBejFVSEREc2o5YmsxcTRfcW5yUVl4QjFKdzBxbVhIZkFPcHlySkZvS190UFY4aVF5UG4yY1NZSm1mZWMzckp0aw?oc=5",
+    "headline": "Can Ampol (ASX:ALD) Maintain Refining Momentum as Lytton Operations Resume? - Kalkine Media",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxOdmozX2dPTW1sbDc3amVwd3FkeThCSFE0SWFTLWxiaUoyV2FGTjR5MGVpSUg2cW1aUGVoMGRPNmJxX19rc0U1anpnSDh5YUlVWnNidFNiLXVtemRMd0JrLVk3RGhtb0NnY3E0OFphWnhBR0RBejFVSEREc2o5YmsxcTRfcW5yUVl4QjFKdzBxbVhIZkFPcHlySkZvS190UFY4aVF5UG4yY1NZSm1mZWMzckp0aw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMisAFBVV95cUxOa1NENHFYZVJ2MDZhSFpNS0oxMHpDZERtUkVhZzZMal9BcEJYc3o0LWdON2FuS3hLc01rMDNHSl9FdWVieUtzWkFrU09Jdi12WWNlQ2t4N2FBajdfZEFyRkIzalQxb180eTNrNWx0N3Q4UXljVURXMUpXMDFOOERDa1RYZjhxQ3d0d2dFa0h0MzNtaVZxY3RCX0g0YWtFbldiNk1DV2ZEeVdZRmVpcHRIUA?oc=5": {
+    "timestamp": "2026-11-13T02:29:34.191275+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOa1NENHFYZVJ2MDZhSFpNS0oxMHpDZERtUkVhZzZMal9BcEJYc3o0LWdON2FuS3hLc01rMDNHSl9FdWVieUtzWkFrU09Jdi12WWNlQ2t4N2FBajdfZEFyRkIzalQxb180eTNrNWx0N3Q4UXljVURXMUpXMDFOOERDa1RYZjhxQ3d0d2dFa0h0MzNtaVZxY3RCX0g0YWtFbldiNk1DV2ZEeVdZRmVpcHRIUA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOa1NENHFYZVJ2MDZhSFpNS0oxMHpDZERtUkVhZzZMal9BcEJYc3o0LWdON2FuS3hLc01rMDNHSl9FdWVieUtzWkFrU09Jdi12WWNlQ2t4N2FBajdfZEFyRkIzalQxb180eTNrNWx0N3Q4UXljVURXMUpXMDFOOERDa1RYZjhxQ3d0d2dFa0h0MzNtaVZxY3RCX0g0YWtFbldiNk1DV2ZEeVdZRmVpcHRIUA?oc=5",
+    "headline": "Chevron U.S.A. to resume operation at facility in Ralston, Iowa - TipRanks",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisAFBVV95cUxOa1NENHFYZVJ2MDZhSFpNS0oxMHpDZERtUkVhZzZMal9BcEJYc3o0LWdON2FuS3hLc01rMDNHSl9FdWVieUtzWkFrU09Jdi12WWNlQ2t4N2FBajdfZEFyRkIzalQxb180eTNrNWx0N3Q4UXljVURXMUpXMDFOOERDa1RYZjhxQ3d0d2dFa0h0MzNtaVZxY3RCX0g0YWtFbldiNk1DV2ZEeVdZRmVpcHRIUA?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOMGRNZlpOZWJQd1cxMlBMUE9wRk9jczNyWXdFZEotUV9pMXdRYkRMLWktdlNkMzZUMVNhX3VRdENPTmJ0RmhlcDU2b292YmhtdGloWER4Zjh5VEZrM3lDc05YUnltbi1hNW5fbHhBOVV2RU02S2k2QlVqT08tQVRUcFEwTWRnY3RMMThmdjQ1N2hSbkk4cUFQX3dFRTlOdzN1cl9KWHVZUE0yVkU?oc=5": {
+    "timestamp": "2026-11-13T02:29:43.514437+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOMGRNZlpOZWJQd1cxMlBMUE9wRk9jczNyWXdFZEotUV9pMXdRYkRMLWktdlNkMzZUMVNhX3VRdENPTmJ0RmhlcDU2b292YmhtdGloWER4Zjh5VEZrM3lDc05YUnltbi1hNW5fbHhBOVV2RU02S2k2QlVqT08tQVRUcFEwTWRnY3RMMThmdjQ1N2hSbkk4cUFQX3dFRTlOdzN1cl9KWHVZUE0yVkU?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOMGRNZlpOZWJQd1cxMlBMUE9wRk9jczNyWXdFZEotUV9pMXdRYkRMLWktdlNkMzZUMVNhX3VRdENPTmJ0RmhlcDU2b292YmhtdGloWER4Zjh5VEZrM3lDc05YUnltbi1hNW5fbHhBOVV2RU02S2k2QlVqT08tQVRUcFEwTWRnY3RMMThmdjQ1N2hSbkk4cUFQX3dFRTlOdzN1cl9KWHVZUE0yVkU?oc=5",
+    "headline": "Chevron price target lowered to $233 from $248 at Bernstein - TipRanks",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqwFBVV95cUxOMGRNZlpOZWJQd1cxMlBMUE9wRk9jczNyWXdFZEotUV9pMXdRYkRMLWktdlNkMzZUMVNhX3VRdENPTmJ0RmhlcDU2b292YmhtdGloWER4Zjh5VEZrM3lDc05YUnltbi1hNW5fbHhBOVV2RU02S2k2QlVqT08tQVRUcFEwTWRnY3RMMThmdjQ1N2hSbkk4cUFQX3dFRTlOdzN1cl9KWHVZUE0yVkU?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPNzV5ajRBUEhWanFKc2dBUmg0cEptNkJpOExGZjlqc04zd3NiMmx0bHFJbTVNTDJfT05QZ2tQNFh6elF3elA1OGNIemkyOUw3ZnVtYUNKaWtLZGNaM0d6VUVkcVdUYi1sZDFhNDcwQnJ2a0tOc3FaZFpicjdHNUJPcVQ0UW4xclNnMGZJ?oc=5": {
+    "timestamp": "2026-11-13T02:29:50.309979+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPNzV5ajRBUEhWanFKc2dBUmg0cEptNkJpOExGZjlqc04zd3NiMmx0bHFJbTVNTDJfT05QZ2tQNFh6elF3elA1OGNIemkyOUw3ZnVtYUNKaWtLZGNaM0d6VUVkcVdUYi1sZDFhNDcwQnJ2a0tOc3FaZFpicjdHNUJPcVQ0UW4xclNnMGZJ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPNzV5ajRBUEhWanFKc2dBUmg0cEptNkJpOExGZjlqc04zd3NiMmx0bHFJbTVNTDJfT05QZ2tQNFh6elF3elA1OGNIemkyOUw3ZnVtYUNKaWtLZGNaM0d6VUVkcVdUYi1sZDFhNDcwQnJ2a0tOc3FaZFpicjdHNUJPcVQ0UW4xclNnMGZJ?oc=5",
+    "headline": "Post US Midterms, India Must Engage Congress - India Narrative",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiiwFBVV95cUxPNzV5ajRBUEhWanFKc2dBUmg0cEptNkJpOExGZjlqc04zd3NiMmx0bHFJbTVNTDJfT05QZ2tQNFh6elF3elA1OGNIemkyOUw3ZnVtYUNKaWtLZGNaM0d6VUVkcVdUYi1sZDFhNDcwQnJ2a0tOc3FaZFpicjdHNUJPcVQ0UW4xclNnMGZJ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMipgFBVV95cUxObVAxNUNJaHJZb0ROZXpmMmRwbFhKMG9yTnprNWNSWXRhSUFNYTZXMFZicWRyOU1RejNucFkxUTIwV0dzRFgzcGU3SThXdGRPQU9WeVMtcV9nOTBpTDdRS0Zmc1JiME0yTGc1eS13NlFKaXlpSXBSQjc2azIwcVozdkhVaHlBNF9TWFFwMlVUSmJpbktreXM4dTViTmJRSVg2LWNMRjlR?oc=5": {
+    "timestamp": "2026-11-13T02:29:57.864586+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxObVAxNUNJaHJZb0ROZXpmMmRwbFhKMG9yTnprNWNSWXRhSUFNYTZXMFZicWRyOU1RejNucFkxUTIwV0dzRFgzcGU3SThXdGRPQU9WeVMtcV9nOTBpTDdRS0Zmc1JiME0yTGc1eS13NlFKaXlpSXBSQjc2azIwcVozdkhVaHlBNF9TWFFwMlVUSmJpbktreXM4dTViTmJRSVg2LWNMRjlR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxObVAxNUNJaHJZb0ROZXpmMmRwbFhKMG9yTnprNWNSWXRhSUFNYTZXMFZicWRyOU1RejNucFkxUTIwV0dzRFgzcGU3SThXdGRPQU9WeVMtcV9nOTBpTDdRS0Zmc1JiME0yTGc1eS13NlFKaXlpSXBSQjc2azIwcVozdkhVaHlBNF9TWFFwMlVUSmJpbktreXM4dTViTmJRSVg2LWNMRjlR?oc=5",
+    "headline": "More Drilling Won’t Shield U.S. Consumers From Oil Price Shocks - Crude Oil Prices Today | OilPrice.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxObVAxNUNJaHJZb0ROZXpmMmRwbFhKMG9yTnprNWNSWXRhSUFNYTZXMFZicWRyOU1RejNucFkxUTIwV0dzRFgzcGU3SThXdGRPQU9WeVMtcV9nOTBpTDdRS0Zmc1JiME0yTGc1eS13NlFKaXlpSXBSQjc2azIwcVozdkhVaHlBNF9TWFFwMlVUSmJpbktreXM4dTViTmJRSVg2LWNMRjlR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMinwFBVV95cUxQckxCNDVaZ09BMFVNY1VZeGVycmFCY0lycUFZUlNUeExWUVkzNjR4aWRUZ3RRYUh4RU5ZZmRpTFZIVjlsV0dxNWJ1bG5FVWN3ck5TODR4dWxNcXA1cFF4bDNhSy1FTEpBTE1OeG16R21WcnYxZzlqNGQzOXhsZEV0c2hUUmdxM3J3MHhpeHN4QmNGX18xWElad0NYVUhoVWM?oc=5": {
+    "timestamp": "2026-11-13T02:30:08.236573+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQckxCNDVaZ09BMFVNY1VZeGVycmFCY0lycUFZUlNUeExWUVkzNjR4aWRUZ3RRYUh4RU5ZZmRpTFZIVjlsV0dxNWJ1bG5FVWN3ck5TODR4dWxNcXA1cFF4bDNhSy1FTEpBTE1OeG16R21WcnYxZzlqNGQzOXhsZEV0c2hUUmdxM3J3MHhpeHN4QmNGX18xWElad0NYVUhoVWM?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQckxCNDVaZ09BMFVNY1VZeGVycmFCY0lycUFZUlNUeExWUVkzNjR4aWRUZ3RRYUh4RU5ZZmRpTFZIVjlsV0dxNWJ1bG5FVWN3ck5TODR4dWxNcXA1cFF4bDNhSy1FTEpBTE1OeG16R21WcnYxZzlqNGQzOXhsZEV0c2hUUmdxM3J3MHhpeHN4QmNGX18xWElad0NYVUhoVWM?oc=5",
+    "headline": "Trump’s Midterm Defeat Opens Door for Indonesia to Recalibrate US Ties - Jakarta Globe",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMinwFBVV95cUxQckxCNDVaZ09BMFVNY1VZeGVycmFCY0lycUFZUlNUeExWUVkzNjR4aWRUZ3RRYUh4RU5ZZmRpTFZIVjlsV0dxNWJ1bG5FVWN3ck5TODR4dWxNcXA1cFF4bDNhSy1FTEpBTE1OeG16R21WcnYxZzlqNGQzOXhsZEV0c2hUUmdxM3J3MHhpeHN4QmNGX18xWElad0NYVUhoVWM?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSUhIZjRDUnRUQUUyWDRCQlBzUVBwS0VKb2tXbTJVM3pqRURJcWQzV0pLN3M1NjVJTUxucHFvMkZOM0R6RDBqZWU3OUFxZTN2T0ltdW8wNEFHd3c3Y0hieXFpOHNqR2xhaml0RXZSM0NmVzZISW9aclhSVmZSWV9GUmphMVVTNGJueUJWUzdWZ0ZQOTNuZUo0dzVFYUg4VzJBZ1g3blYwSy14emkycTdwc3R3b09PdkFTQ200?oc=5": {
+    "timestamp": "2026-11-13T02:30:22.417093+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSUhIZjRDUnRUQUUyWDRCQlBzUVBwS0VKb2tXbTJVM3pqRURJcWQzV0pLN3M1NjVJTUxucHFvMkZOM0R6RDBqZWU3OUFxZTN2T0ltdW8wNEFHd3c3Y0hieXFpOHNqR2xhaml0RXZSM0NmVzZISW9aclhSVmZSWV9GUmphMVVTNGJueUJWUzdWZ0ZQOTNuZUo0dzVFYUg4VzJBZ1g3blYwSy14emkycTdwc3R3b09PdkFTQ200?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSUhIZjRDUnRUQUUyWDRCQlBzUVBwS0VKb2tXbTJVM3pqRURJcWQzV0pLN3M1NjVJTUxucHFvMkZOM0R6RDBqZWU3OUFxZTN2T0ltdW8wNEFHd3c3Y0hieXFpOHNqR2xhaml0RXZSM0NmVzZISW9aclhSVmZSWV9GUmphMVVTNGJueUJWUzdWZ0ZQOTNuZUo0dzVFYUg4VzJBZ1g3blYwSy14emkycTdwc3R3b09PdkFTQ200?oc=5",
+    "headline": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSUhIZjRDUnRUQUUyWDRCQlBzUVBwS0VKb2tXbTJVM3pqRURJcWQzV0pLN3M1NjVJTUxucHFvMkZOM0R6RDBqZWU3OUFxZTN2T0ltdW8wNEFHd3c3Y0hieXFpOHNqR2xhaml0RXZSM0NmVzZISW9aclhSVmZSWV9GUmphMVVTNGJueUJWUzdWZ0ZQOTNuZUo0dzVFYUg4VzJBZ1g3blYwSy14emkycTdwc3R3b09PdkFTQ200?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMirAFBVV95cUxPVFpxN1N1QlJGWXVmaUNRZ3RRZmQyeFJRdFI4amYxc19kS1NiZ1RKdUlUeHNZM0c3QWw1R1dQMTZxeUNNTm9RaGU1c0VoZ3FzNk5PbVA2MXBsdm9LcjRCN1A2ODVMUENzVHpoX010UjIyTmJMak5BU2hVTE44ZW9GMVRCVThyUVlKcVh0UzB6ZDNITV9tQlB4Wm9yOUt3eFp0MDYtYUl6aVJLNjVk?oc=5": {
+    "timestamp": "2026-11-13T02:30:30.651957+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPVFpxN1N1QlJGWXVmaUNRZ3RRZmQyeFJRdFI4amYxc19kS1NiZ1RKdUlUeHNZM0c3QWw1R1dQMTZxeUNNTm9RaGU1c0VoZ3FzNk5PbVA2MXBsdm9LcjRCN1A2ODVMUENzVHpoX010UjIyTmJMak5BU2hVTE44ZW9GMVRCVThyUVlKcVh0UzB6ZDNITV9tQlB4Wm9yOUt3eFp0MDYtYUl6aVJLNjVk?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPVFpxN1N1QlJGWXVmaUNRZ3RRZmQyeFJRdFI4amYxc19kS1NiZ1RKdUlUeHNZM0c3QWw1R1dQMTZxeUNNTm9RaGU1c0VoZ3FzNk5PbVA2MXBsdm9LcjRCN1A2ODVMUENzVHpoX010UjIyTmJMak5BU2hVTE44ZW9GMVRCVThyUVlKcVh0UzB6ZDNITV9tQlB4Wm9yOUt3eFp0MDYtYUl6aVJLNjVk?oc=5",
+    "headline": "Venezuela allows oil companies to build autonomous power plants — OilPrice - UA.NEWS",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirAFBVV95cUxPVFpxN1N1QlJGWXVmaUNRZ3RRZmQyeFJRdFI4amYxc19kS1NiZ1RKdUlUeHNZM0c3QWw1R1dQMTZxeUNNTm9RaGU1c0VoZ3FzNk5PbVA2MXBsdm9LcjRCN1A2ODVMUENzVHpoX010UjIyTmJMak5BU2hVTE44ZW9GMVRCVThyUVlKcVh0UzB6ZDNITV9tQlB4Wm9yOUt3eFp0MDYtYUl6aVJLNjVk?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://truthsocial.com/post/6280691": {
+    "timestamp": "2026-11-13T02:30:37.467876+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://truthsocial.com/post/6280691",
+    "canonical_url": "https://truthsocial.com/post/6280691",
+    "headline": "Current price of oil as of November 11, 2026 - Fortune",
+    "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/6280691",
+    "error": "<urlopen error timed out>"
   }
 }

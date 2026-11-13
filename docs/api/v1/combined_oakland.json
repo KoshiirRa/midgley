@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-12T21:25:16.790803",
+  "timestamp": "2026-11-13T02:31:19.924022",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 5.662,
+    "current_price_per_gal": 5.626,
     "source": "AAA Metro Daily CSV (Oakland, CA)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-12T21:24:49Z"
+      "timestamp": "2026-11-13T02:30:53Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-18",
-    "current_base_price": 5.662,
-    "predicted_price_per_gal": 5.609,
+    "current_base_price": 5.626,
+    "predicted_price_per_gal": 5.573,
     "expected_change_dollars": -0.053,
     "expected_change_percent": -0.94,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 5.487,
-    "prediction_upper_95ci": 5.731,
+    "prediction_lower_95ci": 5.451,
+    "prediction_upper_95ci": 5.695,
     "calibration_method": "conformal",
     "calibration_sample_size": 48,
     "directional_hit_rate_historical": 0.0,
     "historical_mae_dollars": 0.2744,
     "evaluation_sample_size": 32,
-    "day_1_price": 5.651,
-    "day_2_price": 5.638,
-    "day_3_price": 5.625,
-    "day_4_price": 5.617,
-    "day_5_price": 5.609,
+    "day_1_price": 5.615,
+    "day_2_price": 5.605,
+    "day_3_price": 5.589,
+    "day_4_price": 5.581,
+    "day_5_price": 5.573,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.011,
-          "impact_pct": -0.19,
+          "impact_pct": -0.2,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.011,
-      "impact_pct": -0.19,
+      "impact_pct": -0.2,
       "share_pct": 20.0,
       "direction": "DOWN"
     },
