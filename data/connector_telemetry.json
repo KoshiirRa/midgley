@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-14 03:01:12",
+  "last_updated": "2026-11-14 08:46:45",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-02 08:15:08",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 277.01,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-02 08:15:36",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "ERROR",
-      "latency_ms": 332.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Failed to query bank stats across endpoints"
-    },
-    {
-      "timestamp": "2026-10-02 08:30:07",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 299.7,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-02 09:00:07",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 276.8,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
     {
       "timestamp": "2026-10-02 09:30:08",
       "connector_name": "Reachability_EXECUTIVE_SOCIAL",
@@ -9999,6 +9959,46 @@
       "target": "CL",
       "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
       "latency_ms": 541.28,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-14 08:44:36",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 276.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-14 08:46:36",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 1119.38,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 418 docs, 320 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-14 08:46:43",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1980.77,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-14 08:46:45",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1317.46,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."

@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-14T03:01:06.073850",
+  "timestamp": "2026-11-14T08:46:38.832393",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.829,
+    "current_price_per_gal": 3.81,
     "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-14T03:00:38Z"
+      "timestamp": "2026-11-14T08:46:06Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-20",
-    "current_base_price": 3.829,
-    "predicted_price_per_gal": 4.179,
+    "current_base_price": 3.81,
+    "predicted_price_per_gal": 4.16,
     "expected_change_dollars": 0.35,
-    "expected_change_percent": 9.14,
+    "expected_change_percent": 9.19,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.945,
-    "prediction_upper_95ci": 4.413,
+    "prediction_lower_95ci": 3.926,
+    "prediction_upper_95ci": 4.394,
     "calibration_method": "conformal",
     "calibration_sample_size": 52,
     "directional_hit_rate_historical": 0.1944,
     "historical_mae_dollars": 0.2909,
     "evaluation_sample_size": 36,
-    "day_1_price": 3.864,
-    "day_2_price": 3.968,
-    "day_3_price": 4.015,
-    "day_4_price": 4.1,
-    "day_5_price": 4.179,
+    "day_1_price": 3.845,
+    "day_2_price": 3.949,
+    "day_3_price": 3.996,
+    "day_4_price": 4.081,
+    "day_5_price": 4.16,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Newark DE forecast +$0.350/gal (+9.14%): Driven primarily by Refining Yield & Crack Spread (+$0.122/gal), Regional Logistics & Hub Delivery (+$0.087/gal).",
+      "summary_text": "Newark DE forecast +$0.350/gal (+9.19%): Driven primarily by Refining Yield & Crack Spread (+$0.122/gal), Regional Logistics & Hub Delivery (+$0.087/gal).",
       "key_drivers": [
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.122,
-          "impact_pct": 3.19,
+          "impact_pct": 3.2,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.087,
-          "impact_pct": 2.27,
+          "impact_pct": 2.28,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.07,
-          "impact_pct": 1.83,
+          "impact_pct": 1.84,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -126,7 +126,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.035,
-          "impact_pct": 0.91,
+          "impact_pct": 0.92,
           "share_pct": 10.0,
           "direction": "UP"
         },
@@ -142,7 +142,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.017,
-          "impact_pct": 0.44,
+          "impact_pct": 0.45,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -154,7 +154,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.122,
-      "impact_pct": 3.19,
+      "impact_pct": 3.2,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.087,
-      "impact_pct": 2.27,
+      "impact_pct": 2.28,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.07,
-      "impact_pct": 1.83,
+      "impact_pct": 1.84,
       "share_pct": 20.0,
       "direction": "UP"
     },
@@ -178,7 +178,7 @@
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.035,
-      "impact_pct": 0.91,
+      "impact_pct": 0.92,
       "share_pct": 10.0,
       "direction": "UP"
     },
@@ -194,13 +194,13 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.017,
-      "impact_pct": 0.44,
+      "impact_pct": 0.45,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Newark DE forecast +$0.350/gal (+9.14%): Driven primarily by Refining Yield & Crack Spread (+$0.122/gal), Regional Logistics & Hub Delivery (+$0.087/gal).",
+    "summary_text": "Newark DE forecast +$0.350/gal (+9.19%): Driven primarily by Refining Yield & Crack Spread (+$0.122/gal), Regional Logistics & Hub Delivery (+$0.087/gal).",
     "components": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",

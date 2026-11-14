@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-14T03:01:04.900889",
+  "timestamp": "2026-11-14T08:46:37.557057",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.956,
+    "current_price_per_gal": 3.92,
     "source": "AAA National Daily CSV (US Average)",
     "provenance": {
       "source": "AAA National Daily CSV (US Average)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-14T03:01:03Z"
+      "timestamp": "2026-11-14T08:46:36Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-20",
-    "current_base_price": 3.956,
-    "predicted_price_per_gal": 4.203,
+    "current_base_price": 3.92,
+    "predicted_price_per_gal": 4.167,
     "expected_change_dollars": 0.247,
-    "expected_change_percent": 6.24,
+    "expected_change_percent": 6.3,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.863,
-    "prediction_upper_95ci": 4.543,
+    "prediction_lower_95ci": 3.827,
+    "prediction_upper_95ci": 4.507,
     "calibration_method": "conformal",
     "calibration_sample_size": 52,
     "directional_hit_rate_historical": 0.6111,
     "historical_mae_dollars": 0.1377,
     "evaluation_sample_size": 36,
-    "day_1_price": 3.979,
-    "day_2_price": 4.048,
-    "day_3_price": 4.084,
-    "day_4_price": 4.142,
-    "day_5_price": 4.203,
+    "day_1_price": 3.943,
+    "day_2_price": 4.012,
+    "day_3_price": 4.048,
+    "day_4_price": 4.106,
+    "day_5_price": 4.167,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.247/gal (+6.24%): Driven primarily by Futures & Commodity Benchmark (+$0.111/gal), Refining Yield & Crack Spread (+$0.062/gal).",
+      "summary_text": "National forecast +$0.247/gal (+6.30%): Driven primarily by Futures & Commodity Benchmark (+$0.111/gal), Refining Yield & Crack Spread (+$0.062/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.111,
-          "impact_pct": 2.81,
+          "impact_pct": 2.83,
           "share_pct": 45.0,
           "direction": "UP"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.062,
-          "impact_pct": 1.57,
+          "impact_pct": 1.58,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -134,7 +134,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.012,
-          "impact_pct": 0.3,
+          "impact_pct": 0.31,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.111,
-      "impact_pct": 2.81,
+      "impact_pct": 2.83,
       "share_pct": 45.0,
       "direction": "UP"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
       "impact_dollars": 0.062,
-      "impact_pct": 1.57,
+      "impact_pct": 1.58,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -186,7 +186,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.012,
-      "impact_pct": 0.3,
+      "impact_pct": 0.31,
       "share_pct": 5.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.247/gal (+6.24%): Driven primarily by Futures & Commodity Benchmark (+$0.111/gal), Refining Yield & Crack Spread (+$0.062/gal).",
+    "summary_text": "National forecast +$0.247/gal (+6.30%): Driven primarily by Futures & Commodity Benchmark (+$0.111/gal), Refining Yield & Crack Spread (+$0.062/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",

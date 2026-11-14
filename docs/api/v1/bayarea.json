@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-14T03:01:07.767611",
+  "timestamp": "2026-11-14T08:46:40.693148",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 5.706,
+    "current_price_per_gal": 5.68,
     "source": "AAA Metro Daily CSV (San Francisco, CA)",
     "provenance": {
       "source": "AAA Metro Daily CSV (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-14T03:00:39Z"
+      "timestamp": "2026-11-14T08:46:10Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-20",
-    "current_base_price": 5.706,
-    "predicted_price_per_gal": 6.149,
+    "current_base_price": 5.68,
+    "predicted_price_per_gal": 6.123,
     "expected_change_dollars": 0.443,
-    "expected_change_percent": 7.76,
+    "expected_change_percent": 7.8,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 5.848,
-    "prediction_upper_95ci": 6.45,
+    "prediction_lower_95ci": 5.822,
+    "prediction_upper_95ci": 6.424,
     "calibration_method": "conformal",
     "calibration_sample_size": 52,
     "directional_hit_rate_historical": 0.8056,
     "historical_mae_dollars": 0.227,
     "evaluation_sample_size": 36,
-    "day_1_price": 5.766,
-    "day_2_price": 5.897,
-    "day_3_price": 5.954,
-    "day_4_price": 6.047,
-    "day_5_price": 6.149,
+    "day_1_price": 5.739,
+    "day_2_price": 5.871,
+    "day_3_price": 5.928,
+    "day_4_price": 6.021,
+    "day_5_price": 6.123,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "BayArea CA forecast +$0.443/gal (+7.76%): Driven primarily by Tax & Regulatory Overhead (+$0.155/gal), Refining Yield & Crack Spread (+$0.111/gal).",
+      "summary_text": "BayArea CA forecast +$0.443/gal (+7.80%): Driven primarily by Tax & Regulatory Overhead (+$0.155/gal), Refining Yield & Crack Spread (+$0.111/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.155,
-          "impact_pct": 2.72,
+          "impact_pct": 2.73,
           "share_pct": 35.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.089,
-          "impact_pct": 1.56,
+          "impact_pct": 1.57,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
       "impact_dollars": 0.155,
-      "impact_pct": 2.72,
+      "impact_pct": 2.73,
       "share_pct": 35.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.089,
-      "impact_pct": 1.56,
+      "impact_pct": 1.57,
       "share_pct": 20.0,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "BayArea CA forecast +$0.443/gal (+7.76%): Driven primarily by Tax & Regulatory Overhead (+$0.155/gal), Refining Yield & Crack Spread (+$0.111/gal).",
+    "summary_text": "BayArea CA forecast +$0.443/gal (+7.80%): Driven primarily by Tax & Regulatory Overhead (+$0.155/gal), Refining Yield & Crack Spread (+$0.111/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
