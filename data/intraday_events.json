@@ -9786,5 +9786,28 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.64,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-14T00:48:35.301623",
+    "headline": "Explosions heard in Iran\u2019s Jask, east of Strait of Hormuz: State media",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNXzJzQ1cyRFJEZ213XzBwa0l3VmRwaVdINjJEUmRIc2JoT0RCeW1jTjRXamJQRk1CX19UVGRpeVVCdGJRSldNR0F3WU1VTWZ2aVFFSEFnSU12a2JiMm5vcHZsR2tBNnBIRWtRTGxHZWtWd1IwUWgxMGpaQkZDY2dRNkM3bnRwdFE2aEx3dWdDS21WanYwcDJhanZmOEdMMUY4cXZHNTVNRjhTMXdDS1p2aF9OSQ?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNXzJzQ1cyRFJEZ213XzBwa0l3VmRwaVdINjJEUmRIc2JoT0RCeW1jTjRXamJQRk1CX19UVGRpeVVCdGJRSldNR0F3WU1VTWZ2aVFFSEFnSU12a2JiMm5vcHZsR2tBNnBIRWtRTGxHZWtWd1IwUWgxMGpaQkZDY2dRNkM3bnRwdFE2aEx3dWdDS21WanYwcDJhanZmOEdMMUY4cXZHNTVNRjhTMXdDS1p2aF9OSQ?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxNXzJzQ1cyRFJEZ213XzBwa0l3VmRwaVdINjJEUmRIc2JoT0RCeW1jTjRXamJQRk1CX19UVGRpeVVCdGJRSldNR0F3WU1VTWZ2aVFFSEFnSU12a2JiMm5vcHZsR2tBNnBIRWtRTGxHZWtWd1IwUWgxMGpaQkZDY2dRNkM3bnRwdFE2aEx3dWdDS21WanYwcDJhanZmOEdMMUY4cXZHNTVNRjhTMXdDS1p2aF9OSQ?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.45,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.15,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.65
+    },
+    "discord_notified": true
   }
 ]
