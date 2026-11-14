@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-14T16:28:27.447633",
+  "timestamp": "2026-11-14T19:21:32.703277",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-14T16:27:56Z"
+      "timestamp": "2026-11-14T19:21:13Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,27 +29,27 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-11-20",
     "current_base_price": 3.376,
-    "predicted_price_per_gal": 3.259,
-    "expected_change_dollars": -0.117,
-    "expected_change_percent": -3.47,
+    "predicted_price_per_gal": 3.256,
+    "expected_change_dollars": -0.12,
+    "expected_change_percent": -3.55,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.056,
-    "prediction_upper_95ci": 3.462,
+    "prediction_lower_95ci": 3.053,
+    "prediction_upper_95ci": 3.459,
     "calibration_method": "conformal",
     "calibration_sample_size": 52,
     "directional_hit_rate_historical": 0.9444,
     "historical_mae_dollars": 0.2692,
     "evaluation_sample_size": 36,
-    "day_1_price": 3.348,
-    "day_2_price": 3.322,
-    "day_3_price": 3.298,
-    "day_4_price": 3.279,
-    "day_5_price": 3.259,
+    "day_1_price": 3.347,
+    "day_2_price": 3.323,
+    "day_3_price": 3.301,
+    "day_4_price": 3.278,
+    "day_5_price": 3.256,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.035,
+        "delta_dollars": -0.036,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.035,
+        "delta_dollars": -0.036,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.029,
+        "delta_dollars": -0.03,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -96,29 +96,29 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.117/gal (-3.47%): Driven primarily by Regional Logistics & Hub Delivery ($-0.035/gal), Refining Yield & Crack Spread ($-0.035/gal).",
+      "summary_text": "Tulsa OK forecast $-0.120/gal (-3.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.036/gal), Refining Yield & Crack Spread ($-0.036/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.035,
-          "impact_pct": -1.04,
+          "impact_dollars": -0.036,
+          "impact_pct": -1.07,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.035,
-          "impact_pct": -1.04,
+          "impact_dollars": -0.036,
+          "impact_pct": -1.07,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.029,
-          "impact_pct": -0.86,
+          "impact_dollars": -0.03,
+          "impact_pct": -0.89,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -153,24 +153,24 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.035,
-      "impact_pct": -1.04,
+      "impact_dollars": -0.036,
+      "impact_pct": -1.07,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.035,
-      "impact_pct": -1.04,
+      "impact_dollars": -0.036,
+      "impact_pct": -1.07,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.029,
-      "impact_pct": -0.86,
+      "impact_dollars": -0.03,
+      "impact_pct": -0.89,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.117/gal (-3.47%): Driven primarily by Regional Logistics & Hub Delivery ($-0.035/gal), Refining Yield & Crack Spread ($-0.035/gal).",
+    "summary_text": "Tulsa OK forecast $-0.120/gal (-3.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.036/gal), Refining Yield & Crack Spread ($-0.036/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.035,
+        "delta_dollars": -0.036,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.035,
+        "delta_dollars": -0.036,
         "share_pct": 30.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.029,
+        "delta_dollars": -0.03,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"

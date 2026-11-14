@@ -1,9 +1,15 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-11-07 18:21:09",
-  "total_alerts_logged": 23,
+  "last_updated": "2026-11-14 19:16:28",
+  "total_alerts_logged": 24,
   "active_degraded_regions": [
-    "National"
+    "Charlotte_NC",
+    "Cincinnati_KY",
+    "Cincinnati_OH",
+    "Greenville_NC",
+    "National",
+    "Newark_DE",
+    "Tulsa_OK"
   ],
   "history": [
     {
@@ -824,6 +830,70 @@
           "model_mae": 0.1189,
           "naive_mae": 0.1127,
           "model_uplift_mae_pct": -5.48,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-11-14 19:16:28",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 181,
+          "model_mae": 0.2877,
+          "naive_mae": 0.2444,
+          "model_uplift_mae_pct": -17.74,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Cincinnati_KY",
+          "evaluations": 181,
+          "model_mae": 0.1246,
+          "naive_mae": 0.1103,
+          "model_uplift_mae_pct": -12.97,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Cincinnati_OH",
+          "evaluations": 181,
+          "model_mae": 0.1159,
+          "naive_mae": 0.1135,
+          "model_uplift_mae_pct": -2.1,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 120,
+          "model_mae": 0.1354,
+          "naive_mae": 0.0922,
+          "model_uplift_mae_pct": -46.83,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "National",
+          "evaluations": 181,
+          "model_mae": 0.1174,
+          "naive_mae": 0.116,
+          "model_uplift_mae_pct": -1.15,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Newark_DE",
+          "evaluations": 181,
+          "model_mae": 0.2882,
+          "naive_mae": 0.2434,
+          "model_uplift_mae_pct": -18.41,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 181,
+          "model_mae": 0.2922,
+          "naive_mae": 0.2847,
+          "model_uplift_mae_pct": -2.62,
           "status": "DEGRADED"
         }
       ],
