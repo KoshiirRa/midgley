@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-11-07 23:31 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-11-14 00:49 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,11 +10,11 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 37 | `$0.2260/gal` | `$0.2561/gal` | **`+11.74%`** | **`86.49%`** | `35.1%` | 🟢 Optimal |
-| **14-Day Window** | 81 | `$0.1422/gal` | `$0.1456/gal` | **`+2.32%`** | **`64.20%`** | `45.7%` | 🟢 Optimal |
-| **30-Day Window** | 175 | `$0.1189/gal` | `$0.1127/gal` | `-5.48%` | **`58.86%`** | `37.7%` | ⚠️ Calibration Active |
-| **90-Day Window** | 425 | `$0.1434/gal` | `$0.1142/gal` | `-25.60%` | **`45.88%`** | `52.0%` | ⚠️ Calibration Active |
-| **All-Time Window** | 1412 | `$0.1206/gal` | `$0.1040/gal` | `-15.97%` | **`49.36%`** | `51.6%` | ⚠️ Calibration Active |
+| **7-Day Window** | 874 | `$0.2671/gal` | `$0.2708/gal` | **`+1.35%`** | **`51.83%`** | `19.9%` | 🟢 Optimal |
+| **14-Day Window** | 1546 | `$0.2664/gal` | `$0.2713/gal` | **`+1.81%`** | **`46.05%`** | `17.1%` | 🟢 Optimal |
+| **30-Day Window** | 3452 | `$0.2415/gal` | `$0.2427/gal` | **`+0.48%`** | **`43.08%`** | `17.1%` | 🟢 Optimal |
+| **90-Day Window** | 6458 | `$0.2393/gal` | `$0.2334/gal` | `-2.54%` | **`46.44%`** | `28.9%` | ⚠️ Calibration Active |
+| **All-Time Window** | 18471 | `$0.2859/gal` | `$0.2913/gal` | **`+1.87%`** | **`47.58%`** | `32.1%` | 🟢 Optimal |
 
 ---
 
