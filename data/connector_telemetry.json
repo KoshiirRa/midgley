@@ -1,98 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-14 00:49:18",
+  "last_updated": "2026-11-14 03:01:12",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-02 07:04:14",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 124.33,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-10-02 07:04:14",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 101.03,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-10-02 07:04:14",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 98.17,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-10-02 07:04:14",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "ERROR",
-      "latency_ms": 82.83,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 503: Service Unavailable"
-    },
-    {
-      "timestamp": "2026-10-02 07:10:05",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "ERROR",
-      "latency_ms": 346.65,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Failed to query bank stats across endpoints"
-    },
-    {
-      "timestamp": "2026-10-02 07:10:31",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "ERROR",
-      "latency_ms": 298.1,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Failed to query bank stats across endpoints"
-    },
-    {
-      "timestamp": "2026-10-02 07:30:08",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 274.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-02 07:30:41",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "ERROR",
-      "latency_ms": 314.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Failed to query bank stats across endpoints"
-    },
-    {
-      "timestamp": "2026-10-02 07:45:10",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 361.73,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
     {
       "timestamp": "2026-10-02 08:15:08",
       "connector_name": "Reachability_EXECUTIVE_SOCIAL",
@@ -9999,6 +9909,96 @@
       "target": "CL",
       "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
       "latency_ms": 1270.12,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-14 02:27:14",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 287.6,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-14 02:36:13",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 352.32,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-14 02:36:16",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 138.84,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-14 02:36:19",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 156.14,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-14 02:42:31",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 281.67,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-14 02:57:47",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 259.83,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-14 03:01:02",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 666.42,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 418 docs, 320 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-14 03:01:11",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 1617.44,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "No active challenge found for RB on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-14 03:01:12",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
+      "latency_ms": 541.28,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."

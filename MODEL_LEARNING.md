@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-11-14 00:49 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-11-14 03:01 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,11 +10,11 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 874 | `$0.2671/gal` | `$0.2708/gal` | **`+1.35%`** | **`51.83%`** | `19.9%` | 🟢 Optimal |
-| **14-Day Window** | 1546 | `$0.2664/gal` | `$0.2713/gal` | **`+1.81%`** | **`46.05%`** | `17.1%` | 🟢 Optimal |
-| **30-Day Window** | 3452 | `$0.2415/gal` | `$0.2427/gal` | **`+0.48%`** | **`43.08%`** | `17.1%` | 🟢 Optimal |
-| **90-Day Window** | 6458 | `$0.2393/gal` | `$0.2334/gal` | `-2.54%` | **`46.44%`** | `28.9%` | ⚠️ Calibration Active |
-| **All-Time Window** | 18471 | `$0.2859/gal` | `$0.2913/gal` | **`+1.87%`** | **`47.58%`** | `32.1%` | 🟢 Optimal |
+| **7-Day Window** | 882 | `$0.2659/gal` | `$0.2692/gal` | **`+1.24%`** | **`51.70%`** | `19.9%` | 🟢 Optimal |
+| **14-Day Window** | 1554 | `$0.2657/gal` | `$0.2704/gal` | **`+1.75%`** | **`46.01%`** | `17.2%` | 🟢 Optimal |
+| **30-Day Window** | 3460 | `$0.2413/gal` | `$0.2424/gal` | **`+0.46%`** | **`43.06%`** | `17.1%` | 🟢 Optimal |
+| **90-Day Window** | 6466 | `$0.2392/gal` | `$0.2332/gal` | `-2.55%` | **`46.43%`** | `28.9%` | ⚠️ Calibration Active |
+| **All-Time Window** | 18479 | `$0.2858/gal` | `$0.2912/gal` | **`+1.87%`** | **`47.58%`** | `32.1%` | 🟢 Optimal |
 
 ---
 
@@ -54,7 +54,7 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`0`** | Total synthesized reflections: **`0`**
+Total indexed episodic memories in local store: **`2107`** | Total synthesized reflections: **`18`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -67,11 +67,37 @@ _No anomalies logged in this category._
 #### 🏷️ Pipeline / Waterway Constraint (0 case studies)
 _No anomalies logged in this category._
 
-#### 🏷️ Geopolitical & OPEC Shock (0 case studies)
-_No anomalies logged in this category._
+#### 🏷️ Geopolitical & OPEC Shock (4 case studies)
+- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-03`)
+  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
+  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
 
-#### 🏷️ Price Discrepancy & General Outliers (0 case studies)
-_No anomalies logged in this category._
+- **Newark_DE Price Discrepancy ($+0.7166/gal)** (`Newark_DE` | `2026-10-03`)
+  - **Root Cause:** Model underestimated price surge by -$0.7166/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-23 (Newark_DE)'.
+  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
+
+- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-01`)
+  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
+  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
+  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
+
+#### 🏷️ Price Discrepancy & General Outliers (8 case studies)
+- **Anomaly Post-Mortem** (`None` | `2026-11-07`)
+  - **Root Cause:** 
+  - **Historical Analogy:** 
+  - **Calibration Suggestion:** ``
+
+- **Anomaly Post-Mortem** (`None` | `2026-10-31`)
+  - **Root Cause:** 
+  - **Historical Analogy:** 
+  - **Calibration Suggestion:** ``
+
+- **Anomaly Post-Mortem** (`None` | `2026-10-24`)
+  - **Root Cause:** 
+  - **Historical Analogy:** 
+  - **Calibration Suggestion:** ``
 
 ---
 

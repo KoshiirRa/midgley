@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-14T00:49:12.783255",
+  "timestamp": "2026-11-14T03:01:06.463738",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-14T00:48:43Z"
+      "timestamp": "2026-11-14T03:00:38Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-19",
+    "target_date": "2026-11-20",
     "current_base_price": 3.602,
-    "predicted_price_per_gal": 3.443,
-    "expected_change_dollars": -0.159,
-    "expected_change_percent": -4.41,
+    "predicted_price_per_gal": 3.447,
+    "expected_change_dollars": -0.155,
+    "expected_change_percent": -4.3,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.025,
-    "prediction_upper_95ci": 3.861,
+    "prediction_lower_95ci": 3.029,
+    "prediction_upper_95ci": 3.865,
     "calibration_method": "conformal",
     "calibration_sample_size": 49,
     "directional_hit_rate_historical": 0.4722,
     "historical_mae_dollars": 0.1569,
     "evaluation_sample_size": 36,
-    "day_1_price": 3.57,
-    "day_2_price": 3.524,
-    "day_3_price": 3.491,
-    "day_4_price": 3.463,
-    "day_5_price": 3.443,
+    "day_1_price": 3.565,
+    "day_2_price": 3.531,
+    "day_3_price": 3.5,
+    "day_4_price": 3.47,
+    "day_5_price": 3.447,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.056,
+        "delta_dollars": -0.054,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.04,
+        "delta_dollars": -0.039,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -65,7 +65,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.032,
+        "delta_dollars": -0.031,
         "share_pct": 20.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -73,7 +73,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.016,
+        "delta_dollars": -0.015,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
@@ -89,44 +89,44 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.008,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast $-0.159/gal (-4.41%): Driven primarily by Regional Logistics & Hub Delivery ($-0.056/gal), Refining Yield & Crack Spread ($-0.040/gal).",
+      "summary_text": "Cincinnati OH forecast $-0.155/gal (-4.30%): Driven primarily by Regional Logistics & Hub Delivery ($-0.054/gal), Refining Yield & Crack Spread ($-0.039/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.056,
-          "impact_pct": -1.55,
+          "impact_dollars": -0.054,
+          "impact_pct": -1.5,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.04,
-          "impact_pct": -1.11,
+          "impact_dollars": -0.039,
+          "impact_pct": -1.08,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
-          "impact_dollars": -0.032,
-          "impact_pct": -0.89,
+          "impact_dollars": -0.031,
+          "impact_pct": -0.86,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.016,
-          "impact_pct": -0.44,
+          "impact_dollars": -0.015,
+          "impact_pct": -0.42,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -141,8 +141,8 @@
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.007,
-          "impact_pct": -0.19,
+          "impact_dollars": -0.008,
+          "impact_pct": -0.22,
           "share_pct": 5.0,
           "direction": "DOWN"
         }
@@ -153,32 +153,32 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.056,
-      "impact_pct": -1.55,
+      "impact_dollars": -0.054,
+      "impact_pct": -1.5,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.04,
-      "impact_pct": -1.11,
+      "impact_dollars": -0.039,
+      "impact_pct": -1.08,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
-      "impact_dollars": -0.032,
-      "impact_pct": -0.89,
+      "impact_dollars": -0.031,
+      "impact_pct": -0.86,
       "share_pct": 20.0,
       "direction": "DOWN"
     },
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.016,
-      "impact_pct": -0.44,
+      "impact_dollars": -0.015,
+      "impact_pct": -0.42,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
@@ -193,19 +193,19 @@
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "OPEC price pressure talkdown & dovish geopolitical news",
-      "impact_dollars": -0.007,
-      "impact_pct": -0.19,
+      "impact_dollars": -0.008,
+      "impact_pct": -0.22,
       "share_pct": 5.0,
       "direction": "DOWN"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast $-0.159/gal (-4.41%): Driven primarily by Regional Logistics & Hub Delivery ($-0.056/gal), Refining Yield & Crack Spread ($-0.040/gal).",
+    "summary_text": "Cincinnati OH forecast $-0.155/gal (-4.30%): Driven primarily by Regional Logistics & Hub Delivery ($-0.054/gal), Refining Yield & Crack Spread ($-0.039/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.056,
+        "delta_dollars": -0.054,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.04,
+        "delta_dollars": -0.039,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -221,7 +221,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": -0.032,
+        "delta_dollars": -0.031,
         "share_pct": 20.0,
         "direction": "DOWN",
         "description": "Softening NYMEX energy futures contract prices"
@@ -229,7 +229,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.016,
+        "delta_dollars": -0.015,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
@@ -245,7 +245,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": -0.007,
+        "delta_dollars": -0.008,
         "share_pct": 5.0,
         "direction": "DOWN",
         "description": "OPEC price pressure talkdown & dovish geopolitical news"
