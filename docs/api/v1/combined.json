@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-11-15T02:18:26.126286",
+  "timestamp": "2026-11-15T19:39:26.238341",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:23.849041",
+      "timestamp": "2026-11-15T19:39:23.679734",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:23Z"
+          "timestamp": "2026-11-15T19:39:23Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -259,7 +259,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:24.167515",
+      "timestamp": "2026-11-15T19:39:24.044238",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -277,7 +277,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:02Z"
+          "timestamp": "2026-11-15T19:38:49Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -514,7 +514,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:24.472971",
+      "timestamp": "2026-11-15T19:39:24.380800",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -532,7 +532,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:03Z"
+          "timestamp": "2026-11-15T19:38:56Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -769,7 +769,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:24.782310",
+      "timestamp": "2026-11-15T19:39:24.718690",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -787,7 +787,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:02Z"
+          "timestamp": "2026-11-15T19:38:50Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1024,7 +1024,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:25.098482",
+      "timestamp": "2026-11-15T19:39:25.056039",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1042,7 +1042,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:02Z"
+          "timestamp": "2026-11-15T19:38:50Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1279,7 +1279,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:25.190417",
+      "timestamp": "2026-11-15T19:39:25.158038",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1287,7 +1287,7 @@
         "padd_region": "PADD 1C South Atlantic"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.15,
+        "current_price_per_gal": 3.122,
         "source": "AAA State Daily CSV (NC)",
         "provenance": {
           "source": "AAA State Daily CSV (NC)",
@@ -1297,7 +1297,7 @@
           "served_granularity": "STATE",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:02Z"
+          "timestamp": "2026-11-15T19:38:52Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1307,23 +1307,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-20",
-        "current_base_price": 3.15,
-        "predicted_price_per_gal": 3.15,
+        "current_base_price": 3.122,
+        "predicted_price_per_gal": 3.122,
         "expected_change_dollars": 0.0,
         "expected_change_percent": 0.0,
         "projected_direction": "FLAT",
-        "prediction_lower_95ci": 2.8113,
-        "prediction_upper_95ci": 3.4887,
+        "prediction_lower_95ci": 2.7833,
+        "prediction_upper_95ci": 3.4607,
         "calibration_method": "conformal",
         "calibration_sample_size": 24,
         "directional_hit_rate_historical": 0.3333,
         "historical_mae_dollars": 0.1737,
         "evaluation_sample_size": 24,
-        "day_1_price": 3.15,
-        "day_2_price": 3.15,
-        "day_3_price": 3.15,
-        "day_4_price": 3.15,
-        "day_5_price": 3.15,
+        "day_1_price": 3.122,
+        "day_2_price": 3.122,
+        "day_3_price": 3.122,
+        "day_4_price": 3.122,
+        "day_5_price": 3.122,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1534,7 +1534,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:25.498201",
+      "timestamp": "2026-11-15T19:39:25.524585",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1552,7 +1552,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:03Z"
+          "timestamp": "2026-11-15T19:38:53Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1789,7 +1789,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:25.816809",
+      "timestamp": "2026-11-15T19:39:25.866600",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1806,8 +1806,8 @@
           "requested_granularity": "METRO",
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
-          "cache_status": "HIT_STALE",
-          "timestamp": "2026-11-15T02:13:03Z"
+          "cache_status": "HIT_FRESH",
+          "timestamp": "2026-11-15T19:38:53Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2044,7 +2044,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-11-15T02:18:26.124762",
+      "timestamp": "2026-11-15T19:39:26.237186",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2062,7 +2062,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-15T02:18:03Z"
+          "timestamp": "2026-11-15T19:38:57Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
