@@ -9905,5 +9905,32 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.17,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-15T13:41:43.096638",
+    "headline": "Two tankers on fire after hitting naval mines in the Strait of Hormuz, Iran\u2019s IRGC says",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPZjk0S3JZRkZ6MGN4X3FQQ2lBamNoVGFkY3oyUUlaRjR3aW1DM3dTT3NmanRNblh2UDlIX3BESWRGUFprX1Z3WXMzMDFqOGc3SmRueWUxMFlmcFFUcGdiUUNKaTU1d0xFd1NfZ1NJVWRxZmZWZGRNbTFsUkFZY054Z1dDM3ZvYlBVcGtMN3c4VHFqdi1WUl9md3JHdWxZOXZKMzFudWd3aDN6djhGWHFQTUhXZUJRNldOdDFpbEZfejdPcmJOX19WN0RR?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPZjk0S3JZRkZ6MGN4X3FQQ2lBamNoVGFkY3oyUUlaRjR3aW1DM3dTT3NmanRNblh2UDlIX3BESWRGUFprX1Z3WXMzMDFqOGc3SmRueWUxMFlmcFFUcGdiUUNKaTU1d0xFd1NfZ1NJVWRxZmZWZGRNbTFsUkFZY054Z1dDM3ZvYlBVcGtMN3c4VHFqdi1WUl9md3JHdWxZOXZKMzFudWd3aDN6djhGWHFQTUhXZUJRNldOdDFpbEZfejdPcmJOX19WN0RR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiygFBVV95cUxPZjk0S3JZRkZ6MGN4X3FQQ2lBamNoVGFkY3oyUUlaRjR3aW1DM3dTT3NmanRNblh2UDlIX3BESWRGUFprX1Z3WXMzMDFqOGc3SmRueWUxMFlmcFFUcGdiUUNKaTU1d0xFd1NfZ1NJVWRxZmZWZGRNbTFsUkFZY054Z1dDM3ZvYlBVcGtMN3c4VHFqdi1WUl9md3JHdWxZOXZKMzFudWd3aDN6djhGWHFQTUhXZUJRNldOdDFpbEZfejdPcmJOX19WN0RR?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.85,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.9
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Four tankers struck by explosions in Strait of Hormuz, Iran says",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.33,
+    "duplicate_review_notified": false
   }
 ]
