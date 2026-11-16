@@ -9978,5 +9978,32 @@
       "overall_price_pressure": 0.82
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-16T05:29:43.382311",
+    "headline": "Two oil tankers hit mines in the Strait of Hormuz, IRGC says",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5MQXJxTFVOa05BVEtjbTNLMzN5X2J0VnZyMXpGbjJvRFdPMmc4WjhTb0hOQnM3dmhqd3V1eHpwbTkwYkx2WnJwNDVNWjZjbkIya0RZYmYxV3hmRWhs?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5MQXJxTFVOa05BVEtjbTNLMzN5X2J0VnZyMXpGbjJvRFdPMmc4WjhTb0hOQnM3dmhqd3V1eHpwbTkwYkx2WnJwNDVNWjZjbkIya0RZYmYxV3hmRWhs?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiXEFVX3lxTE5MQXJxTFVOa05BVEtjbTNLMzN5X2J0VnZyMXpGbjJvRFdPMmc4WjhTb0hOQnM3dmhqd3V1eHpwbTkwYkx2WnJwNDVNWjZjbkIya0RZYmYxV3hmRWhs?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.05,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.88
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran says 2 oil tankers hit mines near Strait of Hormuz, 1 sinks",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.5,
+    "duplicate_review_notified": false
   }
 ]

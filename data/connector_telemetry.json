@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-16 02:45:31",
+  "last_updated": "2026-11-16 05:29:04",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-03 13:13:35",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "ERROR",
-      "latency_ms": 280.81,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Failed to query bank stats across endpoints"
-    },
     {
       "timestamp": "2026-10-09 23:53:23",
       "connector_name": "Reachability_EXECUTIVE_SOCIAL",
@@ -10002,6 +9992,16 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge 7c89e868-fc4d-43b7-8be1-a5365358f7f5 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-16 05:29:04",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 275.29,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
     }
   ]
 }
