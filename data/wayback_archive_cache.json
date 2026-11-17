@@ -691,13 +691,14 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5": {
-    "timestamp": "2026-11-14T22:07:23.024171+00:00",
+    "timestamp": "2026-11-17T10:22:45.061317+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
     "headline": "Power Outage Forces Venezuela’s Largest Refinery to Shut Down, Sources Say - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZW9WWXV4amNCdXcyZm13UU9rZU5aYlh3TVJSbGUtNGNFUjZNVUh3NURTa0Z0cG4tVlppbjNhVFJhZ1RrVDJWMmV3RW9xaXo4Qk9vMEg1TjRuZzdBU1Y2VEIzNTJFd0lxU1Fsem1mYkUtUFZPNmJhd0d1WE9nU3MxakNWNTZHb212TVZiVkFJVFEzSzI1d3dPU1N0ZnRNR2xNa2lXQlYyLVDSAa4BQVVfeXFMTXRRT250QW9TcGdBM3pUcDByUjFhNDJ0OTZabXhpblJFc1Q3UkxDSXhva1U5dVp3WWU0NkhYeEt1aDRNaDJSbUJLdWM2bkdxZzg2LUFUNExOakJJVnZfN2tEWmNVQjFDUjR1QkRIcWdhUzFuQ2VVY2tVWVg5cm9remp0WGktREtod19zSmlzcmY0OW5rR3ROTTI3UFNqOS0taUdMdVJoelJsWmxYRGN3?oc=5": {
     "timestamp": "2026-09-05T05:30:28.751876",
@@ -24092,5 +24093,41 @@
     "headline": "R.I., Mass. gas prices drop on strong domestic oil production - Providence Business News",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiiAFBVV95cUxPOE1SSk5FbzVEamc1b2VyVTRzWnVqM0pHenAzVTk4MUdMTWZWMHI5MTZ0eTNNT2ZONDFydTVnbTU1RWhVUGh0cUpObHlVWDR3ZGt2Si15M0FwR1dDd2xwcWdEQWZBX0JnVXcyWkxHVmRHRm9UeGswMlZ5Vjd4S3VxMTJiMWlWODVu0gGIAUFVX3lxTE84TVJKTkVvNURqZzVvZXJVNHNadWozSkd6cDNVOTgxR0xNZlYwcjkxNnR5M01PZk40MXJ1NWdtNTVFaFVQaHRxSk5seVVYNHdka3ZKLXkzQXBHV0N3bHBxZ0RBZkFfQmdVdzJaTEdWZEdGb1R4azAyVnlWN3hLdXExMmIxaVY4NW4?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTFVQYkVGYm44T2lpcEZnbThtbUZaRlUtdUpyMjZVc0JRN0Z6MjNYNzA2bmVLQU42Vld4V2g2M2E2b01kOGo5WTQ1ZTZCWldTLUotUk1uZWw1amFwQ0N2RVdjbUtOTmRjQzVrZnljeG1lTF9rQ3NGbW5vdW1RNjQ4UkcyUmFMUGJKT2JLMHE4MU90cnJUQnRrcS1IaFAzUlRMR3dGS29TMWE?oc=5": {
+    "timestamp": "2026-11-17T10:22:21.718545+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTFVQYkVGYm44T2lpcEZnbThtbUZaRlUtdUpyMjZVc0JRN0Z6MjNYNzA2bmVLQU42Vld4V2g2M2E2b01kOGo5WTQ1ZTZCWldTLUotUk1uZWw1amFwQ0N2RVdjbUtOTmRjQzVrZnljeG1lTF9rQ3NGbW5vdW1RNjQ4UkcyUmFMUGJKT2JLMHE4MU90cnJUQnRrcS1IaFAzUlRMR3dGS29TMWE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTFVQYkVGYm44T2lpcEZnbThtbUZaRlUtdUpyMjZVc0JRN0Z6MjNYNzA2bmVLQU42Vld4V2g2M2E2b01kOGo5WTQ1ZTZCWldTLUotUk1uZWw1amFwQ0N2RVdjbUtOTmRjQzVrZnljeG1lTF9rQ3NGbW5vdW1RNjQ4UkcyUmFMUGJKT2JLMHE4MU90cnJUQnRrcS1IaFAzUlRMR3dGS29TMWE?oc=5",
+    "headline": "Relief at the pump: Florida gas prices fall to an eight-month low - The Apopka Voice",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTFVQYkVGYm44T2lpcEZnbThtbUZaRlUtdUpyMjZVc0JRN0Z6MjNYNzA2bmVLQU42Vld4V2g2M2E2b01kOGo5WTQ1ZTZCWldTLUotUk1uZWw1amFwQ0N2RVdjbUtOTmRjQzVrZnljeG1lTF9rQ3NGbW5vdW1RNjQ4UkcyUmFMUGJKT2JLMHE4MU90cnJUQnRrcS1IaFAzUlRMR3dGS29TMWE?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQcTZNVUUteHZaZE5WbzZnclFIcnBYcjhubVVHMl92dVNNS2VxdlpvZlhQVlNMQWFrWnR5NHQ2T1pWaG02U2RXTjVrS1dVVjJXRk50Z3JRTmVXLTF2c01iOXBfUHRxRlNILUJ6aVhiSEZ2cjRqb0pyOWE1VGdSZWFHa1UtVFFUcl85cHFOZ2Z0TWdhM05fTmR3TVg0eHI5Wlc0UWtXVGhNWUJ2R01zdWNRdHJfM0ZNaVpRTWgwbEItTVBFU1ZDMmlWbnlwLXlkazkwZ3NZbg?oc=5": {
+    "timestamp": "2026-11-17T10:22:28.753479+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQcTZNVUUteHZaZE5WbzZnclFIcnBYcjhubVVHMl92dVNNS2VxdlpvZlhQVlNMQWFrWnR5NHQ2T1pWaG02U2RXTjVrS1dVVjJXRk50Z3JRTmVXLTF2c01iOXBfUHRxRlNILUJ6aVhiSEZ2cjRqb0pyOWE1VGdSZWFHa1UtVFFUcl85cHFOZ2Z0TWdhM05fTmR3TVg0eHI5Wlc0UWtXVGhNWUJ2R01zdWNRdHJfM0ZNaVpRTWgwbEItTVBFU1ZDMmlWbnlwLXlkazkwZ3NZbg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQcTZNVUUteHZaZE5WbzZnclFIcnBYcjhubVVHMl92dVNNS2VxdlpvZlhQVlNMQWFrWnR5NHQ2T1pWaG02U2RXTjVrS1dVVjJXRk50Z3JRTmVXLTF2c01iOXBfUHRxRlNILUJ6aVhiSEZ2cjRqb0pyOWE1VGdSZWFHa1UtVFFUcl85cHFOZ2Z0TWdhM05fTmR3TVg0eHI5Wlc0UWtXVGhNWUJ2R01zdWNRdHJfM0ZNaVpRTWgwbEItTVBFU1ZDMmlWbnlwLXlkazkwZ3NZbg?oc=5",
+    "headline": "US Gas Pump Price Hits Lowest Since March as Oil Supply Recovers - Bloomberg.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1AFBVV95cUxQcTZNVUUteHZaZE5WbzZnclFIcnBYcjhubVVHMl92dVNNS2VxdlpvZlhQVlNMQWFrWnR5NHQ2T1pWaG02U2RXTjVrS1dVVjJXRk50Z3JRTmVXLTF2c01iOXBfUHRxRlNILUJ6aVhiSEZ2cjRqb0pyOWE1VGdSZWFHa1UtVFFUcl85cHFOZ2Z0TWdhM05fTmR3TVg0eHI5Wlc0UWtXVGhNWUJ2R01zdWNRdHJfM0ZNaVpRTWgwbEItTVBFU1ZDMmlWbnlwLXlkazkwZ3NZbg?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQS1QwbVdfaTVtek14bHNzMnJIR0RXYUtwTEw2X0d4RkszYVlNMWpIeVQtU0VxUDEtOVh2NXdCXzJmN2JvckY3aFU1elJGaDNxSGlOVlFRc2NscGtXRUQxX1dWNkhlT3VjRjBFVjVjdmVRU2Y5U1JmRjV2VE0yM05GQkRqWWZVeTl1WXBhVEhmWmZZbmxmRFJfRmx2WUw5M1JQbzk4RXJCLXVOTFN1QkkxeTF0WjllZ0ZLakI5U0hlZlVreklTRUJORUlRRHZvRGpURG5NLUg1a25uZkVydzZ2VTBoV3JPdw?oc=5": {
+    "timestamp": "2026-11-17T10:22:36.597678+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQS1QwbVdfaTVtek14bHNzMnJIR0RXYUtwTEw2X0d4RkszYVlNMWpIeVQtU0VxUDEtOVh2NXdCXzJmN2JvckY3aFU1elJGaDNxSGlOVlFRc2NscGtXRUQxX1dWNkhlT3VjRjBFVjVjdmVRU2Y5U1JmRjV2VE0yM05GQkRqWWZVeTl1WXBhVEhmWmZZbmxmRFJfRmx2WUw5M1JQbzk4RXJCLXVOTFN1QkkxeTF0WjllZ0ZLakI5U0hlZlVreklTRUJORUlRRHZvRGpURG5NLUg1a25uZkVydzZ2VTBoV3JPdw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQS1QwbVdfaTVtek14bHNzMnJIR0RXYUtwTEw2X0d4RkszYVlNMWpIeVQtU0VxUDEtOVh2NXdCXzJmN2JvckY3aFU1elJGaDNxSGlOVlFRc2NscGtXRUQxX1dWNkhlT3VjRjBFVjVjdmVRU2Y5U1JmRjV2VE0yM05GQkRqWWZVeTl1WXBhVEhmWmZZbmxmRFJfRmx2WUw5M1JQbzk4RXJCLXVOTFN1QkkxeTF0WjllZ0ZLakI5U0hlZlVreklTRUJORUlRRHZvRGpURG5NLUg1a25uZkVydzZ2VTBoV3JPdw?oc=5",
+    "headline": "Where to find the cheapest fuel in Manly - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi5gFBVV95cUxQS1QwbVdfaTVtek14bHNzMnJIR0RXYUtwTEw2X0d4RkszYVlNMWpIeVQtU0VxUDEtOVh2NXdCXzJmN2JvckY3aFU1elJGaDNxSGlOVlFRc2NscGtXRUQxX1dWNkhlT3VjRjBFVjVjdmVRU2Y5U1JmRjV2VE0yM05GQkRqWWZVeTl1WXBhVEhmWmZZbmxmRFJfRmx2WUw5M1JQbzk4RXJCLXVOTFN1QkkxeTF0WjllZ0ZLakI5U0hlZlVreklTRUJORUlRRHZvRGpURG5NLUg1a25uZkVydzZ2VTBoV3JPdw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPWW5rNEJWZGZKUkxEcWJ1WWgwSTRyRlhmZXgwOFZuQ2JFTXRjSnQ5QzNsSThKdlRKbE5VcmlPaXN3Sm9LcXlxUXRvT2Rya0pFeTN4SklqSWxQNjFScTdZZ3FVUE9fMjdoOXhEUnBUUEpjSWh4NTFBY3lUZ2RFYjhWcXAzbTZEcjNOdGhjYms4dVV4cTlzX1RtY3d5UElQR2xUSFBjbnNuUFQ1ZFhrY2VsT2I5WTdVNUFoRjFHUGFwYnBSd3FKcGRmWXlfS2c5bmFWbWxVeFRzUFVrX0tiVVhIMXBiRHY1VHotZlZzd1JHZUhoem5B?oc=5": {
+    "timestamp": "2026-11-17T10:22:43.551076+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPWW5rNEJWZGZKUkxEcWJ1WWgwSTRyRlhmZXgwOFZuQ2JFTXRjSnQ5QzNsSThKdlRKbE5VcmlPaXN3Sm9LcXlxUXRvT2Rya0pFeTN4SklqSWxQNjFScTdZZ3FVUE9fMjdoOXhEUnBUUEpjSWh4NTFBY3lUZ2RFYjhWcXAzbTZEcjNOdGhjYms4dVV4cTlzX1RtY3d5UElQR2xUSFBjbnNuUFQ1ZFhrY2VsT2I5WTdVNUFoRjFHUGFwYnBSd3FKcGRmWXlfS2c5bmFWbWxVeFRzUFVrX0tiVVhIMXBiRHY1VHotZlZzd1JHZUhoem5B?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPWW5rNEJWZGZKUkxEcWJ1WWgwSTRyRlhmZXgwOFZuQ2JFTXRjSnQ5QzNsSThKdlRKbE5VcmlPaXN3Sm9LcXlxUXRvT2Rya0pFeTN4SklqSWxQNjFScTdZZ3FVUE9fMjdoOXhEUnBUUEpjSWh4NTFBY3lUZ2RFYjhWcXAzbTZEcjNOdGhjYms4dVV4cTlzX1RtY3d5UElQR2xUSFBjbnNuUFQ1ZFhrY2VsT2I5WTdVNUFoRjFHUGFwYnBSd3FKcGRmWXlfS2c5bmFWbWxVeFRzUFVrX0tiVVhIMXBiRHY1VHotZlZzd1JHZUhoem5B?oc=5",
+    "headline": "Where to find the cheapest fuel in Blacktown - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9AFBVV95cUxPWW5rNEJWZGZKUkxEcWJ1WWgwSTRyRlhmZXgwOFZuQ2JFTXRjSnQ5QzNsSThKdlRKbE5VcmlPaXN3Sm9LcXlxUXRvT2Rya0pFeTN4SklqSWxQNjFScTdZZ3FVUE9fMjdoOXhEUnBUUEpjSWh4NTFBY3lUZ2RFYjhWcXAzbTZEcjNOdGhjYms4dVV4cTlzX1RtY3d5UElQR2xUSFBjbnNuUFQ1ZFhrY2VsT2I5WTdVNUFoRjFHUGFwYnBSd3FKcGRmWXlfS2c5bmFWbWxVeFRzUFVrX0tiVVhIMXBiRHY1VHotZlZzd1JHZUhoem5B?oc=5",
+    "error": "<urlopen error timed out>"
   }
 }
