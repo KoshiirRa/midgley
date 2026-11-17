@@ -10032,5 +10032,32 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.47,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-17T00:03:49.571067",
+    "headline": "Fourth oil tanker struck in Strait of Hormuz, Iran says",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1PdjlveG1CQi1zdXRMLWFXQXliQ2RYS1kwRHFQLU1Nam43dkxWSGtHVjJyTkJkdzQxTUlKWENmbzMteGYweVAtNlFKcDZ5NDlkeG1iZmtDd0pnWlZDVG9xTVRCdlBSNWlGR1E?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1PdjlveG1CQi1zdXRMLWFXQXliQ2RYS1kwRHFQLU1Nam43dkxWSGtHVjJyTkJkdzQxTUlKWENmbzMteGYweVAtNlFKcDZ5NDlkeG1iZmtDd0pnWlZDVG9xTVRCdlBSNWlGR1E?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTE1PdjlveG1CQi1zdXRMLWFXQXliQ2RYS1kwRHFQLU1Nam43dkxWSGtHVjJyTkJkdzQxTUlKWENmbzMteGYweVAtNlFKcDZ5NDlkeG1iZmtDd0pnWlZDVG9xTVRCdlBSNWlGR1E?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.65,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.65,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.72
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran says 2 oil tankers hit mines near Strait of Hormuz, 1 sinks",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.33,
+    "duplicate_review_notified": false
   }
 ]
