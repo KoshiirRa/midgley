@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-17T10:23:42.229722",
+  "timestamp": "2026-11-18T03:26:25.435237",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.854,
+    "current_price_per_gal": 3.826,
     "source": "AAA National Daily CSV (US Average)",
     "provenance": {
       "source": "AAA National Daily CSV (US Average)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-17T10:23:41Z"
+      "timestamp": "2026-11-18T03:26:24Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-23",
-    "current_base_price": 3.854,
-    "predicted_price_per_gal": 3.84,
+    "current_base_price": 3.826,
+    "predicted_price_per_gal": 3.812,
     "expected_change_dollars": -0.014,
-    "expected_change_percent": -0.36,
+    "expected_change_percent": -0.37,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.498,
-    "prediction_upper_95ci": 4.182,
+    "prediction_lower_95ci": 3.47,
+    "prediction_upper_95ci": 4.154,
     "calibration_method": "conformal",
     "calibration_sample_size": 53,
     "directional_hit_rate_historical": 0.6364,
     "historical_mae_dollars": 0.1386,
     "evaluation_sample_size": 33,
-    "day_1_price": 3.851,
-    "day_2_price": 3.852,
-    "day_3_price": 3.861,
-    "day_4_price": 3.866,
-    "day_5_price": 3.84,
+    "day_1_price": 3.823,
+    "day_2_price": 3.82,
+    "day_3_price": 3.833,
+    "day_4_price": 3.838,
+    "day_5_price": 3.812,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast $-0.014/gal (-0.36%): Driven primarily by Futures & Commodity Benchmark ($-0.006/gal), Refining Yield & Crack Spread ($-0.004/gal).",
+      "summary_text": "National forecast $-0.014/gal (-0.37%): Driven primarily by Futures & Commodity Benchmark ($-0.006/gal), Refining Yield & Crack Spread ($-0.004/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast $-0.014/gal (-0.36%): Driven primarily by Futures & Commodity Benchmark ($-0.006/gal), Refining Yield & Crack Spread ($-0.004/gal).",
+    "summary_text": "National forecast $-0.014/gal (-0.37%): Driven primarily by Futures & Commodity Benchmark ($-0.006/gal), Refining Yield & Crack Spread ($-0.004/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",

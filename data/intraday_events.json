@@ -10082,5 +10082,28 @@
       "overall_price_pressure": 0.72
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-18T03:25:34.370111",
+    "headline": "U.S. Military Strikes Iranian Missile Site Near Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNMXNBODNiLUlBTzNEN0lUdlk1Z2N4dExRRFVEY3BsejBYUHdDd3NYYlptZXk3OWNXZEJLbFZVYWM0U1FrdTEwNm9PMTBlWXFWSnJyYS1pTkx5Tm9ZcWxZb1R2dXg2LUNlOWxxR3NxMk5JOEhldzV2S1NXbXh2bmY1MVpjWGJXeE9wdWdhYmdR?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNMXNBODNiLUlBTzNEN0lUdlk1Z2N4dExRRFVEY3BsejBYUHdDd3NYYlptZXk3OWNXZEJLbFZVYWM0U1FrdTEwNm9PMTBlWXFWSnJyYS1pTkx5Tm9ZcWxZb1R2dXg2LUNlOWxxR3NxMk5JOEhldzV2S1NXbXh2bmY1MVpjWGJXeE9wdWdhYmdR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxNMXNBODNiLUlBTzNEN0lUdlk1Z2N4dExRRFVEY3BsejBYUHdDd3NYYlptZXk3OWNXZEJLbFZVYWM0U1FrdTEwNm9PMTBlWXFWSnJyYS1pTkx5Tm9ZcWxZb1R2dXg2LUNlOWxxR3NxMk5JOEhldzV2S1NXbXh2bmY1MVpjWGJXeE9wdWdhYmdR?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.35,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.35,
+      "demand_sentiment": -0.05,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.62
+    },
+    "discord_notified": true
   }
 ]
