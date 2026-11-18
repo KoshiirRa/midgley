@@ -10105,5 +10105,28 @@
       "overall_price_pressure": 0.62
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-18T12:48:58.286958",
+    "headline": "IEA chief sees no 'credible pathway' back to pre-war normality in the Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9mY1gzbld3VGk4Tnc1VUw4NmY0UVc5aXZ6dVVDNWxIVldiWWR0TjBDWGZhLThpTVNGRC1lcmRRSkZqNXFqeDJ0aG1KQXdELTJPVmdyQlJ3c0NSZHc0UGJUV25HT0MtSXI3am9HZElMaE10Yy1P0gF6QVVfeXFMTzVQd2FkT3N5ekNUenZsNl9Bbk9BWEdHempvQ0hURC1UOVQwc3R2c1ptUmxhc1VHcHpRQ3pIS1dGQ0VkeF9uQjF6OGQ5LVlBMVhVUzlTcHJvZDY1Q3VEaDg3WFY3YUZkWWJkZ0VmekZzeFZ4MDdJbHVWRmc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9mY1gzbld3VGk4Tnc1VUw4NmY0UVc5aXZ6dVVDNWxIVldiWWR0TjBDWGZhLThpTVNGRC1lcmRRSkZqNXFqeDJ0aG1KQXdELTJPVmdyQlJ3c0NSZHc0UGJUV25HT0MtSXI3am9HZElMaE10Yy1P0gF6QVVfeXFMTzVQd2FkT3N5ekNUenZsNl9Bbk9BWEdHempvQ0hURC1UOVQwc3R2c1ptUmxhc1VHcHpRQ3pIS1dGQ0VkeF9uQjF6OGQ5LVlBMVhVUzlTcHJvZDY1Q3VEaDg3WFY3YUZkWWJkZ0VmekZzeFZ4MDdJbHVWRmc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMidEFVX3lxTE9mY1gzbld3VGk4Tnc1VUw4NmY0UVc5aXZ6dVVDNWxIVldiWWR0TjBDWGZhLThpTVNGRC1lcmRRSkZqNXFqeDJ0aG1KQXdELTJPVmdyQlJ3c0NSZHc0UGJUV25HT0MtSXI3am9HZElMaE10Yy1P0gF6QVVfeXFMTzVQd2FkT3N5ekNUenZsNl9Bbk9BWEdHempvQ0hURC1UOVQwc3R2c1ptUmxhc1VHcHpRQ3pIS1dGQ0VkeF9uQjF6OGQ5LVlBMVhVUzlTcHJvZDY1Q3VEaDg3WFY3YUZkWWJkZ0VmekZzeFZ4MDdJbHVWRmc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.55,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.2,
+      "overall_price_pressure": 0.65
+    },
+    "discord_notified": true
   }
 ]
