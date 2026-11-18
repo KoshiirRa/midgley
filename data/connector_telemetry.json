@@ -1,238 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-18 03:26:32",
+  "last_updated": "2026-11-18 04:21:47",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-10 17:56:27",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 258.68,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 335 docs, 233 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:52",
-      "connector_name": "Firecrawl_Fallback",
-      "target": "https://rigcount.bakerhughes.com/na-rig-count",
-      "status": "ERROR",
-      "latency_ms": 228.02,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "HTTP Error 403: Forbidden"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:53",
-      "connector_name": "Firecrawl_Fallback",
-      "target": "https://www.barchart.com/cmdty/data/fundamental/explore/BH",
-      "status": "SUCCESS",
-      "latency_ms": 245.4,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "WTI_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "BRENT_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "RBOB_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "NG_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "HO_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "RAL_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:57:56",
-      "connector_name": "OilPriceAPIConnector",
-      "target": "COAL_USD",
-      "status": "FALLBACK",
-      "latency_ms": 1.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "API offline or unconfigured, served benchmark anchor"
-    },
-    {
-      "timestamp": "2026-10-10 17:58:01",
-      "connector_name": "OpenSourceAIRadar",
-      "target": "AI_Radar_API",
-      "status": "FALLBACK",
-      "latency_ms": 0.29,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Retrieved 6 radar models"
-    },
-    {
-      "timestamp": "2026-10-10 17:58:03",
-      "connector_name": "HindsightHosted",
-      "target": "health",
-      "status": "SUCCESS",
-      "latency_ms": 139.82,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": ""
-    },
-    {
-      "timestamp": "2026-10-10 17:58:17",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 281.84,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 335 docs, 233 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-10 18:18:45",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 5026.73,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-10 18:18:45",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 21.02,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-10 18:18:45",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 131.63,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-10 18:20:06",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 238.8,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 335 docs, 233 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-10 18:20:14",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 2175.62,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for RB on Headline Arena."
-    },
-    {
-      "timestamp": "2026-10-10 18:20:15",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 1011.36,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for CL on Headline Arena."
-    },
-    {
-      "timestamp": "2026-10-10 23:20:38",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "SUCCESS",
-      "latency_ms": 236.71,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Resolved via rss_syndication (5 items)"
-    },
-    {
-      "timestamp": "2026-10-10 23:22:56",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 261.92,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 335 docs, 233 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-10 23:23:04",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 1741.55,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for RB on Headline Arena."
-    },
-    {
-      "timestamp": "2026-10-10 23:23:04",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "SKIPPED_NO_ACTIVE_CHALLENGE",
-      "latency_ms": 444.25,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "No active challenge found for CL on Headline Arena."
-    },
     {
       "timestamp": "2026-10-11 01:01:16",
       "connector_name": "Reachability_EXECUTIVE_SOCIAL",
@@ -10002,6 +9772,236 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Submitted CL (challenge 25563418-94a1-43f0-b09e-984079660383): direction=bullish, confidence=0.8251, scored=True"
+    },
+    {
+      "timestamp": "2026-11-18 03:43:50",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 235.88,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-18 03:53:41",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 109.0,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 03:53:44",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 93.86,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 03:53:46",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 84.51,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 03:53:49",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 113.27,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 03:53:51",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 102.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:01:16",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 111.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:01:19",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 249.31,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:01:22",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 125.26,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:02:17",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 103.52,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:02:27",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 309.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-18 04:04:06",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 111.58,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:04:37",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 100.94,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:09:50",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 102.61,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:11:42",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 101.72,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:15:11",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 110.07,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:17:46",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 292.98,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-18 04:19:20",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 110.96,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:19:56",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 314.78,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:20:34",
+      "connector_name": "HindsightHosted",
+      "target": "health",
+      "status": "SUCCESS",
+      "latency_ms": 99.24,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": ""
+    },
+    {
+      "timestamp": "2026-11-18 04:21:37",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 878.51,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 447 docs, 351 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-18 04:21:46",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 3039.59,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 3f56878d-2051-435b-9c3e-c341a40adf36 already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-18 04:21:47",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "ALREADY_SUBMITTED_TODAY",
+      "latency_ms": 1676.49,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Challenge 25563418-94a1-43f0-b09e-984079660383 already predicted (HTTP 400)"
     }
   ]
 }

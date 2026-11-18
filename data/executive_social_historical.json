@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-17 05:03:07",
-  "records_count": 59,
+  "last_refreshed_utc": "2026-11-18 04:20:40",
+  "records_count": 74,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -544,9 +544,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-17 05:00:21",
+      "date": "2026-11-18 03:43:50",
       "platform": "Google News RSS",
-      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -554,7 +554,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-17 05:00:21",
+      "date": "2026-11-18 03:43:50",
       "platform": "Google News RSS",
       "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
       "target": "Energy_Market",
@@ -564,9 +564,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-17 05:00:21",
+      "date": "2026-11-18 03:43:50",
       "platform": "Google News RSS",
-      "post_text": "Trump Administration to Slash Oil-Drilling Bond Amount by 95% - EnergyNow.com",
+      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -574,9 +574,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-17 05:00:21",
+      "date": "2026-11-18 03:43:50",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -584,9 +584,159 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-17 05:00:21",
+      "date": "2026-11-18 03:43:50",
       "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:02:27",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:02:27",
+      "platform": "Google News RSS",
+      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:02:27",
+      "platform": "Google News RSS",
+      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:02:27",
+      "platform": "Google News RSS",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:02:27",
+      "platform": "Google News RSS",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-18 04:17:46",
+      "platform": "Google News RSS",
+      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
