@@ -1039,13 +1039,14 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5": {
-    "timestamp": "2026-11-15T19:38:18.595737+00:00",
+    "timestamp": "2026-11-19T22:01:05.900870+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 520,
     "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
     "headline": "How High Are Gas Prices Where You Live? - The New York Times",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiowFBVV95cUxONFFyMEw4dDc1S2JPR0dWakJ3ZHVweTNnX29SUl9KbUEtTnI1ZjVyME96MFRxdkZEY3pNNl85SDkyVklUdm5nTTBKTUdodmdKaDhXNENnX2V2MUlDZ3Jpcks3RTVRTWV6cHo3SjZfU1hKU0szdzhFRXZ2a0R5LUlCaHBUR0RyNl9tRzcwUlk1WWlwYzZKMXFVanA0aENpNFd1a3cw?oc=5",
-    "error": "The read operation timed out"
+    "error": "HTTP Error 520: UNKNOWN"
   },
   "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9vN0tpNVdZWWNRUC1TdVFmZE1FNWpURGFiUlVQYU9ENW92U1k0U0tCMnVXcjdSd2xHRUV2bTFZMnVfM3pQWEFqNDdDalBIakJMOF80dXlVVTlRdw?oc=5": {
     "timestamp": "2026-10-03T12:45:18.769389+00:00",
@@ -14338,13 +14339,13 @@
     "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5": {
-    "timestamp": "2026-11-13T02:30:48.669925+00:00",
+    "timestamp": "2026-11-19T22:02:51.341472+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5",
-    "headline": "Strait of Hormuz Watch: Negotiations Uncertain as Vessel Attacks Continue",
+    "headline": "Strait of Hormuz Watch: Peace Negotiations Stall, Vessel Attacks Persist",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMzdGVkRCRkxtektNWVpJYUlyU2dMRFBSeVNxOVNsaHlDblpiblVTQ2d1SWotMmhUSk52YlNoalZKaGJkV1N4LUdjbXFFLVN4dk9JX1dYYnhZbHU1anY4QjBMNFF4N1JpVHNHNGUxcjk0YzRfSHFjWExic3NLTFFiVUhRVVhZaW1iZEt4eldXVFBfMnlaSmw0T1BMMnhfOGM2WmpROTF0OTZuc2t1Z1llRklEaVRwQ3FPT0tPdGo4Z052c3ZvQTMyVnRrVk9xM1JKRGJsUjhVMA?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "<urlopen error _ssl.c:1018: The handshake operation timed out>"
   },
   "https://news.google.com/rss/articles/CBMitwFBVV95cUxPWC1aamQ0cEFuMHBxTzNWWWZFcVd0SVBCUmhtQTFiRjA1aGlVMU9aaUhrU0dNVUZ2R2IyNFk3Sjk4VGFsVy1FUlFycHdGTTNaZy1oZlNXbzhtVEpxVmROUkh4cVplaDJidFZ5eW0zcmVEM0x2VnpKazlmQi1leXl3Q0FOa1oyNEh3X0dIZkhkdi1ackJfTFpWUkJNeE5aSWI5TWl0TXZJWnVMR0VpVzlUMmdXUHUyQVXSAcsBQVVfeXFMTUhvTi1ETmZKcnFYeWhGNnlTbmtGMUF3enBIbkpnVVdseTlPaXVnSi1mcWUtbkhNdFBBOUZ5TWRPYXFRNnpQTVZwZUR4UGdvQlBXRDI1UDVEOGRhbkdmX0RXQUNfd3FIYXFYbUE1c1cxM0RhQnB0TjV5dFRvSVMxbkUwaWtHOXlON0VxenV3a0xvTThzbVlqcDVlSGpQMUZkUXZIVV90VWdqSGxZTDhtTUhuQmt4MUhReEpqbGs4OUxnLUJUQWJzY1UtRms?oc=5": {
     "timestamp": "2026-10-20T16:33:46.683251+00:00",
@@ -24620,5 +24621,179 @@
     "headline": "Where to find the cheapest fuel in Blacktown - The Daily Telegraph",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9AFBVV95cUxObnk4VnZpakhETWdoLTBMMWpmdXNoZTVlQllDOUdVZzl2QmlXQzhvcTNuWEhJMHo5aXYyWnU3QS1Xb2RwUVIwTWpEcG1VZU5OMHZ6eEVTWFVLeVN5b0dYQnRUcTdLQ0FfaHYwVVZsVnVLVjhLLW50TEstdlNQc0l2Y2hYSkg0NmZ3cnYyZjBiNzJmMzhUZmxMd0xIZm1jX0l5TVdveVU2ZkR3Qi03cUhBSy1CYUNaNEFnR1FlTjhvOWFNUEFNMGFFSHhrd1ZiakVfUW5hbEt4RWwzTHh0cllBWTluVHNBb1BmcERzWUFlUmxMTERj?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMifEFVX3lxTE5adzBnUWFwMTEtc1hqN2lSV01HWlE2VzZpajNrWS0wYmFUNi16Wld2MDE0VmNtRHBDNW0xRE5sdjl3SHdKNl9iTTR6NnliVmV2bllaY3dDT0VIYlUxcHJtYkRGRXY0bmdkMm8zM0o4a29ZM1I1SnZsRTdmMEs?oc=5": {
+    "timestamp": "2026-11-19T22:00:54.481683+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5adzBnUWFwMTEtc1hqN2lSV01HWlE2VzZpajNrWS0wYmFUNi16Wld2MDE0VmNtRHBDNW0xRE5sdjl3SHdKNl9iTTR6NnliVmV2bllaY3dDT0VIYlUxcHJtYkRGRXY0bmdkMm8zM0o4a29ZM1I1SnZsRTdmMEs?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5adzBnUWFwMTEtc1hqN2lSV01HWlE2VzZpajNrWS0wYmFUNi16Wld2MDE0VmNtRHBDNW0xRE5sdjl3SHdKNl9iTTR6NnliVmV2bllaY3dDT0VIYlUxcHJtYkRGRXY0bmdkMm8zM0o4a29ZM1I1SnZsRTdmMEs?oc=5",
+    "headline": "AAA: Jonesboro gas prices drop 13 cents - K8 News | Jonesboro, Arkansas",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMifEFVX3lxTE5adzBnUWFwMTEtc1hqN2lSV01HWlE2VzZpajNrWS0wYmFUNi16Wld2MDE0VmNtRHBDNW0xRE5sdjl3SHdKNl9iTTR6NnliVmV2bllaY3dDT0VIYlUxcHJtYkRGRXY0bmdkMm8zM0o4a29ZM1I1SnZsRTdmMEs?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiUkFVX3lxTE81dHhJb241Q2g1bDhSWlRKRHZrSDRvY2U4R3dMeE4zLUtpZmFURDFXYzVTdUdJMU9VbHJUSm1XR3lyODUyZThwbmgyWlRULUdyd3c?oc=5": {
+    "timestamp": "2026-11-19T22:01:01.744186+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE81dHhJb241Q2g1bDhSWlRKRHZrSDRvY2U4R3dMeE4zLUtpZmFURDFXYzVTdUdJMU9VbHJUSm1XR3lyODUyZThwbmgyWlRULUdyd3c?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE81dHhJb241Q2g1bDhSWlRKRHZrSDRvY2U4R3dMeE4zLUtpZmFURDFXYzVTdUdJMU9VbHJUSm1XR3lyODUyZThwbmgyWlRULUdyd3c?oc=5",
+    "headline": "Weekly Fuel Report - KWBG Radio | Boone, Iowa",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiUkFVX3lxTE81dHhJb241Q2g1bDhSWlRKRHZrSDRvY2U4R3dMeE4zLUtpZmFURDFXYzVTdUdJMU9VbHJUSm1XR3lyODUyZThwbmgyWlRULUdyd3c?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOSERQdjZtR2FFVkplZzhvZ3d3a2lWNGNRc1F1ak4yWmJORmpCWkdLWkw3bDJ3eHFadTJfbW0xcHQzU3h1bHI2M3VWVExTWXQ0eFFDMXlXX3paSUpJWExXdFR5V3BXTDN0U1NKX3FnazVPWW9SME1kRkcwLW4tTTY5MFdUXzYxcWhFR29j?oc=5": {
+    "timestamp": "2026-11-19T22:01:02.603202+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOSERQdjZtR2FFVkplZzhvZ3d3a2lWNGNRc1F1ak4yWmJORmpCWkdLWkw3bDJ3eHFadTJfbW0xcHQzU3h1bHI2M3VWVExTWXQ0eFFDMXlXX3paSUpJWExXdFR5V3BXTDN0U1NKX3FnazVPWW9SME1kRkcwLW4tTTY5MFdUXzYxcWhFR29j?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOSERQdjZtR2FFVkplZzhvZ3d3a2lWNGNRc1F1ak4yWmJORmpCWkdLWkw3bDJ3eHFadTJfbW0xcHQzU3h1bHI2M3VWVExTWXQ0eFFDMXlXX3paSUpJWExXdFR5V3BXTDN0U1NKX3FnazVPWW9SME1kRkcwLW4tTTY5MFdUXzYxcWhFR29j?oc=5",
+    "headline": "Iowa Gas Prices Drop 25 Cents in Past Week - KSOM",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiiwFBVV95cUxOSERQdjZtR2FFVkplZzhvZ3d3a2lWNGNRc1F1ak4yWmJORmpCWkdLWkw3bDJ3eHFadTJfbW0xcHQzU3h1bHI2M3VWVExTWXQ0eFFDMXlXX3paSUpJWExXdFR5V3BXTDN0U1NKX3FnazVPWW9SME1kRkcwLW4tTTY5MFdUXzYxcWhFR29j?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMipwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVdIBpwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVQ?oc=5": {
+    "timestamp": "2026-11-19T22:01:12.955995+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVdIBpwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVdIBpwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVQ?oc=5",
+    "headline": "Local gas prices dropping for Thanksgiving but still high - KWKT - FOX 44",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVdIBpwFBVV95cUxOUVdwbU1PRVozNDlBS09DczlxZXpHck1STXd2R0J1a1ktMHZnUEFwWWZTUDkxalRhRWpka1ZHWGJabmVoSmQ0bDUyZjhGMTZJUlk1amdzeFg1NVdHS2habFphaGt3VlZPYUtnUHZKS25VQTNMcl95Ul8xeFR3T3RzSHNMb3ctZ3JqdTBTRVAxTjZIWEdCN2hZSDFmS2Z4XzlReElQY2lKVQ?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPOHMyQTl6cnFsYVZCb2ZxZlZ4YzJlWVdqdGFCSWdzNjR4S1dmSmF3RGVRZ1RvX0JfYkxJVlV4STFpSXZhUE1pYU1GTjRWU2lodlY5cDBLYVJ3VUZ0Q3JJUEdYT3dHdGRtekhDX3RzMDk5VUtfNE1yZllkczYtMzN0UWJsaGMxMVRnMW5BNGlRYUxzZXFfdTBtS21jMldxczFFVV80LXFQOVPSAagBQVVfeXFMTzhzMkE5enJxbGFWQm9mcWZWeGMyZVlXanRhQklnczY0eEtXZkphd0RlUWdUb19CX2JMSVZVeEkxaUl2YVBNaWFNRk40VlNpaHZWOXAwS2FSd1VGdENySVBHWE93R3RkbXpIQ190czA5OVVLXzRNcmZZZHM2LTMzdFFibGhjMTFUZzFuQTRpUWFMc2VxX3UwbUttYzJXcXMxRVVfNC1xUDlT?oc=5": {
+    "timestamp": "2026-11-19T22:01:22.217399+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPOHMyQTl6cnFsYVZCb2ZxZlZ4YzJlWVdqdGFCSWdzNjR4S1dmSmF3RGVRZ1RvX0JfYkxJVlV4STFpSXZhUE1pYU1GTjRWU2lodlY5cDBLYVJ3VUZ0Q3JJUEdYT3dHdGRtekhDX3RzMDk5VUtfNE1yZllkczYtMzN0UWJsaGMxMVRnMW5BNGlRYUxzZXFfdTBtS21jMldxczFFVV80LXFQOVPSAagBQVVfeXFMTzhzMkE5enJxbGFWQm9mcWZWeGMyZVlXanRhQklnczY0eEtXZkphd0RlUWdUb19CX2JMSVZVeEkxaUl2YVBNaWFNRk40VlNpaHZWOXAwS2FSd1VGdENySVBHWE93R3RkbXpIQ190czA5OVVLXzRNcmZZZHM2LTMzdFFibGhjMTFUZzFuQTRpUWFMc2VxX3UwbUttYzJXcXMxRVVfNC1xUDlT?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPOHMyQTl6cnFsYVZCb2ZxZlZ4YzJlWVdqdGFCSWdzNjR4S1dmSmF3RGVRZ1RvX0JfYkxJVlV4STFpSXZhUE1pYU1GTjRWU2lodlY5cDBLYVJ3VUZ0Q3JJUEdYT3dHdGRtekhDX3RzMDk5VUtfNE1yZllkczYtMzN0UWJsaGMxMVRnMW5BNGlRYUxzZXFfdTBtS21jMldxczFFVV80LXFQOVPSAagBQVVfeXFMTzhzMkE5enJxbGFWQm9mcWZWeGMyZVlXanRhQklnczY0eEtXZkphd0RlUWdUb19CX2JMSVZVeEkxaUl2YVBNaWFNRk40VlNpaHZWOXAwS2FSd1VGdENySVBHWE93R3RkbXpIQ190czA5OVVLXzRNcmZZZHM2LTMzdFFibGhjMTFUZzFuQTRpUWFMc2VxX3UwbUttYzJXcXMxRVVfNC1xUDlT?oc=5",
+    "headline": "Arkansas gas prices fall 18 cents ahead of Thanksgiving travel - FOX16.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqAFBVV95cUxPOHMyQTl6cnFsYVZCb2ZxZlZ4YzJlWVdqdGFCSWdzNjR4S1dmSmF3RGVRZ1RvX0JfYkxJVlV4STFpSXZhUE1pYU1GTjRWU2lodlY5cDBLYVJ3VUZ0Q3JJUEdYT3dHdGRtekhDX3RzMDk5VUtfNE1yZllkczYtMzN0UWJsaGMxMVRnMW5BNGlRYUxzZXFfdTBtS21jMldxczFFVV80LXFQOVPSAagBQVVfeXFMTzhzMkE5enJxbGFWQm9mcWZWeGMyZVlXanRhQklnczY0eEtXZkphd0RlUWdUb19CX2JMSVZVeEkxaUl2YVBNaWFNRk40VlNpaHZWOXAwS2FSd1VGdENySVBHWE93R3RkbXpIQ190czA5OVVLXzRNcmZZZHM2LTMzdFFibGhjMTFUZzFuQTRpUWFMc2VxX3UwbUttYzJXcXMxRVVfNC1xUDlT?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMihgFBVV95cUxQNHM1VktKSERYb0NfUk5IVWkzSDNfekVnLVJrNnJOYjhKMmVRcVlGcXZ6NVQ2RlZLcGdha0RqcTd5b1BUeEtyeDZGX2l1SWFyeFNDbE9iRVpNMTF5TktxU21NRHFFeVI4RzR2WGlzeU53TUFSOGl3bUNYdVNSd09IMk1Gand4UQ?oc=5": {
+    "timestamp": "2026-11-19T22:01:23.469647+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQNHM1VktKSERYb0NfUk5IVWkzSDNfekVnLVJrNnJOYjhKMmVRcVlGcXZ6NVQ2RlZLcGdha0RqcTd5b1BUeEtyeDZGX2l1SWFyeFNDbE9iRVpNMTF5TktxU21NRHFFeVI4RzR2WGlzeU53TUFSOGl3bUNYdVNSd09IMk1Gand4UQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQNHM1VktKSERYb0NfUk5IVWkzSDNfekVnLVJrNnJOYjhKMmVRcVlGcXZ6NVQ2RlZLcGdha0RqcTd5b1BUeEtyeDZGX2l1SWFyeFNDbE9iRVpNMTF5TktxU21NRHFFeVI4RzR2WGlzeU53TUFSOGl3bUNYdVNSd09IMk1Gand4UQ?oc=5",
+    "headline": "Waco Gas Prices Drop 22 Cents in a Week - Wisevoter",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihgFBVV95cUxQNHM1VktKSERYb0NfUk5IVWkzSDNfekVnLVJrNnJOYjhKMmVRcVlGcXZ6NVQ2RlZLcGdha0RqcTd5b1BUeEtyeDZGX2l1SWFyeFNDbE9iRVpNMTF5TktxU21NRHFFeVI4RzR2WGlzeU53TUFSOGl3bUNYdVNSd09IMk1Gand4UQ?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMilAFBVV95cUxNWGdXeFBaTDlUYnQ3Yl82Y3VIdXZNRjZKRTZ2N3hOWklkOThGZ2lZb0ZqbE5jTS1LT2xrN0dodVh4Y1NKdEJSVkRBLUdFbXhteDBZZUpvemhHNnVRYThGR2VhR0hyX1pkRGNKbm9JX3NXSDZ6Rk8xMEl1RTRLQTBaSkktWkV1dHFManc1bS1Ga2pTQWQ2?oc=5": {
+    "timestamp": "2026-11-19T22:01:32.641516+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNWGdXeFBaTDlUYnQ3Yl82Y3VIdXZNRjZKRTZ2N3hOWklkOThGZ2lZb0ZqbE5jTS1LT2xrN0dodVh4Y1NKdEJSVkRBLUdFbXhteDBZZUpvemhHNnVRYThGR2VhR0hyX1pkRGNKbm9JX3NXSDZ6Rk8xMEl1RTRLQTBaSkktWkV1dHFManc1bS1Ga2pTQWQ2?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNWGdXeFBaTDlUYnQ3Yl82Y3VIdXZNRjZKRTZ2N3hOWklkOThGZ2lZb0ZqbE5jTS1LT2xrN0dodVh4Y1NKdEJSVkRBLUdFbXhteDBZZUpvemhHNnVRYThGR2VhR0hyX1pkRGNKbm9JX3NXSDZ6Rk8xMEl1RTRLQTBaSkktWkV1dHFManc1bS1Ga2pTQWQ2?oc=5",
+    "headline": "Wisconsin Fuel Prices Fall for Third Straight Week - Wisevoter",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilAFBVV95cUxNWGdXeFBaTDlUYnQ3Yl82Y3VIdXZNRjZKRTZ2N3hOWklkOThGZ2lZb0ZqbE5jTS1LT2xrN0dodVh4Y1NKdEJSVkRBLUdFbXhteDBZZUpvemhHNnVRYThGR2VhR0hyX1pkRGNKbm9JX3NXSDZ6Rk8xMEl1RTRLQTBaSkktWkV1dHFManc1bS1Ga2pTQWQ2?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNSEU3X1NsSGNSSl9IYzNmeUh4N1o0TUZnMk5OOWJmU192UE82dFIxbEVpcEx3WTZJTkVNck1ISTBxZGJTcDFsNVUzSWxwSjNWY3lFandvaDJuVXUzQVd3endxLUFrX09XN20tV1hpV3JVcmN3cnNwY1RqMVdjellvUHVSZkRZbHpFQmoxTllLcmNlNUhsVWlzX21MTmNST2xUbXFXcGE0cEZLZ3dkQjZqQ2lRdjl3dk9Wd3hYaThjRVZvOVoweF9mRm9taFdPV0VLSDB5SmJjSld5ZzhCSHBXWXZRTHZzZy1RQlJvc25EejRaNGY2WEE?oc=5": {
+    "timestamp": "2026-11-19T22:01:39.689626+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNSEU3X1NsSGNSSl9IYzNmeUh4N1o0TUZnMk5OOWJmU192UE82dFIxbEVpcEx3WTZJTkVNck1ISTBxZGJTcDFsNVUzSWxwSjNWY3lFandvaDJuVXUzQVd3endxLUFrX09XN20tV1hpV3JVcmN3cnNwY1RqMVdjellvUHVSZkRZbHpFQmoxTllLcmNlNUhsVWlzX21MTmNST2xUbXFXcGE0cEZLZ3dkQjZqQ2lRdjl3dk9Wd3hYaThjRVZvOVoweF9mRm9taFdPV0VLSDB5SmJjSld5ZzhCSHBXWXZRTHZzZy1RQlJvc25EejRaNGY2WEE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNSEU3X1NsSGNSSl9IYzNmeUh4N1o0TUZnMk5OOWJmU192UE82dFIxbEVpcEx3WTZJTkVNck1ISTBxZGJTcDFsNVUzSWxwSjNWY3lFandvaDJuVXUzQVd3endxLUFrX09XN20tV1hpV3JVcmN3cnNwY1RqMVdjellvUHVSZkRZbHpFQmoxTllLcmNlNUhsVWlzX21MTmNST2xUbXFXcGE0cEZLZ3dkQjZqQ2lRdjl3dk9Wd3hYaThjRVZvOVoweF9mRm9taFdPV0VLSDB5SmJjSld5ZzhCSHBXWXZRTHZzZy1RQlJvc25EejRaNGY2WEE?oc=5",
+    "headline": "Where to find the cheapest fuel in South Coast - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9gFBVV95cUxNSEU3X1NsSGNSSl9IYzNmeUh4N1o0TUZnMk5OOWJmU192UE82dFIxbEVpcEx3WTZJTkVNck1ISTBxZGJTcDFsNVUzSWxwSjNWY3lFandvaDJuVXUzQVd3endxLUFrX09XN20tV1hpV3JVcmN3cnNwY1RqMVdjellvUHVSZkRZbHpFQmoxTllLcmNlNUhsVWlzX21MTmNST2xUbXFXcGE0cEZLZ3dkQjZqQ2lRdjl3dk9Wd3hYaThjRVZvOVoweF9mRm9taFdPV0VLSDB5SmJjSld5ZzhCSHBXWXZRTHZzZy1RQlJvc25EejRaNGY2WEE?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMihwFBVV95cUxOZDg2Yk1XcUJzUGNQTDhkS3dhU054SWVGLXk0OW5XNGFuX1dYSnoxbmM2ejRDcnNScGFXRU82cnViV20xRFNRYlhNRTE3ZlVyT3hKdDBsWGxZal91ci1QdHpSV2JqQ3QxRndXRU53V25iRG9uRmFkNFNGR2pjdWF2cmY1UHowb1k?oc=5": {
+    "timestamp": "2026-11-19T22:01:46.709071+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOZDg2Yk1XcUJzUGNQTDhkS3dhU054SWVGLXk0OW5XNGFuX1dYSnoxbmM2ejRDcnNScGFXRU82cnViV20xRFNRYlhNRTE3ZlVyT3hKdDBsWGxZal91ci1QdHpSV2JqQ3QxRndXRU53V25iRG9uRmFkNFNGR2pjdWF2cmY1UHowb1k?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOZDg2Yk1XcUJzUGNQTDhkS3dhU054SWVGLXk0OW5XNGFuX1dYSnoxbmM2ejRDcnNScGFXRU82cnViV20xRFNRYlhNRTE3ZlVyT3hKdDBsWGxZal91ci1QdHpSV2JqQ3QxRndXRU53V25iRG9uRmFkNFNGR2pjdWF2cmY1UHowb1k?oc=5",
+    "headline": "Carney and Xi Jinping expand Canada-China tariff deal to $400M — but canola oil still faces a 100% tariff - Yahoo! Finance Canada",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihwFBVV95cUxOZDg2Yk1XcUJzUGNQTDhkS3dhU054SWVGLXk0OW5XNGFuX1dYSnoxbmM2ejRDcnNScGFXRU82cnViV20xRFNRYlhNRTE3ZlVyT3hKdDBsWGxZal91ci1QdHpSV2JqQ3QxRndXRU53V25iRG9uRmFkNFNGR2pjdWF2cmY1UHowb1k?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiXEFVX3lxTFAwYlVZXzRMcjNxV0tmSHpYaWRic2FKNU1nSEJsbG52XzF3dWNsUlRLVHJaLUR0TUZEQVlSSGkyRk9BMTRvQmQ4Z0JIVEp5Wl9URWZYd245SDlLY25I?oc=5": {
+    "timestamp": "2026-11-19T22:01:53.263032+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFAwYlVZXzRMcjNxV0tmSHpYaWRic2FKNU1nSEJsbG52XzF3dWNsUlRLVHJaLUR0TUZEQVlSSGkyRk9BMTRvQmQ4Z0JIVEp5Wl9URWZYd245SDlLY25I?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFAwYlVZXzRMcjNxV0tmSHpYaWRic2FKNU1nSEJsbG52XzF3dWNsUlRLVHJaLUR0TUZEQVlSSGkyRk9BMTRvQmQ4Z0JIVEp5Wl9URWZYd245SDlLY25I?oc=5",
+    "headline": "[Williams-Sonoma Q3 2026 Earnings Call] Williams-Sonoma Posts 5.8% Revenue Growth, 17.4% Operating Margin Despite 60% Diesel Surge; EPS Jumps 12% to $2.19 - BigGo Finance",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiXEFVX3lxTFAwYlVZXzRMcjNxV0tmSHpYaWRic2FKNU1nSEJsbG52XzF3dWNsUlRLVHJaLUR0TUZEQVlSSGkyRk9BMTRvQmQ4Z0JIVEp5Wl9URWZYd245SDlLY25I?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiakFVX3lxTFBOczBvckVSM0pvMjNtVlBEdkI1Y0lnMFV5UWNwd09mUXpQcldQT2tLOGljYTg4b1JsME1TdGYwbi1fMjdVaC10RzllaHNzZ0RtODlJcXhSUk1RcTJlUFduQi1WeFZZUUZRWnc?oc=5": {
+    "timestamp": "2026-11-19T22:02:03.368539+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBOczBvckVSM0pvMjNtVlBEdkI1Y0lnMFV5UWNwd09mUXpQcldQT2tLOGljYTg4b1JsME1TdGYwbi1fMjdVaC10RzllaHNzZ0RtODlJcXhSUk1RcTJlUFduQi1WeFZZUUZRWnc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBOczBvckVSM0pvMjNtVlBEdkI1Y0lnMFV5UWNwd09mUXpQcldQT2tLOGljYTg4b1JsME1TdGYwbi1fMjdVaC10RzllaHNzZ0RtODlJcXhSUk1RcTJlUFduQi1WeFZZUUZRWnc?oc=5",
+    "headline": "Russian Railways Tariffs 2026: The Cost of Bypassing Klaipėda - Сообщество железнодорожников Беларуси",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTFBOczBvckVSM0pvMjNtVlBEdkI1Y0lnMFV5UWNwd09mUXpQcldQT2tLOGljYTg4b1JsME1TdGYwbi1fMjdVaC10RzllaHNzZ0RtODlJcXhSUk1RcTJlUFduQi1WeFZZUUZRWnc?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONkpTa3VTWkhFRm1HcmpIVHJhZmVocGpNN1R2TkpDZnkwWWRDU2dKVTRXeC0wWnVYN21YMG5SYnpLbHp0MGp5Qk5ZNVZwRmtKWGZUOWh0OVlzczZsaVRZYkliVU9NVWs2NUxTUG5qNWVQQjF5b2Z6d1NCeE5OcTgtVEg3Szc0VWstMWg3NHE1YjhMblBxZzRVYWplLU55OE1wYUN1TE5DbmtIU1dyQzFqZHJzU2RjWVRYby1F?oc=5": {
+    "timestamp": "2026-11-19T22:02:10.584562+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONkpTa3VTWkhFRm1HcmpIVHJhZmVocGpNN1R2TkpDZnkwWWRDU2dKVTRXeC0wWnVYN21YMG5SYnpLbHp0MGp5Qk5ZNVZwRmtKWGZUOWh0OVlzczZsaVRZYkliVU9NVWs2NUxTUG5qNWVQQjF5b2Z6d1NCeE5OcTgtVEg3Szc0VWstMWg3NHE1YjhMblBxZzRVYWplLU55OE1wYUN1TE5DbmtIU1dyQzFqZHJzU2RjWVRYby1F?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONkpTa3VTWkhFRm1HcmpIVHJhZmVocGpNN1R2TkpDZnkwWWRDU2dKVTRXeC0wWnVYN21YMG5SYnpLbHp0MGp5Qk5ZNVZwRmtKWGZUOWh0OVlzczZsaVRZYkliVU9NVWs2NUxTUG5qNWVQQjF5b2Z6d1NCeE5OcTgtVEg3Szc0VWstMWg3NHE1YjhMblBxZzRVYWplLU55OE1wYUN1TE5DbmtIU1dyQzFqZHJzU2RjWVRYby1F?oc=5",
+    "headline": "Williams-Sonoma Sinks 14% as Q3 Falls Just Short of Estimates and Full-Year Outlook Stays Put - TIKR.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuwFBVV95cUxONkpTa3VTWkhFRm1HcmpIVHJhZmVocGpNN1R2TkpDZnkwWWRDU2dKVTRXeC0wWnVYN21YMG5SYnpLbHp0MGp5Qk5ZNVZwRmtKWGZUOWh0OVlzczZsaVRZYkliVU9NVWs2NUxTUG5qNWVQQjF5b2Z6d1NCeE5OcTgtVEg3Szc0VWstMWg3NHE1YjhMblBxZzRVYWplLU55OE1wYUN1TE5DbmtIU1dyQzFqZHJzU2RjWVRYby1F?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMioAFBVV95cUxNOGxMNzJIdzRUX054WmpVNlZRSFUzWk5NLTF6M2NtRW1EQVRPbDNqWDFUaTI0aGtDWHVvU1J2UmJETWNVV2p4bDFQNTN1bHl2X25MUVpLSkxYSWF0Z3VfLUpiT3dYbUdfcnFvRHBQX0pKN1hSOXU1NFNWcFMwNWlKeS12SU1SemhsV2N3cGVFWUNma3J1dmFSNzFEaE1wdGs3?oc=5": {
+    "timestamp": "2026-11-19T22:02:17.187571+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNOGxMNzJIdzRUX054WmpVNlZRSFUzWk5NLTF6M2NtRW1EQVRPbDNqWDFUaTI0aGtDWHVvU1J2UmJETWNVV2p4bDFQNTN1bHl2X25MUVpLSkxYSWF0Z3VfLUpiT3dYbUdfcnFvRHBQX0pKN1hSOXU1NFNWcFMwNWlKeS12SU1SemhsV2N3cGVFWUNma3J1dmFSNzFEaE1wdGs3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNOGxMNzJIdzRUX054WmpVNlZRSFUzWk5NLTF6M2NtRW1EQVRPbDNqWDFUaTI0aGtDWHVvU1J2UmJETWNVV2p4bDFQNTN1bHl2X25MUVpLSkxYSWF0Z3VfLUpiT3dYbUdfcnFvRHBQX0pKN1hSOXU1NFNWcFMwNWlKeS12SU1SemhsV2N3cGVFWUNma3J1dmFSNzFEaE1wdGs3?oc=5",
+    "headline": "Nvidia Was The Bottom, And Anthropic Is The Turn - Seeking Alpha",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMioAFBVV95cUxNOGxMNzJIdzRUX054WmpVNlZRSFUzWk5NLTF6M2NtRW1EQVRPbDNqWDFUaTI0aGtDWHVvU1J2UmJETWNVV2p4bDFQNTN1bHl2X25MUVpLSkxYSWF0Z3VfLUpiT3dYbUdfcnFvRHBQX0pKN1hSOXU1NFNWcFMwNWlKeS12SU1SemhsV2N3cGVFWUNma3J1dmFSNzFEaE1wdGs3?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMijgFBVV95cUxObE1uajRxUzRHcU9LOTU4dTR1OGhGNUwwRk1JU3kwUjhJcW5yWXdfTnNLek1ZWjlFeGNuc1hGTTdNcm10NUpoNHQ3bHpJOURVVGZvQl9CLXRPQTBxdlNDOEdfal9aSkR6UzBFd1Y3X3F3Wi1EMnpTQVpYZFItX0dJU1ZXQ0otTG84Qi1Kd3B3?oc=5": {
+    "timestamp": "2026-11-19T22:02:24.335769+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxObE1uajRxUzRHcU9LOTU4dTR1OGhGNUwwRk1JU3kwUjhJcW5yWXdfTnNLek1ZWjlFeGNuc1hGTTdNcm10NUpoNHQ3bHpJOURVVGZvQl9CLXRPQTBxdlNDOEdfal9aSkR6UzBFd1Y3X3F3Wi1EMnpTQVpYZFItX0dJU1ZXQ0otTG84Qi1Kd3B3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxObE1uajRxUzRHcU9LOTU4dTR1OGhGNUwwRk1JU3kwUjhJcW5yWXdfTnNLek1ZWjlFeGNuc1hGTTdNcm10NUpoNHQ3bHpJOURVVGZvQl9CLXRPQTBxdlNDOEdfal9aSkR6UzBFd1Y3X3F3Wi1EMnpTQVpYZFItX0dJU1ZXQ0otTG84Qi1Kd3B3?oc=5",
+    "headline": "US tariff claim stings government - Bangkok Post",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxObE1uajRxUzRHcU9LOTU4dTR1OGhGNUwwRk1JU3kwUjhJcW5yWXdfTnNLek1ZWjlFeGNuc1hGTTdNcm10NUpoNHQ3bHpJOURVVGZvQl9CLXRPQTBxdlNDOEdfal9aSkR6UzBFd1Y3X3F3Wi1EMnpTQVpYZFItX0dJU1ZXQ0otTG84Qi1Kd3B3?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMilwFBVV95cUxOMGtMeVJicnlsQU1GWlRSSWcxQmYtanRXOEZFVDMybGxDTTRrMEtKcGJ0azIybUlMMTB4QVpLZUI2VmNFOF9IVDRiQ1RCaFA4U1ljaTFLend2elRaU2ltYlQweTM2d3lIZlhtNGNBeFBaU0IxYll4XzFLNkI4ajBqM0s5dEVtWVU2UWxnUHNVblNkTEhvek4w?oc=5": {
+    "timestamp": "2026-11-19T22:02:30.948167+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOMGtMeVJicnlsQU1GWlRSSWcxQmYtanRXOEZFVDMybGxDTTRrMEtKcGJ0azIybUlMMTB4QVpLZUI2VmNFOF9IVDRiQ1RCaFA4U1ljaTFLend2elRaU2ltYlQweTM2d3lIZlhtNGNBeFBaU0IxYll4XzFLNkI4ajBqM0s5dEVtWVU2UWxnUHNVblNkTEhvek4w?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOMGtMeVJicnlsQU1GWlRSSWcxQmYtanRXOEZFVDMybGxDTTRrMEtKcGJ0azIybUlMMTB4QVpLZUI2VmNFOF9IVDRiQ1RCaFA4U1ljaTFLend2elRaU2ltYlQweTM2d3lIZlhtNGNBeFBaU0IxYll4XzFLNkI4ajBqM0s5dEVtWVU2UWxnUHNVblNkTEhvek4w?oc=5",
+    "headline": "Pork groups welcome tariff relief arrangement with China - 620 CKRM",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilwFBVV95cUxOMGtMeVJicnlsQU1GWlRSSWcxQmYtanRXOEZFVDMybGxDTTRrMEtKcGJ0azIybUlMMTB4QVpLZUI2VmNFOF9IVDRiQ1RCaFA4U1ljaTFLend2elRaU2ltYlQweTM2d3lIZlhtNGNBeFBaU0IxYll4XzFLNkI4ajBqM0s5dEVtWVU2UWxnUHNVblNkTEhvek4w?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiswFBVV95cUxQRU1KbXpEQUtMTHNWbkJQZ1BoeHlvNTgtRzBLZW9GWTItYkE2R3F1RnBzeXctbWRycVkxZHcxWFB1cmJqeHJJVXlkV3FWVS1Wb0Jva00tTnRoZEI2c3lGdFBCNTh2cUV1b25CUEhQUjFHSEQ2bU93TGZZOFFWa0lpcWxEYzV6dmtBOF9vamhmUWpsQ1p2ai1Ga0hmcVZ0VWVKN0ppQkUyY3dMZERDbnZZekpMZw?oc=5": {
+    "timestamp": "2026-11-19T22:02:37.766718+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQRU1KbXpEQUtMTHNWbkJQZ1BoeHlvNTgtRzBLZW9GWTItYkE2R3F1RnBzeXctbWRycVkxZHcxWFB1cmJqeHJJVXlkV3FWVS1Wb0Jva00tTnRoZEI2c3lGdFBCNTh2cUV1b25CUEhQUjFHSEQ2bU93TGZZOFFWa0lpcWxEYzV6dmtBOF9vamhmUWpsQ1p2ai1Ga0hmcVZ0VWVKN0ppQkUyY3dMZERDbnZZekpMZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQRU1KbXpEQUtMTHNWbkJQZ1BoeHlvNTgtRzBLZW9GWTItYkE2R3F1RnBzeXctbWRycVkxZHcxWFB1cmJqeHJJVXlkV3FWVS1Wb0Jva00tTnRoZEI2c3lGdFBCNTh2cUV1b25CUEhQUjFHSEQ2bU93TGZZOFFWa0lpcWxEYzV6dmtBOF9vamhmUWpsQ1p2ai1Ga0hmcVZ0VWVKN0ppQkUyY3dMZERDbnZZekpMZw?oc=5",
+    "headline": "Tanzania, Uganda move to accelerate completion of oil pipeline - Channel Africa",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxQRU1KbXpEQUtMTHNWbkJQZ1BoeHlvNTgtRzBLZW9GWTItYkE2R3F1RnBzeXctbWRycVkxZHcxWFB1cmJqeHJJVXlkV3FWVS1Wb0Jva00tTnRoZEI2c3lGdFBCNTh2cUV1b25CUEhQUjFHSEQ2bU93TGZZOFFWa0lpcWxEYzV6dmtBOF9vamhmUWpsQ1p2ai1Ga0hmcVZ0VWVKN0ppQkUyY3dMZERDbnZZekpMZw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://www.nytimes.com/2026/11/19/climate/iea-energy-transition-electric-cars.html": {
+    "timestamp": "2026-11-19T22:02:37.837832+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/19/climate/iea-energy-transition-electric-cars.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/19/climate/iea-energy-transition-electric-cars.html",
+    "headline": "Unexpected Fallout From the Iran War",
+    "archive_url": "http://web.archive.org/web/20261119215603/https://www.nytimes.com/2026/11/19/climate/iea-energy-transition-electric-cars.html"
+  },
+  "https://www.nytimes.com/2026/11/19/climate/metals-company-seafloor-mining-auction.html": {
+    "timestamp": "2026-11-19T22:02:37.935025+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/19/climate/metals-company-seafloor-mining-auction.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/19/climate/metals-company-seafloor-mining-auction.html",
+    "headline": "U.S. Auctions 31.5 Million Acres of Pacific Ocean to Deep Sea Mining Company",
+    "archive_url": "http://web.archive.org/web/20261119205555/https://www.nytimes.com/2026/11/19/climate/metals-company-seafloor-mining-auction.html"
+  },
+  "https://www.nytimes.com/2026/11/17/climate/climate-chatbots-people-pleasers.html": {
+    "timestamp": "2026-11-19T22:02:38.257057+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/17/climate/climate-chatbots-people-pleasers.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/17/climate/climate-chatbots-people-pleasers.html",
+    "headline": "A.I.’s People-Pleasing Problem",
+    "archive_url": "http://web.archive.org/web/20261118040935/https://www.nytimes.com/2026/11/17/climate/climate-chatbots-people-pleasers.html"
   }
 }
