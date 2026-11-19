@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-19T03:50:58.512107",
+  "timestamp": "2026-11-19T12:39:12.043441",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.826,
+    "current_price_per_gal": 3.797,
     "source": "AAA National Daily CSV (US Average)",
     "provenance": {
       "source": "AAA National Daily CSV (US Average)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-19T03:50:58Z"
+      "timestamp": "2026-11-19T12:39:11Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-25",
-    "current_base_price": 3.826,
-    "predicted_price_per_gal": 3.878,
+    "current_base_price": 3.797,
+    "predicted_price_per_gal": 3.849,
     "expected_change_dollars": 0.052,
-    "expected_change_percent": 1.36,
+    "expected_change_percent": 1.37,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.531,
-    "prediction_upper_95ci": 4.225,
+    "prediction_lower_95ci": 3.502,
+    "prediction_upper_95ci": 4.196,
     "calibration_method": "conformal",
     "calibration_sample_size": 55,
     "directional_hit_rate_historical": 0.6,
     "historical_mae_dollars": 0.1463,
     "evaluation_sample_size": 35,
-    "day_1_price": 3.836,
-    "day_2_price": 3.777,
-    "day_3_price": 3.833,
-    "day_4_price": 3.812,
-    "day_5_price": 3.878,
+    "day_1_price": 3.807,
+    "day_2_price": 3.748,
+    "day_3_price": 3.804,
+    "day_4_price": 3.783,
+    "day_5_price": 3.849,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.052/gal (+1.36%): Driven primarily by Futures & Commodity Benchmark (+$0.023/gal), Refining Yield & Crack Spread (+$0.013/gal).",
+      "summary_text": "National forecast +$0.052/gal (+1.37%): Driven primarily by Futures & Commodity Benchmark (+$0.023/gal), Refining Yield & Crack Spread (+$0.013/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.023,
-          "impact_pct": 0.6,
+          "impact_pct": 0.61,
           "share_pct": 45.0,
           "direction": "UP"
         },
@@ -126,7 +126,7 @@
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
           "impact_dollars": 0.004,
-          "impact_pct": 0.1,
+          "impact_pct": 0.11,
           "share_pct": 7.5,
           "direction": "UP"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.023,
-      "impact_pct": 0.6,
+      "impact_pct": 0.61,
       "share_pct": 45.0,
       "direction": "UP"
     },
@@ -178,7 +178,7 @@
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
       "impact_dollars": 0.004,
-      "impact_pct": 0.1,
+      "impact_pct": 0.11,
       "share_pct": 7.5,
       "direction": "UP"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.052/gal (+1.36%): Driven primarily by Futures & Commodity Benchmark (+$0.023/gal), Refining Yield & Crack Spread (+$0.013/gal).",
+    "summary_text": "National forecast +$0.052/gal (+1.37%): Driven primarily by Futures & Commodity Benchmark (+$0.023/gal), Refining Yield & Crack Spread (+$0.013/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
