@@ -14344,6 +14344,17 @@
       "total_tokens": 200,
       "cost_usd": 0.00039,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-11-19T03:27:09.880920+00:00",
+      "provider": "finlight",
+      "model_name": "finlight",
+      "call_type": "finlight_feed",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "status": "success"
     }
   ]
 }

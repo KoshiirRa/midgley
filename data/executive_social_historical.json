@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-18 04:20:40",
-  "records_count": 74,
+  "last_refreshed_utc": "2026-11-19 03:50:26",
+  "records_count": 84,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -694,9 +694,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-19 03:27:10",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
+      "post_text": "Why Markets Think the US Is Winning the Blockade - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -704,9 +704,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-19 03:27:10",
       "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
+      "post_text": "COMMENTARY: The Trump Chaotic Presidency Continues \u2013 Fraser Institute - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -714,9 +714,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-19 03:27:10",
       "platform": "Google News RSS",
-      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -724,9 +724,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-19 03:27:10",
       "platform": "Google News RSS",
-      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -734,9 +734,109 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-19 03:27:10",
       "platform": "Google News RSS",
-      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "post_text": "Canada, Alberta Announce New West Coast Oil Pipeline to Boost Exports - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: The Trump Chaotic Presidency Continues \u2013 Fraser Institute - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "Why Markets Think the US Is Winning the Blockade - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:42",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "COMMENTARY: The Trump Chaotic Presidency Continues \u2013 Fraser Institute - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "Why Markets Think the US Is Winning the Blockade - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:41",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-19 03:44:42",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
