@@ -85,6 +85,7 @@ jobs:
           DISCORD_CHANNEL_ID: ${{ needs.select-runner.outputs.discord_channel_id }}
           TESTING: "1"
         run: |
+          set -o pipefail
           export PATH="$HOME/.local/bin:$PATH"
           BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
           git config user.name "midgley-dev-agent[bot]"
@@ -181,22 +182,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Antigravity CLI (agy) & Configure Hindsight MCP
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install Gemini CLI & Configure Hindsight MCP (Cloud Fallback)
         env:
           HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
           HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
         run: |
-          curl -fsSL https://antigravity.google/cli/install.sh | bash
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          mkdir -p "$HOME/.gemini/antigravity"
+          npm install -g @google/gemini-cli
+          mkdir -p "$HOME/.gemini"
           if [ -n "$HINDSIGHT_API_URL" ] && [ -n "$HINDSIGHT_API_KEY" ]; then
             python3 - <<'PYEOF'
           import json, os, pathlib
-          cfg_path = pathlib.Path.home() / ".gemini" / "antigravity" / "mcp_config.json"
+          cfg_path = pathlib.Path.home() / ".gemini" / "settings.json"
           cfg = {
               "mcpServers": {
                   "hindsight": {
-                      "serverUrl": os.environ["HINDSIGHT_API_URL"],
+                      "httpUrl": os.environ["HINDSIGHT_API_URL"],
                       "headers": {
                           "Authorization": f"Bearer {os.environ['HINDSIGHT_API_KEY']}"
                       }
@@ -205,21 +210,21 @@ jobs:
           }
           cfg_path.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
           PYEOF
-            echo "Configured Hindsight MCP server for cloud agy fallback."
+            echo "Configured Hindsight MCP server for cloud Gemini CLI fallback."
           else
             echo "HINDSIGHT_API_URL or HINDSIGHT_API_KEY not set; continuing with repository skills only."
           fi
 
-      - name: Execute Antigravity CLI (agy) on GitHub Cloud & Open Draft PR
+      - name: Execute Gemini CLI Agent on GitHub Cloud & Open Draft PR
         env:
           GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-          ANTIGRAVITY_API_KEY: ${{ secrets.ANTIGRAVITY_API_KEY || secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ needs.select-runner.outputs.discord_channel_id }}
           TESTING: "1"
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
+          set -o pipefail
           BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
           git config user.name "midgley-dev-agent[bot]"
           git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
@@ -229,7 +234,7 @@ jobs:
           ISSUE_TITLE=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['title'])")
           ISSUE_BODY=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['body'])")
 
-          PROMPT_FILE="/tmp/agy_prompt_${ISSUE_NUMBER}.txt"
+          PROMPT_FILE="/tmp/agent_prompt_${ISSUE_NUMBER}.txt"
           cat <<'EOF' > "$PROMPT_FILE"
           You are working an approved Midgley weekly self-review action item on a feature branch off `dev` (cloud fallback runner).
           Follow `AGENTS.md` and relevant `.agents/skills/` runbooks strictly:
@@ -240,7 +245,7 @@ jobs:
           EOF
           printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
 
-          agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+          gemini --yolo -p "$(cat "$PROMPT_FILE")" | tee "/tmp/agent_out_${ISSUE_NUMBER}.log"
 
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
