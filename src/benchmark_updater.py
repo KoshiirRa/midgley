@@ -215,22 +215,34 @@ class HistoricalBenchmarkManager:
     @classmethod
     def refresh_all(cls) -> Dict[str, Any]:
         """
-        Executes a complete weekly refresh pass across all registered benchmarks.
+        Executes a complete weekly refresh pass across all registered benchmarks concurrently.
         """
         logger.info("Starting automated weekly historical benchmark refresh pass...")
         start_time = datetime.now(timezone.utc)
-        results = {
-            "baker_hughes": cls.refresh_baker_hughes(),
-            "executive_social": cls.refresh_executive_social(),
-            "geopolitical": cls.refresh_geopolitical(),
-            "key_movers": cls.refresh_key_movers(),
-            "diesel_regional": cls.refresh_diesel_regional(),
-            "treasury_yields": cls.refresh_treasury_yields(),
-            "usgs_water": cls.refresh_usgs_water(),
-            "usgs_seismic": cls.refresh_usgs_seismic(),
-            "census_demographics": cls.refresh_census_demographics(),
-            "commodity_spot_prices": cls.refresh_commodity_spot_prices()
+        from concurrent.futures import ThreadPoolExecutor
+
+        tasks = {
+            "baker_hughes": cls.refresh_baker_hughes,
+            "executive_social": cls.refresh_executive_social,
+            "geopolitical": cls.refresh_geopolitical,
+            "key_movers": cls.refresh_key_movers,
+            "diesel_regional": cls.refresh_diesel_regional,
+            "treasury_yields": cls.refresh_treasury_yields,
+            "usgs_water": cls.refresh_usgs_water,
+            "usgs_seismic": cls.refresh_usgs_seismic,
+            "census_demographics": cls.refresh_census_demographics,
+            "commodity_spot_prices": cls.refresh_commodity_spot_prices,
         }
+
+        results = {}
+        with ThreadPoolExecutor(max_workers=min(len(tasks), 8)) as pool:
+            futures = {k: pool.submit(fn) for k, fn in tasks.items()}
+            for k, fut in futures.items():
+                try:
+                    results[k] = fut.result()
+                except Exception as e:
+                    logger.warning(f"Benchmark '{k}' refresh exception: {e}")
+                    results[k] = {"status": "FAILED", "records": 0}
 
         successful = sum(1 for v in results.values() if v.get("status") == "SUCCESS")
         total = len(results)
