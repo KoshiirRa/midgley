@@ -187,11 +187,12 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install Gemini CLI & Configure Hindsight MCP (Cloud Fallback)
+      - name: Install Gemini CLI, ripgrep & Configure Hindsight MCP (Cloud Fallback)
         env:
           HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
           HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ripgrep
           npm install -g @google/gemini-cli
           mkdir -p "$HOME/.gemini"
           if [ -n "$HINDSIGHT_API_URL" ] && [ -n "$HINDSIGHT_API_KEY" ]; then
@@ -246,7 +247,41 @@ jobs:
           EOF
           printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
 
-          gemini --yolo -p "$(cat "$PROMPT_FILE")" | tee "/tmp/agent_out_${ISSUE_NUMBER}.log"
+          gemini --yolo --output-format stream-json -p "$(cat "$PROMPT_FILE")" \
+            | tee "/tmp/agent_out_${ISSUE_NUMBER}.log" \
+            | python3 -u -c '
+          import json, sys
+          for raw in sys.stdin:
+              line = raw.strip()
+              if not line:
+                  continue
+              try:
+                  ev = json.loads(line)
+              except Exception:
+                  print(line, flush=True)
+                  continue
+              etype = ev.get("type", "")
+              if etype == "tool_use":
+                  name = ev.get("tool_name") or ev.get("name") or "tool"
+                  params = json.dumps(ev.get("parameters") or ev.get("input") or {})[:180]
+                  print(f"🔧 [tool_use] {name} {params}", flush=True)
+              elif etype == "tool_result":
+                  status = ev.get("status", "ok")
+                  out = str(ev.get("output") or "")[:180].replace("\n", " ")
+                  icon = "✅" if status == "success" else "⚠️"
+                  print(f"{icon} [tool_result] ({status}) {out}", flush=True)
+              elif etype == "message":
+                  role = ev.get("role", "")
+                  content = str(ev.get("content") or "").strip()
+                  if role == "assistant" and content:
+                      print(f"💬 {content}", flush=True)
+              elif etype == "result":
+                  st = ev.get("status")
+                  stats = ev.get("stats") or {}
+                  print(f"📊 [done] status={st} stats={json.dumps(stats)}", flush=True)
+              elif etype == "error":
+                  print(f"❌ [error] {ev}", flush=True)
+          '
 
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
