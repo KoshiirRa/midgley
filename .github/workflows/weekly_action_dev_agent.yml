@@ -1,0 +1,292 @@
+name: Weekly Action Dev Agent (dev-vm Primary / Cloud agy Fallback)
+
+on:
+  repository_dispatch:
+    types: [weekly-action-approved]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "GitHub Issue number to work on"
+        required: true
+        type: string
+      force_cloud:
+        description: "Skip dev-vm check and run directly on GitHub Cloud"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: weekly-action-dev-agent-${{ github.event.client_payload.issue_number || inputs.issue_number || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  select-runner:
+    runs-on: ubuntu-latest
+    outputs:
+      target_runner: ${{ steps.check.outputs.target_runner }}
+      issue_number: ${{ steps.check.outputs.issue_number }}
+      discord_channel_id: ${{ steps.check.outputs.discord_channel_id }}
+    steps:
+      - name: Resolve Issue & Check dev-vm Runner Availability
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          PAYLOAD_ISSUE: ${{ github.event.client_payload.issue_number || inputs.issue_number }}
+          PAYLOAD_CHANNEL: ${{ github.event.client_payload.discord_channel_id || '1573379167452405851' }}
+          FORCE_CLOUD: ${{ inputs.force_cloud || false }}
+        run: |
+          if [ -z "$PAYLOAD_ISSUE" ]; then
+            echo "No issue_number supplied in dispatch payload or workflow_dispatch input." >&2
+            exit 1
+          fi
+          echo "issue_number=$PAYLOAD_ISSUE" >> "$GITHUB_OUTPUT"
+          echo "discord_channel_id=$PAYLOAD_CHANNEL" >> "$GITHUB_OUTPUT"
+
+          if [ "$FORCE_CLOUD" = "true" ]; then
+            echo "target_runner=cloud" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          ONLINE=$(gh api "repos/${{ github.repository }}/actions/runners" \
+            --jq '[.runners[] | select(.status == "online" and any(.labels[]; .name == "dev-vm"))] | length' \
+            2>/dev/null || echo "0")
+
+          if [ "${ONLINE:-0}" -gt 0 ]; then
+            echo "dev-vm self-hosted runner is ONLINE; routing to dev-vm."
+            echo "target_runner=dev-vm" >> "$GITHUB_OUTPUT"
+          else
+            echo "dev-vm self-hosted runner is offline or unregistered; falling back to GitHub Cloud (ubuntu-latest)."
+            echo "target_runner=cloud" >> "$GITHUB_OUTPUT"
+          fi
+
+  run-on-dev-vm:
+    needs: select-runner
+    if: needs.select-runner.outputs.target_runner == 'dev-vm'
+    runs-on: [self-hosted, dev-vm]
+    timeout-minutes: 45
+    steps:
+      - name: Checkout dev Branch
+        uses: actions/checkout@v7
+        with:
+          ref: dev
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Fetch Issue Details & Execute Antigravity CLI (agy) on dev-vm
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_CHANNEL_ID: ${{ needs.select-runner.outputs.discord_channel_id }}
+          TESTING: "1"
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
+          git config user.name "midgley-dev-agent[bot]"
+          git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH" origin/dev
+
+          gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json number,title,body,url > /tmp/issue_${ISSUE_NUMBER}.json
+          ISSUE_TITLE=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['title'])")
+          ISSUE_BODY=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['body'])")
+
+          PROMPT_FILE="/tmp/agy_prompt_${ISSUE_NUMBER}.txt"
+          cat <<'EOF' > "$PROMPT_FILE"
+          You are working an approved Midgley weekly self-review action item on a feature branch off `dev`.
+          Follow `AGENTS.md` and relevant `.agents/skills/` runbooks strictly:
+          - Enforce Point-in-Time (PIT) safety and genuine data provenance.
+          - Use LF line endings and keep changes minimal, well-scoped, and regression-tested under `TESTING=1`.
+          - Run `ruff check .` and targeted `TESTING=1 pytest` checks before finishing.
+          - Do NOT push or merge to `main`. Commit your verified changes to the current feature branch.
+          EOF
+          printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
+
+          agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+
+          if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "fix(weekly-action): address #${ISSUE_NUMBER}"
+          fi
+
+          if [ "$(git rev-list --count origin/dev..HEAD)" -gt 0 ]; then
+            git push -u origin "$BRANCH" --force-with-lease
+            PR_BODY="/tmp/pr_body_${ISSUE_NUMBER}.md"
+            cat <<EOF > "$PR_BODY"
+          ## Automated Weekly Action Draft PR (dev-vm)
+
+          Closes #${ISSUE_NUMBER}
+
+          - **Runner:** \`dev-vm\` (self-hosted Antigravity CLI)
+          - **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Please review changes and test output before marking ready for review.
+          EOF
+            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "fix(weekly-action): ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            echo "Opened Draft PR: $PR_URL"
+
+            if [ -n "$DISCORD_BOT_TOKEN" ]; then
+              python3 - "$DISCORD_CHANNEL_ID" "$ISSUE_NUMBER" "$PR_URL" "dev-vm" <<'PYEOF'
+          import json, os, sys, urllib.request
+          channel_id, issue_num, pr_url, runner = sys.argv[1:5]
+          req = urllib.request.Request(
+              f"https://discord.com/api/v10/channels/{channel_id}/messages",
+              data=json.dumps({
+                  "content": f"🤖 **Dev Agent completed Issue #{issue_num}** on `{runner}`\nDraft PR ready for review: {pr_url}"
+              }).encode("utf-8"),
+              headers={
+                  "Authorization": f"Bot {os.environ['DISCORD_BOT_TOKEN']}",
+                  "Content-Type": "application/json",
+                  "User-Agent": "Midgley-Dev-Agent/1.0"
+              },
+              method="POST"
+          )
+          urllib.request.urlopen(req, timeout=15)
+          PYEOF
+            fi
+          else
+            COMMENT_FILE="/tmp/no_diff_${ISSUE_NUMBER}.md"
+            cat <<EOF > "$COMMENT_FILE"
+          🤖 **Dev Agent (\`dev-vm\`) completed investigation** for #${ISSUE_NUMBER}, but produced no committed code diff.
+          See workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+            gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$COMMENT_FILE"
+          fi
+
+  run-on-cloud:
+    needs: select-runner
+    if: needs.select-runner.outputs.target_runner == 'cloud'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout dev Branch
+        uses: actions/checkout@v7
+        with:
+          ref: dev
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Antigravity CLI (agy) & Configure Hindsight MCP
+        env:
+          HINDSIGHT_API_URL: ${{ secrets.HINDSIGHT_API_URL }}
+          HINDSIGHT_API_KEY: ${{ secrets.HINDSIGHT_API_KEY }}
+        run: |
+          curl -fsSL https://antigravity.google/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          mkdir -p "$HOME/.gemini/antigravity"
+          if [ -n "$HINDSIGHT_API_URL" ] && [ -n "$HINDSIGHT_API_KEY" ]; then
+            python3 - <<'PYEOF'
+          import json, os, pathlib
+          cfg_path = pathlib.Path.home() / ".gemini" / "antigravity" / "mcp_config.json"
+          cfg = {
+              "mcpServers": {
+                  "hindsight": {
+                      "serverUrl": os.environ["HINDSIGHT_API_URL"],
+                      "headers": {
+                          "Authorization": f"Bearer {os.environ['HINDSIGHT_API_KEY']}"
+                      }
+                  }
+              }
+          }
+          cfg_path.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
+          PYEOF
+            echo "Configured Hindsight MCP server for cloud agy fallback."
+          else
+            echo "HINDSIGHT_API_URL or HINDSIGHT_API_KEY not set; continuing with repository skills only."
+          fi
+
+      - name: Execute Antigravity CLI (agy) on GitHub Cloud & Open Draft PR
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          ANTIGRAVITY_API_KEY: ${{ secrets.ANTIGRAVITY_API_KEY || secrets.GEMINI_API_KEY }}
+          ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_CHANNEL_ID: ${{ needs.select-runner.outputs.discord_channel_id }}
+          TESTING: "1"
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
+          git config user.name "midgley-dev-agent[bot]"
+          git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH" origin/dev
+
+          gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json number,title,body,url > /tmp/issue_${ISSUE_NUMBER}.json
+          ISSUE_TITLE=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['title'])")
+          ISSUE_BODY=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['body'])")
+
+          PROMPT_FILE="/tmp/agy_prompt_${ISSUE_NUMBER}.txt"
+          cat <<'EOF' > "$PROMPT_FILE"
+          You are working an approved Midgley weekly self-review action item on a feature branch off `dev` (cloud fallback runner).
+          Follow `AGENTS.md` and relevant `.agents/skills/` runbooks strictly:
+          - Enforce Point-in-Time (PIT) safety and genuine data provenance.
+          - Use LF line endings and keep changes minimal, well-scoped, and regression-tested under `TESTING=1`.
+          - Run `ruff check .` and targeted `TESTING=1 pytest` checks before finishing.
+          - Do NOT push or merge to `main`. Commit your verified changes to the current feature branch.
+          EOF
+          printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
+
+          agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+
+          if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "fix(weekly-action): address #${ISSUE_NUMBER}"
+          fi
+
+          if [ "$(git rev-list --count origin/dev..HEAD)" -gt 0 ]; then
+            git push -u origin "$BRANCH" --force-with-lease
+            PR_BODY="/tmp/pr_body_${ISSUE_NUMBER}.md"
+            cat <<EOF > "$PR_BODY"
+          ## Automated Weekly Action Draft PR (GitHub Cloud Fallback)
+
+          Closes #${ISSUE_NUMBER}
+
+          - **Runner:** \`ubuntu-latest\` (GitHub Cloud fallback — \`dev-vm\` offline)
+          - **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Please review changes and test output before marking ready for review.
+          EOF
+            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "fix(weekly-action): ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            echo "Opened Draft PR: $PR_URL"
+
+            if [ -n "$DISCORD_BOT_TOKEN" ]; then
+              python3 - "$DISCORD_CHANNEL_ID" "$ISSUE_NUMBER" "$PR_URL" "ubuntu-latest (cloud fallback)" <<'PYEOF'
+          import json, os, sys, urllib.request
+          channel_id, issue_num, pr_url, runner = sys.argv[1:5]
+          req = urllib.request.Request(
+              f"https://discord.com/api/v10/channels/{channel_id}/messages",
+              data=json.dumps({
+                  "content": f"☁️ **Dev Agent completed Issue #{issue_num}** on `{runner}`\nDraft PR ready for review: {pr_url}"
+              }).encode("utf-8"),
+              headers={
+                  "Authorization": f"Bot {os.environ['DISCORD_BOT_TOKEN']}",
+                  "Content-Type": "application/json",
+                  "User-Agent": "Midgley-Dev-Agent/1.0"
+              },
+              method="POST"
+          )
+          urllib.request.urlopen(req, timeout=15)
+          PYEOF
+            fi
+          else
+            COMMENT_FILE="/tmp/no_diff_${ISSUE_NUMBER}.md"
+            cat <<EOF > "$COMMENT_FILE"
+          ☁️ **Dev Agent (\`ubuntu-latest\` cloud fallback) completed investigation** for #${ISSUE_NUMBER}, but produced no committed code diff.
+          See workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+            gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$COMMENT_FILE"
+          fi
