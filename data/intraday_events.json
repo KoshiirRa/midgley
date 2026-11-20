@@ -10224,5 +10224,32 @@
       "overall_price_pressure": 0.58
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-20T12:37:49.435912",
+    "headline": "Iran's attacks on ships in the Strait of Hormuz escalate",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPUGJYWnJBeEFvZjlDcUZJUWEyTWNNY3RJMjhIc3dUcDJPVm1zbU5uLWtKOTg4T1JmNHA4d2RhS2tZRUZVVXdMUm4yeWdlSVdNbF9NOHU5WVZNLWk2ZC05SUVYMl9zM2szZ2FOOUxKRnVIeV9aWG93VXExcEVxcktBUExTYjZmOFVCN2RZVVB4aXRmbVJRRWZreE9KUXJDVTVlZmc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPUGJYWnJBeEFvZjlDcUZJUWEyTWNNY3RJMjhIc3dUcDJPVm1zbU5uLWtKOTg4T1JmNHA4d2RhS2tZRUZVVXdMUm4yeWdlSVdNbF9NOHU5WVZNLWk2ZC05SUVYMl9zM2szZ2FOOUxKRnVIeV9aWG93VXExcEVxcktBUExTYjZmOFVCN2RZVVB4aXRmbVJRRWZreE9KUXJDVTVlZmc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxPUGJYWnJBeEFvZjlDcUZJUWEyTWNNY3RJMjhIc3dUcDJPVm1zbU5uLWtKOTg4T1JmNHA4d2RhS2tZRUZVVXdMUm4yeWdlSVdNbF9NOHU5WVZNLWk2ZC05SUVYMl9zM2szZ2FOOUxKRnVIeV9aWG93VXExcEVxcktBUExTYjZmOFVCN2RZVVB4aXRmbVJRRWZreE9KUXJDVTVlZmc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.3,
+      "overall_price_pressure": 0.88
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Iran Keeps Up Unrelenting Attacks on Ships in the Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.5,
+    "duplicate_review_notified": false
   }
 ]
