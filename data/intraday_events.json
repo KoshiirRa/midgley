@@ -10201,5 +10201,28 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-20T03:01:40.561577",
+    "headline": "Iran grows more aggressive in Strait of Hormuz despite surge in oil traffic",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFA4U3VmZTQ5bWUzbVN3LXJCM2FVR0JrNjRWMkFqd25NeWtqNm9wcGI2MG5XMTFwRWU0VTFBdlBTQ1hJRU1GODZseWxkVmh3Tm1XTElySDN6LXhkRUdsM2JmbGdkVnhnQ0g3TXc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFA4U3VmZTQ5bWUzbVN3LXJCM2FVR0JrNjRWMkFqd25NeWtqNm9wcGI2MG5XMTFwRWU0VTFBdlBTQ1hJRU1GODZseWxkVmh3Tm1XTElySDN6LXhkRUdsM2JmbGdkVnhnQ0g3TXc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiakFVX3lxTFA4U3VmZTQ5bWUzbVN3LXJCM2FVR0JrNjRWMkFqd25NeWtqNm9wcGI2MG5XMTFwRWU0VTFBdlBTQ1hJRU1GODZseWxkVmh3Tm1XTElySDN6LXhkRUdsM2JmbGdkVnhnQ0g3TXc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.72,
+      "supply_disruption": 0.35,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.35,
+      "demand_sentiment": 0.1,
+      "opec_action": 0.15,
+      "overall_price_pressure": 0.58
+    },
+    "discord_notified": true
   }
 ]
