@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-20T03:02:18.530340",
+  "timestamp": "2026-11-20T03:58:17.265002",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-20T03:02:17Z"
+      "timestamp": "2026-11-20T03:58:16Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-25",
+    "target_date": "2026-11-27",
     "current_base_price": 3.766,
-    "predicted_price_per_gal": 3.818,
-    "expected_change_dollars": 0.052,
-    "expected_change_percent": 1.38,
+    "predicted_price_per_gal": 3.804,
+    "expected_change_dollars": 0.038,
+    "expected_change_percent": 1.01,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.471,
-    "prediction_upper_95ci": 4.165,
+    "prediction_lower_95ci": 3.449,
+    "prediction_upper_95ci": 4.159,
     "calibration_method": "conformal",
-    "calibration_sample_size": 55,
-    "directional_hit_rate_historical": 0.6,
-    "historical_mae_dollars": 0.1463,
+    "calibration_sample_size": 56,
+    "directional_hit_rate_historical": 0.5714,
+    "historical_mae_dollars": 0.155,
     "evaluation_sample_size": 35,
-    "day_1_price": 3.776,
-    "day_2_price": 3.787,
-    "day_3_price": 3.772,
-    "day_4_price": 3.752,
-    "day_5_price": 3.818,
+    "day_1_price": 3.774,
+    "day_2_price": 3.774,
+    "day_3_price": 3.775,
+    "day_4_price": 3.779,
+    "day_5_price": 3.804,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.023,
+        "delta_dollars": 0.017,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.013,
+        "delta_dollars": 0.009,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -65,7 +65,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.008,
+        "delta_dollars": 0.006,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.003,
         "share_pct": 7.5,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -81,7 +81,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -96,45 +96,45 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "National forecast +$0.052/gal (+1.38%): Driven primarily by Futures & Commodity Benchmark (+$0.023/gal), Refining Yield & Crack Spread (+$0.013/gal).",
+      "summary_text": "National forecast +$0.038/gal (+1.01%): Driven primarily by Futures & Commodity Benchmark (+$0.017/gal), Refining Yield & Crack Spread (+$0.009/gal).",
       "key_drivers": [
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.023,
-          "impact_pct": 0.61,
+          "impact_dollars": 0.017,
+          "impact_pct": 0.45,
           "share_pct": 45.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.013,
-          "impact_pct": 0.35,
+          "impact_dollars": 0.009,
+          "impact_pct": 0.24,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "Geopolitical supply risk news & executive social media hawkish posts",
-          "impact_dollars": 0.008,
-          "impact_pct": 0.21,
+          "impact_dollars": 0.006,
+          "impact_pct": 0.16,
           "share_pct": 15.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.004,
-          "impact_pct": 0.11,
+          "impact_dollars": 0.003,
+          "impact_pct": 0.08,
           "share_pct": 7.5,
           "direction": "UP"
         },
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.003,
-          "impact_pct": 0.08,
+          "impact_dollars": 0.002,
+          "impact_pct": 0.05,
           "share_pct": 5.0,
           "direction": "UP"
         },
@@ -153,40 +153,40 @@
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.023,
-      "impact_pct": 0.61,
+      "impact_dollars": 0.017,
+      "impact_pct": 0.45,
       "share_pct": 45.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.013,
-      "impact_pct": 0.35,
+      "impact_dollars": 0.009,
+      "impact_pct": 0.24,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Unstructured Intelligence & Sentiment",
       "description": "Geopolitical supply risk news & executive social media hawkish posts",
-      "impact_dollars": 0.008,
-      "impact_pct": 0.21,
+      "impact_dollars": 0.006,
+      "impact_pct": 0.16,
       "share_pct": 15.0,
       "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.004,
-      "impact_pct": 0.11,
+      "impact_dollars": 0.003,
+      "impact_pct": 0.08,
       "share_pct": 7.5,
       "direction": "UP"
     },
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.003,
-      "impact_pct": 0.08,
+      "impact_dollars": 0.002,
+      "impact_pct": 0.05,
       "share_pct": 5.0,
       "direction": "UP"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "National forecast +$0.052/gal (+1.38%): Driven primarily by Futures & Commodity Benchmark (+$0.023/gal), Refining Yield & Crack Spread (+$0.013/gal).",
+    "summary_text": "National forecast +$0.038/gal (+1.01%): Driven primarily by Futures & Commodity Benchmark (+$0.017/gal), Refining Yield & Crack Spread (+$0.009/gal).",
     "components": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.023,
+        "delta_dollars": 0.017,
         "share_pct": 45.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.013,
+        "delta_dollars": 0.009,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -221,7 +221,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.008,
+        "delta_dollars": 0.006,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.004,
+        "delta_dollars": 0.003,
         "share_pct": 7.5,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -237,7 +237,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.002,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
