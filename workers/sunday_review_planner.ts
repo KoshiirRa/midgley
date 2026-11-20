@@ -860,17 +860,13 @@ async function dispatchDevAgentWorkflow(
     },
     body: JSON.stringify({
       event_type: "weekly-action-approved",
+      // GitHub repository_dispatch enforces a strict max of 10 top-level keys in client_payload
       client_payload: {
         action_id: item.action_id,
         issue_number: issueNumber,
         issue_url: issueUrl,
-        title: item.title,
         priority: item.priority,
-        target_branch: item.target_branch,
-        component: item.component,
-        domain_label: item.domain_label,
         discord_channel_id: item.discord_channel_id,
-        discord_message_id: item.discord_message_id,
         approved_by: reviewerDisplay
       }
     })

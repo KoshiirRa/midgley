@@ -230,6 +230,7 @@ describe("Sunday Weekly Self-Review Action Planner", () => {
         const body = JSON.parse(String(init?.body || "{}"));
         expect(body.event_type).toBe("weekly-action-approved");
         expect(body.client_payload.issue_number).toBe(720);
+        expect(Object.keys(body.client_payload).length).toBeLessThanOrEqual(10);
         return new Response(null, { status: 204 });
       }
       if (url.includes("generativelanguage.googleapis.com")) {
