@@ -68,7 +68,7 @@ jobs:
     needs: select-runner
     if: needs.select-runner.outputs.target_runner == 'dev-vm'
     runs-on: [self-hosted, dev-vm]
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
       - name: Checkout dev Branch
         uses: actions/checkout@v7
@@ -107,42 +107,48 @@ jobs:
           EOF
           printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
 
+          TIMED_OUT="false"
           set +e
-          timeout 30m agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" < /dev/null | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+          timeout 40m agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" < /dev/null | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
           AGENT_EXIT=$?
           set -e
 
           if [ "$AGENT_EXIT" -eq 124 ]; then
-            TIMEOUT_FILE="/tmp/timeout_${ISSUE_NUMBER}.md"
-            cat <<EOF > "$TIMEOUT_FILE"
-          ⏱️ **Dev Agent (\`dev-vm\`) hit the 30-minute execution limit** for #${ISSUE_NUMBER}.
-          Full transcript uploaded as workflow artifact (\`dev-agent-log-${ISSUE_NUMBER}\`): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          EOF
-            gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$TIMEOUT_FILE"
-            exit 124
+            TIMED_OUT="true"
+            echo "Dev agent hit 40m timeout; checking for uncommitted/committed work to salvage into a Draft PR."
           elif [ "$AGENT_EXIT" -ne 0 ]; then
             exit "$AGENT_EXIT"
           fi
 
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "fix(weekly-action): address #${ISSUE_NUMBER}"
+            if [ "$TIMED_OUT" = "true" ]; then
+              git commit -m "wip(weekly-action): salvage progress for #${ISSUE_NUMBER} (40m timeout)"
+            else
+              git commit -m "fix(weekly-action): address #${ISSUE_NUMBER}"
+            fi
           fi
 
           if [ "$(git rev-list --count origin/dev..HEAD)" -gt 0 ]; then
             git push -u origin "$BRANCH" --force-with-lease
             PR_BODY="/tmp/pr_body_${ISSUE_NUMBER}.md"
+            TIMEOUT_NOTE=""
+            PR_PREFIX="fix(weekly-action):"
+            if [ "$TIMED_OUT" = "true" ]; then
+              TIMEOUT_NOTE=$'\n> [!WARNING]\n> The agent hit the 40-minute execution limit; this Draft PR salvages its working changes. Please review the diff and CI checks carefully.\n'
+              PR_PREFIX="wip(weekly-action):"
+            fi
             cat <<EOF > "$PR_BODY"
           ## Automated Weekly Action Draft PR (dev-vm)
 
           Closes #${ISSUE_NUMBER}
-
+          ${TIMEOUT_NOTE}
           - **Runner:** \`dev-vm\` (self-hosted Antigravity CLI)
           - **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
           Please review changes and test output before marking ready for review.
           EOF
-            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "fix(weekly-action): ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
             echo "Opened Draft PR: $PR_URL"
 
             if [ -n "$DISCORD_BOT_TOKEN" ]; then
@@ -186,7 +192,7 @@ jobs:
     needs: select-runner
     if: needs.select-runner.outputs.target_runner == 'cloud'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
       - name: Checkout dev Branch
         uses: actions/checkout@v7
@@ -271,8 +277,9 @@ jobs:
           EOF
           printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
 
+          TIMED_OUT="false"
           set +e
-          timeout 30m gemini --yolo --output-format stream-json -p "$(cat "$PROMPT_FILE")" < /dev/null \
+          timeout 40m gemini --yolo --output-format stream-json -p "$(cat "$PROMPT_FILE")" < /dev/null \
             | tee "/tmp/agent_out_${ISSUE_NUMBER}.log" \
             | python3 -u -c '
           import json, sys
@@ -311,36 +318,41 @@ jobs:
           set -e
 
           if [ "$AGENT_EXIT" -eq 124 ]; then
-            TIMEOUT_FILE="/tmp/timeout_${ISSUE_NUMBER}.md"
-            cat <<EOF > "$TIMEOUT_FILE"
-          ⏱️ **Dev Agent (\`ubuntu-latest\` cloud fallback) hit the 30-minute execution limit** for #${ISSUE_NUMBER}.
-          Full transcript uploaded as workflow artifact (\`dev-agent-log-cloud-${ISSUE_NUMBER}\`): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          EOF
-            gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$TIMEOUT_FILE"
-            exit 124
+            TIMED_OUT="true"
+            echo "Cloud dev agent hit 40m timeout; checking for uncommitted/committed work to salvage into a Draft PR."
           elif [ "$AGENT_EXIT" -ne 0 ]; then
             exit "$AGENT_EXIT"
           fi
 
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "fix(weekly-action): address #${ISSUE_NUMBER}"
+            if [ "$TIMED_OUT" = "true" ]; then
+              git commit -m "wip(weekly-action): salvage progress for #${ISSUE_NUMBER} (40m timeout)"
+            else
+              git commit -m "fix(weekly-action): address #${ISSUE_NUMBER}"
+            fi
           fi
 
           if [ "$(git rev-list --count origin/dev..HEAD)" -gt 0 ]; then
             git push -u origin "$BRANCH" --force-with-lease
             PR_BODY="/tmp/pr_body_${ISSUE_NUMBER}.md"
+            TIMEOUT_NOTE=""
+            PR_PREFIX="fix(weekly-action):"
+            if [ "$TIMED_OUT" = "true" ]; then
+              TIMEOUT_NOTE=$'\n> [!WARNING]\n> The agent hit the 40-minute execution limit; this Draft PR salvages its working changes. Please review the diff and CI checks carefully.\n'
+              PR_PREFIX="wip(weekly-action):"
+            fi
             cat <<EOF > "$PR_BODY"
           ## Automated Weekly Action Draft PR (GitHub Cloud Fallback)
 
           Closes #${ISSUE_NUMBER}
-
+          ${TIMEOUT_NOTE}
           - **Runner:** \`ubuntu-latest\` (GitHub Cloud fallback — \`dev-vm\` offline)
           - **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
           Please review changes and test output before marking ready for review.
           EOF
-            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "fix(weekly-action): ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
             echo "Opened Draft PR: $PR_URL"
 
             if [ -n "$DISCORD_BOT_TOKEN" ]; then
