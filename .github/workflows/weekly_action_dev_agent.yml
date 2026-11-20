@@ -120,6 +120,7 @@ jobs:
             exit "$AGENT_EXIT"
           fi
 
+          git checkout HEAD -- data/lookup_cache.sqlite data/agent_memory.sqlite MODEL_LEARNING.md 2>/dev/null || true
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
             if [ "$TIMED_OUT" = "true" ]; then
@@ -324,6 +325,7 @@ jobs:
             exit "$AGENT_EXIT"
           fi
 
+          git checkout HEAD -- data/lookup_cache.sqlite data/agent_memory.sqlite MODEL_LEARNING.md 2>/dev/null || true
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
             if [ "$TIMED_OUT" = "true" ]; then
