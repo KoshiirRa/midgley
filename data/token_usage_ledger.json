@@ -14476,6 +14476,72 @@
       "total_tokens": 200,
       "cost_usd": 0.00039,
       "status": "success"
+    },
+    {
+      "timestamp": "2026-11-20T21:44:34.488888+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 124,
+      "output_tokens": 80,
+      "total_tokens": 204,
+      "cost_usd": 0.000393,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-11-20T21:44:50.461379+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 130,
+      "output_tokens": 80,
+      "total_tokens": 210,
+      "cost_usd": 0.000398,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-11-20T21:45:44.053656+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 136,
+      "output_tokens": 80,
+      "total_tokens": 216,
+      "cost_usd": 0.000402,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-11-20T21:46:24.677645+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 126,
+      "output_tokens": 80,
+      "total_tokens": 206,
+      "cost_usd": 0.000394,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-11-20T21:46:41.123161+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 122,
+      "output_tokens": 80,
+      "total_tokens": 202,
+      "cost_usd": 0.000392,
+      "status": "success"
+    },
+    {
+      "timestamp": "2026-11-20T21:46:59.168908+00:00",
+      "provider": "gemini-3.8-flash",
+      "model_name": "gemini-3.8-flash",
+      "call_type": "event_extraction",
+      "input_tokens": 124,
+      "output_tokens": 80,
+      "total_tokens": 204,
+      "cost_usd": 0.000393,
+      "status": "success"
     }
   ]
 }

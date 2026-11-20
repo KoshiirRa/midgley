@@ -10251,5 +10251,32 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.5,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-20T21:47:07.620118",
+    "headline": "Tanker hit in Strait of Hormuz as missile strikes Iran's Qeshm Island",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPOGZ6UUxNSDVOSHc0Ti13UnJzLVFyUVlPSDJXZDRXVXRUSmtCcmY0VTg5NkFnS3NLVm01VWNndjZWWDhMWU14c296NkdFTUlhSjdpWk5FQkFYTGNUdjU1S2dPN0FQMVBiRkoycUxBa2ttYktnbmdrVFhGRWtiZ05jQVpYdDRaZUoyWWZOMnY5bG9oTE1UZGlscGthSWVBV2ZCSFdYQURLUHJta1NzU1JtWHpROA?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPOGZ6UUxNSDVOSHc0Ti13UnJzLVFyUVlPSDJXZDRXVXRUSmtCcmY0VTg5NkFnS3NLVm01VWNndjZWWDhMWU14c296NkdFTUlhSjdpWk5FQkFYTGNUdjU1S2dPN0FQMVBiRkoycUxBa2ttYktnbmdrVFhGRWtiZ05jQVpYdDRaZUoyWWZOMnY5bG9oTE1UZGlscGthSWVBV2ZCSFdYQURLUHJta1NzU1JtWHpROA?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiswFBVV95cUxPOGZ6UUxNSDVOSHc0Ti13UnJzLVFyUVlPSDJXZDRXVXRUSmtCcmY0VTg5NkFnS3NLVm01VWNndjZWWDhMWU14c296NkdFTUlhSjdpWk5FQkFYTGNUdjU1S2dPN0FQMVBiRkoycUxBa2ttYktnbmdrVFhGRWtiZ05jQVpYdDRaZUoyWWZOMnY5bG9oTE1UZGlscGthSWVBV2ZCSFdYQURLUHJta1NzU1JtWHpROA?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.8,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.85
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "U.S. Military Strikes Iranian Missile Site Near Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.31,
+    "duplicate_review_notified": false
   }
 ]

@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-20 12:37:08",
+  "last_updated": "2026-11-20 21:43:16",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-14 07:18:27",
-      "connector_name": "HeadlineArena",
-      "target": "CL",
-      "status": "ALREADY_SUBMITTED_TODAY",
-      "latency_ms": 870.54,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Challenge 36220175-93ca-4c65-8d9f-d8886824969a already predicted (HTTP 400)"
-    },
     {
       "timestamp": "2026-10-14 13:26:18",
       "connector_name": "Reachability_EXECUTIVE_SOCIAL",
@@ -9999,6 +9989,16 @@
       "target": "Trump energy oil gasoline tariffs OPEC",
       "status": "SUCCESS",
       "latency_ms": 249.66,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-20 21:43:16",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 270.52,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Resolved via rss_syndication (5 items)"
