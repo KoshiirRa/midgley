@@ -297,3 +297,184 @@ def test_heuristic_filters_false_positive_and_cross_repo_and_avoids_saturation()
     assert res["ranking"][0]["impact_score"] > res["ranking"][1]["impact_score"]
 
 
+def test_load_prediction_records_unions_db_batch_and_csv_history(tmp_path):
+    """
+    Verifies that when database only returns recent prospective forecasts (e.g. 5 horizons in Turso),
+    load_prediction_records retains historical evaluated records from CSV so that rolling accuracy
+    is populated rather than showing '0 / 5 (Pending) | *Pending Horizon*' (Issue #716).
+    """
+    from src.weekly_issue_reporter import load_prediction_records
+    import pandas as pd
+
+    # CSV has 5 historical evaluated days for Phoenix_AZ
+    csv_rows = []
+    for i in range(5):
+        csv_rows.append({
+            "forecast_id": f"phx_hist_{i}",
+            "region": "Phoenix_AZ",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": f"2026-11-0{i+1}",
+            "forecast_target_date": f"2026-11-0{i+6}",
+            "forecast_horizon_days": 5,
+            "current_base_price": 4.10,
+            "predicted_5d_price": 4.15,
+            "actual_5d_price": 4.12,
+            "error_dollars": 0.03,
+            "directional_hit": 1.0,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False
+        })
+    csv_file = tmp_path / "prediction_history.csv"
+    pd.DataFrame(csv_rows).to_csv(csv_file, index=False)
+
+    # DB only has 5 fresh prospective rows (today's batch, pending horizon)
+    mock_db = MagicMock()
+    mock_db.execute.return_value = [
+        {
+            "forecast_id": f"phx_live_h{h}",
+            "region": "Phoenix_AZ",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-11-20",
+            "forecast_target_date": f"2026-11-2{h}",
+            "forecast_horizon_days": h,
+            "predicted_5d_price": 4.18,
+            "prediction_lower_95ci": 3.90,
+            "prediction_upper_95ci": 4.40,
+            "llm_price_pressure": 0.0,
+            "llm_supply_disruption": 0.0,
+            "point_in_time_features": json.dumps({"current_base_price": 4.10}),
+            "run_type": "LIVE_PROSPECTIVE",
+            "actual_5d_price": None,
+            "error_dollars": None,
+            "directional_hit": None,
+            "within_95ci_hit": None
+        }
+        for h in range(1, 6)
+    ]
+
+    with patch("src.db.client.get_db", return_value=mock_db):
+        df = load_prediction_records(str(csv_file))
+
+    # Should contain all 10 records: 5 evaluated from CSV + 5 fresh from DB
+    assert len(df) == 10
+    eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars'])
+    assert len(eval_df) == 5
+    assert float(eval_df['error_dollars'].mean()) == pytest.approx(0.03, abs=1e-4)
+
+
+def test_active_forecasts_filters_stale_target_dates_and_decommissioned_regions(tmp_path):
+    """
+    Verifies that 'Active 5-Day Out-of-Time Forecasts' strictly excludes decommissioned regions
+    (Greenville_NC 2026-10-21), test artifacts (Test_Region 2026-01-15), and past backtests (Issue #716).
+    """
+    from datetime import datetime, timedelta, timezone
+    from src.weekly_issue_reporter import generate_weekly_markdown_report
+    import pandas as pd
+
+    future_target = (datetime.now(timezone.utc) + timedelta(days=5)).strftime("%Y-%m-%d")
+
+    records = [
+        # Greenville_NC stale prospective forecast from October
+        {
+            "forecast_id": "gnc_oct",
+            "region": "Greenville_NC",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-10-16 00:31:00",
+            "forecast_target_date": "2026-10-21",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.691,
+            "predicted_5d_price": 3.642,
+            "actual_5d_price": 3.860,
+            "error_dollars": 0.218,
+            "directional_hit": 1.0,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False
+        },
+        # Test_Region fixture from January
+        {
+            "forecast_id": "test_jan",
+            "region": "Test_Region",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-10-01 14:48:44",
+            "forecast_target_date": "2026-01-15",
+            "forecast_horizon_days": 5,
+            "current_base_price": 2.500,
+            "predicted_5d_price": 2.550,
+            "actual_5d_price": 2.510,
+            "error_dollars": 0.040,
+            "directional_hit": 1.0,
+            "run_type": "RETROSPECTIVE_BACKTEST",
+            "is_retroactive_backtest": True
+        },
+        # Active hub with contemporary forecast
+        {
+            "forecast_id": "phx_active",
+            "region": "Phoenix_AZ",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d 03:00:00"),
+            "forecast_target_date": future_target,
+            "forecast_horizon_days": 5,
+            "current_base_price": 4.097,
+            "predicted_5d_price": 4.150,
+            "actual_5d_price": None,
+            "error_dollars": None,
+            "directional_hit": None,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False
+        }
+    ]
+    csv_file = tmp_path / "prediction_history.csv"
+    pd.DataFrame(records).to_csv(csv_file, index=False)
+
+    with patch("src.weekly_issue_reporter.HISTORY_CSV", str(csv_file)), \
+         patch("src.db.client.get_db", side_effect=Exception("Offline DB")), \
+         patch("src.weekly_issue_reporter.fetch_open_github_issues", return_value=[]):
+        report = generate_weekly_markdown_report()
+
+    # Active forecasts section bounded by section headers / horizontal rules
+    active_section = report.split("## 🔮 Active 5-Day Out-of-Time Forecasts")[1].split("\n---\n")[0]
+    assert "Phoenix_AZ" in active_section
+    assert future_target in active_section
+    assert "Greenville_NC" not in active_section
+    assert "2026-10-21" not in active_section
+    assert "Test_Region" not in report
+    assert "2026-01-15" not in active_section
+
+
+def test_report_generation_time_latency_badge(tmp_path):
+    """
+    Verifies that generate_weekly_markdown_report() includes the generation time latency badge (< 10.0s target)
+    without touching production CSV or database state.
+    """
+    from src.weekly_issue_reporter import generate_weekly_markdown_report
+    import pandas as pd
+
+    csv_file = tmp_path / "prediction_history.csv"
+    pd.DataFrame([{
+        "forecast_id": "nat_latency_test",
+        "region": "National",
+        "model_version": "v1.6-Ipatieff",
+        "log_timestamp": "2026-11-20 03:00:00",
+        "forecast_target_date": "2026-11-27",
+        "forecast_horizon_days": 5,
+        "current_base_price": 2.50,
+        "predicted_5d_price": 2.52,
+        "actual_5d_price": None,
+        "error_dollars": None,
+        "directional_hit": None,
+        "run_type": "LIVE_PROSPECTIVE",
+        "is_retroactive_backtest": False
+    }]).to_csv(csv_file, index=False)
+
+    with patch("src.weekly_issue_reporter.HISTORY_CSV", str(csv_file)), \
+         patch("src.db.client.get_db", side_effect=Exception("Offline DB")), \
+         patch("src.weekly_issue_reporter.fetch_open_github_issues", return_value=[]), \
+         patch("src.catalog_monitor.run_catalog_monitors", return_value={"catalogs_scanned": 6, "new_items_discovered": 0, "issues_created": []}), \
+         patch("src.benchmark_updater.refresh_all_historical_benchmarks", return_value={"benchmarks_refreshed": 10}):
+        report = generate_weekly_markdown_report()
+
+    assert "Report Generation Time:" in report
+    assert "Target `< 10.0s`" in report
+    assert ("🟢 OPTIMAL" in report or "⚠️ SLOW" in report)
+
+
