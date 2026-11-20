@@ -107,7 +107,22 @@ jobs:
           EOF
           printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
 
-          agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+          set +e
+          timeout 30m agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" < /dev/null | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+          AGENT_EXIT=$?
+          set -e
+
+          if [ "$AGENT_EXIT" -eq 124 ]; then
+            TIMEOUT_FILE="/tmp/timeout_${ISSUE_NUMBER}.md"
+            cat <<EOF > "$TIMEOUT_FILE"
+          ⏱️ **Dev Agent (\`dev-vm\`) hit the 30-minute execution limit** for #${ISSUE_NUMBER}.
+          Full transcript uploaded as workflow artifact (\`dev-agent-log-${ISSUE_NUMBER}\`): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+            gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$TIMEOUT_FILE"
+            exit 124
+          elif [ "$AGENT_EXIT" -ne 0 ]; then
+            exit "$AGENT_EXIT"
+          fi
 
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
@@ -157,6 +172,15 @@ jobs:
           EOF
             gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$COMMENT_FILE"
           fi
+
+      - name: Upload Dev Agent Transcript Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-agent-log-devvm-${{ needs.select-runner.outputs.issue_number }}
+          path: /tmp/agy_out_${{ needs.select-runner.outputs.issue_number }}.log
+          if-no-files-found: ignore
+          retention-days: 14
 
   run-on-cloud:
     needs: select-runner
@@ -247,7 +271,8 @@ jobs:
           EOF
           printf "\n\nIssue #%s: %s\n\n%s\n" "$ISSUE_NUMBER" "$ISSUE_TITLE" "$ISSUE_BODY" >> "$PROMPT_FILE"
 
-          gemini --yolo --output-format stream-json -p "$(cat "$PROMPT_FILE")" \
+          set +e
+          timeout 30m gemini --yolo --output-format stream-json -p "$(cat "$PROMPT_FILE")" < /dev/null \
             | tee "/tmp/agent_out_${ISSUE_NUMBER}.log" \
             | python3 -u -c '
           import json, sys
@@ -282,6 +307,20 @@ jobs:
               elif etype == "error":
                   print(f"❌ [error] {ev}", flush=True)
           '
+          AGENT_EXIT=$?
+          set -e
+
+          if [ "$AGENT_EXIT" -eq 124 ]; then
+            TIMEOUT_FILE="/tmp/timeout_${ISSUE_NUMBER}.md"
+            cat <<EOF > "$TIMEOUT_FILE"
+          ⏱️ **Dev Agent (\`ubuntu-latest\` cloud fallback) hit the 30-minute execution limit** for #${ISSUE_NUMBER}.
+          Full transcript uploaded as workflow artifact (\`dev-agent-log-cloud-${ISSUE_NUMBER}\`): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+            gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$TIMEOUT_FILE"
+            exit 124
+          elif [ "$AGENT_EXIT" -ne 0 ]; then
+            exit "$AGENT_EXIT"
+          fi
 
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
@@ -331,3 +370,12 @@ jobs:
           EOF
             gh issue comment "$ISSUE_NUMBER" --repo "${{ github.repository }}" --body-file "$COMMENT_FILE"
           fi
+
+      - name: Upload Cloud Dev Agent Transcript Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-agent-log-cloud-${{ needs.select-runner.outputs.issue_number }}
+          path: /tmp/agent_out_${{ needs.select-runner.outputs.issue_number }}.log
+          if-no-files-found: ignore
+          retention-days: 14
