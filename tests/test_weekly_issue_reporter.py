@@ -367,8 +367,11 @@ def test_active_forecasts_filters_stale_target_dates_and_decommissioned_regions(
     Verifies that 'Active 5-Day Out-of-Time Forecasts' strictly excludes decommissioned regions
     (Greenville_NC 2026-10-21), test artifacts (Test_Region 2026-01-15), and past backtests (Issue #716).
     """
+    from datetime import datetime, timedelta, timezone
     from src.weekly_issue_reporter import generate_weekly_markdown_report
     import pandas as pd
+
+    future_target = (datetime.now(timezone.utc) + timedelta(days=5)).strftime("%Y-%m-%d")
 
     records = [
         # Greenville_NC stale prospective forecast from October
@@ -408,8 +411,8 @@ def test_active_forecasts_filters_stale_target_dates_and_decommissioned_regions(
             "forecast_id": "phx_active",
             "region": "Phoenix_AZ",
             "model_version": "v1.6-Ipatieff",
-            "log_timestamp": "2026-11-20 03:00:00",
-            "forecast_target_date": "2026-11-27",
+            "log_timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d 03:00:00"),
+            "forecast_target_date": future_target,
             "forecast_horizon_days": 5,
             "current_base_price": 4.097,
             "predicted_5d_price": 4.150,
@@ -431,20 +434,43 @@ def test_active_forecasts_filters_stale_target_dates_and_decommissioned_regions(
     # Active forecasts section bounded by section headers / horizontal rules
     active_section = report.split("## 🔮 Active 5-Day Out-of-Time Forecasts")[1].split("\n---\n")[0]
     assert "Phoenix_AZ" in active_section
-    assert "2026-11-27" in active_section
+    assert future_target in active_section
     assert "Greenville_NC" not in active_section
     assert "2026-10-21" not in active_section
     assert "Test_Region" not in report
     assert "2026-01-15" not in active_section
 
 
-def test_report_generation_time_latency_badge():
+def test_report_generation_time_latency_badge(tmp_path):
     """
-    Verifies that generate_weekly_markdown_report() includes the generation time latency badge (< 10.0s target).
+    Verifies that generate_weekly_markdown_report() includes the generation time latency badge (< 10.0s target)
+    without touching production CSV or database state.
     """
     from src.weekly_issue_reporter import generate_weekly_markdown_report
+    import pandas as pd
 
-    with patch("src.weekly_issue_reporter.fetch_open_github_issues", return_value=[]):
+    csv_file = tmp_path / "prediction_history.csv"
+    pd.DataFrame([{
+        "forecast_id": "nat_latency_test",
+        "region": "National",
+        "model_version": "v1.6-Ipatieff",
+        "log_timestamp": "2026-11-20 03:00:00",
+        "forecast_target_date": "2026-11-27",
+        "forecast_horizon_days": 5,
+        "current_base_price": 2.50,
+        "predicted_5d_price": 2.52,
+        "actual_5d_price": None,
+        "error_dollars": None,
+        "directional_hit": None,
+        "run_type": "LIVE_PROSPECTIVE",
+        "is_retroactive_backtest": False
+    }]).to_csv(csv_file, index=False)
+
+    with patch("src.weekly_issue_reporter.HISTORY_CSV", str(csv_file)), \
+         patch("src.db.client.get_db", side_effect=Exception("Offline DB")), \
+         patch("src.weekly_issue_reporter.fetch_open_github_issues", return_value=[]), \
+         patch("src.catalog_monitor.run_catalog_monitors", return_value={"catalogs_scanned": 6, "new_items_discovered": 0, "issues_created": []}), \
+         patch("src.benchmark_updater.refresh_all_historical_benchmarks", return_value={"benchmarks_refreshed": 10}):
         report = generate_weekly_markdown_report()
 
     assert "Report Generation Time:" in report

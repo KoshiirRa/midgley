@@ -719,7 +719,7 @@ def evaluate_open_issues_for_modelling(issues: list, nat_mae: float = 0.1069, tu
             "summary_markdown": "ℹ️ *No open GitHub issues currently found on repository KoshiirRa/midgley.*"
         }
 
-    if os.environ.get("TESTING") == "1" and api_key != "fake_test_key":
+    if os.environ.get("TESTING") == "1" and api_key is None:
         return _evaluate_issues_heuristic(issues, nat_mae, tulsa_mae)
 
     if api_key is None:
@@ -1359,28 +1359,21 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
     # Reconcile DB and CSV records with full union and column-wise enrichment
     if not db_df.empty and not csv_df.empty:
         if 'forecast_id' in db_df.columns and 'forecast_id' in csv_df.columns:
+            db_missing_id = db_df[db_df['forecast_id'].isna()].copy()
+            csv_missing_id = csv_df[csv_df['forecast_id'].isna()].copy()
             db_dedup = db_df.dropna(subset=['forecast_id']).drop_duplicates(subset=['forecast_id'], keep='last')
             csv_dedup = csv_df.dropna(subset=['forecast_id']).drop_duplicates(subset=['forecast_id'], keep='last')
 
             db_indexed = db_dedup.set_index('forecast_id')
             csv_indexed = csv_dedup.set_index('forecast_id')
 
-            # Combine all records: db filled with csv records and values
+            # Combine all keyed records: db filled with csv records and values
             merged = db_indexed.combine_first(csv_indexed)
-
-            # Ensure evaluated metrics and base price from CSV fill any un-evaluated DB records
-            eval_cols = [
-                'actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit',
-                'current_base_price', 'predicted_direction', 'quant_baseline_5d_price',
-                'is_retroactive_backtest', 'data_source_provenance'
-            ]
-            for c in eval_cols:
-                if c in csv_indexed.columns:
-                    if c in merged.columns:
-                        merged[c] = merged[c].combine_first(csv_indexed[c])
-                    else:
-                        merged[c] = csv_indexed[c]
             df = merged.reset_index()
+
+            # Preserve legacy rows lacking forecast_id instead of silently dropping them
+            if not db_missing_id.empty or not csv_missing_id.empty:
+                df = pd.concat([df, db_missing_id, csv_missing_id], ignore_index=True)
         else:
             df = pd.concat([csv_df, db_df], ignore_index=True)
     elif not db_df.empty:
@@ -1588,21 +1581,30 @@ def generate_weekly_markdown_report() -> str:
 
     # Concurrently execute independent audit generators and research fetchers to optimize report generation latency (< 10.0s target)
     from concurrent.futures import ThreadPoolExecutor
-    from src.catalog_monitor import run_catalog_monitors
-    from src.benchmark_updater import refresh_all_historical_benchmarks
+
+    task_errors: dict[str, str] = {}
 
     def _safe_run(name, fn):
         try:
             return fn()
         except Exception as err:
             logger.warning(f"Error in async report task '{name}': {err}")
+            task_errors[name] = str(err)
             return None
+
+    def _run_catalog():
+        from src.catalog_monitor import run_catalog_monitors
+        return run_catalog_monitors(dry_run=False)
+
+    def _run_benchmarks():
+        from src.benchmark_updater import refresh_all_historical_benchmarks
+        return refresh_all_historical_benchmarks()
 
     tasks = {
         "issues_eval": lambda: _safe_run("issues_eval", lambda: evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=(tulsa_mae if tulsa_mae is not None else 0.5611))),
         "issues_tagging": lambda: _safe_run("issues_tagging", lambda: audit_and_tag_open_issues(issues=issues)),
-        "catalog": lambda: _safe_run("catalog", lambda: run_catalog_monitors(dry_run=False)),
-        "benchmarks": lambda: _safe_run("benchmarks", refresh_all_historical_benchmarks),
+        "catalog": lambda: _safe_run("catalog", _run_catalog),
+        "benchmarks": lambda: _safe_run("benchmarks", _run_benchmarks),
         "arxiv": lambda: _safe_run("arxiv", lambda: format_arxiv_markdown_section(days_back=7)),
         "core": lambda: _safe_run("core", lambda: format_core_markdown_section(days_back=7)),
         "ai_radar": lambda: _safe_run("ai_radar", lambda: format_ai_radar_markdown_section(limit=6)),
@@ -1632,8 +1634,9 @@ def generate_weekly_markdown_report() -> str:
         tagging_summary_md = "\n".join(lines)
 
     cat_res = async_results.get("catalog")
-    catalog_summary_md = "ℹ️ *No new catalog additions detected during this weekly scan window.*"
-    if cat_res:
+    if "catalog" in task_errors:
+        catalog_summary_md = f"⚠️ *Catalog monitor scan skipped ({task_errors['catalog']}).*"
+    elif cat_res:
         disc_count = cat_res.get("new_items_discovered", 0)
         scanned_count = cat_res.get("catalogs_scanned", 6)
         issues_created = cat_res.get("issues_created", [])
@@ -1647,13 +1650,17 @@ def generate_weekly_markdown_report() -> str:
             catalog_summary_md = "\n".join(lines)
         else:
             catalog_summary_md = f"✅ Monitored **{scanned_count} developer catalogs** (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). All catalog state entries are up-to-date with 0 new additions."
+    else:
+        catalog_summary_md = "ℹ️ *No new catalog additions detected during this weekly scan window.*"
 
     bench_res = async_results.get("benchmarks")
-    if bench_res:
+    if "benchmarks" in task_errors:
+        benchmark_summary_md = f"⚠️ *Historical benchmark refresh skipped ({task_errors['benchmarks']}).*"
+    elif bench_res:
         refreshed_count = bench_res.get("benchmarks_refreshed", "N/A")
         benchmark_summary_md = f"✅ **Automated Historical Benchmark Refresh (Issue #297):** Refreshed **`{refreshed_count}`** persistent historical fallback datasets (`data/*_historical.json`) reflecting latest Friday market closes."
     else:
-        benchmark_summary_md = "✅ *All historical benchmarks up-to-date.*"
+        benchmark_summary_md = "ℹ️ *Historical benchmark refresh unavailable.*"
 
     # Log weekly audit metrics to Weights & Biases (Issue #80, #372)
     try:
