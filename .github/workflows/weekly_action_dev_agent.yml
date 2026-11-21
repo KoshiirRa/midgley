@@ -182,7 +182,7 @@ jobs:
 
       - name: Upload Dev Agent Transcript Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dev-agent-log-devvm-${{ needs.select-runner.outputs.issue_number }}
           path: /tmp/agy_out_${{ needs.select-runner.outputs.issue_number }}.log
@@ -387,7 +387,7 @@ jobs:
 
       - name: Upload Cloud Dev Agent Transcript Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dev-agent-log-cloud-${{ needs.select-runner.outputs.issue_number }}
           path: /tmp/agent_out_${{ needs.select-runner.outputs.issue_number }}.log
