@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-20T03:58:18.299654",
+  "timestamp": "2026-11-21T03:03:57.155743",
   "locale": {
     "code": "newark",
     "region_id": "Newark_DE",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1B Central Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.734,
+    "current_price_per_gal": 3.724,
     "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-20T03:57:52Z"
+      "timestamp": "2026-11-21T03:03:12Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-27",
-    "current_base_price": 3.734,
-    "predicted_price_per_gal": 3.79,
+    "current_base_price": 3.724,
+    "predicted_price_per_gal": 3.78,
     "expected_change_dollars": 0.056,
     "expected_change_percent": 1.5,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 3.459,
-    "prediction_upper_95ci": 4.121,
+    "prediction_lower_95ci": 3.449,
+    "prediction_upper_95ci": 4.111,
     "calibration_method": "conformal",
     "calibration_sample_size": 60,
     "directional_hit_rate_historical": 0.3158,
     "historical_mae_dollars": 0.2798,
     "evaluation_sample_size": 38,
-    "day_1_price": 3.745,
-    "day_2_price": 3.748,
-    "day_3_price": 3.747,
-    "day_4_price": 3.754,
-    "day_5_price": 3.79,
+    "day_1_price": 3.735,
+    "day_2_price": 3.738,
+    "day_3_price": 3.737,
+    "day_4_price": 3.744,
+    "day_5_price": 3.78,
     "feature_attributions": {
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
@@ -110,7 +110,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.014,
-          "impact_pct": 0.37,
+          "impact_pct": 0.38,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.011,
-          "impact_pct": 0.29,
+          "impact_pct": 0.3,
           "share_pct": 20.0,
           "direction": "UP"
         },
@@ -162,7 +162,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
       "impact_dollars": 0.014,
-      "impact_pct": 0.37,
+      "impact_pct": 0.38,
       "share_pct": 25.0,
       "direction": "UP"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
       "impact_dollars": 0.011,
-      "impact_pct": 0.29,
+      "impact_pct": 0.3,
       "share_pct": 20.0,
       "direction": "UP"
     },

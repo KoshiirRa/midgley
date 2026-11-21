@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-20T03:58:18.641753",
+  "timestamp": "2026-11-21T03:03:57.531429",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.228,
+    "current_price_per_gal": 3.167,
     "source": "AAA Metro Daily CSV (Cincinnati (OH only), OH)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Cincinnati (OH only), OH)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-20T03:57:52Z"
+      "timestamp": "2026-11-21T03:03:13Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-27",
-    "current_base_price": 3.228,
-    "predicted_price_per_gal": 3.178,
+    "current_base_price": 3.167,
+    "predicted_price_per_gal": 3.117,
     "expected_change_dollars": -0.05,
-    "expected_change_percent": -1.55,
+    "expected_change_percent": -1.58,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.762,
-    "prediction_upper_95ci": 3.594,
+    "prediction_lower_95ci": 2.701,
+    "prediction_upper_95ci": 3.533,
     "calibration_method": "conformal",
     "calibration_sample_size": 57,
     "directional_hit_rate_historical": 0.5789,
     "historical_mae_dollars": 0.1553,
     "evaluation_sample_size": 38,
-    "day_1_price": 3.218,
-    "day_2_price": 3.21,
-    "day_3_price": 3.198,
-    "day_4_price": 3.187,
-    "day_5_price": 3.178,
+    "day_1_price": 3.157,
+    "day_2_price": 3.149,
+    "day_3_price": 3.137,
+    "day_4_price": 3.126,
+    "day_5_price": 3.117,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast $-0.050/gal (-1.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.017/gal), Refining Yield & Crack Spread ($-0.013/gal).",
+      "summary_text": "Cincinnati OH forecast $-0.050/gal (-1.58%): Driven primarily by Regional Logistics & Hub Delivery ($-0.017/gal), Refining Yield & Crack Spread ($-0.013/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.017,
-          "impact_pct": -0.53,
+          "impact_pct": -0.54,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.013,
-          "impact_pct": -0.4,
+          "impact_pct": -0.41,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.01,
-          "impact_pct": -0.31,
+          "impact_pct": -0.32,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
@@ -126,7 +126,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.005,
-          "impact_pct": -0.15,
+          "impact_pct": -0.16,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.017,
-      "impact_pct": -0.53,
+      "impact_pct": -0.54,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.013,
-      "impact_pct": -0.4,
+      "impact_pct": -0.41,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.01,
-      "impact_pct": -0.31,
+      "impact_pct": -0.32,
       "share_pct": 20.0,
       "direction": "DOWN"
     },
@@ -178,7 +178,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.005,
-      "impact_pct": -0.15,
+      "impact_pct": -0.16,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast $-0.050/gal (-1.55%): Driven primarily by Regional Logistics & Hub Delivery ($-0.017/gal), Refining Yield & Crack Spread ($-0.013/gal).",
+    "summary_text": "Cincinnati OH forecast $-0.050/gal (-1.58%): Driven primarily by Regional Logistics & Hub Delivery ($-0.017/gal), Refining Yield & Crack Spread ($-0.013/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

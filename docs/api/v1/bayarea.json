@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-20T03:58:19.780721",
+  "timestamp": "2026-11-21T03:03:58.801083",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 5.63,
+    "current_price_per_gal": 5.626,
     "source": "AAA Metro Daily CSV (San Francisco, CA)",
     "provenance": {
       "source": "AAA Metro Daily CSV (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-20T03:57:53Z"
+      "timestamp": "2026-11-21T03:03:17Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-11-27",
-    "current_base_price": 5.63,
-    "predicted_price_per_gal": 5.686,
-    "expected_change_dollars": 0.056,
-    "expected_change_percent": 0.99,
+    "current_base_price": 5.626,
+    "predicted_price_per_gal": 5.683,
+    "expected_change_dollars": 0.057,
+    "expected_change_percent": 1.01,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 5.194,
-    "prediction_upper_95ci": 6.178,
+    "prediction_lower_95ci": 5.191,
+    "prediction_upper_95ci": 6.175,
     "calibration_method": "conformal",
     "calibration_sample_size": 60,
     "directional_hit_rate_historical": 0.6842,
     "historical_mae_dollars": 0.3099,
     "evaluation_sample_size": 38,
-    "day_1_price": 5.641,
-    "day_2_price": 5.647,
-    "day_3_price": 5.641,
-    "day_4_price": 5.639,
-    "day_5_price": 5.686,
+    "day_1_price": 5.637,
+    "day_2_price": 5.643,
+    "day_3_price": 5.637,
+    "day_4_price": 5.635,
+    "day_5_price": 5.683,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -89,14 +89,14 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.003,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
       }
     },
     "driver_breakdown": {
-      "summary_text": "BayArea CA forecast +$0.056/gal (+0.99%): Driven primarily by Tax & Regulatory Overhead (+$0.020/gal), Refining Yield & Crack Spread (+$0.014/gal).",
+      "summary_text": "BayArea CA forecast +$0.057/gal (+1.01%): Driven primarily by Tax & Regulatory Overhead (+$0.020/gal), Refining Yield & Crack Spread (+$0.014/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -141,8 +141,8 @@
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.002,
-          "impact_pct": 0.04,
+          "impact_dollars": 0.003,
+          "impact_pct": 0.05,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -193,14 +193,14 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.002,
-      "impact_pct": 0.04,
+      "impact_dollars": 0.003,
+      "impact_pct": 0.05,
       "share_pct": 5.0,
       "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "BayArea CA forecast +$0.056/gal (+0.99%): Driven primarily by Tax & Regulatory Overhead (+$0.020/gal), Refining Yield & Crack Spread (+$0.014/gal).",
+    "summary_text": "BayArea CA forecast +$0.057/gal (+1.01%): Driven primarily by Tax & Regulatory Overhead (+$0.020/gal), Refining Yield & Crack Spread (+$0.014/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -245,7 +245,7 @@
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.002,
+        "delta_dollars": 0.003,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
