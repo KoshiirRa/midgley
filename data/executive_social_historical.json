@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-20 03:57:25",
-  "records_count": 99,
+  "last_refreshed_utc": "2026-11-21 03:49:22",
+  "records_count": 114,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -944,52 +944,202 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
+      "date": "2026-11-21 03:13:25",
       "platform": "Google News RSS",
       "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
+      "is_weekend": true,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:51:28",
+      "date": "2026-11-21 03:13:25",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:13:25",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:13:25",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:13:25",
+      "platform": "Google News RSS",
+      "post_text": "Gas Prices Were Already Down 32.5 Cents Before the Midterms. Diesel Is Still Near $6. - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:31:03",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:31:03",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:31:03",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:31:03",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:31:03",
+      "platform": "Google News RSS",
+      "post_text": "Gas Prices Were Already Down 32.5 Cents Before the Midterms. Diesel Is Still Near $6. - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
       "platform": "Google News RSS",
       "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
+      "is_weekend": true,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:51:28",
+      "date": "2026-11-21 03:46:12",
       "platform": "Google News RSS",
-      "post_text": "THE BLAME GAME - The US Blames Canada for Failed Talks, the Reaction From Trump and What Happens Next - EnergyNow",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "Gas Prices Were Already Down 32.5 Cents Before the Midterms. Diesel Is Still Near $6. - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "US Senate Passes Sweeping Russia Energy Sanctions, Next Stop US House - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-21 03:46:12",
+      "platform": "Google News RSS",
+      "post_text": "Gas Prices Were Already Down 32.5 Cents Before the Midterms. Diesel Is Still Near $6. - Energy News Beat",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     }

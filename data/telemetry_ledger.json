@@ -11011,45 +11011,13 @@
   ],
   "api_events": [],
   "memory_totals": {
-    "retain_count": 26304,
+    "retain_count": 26308,
     "recall_count": 10,
     "reflect_count": 17,
-    "cloud_calls": 11038,
+    "cloud_calls": 11042,
     "local_fallback_calls": 15275
   },
   "memory_events": [
-    {
-      "timestamp": "2026-09-30 19:50:27",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:50:29",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:50:31",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
-    {
-      "timestamp": "2026-09-30 19:50:33",
-      "environment": "prod",
-      "operation": "retain",
-      "backend": "hindsight_cloud",
-      "status": "success",
-      "latency_ms": 0.0
-    },
     {
       "timestamp": "2026-09-30 19:50:34",
       "environment": "prod",
@@ -19012,6 +18980,38 @@
     },
     {
       "timestamp": "2026-11-20 03:57:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-21 03:22:17",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-21 03:22:19",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-21 03:22:22",
+      "environment": "prod",
+      "operation": "retain",
+      "backend": "hindsight_cloud",
+      "status": "success",
+      "latency_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-21 03:22:24",
       "environment": "prod",
       "operation": "retain",
       "backend": "hindsight_cloud",
