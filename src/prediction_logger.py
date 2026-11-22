@@ -694,7 +694,7 @@ _GLOBAL_ACTUALS_FETCHED_THIS_PROCESS: bool = False
 
 def validate_price_plausibility(price: Optional[float], region: str = "National", is_retail: bool = True) -> bool:
     """
-    Validates whether a price observation falls within economically plausible bands (Issue #399, #591).
+    Validates whether a price observation falls within economically plausible bands (Issue #399, #591, #734).
     Retail gasoline plausibility band: [$1.00, $10.00]/gal.
     California retail gasoline plausibility band: [$4.00, $10.00]/gal (PADD 5 CARB Phase 3 standards).
     Wholesale RBOB futures plausibility band: [$0.50, $7.00]/gal.
@@ -706,8 +706,9 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
         if np.isnan(val) or np.isinf(val):
             return False
         if is_retail:
-            if region in ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA", "Oakland_Diesel"]:
-                return 5.00 <= val <= 10.00
+            ca_regions = ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA", "Los_Angeles_CA", "Oakland_Diesel"]
+            if region in ca_regions:
+                return 4.00 <= val <= 10.00
             if region != "National":
                 return 1.00 <= val <= 10.00
         elif region == "National" and not is_retail:
@@ -719,7 +720,7 @@ def validate_price_plausibility(price: Optional[float], region: str = "National"
 
 def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
     """
-    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427, #591).
+    Cleanses Test_Region, Test_*, and corrupted test fixture rows from prediction_history.csv (Issue #399, #427, #591, #734).
     Also clears premature future actual prices (where forecast_target_date > today) and resets corrupted California actual prices.
     Returns the number of rows purged or corrected.
     """
@@ -742,13 +743,13 @@ def cleanse_prediction_history(csv_path: Optional[str] = None) -> int:
         cleansed_df = df[valid_mask].copy()
         purged = initial_len - len(cleansed_df)
 
-        # 2. Reset corrupted California actual prices that mistakenly took National $4.465 or < $5.00 (Issue #591)
-        ca_regions = ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA"]
+        # 2. Reset corrupted California actual prices that mistakenly took National $3.061 / $4.465 or < $4.00 (Issue #591, #734)
+        ca_regions = ["Oakland_CA", "BayArea_CA", "SanFrancisco_CA", "SanJose_CA", "NorthBay_CA", "Los_Angeles_CA", "Oakland_Diesel"]
         if 'region' in cleansed_df.columns and 'actual_5d_price' in cleansed_df.columns:
             ca_corrupted = (
                 cleansed_df['region'].isin(ca_regions) &
                 cleansed_df['actual_5d_price'].notna() &
-                (cleansed_df['actual_5d_price'] < 5.00)
+                (cleansed_df['actual_5d_price'] < 4.00)
             )
             if ca_corrupted.any():
                 cleansed_df.loc[ca_corrupted, 'actual_5d_price'] = np.nan
@@ -1313,9 +1314,13 @@ def filter_evaluated_history_by_window(
     if eval_df.empty:
         return eval_df
 
-    if not include_retroactive and 'is_retroactive_backtest' in eval_df.columns:
-        is_retro = eval_df['is_retroactive_backtest'].map(lambda x: str(x).strip().lower() in ['true', '1', '1.0', 't'])
-        eval_df = eval_df[~is_retro]
+    if not include_retroactive:
+        if 'is_retroactive_backtest' in eval_df.columns:
+            is_retro = eval_df['is_retroactive_backtest'].map(lambda x: str(x).strip().lower() in ['true', '1', '1.0', 't'])
+            eval_df = eval_df[~is_retro]
+        if 'run_type' in eval_df.columns:
+            is_backtest_run = eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)
+            eval_df = eval_df[~is_backtest_run]
 
     if eval_df.empty:
         return eval_df
@@ -1467,9 +1472,13 @@ def compute_regional_scoreboard_breakdown(
     if eval_df.empty:
         return []
 
-    if not include_retroactive and 'is_retroactive_backtest' in eval_df.columns:
-        is_retro = eval_df['is_retroactive_backtest'].map(lambda x: str(x).strip().lower() in ['true', '1', '1.0', 't'])
-        eval_df = eval_df[~is_retro]
+    if not include_retroactive:
+        if 'is_retroactive_backtest' in eval_df.columns:
+            is_retro = eval_df['is_retroactive_backtest'].map(lambda x: str(x).strip().lower() in ['true', '1', '1.0', 't'])
+            eval_df = eval_df[~is_retro]
+        if 'run_type' in eval_df.columns:
+            is_backtest_run = eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)
+            eval_df = eval_df[~is_backtest_run]
 
     if eval_df.empty:
         return []

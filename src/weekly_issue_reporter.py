@@ -168,7 +168,11 @@ def send_degradation_webhook_alert(alert_summary: dict, webhook_url: Optional[st
         return False
 
 
-def evaluate_model_degradation_alerts(window_days: int | str = 30, repo: str = "KoshiirRa/midgley") -> dict:
+def evaluate_model_degradation_alerts(
+    window_days: int | str = 30, 
+    repo: str = "KoshiirRa/midgley",
+    df: Optional[pd.DataFrame] = None
+) -> dict:
     """
     Evaluates rolling MAE uplift across all active regions.
     If model_uplift_mae_pct < 0.0 for any region with evaluated records,
@@ -177,7 +181,9 @@ def evaluate_model_degradation_alerts(window_days: int | str = 30, repo: str = "
     """
     try:
         from src.prediction_logger import compute_regional_scoreboard_breakdown
-        regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window_days)
+        if df is None:
+            df = load_prediction_records()
+        regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window_days, include_retroactive=False, df=df)
     except Exception as e:
         logger.warning(f"Could not fetch regional scoreboard breakdown for degradation check: {e}")
         regional_breakdown = []
@@ -891,7 +897,8 @@ def format_mlops_observability_markdown_section() -> str:
     """Generates MLOps observability & feature attribution markdown for the weekly review report."""
     try:
         from src.prediction_logger import compute_mlops_observability_summary
-        obs = compute_mlops_observability_summary(window_days=30)
+        df = load_prediction_records()
+        obs = compute_mlops_observability_summary(window_days=30, include_retroactive=False, df=df)
         
         n_eval = obs.get("total_evaluations", 0)
         if n_eval == 0:
@@ -1346,7 +1353,25 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
     # 2. Fallback to CSV
     from src.prediction_logger import read_prediction_history
     if os.path.exists(csv_path):
-        return read_prediction_history(csv_path)
+        df = read_prediction_history(csv_path)
+        if not df.empty:
+            if 'region' in df.columns:
+                df = df[~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)].copy()
+            if 'region' in df.columns and 'actual_5d_price' in df.columns:
+                from src.prediction_logger import validate_price_plausibility
+                invalid_eval_mask = df.apply(
+                    lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
+                        r.get('actual_5d_price'),
+                        str(r.get('region', 'National')),
+                        is_retail=(str(r.get('region', 'National')) != 'National')
+                    ),
+                    axis=1
+                )
+                if invalid_eval_mask.any():
+                    for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
+                        if c in df.columns:
+                            df.loc[invalid_eval_mask, c] = np.nan
+        return df
     return pd.DataFrame()
 
 
@@ -1364,7 +1389,8 @@ def generate_weekly_markdown_report() -> str:
     # Ensure matured actuals are backfilled in CSV & DB before loading weekly audit records (when not in TESTING)
     if os.environ.get("TESTING") != "1":
         try:
-            from src.prediction_logger import backfill_actual_prices_and_evaluate
+            from src.prediction_logger import backfill_actual_prices_and_evaluate, cleanse_prediction_history
+            cleanse_prediction_history(HISTORY_CSV)
             backfill_actual_prices_and_evaluate()
         except Exception as bf_err:
             logger.debug(f"Pre-report backfill notice: {bf_err}")
@@ -1392,7 +1418,7 @@ def generate_weekly_markdown_report() -> str:
     tulsa_mae = round(float(tulsa_sub['error_dollars'].mean()), 4) if not tulsa_sub.empty else None
 
     # Evaluate Model Degradation & Baseline Underperformance Alerts upfront so top table & recommendations align
-    degradation_res = evaluate_model_degradation_alerts(window_days=30)
+    degradation_res = evaluate_model_degradation_alerts(window_days=30, df=eval_df)
     degradation_section_md = format_degradation_markdown_section(degradation_res)
     degraded_map = {
         r.get("region"): r
@@ -1403,6 +1429,7 @@ def generate_weekly_markdown_report() -> str:
     # Dynamic Rolling Accuracy Summary Table across ALL Regions
     summary_rows = ""
     regions_summary = {}
+    from src.prediction_logger import compute_rolling_scoreboard_metrics
     for reg in df['region'].unique():
         meta = REGION_METADATA.get(reg, {
             "display_name": f"{reg} Retail",
@@ -1410,10 +1437,22 @@ def generate_weekly_markdown_report() -> str:
         })
         reg_eval = eval_df[eval_df['region'] == reg]
         if not reg_eval.empty:
-            mae = round(float(reg_eval['error_dollars'].mean()), 4)
-            rmse = round(float(np.sqrt((reg_eval['error_dollars'] ** 2).mean())), 4)
-            hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
-            n_days = len(reg_eval)
+            reg_rolling = compute_rolling_scoreboard_metrics(
+                window_days=30,
+                region=reg,
+                include_retroactive=False,
+                df=eval_df
+            )
+            if reg_rolling.get("total_evaluations", 0) > 0:
+                mae = reg_rolling["mae_dollars"]
+                rmse = reg_rolling["rmse_dollars"]
+                hit_rate = reg_rolling["directional_hit_rate_pct"]
+                n_days = reg_rolling["total_evaluations"]
+            else:
+                mae = round(float(reg_eval['error_dollars'].mean()), 4)
+                rmse = round(float(np.sqrt((reg_eval['error_dollars'] ** 2).mean())), 4)
+                hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
+                n_days = len(reg_eval)
             if reg in degraded_map:
                 uplift_pct = degraded_map[reg].get("model_uplift_mae_pct", 0.0)
                 status_str = f"🚨 Degraded ({uplift_pct:+.1f}% vs Naive)"
