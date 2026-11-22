@@ -24,20 +24,29 @@ describe("Sunday Weekly Self-Review Action Planner", () => {
     globalThis.fetch = originalFetch;
   });
 
-  it("enforces DST-safe Sunday 9:00 AM America/Chicago gating", () => {
+  it("enforces DST-safe Sunday >= 9:00 AM America/Chicago gating with catch-up window", () => {
     // CST (Standard Time, UTC-6): Sunday 2026-11-15 15:00 UTC === 09:00 America/Chicago
     const cst9am = isSundayNineAmCentral(new Date("2026-11-15T15:00:00Z"));
     expect(cst9am.shouldRun).toBe(true);
     expect(cst9am.localDateKey).toBe("2026-11-15");
 
-    // CST 14:00 UTC === 08:00 America/Chicago -> must NOT run
+    // CST 14:00 UTC === 08:00 America/Chicago -> must NOT run yet
     const cst8am = isSundayNineAmCentral(new Date("2026-11-15T14:00:00Z"));
     expect(cst8am.shouldRun).toBe(false);
+
+    // CST 20:00 UTC === 14:00 America/Chicago -> eligible for D1-guarded catch-up retry
+    const cst2pm = isSundayNineAmCentral(new Date("2026-11-15T20:00:00Z"));
+    expect(cst2pm.shouldRun).toBe(true);
+    expect(cst2pm.localDateKey).toBe("2026-11-15");
 
     // CDT (Daylight Time, UTC-5): Sunday 2026-07-12 14:00 UTC === 09:00 America/Chicago
     const cdt9am = isSundayNineAmCentral(new Date("2026-07-12T14:00:00Z"));
     expect(cdt9am.shouldRun).toBe(true);
     expect(cdt9am.localDateKey).toBe("2026-07-12");
+
+    // CDT 13:00 UTC === 08:00 America/Chicago -> must NOT run yet
+    const cdt8am = isSundayNineAmCentral(new Date("2026-07-12T13:00:00Z"));
+    expect(cdt8am.shouldRun).toBe(false);
 
     // Monday 15:00 UTC -> must NOT run
     const monday = isSundayNineAmCentral(new Date("2026-11-16T15:00:00Z"));

@@ -106,7 +106,10 @@ function getRepoCoords(env: SundayReviewEnv): { owner: string; repo: string } {
 }
 
 /**
- * Evaluates whether `now` falls on Sunday 09:00 hour in `America/Chicago` (DST-safe).
+ * Evaluates whether `now` is on Sunday at or after 09:00 in `America/Chicago` (DST-safe).
+ * Combined with D1 `weekly_review_runs` idempotency, this fires at 09:00 Central and
+ * automatically retries on subsequent 15-minute ticks if a transient API error occurs,
+ * while guaranteeing at-most-once execution per Sunday.
  */
 export function isSundayNineAmCentral(now: Date = new Date()): {
   shouldRun: boolean;
@@ -136,7 +139,7 @@ export function isSundayNineAmCentral(now: Date = new Date()): {
   const localDateKey = `${year}-${month}-${day}`;
 
   return {
-    shouldRun: localWeekday === "Sun" && localHour === 9,
+    shouldRun: localWeekday === "Sun" && localHour >= 9,
     localDateKey,
     localHour,
     localWeekday
