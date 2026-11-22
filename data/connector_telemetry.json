@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-22 09:39:01",
+  "last_updated": "2026-11-22 17:40:47",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-15 00:42:53",
-      "connector_name": "Reachability_GEOPOLITICAL_STRAIT_OF_HORMUZ",
-      "target": "Iran tanker OR Strait of Hormuz when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 91.07,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-15 00:42:58",
       "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
@@ -9999,6 +9989,16 @@
       "target": "Trump energy oil gasoline tariffs OPEC",
       "status": "SUCCESS",
       "latency_ms": 313.91,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-22 17:40:47",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 284.21,
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Resolved via rss_syndication (5 items)"

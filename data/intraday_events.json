@@ -10374,5 +10374,32 @@
     "matched_entity": "Strait Of Hormuz",
     "similarity": 0.4,
     "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-22T17:42:04.921576",
+    "headline": "Iranian attacks in the Strait of Hormuz are at the highest levels since the conflict began",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.2,
+      "overall_price_pressure": 0.85
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Strait of Hormuz attacks have increased to highest level since Iran war began - ABC News",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.4,
+    "duplicate_review_notified": false
   }
 ]

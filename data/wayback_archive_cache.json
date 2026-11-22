@@ -13290,13 +13290,14 @@
     "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMieEFVX3lxTE1QeFBpZHRGX2JKcGtmVl9aOV8zN0dBLXFvYklmd1hqcDNaQ0dLSmEtREpNWUwtS2toeXVHbldYRmVkRnF1bnNVU25adEZBSjVBSTFweXl4ME8yM1g5TGJXb1dweFRLRXpnRG81QXpob1phX0hrRlk2VQ?oc=5": {
-    "timestamp": "2026-11-08T12:57:43.924388+00:00",
+    "timestamp": "2026-11-22T17:40:55.111351+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 520,
     "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1QeFBpZHRGX2JKcGtmVl9aOV8zN0dBLXFvYklmd1hqcDNaQ0dLSmEtREpNWUwtS2toeXVHbldYRmVkRnF1bnNVU25adEZBSjVBSTFweXl4ME8yM1g5TGJXb1dweFRLRXpnRG81QXpob1phX0hrRlk2VQ?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1QeFBpZHRGX2JKcGtmVl9aOV8zN0dBLXFvYklmd1hqcDNaQ0dLSmEtREpNWUwtS2toeXVHbldYRmVkRnF1bnNVU25adEZBSjVBSTFweXl4ME8yM1g5TGJXb1dweFRLRXpnRG81QXpob1phX0hrRlk2VQ?oc=5",
     "headline": "'Just Filled Up At Circle K': Texas Man Notices Unleaded, Mid-Grade Are Sold Out At H-E-B. Then He Sees What They Did To Premium - Motor1.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMieEFVX3lxTE1QeFBpZHRGX2JKcGtmVl9aOV8zN0dBLXFvYklmd1hqcDNaQ0dLSmEtREpNWUwtS2toeXVHbldYRmVkRnF1bnNVU25adEZBSjVBSTFweXl4ME8yM1g5TGJXb1dweFRLRXpnRG81QXpob1phX0hrRlk2VQ?oc=5",
-    "error": "The read operation timed out"
+    "error": "HTTP Error 520: UNKNOWN"
   },
   "https://news.google.com/rss/articles/CBMiigJBVV95cUxPaTFhNnZ1b0xIejgwVWFzQTlmWHdHV05zcmlJb3dNV3ljM29zeG1vMURZU2lpY1V6ZUlkU2hCcW14UmRLcUM1dnBBWXZNZzZ0eGlTTnZyRXVLTXA1cXlYX1JJdTg3VzhTU1FuSmJhdXRBOWlvRjRSdjliazl5R3JNZnFoaGRVTUZxcUdCRkY2ekM1dENDZ2lLQml0LWZwdVBqaUxTVEpmUWRYWFhXYXpoSkx0QTFuOUJQczh2VHIzMjZHN2Z6cVJTRG5nMFdoYVBxakNPOWh0YlVveklPWHh4S1pQck0xaV9PZmJYTVB0WWwxOElVRW1zemtMWkN1dDJQdjFmeDhDMlF4Zw?oc=5": {
     "timestamp": "2026-10-17T16:55:31.586588+00:00",
@@ -25506,6 +25507,128 @@
     "canonical_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOZ0VzSEdkMFJlclR3UnhCVFVBa0dKWVF4SEd2Zzk3M0t1NW5GZWI4U2Q4T28xS1dtNXdVTl90VzJfQ0RCVE9rdENDWk93MHpTTGtzaU9lQ29BS2ZaVklnZzhMY2tYeTBhV3hnWlhNYmdWRE1yd0N5X1hELTNubmtiU2k4bXI5T3BHTGlONjRyajFsckY0MVZUSmFicWhQazBuM1dkRlU2OEI0MXpUWUZvM2tkVWpWUUxzR2U3TUJR?oc=5",
     "headline": "Two tankers hit in Strait of Hormuz as hawks press Trump to resume Iran strikes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxOZ0VzSEdkMFJlclR3UnhCVFVBa0dKWVF4SEd2Zzk3M0t1NW5GZWI4U2Q4T28xS1dtNXdVTl90VzJfQ0RCVE9rdENDWk93MHpTTGtzaU9lQ29BS2ZaVklnZzhMY2tYeTBhV3hnWlhNYmdWRE1yd0N5X1hELTNubmtiU2k4bXI5T3BHTGlONjRyajFsckY0MVZUSmFicWhQazBuM1dkRlU2OEI0MXpUWUZvM2tkVWpWUUxzR2U3TUJR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTmc3R1JUeThHWnJkWXhhOFJFRXVkWEpQWUtYSjBJWTJzclV0NVlTdFJVZnYtV2xNVWQxMFgyX2thWEVvUldDNWxaWmhTR0lfRnM1dUFSbGY5N3dKQ1JMWmN5VkdfcVd6MkwxcGk2dG5VZEJONEM1MS1KOGhxQWk2UnF0Vnk5WGFheGZ1MnMtLWJTckVPRnJmeTV30gGfAUFVX3lxTE9FdzlqSVc4TU9RSDBMRWtOMlFRREJEdk5VdVhIM3gtZG5qOEpXWnN0eWhrUWZCeTRlWmZPeDVhc3ZYT1dYR1g3bmR2S2Jmdk1aRzhaZS1fSm13WVoyeXNpUGdrYUdBR0I3d1pkcjZoQ1ZWc0NDcElfVEZmU3lyb3U2cnE3bFV6V0ZtaVJQcDZSVHNXdFVDQm1mVmdObU5GMA?oc=5": {
+    "timestamp": "2026-11-22T17:40:51.722728+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTmc3R1JUeThHWnJkWXhhOFJFRXVkWEpQWUtYSjBJWTJzclV0NVlTdFJVZnYtV2xNVWQxMFgyX2thWEVvUldDNWxaWmhTR0lfRnM1dUFSbGY5N3dKQ1JMWmN5VkdfcVd6MkwxcGk2dG5VZEJONEM1MS1KOGhxQWk2UnF0Vnk5WGFheGZ1MnMtLWJTckVPRnJmeTV30gGfAUFVX3lxTE9FdzlqSVc4TU9RSDBMRWtOMlFRREJEdk5VdVhIM3gtZG5qOEpXWnN0eWhrUWZCeTRlWmZPeDVhc3ZYT1dYR1g3bmR2S2Jmdk1aRzhaZS1fSm13WVoyeXNpUGdrYUdBR0I3d1pkcjZoQ1ZWc0NDcElfVEZmU3lyb3U2cnE3bFV6V0ZtaVJQcDZSVHNXdFVDQm1mVmdObU5GMA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTmc3R1JUeThHWnJkWXhhOFJFRXVkWEpQWUtYSjBJWTJzclV0NVlTdFJVZnYtV2xNVWQxMFgyX2thWEVvUldDNWxaWmhTR0lfRnM1dUFSbGY5N3dKQ1JMWmN5VkdfcVd6MkwxcGk2dG5VZEJONEM1MS1KOGhxQWk2UnF0Vnk5WGFheGZ1MnMtLWJTckVPRnJmeTV30gGfAUFVX3lxTE9FdzlqSVc4TU9RSDBMRWtOMlFRREJEdk5VdVhIM3gtZG5qOEpXWnN0eWhrUWZCeTRlWmZPeDVhc3ZYT1dYR1g3bmR2S2Jmdk1aRzhaZS1fSm13WVoyeXNpUGdrYUdBR0I3d1pkcjZoQ1ZWc0NDcElfVEZmU3lyb3U2cnE3bFV6V0ZtaVJQcDZSVHNXdFVDQm1mVmdObU5GMA?oc=5",
+    "headline": "After months of war with Iran, people across the US say they're feeling the strain of high gas prices - ABC News - Breaking News, Latest News and Videos",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMimgFBVV95cUxPTmc3R1JUeThHWnJkWXhhOFJFRXVkWEpQWUtYSjBJWTJzclV0NVlTdFJVZnYtV2xNVWQxMFgyX2thWEVvUldDNWxaWmhTR0lfRnM1dUFSbGY5N3dKQ1JMWmN5VkdfcVd6MkwxcGk2dG5VZEJONEM1MS1KOGhxQWk2UnF0Vnk5WGFheGZ1MnMtLWJTckVPRnJmeTV30gGfAUFVX3lxTE9FdzlqSVc4TU9RSDBMRWtOMlFRREJEdk5VdVhIM3gtZG5qOEpXWnN0eWhrUWZCeTRlWmZPeDVhc3ZYT1dYR1g3bmR2S2Jmdk1aRzhaZS1fSm13WVoyeXNpUGdrYUdBR0I3d1pkcjZoQ1ZWc0NDcElfVEZmU3lyb3U2cnE3bFV6V0ZtaVJQcDZSVHNXdFVDQm1mVmdObU5GMA?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMirgFBVV95cUxPNm1kbTRzeUFDcVdReHlHSXBwdXNmV1FyV3B6WnhxelRjblRvQzFHZXQxT2VuMUVtRzQySDhFSXdkMTJhdU9jM0M4MGxXMWExaUdSc2NaMmJETkFBeE4tODBGTnBqWWtOY2RZdHI3aHBybnVncnlwLTFvY0M4aUVRcHhhOGF5U0pVOGVuMjVUcmpBempjZ2MwNnZ2Z0tueDhPcWpDS3dtTXpZMTkzdHfSAa4BQVVfeXFMTzZtZG00c3lBQ3FXUXh5R0lwcHVzZldRcldwelp4cXpUY25Ub0MxR2V0MU9lbjFFbUc0Mkg4RUl3ZDEyYXVPYzNDODBsVzFhMWlHUnNjWjJiRE5BQXhOLTgwRk5wallrTmNkWXRyN2hwcm51Z3J5cC0xb2NDOGlFUXB4YThheVNKVThlbjI1VHJqQXpqY2djMDZ2dmdLbng4T3FqQ0t3bU16WTE5M3R3?oc=5": {
+    "timestamp": "2026-11-22T17:40:58.617197+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPNm1kbTRzeUFDcVdReHlHSXBwdXNmV1FyV3B6WnhxelRjblRvQzFHZXQxT2VuMUVtRzQySDhFSXdkMTJhdU9jM0M4MGxXMWExaUdSc2NaMmJETkFBeE4tODBGTnBqWWtOY2RZdHI3aHBybnVncnlwLTFvY0M4aUVRcHhhOGF5U0pVOGVuMjVUcmpBempjZ2MwNnZ2Z0tueDhPcWpDS3dtTXpZMTkzdHfSAa4BQVVfeXFMTzZtZG00c3lBQ3FXUXh5R0lwcHVzZldRcldwelp4cXpUY25Ub0MxR2V0MU9lbjFFbUc0Mkg4RUl3ZDEyYXVPYzNDODBsVzFhMWlHUnNjWjJiRE5BQXhOLTgwRk5wallrTmNkWXRyN2hwcm51Z3J5cC0xb2NDOGlFUXB4YThheVNKVThlbjI1VHJqQXpqY2djMDZ2dmdLbng4T3FqQ0t3bU16WTE5M3R3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPNm1kbTRzeUFDcVdReHlHSXBwdXNmV1FyV3B6WnhxelRjblRvQzFHZXQxT2VuMUVtRzQySDhFSXdkMTJhdU9jM0M4MGxXMWExaUdSc2NaMmJETkFBeE4tODBGTnBqWWtOY2RZdHI3aHBybnVncnlwLTFvY0M4aUVRcHhhOGF5U0pVOGVuMjVUcmpBempjZ2MwNnZ2Z0tueDhPcWpDS3dtTXpZMTkzdHfSAa4BQVVfeXFMTzZtZG00c3lBQ3FXUXh5R0lwcHVzZldRcldwelp4cXpUY25Ub0MxR2V0MU9lbjFFbUc0Mkg4RUl3ZDEyYXVPYzNDODBsVzFhMWlHUnNjWjJiRE5BQXhOLTgwRk5wallrTmNkWXRyN2hwcm51Z3J5cC0xb2NDOGlFUXB4YThheVNKVThlbjI1VHJqQXpqY2djMDZ2dmdLbng4T3FqQ0t3bU16WTE5M3R3?oc=5",
+    "headline": "EU, Indonesia sign landmark trade deal after 10 years of talks | Daily Sabah - Daily Sabah",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirgFBVV95cUxPNm1kbTRzeUFDcVdReHlHSXBwdXNmV1FyV3B6WnhxelRjblRvQzFHZXQxT2VuMUVtRzQySDhFSXdkMTJhdU9jM0M4MGxXMWExaUdSc2NaMmJETkFBeE4tODBGTnBqWWtOY2RZdHI3aHBybnVncnlwLTFvY0M4aUVRcHhhOGF5U0pVOGVuMjVUcmpBempjZ2MwNnZ2Z0tueDhPcWpDS3dtTXpZMTkzdHfSAa4BQVVfeXFMTzZtZG00c3lBQ3FXUXh5R0lwcHVzZldRcldwelp4cXpUY25Ub0MxR2V0MU9lbjFFbUc0Mkg4RUl3ZDEyYXVPYzNDODBsVzFhMWlHUnNjWjJiRE5BQXhOLTgwRk5wallrTmNkWXRyN2hwcm51Z3J5cC0xb2NDOGlFUXB4YThheVNKVThlbjI1VHJqQXpqY2djMDZ2dmdLbng4T3FqQ0t3bU16WTE5M3R3?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMipwFBVV95cUxQaERRMmx0OThSNUdBelhOZHNPYUlMaFV4SV9KVlF4cDZGOGhwelhRcmtrZnpjUUlKOVlLQzBZTnkxRlJlZHJsQUlNT1NTSWNUblZJSkZIWFIwdHA4d3JvMFRxdGdfcmNYYTlKYllicmRMdlRsVEg0WWpaMjljTWZZN2hURGNJV1ZPOEdaTU5NRzEtTndjUWV1aTFPeUlITFFIakNZWTdkd9IBrAFBVV95cUxNUFJEc3hyS0FZVEV5WWkybXVlekM4Q3RRdVNrM1NaUEFMTEE5bm8wcmlDQnhxV0tsR1dkd0VlaWNySmFnd2dzMmpWdWt3ZjdhYy04MXkxTGx5ZVcwMGFodHRHbTYyYnloT1BFQThIUU5ESG5KWHJNWVdROVpiOWZIOXdVdlNpSVNlcm5CVlpLTUl5OHpKaENKeVNac1V5cE9tRVNyaWx4RnFLRmo2?oc=5": {
+    "timestamp": "2026-11-22T17:41:02.239530+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQaERRMmx0OThSNUdBelhOZHNPYUlMaFV4SV9KVlF4cDZGOGhwelhRcmtrZnpjUUlKOVlLQzBZTnkxRlJlZHJsQUlNT1NTSWNUblZJSkZIWFIwdHA4d3JvMFRxdGdfcmNYYTlKYllicmRMdlRsVEg0WWpaMjljTWZZN2hURGNJV1ZPOEdaTU5NRzEtTndjUWV1aTFPeUlITFFIakNZWTdkd9IBrAFBVV95cUxNUFJEc3hyS0FZVEV5WWkybXVlekM4Q3RRdVNrM1NaUEFMTEE5bm8wcmlDQnhxV0tsR1dkd0VlaWNySmFnd2dzMmpWdWt3ZjdhYy04MXkxTGx5ZVcwMGFodHRHbTYyYnloT1BFQThIUU5ESG5KWHJNWVdROVpiOWZIOXdVdlNpSVNlcm5CVlpLTUl5OHpKaENKeVNac1V5cE9tRVNyaWx4RnFLRmo2?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQaERRMmx0OThSNUdBelhOZHNPYUlMaFV4SV9KVlF4cDZGOGhwelhRcmtrZnpjUUlKOVlLQzBZTnkxRlJlZHJsQUlNT1NTSWNUblZJSkZIWFIwdHA4d3JvMFRxdGdfcmNYYTlKYllicmRMdlRsVEg0WWpaMjljTWZZN2hURGNJV1ZPOEdaTU5NRzEtTndjUWV1aTFPeUlITFFIakNZWTdkd9IBrAFBVV95cUxNUFJEc3hyS0FZVEV5WWkybXVlekM4Q3RRdVNrM1NaUEFMTEE5bm8wcmlDQnhxV0tsR1dkd0VlaWNySmFnd2dzMmpWdWt3ZjdhYy04MXkxTGx5ZVcwMGFodHRHbTYyYnloT1BFQThIUU5ESG5KWHJNWVdROVpiOWZIOXdVdlNpSVNlcm5CVlpLTUl5OHpKaENKeVNac1V5cE9tRVNyaWx4RnFLRmo2?oc=5",
+    "headline": "IEU-CEPA to scrap tariffs on over 90 pct of traded goods: Airlangga - ANTARA News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipwFBVV95cUxQaERRMmx0OThSNUdBelhOZHNPYUlMaFV4SV9KVlF4cDZGOGhwelhRcmtrZnpjUUlKOVlLQzBZTnkxRlJlZHJsQUlNT1NTSWNUblZJSkZIWFIwdHA4d3JvMFRxdGdfcmNYYTlKYllicmRMdlRsVEg0WWpaMjljTWZZN2hURGNJV1ZPOEdaTU5NRzEtTndjUWV1aTFPeUlITFFIakNZWTdkd9IBrAFBVV95cUxNUFJEc3hyS0FZVEV5WWkybXVlekM4Q3RRdVNrM1NaUEFMTEE5bm8wcmlDQnhxV0tsR1dkd0VlaWNySmFnd2dzMmpWdWt3ZjdhYy04MXkxTGx5ZVcwMGFodHRHbTYyYnloT1BFQThIUU5ESG5KWHJNWVdROVpiOWZIOXdVdlNpSVNlcm5CVlpLTUl5OHpKaENKeVNac1V5cE9tRVNyaWx4RnFLRmo2?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMingFBVV95cUxPMjBqM0dKTHRSeGhyenlKTWJsZGw3UWVoZzFEM1lnUWZrZmVJWXZoYzFyQ0J5NEhvTU91VHYzYzRFWnAwaGhsM0lGNXNRRjc3YlNJUy1zTEdOaXR2UkxWS2FlYUVlNlhfUjU4M0hnQnBiVzlFamRPTFBhNFpXNmRUT3dfdE5PUmtoanhpX0ZHeU1iQnVNV0NGWng0S2hZQQ?oc=5": {
+    "timestamp": "2026-11-22T17:41:05.448492+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPMjBqM0dKTHRSeGhyenlKTWJsZGw3UWVoZzFEM1lnUWZrZmVJWXZoYzFyQ0J5NEhvTU91VHYzYzRFWnAwaGhsM0lGNXNRRjc3YlNJUy1zTEdOaXR2UkxWS2FlYUVlNlhfUjU4M0hnQnBiVzlFamRPTFBhNFpXNmRUT3dfdE5PUmtoanhpX0ZHeU1iQnVNV0NGWng0S2hZQQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPMjBqM0dKTHRSeGhyenlKTWJsZGw3UWVoZzFEM1lnUWZrZmVJWXZoYzFyQ0J5NEhvTU91VHYzYzRFWnAwaGhsM0lGNXNRRjc3YlNJUy1zTEdOaXR2UkxWS2FlYUVlNlhfUjU4M0hnQnBiVzlFamRPTFBhNFpXNmRUT3dfdE5PUmtoanhpX0ZHeU1iQnVNV0NGWng0S2hZQQ?oc=5",
+    "headline": "Indonesia, EU Seal Zero-Tariff Trade Deal After Decade-Long Talks - Tempo.co English",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMingFBVV95cUxPMjBqM0dKTHRSeGhyenlKTWJsZGw3UWVoZzFEM1lnUWZrZmVJWXZoYzFyQ0J5NEhvTU91VHYzYzRFWnAwaGhsM0lGNXNRRjc3YlNJUy1zTEdOaXR2UkxWS2FlYUVlNlhfUjU4M0hnQnBiVzlFamRPTFBhNFpXNmRUT3dfdE5PUmtoanhpX0ZHeU1iQnVNV0NGWng0S2hZQQ?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMilgFBVV95cUxQd0xCb2t5eVlPRmZZeU90TzlVeU9DakJucGRPZHZDbUItN3M3M09XcEZFLVBDenlRa0h4cUF6emhDc1hWbnZlVEpqRlk4MU51bTBiTGllTzZlNUlPRjF0eHZkeWtiaWtSUmZNeTlRRzBzLU56QzB1bUJDOGJLd2U2U01Rb0k3bnd5eGVHN3RHbUhiLXNablE?oc=5": {
+    "timestamp": "2026-11-22T17:41:08.863621+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 520,
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQd0xCb2t5eVlPRmZZeU90TzlVeU9DakJucGRPZHZDbUItN3M3M09XcEZFLVBDenlRa0h4cUF6emhDc1hWbnZlVEpqRlk4MU51bTBiTGllTzZlNUlPRjF0eHZkeWtiaWtSUmZNeTlRRzBzLU56QzB1bUJDOGJLd2U2U01Rb0k3bnd5eGVHN3RHbUhiLXNablE?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQd0xCb2t5eVlPRmZZeU90TzlVeU9DakJucGRPZHZDbUItN3M3M09XcEZFLVBDenlRa0h4cUF6emhDc1hWbnZlVEpqRlk4MU51bTBiTGllTzZlNUlPRjF0eHZkeWtiaWtSUmZNeTlRRzBzLU56QzB1bUJDOGJLd2U2U01Rb0k3bnd5eGVHN3RHbUhiLXNablE?oc=5",
+    "headline": "Oil prices nearing 'capitulation', Goldman Sachs says - Yeni Safak English",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMilgFBVV95cUxQd0xCb2t5eVlPRmZZeU90TzlVeU9DakJucGRPZHZDbUItN3M3M09XcEZFLVBDenlRa0h4cUF6emhDc1hWbnZlVEpqRlk4MU51bTBiTGllTzZlNUlPRjF0eHZkeWtiaWtSUmZNeTlRRzBzLU56QzB1bUJDOGJLd2U2U01Rb0k3bnd5eGVHN3RHbUhiLXNablE?oc=5",
+    "error": "HTTP Error 520: UNKNOWN"
+  },
+  "https://news.google.com/rss/articles/CBMiogFBVV95cUxQNXI4ZGVpQWp2cUZqNjRiM0hfd2ZIQ2htUzJtMnNFRjdWUnozR0pOd1JvaW1wVjlSZFA0NU01VGctZTNGcWpCdTRBckw0bUxWcTZsMmZJRFdxZE5wUUZ5LXdQUmRNNkJkMjdvVXctbVZWbExvUDJOMWFSQUdjMDRZMkhhUUx2S1BPSW1sSGlQSnlSMnAwRElDRDVkQkdXdTlndWfSAacBQVVfeXFMTkxDOU5mYkRpMmxIQWE3MDl1VmdEREZPOXhQSndNbmFSVVpyaWt1dkM3U2tsN0REVWI3NUxSZk9GQzBwLVNSVHZyMUVQRkhVamRSUmNITmk0T094TEpsNUxqS2JsVlhnRjByakV0ajRmb0lKaUNEZXlxOGw4OElrTTBQLWV1YmJGZnVrX296dlpfakpJUGpVZlRvYi1McW5xNUY1UHkxVkk?oc=5": {
+    "timestamp": "2026-11-22T17:41:19.898727+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQNXI4ZGVpQWp2cUZqNjRiM0hfd2ZIQ2htUzJtMnNFRjdWUnozR0pOd1JvaW1wVjlSZFA0NU01VGctZTNGcWpCdTRBckw0bUxWcTZsMmZJRFdxZE5wUUZ5LXdQUmRNNkJkMjdvVXctbVZWbExvUDJOMWFSQUdjMDRZMkhhUUx2S1BPSW1sSGlQSnlSMnAwRElDRDVkQkdXdTlndWfSAacBQVVfeXFMTkxDOU5mYkRpMmxIQWE3MDl1VmdEREZPOXhQSndNbmFSVVpyaWt1dkM3U2tsN0REVWI3NUxSZk9GQzBwLVNSVHZyMUVQRkhVamRSUmNITmk0T094TEpsNUxqS2JsVlhnRjByakV0ajRmb0lKaUNEZXlxOGw4OElrTTBQLWV1YmJGZnVrX296dlpfakpJUGpVZlRvYi1McW5xNUY1UHkxVkk?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQNXI4ZGVpQWp2cUZqNjRiM0hfd2ZIQ2htUzJtMnNFRjdWUnozR0pOd1JvaW1wVjlSZFA0NU01VGctZTNGcWpCdTRBckw0bUxWcTZsMmZJRFdxZE5wUUZ5LXdQUmRNNkJkMjdvVXctbVZWbExvUDJOMWFSQUdjMDRZMkhhUUx2S1BPSW1sSGlQSnlSMnAwRElDRDVkQkdXdTlndWfSAacBQVVfeXFMTkxDOU5mYkRpMmxIQWE3MDl1VmdEREZPOXhQSndNbmFSVVpyaWt1dkM3U2tsN0REVWI3NUxSZk9GQzBwLVNSVHZyMUVQRkhVamRSUmNITmk0T094TEpsNUxqS2JsVlhnRjByakV0ajRmb0lKaUNEZXlxOGw4OElrTTBQLWV1YmJGZnVrX296dlpfakpJUGpVZlRvYi1McW5xNUY1UHkxVkk?oc=5",
+    "headline": "Indonesia, EU sign IEU-CEPA to boost exports, attract investment - ANTARA News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiogFBVV95cUxQNXI4ZGVpQWp2cUZqNjRiM0hfd2ZIQ2htUzJtMnNFRjdWUnozR0pOd1JvaW1wVjlSZFA0NU01VGctZTNGcWpCdTRBckw0bUxWcTZsMmZJRFdxZE5wUUZ5LXdQUmRNNkJkMjdvVXctbVZWbExvUDJOMWFSQUdjMDRZMkhhUUx2S1BPSW1sSGlQSnlSMnAwRElDRDVkQkdXdTlndWfSAacBQVVfeXFMTkxDOU5mYkRpMmxIQWE3MDl1VmdEREZPOXhQSndNbmFSVVpyaWt1dkM3U2tsN0REVWI3NUxSZk9GQzBwLVNSVHZyMUVQRkhVamRSUmNITmk0T094TEpsNUxqS2JsVlhnRjByakV0ajRmb0lKaUNEZXlxOGw4OElrTTBQLWV1YmJGZnVrX296dlpfakpJUGpVZlRvYi1McW5xNUY1UHkxVkk?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPcTUtN0tTWWZXLWR5dl8yLTdaYXhVdXR5MGY0R1ZJN1F4UVlYZUFnTGJ1TlBIRzZmNloya1NRMllFWEN5QTR5QmdFbGNoT3pQa2hUZWY3Z1AwV1Eza1NBTFd5R1ZEOUl4T05XWVRLUnU3b0J4V3ZjcG8tRzRuSVdsVy1YVm94SkVLbUp2WE9QdmV3YWQwQWVqX2pZdWUxWjN4OHU5SVZVcTRHSmNrTlA2cDBUNC1WVnBZbmtCWGg2dWNqaFpJSC05Nk9vS1FMYlFKaGZlcWtmZUttY29OZ0JuRWtaaGktbkdJRlJFWDc4ek43aEc00gH6AUFVX3lxTE9EWGhvQVZER19DRlR5NFBBMGhuc3Z0bTFKd012N2wyQVV6V0l0aWJubGUtM284aHVURVI4ZjFIWE83VWhBbk5Od3I3bUZHcDlBbmc1aWZqZU5mSm5nM09CRG1ON1M1SnJZcFdVQ2gtRWtmbHNMeGdwUENZX1FjT0ZEcnA4ZjBkSGZyX3Jrb2hsaGE0c1RyZnNkMXJSSVFyYkZVcnVtdjc1cmF2cTVmY1dkd2RDRWc4ZC1fa3YxU3Z3bVhMSGQzWVlIck1Rd2lxbUFzdGNjdWZhYjI1OE00TlpjNkFZNXFsRGtySGgwcExmS25vbklxc3g1Z1E?oc=5": {
+    "timestamp": "2026-11-22T17:41:29.546955+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPcTUtN0tTWWZXLWR5dl8yLTdaYXhVdXR5MGY0R1ZJN1F4UVlYZUFnTGJ1TlBIRzZmNloya1NRMllFWEN5QTR5QmdFbGNoT3pQa2hUZWY3Z1AwV1Eza1NBTFd5R1ZEOUl4T05XWVRLUnU3b0J4V3ZjcG8tRzRuSVdsVy1YVm94SkVLbUp2WE9QdmV3YWQwQWVqX2pZdWUxWjN4OHU5SVZVcTRHSmNrTlA2cDBUNC1WVnBZbmtCWGg2dWNqaFpJSC05Nk9vS1FMYlFKaGZlcWtmZUttY29OZ0JuRWtaaGktbkdJRlJFWDc4ek43aEc00gH6AUFVX3lxTE9EWGhvQVZER19DRlR5NFBBMGhuc3Z0bTFKd012N2wyQVV6V0l0aWJubGUtM284aHVURVI4ZjFIWE83VWhBbk5Od3I3bUZHcDlBbmc1aWZqZU5mSm5nM09CRG1ON1M1SnJZcFdVQ2gtRWtmbHNMeGdwUENZX1FjT0ZEcnA4ZjBkSGZyX3Jrb2hsaGE0c1RyZnNkMXJSSVFyYkZVcnVtdjc1cmF2cTVmY1dkd2RDRWc4ZC1fa3YxU3Z3bVhMSGQzWVlIck1Rd2lxbUFzdGNjdWZhYjI1OE00TlpjNkFZNXFsRGtySGgwcExmS25vbklxc3g1Z1E?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPcTUtN0tTWWZXLWR5dl8yLTdaYXhVdXR5MGY0R1ZJN1F4UVlYZUFnTGJ1TlBIRzZmNloya1NRMllFWEN5QTR5QmdFbGNoT3pQa2hUZWY3Z1AwV1Eza1NBTFd5R1ZEOUl4T05XWVRLUnU3b0J4V3ZjcG8tRzRuSVdsVy1YVm94SkVLbUp2WE9QdmV3YWQwQWVqX2pZdWUxWjN4OHU5SVZVcTRHSmNrTlA2cDBUNC1WVnBZbmtCWGg2dWNqaFpJSC05Nk9vS1FMYlFKaGZlcWtmZUttY29OZ0JuRWtaaGktbkdJRlJFWDc4ek43aEc00gH6AUFVX3lxTE9EWGhvQVZER19DRlR5NFBBMGhuc3Z0bTFKd012N2wyQVV6V0l0aWJubGUtM284aHVURVI4ZjFIWE83VWhBbk5Od3I3bUZHcDlBbmc1aWZqZU5mSm5nM09CRG1ON1M1SnJZcFdVQ2gtRWtmbHNMeGdwUENZX1FjT0ZEcnA4ZjBkSGZyX3Jrb2hsaGE0c1RyZnNkMXJSSVFyYkZVcnVtdjc1cmF2cTVmY1dkd2RDRWc4ZC1fa3YxU3Z3bVhMSGQzWVlIck1Rd2lxbUFzdGNjdWZhYjI1OE00TlpjNkFZNXFsRGtySGgwcExmS25vbklxc3g1Z1E?oc=5",
+    "headline": "Taj Mahal Yes, Nizamuddin No: Why India Denied Pakistan Minister Musadik Malik’s Dargah Visit - The Times of India",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi9AFBVV95cUxPcTUtN0tTWWZXLWR5dl8yLTdaYXhVdXR5MGY0R1ZJN1F4UVlYZUFnTGJ1TlBIRzZmNloya1NRMllFWEN5QTR5QmdFbGNoT3pQa2hUZWY3Z1AwV1Eza1NBTFd5R1ZEOUl4T05XWVRLUnU3b0J4V3ZjcG8tRzRuSVdsVy1YVm94SkVLbUp2WE9QdmV3YWQwQWVqX2pZdWUxWjN4OHU5SVZVcTRHSmNrTlA2cDBUNC1WVnBZbmtCWGg2dWNqaFpJSC05Nk9vS1FMYlFKaGZlcWtmZUttY29OZ0JuRWtaaGktbkdJRlJFWDc4ek43aEc00gH6AUFVX3lxTE9EWGhvQVZER19DRlR5NFBBMGhuc3Z0bTFKd012N2wyQVV6V0l0aWJubGUtM284aHVURVI4ZjFIWE83VWhBbk5Od3I3bUZHcDlBbmc1aWZqZU5mSm5nM09CRG1ON1M1SnJZcFdVQ2gtRWtmbHNMeGdwUENZX1FjT0ZEcnA4ZjBkSGZyX3Jrb2hsaGE0c1RyZnNkMXJSSVFyYkZVcnVtdjc1cmF2cTVmY1dkd2RDRWc4ZC1fa3YxU3Z3bVhMSGQzWVlIck1Rd2lxbUFzdGNjdWZhYjI1OE00TlpjNkFZNXFsRGtySGgwcExmS25vbklxc3g1Z1E?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQTE9iSWNYa2I5cTduSGtSREdHTUhONkVfNGtubTg1dXljUWtMTnBndVFtUU11MEFVeHlaYkxyemxGZ0dxN3JCakVVRGE2Qm4zS2Vpa3dXVlRGYzJLY0RZeHpUWDZHempkWXRCa1M5VGF3X3VvYjBzRHY4eDc0SUwwT2JNRmxjX2dQX0RKbEdFQmd4OGd5b2ZzRWxpcEV6UUlFNlN0Q2NTaThldVFGZU10NjJtUnhZOVU3MWpB?oc=5": {
+    "timestamp": "2026-11-22T17:41:36.488188+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQTE9iSWNYa2I5cTduSGtSREdHTUhONkVfNGtubTg1dXljUWtMTnBndVFtUU11MEFVeHlaYkxyemxGZ0dxN3JCakVVRGE2Qm4zS2Vpa3dXVlRGYzJLY0RZeHpUWDZHempkWXRCa1M5VGF3X3VvYjBzRHY4eDc0SUwwT2JNRmxjX2dQX0RKbEdFQmd4OGd5b2ZzRWxpcEV6UUlFNlN0Q2NTaThldVFGZU10NjJtUnhZOVU3MWpB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQTE9iSWNYa2I5cTduSGtSREdHTUhONkVfNGtubTg1dXljUWtMTnBndVFtUU11MEFVeHlaYkxyemxGZ0dxN3JCakVVRGE2Qm4zS2Vpa3dXVlRGYzJLY0RZeHpUWDZHempkWXRCa1M5VGF3X3VvYjBzRHY4eDc0SUwwT2JNRmxjX2dQX0RKbEdFQmd4OGd5b2ZzRWxpcEV6UUlFNlN0Q2NTaThldVFGZU10NjJtUnhZOVU3MWpB?oc=5",
+    "headline": "Indonesia Unlocks 730-Million-Consumer Market with Landmark EU Trade Deal - InvestorTrust",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuwFBVV95cUxQTE9iSWNYa2I5cTduSGtSREdHTUhONkVfNGtubTg1dXljUWtMTnBndVFtUU11MEFVeHlaYkxyemxGZ0dxN3JCakVVRGE2Qm4zS2Vpa3dXVlRGYzJLY0RZeHpUWDZHempkWXRCa1M5VGF3X3VvYjBzRHY4eDc0SUwwT2JNRmxjX2dQX0RKbEdFQmd4OGd5b2ZzRWxpcEV6UUlFNlN0Q2NTaThldVFGZU10NjJtUnhZOVU3MWpB?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMigAJBVV95cUxQbHZJSlYyamRNQ3pYMlVCRk5oUVl0cDdvd0o1UXlONzQ3RWZyVlRIOENHdlo1QWJ4WlBMaU5odndWT1laeHpDZmpIS1JHckFGMmpEQnlwSXFXVF9pRkYxdzFfZHRuRDNlY0txYkp2bTVwcVZWT2cyT1hPTVFES093UXpkaXRBU1JKZDJKemtHd18tVUhCN1IzdldHOXZiMTA3Q2haM1JBX19zMlRzdVI0V2p4VDdzcmNmUFAtYnAwZEJzcUdid1h2VE9zaHUwSXFsd2NKRjRxM0xGMGJzMzNiaEtSZDdidi1BV0tRRVMyNVE0Wm9UVV9zMFFSUGdPOGpm0gGGAkFVX3lxTE1VNkFIRFZDa3duTUNfM05pSGRnREJ0UmdhUFdESnZLVkY3M2lvMHdqeW4zYzhNUzExZzlPbUtkazJqSkotM1kzalQwYnpadFQzTW1SeVlha19pc3AzcTNEZkpna3BZR3ZUVVczSzhxZU9xWnlQc2g4SHJmZHhIaHNrSHZpdGprWWxrc0M4eEVnX0ZzSXppZTlmVnZCUkhwV1VyaVlWbzZLUVFNMC1sXzNndnpubnVwTXhwN3JweGZSSVpaZUtXTDRXRy13NlgwT1RIM1g1Xy1MMkg0cWUydHIwUWdpSHB0NEZmWlJGb3BuZ3MxLWxKNjVTNV9KUUpCcW5Kak9GTHc?oc=5": {
+    "timestamp": "2026-11-22T17:41:47.138379+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxQbHZJSlYyamRNQ3pYMlVCRk5oUVl0cDdvd0o1UXlONzQ3RWZyVlRIOENHdlo1QWJ4WlBMaU5odndWT1laeHpDZmpIS1JHckFGMmpEQnlwSXFXVF9pRkYxdzFfZHRuRDNlY0txYkp2bTVwcVZWT2cyT1hPTVFES093UXpkaXRBU1JKZDJKemtHd18tVUhCN1IzdldHOXZiMTA3Q2haM1JBX19zMlRzdVI0V2p4VDdzcmNmUFAtYnAwZEJzcUdid1h2VE9zaHUwSXFsd2NKRjRxM0xGMGJzMzNiaEtSZDdidi1BV0tRRVMyNVE0Wm9UVV9zMFFSUGdPOGpm0gGGAkFVX3lxTE1VNkFIRFZDa3duTUNfM05pSGRnREJ0UmdhUFdESnZLVkY3M2lvMHdqeW4zYzhNUzExZzlPbUtkazJqSkotM1kzalQwYnpadFQzTW1SeVlha19pc3AzcTNEZkpna3BZR3ZUVVczSzhxZU9xWnlQc2g4SHJmZHhIaHNrSHZpdGprWWxrc0M4eEVnX0ZzSXppZTlmVnZCUkhwV1VyaVlWbzZLUVFNMC1sXzNndnpubnVwTXhwN3JweGZSSVpaZUtXTDRXRy13NlgwT1RIM1g1Xy1MMkg0cWUydHIwUWdpSHB0NEZmWlJGb3BuZ3MxLWxKNjVTNV9KUUpCcW5Kak9GTHc?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxQbHZJSlYyamRNQ3pYMlVCRk5oUVl0cDdvd0o1UXlONzQ3RWZyVlRIOENHdlo1QWJ4WlBMaU5odndWT1laeHpDZmpIS1JHckFGMmpEQnlwSXFXVF9pRkYxdzFfZHRuRDNlY0txYkp2bTVwcVZWT2cyT1hPTVFES093UXpkaXRBU1JKZDJKemtHd18tVUhCN1IzdldHOXZiMTA3Q2haM1JBX19zMlRzdVI0V2p4VDdzcmNmUFAtYnAwZEJzcUdid1h2VE9zaHUwSXFsd2NKRjRxM0xGMGJzMzNiaEtSZDdidi1BV0tRRVMyNVE0Wm9UVV9zMFFSUGdPOGpm0gGGAkFVX3lxTE1VNkFIRFZDa3duTUNfM05pSGRnREJ0UmdhUFdESnZLVkY3M2lvMHdqeW4zYzhNUzExZzlPbUtkazJqSkotM1kzalQwYnpadFQzTW1SeVlha19pc3AzcTNEZkpna3BZR3ZUVVczSzhxZU9xWnlQc2g4SHJmZHhIaHNrSHZpdGprWWxrc0M4eEVnX0ZzSXppZTlmVnZCUkhwV1VyaVlWbzZLUVFNMC1sXzNndnpubnVwTXhwN3JweGZSSVpaZUtXTDRXRy13NlgwT1RIM1g1Xy1MMkg0cWUydHIwUWdpSHB0NEZmWlJGb3BuZ3MxLWxKNjVTNV9KUUpCcW5Kak9GTHc?oc=5",
+    "headline": "Amit Shah Says Population Rises In 40 China-Border Villages As Migration Stops In Arunachal Pradesh - The Times of India",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMigAJBVV95cUxQbHZJSlYyamRNQ3pYMlVCRk5oUVl0cDdvd0o1UXlONzQ3RWZyVlRIOENHdlo1QWJ4WlBMaU5odndWT1laeHpDZmpIS1JHckFGMmpEQnlwSXFXVF9pRkYxdzFfZHRuRDNlY0txYkp2bTVwcVZWT2cyT1hPTVFES093UXpkaXRBU1JKZDJKemtHd18tVUhCN1IzdldHOXZiMTA3Q2haM1JBX19zMlRzdVI0V2p4VDdzcmNmUFAtYnAwZEJzcUdid1h2VE9zaHUwSXFsd2NKRjRxM0xGMGJzMzNiaEtSZDdidi1BV0tRRVMyNVE0Wm9UVV9zMFFSUGdPOGpm0gGGAkFVX3lxTE1VNkFIRFZDa3duTUNfM05pSGRnREJ0UmdhUFdESnZLVkY3M2lvMHdqeW4zYzhNUzExZzlPbUtkazJqSkotM1kzalQwYnpadFQzTW1SeVlha19pc3AzcTNEZkpna3BZR3ZUVVczSzhxZU9xWnlQc2g4SHJmZHhIaHNrSHZpdGprWWxrc0M4eEVnX0ZzSXppZTlmVnZCUkhwV1VyaVlWbzZLUVFNMC1sXzNndnpubnVwTXhwN3JweGZSSVpaZUtXTDRXRy13NlgwT1RIM1g1Xy1MMkg0cWUydHIwUWdpSHB0NEZmWlJGb3BuZ3MxLWxKNjVTNV9KUUpCcW5Kak9GTHc?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://www.nytimes.com/2026/11/22/climate/cop31-climate-summit-ends-climate.html": {
+    "timestamp": "2026-11-22T17:41:47.212984+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/22/climate/cop31-climate-summit-ends-climate.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/22/climate/cop31-climate-summit-ends-climate.html",
+    "headline": "COP31 Talks Collapse in Turkey in a Clash Over Fossil Fuels",
+    "archive_url": "http://web.archive.org/web/20261122124056/https://www.nytimes.com/2026/11/22/climate/cop31-climate-summit-ends-climate.html"
+  },
+  "https://www.nytimes.com/2026/11/19/climate/senate-passes-baaja-permitting-bill-energy.html": {
+    "timestamp": "2026-11-22T17:41:47.441921+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/19/climate/senate-passes-baaja-permitting-bill-energy.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/19/climate/senate-passes-baaja-permitting-bill-energy.html",
+    "headline": "Senate Passes Major Permitting Bill to Speed Up Energy Projects",
+    "archive_url": "http://web.archive.org/web/20261120194426/https://www.nytimes.com/2026/11/19/climate/senate-passes-baaja-permitting-bill-energy.html"
+  },
+  "https://www.nytimes.com/2026/11/17/climate/seabed-mining-lease-auction.html": {
+    "timestamp": "2026-11-22T17:41:47.853178+00:00",
+    "status": "AVAILABLE_SNAPSHOT",
+    "http_status": 200,
+    "url": "https://www.nytimes.com/2026/11/17/climate/seabed-mining-lease-auction.html",
+    "canonical_url": "https://www.nytimes.com/2026/11/17/climate/seabed-mining-lease-auction.html",
+    "headline": "Judge Finds Trump’s Planned Seabed Mining Auction Violated Law",
+    "archive_url": "http://web.archive.org/web/20261117231807/https://www.nytimes.com/2026/11/17/climate/seabed-mining-lease-auction.html"
+  },
+  "https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5": {
+    "timestamp": "2026-11-22T17:42:04.853911+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5",
+    "headline": "Iranian attacks in the Strait of Hormuz are at the highest levels since the conflict began",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxPazIzNmZVck5Udmx0UjFsVV9LQjJsSDhlUm95QjhZalplRUNIa1QyNXh0Z0lPYXVEblBmOWpWN3p3b0pXWXhyZko4cmlzSl92b19UbjNqS3NZUHJwWFZiZnZiRWJHSTVKMjBkNGFmdWJWcGpBcEJfSzROU0VjZHEyVXdOWWFkb2gxN1FaZ0N3?oc=5",
     "error": "<urlopen error timed out>"
   }
 }
