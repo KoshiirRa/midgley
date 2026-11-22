@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-22 17:40:47",
+  "last_updated": "2026-11-22 23:26:18",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-15 00:42:58",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5022.05,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-15 00:42:59",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 26.0,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-15 00:42:59",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 61.55,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-15 00:43:04",
-      "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
-      "target": "Venezuela oil sanction OR PDVSA when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 5020.59,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier rss_syndication yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-15 00:43:04",
       "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
@@ -10002,6 +9962,46 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-22 23:24:00",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 223.14,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
+    },
+    {
+      "timestamp": "2026-11-22 23:26:06",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 1221.13,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 473 docs, 378 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-22 23:26:15",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 3999.48,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge 7db09420-d185-46ea-94bf-717d8e5bd816): direction=bullish, confidence=0.8749, scored=True"
+    },
+    {
+      "timestamp": "2026-11-22 23:26:18",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 2581.9,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge a0555faf-b6fb-4660-820b-c2b15b724ecb): direction=bullish, confidence=0.8383, scored=True"
     }
   ]
 }
