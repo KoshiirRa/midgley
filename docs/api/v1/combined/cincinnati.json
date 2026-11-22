@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-22T01:59:48.239333",
+  "timestamp": "2026-11-22T02:36:13.791940",
   "locale": {
     "code": "cincinnati",
     "region_id": "Cincinnati_OH",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-22T01:59:02Z"
+      "timestamp": "2026-11-22T02:35:48Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -29,12 +29,12 @@
     "forecast_horizon_days": 5,
     "target_date": "2026-11-30",
     "current_base_price": 3.1,
-    "predicted_price_per_gal": 3.056,
-    "expected_change_dollars": -0.044,
-    "expected_change_percent": -1.42,
+    "predicted_price_per_gal": 3.053,
+    "expected_change_dollars": -0.047,
+    "expected_change_percent": -1.52,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.64,
-    "prediction_upper_95ci": 3.472,
+    "prediction_lower_95ci": 2.637,
+    "prediction_upper_95ci": 3.469,
     "calibration_method": "conformal",
     "calibration_sample_size": 57,
     "directional_hit_rate_historical": 0.5789,
@@ -42,14 +42,14 @@
     "evaluation_sample_size": 38,
     "day_1_price": 3.091,
     "day_2_price": 3.08,
-    "day_3_price": 3.071,
-    "day_4_price": 3.061,
-    "day_5_price": 3.056,
+    "day_3_price": 3.07,
+    "day_4_price": 3.062,
+    "day_5_price": 3.053,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.015,
+        "delta_dollars": -0.016,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -57,7 +57,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.011,
+        "delta_dollars": -0.012,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -73,7 +73,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.004,
+        "delta_dollars": -0.005,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
@@ -96,21 +96,21 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Cincinnati OH forecast $-0.044/gal (-1.42%): Driven primarily by Regional Logistics & Hub Delivery ($-0.015/gal), Refining Yield & Crack Spread ($-0.011/gal).",
+      "summary_text": "Cincinnati OH forecast $-0.047/gal (-1.52%): Driven primarily by Regional Logistics & Hub Delivery ($-0.016/gal), Refining Yield & Crack Spread ($-0.012/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
-          "impact_dollars": -0.015,
-          "impact_pct": -0.48,
+          "impact_dollars": -0.016,
+          "impact_pct": -0.52,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
-          "impact_dollars": -0.011,
-          "impact_pct": -0.35,
+          "impact_dollars": -0.012,
+          "impact_pct": -0.39,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -125,8 +125,8 @@
         {
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
-          "impact_dollars": -0.004,
-          "impact_pct": -0.13,
+          "impact_dollars": -0.005,
+          "impact_pct": -0.16,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -153,16 +153,16 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
-      "impact_dollars": -0.015,
-      "impact_pct": -0.48,
+      "impact_dollars": -0.016,
+      "impact_pct": -0.52,
       "share_pct": 35.0,
       "direction": "DOWN"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
-      "impact_dollars": -0.011,
-      "impact_pct": -0.35,
+      "impact_dollars": -0.012,
+      "impact_pct": -0.39,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -177,8 +177,8 @@
     {
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
-      "impact_dollars": -0.004,
-      "impact_pct": -0.13,
+      "impact_dollars": -0.005,
+      "impact_pct": -0.16,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
@@ -200,12 +200,12 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Cincinnati OH forecast $-0.044/gal (-1.42%): Driven primarily by Regional Logistics & Hub Delivery ($-0.015/gal), Refining Yield & Crack Spread ($-0.011/gal).",
+    "summary_text": "Cincinnati OH forecast $-0.047/gal (-1.52%): Driven primarily by Regional Logistics & Hub Delivery ($-0.016/gal), Refining Yield & Crack Spread ($-0.012/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": -0.015,
+        "delta_dollars": -0.016,
         "share_pct": 35.0,
         "direction": "DOWN",
         "description": "Ecodeveloped pipeline loading flows"
@@ -213,7 +213,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": -0.011,
+        "delta_dollars": -0.012,
         "share_pct": 25.0,
         "direction": "DOWN",
         "description": "Narrowing refining margins and elevated product yield"
@@ -229,7 +229,7 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": -0.004,
+        "delta_dollars": -0.005,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Tax relief or off-peak RVP specification"
