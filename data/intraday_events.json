@@ -10347,5 +10347,32 @@
       "overall_price_pressure": 0.8
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-22T09:40:42.349852",
+    "headline": "Two tankers hit in Strait of Hormuz as hawks press Trump to resume Iran strikes",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOZ0VzSEdkMFJlclR3UnhCVFVBa0dKWVF4SEd2Zzk3M0t1NW5GZWI4U2Q4T28xS1dtNXdVTl90VzJfQ0RCVE9rdENDWk93MHpTTGtzaU9lQ29BS2ZaVklnZzhMY2tYeTBhV3hnWlhNYmdWRE1yd0N5X1hELTNubmtiU2k4bXI5T3BHTGlONjRyajFsckY0MVZUSmFicWhQazBuM1dkRlU2OEI0MXpUWUZvM2tkVWpWUUxzR2U3TUJR?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOZ0VzSEdkMFJlclR3UnhCVFVBa0dKWVF4SEd2Zzk3M0t1NW5GZWI4U2Q4T28xS1dtNXdVTl90VzJfQ0RCVE9rdENDWk93MHpTTGtzaU9lQ29BS2ZaVklnZzhMY2tYeTBhV3hnWlhNYmdWRE1yd0N5X1hELTNubmtiU2k4bXI5T3BHTGlONjRyajFsckY0MVZUSmFicWhQazBuM1dkRlU2OEI0MXpUWUZvM2tkVWpWUUxzR2U3TUJR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxOZ0VzSEdkMFJlclR3UnhCVFVBa0dKWVF4SEd2Zzk3M0t1NW5GZWI4U2Q4T28xS1dtNXdVTl90VzJfQ0RCVE9rdENDWk93MHpTTGtzaU9lQ29BS2ZaVklnZzhMY2tYeTBhV3hnWlhNYmdWRE1yd0N5X1hELTNubmtiU2k4bXI5T3BHTGlONjRyajFsckY0MVZUSmFicWhQazBuM1dkRlU2OEI0MXpUWUZvM2tkVWpWUUxzR2U3TUJR?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.65,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.65,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.72
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Tankers hit in Strait of Hormuz as Iran tightens grip on shipping",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.4,
+    "duplicate_review_notified": false
   }
 ]
