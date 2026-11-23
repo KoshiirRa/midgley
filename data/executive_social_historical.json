@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-22 02:35:34",
-  "records_count": 29,
+  "last_refreshed_utc": "2026-11-23 03:20:16",
+  "records_count": 39,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -244,52 +244,152 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-22 02:30:54",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
-      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-22 02:30:54",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-22 02:30:54",
-      "platform": "Google News RSS",
-      "post_text": "Canada Builds an Energy Exit From the U.S. - Crude Oil Prices Today | OilPrice.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-22 02:30:54",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-22 02:30:54",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
       "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:02:36",
+      "platform": "Google News RSS",
+      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:02:36",
+      "platform": "Google News RSS",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:18:29",
+      "platform": "Google News RSS",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
       "actual_1d_crude_return_pct": 0.0,
       "actual_1d_rbob_return_pct": 0.0
     }
