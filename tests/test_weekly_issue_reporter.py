@@ -297,3 +297,211 @@ def test_heuristic_filters_false_positive_and_cross_repo_and_avoids_saturation()
     assert res["ranking"][0]["impact_score"] > res["ranking"][1]["impact_score"]
 
 
+def test_load_prediction_records_csv_fallback_filters_test_regions(tmp_path):
+    """Verify CSV fallback path purges Test_Region/Test_* artifacts consistently with DB path (Issue #737)."""
+    from src.weekly_issue_reporter import load_prediction_records
+    import pandas as pd
+
+    csv_file = tmp_path / "fallback_history.csv"
+    pd.DataFrame([
+        {
+            "forecast_id": "f_tulsa",
+            "region": "Tulsa_OK",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.186,
+            "predicted_5d_price": 3.089,
+            "run_type": "LIVE_PROSPECTIVE",
+        },
+        {
+            "forecast_id": "f_test",
+            "region": "Test_Region",
+            "forecast_target_date": "2026-01-15",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.550,
+            "predicted_5d_price": 3.550,
+            "run_type": "LIVE_PROSPECTIVE",
+        },
+    ]).to_csv(csv_file, index=False)
+
+    with patch("src.db.client.get_db", side_effect=RuntimeError("DB unavailable")):
+        df = load_prediction_records(str(csv_file))
+
+    assert list(df["region"].unique()) == ["Tulsa_OK"]
+
+
+def test_load_prediction_records_horizon_aware_enrichment_and_missing_base_preservation(tmp_path):
+    """Verify CSV enrichment respects horizon and preserves genuine NaN base prices without fabrication (Issue #737)."""
+    from src.weekly_issue_reporter import load_prediction_records
+    import pandas as pd
+
+    csv_file = tmp_path / "horizon_enrich.csv"
+    pd.DataFrame([
+        {
+            "forecast_id": "csv_1d",
+            "region": "National",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 1,
+            "current_base_price": 2.999,
+            "predicted_5d_price": 3.010,
+        },
+        {
+            "forecast_id": "csv_5d",
+            "region": "National",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "current_base_price": 2.482,
+            "predicted_5d_price": 2.450,
+        },
+    ]).to_csv(csv_file, index=False)
+
+    mock_db = MagicMock()
+    mock_db.execute.return_value = [
+        {
+            "forecast_id": "db_5d_different_id",
+            "region": "National",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-11-22",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "predicted_5d_price": 2.450,
+            "point_in_time_features": None,
+            "run_type": "LIVE_PROSPECTIVE",
+        },
+        {
+            "forecast_id": "db_missing_base",
+            "region": "Boston_MA",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-11-22",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "predicted_5d_price": 3.754,
+            "point_in_time_features": None,
+            "run_type": "LIVE_PROSPECTIVE",
+        },
+    ]
+
+    with patch("src.db.client.get_db", return_value=mock_db):
+        df = load_prediction_records(str(csv_file))
+
+    nat_row = df[df["region"] == "National"].iloc[0]
+    bos_row = df[df["region"] == "Boston_MA"].iloc[0]
+    assert abs(float(nat_row["current_base_price"]) - 2.482) < 1e-6
+    assert pd.isna(bos_row["current_base_price"])
+
+
+def test_active_latest_forecasts_filters_stale_retired_test_and_fixes_directions():
+    """Verify Active 5-Day table excludes stale/retired/test/backtest rows and computes UP/DOWN/FLAT/N/A accurately (Issue #737)."""
+    import pandas as pd
+    import numpy as np
+    from src.weekly_issue_reporter import _select_active_latest_forecasts, _format_projected_direction
+
+    df = pd.DataFrame([
+        # Retired region (even if future target date were somehow present)
+        {
+            "region": "Greenville_NC",
+            "log_timestamp": "2026-10-16 00:31:06",
+            "forecast_target_date": "2026-10-21",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.691,
+            "predicted_5d_price": 3.691,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        # Test artifact
+        {
+            "region": "Test_Region",
+            "log_timestamp": "2026-01-10 00:00:00",
+            "forecast_target_date": "2026-01-15",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.550,
+            "predicted_5d_price": 3.550,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        # Stale past target date for active region
+        {
+            "region": "Denver_CO",
+            "log_timestamp": "2026-10-01 00:00:00",
+            "forecast_target_date": "2026-10-08",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.300,
+            "predicted_5d_price": 3.250,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        # Active UP forecast (placed BEFORE an older row to test chronological sorting)
+        {
+            "region": "National",
+            "log_timestamp": "2026-11-22 05:00:00",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "current_base_price": 2.482,
+            "predicted_5d_price": 2.520,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        {
+            "region": "National",
+            "log_timestamp": "2026-11-19 05:00:00",
+            "forecast_target_date": "2026-11-25",
+            "forecast_horizon_days": 5,
+            "current_base_price": 2.500,
+            "predicted_5d_price": 2.400,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        # Active DOWN forecast
+        {
+            "region": "Boston_MA",
+            "log_timestamp": "2026-11-22 05:00:00",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.882,
+            "predicted_5d_price": 3.754,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        # Active FLAT forecast (zero delta)
+        {
+            "region": "Phoenix_AZ",
+            "log_timestamp": "2026-11-22 05:00:00",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.899,
+            "predicted_5d_price": 3.899,
+            "run_type": "LIVE_PROSPECTIVE",
+            "is_retroactive_backtest": False,
+        },
+        # Retroactive backtest with future-looking date should be ignored
+        {
+            "region": "Tulsa_OK",
+            "log_timestamp": "2026-11-22 05:00:00",
+            "forecast_target_date": "2026-11-30",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.100,
+            "predicted_5d_price": 3.500,
+            "run_type": "RETROSPECTIVE_BACKTEST",
+            "is_retroactive_backtest": True,
+        },
+    ])
+
+    active = _select_active_latest_forecasts(df, today_str="2026-11-23")
+    regions = set(active["region"].tolist())
+    assert regions == {"National", "Boston_MA", "Phoenix_AZ"}
+    assert "Greenville_NC" not in regions
+    assert "Test_Region" not in regions
+    assert "Denver_CO" not in regions
+    assert "Tulsa_OK" not in regions
+
+    nat = active[active["region"] == "National"].iloc[0]
+    bos = active[active["region"] == "Boston_MA"].iloc[0]
+    phx = active[active["region"] == "Phoenix_AZ"].iloc[0]
+    assert nat["forecast_target_date"] == "2026-11-30"
+    assert _format_projected_direction(nat["current_base_price"], nat["predicted_5d_price"]) == "UP 📈"
+    assert _format_projected_direction(bos["current_base_price"], bos["predicted_5d_price"]) == "DOWN 📉"
+    assert _format_projected_direction(phx["current_base_price"], phx["predicted_5d_price"]) == "FLAT ➡️"
+    assert _format_projected_direction(np.nan, 3.50) == "N/A"
+
+
+

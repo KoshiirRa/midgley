@@ -40,6 +40,22 @@ PREDICTION_HISTORY_DTYPES = {
 }
 
 
+def classify_price_direction(
+    target_price: float,
+    base_price: float,
+    tolerance: float = 1e-4
+) -> str:
+    """
+    Classifies directional price movement using a symmetric deadband tolerance.
+    Returns 'UP', 'DOWN', or 'FLAT' (avoiding >= defaulting zero-delta predictions to 'UP').
+    """
+    if target_price > base_price + tolerance:
+        return "UP"
+    if target_price < base_price - tolerance:
+        return "DOWN"
+    return "FLAT"
+
+
 def read_prediction_history(path: str = HISTORY_CSV_PATH) -> pd.DataFrame:
     """
     Safely reads prediction_history.csv with standardized column dtypes and low_memory=False
@@ -509,7 +525,7 @@ def log_predictions(
     for idx, row in predictions_df.iterrows():
         base_price = float(row['current_price'])
         pred_price = float(row['predicted_5d_price'])
-        pred_dir = "UP" if pred_price >= base_price else "DOWN"
+        pred_dir = classify_price_direction(pred_price, base_price)
         
         # Determine forecast horizon
         row_h = row.get('forecast_horizon_days', row.get('horizon_days', row.get('horizon', forecast_horizon_days)))
@@ -951,7 +967,7 @@ def backfill_actual_prices_and_evaluate(
                     source_prov = f"eia_retail_feed:{reg}"
 
         if actual_price is not None:
-            actual_dir = "UP" if actual_price >= base_price else "DOWN"
+            actual_dir = classify_price_direction(actual_price, base_price)
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0
 
