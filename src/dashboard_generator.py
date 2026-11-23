@@ -2024,9 +2024,9 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">Empirical Residual 95% Confidence Intervals (Issue #214):</p>
-                    <p class="text-blue-300">$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$</p>
-                    <p class="text-slate-400 text-[11px]">Derives dynamic 95% confidence bands from rolling 30-day regional residual standard errors.</p>
+                    <p class="text-amber-300 font-bold">Adaptive Conformal &amp; RMSE 95% Prediction Intervals (Issues #214, #449, #732):</p>
+                    <p class="text-blue-300">$$\\alpha_{{t+1}} = \\alpha_t + \\gamma(\\alpha^* - \\text{{miss}}_t), \\quad \\text{{PI}}_{{95\\%}} = \\hat{{y}}_{{t+h}} \\pm \\max\\!\\left(q_{{1-\\alpha_t}}(|e|),\\; t_{{1-\\alpha_t/2}} \\cdot \\text{{RMSE}}_r\\right)$$</p>
+                    <p class="text-slate-400 text-[11px]">Computes point-in-time Adaptive Conformal Inference (ACI) prediction bands with a Student-$t$ RMSE small-sample and distribution-shift floor.</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
@@ -2222,8 +2222,8 @@ $$P_{{10}} = P_{{50}} - 1.2815\\sigma, \\quad P_{{90}} = P_{{50}} + 1.2815\\sigm
 ### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
 $$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$
 
-### Empirical Residual 95% Confidence Intervals (Issue #214)
-$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$
+### Adaptive Conformal & RMSE 95% Prediction Intervals (Issues #214, #449, #732)
+$$\\alpha_{{t+1}} = \\alpha_t + \\gamma(\\alpha^* - \\text{{miss}}_t), \\quad \\text{{PI}}_{{95\\%}} = \\hat{{y}}_{{t+h}} \\pm \\max\\!\\left(q_{{1-\\alpha_t}}(|e|),\\; t_{{1-\\alpha_t/2}} \\cdot \\text{{RMSE}}_r\\right)$$
 
 ### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
 $$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$
