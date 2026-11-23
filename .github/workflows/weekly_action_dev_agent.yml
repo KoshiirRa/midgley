@@ -86,7 +86,7 @@ jobs:
           TESTING: "1"
         run: |
           set -o pipefail
-          export PATH="$HOME/.local/bin:$PATH"
+          export PATH="$HOME/.midgley-venv/bin:$HOME/.local/bin:$PATH"
           BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
           git config user.name "midgley-dev-agent[bot]"
           git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
@@ -109,7 +109,39 @@ jobs:
 
           TIMED_OUT="false"
           set +e
-          timeout 40m agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" < /dev/null | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+          timeout 40m agy --dangerously-skip-permissions --output-format stream-json -p "$(cat "$PROMPT_FILE")" < /dev/null \
+            | tee "/tmp/agy_out_${ISSUE_NUMBER}.log" \
+            | python3 -u -c '
+          import json, sys
+          for raw in sys.stdin:
+              line = raw.strip()
+              if not line:
+                  continue
+              try:
+                  ev = json.loads(line)
+              except Exception:
+                  print(line, flush=True)
+                  continue
+              etype = ev.get("type", "")
+              if etype in ("tool_use", "tool_call"):
+                  name = ev.get("tool_name") or ev.get("name") or "tool"
+                  params = json.dumps(ev.get("parameters") or ev.get("input") or {})[:180]
+                  print(f"🔧 [tool_use] {name} {params}", flush=True)
+              elif etype == "tool_result":
+                  status = ev.get("status", "ok")
+                  out = str(ev.get("output") or "")[:180].replace("\n", " ")
+                  icon = "✅" if status == "success" else "⚠️"
+                  print(f"{icon} [tool_result] ({status}) {out}", flush=True)
+              elif etype in ("message", "assistant", "text"):
+                  content = str(ev.get("content") or ev.get("text") or "").strip()
+                  if content:
+                      print(f"💬 {content[:400]}", flush=True)
+              elif etype == "result":
+                  st = ev.get("status") or "done"
+                  print(f"📊 [done] status={st}", flush=True)
+              elif etype == "error":
+                  print(f"❌ [error] {ev}", flush=True)
+          '
           AGENT_EXIT=$?
           set -e
 

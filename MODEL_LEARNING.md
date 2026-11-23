@@ -1,6 +1,6 @@
 # 🧠 Model Learning, Adaptation & Longitudinal Evolution Journal
 
-> **Last Evaluated & Synced:** `2026-11-20 03:58 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
+> **Last Evaluated & Synced:** `2026-11-22 23:26 UTC` | **Repository Architecture:** `v1.6 Ipatieff`
 
 This journal tracks and documents how Midgley's multi-agent quantitative and LLM system learns, recalibrates, and adapts over time through **Rolling Ridge Re-weighting**, **Episodic Outlier Reflection (Retain-Recall-Reflect)**, and **Sapient PRAXIST Autonomous Hypothesis Testing**.
 
@@ -10,18 +10,18 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 
 | Time Window | Evaluations | Model MAE | Naive Baseline MAE | Model Uplift vs. Naive | Directional Hit Rate | LLM Win Rate | Status |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **7-Day Window** | 1000 | `$0.2737/gal` | `$0.2787/gal` | **`+1.80%`** | **`62.30%`** | `27.2%` | 🟢 Optimal |
-| **14-Day Window** | 1714 | `$0.2708/gal` | `$0.2751/gal` | **`+1.56%`** | **`57.29%`** | `23.8%` | 🟢 Optimal |
-| **30-Day Window** | 3697 | `$0.2576/gal` | `$0.2607/gal` | **`+1.19%`** | **`47.63%`** | `18.9%` | 🟢 Optimal |
-| **90-Day Window** | 6973 | `$0.2405/gal` | `$0.2354/gal` | `-2.15%` | **`48.10%`** | `27.7%` | ⚠️ Calibration Active |
-| **All-Time Window** | 19311 | `$0.2854/gal` | `$0.2908/gal` | **`+1.87%`** | **`48.25%`** | `31.9%` | 🟢 Optimal |
+| **7-Day Window** | 1008 | `$0.2727/gal` | `$0.2771/gal` | **`+1.56%`** | **`61.90%`** | `27.3%` | 🟢 Optimal |
+| **14-Day Window** | 1722 | `$0.2703/gal` | `$0.2742/gal` | **`+1.42%`** | **`57.08%`** | `23.9%` | 🟢 Optimal |
+| **30-Day Window** | 3705 | `$0.2573/gal` | `$0.2603/gal` | **`+1.12%`** | **`47.56%`** | `18.9%` | 🟢 Optimal |
+| **90-Day Window** | 6981 | `$0.2404/gal` | `$0.2352/gal` | `-2.19%` | **`48.06%`** | `27.8%` | ⚠️ Calibration Active |
+| **All-Time Window** | 19319 | `$0.2853/gal` | `$0.2907/gal` | **`+1.85%`** | **`48.24%`** | `31.9%` | 🟢 Optimal |
 
 ---
 
 ## 🔬 Sapient PRAXIST Parameter Evolution & Hypothesis Ledger
 
-- **Total Hypotheses Evaluated:** `17`
-- **Accepted Hypotheses in Production:** `11`
+- **Total Hypotheses Evaluated:** `18`
+- **Accepted Hypotheses in Production:** `12`
 - **Active Calibrated Baseline Parameters:**
   - Exogenous Shock Half-Life ($t_{1/2}$): **`4.5 days`**
   - Geopolitical Shock Weight: **`0.35`**
@@ -50,12 +50,13 @@ This journal tracks and documents how Midgley's multi-agent quantitative and LLM
 | `2026-10-31` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 | `2026-11-07` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 | `2026-11-14` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
+| `2026-11-21` | **`Weekly_Exogenous_Decay_Validation`** | $t_{1/2}=4.8\text{d}, W_{wknd}=1.45\times$ | `$0.1390` | `$0.1379` | `-0.0011` | $t=2.84$ ($p=0.0217$) | 🟢 **ACCEPTED** |
 
 ---
 
 ## 🧠 Episodic Qualitative Failure Modes & Reflection Archive
 
-Total indexed episodic memories in local store: **`2181`** | Total synthesized reflections: **`19`**
+Total indexed episodic memories in local store: **`0`** | Total synthesized reflections: **`0`**
 
 ### 📂 Categorized Anomaly Case Studies
 
@@ -68,37 +69,11 @@ _No anomalies logged in this category._
 #### 🏷️ Pipeline / Waterway Constraint (0 case studies)
 _No anomalies logged in this category._
 
-#### 🏷️ Geopolitical & OPEC Shock (4 case studies)
-- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
+#### 🏷️ Geopolitical & OPEC Shock (0 case studies)
+_No anomalies logged in this category._
 
-- **Newark_DE Price Discrepancy ($+0.7166/gal)** (`Newark_DE` | `2026-10-03`)
-  - **Root Cause:** Model underestimated price surge by -$0.7166/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-23 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-- **Newark_DE Price Discrepancy ($+0.6802/gal)** (`Newark_DE` | `2026-10-01`)
-  - **Root Cause:** Model underestimated price surge by -$0.6802/gal. Physical supply constraints or rack margin spikes expanded faster than captured by baseline futures curves. Associated context: 'Historical shock record on 2026-09-25 (Newark_DE)'.
-  - **Historical Analogy:** Similar to historical Newark_DE turnaround shocks where market pricing normalized post-event.
-  - **Calibration Suggestion:** `Increase Cushing/PADD crack spread momentum weight or verify local NOAA freeze alerts.`
-
-#### 🏷️ Price Discrepancy & General Outliers (8 case studies)
-- **Anomaly Post-Mortem** (`None` | `2026-11-14`)
-  - **Root Cause:** 
-  - **Historical Analogy:** 
-  - **Calibration Suggestion:** ``
-
-- **Anomaly Post-Mortem** (`None` | `2026-11-07`)
-  - **Root Cause:** 
-  - **Historical Analogy:** 
-  - **Calibration Suggestion:** ``
-
-- **Anomaly Post-Mortem** (`None` | `2026-10-31`)
-  - **Root Cause:** 
-  - **Historical Analogy:** 
-  - **Calibration Suggestion:** ``
+#### 🏷️ Price Discrepancy & General Outliers (0 case studies)
+_No anomalies logged in this category._
 
 ---
 

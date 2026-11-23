@@ -1,11 +1,10 @@
 {
   "created_at": "2026-09-05 04:38:50",
-  "last_updated": "2026-11-14 19:16:28",
-  "total_alerts_logged": 24,
+  "last_updated": "2026-11-21 20:49:23",
+  "total_alerts_logged": 25,
   "active_degraded_regions": [
     "Charlotte_NC",
     "Cincinnati_KY",
-    "Cincinnati_OH",
     "Greenville_NC",
     "National",
     "Newark_DE",
@@ -894,6 +893,62 @@
           "model_mae": 0.2922,
           "naive_mae": 0.2847,
           "model_uplift_mae_pct": -2.62,
+          "status": "DEGRADED"
+        }
+      ],
+      "github_issue_url": null,
+      "webhook_sent": false
+    },
+    {
+      "timestamp": "2026-11-21 20:49:23",
+      "is_degraded": true,
+      "degraded_regions": [
+        {
+          "region": "Charlotte_NC",
+          "evaluations": 178,
+          "model_mae": 0.2955,
+          "naive_mae": 0.2813,
+          "model_uplift_mae_pct": -5.04,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Cincinnati_KY",
+          "evaluations": 178,
+          "model_mae": 0.1535,
+          "naive_mae": 0.135,
+          "model_uplift_mae_pct": -13.72,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Greenville_NC",
+          "evaluations": 120,
+          "model_mae": 0.1354,
+          "naive_mae": 0.0922,
+          "model_uplift_mae_pct": -46.83,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "National",
+          "evaluations": 178,
+          "model_mae": 0.1395,
+          "naive_mae": 0.1227,
+          "model_uplift_mae_pct": -13.74,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Newark_DE",
+          "evaluations": 178,
+          "model_mae": 0.2806,
+          "naive_mae": 0.2655,
+          "model_uplift_mae_pct": -5.68,
+          "status": "DEGRADED"
+        },
+        {
+          "region": "Tulsa_OK",
+          "evaluations": 178,
+          "model_mae": 0.3322,
+          "naive_mae": 0.3084,
+          "model_uplift_mae_pct": -7.73,
           "status": "DEGRADED"
         }
       ],
