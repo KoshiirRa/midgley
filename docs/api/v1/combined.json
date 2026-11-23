@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-11-23T03:21:15.408610",
+  "timestamp": "2026-11-23T20:01:32.487457",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:13.419064",
+      "timestamp": "2026-11-23T20:01:29.738875",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -12,7 +12,7 @@
         "padd_region": "US National"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.705,
+        "current_price_per_gal": 3.688,
         "source": "AAA National Daily CSV (US Average)",
         "provenance": {
           "source": "AAA National Daily CSV (US Average)",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:21:12Z"
+          "timestamp": "2026-11-23T20:01:29Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -32,23 +32,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 3.705,
-        "predicted_price_per_gal": 3.749,
+        "current_base_price": 3.688,
+        "predicted_price_per_gal": 3.732,
         "expected_change_dollars": 0.044,
         "expected_change_percent": 1.19,
         "projected_direction": "UP",
-        "prediction_lower_95ci": 3.389,
-        "prediction_upper_95ci": 4.109,
+        "prediction_lower_95ci": 3.372,
+        "prediction_upper_95ci": 4.092,
         "calibration_method": "conformal",
         "calibration_sample_size": 60,
         "directional_hit_rate_historical": 0.5,
         "historical_mae_dollars": 0.1707,
         "evaluation_sample_size": 38,
-        "day_1_price": 3.714,
-        "day_2_price": 3.724,
-        "day_3_price": 3.722,
-        "day_4_price": 3.723,
-        "day_5_price": 3.749,
+        "day_1_price": 3.697,
+        "day_2_price": 3.707,
+        "day_3_price": 3.705,
+        "day_4_price": 3.706,
+        "day_5_price": 3.732,
         "feature_attributions": {
           "futures_commodity": {
             "name": "Futures & Commodity Benchmark",
@@ -259,7 +259,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:13.686232",
+      "timestamp": "2026-11-23T20:01:30.113450",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -267,7 +267,7 @@
         "padd_region": "PADD 2 Midwest"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.115,
+        "current_price_per_gal": 3.088,
         "source": "AAA Metro Daily CSV (Tulsa, OK)",
         "provenance": {
           "source": "AAA Metro Daily CSV (Tulsa, OK)",
@@ -277,7 +277,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:42Z"
+          "timestamp": "2026-11-23T20:00:50Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -287,23 +287,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 3.115,
-        "predicted_price_per_gal": 3.019,
+        "current_base_price": 3.088,
+        "predicted_price_per_gal": 2.992,
         "expected_change_dollars": -0.096,
-        "expected_change_percent": -3.08,
+        "expected_change_percent": -3.11,
         "projected_direction": "DOWN",
-        "prediction_lower_95ci": 2.848,
-        "prediction_upper_95ci": 3.19,
+        "prediction_lower_95ci": 2.821,
+        "prediction_upper_95ci": 3.163,
         "calibration_method": "conformal",
         "calibration_sample_size": 61,
         "directional_hit_rate_historical": 0.6452,
         "historical_mae_dollars": 0.3258,
         "evaluation_sample_size": 31,
-        "day_1_price": 3.096,
-        "day_2_price": 3.073,
-        "day_3_price": 3.055,
-        "day_4_price": 3.037,
-        "day_5_price": 3.019,
+        "day_1_price": 3.069,
+        "day_2_price": 3.046,
+        "day_3_price": 3.028,
+        "day_4_price": 3.01,
+        "day_5_price": 2.992,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -355,13 +355,13 @@
           }
         },
         "driver_breakdown": {
-          "summary_text": "Tulsa OK forecast $-0.096/gal (-3.08%): Driven primarily by Regional Logistics & Hub Delivery ($-0.029/gal), Refining Yield & Crack Spread ($-0.029/gal).",
+          "summary_text": "Tulsa OK forecast $-0.096/gal (-3.11%): Driven primarily by Regional Logistics & Hub Delivery ($-0.029/gal), Refining Yield & Crack Spread ($-0.029/gal).",
           "key_drivers": [
             {
               "category": "Regional Logistics & Hub Delivery",
               "description": "Ecodeveloped pipeline loading flows",
               "impact_dollars": -0.029,
-              "impact_pct": -0.93,
+              "impact_pct": -0.94,
               "share_pct": 30.0,
               "direction": "DOWN"
             },
@@ -369,7 +369,7 @@
               "category": "Refining Yield & Crack Spread",
               "description": "Narrowing refining margins and elevated product yield",
               "impact_dollars": -0.029,
-              "impact_pct": -0.93,
+              "impact_pct": -0.94,
               "share_pct": 30.0,
               "direction": "DOWN"
             },
@@ -377,7 +377,7 @@
               "category": "Futures & Commodity Benchmark",
               "description": "Softening NYMEX energy futures contract prices",
               "impact_dollars": -0.024,
-              "impact_pct": -0.77,
+              "impact_pct": -0.78,
               "share_pct": 25.0,
               "direction": "DOWN"
             },
@@ -413,7 +413,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.029,
-          "impact_pct": -0.93,
+          "impact_pct": -0.94,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -421,7 +421,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.029,
-          "impact_pct": -0.93,
+          "impact_pct": -0.94,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -429,7 +429,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.024,
-          "impact_pct": -0.77,
+          "impact_pct": -0.78,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -459,7 +459,7 @@
         }
       ],
       "driver_breakdown": {
-        "summary_text": "Tulsa OK forecast $-0.096/gal (-3.08%): Driven primarily by Regional Logistics & Hub Delivery ($-0.029/gal), Refining Yield & Crack Spread ($-0.029/gal).",
+        "summary_text": "Tulsa OK forecast $-0.096/gal (-3.11%): Driven primarily by Regional Logistics & Hub Delivery ($-0.029/gal), Refining Yield & Crack Spread ($-0.029/gal).",
         "components": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -514,7 +514,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:13.956106",
+      "timestamp": "2026-11-23T20:01:30.487335",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -522,7 +522,7 @@
         "padd_region": "PADD 5 West Coast"
       },
       "live_lookup": {
-        "current_price_per_gal": 5.518,
+        "current_price_per_gal": 5.509,
         "source": "AAA Metro Daily CSV (Oakland, CA)",
         "provenance": {
           "source": "AAA Metro Daily CSV (Oakland, CA)",
@@ -532,7 +532,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:43Z"
+          "timestamp": "2026-11-23T20:00:55Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -542,23 +542,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 5.518,
-        "predicted_price_per_gal": 5.437,
+        "current_base_price": 5.509,
+        "predicted_price_per_gal": 5.428,
         "expected_change_dollars": -0.081,
         "expected_change_percent": -1.47,
         "projected_direction": "DOWN",
-        "prediction_lower_95ci": 5.302,
-        "prediction_upper_95ci": 5.572,
+        "prediction_lower_95ci": 5.293,
+        "prediction_upper_95ci": 5.563,
         "calibration_method": "conformal",
         "calibration_sample_size": 61,
         "directional_hit_rate_historical": 0.3548,
         "historical_mae_dollars": 0.2846,
         "evaluation_sample_size": 31,
-        "day_1_price": 5.502,
-        "day_2_price": 5.485,
-        "day_3_price": 5.468,
-        "day_4_price": 5.45,
-        "day_5_price": 5.437,
+        "day_1_price": 5.493,
+        "day_2_price": 5.476,
+        "day_3_price": 5.459,
+        "day_4_price": 5.441,
+        "day_5_price": 5.428,
         "feature_attributions": {
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
@@ -640,7 +640,7 @@
               "category": "Unstructured Intelligence & Sentiment",
               "description": "OPEC price pressure talkdown & dovish geopolitical news",
               "impact_dollars": -0.008,
-              "impact_pct": -0.14,
+              "impact_pct": -0.15,
               "share_pct": 10.0,
               "direction": "DOWN"
             },
@@ -692,7 +692,7 @@
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
           "impact_dollars": -0.008,
-          "impact_pct": -0.14,
+          "impact_pct": -0.15,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -769,7 +769,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:14.227941",
+      "timestamp": "2026-11-23T20:01:30.857705",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -777,7 +777,7 @@
         "padd_region": "PADD 1B Central Atlantic"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.692,
+        "current_price_per_gal": 3.681,
         "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
         "provenance": {
           "source": "AAA Metro Daily CSV (Wilmington-Newark (DE only), DE)",
@@ -787,7 +787,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:42Z"
+          "timestamp": "2026-11-23T20:00:51Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -797,23 +797,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 3.692,
-        "predicted_price_per_gal": 3.764,
+        "current_base_price": 3.681,
+        "predicted_price_per_gal": 3.753,
         "expected_change_dollars": 0.072,
-        "expected_change_percent": 1.95,
+        "expected_change_percent": 1.96,
         "projected_direction": "UP",
-        "prediction_lower_95ci": 3.405,
-        "prediction_upper_95ci": 4.123,
+        "prediction_lower_95ci": 3.394,
+        "prediction_upper_95ci": 4.112,
         "calibration_method": "conformal",
         "calibration_sample_size": 61,
         "directional_hit_rate_historical": 0.3871,
         "historical_mae_dollars": 0.2707,
         "evaluation_sample_size": 31,
-        "day_1_price": 3.706,
-        "day_2_price": 3.723,
-        "day_3_price": 3.72,
-        "day_4_price": 3.723,
-        "day_5_price": 3.764,
+        "day_1_price": 3.695,
+        "day_2_price": 3.712,
+        "day_3_price": 3.709,
+        "day_4_price": 3.712,
+        "day_5_price": 3.753,
         "feature_attributions": {
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
@@ -865,7 +865,7 @@
           }
         },
         "driver_breakdown": {
-          "summary_text": "Newark DE forecast +$0.072/gal (+1.95%): Driven primarily by Refining Yield & Crack Spread (+$0.025/gal), Regional Logistics & Hub Delivery (+$0.018/gal).",
+          "summary_text": "Newark DE forecast +$0.072/gal (+1.96%): Driven primarily by Refining Yield & Crack Spread (+$0.025/gal), Regional Logistics & Hub Delivery (+$0.018/gal).",
           "key_drivers": [
             {
               "category": "Refining Yield & Crack Spread",
@@ -969,7 +969,7 @@
         }
       ],
       "driver_breakdown": {
-        "summary_text": "Newark DE forecast +$0.072/gal (+1.95%): Driven primarily by Refining Yield & Crack Spread (+$0.025/gal), Regional Logistics & Hub Delivery (+$0.018/gal).",
+        "summary_text": "Newark DE forecast +$0.072/gal (+1.96%): Driven primarily by Refining Yield & Crack Spread (+$0.025/gal), Regional Logistics & Hub Delivery (+$0.018/gal).",
         "components": {
           "refining_crack_margin": {
             "name": "Refining Yield & Crack Spread",
@@ -1024,7 +1024,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:14.499059",
+      "timestamp": "2026-11-23T20:01:31.233338",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1032,7 +1032,7 @@
         "padd_region": "PADD 2 Midwest"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.1,
+        "current_price_per_gal": 3.058,
         "source": "AAA Metro Daily CSV (Cincinnati (OH only), OH)",
         "provenance": {
           "source": "AAA Metro Daily CSV (Cincinnati (OH only), OH)",
@@ -1042,7 +1042,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:42Z"
+          "timestamp": "2026-11-23T20:00:51Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1052,23 +1052,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 3.1,
-        "predicted_price_per_gal": 3.049,
-        "expected_change_dollars": -0.051,
-        "expected_change_percent": -1.65,
+        "current_base_price": 3.058,
+        "predicted_price_per_gal": 3.006,
+        "expected_change_dollars": -0.052,
+        "expected_change_percent": -1.7,
         "projected_direction": "DOWN",
-        "prediction_lower_95ci": 2.595,
-        "prediction_upper_95ci": 3.503,
+        "prediction_lower_95ci": 2.552,
+        "prediction_upper_95ci": 3.46,
         "calibration_method": "conformal",
         "calibration_sample_size": 58,
         "directional_hit_rate_historical": 0.4839,
         "historical_mae_dollars": 0.1802,
         "evaluation_sample_size": 31,
-        "day_1_price": 3.09,
-        "day_2_price": 3.077,
-        "day_3_price": 3.068,
-        "day_4_price": 3.057,
-        "day_5_price": 3.049,
+        "day_1_price": 3.048,
+        "day_2_price": 3.035,
+        "day_3_price": 3.026,
+        "day_4_price": 3.015,
+        "day_5_price": 3.006,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1113,20 +1113,20 @@
           "unstructured_sentiment": {
             "name": "Unstructured Intelligence & Sentiment",
             "category": "unstructured_sentiment",
-            "delta_dollars": -0.002,
+            "delta_dollars": -0.003,
             "share_pct": 5.0,
             "direction": "DOWN",
             "description": "OPEC price pressure talkdown & dovish geopolitical news"
           }
         },
         "driver_breakdown": {
-          "summary_text": "Cincinnati OH forecast $-0.051/gal (-1.65%): Driven primarily by Regional Logistics & Hub Delivery ($-0.018/gal), Refining Yield & Crack Spread ($-0.013/gal).",
+          "summary_text": "Cincinnati OH forecast $-0.052/gal (-1.70%): Driven primarily by Regional Logistics & Hub Delivery ($-0.018/gal), Refining Yield & Crack Spread ($-0.013/gal).",
           "key_drivers": [
             {
               "category": "Regional Logistics & Hub Delivery",
               "description": "Ecodeveloped pipeline loading flows",
               "impact_dollars": -0.018,
-              "impact_pct": -0.58,
+              "impact_pct": -0.59,
               "share_pct": 35.0,
               "direction": "DOWN"
             },
@@ -1134,7 +1134,7 @@
               "category": "Refining Yield & Crack Spread",
               "description": "Narrowing refining margins and elevated product yield",
               "impact_dollars": -0.013,
-              "impact_pct": -0.42,
+              "impact_pct": -0.43,
               "share_pct": 25.0,
               "direction": "DOWN"
             },
@@ -1142,7 +1142,7 @@
               "category": "Futures & Commodity Benchmark",
               "description": "Softening NYMEX energy futures contract prices",
               "impact_dollars": -0.01,
-              "impact_pct": -0.32,
+              "impact_pct": -0.33,
               "share_pct": 20.0,
               "direction": "DOWN"
             },
@@ -1165,8 +1165,8 @@
             {
               "category": "Unstructured Intelligence & Sentiment",
               "description": "OPEC price pressure talkdown & dovish geopolitical news",
-              "impact_dollars": -0.002,
-              "impact_pct": -0.06,
+              "impact_dollars": -0.003,
+              "impact_pct": -0.1,
               "share_pct": 5.0,
               "direction": "DOWN"
             }
@@ -1178,7 +1178,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.018,
-          "impact_pct": -0.58,
+          "impact_pct": -0.59,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -1186,7 +1186,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.013,
-          "impact_pct": -0.42,
+          "impact_pct": -0.43,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -1194,7 +1194,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.01,
-          "impact_pct": -0.32,
+          "impact_pct": -0.33,
           "share_pct": 20.0,
           "direction": "DOWN"
         },
@@ -1217,14 +1217,14 @@
         {
           "category": "Unstructured Intelligence & Sentiment",
           "description": "OPEC price pressure talkdown & dovish geopolitical news",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.06,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.1,
           "share_pct": 5.0,
           "direction": "DOWN"
         }
       ],
       "driver_breakdown": {
-        "summary_text": "Cincinnati OH forecast $-0.051/gal (-1.65%): Driven primarily by Regional Logistics & Hub Delivery ($-0.018/gal), Refining Yield & Crack Spread ($-0.013/gal).",
+        "summary_text": "Cincinnati OH forecast $-0.052/gal (-1.70%): Driven primarily by Regional Logistics & Hub Delivery ($-0.018/gal), Refining Yield & Crack Spread ($-0.013/gal).",
         "components": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1269,7 +1269,7 @@
           "unstructured_sentiment": {
             "name": "Unstructured Intelligence & Sentiment",
             "category": "unstructured_sentiment",
-            "delta_dollars": -0.002,
+            "delta_dollars": -0.003,
             "share_pct": 5.0,
             "direction": "DOWN",
             "description": "OPEC price pressure talkdown & dovish geopolitical news"
@@ -1279,7 +1279,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:14.593532",
+      "timestamp": "2026-11-23T20:01:31.359578",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1287,7 +1287,7 @@
         "padd_region": "PADD 1C South Atlantic"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.015,
+        "current_price_per_gal": 3.003,
         "source": "AAA State Daily CSV (NC)",
         "provenance": {
           "source": "AAA State Daily CSV (NC)",
@@ -1297,7 +1297,7 @@
           "served_granularity": "STATE",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:42Z"
+          "timestamp": "2026-11-23T20:00:52Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1307,23 +1307,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-28",
-        "current_base_price": 3.015,
-        "predicted_price_per_gal": 3.015,
+        "current_base_price": 3.003,
+        "predicted_price_per_gal": 3.003,
         "expected_change_dollars": 0.0,
         "expected_change_percent": 0.0,
         "projected_direction": "FLAT",
-        "prediction_lower_95ci": 2.6763,
-        "prediction_upper_95ci": 3.3537,
+        "prediction_lower_95ci": 2.6643,
+        "prediction_upper_95ci": 3.3417,
         "calibration_method": "conformal",
         "calibration_sample_size": 24,
         "directional_hit_rate_historical": 0.3333,
         "historical_mae_dollars": 0.1737,
         "evaluation_sample_size": 24,
-        "day_1_price": 3.015,
-        "day_2_price": 3.015,
-        "day_3_price": 3.015,
-        "day_4_price": 3.015,
-        "day_5_price": 3.015,
+        "day_1_price": 3.003,
+        "day_2_price": 3.003,
+        "day_3_price": 3.003,
+        "day_4_price": 3.003,
+        "day_5_price": 3.003,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1534,7 +1534,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:14.864049",
+      "timestamp": "2026-11-23T20:01:31.735111",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1542,7 +1542,7 @@
         "padd_region": "PADD 1C South Atlantic"
       },
       "live_lookup": {
-        "current_price_per_gal": 2.978,
+        "current_price_per_gal": 2.965,
         "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
         "provenance": {
           "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
@@ -1552,7 +1552,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:43Z"
+          "timestamp": "2026-11-23T20:00:52Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1562,23 +1562,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 2.978,
-        "predicted_price_per_gal": 3.036,
+        "current_base_price": 2.965,
+        "predicted_price_per_gal": 3.023,
         "expected_change_dollars": 0.058,
-        "expected_change_percent": 1.95,
+        "expected_change_percent": 1.96,
         "projected_direction": "UP",
-        "prediction_lower_95ci": 2.752,
-        "prediction_upper_95ci": 3.32,
+        "prediction_lower_95ci": 2.739,
+        "prediction_upper_95ci": 3.307,
         "calibration_method": "conformal",
         "calibration_sample_size": 61,
         "directional_hit_rate_historical": 0.3226,
         "historical_mae_dollars": 0.2706,
         "evaluation_sample_size": 31,
-        "day_1_price": 2.99,
-        "day_2_price": 3.003,
-        "day_3_price": 3.0,
-        "day_4_price": 3.003,
-        "day_5_price": 3.036,
+        "day_1_price": 2.977,
+        "day_2_price": 2.99,
+        "day_3_price": 2.987,
+        "day_4_price": 2.99,
+        "day_5_price": 3.023,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1630,13 +1630,13 @@
           }
         },
         "driver_breakdown": {
-          "summary_text": "Charlotte NC forecast +$0.058/gal (+1.95%): Driven primarily by Regional Logistics & Hub Delivery (+$0.023/gal), Futures & Commodity Benchmark (+$0.015/gal).",
+          "summary_text": "Charlotte NC forecast +$0.058/gal (+1.96%): Driven primarily by Regional Logistics & Hub Delivery (+$0.023/gal), Futures & Commodity Benchmark (+$0.015/gal).",
           "key_drivers": [
             {
               "category": "Regional Logistics & Hub Delivery",
               "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
               "impact_dollars": 0.023,
-              "impact_pct": 0.77,
+              "impact_pct": 0.78,
               "share_pct": 40.0,
               "direction": "UP"
             },
@@ -1644,7 +1644,7 @@
               "category": "Futures & Commodity Benchmark",
               "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
               "impact_dollars": 0.015,
-              "impact_pct": 0.5,
+              "impact_pct": 0.51,
               "share_pct": 25.0,
               "direction": "UP"
             },
@@ -1688,7 +1688,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
           "impact_dollars": 0.023,
-          "impact_pct": 0.77,
+          "impact_pct": 0.78,
           "share_pct": 40.0,
           "direction": "UP"
         },
@@ -1696,7 +1696,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
           "impact_dollars": 0.015,
-          "impact_pct": 0.5,
+          "impact_pct": 0.51,
           "share_pct": 25.0,
           "direction": "UP"
         },
@@ -1734,7 +1734,7 @@
         }
       ],
       "driver_breakdown": {
-        "summary_text": "Charlotte NC forecast +$0.058/gal (+1.95%): Driven primarily by Regional Logistics & Hub Delivery (+$0.023/gal), Futures & Commodity Benchmark (+$0.015/gal).",
+        "summary_text": "Charlotte NC forecast +$0.058/gal (+1.96%): Driven primarily by Regional Logistics & Hub Delivery (+$0.023/gal), Futures & Commodity Benchmark (+$0.015/gal).",
         "components": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1789,7 +1789,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:15.135090",
+      "timestamp": "2026-11-23T20:01:32.110594",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1797,7 +1797,7 @@
         "padd_region": "PADD 1C South Atlantic"
       },
       "live_lookup": {
-        "current_price_per_gal": 3.431,
+        "current_price_per_gal": 3.426,
         "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
         "provenance": {
           "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
@@ -1807,7 +1807,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:43Z"
+          "timestamp": "2026-11-23T20:00:53Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1817,23 +1817,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 3.431,
-        "predicted_price_per_gal": 3.51,
+        "current_base_price": 3.426,
+        "predicted_price_per_gal": 3.505,
         "expected_change_dollars": 0.079,
-        "expected_change_percent": 2.3,
+        "expected_change_percent": 2.31,
         "projected_direction": "UP",
-        "prediction_lower_95ci": 3.21,
-        "prediction_upper_95ci": 3.81,
+        "prediction_lower_95ci": 3.205,
+        "prediction_upper_95ci": 3.805,
         "calibration_method": "conformal",
         "calibration_sample_size": 61,
         "directional_hit_rate_historical": 0.6452,
         "historical_mae_dollars": 0.1332,
         "evaluation_sample_size": 31,
-        "day_1_price": 3.447,
-        "day_2_price": 3.455,
-        "day_3_price": 3.461,
-        "day_4_price": 3.473,
-        "day_5_price": 3.51,
+        "day_1_price": 3.442,
+        "day_2_price": 3.45,
+        "day_3_price": 3.456,
+        "day_4_price": 3.468,
+        "day_5_price": 3.505,
         "feature_attributions": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -1885,7 +1885,7 @@
           }
         },
         "driver_breakdown": {
-          "summary_text": "Port St Lucie FL forecast +$0.079/gal (+2.30%): Driven primarily by Regional Logistics & Hub Delivery (+$0.028/gal), Futures & Commodity Benchmark (+$0.020/gal).",
+          "summary_text": "Port St Lucie FL forecast +$0.079/gal (+2.31%): Driven primarily by Regional Logistics & Hub Delivery (+$0.028/gal), Futures & Commodity Benchmark (+$0.020/gal).",
           "key_drivers": [
             {
               "category": "Regional Logistics & Hub Delivery",
@@ -1923,7 +1923,7 @@
               "category": "Refining Yield & Crack Spread",
               "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
               "impact_dollars": 0.006,
-              "impact_pct": 0.17,
+              "impact_pct": 0.18,
               "share_pct": 8.0,
               "direction": "UP"
             },
@@ -1975,7 +1975,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
           "impact_dollars": 0.006,
-          "impact_pct": 0.17,
+          "impact_pct": 0.18,
           "share_pct": 8.0,
           "direction": "UP"
         },
@@ -1989,7 +1989,7 @@
         }
       ],
       "driver_breakdown": {
-        "summary_text": "Port St Lucie FL forecast +$0.079/gal (+2.30%): Driven primarily by Regional Logistics & Hub Delivery (+$0.028/gal), Futures & Commodity Benchmark (+$0.020/gal).",
+        "summary_text": "Port St Lucie FL forecast +$0.079/gal (+2.31%): Driven primarily by Regional Logistics & Hub Delivery (+$0.028/gal), Futures & Commodity Benchmark (+$0.020/gal).",
         "components": {
           "regional_logistics": {
             "name": "Regional Logistics & Hub Delivery",
@@ -2044,7 +2044,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-11-23T03:21:15.407044",
+      "timestamp": "2026-11-23T20:01:32.485803",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2052,7 +2052,7 @@
         "padd_region": "PADD 5 West Coast"
       },
       "live_lookup": {
-        "current_price_per_gal": 5.617,
+        "current_price_per_gal": 5.609,
         "source": "AAA Metro Daily CSV (San Francisco, CA)",
         "provenance": {
           "source": "AAA Metro Daily CSV (San Francisco, CA)",
@@ -2062,7 +2062,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T03:20:43Z"
+          "timestamp": "2026-11-23T20:00:55Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2072,23 +2072,23 @@
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
         "target_date": "2026-11-30",
-        "current_base_price": 5.617,
-        "predicted_price_per_gal": 5.726,
+        "current_base_price": 5.609,
+        "predicted_price_per_gal": 5.718,
         "expected_change_dollars": 0.109,
         "expected_change_percent": 1.94,
         "projected_direction": "UP",
-        "prediction_lower_95ci": 5.207,
-        "prediction_upper_95ci": 6.245,
+        "prediction_lower_95ci": 5.199,
+        "prediction_upper_95ci": 6.237,
         "calibration_method": "conformal",
         "calibration_sample_size": 61,
         "directional_hit_rate_historical": 0.6129,
         "historical_mae_dollars": 0.3485,
         "evaluation_sample_size": 31,
-        "day_1_price": 5.639,
-        "day_2_price": 5.662,
-        "day_3_price": 5.658,
-        "day_4_price": 5.663,
-        "day_5_price": 5.726,
+        "day_1_price": 5.631,
+        "day_2_price": 5.654,
+        "day_3_price": 5.65,
+        "day_4_price": 5.655,
+        "day_5_price": 5.718,
         "feature_attributions": {
           "tax_regulatory": {
             "name": "Tax & Regulatory Overhead",
