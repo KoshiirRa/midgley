@@ -1,35 +1,13 @@
 {
   "created_at": "2026-09-02 00:19:23",
   "llm_totals": {
-    "prompt_tokens": 129336,
-    "completion_tokens": 75700,
-    "total_tokens": 205036,
-    "estimated_cost_usd": 0.203555,
+    "prompt_tokens": 129584,
+    "completion_tokens": 75860,
+    "total_tokens": 205444,
+    "estimated_cost_usd": 0.204341,
     "fallback_activations": 530
   },
   "llm_events": [
-    {
-      "timestamp": "2026-09-21 09:53:01",
-      "environment": "prod",
-      "vendor": "google",
-      "model": "gemini-2.5-flash",
-      "prompt_tokens": 130,
-      "completion_tokens": 80,
-      "total_tokens": 210,
-      "estimated_cost_usd": 3.4e-05,
-      "is_fallback": false
-    },
-    {
-      "timestamp": "2026-09-21 09:53:43",
-      "environment": "prod",
-      "vendor": "google",
-      "model": "gemini-2.5-flash",
-      "prompt_tokens": 140,
-      "completion_tokens": 80,
-      "total_tokens": 220,
-      "estimated_cost_usd": 3.4e-05,
-      "is_fallback": false
-    },
     {
       "timestamp": "2026-09-21 16:21:05",
       "environment": "prod",
@@ -11006,6 +10984,28 @@
       "completion_tokens": 80,
       "total_tokens": 200,
       "estimated_cost_usd": 0.00039,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-11-23 06:30:57",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 0.000393,
+      "is_fallback": false
+    },
+    {
+      "timestamp": "2026-11-23 06:31:00",
+      "environment": "prod",
+      "vendor": "google",
+      "model": "gemini-3.8-flash",
+      "prompt_tokens": 124,
+      "completion_tokens": 80,
+      "total_tokens": 204,
+      "estimated_cost_usd": 0.000393,
       "is_fallback": false
     }
   ],

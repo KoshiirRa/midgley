@@ -1,18 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-23 03:21:24",
+  "last_updated": "2026-11-23 06:30:17",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-15 00:48:45",
-      "connector_name": "Reachability_GEOPOLITICAL_SUEZ_BAB_EL_MANDEB",
-      "target": "Red Sea tanker OR Houthi Suez when:2d",
-      "status": "FAILOVER",
-      "latency_ms": 78.31,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
     {
       "timestamp": "2026-10-15 00:48:50",
       "connector_name": "Reachability_GEOPOLITICAL_VENEZUELA_ORINOCO",
@@ -10002,6 +9992,16 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "Challenge a0555faf-b6fb-4660-820b-c2b15b724ecb already predicted (HTTP 400)"
+    },
+    {
+      "timestamp": "2026-11-23 06:30:17",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 187.44,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (5 items)"
     }
   ]
 }

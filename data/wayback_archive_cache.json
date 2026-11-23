@@ -691,14 +691,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5": {
-    "timestamp": "2026-11-17T10:22:45.061317+00:00",
+    "timestamp": "2026-11-23T06:30:48.012891+00:00",
     "status": "FALLBACK_PENDING",
-    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
     "headline": "Power Outage Forces Venezuela’s Largest Refinery to Shut Down, Sources Say - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNRm9qYWtSbnJCaTYta0hjQlJSUk1Pd05CaDFRMW9WS3VJMGMzbWRtZ0VPVkZCY25rZjhwcUI1YTc3dURCYWFiSDZ0ME9CWG4yaTRlQTJpT2h3YjQ4aGc1cnIzbFpocVN1d2xldzZ5eFpHbjRUNDlmTFlBdGNwZndqM2FROTY3Vy10dEhTV1hQUEtNdWZBeHl5SnVueUhoRWNGLW1MZnNB?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZW9WWXV4amNCdXcyZm13UU9rZU5aYlh3TVJSbGUtNGNFUjZNVUh3NURTa0Z0cG4tVlppbjNhVFJhZ1RrVDJWMmV3RW9xaXo4Qk9vMEg1TjRuZzdBU1Y2VEIzNTJFd0lxU1Fsem1mYkUtUFZPNmJhd0d1WE9nU3MxakNWNTZHb212TVZiVkFJVFEzSzI1d3dPU1N0ZnRNR2xNa2lXQlYyLVDSAa4BQVVfeXFMTXRRT250QW9TcGdBM3pUcDByUjFhNDJ0OTZabXhpblJFc1Q3UkxDSXhva1U5dVp3WWU0NkhYeEt1aDRNaDJSbUJLdWM2bkdxZzg2LUFUNExOakJJVnZfN2tEWmNVQjFDUjR1QkRIcWdhUzFuQ2VVY2tVWVg5cm9remp0WGktREtod19zSmlzcmY0OW5rR3ROTTI3UFNqOS0taUdMdVJoelJsWmxYRGN3?oc=5": {
     "timestamp": "2026-09-05T05:30:28.751876",
@@ -918,13 +917,14 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5": {
-    "timestamp": "2026-11-13T02:29:04.926791+00:00",
+    "timestamp": "2026-11-23T06:30:49.151432+00:00",
     "status": "FALLBACK_PENDING",
+    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
-    "error": "The read operation timed out"
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMib0FVX3lxTE1YSnN3Sjd3ei04TUhDMUstTWhfWGR0R19aR0Y1SWJxWlZSenNpR0NzYko5bmhqbEQ4amd5M1RtVkFvRldNbjNzOGJxOXdTaGRGRGRxUXd5OHFfaXFyZnhNSUQ1TUJHZlpZb2hnaTdaNA?oc=5": {
     "timestamp": "2026-09-06T04:45:22.815148",
@@ -25723,5 +25723,32 @@
     "headline": "Tanker incident “involving military forces” reported in Strait of Hormuz",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqgFBVV95cUxNQm96RExBbGw0OERZX1lMWGxhczRYS00yOXR6Rlg0XzJ0VHk2bEhZVHVFNmFRYllVUjZvZUhqYzFQSnNULTNhRjNhcE5IOXFNQmFOU2RlZlRZYWxrUnVZbWJrWGEyQWF6T1Z4MUUweHVKTmsyNnMtSS1KeHhxeWdoUWlZYU03eUR0X242RVdjNUp5dnU1R3hXRmNwOV94Nkx5UGtySXZMVnV2QQ?oc=5",
     "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiqgFBVV95cUxObjFnenNteVI0MF9jc2lXVE5wdFhzM1lMMDJ6TFlTNVVqUWVvcnJTYnFYTDlUdEp0UXA5dGg4dERBNllWaXoyb1BXU2lhUEVWeW5FQVNWYzU3Tkx6c0xrQXN1Z05NMVVjSlg5ZzFCWnBzR1ZRZXppOEFLc29XamdoY1dxZGphdDRDMWpCZDM0WUwxNFNFYnZUV0MwMVI1SVEtWmh1WXE3ZW56dw?oc=5": {
+    "timestamp": "2026-11-23T06:30:27.342339+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxObjFnenNteVI0MF9jc2lXVE5wdFhzM1lMMDJ6TFlTNVVqUWVvcnJTYnFYTDlUdEp0UXA5dGg4dERBNllWaXoyb1BXU2lhUEVWeW5FQVNWYzU3Tkx6c0xrQXN1Z05NMVVjSlg5ZzFCWnBzR1ZRZXppOEFLc29XamdoY1dxZGphdDRDMWpCZDM0WUwxNFNFYnZUV0MwMVI1SVEtWmh1WXE3ZW56dw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxObjFnenNteVI0MF9jc2lXVE5wdFhzM1lMMDJ6TFlTNVVqUWVvcnJTYnFYTDlUdEp0UXA5dGg4dERBNllWaXoyb1BXU2lhUEVWeW5FQVNWYzU3Tkx6c0xrQXN1Z05NMVVjSlg5ZzFCWnBzR1ZRZXppOEFLc29XamdoY1dxZGphdDRDMWpCZDM0WUwxNFNFYnZUV0MwMVI1SVEtWmh1WXE3ZW56dw?oc=5",
+    "headline": "Petrol drops below $2 as Tas Petroleum celebrates new Devils sponsorship - Pulse Tasmania",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqgFBVV95cUxObjFnenNteVI0MF9jc2lXVE5wdFhzM1lMMDJ6TFlTNVVqUWVvcnJTYnFYTDlUdEp0UXA5dGg4dERBNllWaXoyb1BXU2lhUEVWeW5FQVNWYzU3Tkx6c0xrQXN1Z05NMVVjSlg5ZzFCWnBzR1ZRZXppOEFLc29XamdoY1dxZGphdDRDMWpCZDM0WUwxNFNFYnZUV0MwMVI1SVEtWmh1WXE3ZW56dw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPcGJxUjRFdG5LQ01iNVRBTWZoZ3pBS3hfaWd5NFNZdVk4eFpaMmk4S2N5ZXVCcGstbTlsazJPbHE5c2R4STJJa1U0dE5DYVJsdjdoaGQyTk5HRXpxZGo3U3BUaGJyRGltSk4wR2RscnlxREV3RFNaQXN5cnp5SUtvTnFHd3ZnX3E5WnhpV1BQRmR5WkQ3M2wzUzJvc3BSWjBnY3ZZbDB4YzVaQzg4SnA3VGh0RUdHUlN1d0Vwem10VGo2SUZBd0FQSXdVODFPZjRlZ1lIVWVkTDlDbHdUcHF4Q015MFpwcFg1TWNZ?oc=5": {
+    "timestamp": "2026-11-23T06:30:34.148237+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPcGJxUjRFdG5LQ01iNVRBTWZoZ3pBS3hfaWd5NFNZdVk4eFpaMmk4S2N5ZXVCcGstbTlsazJPbHE5c2R4STJJa1U0dE5DYVJsdjdoaGQyTk5HRXpxZGo3U3BUaGJyRGltSk4wR2RscnlxREV3RFNaQXN5cnp5SUtvTnFHd3ZnX3E5WnhpV1BQRmR5WkQ3M2wzUzJvc3BSWjBnY3ZZbDB4YzVaQzg4SnA3VGh0RUdHUlN1d0Vwem10VGo2SUZBd0FQSXdVODFPZjRlZ1lIVWVkTDlDbHdUcHF4Q015MFpwcFg1TWNZ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPcGJxUjRFdG5LQ01iNVRBTWZoZ3pBS3hfaWd5NFNZdVk4eFpaMmk4S2N5ZXVCcGstbTlsazJPbHE5c2R4STJJa1U0dE5DYVJsdjdoaGQyTk5HRXpxZGo3U3BUaGJyRGltSk4wR2RscnlxREV3RFNaQXN5cnp5SUtvTnFHd3ZnX3E5WnhpV1BQRmR5WkQ3M2wzUzJvc3BSWjBnY3ZZbDB4YzVaQzg4SnA3VGh0RUdHUlN1d0Vwem10VGo2SUZBd0FQSXdVODFPZjRlZ1lIVWVkTDlDbHdUcHF4Q015MFpwcFg1TWNZ?oc=5",
+    "headline": "Where to find the cheapest fuel in Penrith - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi6wFBVV95cUxPcGJxUjRFdG5LQ01iNVRBTWZoZ3pBS3hfaWd5NFNZdVk4eFpaMmk4S2N5ZXVCcGstbTlsazJPbHE5c2R4STJJa1U0dE5DYVJsdjdoaGQyTk5HRXpxZGo3U3BUaGJyRGltSk4wR2RscnlxREV3RFNaQXN5cnp5SUtvTnFHd3ZnX3E5WnhpV1BQRmR5WkQ3M2wzUzJvc3BSWjBnY3ZZbDB4YzVaQzg4SnA3VGh0RUdHUlN1d0Vwem10VGo2SUZBd0FQSXdVODFPZjRlZ1lIVWVkTDlDbHdUcHF4Q015MFpwcFg1TWNZ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQVVRiZmx3dV9GUWJnR1hjdDZuemlGWGp5U1NOS2lnRDAtNklWaGpYSlBaOW9SbDJteVRqSjAwOFl1LU5ZZFNJcEtoaWY3Vm1faUpPSmVDU2xfV0NIUEswWWhISXRuS19aVVVhTXFkZFlFSEVhZTFBUW1pblFWaVBVdld5N3Z5X0hCN2tDN1BxSGgxSWVXQl9mV1R5bWNqYTFMQmxPYXRsczRtWFk3UUtHOUxYNjJMMXNQT2ZINHIyWkxPbHZRLUVCdmJGYkZhRWNkS2Q4YzNCdFFwZWxmTDNDbw?oc=5": {
+    "timestamp": "2026-11-23T06:30:41.334135+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQVVRiZmx3dV9GUWJnR1hjdDZuemlGWGp5U1NOS2lnRDAtNklWaGpYSlBaOW9SbDJteVRqSjAwOFl1LU5ZZFNJcEtoaWY3Vm1faUpPSmVDU2xfV0NIUEswWWhISXRuS19aVVVhTXFkZFlFSEVhZTFBUW1pblFWaVBVdld5N3Z5X0hCN2tDN1BxSGgxSWVXQl9mV1R5bWNqYTFMQmxPYXRsczRtWFk3UUtHOUxYNjJMMXNQT2ZINHIyWkxPbHZRLUVCdmJGYkZhRWNkS2Q4YzNCdFFwZWxmTDNDbw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQVVRiZmx3dV9GUWJnR1hjdDZuemlGWGp5U1NOS2lnRDAtNklWaGpYSlBaOW9SbDJteVRqSjAwOFl1LU5ZZFNJcEtoaWY3Vm1faUpPSmVDU2xfV0NIUEswWWhISXRuS19aVVVhTXFkZFlFSEVhZTFBUW1pblFWaVBVdld5N3Z5X0hCN2tDN1BxSGgxSWVXQl9mV1R5bWNqYTFMQmxPYXRsczRtWFk3UUtHOUxYNjJMMXNQT2ZINHIyWkxPbHZRLUVCdmJGYkZhRWNkS2Q4YzNCdFFwZWxmTDNDbw?oc=5",
+    "headline": "Where to find the cheapest fuel in Bowral - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4AFBVV95cUxQVVRiZmx3dV9GUWJnR1hjdDZuemlGWGp5U1NOS2lnRDAtNklWaGpYSlBaOW9SbDJteVRqSjAwOFl1LU5ZZFNJcEtoaWY3Vm1faUpPSmVDU2xfV0NIUEswWWhISXRuS19aVVVhTXFkZFlFSEVhZTFBUW1pblFWaVBVdld5N3Z5X0hCN2tDN1BxSGgxSWVXQl9mV1R5bWNqYTFMQmxPYXRsczRtWFk3UUtHOUxYNjJMMXNQT2ZINHIyWkxPbHZRLUVCdmJGYkZhRWNkS2Q4YzNCdFFwZWxmTDNDbw?oc=5",
+    "error": "The read operation timed out"
   }
 }
