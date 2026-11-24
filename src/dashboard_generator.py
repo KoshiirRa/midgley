@@ -2024,9 +2024,9 @@ def generate_technical_breakdown_file(audit_data: dict, docs_dir: str = DOCS_DIR
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                    <p class="text-amber-300 font-bold">Empirical Residual 95% Confidence Intervals (Issue #214):</p>
-                    <p class="text-blue-300">$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$</p>
-                    <p class="text-slate-400 text-[11px]">Derives dynamic 95% confidence bands from rolling 30-day regional residual standard errors.</p>
+                    <p class="text-amber-300 font-bold">Adaptive Conformal &amp; RMSE 95% Prediction Intervals (Issues #214, #449, #732):</p>
+                    <p class="text-blue-300">$$\\alpha_{{t+1}} = \\alpha_t + \\gamma(\\alpha^* - \\text{{miss}}_t), \\quad \\text{{PI}}_{{95\\%}} = \\hat{{y}}_{{t+h}} \\pm \\max\\!\\left(q_{{1-\\alpha_t}}(|e|),\\; t_{{1-\\alpha_t/2}} \\cdot \\text{{RMSE}}_r\\right)$$</p>
+                    <p class="text-slate-400 text-[11px]">Computes point-in-time Adaptive Conformal Inference (ACI) prediction bands with a Student-$t$ RMSE small-sample and distribution-shift floor.</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
@@ -2222,8 +2222,8 @@ $$P_{{10}} = P_{{50}} - 1.2815\\sigma, \\quad P_{{90}} = P_{{50}} + 1.2815\\sigm
 ### Dynamic Volatility-Gated Persistence Blending (DV-GPB) (Issue #214)
 $$\\lambda_{{\\text{{vol}}}} = \\frac{{1}}{{1 + e^{{-200.0 \\cdot (\\sigma_{{14\\text{{d}}}} - 0.015)}}}}, \\quad \\hat{{y}}_{{t+5}} = \\lambda_{{\\text{{vol}}}} \\hat{{y}}_{{\\text{{model}}}} + (1 - \\lambda_{{\\text{{vol}}}}) y_t$$
 
-### Empirical Residual 95% Confidence Intervals (Issue #214)
-$$\\text{{CI}}_{{95\\%}} = \\hat{{y}}_{{t+5}} \\pm 1.96 \\cdot \\sigma_{{\\text{{residual, 30d}}}}(r)$$
+### Adaptive Conformal & RMSE 95% Prediction Intervals (Issues #214, #449, #732)
+$$\\alpha_{{t+1}} = \\alpha_t + \\gamma(\\alpha^* - \\text{{miss}}_t), \\quad \\text{{PI}}_{{95\\%}} = \\hat{{y}}_{{t+h}} \\pm \\max\\!\\left(q_{{1-\\alpha_t}}(|e|),\\; t_{{1-\\alpha_t/2}} \\cdot \\text{{RMSE}}_r\\right)$$
 
 ### USGS 3D Hypocentral Attenuation & Ground Shaking Intensity (Issue #55)
 $$R = \\sqrt{{d^2 + h^2}}, \\quad w(R) = \\frac{{1}}{{1 + (R/35)^2}}, \\quad I = 10^{{M - M_{{\\text{{base}}}}}} \\times w(R)$$
@@ -6540,7 +6540,9 @@ def generate_public_dashboard():
                     <strong>Port St. Lucie FL:</strong> Florida waterborne ATB tanker delivery freight from Gulf Coast refining hubs and Florida state tax (\(\$0.352/\text{gal}\)).<br>
                     <strong>Chicago IL/IN:</strong> Multi-tiered Illinois (\(\$0.470/\text{gal}\)), Cook County (\(\$0.060/\text{gal}\)), and Chicago city (\(\$0.080/\text{gal}\)) motor fuel taxes with Indiana cross-border arbitrage and BP Whiting / CITGO Lemont rack margin pass-through.<br>
                     <strong>Houston TX:</strong> PADD 3 Gulf Coast refining epicenter directly adjacent to Baytown and Port Arthur mega-refineries, Texas state excise tax (\(\$0.200/\text{gal}\)), prompt USGC spot pass-through, and zero local pipeline import tariff.<br>
-                    <strong>Los Angeles CA:</strong> PADD 5 South Coast Basin refining cluster (Marathon Carson/Wilmington, Chevron El Segundo, PBF Torrance), statutory CARB regulatory burden (\(\$0.953/\text{gal}\)), LA CARBOB spot pass-through, and Kinder Morgan Watson Station rack distribution.
+                    <strong>Los Angeles CA:</strong> PADD 5 South Coast Basin refining cluster (Marathon Carson/Wilmington, Chevron El Segundo, PBF Torrance), statutory CARB regulatory burden (\(\$0.953/\text{gal}\)), LA CARBOB spot pass-through, and Kinder Morgan Watson Station rack distribution.<br><br>
+                    <strong>Dynamic Emergency Tax Suspensions &amp; Disaster Relief Holidays (\(\tau_{\text{state}, r}(t)\)) (Issue #632):</strong><br>
+                    When governors declare States of Emergency (e.g. post-hurricane supply disruption relief) and suspend statutory motor fuels taxes, \(\tau_{\text{state}, r}(t)\) resolves dynamically through point-in-time regulatory event registries (<code class="text-amber-300">data/known_future_events.json</code>). Tax waivers are activated strictly when \(\text{announcement\_date} \le \text{as\_of\_date}\) across the effective holiday interval \([t_{\text{effective}}, t_{\text{expiration}}]\), automatically reverting to baseline rates upon sunset without leaking unannounced executive orders into historical backtests.
                 </p>
             </div>
         </section>

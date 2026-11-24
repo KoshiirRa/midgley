@@ -434,10 +434,15 @@ def resolve_zip_coordinates(zip_code: str, state_code: str = "US", padd_region: 
     return 39.8283, -98.5795, f"{z_clean} - US{padd_str}"
 
 
-def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
+def resolve_zip_code(
+    zip_code: str,
+    target_date: Optional[str] = None,
+    as_of_date: Optional[str] = None
+) -> Dict[str, Any]:
     """
     Resolves a 5-digit US ZIP code to mapped metro area locale, PADD region, state,
-    state fuel tax, resolution tier, and departure diagnostics.
+    state fuel tax (incorporating point-in-time emergency tax suspensions, Issue #632),
+    resolution tier, and departure diagnostics.
     Logs unmapped out-of-metro lookups.
     Zero-pads numeric inputs (e.g. 7001 -> 07001 NJ) to prevent leading-zero misrouting (Issue #335).
     """
@@ -464,13 +469,29 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     zip_clean = raw_str.zfill(5)[:5]
     prefix_3 = zip_clean[:3]
 
+    from src.rvp_regulations import resolve_point_in_time_tax_rate
+
     # Check Tier 1: Primary Metro Cluster Hit
     if prefix_3 in ZIP_METRO_PREFIX_MAP:
         metro_loc = ZIP_METRO_PREFIX_MAP[prefix_3]
         state_code = ZIP_PREFIX_STATE_MAP.get(prefix_3, "US")
         state_meta = STATE_PADD_MODEL_MAP.get(state_code, {})
         loc_name = resolve_location_name(zip_clean, prefix_3, state_code)
-        hub_tax = HUB_BASELINE_TAXES.get(metro_loc, 0.250)
+        base_hub_tax = HUB_BASELINE_TAXES.get(metro_loc, 0.250)
+        base_state_tax = state_meta.get("state_tax", 0.250)
+
+        eff_state_tax = resolve_point_in_time_tax_rate(
+            region=state_code,
+            baseline_tax_rate=base_state_tax,
+            target_date=target_date,
+            as_of_date=as_of_date
+        )
+        eff_hub_tax = resolve_point_in_time_tax_rate(
+            region=metro_loc,
+            baseline_tax_rate=base_hub_tax,
+            target_date=target_date,
+            as_of_date=as_of_date
+        )
 
         res = {
             "status": "success",
@@ -482,9 +503,9 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
             "prefix_3": prefix_3,
             "state": state_code,
             "padd_region": state_meta.get("padd", "PADD 2"),
-            "state_tax_rate_per_gal": state_meta.get("state_tax", 0.250),
-            "hub_baseline_tax_rate": hub_tax,
-            "tax_delta_per_gal": 0.0,
+            "state_tax_rate_per_gal": eff_state_tax,
+            "hub_baseline_tax_rate": eff_hub_tax,
+            "tax_delta_per_gal": round(eff_state_tax - eff_hub_tax, 3),
             "is_significant_departure": False,
             "departure_reason": "",
             "estimated_basis_delta": 0.0
@@ -498,9 +519,22 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
     })
     loc_name = resolve_location_name(zip_clean, prefix_3, state_code)
     fallback_hub = state_meta.get("fallback_locale", "national")
-    hub_tax = HUB_BASELINE_TAXES.get(fallback_hub, 0.250)
-    state_tax = state_meta.get("state_tax", 0.250)
-    tax_delta = round(state_tax - hub_tax, 3)
+    base_hub_tax = HUB_BASELINE_TAXES.get(fallback_hub, 0.250)
+    base_state_tax = state_meta.get("state_tax", 0.250)
+
+    eff_state_tax = resolve_point_in_time_tax_rate(
+        region=state_code,
+        baseline_tax_rate=base_state_tax,
+        target_date=target_date,
+        as_of_date=as_of_date
+    )
+    eff_hub_tax = resolve_point_in_time_tax_rate(
+        region=fallback_hub,
+        baseline_tax_rate=base_hub_tax,
+        target_date=target_date,
+        as_of_date=as_of_date
+    )
+    tax_delta = round(eff_state_tax - eff_hub_tax, 3)
 
     padd_str = state_meta.get("padd", "PADD 2")
     is_departure = (
@@ -536,8 +570,8 @@ def resolve_zip_code(zip_code: str) -> Dict[str, Any]:
         "padd_region": padd_str,
         "padd_name": state_meta.get("padd_name", "Midwest"),
         "calibrated_model_used": state_meta.get("fallback_model", "National Wholesale"),
-        "state_tax_rate_per_gal": state_tax,
-        "hub_baseline_tax_rate": hub_tax,
+        "state_tax_rate_per_gal": eff_state_tax,
+        "hub_baseline_tax_rate": eff_hub_tax,
         "tax_delta_per_gal": tax_delta,
         "is_significant_departure": is_departure,
         "departure_reason": departure_reason,

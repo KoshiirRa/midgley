@@ -9,10 +9,13 @@ EDGAR_8K_TICKERS = "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD"
 MIDGLEY_AGENT_USER_AGENT = "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
 HINDSIGHT_API_URL = "https://api.hindsight.vectorize.io"
 HINDSIGHT_DEDUPE_BANK_ID = "midgley-event-dedupe"
-# SEC_USER_AGENT and HINDSIGHT_API_TOKEN are sensitive — set as Worker secrets (never commit to wrangler.toml):
+# Sensitive Worker secrets (never commit to wrangler.toml):
 # wrangler secret put SEC_USER_AGENT
 # wrangler secret put HINDSIGHT_API_TOKEN
-# Value format: "Midgley your@email.com" (per EDGAR robots.txt policy)
+# wrangler secret put GEMINI_API_KEY
+# wrangler secret put DISCORD_BOT_TOKEN
+# wrangler secret put GH_PAT
+# Value format for SEC_USER_AGENT: "Midgley your@email.com" (per EDGAR robots.txt policy)
 
 [ai]
 binding = "AI"
@@ -25,7 +28,8 @@ index_name = "midgley-event-embeddings"
 binding = "MYBROWSER"
 
 [triggers]
-crons = ["*/15 * * * *"]
+# 15-min intraday monitor + Sunday 09:00 America/Chicago weekly self-review planner (14:00 UTC CDT / 15:00 UTC CST; DST-gated in worker)
+crons = ["*/15 * * * *", "0 14,15 * * SUN"]
 
 [[queues.producers]]
 queue = "intraday-event-queue"

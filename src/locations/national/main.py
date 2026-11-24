@@ -126,6 +126,31 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
     last_date = market_df['date'].iloc[-1]
     current_live_price = float(market_df['gasoline_rbob'].iloc[-1])
 
+    # Read ledger once for backfill skip check and closed-loop 14-day degradation guardrail (Issue #732)
+    ph = pd.DataFrame()
+    national_guardrail_active = False
+    if os.path.exists("data/prediction_history.csv"):
+        try:
+            from src.prediction_logger import read_prediction_history, compute_rolling_scoreboard_metrics
+            ph = read_prediction_history("data/prediction_history.csv")
+            if not ph.empty:
+                sb_nat = compute_rolling_scoreboard_metrics(
+                    window_days=14,
+                    region="National",
+                    include_retroactive=False,
+                    df=ph
+                )
+                if sb_nat.get("total_evaluations", 0) >= 10 and sb_nat.get("model_uplift_mae_pct", 0.0) < -2.0:
+                    national_guardrail_active = True
+                    logger.info(
+                        f"Closed-loop degradation guardrail active for National "
+                        f"(14d live uplift={sb_nat.get('model_uplift_mae_pct'):+.2f}%)"
+                    )
+        except Exception as e:
+            logger.debug(f"Notice inspecting prediction history for National: {e}")
+
+    from src.models import apply_gated_persistence_blending
+
     for h in [1, 2, 3, 4, 5]:
         h_res = multi_horizon_results.get(h)
         if not h_res:
@@ -147,22 +172,25 @@ def run_national_pipeline(use_llm_api: bool = False, model_type: str = "ridge"):
         
         # Check if historical backtest is already recorded in history
         need_backfill = True
-        if os.path.exists("data/prediction_history.csv"):
-            try:
-                from src.prediction_logger import read_prediction_history
-                ph = read_prediction_history("data/prediction_history.csv")
-                if not ph.empty and 'region' in ph.columns and 'model_version' in ph.columns:
-                    m = (ph['region'] == "National") & (ph['model_version'] == national_version)
-                    if 'forecast_horizon_days' in ph.columns:
-                        m = m & (ph['forecast_horizon_days'].fillna(5).astype(int) == h)
-                    if m.sum() >= 30:
-                        need_backfill = False
-            except Exception:
-                pass
+        if not ph.empty and 'region' in ph.columns and 'model_version' in ph.columns:
+            m = (ph['region'] == "National") & (ph['model_version'] == national_version)
+            if 'forecast_horizon_days' in ph.columns:
+                m = m & (ph['forecast_horizon_days'].fillna(5).astype(int) == h)
+            if m.sum() >= 30:
+                need_backfill = False
 
         # Construct today's live prediction row
         live_pred = float(h_res['live_pred_price'])
         live_quant_pred = float(h_res.get('live_pred_quant_price', live_pred))
+        if national_guardrail_active:
+            live_pred = apply_gated_persistence_blending(
+                raw_pred_price=live_pred,
+                current_base_price=current_live_price,
+                lambda_vol=1.0,
+                guardrail_active=True,
+                guardrail_alpha=0.5
+            )
+            h_res['live_pred_price'] = live_pred
         h_today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': current_live_price,

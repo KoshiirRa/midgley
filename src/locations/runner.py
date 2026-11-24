@@ -216,16 +216,20 @@ def run_regional_pipeline(
     last_date = market_df['date'].iloc[-1]
     latest_rbob = market_df['gasoline_rbob'].iloc[-1]
 
-    # Fit Asymmetric Pass-Through ECM for region using authentic retail history (Issues #443, #607, #608)
+    # Fit Asymmetric Pass-Through ECM for region using authentic retail history (Issues #443, #607, #608, #732)
     ecm_model = None
     try:
         reg_col = f"{reg_clean}_retail_gasoline"
+        wholesale_series = market_df['gasoline_rbob']
+        retail_series = None
         if reg_col in market_df.columns:
-            retail_series = market_df[reg_col]
-        else:
+            cand_series = market_df[reg_col]
+            spread_var = float(np.var((cand_series - wholesale_series).dropna().values))
+            if spread_var >= 1e-6:
+                retail_series = cand_series
+        if retail_series is None:
             from src.eia_retail_feed import get_regional_retail_history
             retail_series = get_regional_retail_history(logger_region_key, market_df['date'], live_pump_price)
-        wholesale_series = market_df['gasoline_rbob']
         ecm_model = AsymmetricECM(wholesale_lags=3, retail_lags=2)
         ecm_model.fit(retail_data=retail_series, wholesale_series=wholesale_series)
     except Exception as e:
@@ -234,6 +238,37 @@ def run_regional_pipeline(
     # Dynamic model version tag distinguishing active ECM pipeline from legacy models (Issue #607, T-2)
     pipeline_tag = "ECM" if (ecm_model and ecm_model.is_fitted) else None
     model_tag = resolve_model_tag(region=logger_region_key, model_type=model_type, pipeline=pipeline_tag)
+
+    # Closed-loop 14-day live degradation guardrail check (read ledger once per region, Issue #214, #732)
+    primary_guardrail_active = False
+    sec_guardrails: Dict[str, bool] = {}
+    try:
+        from src.prediction_logger import read_prediction_history, compute_rolling_scoreboard_metrics
+        _hist_once = read_prediction_history()
+        if not _hist_once.empty:
+            _sb = compute_rolling_scoreboard_metrics(
+                window_days=14,
+                region=logger_region_key,
+                include_retroactive=False,
+                df=_hist_once
+            )
+            if _sb.get("total_evaluations", 0) >= 10 and _sb.get("model_uplift_mae_pct", 0.0) < -2.0:
+                primary_guardrail_active = True
+                logger.info(
+                    f"Closed-loop degradation guardrail active for {logger_region_key} "
+                    f"(14d live uplift={_sb.get('model_uplift_mae_pct'):+.2f}%)"
+                )
+            for sec_key in ("BayArea_CA", "Cincinnati_KY"):
+                _sec_sb = compute_rolling_scoreboard_metrics(
+                    window_days=14,
+                    region=sec_key,
+                    include_retroactive=False,
+                    df=_hist_once
+                )
+                if _sec_sb.get("total_evaluations", 0) >= 10 and _sec_sb.get("model_uplift_mae_pct", 0.0) < -2.0:
+                    sec_guardrails[sec_key] = True
+    except Exception as e:
+        logger.debug(f"Notice checking rolling degradation guardrail for {logger_region_key}: {e}")
 
     # Pre-fetch secondary dual-anchor retail prices once per regional run (Issue #591)
     dual_anchor_map = {
@@ -360,6 +395,16 @@ def run_regional_pipeline(
             h_forecast = round(h_forecast + tax_delta_h, 4)
             h_quant = round(h_quant + tax_delta_h, 4)
 
+        if primary_guardrail_active:
+            from src.models import apply_gated_persistence_blending
+            h_forecast = apply_gated_persistence_blending(
+                raw_pred_price=h_forecast,
+                current_base_price=live_pump_price,
+                lambda_vol=1.0,
+                guardrail_active=True,
+                guardrail_alpha=0.5
+            )
+
         today_df = pd.DataFrame([{
             'date': last_date,
             'current_price': live_pump_price,
@@ -381,10 +426,12 @@ def run_regional_pipeline(
         except Exception as e:
             logger.debug(f"Live prediction logging skipped for {logger_region_key}: {e}")
 
-        # Process dual-anchor secondary sub-regions (Issue #464)
+        # Process dual-anchor secondary sub-regions (Issue #464, #732)
         if logger_region_key in dual_anchor_map:
+            sec_pipeline_tag = "ECM" if (ecm_model and ecm_model.is_fitted) else None
             for sec_key, sec_col, sec_default in dual_anchor_map[logger_region_key]:
                 sec_base_price = sec_cached_prices.get(sec_key, sec_default)
+                sec_model_tag = resolve_model_tag(region=sec_key, model_type=model_type, pipeline=sec_pipeline_tag)
 
                 sec_hist_base = h_splits['test_df'].get(sec_col, h_splits['test_df']['gasoline_rbob'] + (sec_base_price - latest_rbob))
                 sec_hist_pred = sec_hist_base * (1.0 + pred_ret_hybrid)
@@ -396,15 +443,46 @@ def run_regional_pipeline(
                         base_prices=sec_hist_base,
                         predicted_prices=sec_hist_pred,
                         region=sec_key,
-                        model_version=resolve_model_tag(region=sec_key, model_type=model_type),
+                        model_version=sec_model_tag,
                         forecast_horizon_days=h,
                         quant_baseline_prices=sec_hist_quant
                     )
                 except Exception as e:
                     logger.debug(f"Secondary regional backfill skipped for {sec_key}: {e}")
 
-                sec_forecast = sec_base_price * (1.0 + baseline_return_h)
-                sec_quant = sec_base_price * (1.0 + quant_return_h)
+                sec_tax_delta_h = get_known_future_tax_deltas(region=sec_key, as_of_date=str(last_date), horizon_days=h)
+                sec_is_ca = bool("ca" in sec_key.lower() or "oakland" in sec_key.lower() or "bayarea" in sec_key.lower() or "los_angeles" in sec_key.lower())
+                if ecm_model and ecm_model.is_fitted:
+                    sec_forecast = round(ecm_model.forecast_horizon(
+                        current_retail=sec_base_price,
+                        current_wholesale=latest_rbob,
+                        future_wholesale_deltas=[raw_pred_h - latest_rbob],
+                        horizon_days=h,
+                        forward_tax_delta=sec_tax_delta_h,
+                        is_california=sec_is_ca
+                    ), 4)
+                    sec_quant = round(ecm_model.forecast_horizon(
+                        current_retail=sec_base_price,
+                        current_wholesale=latest_rbob,
+                        future_wholesale_deltas=[raw_quant_h - latest_rbob],
+                        horizon_days=h,
+                        forward_tax_delta=sec_tax_delta_h,
+                        is_california=sec_is_ca
+                    ), 4)
+                else:
+                    sec_forecast = round(sec_base_price * (1.0 + baseline_return_h) + sec_tax_delta_h, 4)
+                    sec_quant = round(sec_base_price * (1.0 + quant_return_h) + sec_tax_delta_h, 4)
+
+                if sec_guardrails.get(sec_key, False):
+                    from src.models import apply_gated_persistence_blending
+                    sec_forecast = apply_gated_persistence_blending(
+                        raw_pred_price=sec_forecast,
+                        current_base_price=sec_base_price,
+                        lambda_vol=1.0,
+                        guardrail_active=True,
+                        guardrail_alpha=0.5
+                    )
+
                 sec_today_df = pd.DataFrame([{
                     'date': last_date,
                     'current_price': sec_base_price,
@@ -417,7 +495,7 @@ def run_regional_pipeline(
                     log_predictions(
                         sec_today_df,
                         region=sec_key,
-                        model_version=resolve_model_tag(region=sec_key, model_type=model_type),
+                        model_version=sec_model_tag,
                         run_type="LIVE_PROSPECTIVE",
                         forecast_horizon_days=h,
                         is_retroactive_backtest=False
