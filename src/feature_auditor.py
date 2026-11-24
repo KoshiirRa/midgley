@@ -42,7 +42,8 @@ class PointInTimeLeakageAuditor:
         feature_series: pd.Series,
         price_returns: pd.Series,
         max_lags: int = 5,
-        threshold_lead_corr: float = 0.35
+        threshold_lead_corr: float = 0.35,
+        feature_name: str = ""
     ) -> Dict[str, Any]:
         """
         Computes lead-lag cross-correlation between feature at time t and returns at time t + k.
@@ -101,14 +102,22 @@ class PointInTimeLeakageAuditor:
         status = "PASS"
         reason = "Clean point-in-time temporal structure."
 
+        fname_lower = (feature_name or "").lower()
+        is_trailing_return = any(
+            tok in fname_lower for tok in ("_return_", "_pct_change_", "_roc_", "_momentum_")
+        )
+
         if max_lag > 0.50:
             status = "WARN"
             reason = f"Unphysically high forward predictive correlation ({max_lag:.4f}). High probability of target or lookahead leakage."
             leakage_detected = True
         elif max_lead > threshold_lead_corr and max_lead > (max_lag * 1.5):
-            status = "WARN"
-            reason = f"Suspiciously high backward lead correlation ({max_lead:.4f} vs fwd {max_lag:.4f}). Potential lookahead or inverted shift."
-            leakage_detected = True
+            if is_trailing_return:
+                reason = "Clean point-in-time trailing return structure (expected backward window overlap)."
+            else:
+                status = "WARN"
+                reason = f"Suspiciously high backward lead correlation ({max_lead:.4f} vs fwd {max_lag:.4f}). Potential lookahead or inverted shift."
+                leakage_detected = True
 
         return {
             "status": status,
@@ -475,7 +484,8 @@ class FeatureAuditor:
             res = self.leakage_auditor.audit_feature_lead_lag(
                 feature_series=feature_df[col],
                 price_returns=price_returns,
-                max_lags=5
+                max_lags=5,
+                feature_name=col
             )
             leakage_results[col] = res
             status = res.get("status", "PASS")

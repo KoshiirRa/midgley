@@ -96,7 +96,13 @@ class AsymmetricECM:
         if len(df) < 30:
             raise ValueError(f"Insufficient observations for AsymmetricECM fitting ({len(df)} < 30).")
 
-        # Refuse to fit on synthetic constant-margin series (Issue #607, T-1)
+        # Refuse to fit on constant retail series or synthetic constant-margin series (Issue #607, #737)
+        retail_var = float(np.var(df["retail"].values))
+        if retail_var < 1e-6:
+            raise ValueError(
+                f"Cannot fit AsymmetricECM on constant retail price series (variance={retail_var:.2e} < 1e-6). "
+                "Model requires genuine time-varying retail price history."
+            )
         spread = df["retail"].values - df["wholesale"].values
         spread_var = float(np.var(spread))
         if spread_var < 1e-6:

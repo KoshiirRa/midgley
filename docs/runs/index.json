@@ -1,5 +1,35 @@
 [
   {
+    "run_id": "2026-11-24_17-15-15",
+    "timestamp": "2026-11-24 06:37:47",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-24 06:37:47)"
+  },
+  {
+    "run_id": "2026-11-24_06-38-04",
+    "timestamp": "2026-11-24 06:37:47",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-24 06:37:47)"
+  },
+  {
+    "run_id": "2026-11-24_04-43-11",
+    "timestamp": "2026-11-23 03:20:36",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-23 03:20:36)"
+  },
+  {
+    "run_id": "2026-11-23_20-01-00",
+    "timestamp": "2026-11-23 03:20:36",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-23 03:20:36)"
+  },
+  {
+    "run_id": "2026-11-23_03-20-46",
+    "timestamp": "2026-11-23 03:20:36",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-23 03:20:36)"
+  },
+  {
     "run_id": "2026-11-22_23-25-39",
     "timestamp": "2026-11-22 02:35:47",
     "run_type": "LIVE_PROSPECTIVE",
@@ -568,35 +598,5 @@
     "timestamp": "2026-10-27 01:38:29",
     "run_type": "LIVE_PROSPECTIVE",
     "trigger": "Daily Forecast Batch Execution (2026-10-27 01:38:29)"
-  },
-  {
-    "run_id": "2026-10-27_01-38-33",
-    "timestamp": "2026-10-27 01:38:29",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-27 01:38:29)"
-  },
-  {
-    "run_id": "2026-10-26_21-26-48",
-    "timestamp": "2026-10-26 21:26:45",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-26 21:26:45)"
-  },
-  {
-    "run_id": "2026-10-26_19-50-54",
-    "timestamp": "2026-10-26 00:35:17",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-26 00:35:17)"
-  },
-  {
-    "run_id": "2026-10-26_12-32-58",
-    "timestamp": "2026-10-26 00:35:17",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-26 00:35:17)"
-  },
-  {
-    "run_id": "2026-10-26_00-35-22",
-    "timestamp": "2026-10-26 00:35:17",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-26 00:35:17)"
   }
 ]

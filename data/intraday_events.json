@@ -10424,5 +10424,101 @@
       "overall_price_pressure": 0.65
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-23T06:31:01.058407",
+    "headline": "US naval blockade of Iran: Tanker incident reported near Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNY3dvQTY1cnRrWV9zbHJMQk0xM1NRc2daTm1JbEt4MUJud3ltYmxGV0IwOUxFTXhmbHR5RzJrSi1CZlJzSHFacW10Slc3NXFPSWJBNVRBUnNPNmxyaWZteGp2SnRZWmJvVi1ZRGpxT05WVXp2M2JfdlNUWHJuRUctZlQ5cnhCSkFuaDI2RmFDVnZLYzJKVXdzaUJjdU53VkVM?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNY3dvQTY1cnRrWV9zbHJMQk0xM1NRc2daTm1JbEt4MUJud3ltYmxGV0IwOUxFTXhmbHR5RzJrSi1CZlJzSHFacW10Slc3NXFPSWJBNVRBUnNPNmxyaWZteGp2SnRZWmJvVi1ZRGpxT05WVXp2M2JfdlNUWHJuRUctZlQ5cnhCSkFuaDI2RmFDVnZLYzJKVXdzaUJjdU53VkVM?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMioAFBVV95cUxNY3dvQTY1cnRrWV9zbHJMQk0xM1NRc2daTm1JbEt4MUJud3ltYmxGV0IwOUxFTXhmbHR5RzJrSi1CZlJzSHFacW10Slc3NXFPSWJBNVRBUnNPNmxyaWZteGp2SnRZWmJvVi1ZRGpxT05WVXp2M2JfdlNUWHJuRUctZlQ5cnhCSkFuaDI2RmFDVnZLYzJKVXdzaUJjdU53VkVM?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.05,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.2,
+      "overall_price_pressure": 0.9
+    },
+    "pending_review": true,
+    "duplicate_candidate_of": "Tanker incident \u201cinvolving military forces\u201d reported in Strait of Hormuz",
+    "matched_entity": "Strait Of Hormuz",
+    "similarity": 0.33,
+    "duplicate_review_notified": false
+  },
+  {
+    "timestamp": "2026-11-23T20:00:45.616349",
+    "headline": "Could Iran break the US naval blockade in the Strait of Hormuz?",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOVVdCRWVjaEM3WXFzZ2xvNEJqWGZqYXVVdmRXV0oyOHExSVVhU3dCYXd0NXVXVklvdFFaZ1IwNFdtY0hmRzV4eUJpTXBMZ1NlWVdVa183ckNpQnRpRnFQMEdiVjZiTzBISl9VS2JJdG5PaGpCTW5JUkRaOGxNUEFDX3VaZ1VLTTY20gGOAUFVX3lxTFB5VVlSaFZ4b0o1N1VXa08tXzFJN1J2WDVpMC1GbnFYOGFxdVZlWEo3U2t0aDdwbEo0T1NlNmhmUlJyN05vMGN3MHdma1F3T2VtVi1FV2FkMkZBVFlGSWRhX2hfQWRUamhHTXhxUjFmaG9VaTJYMDNsZXVYSmwtUldXTGlvT0UtR1M5cnVKWVE?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOVVdCRWVjaEM3WXFzZ2xvNEJqWGZqYXVVdmRXV0oyOHExSVVhU3dCYXd0NXVXVklvdFFaZ1IwNFdtY0hmRzV4eUJpTXBMZ1NlWVdVa183ckNpQnRpRnFQMEdiVjZiTzBISl9VS2JJdG5PaGpCTW5JUkRaOGxNUEFDX3VaZ1VLTTY20gGOAUFVX3lxTFB5VVlSaFZ4b0o1N1VXa08tXzFJN1J2WDVpMC1GbnFYOGFxdVZlWEo3U2t0aDdwbEo0T1NlNmhmUlJyN05vMGN3MHdma1F3T2VtVi1FV2FkMkZBVFlGSWRhX2hfQWRUamhHTXhxUjFmaG9VaTJYMDNsZXVYSmwtUldXTGlvT0UtR1M5cnVKWVE?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiiAFBVV95cUxOVVdCRWVjaEM3WXFzZ2xvNEJqWGZqYXVVdmRXV0oyOHExSVVhU3dCYXd0NXVXVklvdFFaZ1IwNFdtY0hmRzV4eUJpTXBMZ1NlWVdVa183ckNpQnRpRnFQMEdiVjZiTzBISl9VS2JJdG5PaGpCTW5JUkRaOGxNUEFDX3VaZ1VLTTY20gGOAUFVX3lxTFB5VVlSaFZ4b0o1N1VXa08tXzFJN1J2WDVpMC1GbnFYOGFxdVZlWEo3U2t0aDdwbEo0T1NlNmhmUlJyN05vMGN3MHdma1F3T2VtVi1FV2FkMkZBVFlGSWRhX2hfQWRUamhHTXhxUjFmaG9VaTJYMDNsZXVYSmwtUldXTGlvT0UtR1M5cnVKWVE?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.65,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.2,
+      "opec_action": 0.3,
+      "overall_price_pressure": 0.68
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-24T04:42:55.299138",
+    "headline": "Iran\u2019s Revolutionary Guard Corps Navy says mine blasts set 3 oil tankers ablaze in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOQ3hUejNoS0xseXVnSFdGWnZYd2NfYV9jUmpsWU40NGJtbTF3M1duQmh2T2tNSXpacUhsRTQtSW1GVThHdENUS0dXQ1pKUDJLMU44cS0yMXFaa25NXzJDRVY2eDVlMWRCNjVXelNvcDFINldCQkJmLVZ6M1FtanBIcVFVdjBITXZxRTZLc3lyQWJTU1ZQeW4yNmNlQjIxcVhyT2wzcFZZZ0lWb2otdk5HaGJHcGVoOEZIbURPV3F4Nm5Sd0NBM0tuRnB4cmpqZDFzY3hfVHlMdXd2ckVLdG9z0gHkAUFVX3lxTE4tV0xDWG5uWGs4clZyS0ZoMnRfdFJVcHAtNFpHZWllRVNLVnkzM1FUU0phZk9SUWFobUZ1N19zQ3YxZ29sZGxhdEJ0RHF0R3h2cGhycXNKaGJTQjVjekg2ZHdWb2xSNTgtVFVzZEk1Tk1EOWJ6MjdhQlFBZ2p2dXBnSVphMm9VaV9VcENtMGc5ajlaaW5fQlktelRDdXA1cTVhUllwTHB1Mmt6enZPSVBRMWRlRGQ2R3BTcnlFZEVCN3FoclV0QllyYnNlQ3hzdV9ONjVYWkZoelFNcEhfWmtaUWFuNw?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOQ3hUejNoS0xseXVnSFdGWnZYd2NfYV9jUmpsWU40NGJtbTF3M1duQmh2T2tNSXpacUhsRTQtSW1GVThHdENUS0dXQ1pKUDJLMU44cS0yMXFaa25NXzJDRVY2eDVlMWRCNjVXelNvcDFINldCQkJmLVZ6M1FtanBIcVFVdjBITXZxRTZLc3lyQWJTU1ZQeW4yNmNlQjIxcVhyT2wzcFZZZ0lWb2otdk5HaGJHcGVoOEZIbURPV3F4Nm5Sd0NBM0tuRnB4cmpqZDFzY3hfVHlMdXd2ckVLdG9z0gHkAUFVX3lxTE4tV0xDWG5uWGs4clZyS0ZoMnRfdFJVcHAtNFpHZWllRVNLVnkzM1FUU0phZk9SUWFobUZ1N19zQ3YxZ29sZGxhdEJ0RHF0R3h2cGhycXNKaGJTQjVjekg2ZHdWb2xSNTgtVFVzZEk1Tk1EOWJ6MjdhQlFBZ2p2dXBnSVphMm9VaV9VcENtMGc5ajlaaW5fQlktelRDdXA1cTVhUllwTHB1Mmt6enZPSVBRMWRlRGQ2R3BTcnlFZEVCN3FoclV0QllyYnNlQ3hzdV9ONjVYWkZoelFNcEhfWmtaUWFuNw?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi3wFBVV95cUxOQ3hUejNoS0xseXVnSFdGWnZYd2NfYV9jUmpsWU40NGJtbTF3M1duQmh2T2tNSXpacUhsRTQtSW1GVThHdENUS0dXQ1pKUDJLMU44cS0yMXFaa25NXzJDRVY2eDVlMWRCNjVXelNvcDFINldCQkJmLVZ6M1FtanBIcVFVdjBITXZxRTZLc3lyQWJTU1ZQeW4yNmNlQjIxcVhyT2wzcFZZZ0lWb2otdk5HaGJHcGVoOEZIbURPV3F4Nm5Sd0NBM0tuRnB4cmpqZDFzY3hfVHlMdXd2ckVLdG9z0gHkAUFVX3lxTE4tV0xDWG5uWGs4clZyS0ZoMnRfdFJVcHAtNFpHZWllRVNLVnkzM1FUU0phZk9SUWFobUZ1N19zQ3YxZ29sZGxhdEJ0RHF0R3h2cGhycXNKaGJTQjVjekg2ZHdWb2xSNTgtVFVzZEk1Tk1EOWJ6MjdhQlFBZ2p2dXBnSVphMm9VaV9VcENtMGc5ajlaaW5fQlktelRDdXA1cTVhUllwTHB1Mmt6enZPSVBRMWRlRGQ2R3BTcnlFZEVCN3FoclV0QllyYnNlQ3hzdV9ONjVYWkZoelFNcEhfWmtaUWFuNw?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.85,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.85
+    },
+    "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-24T17:14:56.252197",
+    "headline": "Iran says three tankers hit mines in Hormuz despite U.S. escort, as Treasury widens sanctions",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9aSnVNOTQ5Ml81YUdQSkxzbkI0bVF5OUV4RndqcjVrWkM1SGw4V0tZOVJEbGRmTGgybGxfTUwzRVNISTRFUmxkX0cydWlPcVRCN2dIWFFfaklmbk40ZnptNVMxUURLdWFoRUtUNkNR?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9aSnVNOTQ5Ml81YUdQSkxzbkI0bVF5OUV4RndqcjVrWkM1SGw4V0tZOVJEbGRmTGgybGxfTUwzRVNISTRFUmxkX0cydWlPcVRCN2dIWFFfaklmbk40ZnptNVMxUURLdWFoRUtUNkNR?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMibkFVX3lxTE9aSnVNOTQ5Ml81YUdQSkxzbkI0bVF5OUV4RndqcjVrWkM1SGw4V0tZOVJEbGRmTGgybGxfTUwzRVNISTRFUmxkX0cydWlPcVRCN2dIWFFfaklmbk40ZnptNVMxUURLdWFoRUtUNkNR?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.95,
+      "supply_disruption": 0.85,
+      "upstream_offshore_shutin": 0.05,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.1,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.88
+    },
+    "discord_notified": true
   }
 ]

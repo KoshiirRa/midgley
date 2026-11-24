@@ -154,6 +154,26 @@ class TestEIARetailFeed(unittest.TestCase):
             # Verify Chicago Y03CH alias resolved to YORD on EIA DNAV
             self.assertIn("EMM_EPMR_PTE_YORD_DPG", called_req.full_url)
 
+    def test_get_regional_retail_history_uses_secondary_regional_series_when_primary_empty(self):
+        """Verify get_regional_retail_history falls back to configured secondary regional PADD series instead of a constant scalar (Issue #737)."""
+        import pandas as pd
+        from src.eia_retail_feed import get_regional_retail_history
+
+        mock_feed = MagicMock()
+        mock_feed.fetch_series_history.side_effect = lambda sid: (
+            {} if sid == "GASREGWAZ" else {
+                "2026-10-05": 3.70,
+                "2026-10-12": 3.82,
+                "2026-10-19": 3.91,
+                "2026-10-26": 3.86,
+            }
+        )
+        dates = pd.date_range("2026-10-05", "2026-10-26", freq="B")
+        series = get_regional_retail_history("Phoenix_AZ", dates, live_price=3.899, feed=mock_feed)
+        self.assertEqual(len(series), len(dates))
+        self.assertGreater(float(series.var()), 1e-4)
+        self.assertAlmostEqual(float(series.iloc[-1]), 3.899, places=4)
+
 
 
 if __name__ == "__main__":
