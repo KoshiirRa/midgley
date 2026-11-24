@@ -1,10 +1,10 @@
 {
   "status": "success",
-  "timestamp": "2026-11-23T20:01:32.487457",
+  "timestamp": "2026-11-24T04:43:42.322973",
   "locales": {
     "national": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:29.738875",
+      "timestamp": "2026-11-24T04:43:39.777659",
       "locale": {
         "code": "national",
         "region_id": "National",
@@ -22,7 +22,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:01:29Z"
+          "timestamp": "2026-11-24T04:43:39Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -45,7 +45,7 @@
         "historical_mae_dollars": 0.1707,
         "evaluation_sample_size": 38,
         "day_1_price": 3.697,
-        "day_2_price": 3.707,
+        "day_2_price": 3.706,
         "day_3_price": 3.705,
         "day_4_price": 3.706,
         "day_5_price": 3.732,
@@ -259,7 +259,7 @@
     },
     "tulsa": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:30.113450",
+      "timestamp": "2026-11-24T04:43:40.096201",
       "locale": {
         "code": "tulsa",
         "region_id": "Tulsa_OK",
@@ -277,7 +277,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:50Z"
+          "timestamp": "2026-11-24T04:43:00Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -300,7 +300,7 @@
         "historical_mae_dollars": 0.3258,
         "evaluation_sample_size": 31,
         "day_1_price": 3.069,
-        "day_2_price": 3.046,
+        "day_2_price": 3.05,
         "day_3_price": 3.028,
         "day_4_price": 3.01,
         "day_5_price": 2.992,
@@ -514,7 +514,7 @@
     },
     "oakland": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:30.487335",
+      "timestamp": "2026-11-24T04:43:40.417959",
       "locale": {
         "code": "oakland",
         "region_id": "Oakland_CA",
@@ -532,7 +532,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:55Z"
+          "timestamp": "2026-11-24T04:43:05Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -555,7 +555,7 @@
         "historical_mae_dollars": 0.2846,
         "evaluation_sample_size": 31,
         "day_1_price": 5.493,
-        "day_2_price": 5.476,
+        "day_2_price": 5.477,
         "day_3_price": 5.459,
         "day_4_price": 5.441,
         "day_5_price": 5.428,
@@ -769,7 +769,7 @@
     },
     "newark": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:30.857705",
+      "timestamp": "2026-11-24T04:43:40.749705",
       "locale": {
         "code": "newark",
         "region_id": "Newark_DE",
@@ -787,7 +787,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:51Z"
+          "timestamp": "2026-11-24T04:43:00Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -810,7 +810,7 @@
         "historical_mae_dollars": 0.2707,
         "evaluation_sample_size": 31,
         "day_1_price": 3.695,
-        "day_2_price": 3.712,
+        "day_2_price": 3.71,
         "day_3_price": 3.709,
         "day_4_price": 3.712,
         "day_5_price": 3.753,
@@ -1024,7 +1024,7 @@
     },
     "cincinnati": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:31.233338",
+      "timestamp": "2026-11-24T04:43:41.249555",
       "locale": {
         "code": "cincinnati",
         "region_id": "Cincinnati_OH",
@@ -1042,7 +1042,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:51Z"
+          "timestamp": "2026-11-24T04:43:01Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1065,7 +1065,7 @@
         "historical_mae_dollars": 0.1802,
         "evaluation_sample_size": 31,
         "day_1_price": 3.048,
-        "day_2_price": 3.035,
+        "day_2_price": 3.037,
         "day_3_price": 3.026,
         "day_4_price": 3.015,
         "day_5_price": 3.006,
@@ -1279,7 +1279,7 @@
     },
     "greenville": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:31.359578",
+      "timestamp": "2026-11-24T04:43:41.379442",
       "locale": {
         "code": "greenville",
         "region_id": "Greenville_NC",
@@ -1297,7 +1297,7 @@
           "served_granularity": "STATE",
           "is_fallback_granularity": true,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:52Z"
+          "timestamp": "2026-11-24T04:43:02Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1306,7 +1306,7 @@
       "forecast": {
         "model_version": "v1.6 Ipatieff",
         "forecast_horizon_days": 5,
-        "target_date": "2026-11-28",
+        "target_date": "2026-11-29",
         "current_base_price": 3.003,
         "predicted_price_per_gal": 3.003,
         "expected_change_dollars": 0.0,
@@ -1534,7 +1534,7 @@
     },
     "charlotte": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:31.735111",
+      "timestamp": "2026-11-24T04:43:41.705787",
       "locale": {
         "code": "charlotte",
         "region_id": "Charlotte_NC",
@@ -1552,7 +1552,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:52Z"
+          "timestamp": "2026-11-24T04:43:02Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1575,7 +1575,7 @@
         "historical_mae_dollars": 0.2706,
         "evaluation_sample_size": 31,
         "day_1_price": 2.977,
-        "day_2_price": 2.99,
+        "day_2_price": 2.988,
         "day_3_price": 2.987,
         "day_4_price": 2.99,
         "day_5_price": 3.023,
@@ -1789,7 +1789,7 @@
     },
     "port_st_lucie": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:32.110594",
+      "timestamp": "2026-11-24T04:43:42.013004",
       "locale": {
         "code": "port_st_lucie",
         "region_id": "Port_St_Lucie_FL",
@@ -1807,7 +1807,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:53Z"
+          "timestamp": "2026-11-24T04:43:03Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -1830,7 +1830,7 @@
         "historical_mae_dollars": 0.1332,
         "evaluation_sample_size": 31,
         "day_1_price": 3.442,
-        "day_2_price": 3.45,
+        "day_2_price": 3.458,
         "day_3_price": 3.456,
         "day_4_price": 3.468,
         "day_5_price": 3.505,
@@ -2044,7 +2044,7 @@
     },
     "bayarea": {
       "status": "success",
-      "timestamp": "2026-11-23T20:01:32.485803",
+      "timestamp": "2026-11-24T04:43:42.320772",
       "locale": {
         "code": "bayarea",
         "region_id": "BayArea_CA",
@@ -2062,7 +2062,7 @@
           "served_granularity": "METRO",
           "is_fallback_granularity": false,
           "cache_status": "HIT_FRESH",
-          "timestamp": "2026-11-23T20:00:55Z"
+          "timestamp": "2026-11-24T04:43:05Z"
         },
         "cache_hit": false,
         "cache_age_seconds": 0.0,
@@ -2085,7 +2085,7 @@
         "historical_mae_dollars": 0.3485,
         "evaluation_sample_size": 31,
         "day_1_price": 5.631,
-        "day_2_price": 5.654,
+        "day_2_price": 5.653,
         "day_3_price": 5.65,
         "day_4_price": 5.655,
         "day_5_price": 5.718,

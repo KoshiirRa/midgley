@@ -1,48 +1,8 @@
 {
   "created_at": "2026-08-30 17:46:33",
-  "last_updated": "2026-11-23 20:01:37",
+  "last_updated": "2026-11-24 04:43:51",
   "total_events": 1000,
   "events": [
-    {
-      "timestamp": "2026-10-15 00:48:56",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 33.95,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier public_proxy yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-15 00:48:56",
-      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
-      "target": "Trump energy oil gasoline tariffs OPEC",
-      "status": "FAILOVER",
-      "latency_ms": 56.22,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Tier search_fallback yielded 0 items; cascading..."
-    },
-    {
-      "timestamp": "2026-10-15 00:49:32",
-      "connector_name": "HindsightHosted",
-      "target": "Midgley",
-      "status": "SUCCESS",
-      "latency_ms": 262.24,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Stats: 338 docs, 236 obs, 0 refs"
-    },
-    {
-      "timestamp": "2026-10-15 00:49:41",
-      "connector_name": "HeadlineArena",
-      "target": "RB",
-      "status": "ALREADY_SUBMITTED_TODAY",
-      "latency_ms": 3378.21,
-      "data_age_hours": 0.0,
-      "is_stale": false,
-      "details": "Challenge ef8c8758-99cd-4ce7-a0dc-5254223e19ce already predicted (HTTP 400)"
-    },
     {
       "timestamp": "2026-10-15 00:49:44",
       "connector_name": "HeadlineArena",
@@ -10002,6 +9962,46 @@
       "data_age_hours": 0.0,
       "is_stale": false,
       "details": "No active challenge found for CL on Headline Arena."
+    },
+    {
+      "timestamp": "2026-11-24 04:42:10",
+      "connector_name": "Reachability_EXECUTIVE_SOCIAL",
+      "target": "Trump energy oil gasoline tariffs OPEC",
+      "status": "SUCCESS",
+      "latency_ms": 217.04,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Resolved via rss_syndication (3 items)"
+    },
+    {
+      "timestamp": "2026-11-24 04:43:38",
+      "connector_name": "HindsightHosted",
+      "target": "Midgley",
+      "status": "SUCCESS",
+      "latency_ms": 1054.29,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Stats: 487 docs, 392 obs, 0 refs"
+    },
+    {
+      "timestamp": "2026-11-24 04:43:48",
+      "connector_name": "HeadlineArena",
+      "target": "RB",
+      "status": "SUCCESS",
+      "latency_ms": 4110.47,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted RB (challenge b344110f-9cf9-4e89-9b49-c31df24c8933): direction=bullish, confidence=0.9394, scored=True"
+    },
+    {
+      "timestamp": "2026-11-24 04:43:51",
+      "connector_name": "HeadlineArena",
+      "target": "CL",
+      "status": "SUCCESS",
+      "latency_ms": 2793.88,
+      "data_age_hours": 0.0,
+      "is_stale": false,
+      "details": "Submitted CL (challenge cec78304-41c9-486b-a624-e4fbdd46a43a): direction=bullish, confidence=0.9095, scored=True"
     }
   ]
 }
