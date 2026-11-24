@@ -7,6 +7,7 @@ in the KoshiirRa/midgley repository detailing rolling accuracy, backtest errors,
 from __future__ import annotations
 
 import os
+import time
 import json
 import subprocess
 import urllib.request
@@ -168,7 +169,11 @@ def send_degradation_webhook_alert(alert_summary: dict, webhook_url: Optional[st
         return False
 
 
-def evaluate_model_degradation_alerts(window_days: int | str = 30, repo: str = "KoshiirRa/midgley") -> dict:
+def evaluate_model_degradation_alerts(
+    window_days: int | str = 30, 
+    repo: str = "KoshiirRa/midgley",
+    df: Optional[pd.DataFrame] = None
+) -> dict:
     """
     Evaluates rolling MAE uplift across all active regions.
     If model_uplift_mae_pct < 0.0 for any region with evaluated records,
@@ -177,7 +182,9 @@ def evaluate_model_degradation_alerts(window_days: int | str = 30, repo: str = "
     """
     try:
         from src.prediction_logger import compute_regional_scoreboard_breakdown
-        regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window_days)
+        if df is None:
+            df = load_prediction_records()
+        regional_breakdown = compute_regional_scoreboard_breakdown(window_days=window_days, include_retroactive=False, df=df)
     except Exception as e:
         logger.warning(f"Could not fetch regional scoreboard breakdown for degradation check: {e}")
         regional_breakdown = []
@@ -576,6 +583,13 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
     ]
 
     ranked = []
+    active_scens = []
+    try:
+        from src.scenario_engine import get_all_scenarios_with_plausibility
+        active_scens = get_all_scenarios_with_plausibility(active_only=True).get("scenarios", [])
+    except Exception:
+        pass
+
     for issue in issues:
         title_str = str(issue.get("title", ""))
         body_str = str(issue.get("body", "") or "")
@@ -641,30 +655,25 @@ def _evaluate_issues_heuristic(issues: list, nat_mae: float, tulsa_mae: float) -
             category = "Data & Feed Ingestion"
 
         # Seasonal Plausibility Priority Boost (Issue #300) — only when the issue title/topic itself targets that seasonal driver
-        try:
-            from src.scenario_engine import get_all_scenarios_with_plausibility
-            active_scens = get_all_scenarios_with_plausibility(active_only=True).get("scenarios", [])
-            for asc in active_scens:
-                cat_name = asc.get("category", "")
-                sid_name = asc.get("scenario_id", "")
-                if ("hurricane" in title_lower or "tropical" in title_lower or "shut-in" in title_lower or "shutin" in title_lower) and ("hurricane" in sid_name or "meteorological" in cat_name):
-                    score += 0.7
-                    category = "Seasonal Priority: Tropical & Weather Shock"
-                    break
-                elif ("freeze" in title_lower or "polar vortex" in title_lower or "winter" in title_lower) and ("freeze" in sid_name or "vortex" in sid_name):
-                    score += 0.7
-                    category = "Seasonal Priority: Winter Freeze & Grid Outage"
-                    break
-                elif ("drought" in title_lower or "low water" in title_lower or "barge" in title_lower or "river" in title_lower) and ("water" in sid_name or "hydrological" in cat_name):
-                    score += 0.7
-                    category = "Seasonal Priority: River Drought & Waterway Restriction"
-                    break
-                elif ("rvp" in title_lower or "carb" in title_lower or "summer blend" in title_lower or "transition" in title_lower) and ("transition" in sid_name or "spec" in cat_name):
-                    score += 0.7
-                    category = "Seasonal Priority: Regulatory Fuel Spec Switchover"
-                    break
-        except Exception:
-            pass
+        for asc in active_scens:
+            cat_name = asc.get("category", "")
+            sid_name = asc.get("scenario_id", "")
+            if ("hurricane" in title_lower or "tropical" in title_lower or "shut-in" in title_lower or "shutin" in title_lower) and ("hurricane" in sid_name or "meteorological" in cat_name):
+                score += 0.7
+                category = "Seasonal Priority: Tropical & Weather Shock"
+                break
+            elif ("freeze" in title_lower or "polar vortex" in title_lower or "winter" in title_lower) and ("freeze" in sid_name or "vortex" in sid_name):
+                score += 0.7
+                category = "Seasonal Priority: Winter Freeze & Grid Outage"
+                break
+            elif ("drought" in title_lower or "low water" in title_lower or "barge" in title_lower or "river" in title_lower) and ("water" in sid_name or "hydrological" in cat_name):
+                score += 0.7
+                category = "Seasonal Priority: River Drought & Waterway Restriction"
+                break
+            elif ("rvp" in title_lower or "carb" in title_lower or "summer blend" in title_lower or "transition" in title_lower) and ("transition" in sid_name or "spec" in cat_name):
+                score += 0.7
+                category = "Seasonal Priority: Regulatory Fuel Spec Switchover"
+                break
 
         score = max(0.5, min(round(score, 1), 9.9))
 
@@ -715,6 +724,9 @@ def evaluate_open_issues_for_modelling(issues: list, nat_mae: float = 0.1069, tu
             "recommended_implementation": "N/A",
             "summary_markdown": "ℹ️ *No open GitHub issues currently found on repository KoshiirRa/midgley.*"
         }
+
+    if os.environ.get("TESTING") == "1" and api_key is None:
+        return _evaluate_issues_heuristic(issues, nat_mae, tulsa_mae)
 
     if api_key is None:
         api_key = os.environ.get("GEMINI_API_KEY")
@@ -873,7 +885,7 @@ REGION_METADATA = {
         "architecture": "SFPP Pipeline Corridor + Hayward Fault Seismic Alert"
     },
     "Greenville_NC": {
-        "display_name": "Greenville, NC Metro Retail (PADD 1C)",
+        "display_name": "Greenville, NC Metro Retail (Legacy / Merged into Charlotte)",
         "architecture": "Colonial Pipeline Selma Hub + Tar River Flooding Model"
     },
     "Charlotte_NC": {
@@ -883,15 +895,64 @@ REGION_METADATA = {
     "Port_St_Lucie_FL": {
         "display_name": "Port St. Lucie, FL Metro Retail (PADD 1C)",
         "architecture": "Port Everglades Marine Offloading + FL Tax & Hurricane Model"
+    },
+    "Chicago_IL": {
+        "display_name": "Chicago, IL Metro Retail",
+        "architecture": "Whiting Refinery + PADD 2 Pipeline Logistics"
+    },
+    "Houston_TX": {
+        "display_name": "Houston, TX Metro Retail (PADD 3)",
+        "architecture": "Gulf Coast Refining Complex + Houston Ship Channel"
+    },
+    "Los_Angeles_CA": {
+        "display_name": "Los Angeles, CA Metro Retail (PADD 5)",
+        "architecture": "CARB Phase 3 Gasoline + Torrance/El Segundo Refining"
+    },
+    "Denver_CO": {
+        "display_name": "Denver Front Range, CO Retail (PADD 4)",
+        "architecture": "Suncor Commerce City Refinery + Front Range Logistics"
+    },
+    "New_York_NY": {
+        "display_name": "New York, NY Metro Retail (PADD 1B)",
+        "architecture": "New York Harbor Barging + Bayway Refinery Logistics"
+    },
+    "Seattle_WA": {
+        "display_name": "Seattle, WA Metro Retail (PADD 5)",
+        "architecture": "Olympic Pipeline Corridor + Puget Sound Refining Hub"
+    },
+    "Phoenix_AZ": {
+        "display_name": "Phoenix, AZ Metro Retail (PADD 5)",
+        "architecture": "Kinder Morgan SFPP Pipeline + West Texas/California Feed"
+    },
+    "Anchorage_AK": {
+        "display_name": "Anchorage, AK Metro Retail (PADD 5)",
+        "architecture": "Cook Inlet / Nikiski Refinery + Marine Tanker Logistics"
+    },
+    "Honolulu_HI": {
+        "display_name": "Honolulu, HI Metro Retail (PADD 5)",
+        "architecture": "Par Hawaii Kapolei Refinery + Island Freight Logistics"
+    },
+    "Guam_GU": {
+        "display_name": "Guam Territory Retail (PADD 5)",
+        "architecture": "Apra Harbor Marine Headers + Asian Tanker Imports"
+    },
+    "San_Juan_PR": {
+        "display_name": "San Juan, PR Metro Retail (PADD 6)",
+        "architecture": "San Juan Harbor Tanker Berths + Jones Act Logistics"
+    },
+    "Boston_MA": {
+        "display_name": "Boston, MA Metro Retail (PADD 1A)",
+        "architecture": "Boston Harbor Product Barges + Irving Oil Marine Imports"
     }
 }
 
 
-def format_mlops_observability_markdown_section() -> str:
+def format_mlops_observability_markdown_section(generation_time: Optional[float] = None) -> str:
     """Generates MLOps observability & feature attribution markdown for the weekly review report."""
     try:
         from src.prediction_logger import compute_mlops_observability_summary
-        obs = compute_mlops_observability_summary(window_days=30)
+        df = load_prediction_records()
+        obs = compute_mlops_observability_summary(window_days=30, include_retroactive=False, df=df)
         
         n_eval = obs.get("total_evaluations", 0)
         if n_eval == 0:
@@ -910,6 +971,11 @@ def format_mlops_observability_markdown_section() -> str:
         
         wandb_status = "🟢 Active (Online)" if is_wandb_enabled() else "ℹ️ Configured (Standby)"
 
+        gen_time_row = ""
+        if generation_time is not None:
+            gen_status = "🟢 Optimal" if generation_time < 10.0 else "⚠️ SLOW"
+            gen_time_row = f"\n| **Report Generation Latency** | **`{generation_time:.1f}s`** | `< 10.0s` | {gen_status} |"
+
         section = f"""## 📊 Extended MLOps Observability & Feature Attribution (30-Day Window)
 
 | Metric / Dimension | Metric Value | Benchmark Target | Status |
@@ -918,7 +984,7 @@ def format_mlops_observability_markdown_section() -> str:
 | **95% Confidence Interval Coverage** | **`{ci_cov:.1f}%`** | `> 90.0%` | {"✅ Well Calibrated" if ci_cov >= 90 else "ℹ️ Active Tracking"} |
 | **Weights & Biases (W&B) Dashboard** | [wandb.ai/midgley-gas-forecasting](https://wandb.ai) | Continuous Run Tracking | {wandb_status} |
 | **Mean LLM Price Pressure Vector** | `{avg_press:+.4f}` | `-1.0 to +1.0` | 🟢 Balanced |
-| **Mean LLM Supply Disruption Vector** | `{avg_disr:+.4f}` | `0.0 to +1.0` | 🟢 Active |
+| **Mean LLM Supply Disruption Vector** | `{avg_disr:+.4f}` | `0.0 to +1.0` | 🟢 Active |{gen_time_row}
 
 #### 🌐 Data Feed Provenance Performance Breakdown:
 | Data Feed Source | Evaluated Records | Mean Absolute Error (MAE) |
@@ -1176,10 +1242,11 @@ def format_scenario_plausibility_markdown_section() -> str:
 
         plausible_scenarios = active_threats + in_season + prospective + evergreen[:4]
         stress_count = 0
-        for ps in plausible_scenarios:
+
+        def _run_single_stress(ps):
             sid = ps.get("scenario_id")
             if not sid:
-                continue
+                return None
             locs = ps.get("locales", ["national"])
             target_loc = locs[0] if locs else "national"
 
@@ -1191,8 +1258,7 @@ def format_scenario_plausibility_markdown_section() -> str:
                     base_p = base_res.get("price", 3.184)
                     dol_imp = round(base_p * custom_pct, 3)
                     sim_p = round(base_p + dol_imp, 3)
-                    lines.append(f"| **{ps.get('name')}** | `{target_loc}` | `${base_p:.3f}` | **`${sim_p:.3f}`** | `{dol_imp:+.3f}` | `{custom_pct*100:+.1f}%` | 🟣 Prospective Forward Synthesis |")
-                    stress_count += 1
+                    return f"| **{ps.get('name')}** | `{target_loc}` | `${base_p:.3f}` | **`${sim_p:.3f}`** | `{dol_imp:+.3f}` | `{custom_pct*100:+.1f}%` | 🟣 Prospective Forward Synthesis |"
                 else:
                     req = SimulateRequest(scenario_id=sid, locale=target_loc, target_date=today_str)
                     res = simulate_shock(req)
@@ -1203,10 +1269,19 @@ def format_scenario_plausibility_markdown_section() -> str:
                     d_p = sim_info.get("shock_delta_dollars", 0.0)
                     pct_p = sim_info.get("shock_delta_percent", 0.0)
                     st_str = plaus_info.get("status", "EVERGREEN")
-                    lines.append(f"| **{ps.get('name')}** | `{target_loc}` | `${b_p:.3f}` | **`${s_p:.3f}`** | `{d_p:+.3f}` | `{pct_p:+.1f}%` | {st_str} ({plaus_info.get('score', 0.8):.2f}) |")
-                    stress_count += 1
+                    return f"| **{ps.get('name')}** | `{target_loc}` | `${b_p:.3f}` | **`${s_p:.3f}`** | `{d_p:+.3f}` | `{pct_p:+.1f}%` | {st_str} ({plaus_info.get('score', 0.8):.2f}) |"
             except Exception as e:
                 logger.debug(f"Stress test notice for {sid}: {e}")
+                return None
+
+        if plausible_scenarios:
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=min(len(plausible_scenarios), 8)) as pool:
+                sim_rows = list(pool.map(_run_single_stress, plausible_scenarios))
+            for r in sim_rows:
+                if r:
+                    lines.append(r)
+                    stress_count += 1
 
         if stress_count == 0:
             lines.append("| *No active seasonal shocks evaluated.* | N/A | N/A | N/A | N/A | N/A | Evergreen Baseline |")
@@ -1219,14 +1294,148 @@ def format_scenario_plausibility_markdown_section() -> str:
         return f"## 🌪️ Scenario Seasonality & Climatological Horizon Matrix\n*Plausibility audit notice: {e}*"
 
 
+CONSOLIDATED_RETIRED_REGIONS = frozenset({"Greenville_NC"})
+
+
+def _is_test_region_name(region: Any) -> bool:
+    """Returns True if region identifier represents a test fixture/artifact."""
+    reg_str = str(region or "").strip()
+    if not reg_str:
+        return True
+    lower = reg_str.lower()
+    return lower.startswith("test_") or "test" in lower
+
+
+def _sanitize_prediction_records(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Applies consistent data-integrity hygiene to prediction records from either DB or CSV:
+    - Filters out Test_Region / Test_* test artifacts.
+    - Resets implausible regional/wholesale actual price evaluations to NaN.
+    """
+    if df.empty:
+        return df
+
+    cleaned = df.copy()
+    if 'region' in cleaned.columns:
+        cleaned = cleaned[~cleaned['region'].apply(_is_test_region_name)].copy()
+
+    if not cleaned.empty and 'region' in cleaned.columns and 'actual_5d_price' in cleaned.columns:
+        from src.prediction_logger import validate_price_plausibility
+        invalid_eval_mask = cleaned.apply(
+            lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
+                r.get('actual_5d_price'),
+                str(r.get('region', 'National')),
+                is_retail=(str(r.get('region', 'National')) != 'National')
+            ),
+            axis=1
+        )
+        if invalid_eval_mask.any():
+            for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
+                if c in cleaned.columns:
+                    cleaned.loc[invalid_eval_mask, c] = np.nan
+
+    return cleaned
+
+
+def _format_projected_direction(curr_p: Any, fore_p: Any, tolerance: float = 1e-4) -> str:
+    """
+    Computes 3-way projected direction label ('UP 📈', 'DOWN 📉', 'FLAT ➡️')
+    or 'N/A' when either price is missing/non-finite.
+    """
+    try:
+        c_val = float(curr_p)
+        f_val = float(fore_p)
+    except (TypeError, ValueError):
+        return "N/A"
+    if np.isnan(c_val) or np.isnan(f_val) or np.isinf(c_val) or np.isinf(f_val):
+        return "N/A"
+    if f_val < c_val - tolerance:
+        return "DOWN 📉"
+    if f_val > c_val + tolerance:
+        return "UP 📈"
+    return "FLAT ➡️"
+
+
+def _select_active_latest_forecasts(df: pd.DataFrame, today_str: str) -> pd.DataFrame:
+    """
+    Selects the single latest active 5-day prospective out-of-time forecast per active region:
+    - Excludes test artifacts (Test_*) and consolidated/retired regions (e.g. Greenville_NC).
+    - Prefers prospective non-backtest records and 5-day horizon rows.
+    - Sorts chronologically by (forecast_target_date, log_timestamp) prior to deduplication.
+    - Excludes stale/already-matured forecasts with forecast_target_date < today_str.
+    """
+    if df.empty or 'region' not in df.columns:
+        return pd.DataFrame()
+
+    cand = df.dropna(subset=['region']).copy()
+    cand = cand[
+        ~cand['region'].apply(_is_test_region_name)
+        & ~cand['region'].astype(str).isin(CONSOLIDATED_RETIRED_REGIONS)
+    ].copy()
+    if cand.empty:
+        return cand
+
+    # Exclude retroactive backtest records from active out-of-time forecast table
+    prospective_mask = pd.Series(True, index=cand.index)
+    if 'run_type' in cand.columns:
+        prospective_mask &= ~cand['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)
+    if 'is_retroactive_backtest' in cand.columns:
+        retro_flags = cand['is_retroactive_backtest'].apply(
+            lambda v: str(v).strip().lower() in {"true", "1", "1.0", "t"} if pd.notna(v) else False
+        )
+        prospective_mask &= ~retro_flags
+    if prospective_mask.any():
+        cand = cand[prospective_mask].copy()
+
+    # Prefer 5-day horizon forecasts when present
+    if 'forecast_horizon_days' in cand.columns:
+        h_num = pd.to_numeric(cand['forecast_horizon_days'], errors='coerce')
+        if (h_num == 5).any():
+            cand = cand[h_num == 5].copy()
+
+    if cand.empty:
+        return cand
+
+    # Normalize target_date and filter strictly to non-stale active targets (>= today_str)
+    if 'forecast_target_date' in cand.columns:
+        cand['_target_date_norm'] = cand['forecast_target_date'].astype(str).str.slice(0, 10)
+        valid_date_mask = cand['_target_date_norm'].str.match(r"^\d{4}-\d{2}-\d{2}$", na=False)
+        cand = cand[valid_date_mask & (cand['_target_date_norm'] >= today_str)].copy()
+        if cand.empty:
+            return cand
+    else:
+        cand['_target_date_norm'] = ""
+
+    if 'log_timestamp' in cand.columns:
+        cand['_log_ts_norm'] = cand['log_timestamp'].astype(str)
+    else:
+        cand['_log_ts_norm'] = ""
+
+    cand = cand.sort_values(
+        by=['region', '_target_date_norm', '_log_ts_norm'],
+        ascending=[True, True, True],
+        kind='mergesort'
+    )
+    latest_df = cand.groupby('region', as_index=False, sort=True).last()
+    return latest_df.drop(columns=['_target_date_norm', '_log_ts_norm'], errors='ignore')
+
+
 def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
     """
     Loads prediction and evaluation records from unified database (Turso libSQL / SQLite),
-    with graceful fallback to prediction_history.csv when offline or in test environments.
-    Enriches database records with current_base_price, predicted_direction, and evaluated actuals
-    from prediction_history.csv when available.
+    reconciled with prediction_history.csv to preserve both live database records and historical evaluated actuals.
+    Enforces honest provenance, point-in-time integrity, and purges test artifacts.
     """
+    csv_df = pd.DataFrame()
+    if csv_path and os.path.exists(csv_path):
+        try:
+            from src.prediction_logger import read_prediction_history
+            csv_df = read_prediction_history(csv_path)
+        except Exception as csv_err:
+            logger.debug(f"CSV read notice in load_prediction_records: {csv_err}")
+
     # 1. Attempt database query
+    db_df = pd.DataFrame()
     try:
         from src.db.client import get_db
         db = get_db()
@@ -1255,17 +1464,16 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
         """
         rows = db.execute(sql)
         if rows:
-            df = pd.DataFrame(rows)
+            db_df = pd.DataFrame(rows)
             for col in ['predicted_5d_price', 'prediction_lower_95ci', 'prediction_upper_95ci',
                         'llm_price_pressure', 'llm_supply_disruption', 'actual_5d_price',
                         'error_dollars', 'directional_hit', 'within_95ci_hit']:
-                if col in df.columns:
-                    df[col] = pd.to_numeric(df[col], errors='coerce')
-            if 'forecast_horizon_days' in df.columns:
-                df['forecast_horizon_days'] = pd.to_numeric(df['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
+                if col in db_df.columns:
+                    db_df[col] = pd.to_numeric(db_df[col], errors='coerce')
+            if 'forecast_horizon_days' in db_df.columns:
+                db_df['forecast_horizon_days'] = pd.to_numeric(db_df['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
 
-            # Extract base_price from point_in_time_features JSON if stored in DB
-            if 'current_base_price' not in df.columns and 'point_in_time_features' in df.columns:
+            if 'current_base_price' not in db_df.columns and 'point_in_time_features' in db_df.columns:
                 def _extract_pit_base(val):
                     if not val or pd.isna(val):
                         return np.nan
@@ -1277,77 +1485,96 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
                     except Exception:
                         pass
                     return np.nan
-                df['current_base_price'] = df['point_in_time_features'].apply(_extract_pit_base)
-
-            # Enrich from CSV ledger if present (supplies current_base_price, predicted_direction, and CSV-evaluated rows)
-            if csv_path and os.path.exists(csv_path):
-                try:
-                    from src.prediction_logger import read_prediction_history
-                    csv_df = read_prediction_history(csv_path)
-                    if not csv_df.empty and 'forecast_id' in csv_df.columns and 'forecast_id' in df.columns:
-                        csv_dedup = csv_df.dropna(subset=['forecast_id']).drop_duplicates(subset=['forecast_id'], keep='last')
-                        enrich_cols = [
-                            c for c in [
-                                'current_base_price', 'predicted_direction', 'quant_baseline_5d_price',
-                                'is_retroactive_backtest', 'actual_5d_price', 'error_dollars',
-                                'directional_hit', 'within_95ci_hit', 'data_source_provenance'
-                            ]
-                            if c in csv_dedup.columns
-                        ]
-                        if enrich_cols:
-                            csv_map = csv_dedup.set_index('forecast_id')[enrich_cols]
-                            for col in enrich_cols:
-                                mapped_s = df['forecast_id'].map(csv_map[col])
-                                if col not in df.columns:
-                                    df[col] = mapped_s
-                                else:
-                                    df[col] = df[col].combine_first(mapped_s)
-                    # Also fallback match on (region, forecast_target_date, forecast_horizon_days) for current_base_price if forecast_id differed
-                    if 'current_base_price' in df.columns and df['current_base_price'].isna().any() and not csv_df.empty:
-                        if all(k in csv_df.columns for k in ['region', 'forecast_target_date', 'current_base_price']):
-                            comp_dedup = csv_df.dropna(subset=['region', 'forecast_target_date', 'current_base_price']).drop_duplicates(
-                                subset=['region', 'forecast_target_date'], keep='last'
-                            )
-                            comp_map = comp_dedup.set_index(['region', 'forecast_target_date'])['current_base_price']
-                            idx_tuples = list(zip(df['region'], df['forecast_target_date']))
-                            fallback_bp = pd.Series([comp_map.get(t, np.nan) for t in idx_tuples], index=df.index)
-                            df['current_base_price'] = df['current_base_price'].combine_first(fallback_bp)
-                except Exception as csv_err:
-                    logger.debug(f"CSV enrichment notice in load_prediction_records: {csv_err}")
-
-            # Purge corrupted regional evaluations (e.g. legacy_ledger $3.061 National prices in CA/DE or Test_Region)
-            if 'region' in df.columns:
-                df = df[~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)].copy()
-            if 'region' in df.columns and 'actual_5d_price' in df.columns:
-                from src.prediction_logger import validate_price_plausibility
-                invalid_eval_mask = df.apply(
-                    lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
-                        r.get('actual_5d_price'),
-                        str(r.get('region', 'National')),
-                        is_retail=(str(r.get('region', 'National')) != 'National')
-                    ),
-                    axis=1
-                )
-                if invalid_eval_mask.any():
-                    for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
-                        if c in df.columns:
-                            df.loc[invalid_eval_mask, c] = np.nan
-
-            if 'current_base_price' not in df.columns:
-                df['current_base_price'] = df['predicted_5d_price'] if 'predicted_5d_price' in df.columns else 0.0
-            elif 'predicted_5d_price' in df.columns:
-                df['current_base_price'] = pd.to_numeric(df['current_base_price'], errors='coerce').fillna(df['predicted_5d_price'])
-
-            logger.info(f"Loaded {len(df)} prediction records directly from unified database.")
-            return df
+                db_df['current_base_price'] = db_df['point_in_time_features'].apply(_extract_pit_base)
     except Exception as e:
         logger.debug(f"Notice: Database query failed ({e}), falling back to CSV datastore.")
 
-    # 2. Fallback to CSV
-    from src.prediction_logger import read_prediction_history
-    if os.path.exists(csv_path):
-        return read_prediction_history(csv_path)
-    return pd.DataFrame()
+    # Reconcile DB and CSV records with full union and column-wise enrichment
+    if not db_df.empty and not csv_df.empty:
+        if 'forecast_id' in db_df.columns and 'forecast_id' in csv_df.columns:
+            db_missing_id = db_df[db_df['forecast_id'].isna()].copy()
+            csv_missing_id = csv_df[csv_df['forecast_id'].isna()].copy()
+            db_dedup = db_df.dropna(subset=['forecast_id']).drop_duplicates(subset=['forecast_id'], keep='last')
+            csv_dedup = csv_df.dropna(subset=['forecast_id']).drop_duplicates(subset=['forecast_id'], keep='last')
+
+            db_indexed = db_dedup.set_index('forecast_id')
+            csv_indexed = csv_dedup.set_index('forecast_id')
+
+            # Combine all keyed records: preserve DB rows first, then CSV-only rows
+            merged = db_indexed.combine_first(csv_indexed)
+            db_order = list(db_indexed.index)
+            csv_only_order = [idx for idx in csv_indexed.index if idx not in db_indexed.index]
+            df = merged.loc[db_order + csv_only_order].reset_index()
+
+            # Secondary horizon-aware base-price enrichment when DB and CSV forecast_ids differ (Issue #737)
+            if (
+                'current_base_price' in csv_dedup.columns
+                and {'region', 'forecast_target_date', 'forecast_horizon_days'}.issubset(df.columns)
+                and {'region', 'forecast_target_date', 'forecast_horizon_days'}.issubset(csv_dedup.columns)
+            ):
+                if 'current_base_price' not in df.columns:
+                    df['current_base_price'] = np.nan
+                missing_bp = df['current_base_price'].isna()
+                if missing_bp.any():
+                    csv_bp = csv_dedup.dropna(subset=['current_base_price']).copy()
+                    csv_bp['_h'] = pd.to_numeric(csv_bp['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
+                    bp_lookup = {
+                        (str(r['region']), str(r['forecast_target_date'])[:10], int(r['_h'])): r['current_base_price']
+                        for _, r in csv_bp.iterrows()
+                    }
+                    for idx_row in df.index[missing_bp]:
+                        h_val = pd.to_numeric(df.at[idx_row, 'forecast_horizon_days'], errors='coerce')
+                        key = (
+                            str(df.at[idx_row, 'region']),
+                            str(df.at[idx_row, 'forecast_target_date'])[:10],
+                            int(h_val) if pd.notna(h_val) else 5,
+                        )
+                        if key in bp_lookup:
+                            df.at[idx_row, 'current_base_price'] = bp_lookup[key]
+
+            # Preserve legacy rows lacking forecast_id instead of silently dropping them
+            if not db_missing_id.empty or not csv_missing_id.empty:
+                df = pd.concat([df, db_missing_id, csv_missing_id], ignore_index=True)
+        else:
+            df = pd.concat([csv_df, db_df], ignore_index=True)
+    elif not db_df.empty:
+        df = db_df
+    elif not csv_df.empty:
+        df = csv_df
+    else:
+        return pd.DataFrame()
+
+    # Numeric coercion for prediction and evaluation columns
+    for col in ['predicted_5d_price', 'prediction_lower_95ci', 'prediction_upper_95ci',
+                'llm_price_pressure', 'llm_supply_disruption', 'actual_5d_price',
+                'error_dollars', 'directional_hit', 'within_95ci_hit', 'current_base_price']:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    if 'forecast_horizon_days' in df.columns:
+        df['forecast_horizon_days'] = pd.to_numeric(df['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
+    if 'is_retroactive_backtest' in df.columns:
+        df['is_retroactive_backtest'] = df['is_retroactive_backtest'].astype(str).str.strip().str.lower().isin(['true', '1', 't', 'yes'])
+
+    # Purge test fixture artifacts and corrupted regional evaluations
+    if 'region' in df.columns:
+        df = df[~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)].copy()
+
+    if 'region' in df.columns and 'actual_5d_price' in df.columns:
+        from src.prediction_logger import validate_price_plausibility
+        invalid_eval_mask = df.apply(
+            lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
+                r.get('actual_5d_price'),
+                str(r.get('region', 'National')),
+                is_retail=(str(r.get('region', 'National')) != 'National')
+            ),
+            axis=1
+        )
+        if invalid_eval_mask.any():
+            for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
+                if c in df.columns:
+                    df.loc[invalid_eval_mask, c] = np.nan
+
+    return _sanitize_prediction_records(df)
 
 
 def generate_weekly_markdown_report() -> str:
@@ -1356,6 +1583,7 @@ def generate_weekly_markdown_report() -> str:
     Also fetches open repository issues and performs a self-review evaluation to identify
     the issue offering the largest potential modeling improvement.
     """
+    gen_start = time.perf_counter()
     now_utc = datetime.now(timezone.utc)
     today_str = now_utc.strftime("%Y-%m-%d")
     timestamp_utc = now_utc.strftime("%Y-%m-%d %H:%M UTC")
@@ -1364,7 +1592,8 @@ def generate_weekly_markdown_report() -> str:
     # Ensure matured actuals are backfilled in CSV & DB before loading weekly audit records (when not in TESTING)
     if os.environ.get("TESTING") != "1":
         try:
-            from src.prediction_logger import backfill_actual_prices_and_evaluate
+            from src.prediction_logger import backfill_actual_prices_and_evaluate, cleanse_prediction_history
+            cleanse_prediction_history(HISTORY_CSV)
             backfill_actual_prices_and_evaluate()
         except Exception as bf_err:
             logger.debug(f"Pre-report backfill notice: {bf_err}")
@@ -1381,7 +1610,7 @@ def generate_weekly_markdown_report() -> str:
         if 'run_type' in eval_df.columns:
             prospective_mask &= ~eval_df['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)
         if 'is_retroactive_backtest' in eval_df.columns:
-            prospective_mask &= (eval_df['is_retroactive_backtest'].fillna(False).astype(bool) == False)
+            prospective_mask &= ~eval_df['is_retroactive_backtest'].astype(str).str.strip().str.lower().isin(['true', '1', 't', 'yes'])
         if prospective_mask.any():
             eval_df = eval_df[prospective_mask].copy()
     
@@ -1392,7 +1621,7 @@ def generate_weekly_markdown_report() -> str:
     tulsa_mae = round(float(tulsa_sub['error_dollars'].mean()), 4) if not tulsa_sub.empty else None
 
     # Evaluate Model Degradation & Baseline Underperformance Alerts upfront so top table & recommendations align
-    degradation_res = evaluate_model_degradation_alerts(window_days=30)
+    degradation_res = evaluate_model_degradation_alerts(window_days=30, df=eval_df)
     degradation_section_md = format_degradation_markdown_section(degradation_res)
     degraded_map = {
         r.get("region"): r
@@ -1403,6 +1632,7 @@ def generate_weekly_markdown_report() -> str:
     # Dynamic Rolling Accuracy Summary Table across ALL Regions
     summary_rows = ""
     regions_summary = {}
+    from src.prediction_logger import compute_rolling_scoreboard_metrics
     for reg in df['region'].unique():
         meta = REGION_METADATA.get(reg, {
             "display_name": f"{reg} Retail",
@@ -1410,10 +1640,22 @@ def generate_weekly_markdown_report() -> str:
         })
         reg_eval = eval_df[eval_df['region'] == reg]
         if not reg_eval.empty:
-            mae = round(float(reg_eval['error_dollars'].mean()), 4)
-            rmse = round(float(np.sqrt((reg_eval['error_dollars'] ** 2).mean())), 4)
-            hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
-            n_days = len(reg_eval)
+            reg_rolling = compute_rolling_scoreboard_metrics(
+                window_days=30,
+                region=reg,
+                include_retroactive=False,
+                df=eval_df
+            )
+            if reg_rolling.get("total_evaluations", 0) > 0:
+                mae = reg_rolling["mae_dollars"]
+                rmse = reg_rolling["rmse_dollars"]
+                hit_rate = reg_rolling["directional_hit_rate_pct"]
+                n_days = reg_rolling["total_evaluations"]
+            else:
+                mae = round(float(reg_eval['error_dollars'].mean()), 4)
+                rmse = round(float(np.sqrt((reg_eval['error_dollars'] ** 2).mean())), 4)
+                hit_rate = round(float(reg_eval['directional_hit'].mean() * 100.0), 2)
+                n_days = len(reg_eval)
             if reg in degraded_map:
                 uplift_pct = degraded_map[reg].get("model_uplift_mae_pct", 0.0)
                 status_str = f"🚨 Degraded ({uplift_pct:+.1f}% vs Naive)"
@@ -1433,24 +1675,23 @@ def generate_weekly_markdown_report() -> str:
             n_total = len(df[df['region'] == reg])
             summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | 0 / {n_total} (Pending) | *Pending Horizon* | *Pending Horizon* | ⏳ New Region |\n"
 
-    # Latest forecast predictions per region (prefer 5-day horizon prospective forecasts)
-    df_for_latest = df
-    if 'forecast_horizon_days' in df.columns and (df['forecast_horizon_days'] == 5).any():
-        df_for_latest = df[df['forecast_horizon_days'] == 5]
-    latest_df = df_for_latest.groupby('region', as_index=False).last()
+    # Latest forecast predictions per active region (prospective 5-day horizon, non-stale)
+    latest_df = _select_active_latest_forecasts(df, today_str=today_str)
     latest_rows = ""
-    for _, row in latest_df.iterrows():
-        region = row.get('region', 'N/A')
-        curr_p = float(row.get('current_base_price', row.get('current_price', 0.0)))
-        fore_p = float(row.get('predicted_5d_price', 0.0))
-        target_d = row.get('forecast_target_date', 'N/A')
-        if fore_p < curr_p - 1e-4:
-            dir_str = "DOWN 📉"
-        elif fore_p > curr_p + 1e-4:
-            dir_str = "UP 📈"
-        else:
-            dir_str = "FLAT ➡️"
-        latest_rows += f"| **{region}** | `${curr_p:.3f}/gal` | **`${fore_p:.3f}/gal`** | {dir_str} | `{target_d}` |\n"
+    if latest_df.empty:
+        latest_rows = "| *No active out-of-time forecasts available* | N/A | N/A | N/A | N/A |\n"
+    else:
+        for _, row in latest_df.iterrows():
+            region = row.get('region', 'N/A')
+            raw_curr = row.get('current_base_price', row.get('current_price', np.nan))
+            raw_fore = row.get('predicted_5d_price', np.nan)
+            curr_p = pd.to_numeric(raw_curr, errors='coerce')
+            fore_p = pd.to_numeric(raw_fore, errors='coerce')
+            target_d = str(row.get('forecast_target_date', 'N/A'))[:10]
+            curr_str = f"`${float(curr_p):.3f}/gal`" if pd.notna(curr_p) else "N/A"
+            fore_str = f"**`${float(fore_p):.3f}/gal`**" if pd.notna(fore_p) else "N/A"
+            dir_str = _format_projected_direction(curr_p, fore_p)
+            latest_rows += f"| **{region}** | {curr_str} | {fore_str} | {dir_str} | `{target_d}` |\n"
 
     # Automated Recommendations (aligned with degradation check and actual regional sample availability)
     recommendations = []
@@ -1485,10 +1726,53 @@ def generate_weekly_markdown_report() -> str:
 
     # Open GitHub Issues Self-Review & Modeling Evaluation
     issues = fetch_open_github_issues()
-    tagged_records = audit_and_tag_open_issues(issues=issues)
-    issue_eval = evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=(tulsa_mae if tulsa_mae is not None else 0.5611))
+
+    # Concurrently execute independent audit generators and research fetchers to optimize report generation latency (< 10.0s target)
+    from concurrent.futures import ThreadPoolExecutor
+
+    task_errors: dict[str, str] = {}
+
+    def _safe_run(name, fn):
+        try:
+            return fn()
+        except Exception as err:
+            logger.warning(f"Error in async report task '{name}': {err}")
+            task_errors[name] = str(err)
+            return None
+
+    def _run_catalog():
+        from src.catalog_monitor import run_catalog_monitors
+        return run_catalog_monitors(dry_run=False)
+
+    def _run_benchmarks():
+        from src.benchmark_updater import refresh_all_historical_benchmarks
+        return refresh_all_historical_benchmarks()
+
+    tasks = {
+        "issues_eval": lambda: _safe_run("issues_eval", lambda: evaluate_open_issues_for_modelling(issues, nat_mae=nat_mae, tulsa_mae=(tulsa_mae if tulsa_mae is not None else 0.5611))),
+        "issues_tagging": lambda: _safe_run("issues_tagging", lambda: audit_and_tag_open_issues(issues=issues)),
+        "catalog": lambda: _safe_run("catalog", _run_catalog),
+        "benchmarks": lambda: _safe_run("benchmarks", _run_benchmarks),
+        "arxiv": lambda: _safe_run("arxiv", lambda: format_arxiv_markdown_section(days_back=7)),
+        "core": lambda: _safe_run("core", lambda: format_core_markdown_section(days_back=7)),
+        "ai_radar": lambda: _safe_run("ai_radar", lambda: format_ai_radar_markdown_section(limit=6)),
+        "praxist": lambda: _safe_run("praxist", format_praxist_research_markdown_section),
+        "refinery": lambda: _safe_run("refinery", lambda: format_refinery_outage_attribution_markdown(window_days=30)),
+        "feature_audit": lambda: _safe_run("feature_audit", format_feature_leakage_audit_markdown_section),
+        "scenario_plausibility": lambda: _safe_run("scenario_plausibility", format_scenario_plausibility_markdown_section),
+        "memory_reflection": lambda: _safe_run("memory_reflection", lambda: format_qualitative_anomaly_reflections_markdown(max_anomalies=3)),
+    }
+
+    async_results = {}
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = {k: pool.submit(fn) for k, fn in tasks.items()}
+        for k, fut in futures.items():
+            async_results[k] = fut.result()
+
+    issue_eval = async_results.get("issues_eval") or {}
     issue_analysis_md = issue_eval.get("summary_markdown", "")
 
+    tagged_records = async_results.get("issues_tagging") or []
     tagging_summary_md = "✅ All open repository issues are fully tagged with standard domain taxonomy labels (`data-ingestion`, `infrastructure`, `modeling`, `dashboard`, `integration`, `api`, `security`)."
     if tagged_records:
         lines = [f"Audited **{len(issues)} open repository issues**. Automatically assigned domain taxonomy labels to **{len(tagged_records)} untagged / external issue(s)**:\n"]
@@ -1497,11 +1781,10 @@ def generate_weekly_markdown_report() -> str:
             lines.append(f"- **[#{rec['number']}]({rec['html_url']}) - {rec['title']}** → Assigned domain labels: {lbl_str}")
         tagging_summary_md = "\n".join(lines)
 
-    # Run Developer Catalog Monitor & Differential Evaluator
-    catalog_summary_md = "ℹ️ *No new catalog additions detected during this weekly scan window.*"
-    try:
-        from src.catalog_monitor import run_catalog_monitors
-        cat_res = run_catalog_monitors(dry_run=False)
+    cat_res = async_results.get("catalog")
+    if "catalog" in task_errors:
+        catalog_summary_md = f"⚠️ *Catalog monitor scan skipped ({task_errors['catalog']}).*"
+    elif cat_res:
         disc_count = cat_res.get("new_items_discovered", 0)
         scanned_count = cat_res.get("catalogs_scanned", 6)
         issues_created = cat_res.get("issues_created", [])
@@ -1515,23 +1798,17 @@ def generate_weekly_markdown_report() -> str:
             catalog_summary_md = "\n".join(lines)
         else:
             catalog_summary_md = f"✅ Monitored **{scanned_count} developer catalogs** (`public-apis`, `free-for-dev`, `freestuff.dev`, `free-for-life`, `awesome`, `awesome-selfhosted`). All catalog state entries are up-to-date with 0 new additions."
-    except Exception as e:
-        logger.warning(f"Could not execute catalog monitor in weekly report: {e}")
-        catalog_summary_md = f"⚠️ *Catalog monitor scan skipped ({e}).*"
+    else:
+        catalog_summary_md = "ℹ️ *No new catalog additions detected during this weekly scan window.*"
 
-    # Fetch MLOps Observability Section
-    mlops_obs_md = format_mlops_observability_markdown_section()
-
-    # Refresh Historical Benchmarks & Fallback Datasets (Issue #297)
-    benchmark_summary_md = "✅ *All historical benchmarks up-to-date.*"
-    try:
-        from src.benchmark_updater import refresh_all_historical_benchmarks
-        bench_res = refresh_all_historical_benchmarks()
+    bench_res = async_results.get("benchmarks")
+    if "benchmarks" in task_errors:
+        benchmark_summary_md = f"⚠️ *Historical benchmark refresh skipped ({task_errors['benchmarks']}).*"
+    elif bench_res:
         refreshed_count = bench_res.get("benchmarks_refreshed", "N/A")
         benchmark_summary_md = f"✅ **Automated Historical Benchmark Refresh (Issue #297):** Refreshed **`{refreshed_count}`** persistent historical fallback datasets (`data/*_historical.json`) reflecting latest Friday market closes."
-    except Exception as e:
-        logger.warning(f"Benchmark updater error in weekly report: {e}")
-        benchmark_summary_md = f"⚠️ *Historical benchmark refresh skipped ({e}).*"
+    else:
+        benchmark_summary_md = "ℹ️ *Historical benchmark refresh unavailable.*"
 
     # Log weekly audit metrics to Weights & Biases (Issue #80, #372)
     try:
@@ -1549,33 +1826,21 @@ def generate_weekly_markdown_report() -> str:
     except Exception as e:
         logger.debug(f"Notice logging weekly audit to W&B: {e}")
 
-    # Fetch recent arXiv research preprints
-    arxiv_section_md = format_arxiv_markdown_section(days_back=7)
+    arxiv_section_md = async_results.get("arxiv") or ""
+    core_section_md = async_results.get("core") or ""
+    ai_radar_section_md = async_results.get("ai_radar") or ""
+    praxist_section_md = async_results.get("praxist") or ""
+    refinery_outage_attribution_md = async_results.get("refinery") or ""
+    feature_audit_md = async_results.get("feature_audit") or ""
+    scenario_plausibility_md = async_results.get("scenario_plausibility") or ""
+    memory_reflection_md = async_results.get("memory_reflection") or ""
 
-    # Fetch recent CORE open-access research papers
-    core_section_md = format_core_markdown_section(days_back=7)
+    # Measure total generation time and format telemetry badge
+    gen_time = round(time.perf_counter() - gen_start, 1)
+    gen_status = "🟢 OPTIMAL" if gen_time < 10.0 else "⚠️ SLOW"
+    gen_badge = f"Report Generation Time: `{gen_time:.1f}s` (Target `< 10.0s`) {gen_status}"
 
-    # Fetch Open Source AI Radar models (Issue #187)
-    ai_radar_section_md = format_ai_radar_markdown_section(limit=6)
-
-    # Fetch Sapient PRAXIST autonomous research audit (Issue #188)
-    praxist_section_md = format_praxist_research_markdown_section()
-
-    # Fetch Gulf Coast refinery outage error attribution (Issue #406)
-    refinery_outage_attribution_md = format_refinery_outage_attribution_markdown(window_days=30)
-
-    # Fetch feature leakage & factor decay audit
-    feature_audit_md = format_feature_leakage_audit_markdown_section()
-
-    # Fetch Seasonal Plausibility Horizon Matrix & Stress Audit (Issue #300)
-    scenario_plausibility_md = format_scenario_plausibility_markdown_section()
-
-    # Fetch qualitative anomaly post-mortems & episodic memory reflection (Issue #230)
-    memory_reflection_md = ""
-    try:
-        memory_reflection_md = format_qualitative_anomaly_reflections_markdown(max_anomalies=3)
-    except Exception as e:
-        logger.debug(f"Notice generating memory reflections: {e}")
+    mlops_obs_md = format_mlops_observability_markdown_section(generation_time=gen_time)
 
     from src.version import get_model_version
     model_ver = get_model_version()
@@ -1672,7 +1937,7 @@ def generate_weekly_markdown_report() -> str:
 
 ---
 
-*Automated Weekly Performance Review generated by `src/weekly_issue_reporter.py` via GitHub Actions Cloud Runner. Track model adaptation and longitudinal learning curves in [`MODEL_LEARNING.md`](MODEL_LEARNING.md) and on the [System Telemetry Dashboard](https://koshiirra.github.io/midgley/telemetry.html).*
+*Automated Weekly Performance Review generated by `src/weekly_issue_reporter.py` via GitHub Actions Cloud Runner. {gen_badge}. Track model adaptation and longitudinal learning curves in [`MODEL_LEARNING.md`](MODEL_LEARNING.md) and on the [System Telemetry Dashboard](https://koshiirra.github.io/midgley/telemetry.html).*
 """
     # Trigger MODEL_LEARNING.md sync
     try:

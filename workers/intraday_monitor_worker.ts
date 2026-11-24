@@ -23,9 +23,17 @@ import {
   synthesizeAnalystBrief,
   getHeadlineEmbedding
 } from "./ai_event_scorer";
+import {
+  SUNDAY_REVIEW_CRON_EXPRESSION,
+  isSundayNineAmCentral,
+  runSundayWeeklyReviewPlanner,
+  handleWeeklyActionComponentInteraction
+} from "./sunday_review_planner";
 
 export interface Env {
   GH_PAT?: string;
+  GITHUB_PAT?: string;
+  GITHUB_TOKEN?: string;
   REPO_OWNER?: string;
   REPO_NAME?: string;
   SENTRY_DSN?: string;
@@ -37,6 +45,9 @@ export interface Env {
   DISCORD_PUBLIC_KEY?: string;
   DISCORD_APP_ID?: string;
   DISCORD_BOT_TOKEN?: string;
+  DISCORD_SUNDAY_REVIEW_CHANNEL_ID?: string;
+  GEMINI_API_KEY?: string;
+  GEMINI_REVIEW_MODEL?: string;
   PROJECT_V2_ID?: string;
   CLOUDFLARE_AUTH_TOKEN?: string;
   ADMIN_TOKEN?: string;
@@ -3028,9 +3039,12 @@ export async function handleDiscordInteraction(request: Request, env: Env, ctx: 
     );
   }
 
-  // Type 3: MESSAGE_COMPONENT (User clicked "🚩 Flag False Positive" or "🔕 Mute This Hub (24h)" button)
+  // Type 3: MESSAGE_COMPONENT (Weekly Review Action Buttons, "🚩 Flag False Positive", or "🔕 Mute This Hub (24h)")
   if (interaction.type === 3) {
     const customId = interaction.data?.custom_id || "";
+    if (customId.startsWith("weekly_action:")) {
+      return await handleWeeklyActionComponentInteraction(interaction, env, ctx);
+    }
     if (customId.startsWith("mute_hub:")) {
       const userObj = interaction.member?.user || interaction.user || {};
       const userId = String(userObj.id || "");
@@ -3949,10 +3963,22 @@ export async function handleReviewWebRequest(request: Request, env: Env, ctx: an
 export default {
   async scheduled(controller: any, env: Env, ctx: any): Promise<void> {
     try {
-      ctx.waitUntil(runMonitoringCycle(env, ctx));
+      const cronExpr = String(controller?.cron || "").trim();
+      const isDedicatedSundayCron =
+        cronExpr.toUpperCase() === SUNDAY_REVIEW_CRON_EXPRESSION.toUpperCase() ||
+        cronExpr.includes("14,15");
+      if (isDedicatedSundayCron) {
+        ctx.waitUntil(runSundayWeeklyReviewPlanner(env, ctx));
+      } else {
+        ctx.waitUntil(runMonitoringCycle(env, ctx));
+        // Self-healing catch-up: on Sunday >= 09:00 America/Chicago, retry every 15m until D1 records completion
+        if (isSundayNineAmCentral().shouldRun) {
+          ctx.waitUntil(runSundayWeeklyReviewPlanner(env, ctx));
+        }
+      }
     } catch (err: any) {
       console.error(`[Scheduled Exception] ${err.message || String(err)}`);
-      await captureSentryException(env, ctx, err, { trigger: "scheduled" });
+      await captureSentryException(env, ctx, err, { trigger: "scheduled", cron: controller?.cron });
     }
   },
 
@@ -4213,6 +4239,38 @@ export default {
         });
       }
 
+      // Secure manual Sunday Weekly Self-Review Action Planner trigger (Fail-Closed)
+      if (url.pathname === "/run-sunday-review") {
+        if (request.method !== "POST") {
+          return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+            status: 405,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+        const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim() || "";
+        const adminOk = Boolean(env.ADMIN_TOKEN && authHeader && timingSafeEqual(authHeader, env.ADMIN_TOKEN));
+        const cfOk = Boolean(env.CLOUDFLARE_AUTH_TOKEN && authHeader && timingSafeEqual(authHeader, env.CLOUDFLARE_AUTH_TOKEN));
+        if (!adminOk && !cfOk) {
+          return new Response(JSON.stringify({ error: "Unauthorized: Valid ADMIN_TOKEN or CLOUDFLARE_AUTH_TOKEN required" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" }
+          });
+        }
+        let reqBody: any = {};
+        try {
+          reqBody = await request.json();
+        } catch {
+          reqBody = {};
+        }
+        const result = await runSundayWeeklyReviewPlanner(env, ctx, {
+          force: reqBody?.force !== false
+        });
+        return new Response(JSON.stringify(result, null, 2), {
+          status: result.status === "error" ? 500 : 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
       // Secure manual run & trigger endpoints (Fail-Closed, Issues #438, #574)
       if (url.pathname === "/run" || url.pathname === "/trigger") {
         const authHeader = request.headers.get("Authorization")?.replace("Bearer ", "").trim();
@@ -4237,6 +4295,7 @@ export default {
           endpoints: [
             "/run",
             "/trigger",
+            "/run-sunday-review",
             "/status",
             "/flag",
             "/discord/interactions",

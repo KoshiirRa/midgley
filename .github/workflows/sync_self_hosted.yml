@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: sync-self-hosted
+  cancel-in-progress: false
 
 jobs:
   sync-self-hosted:
@@ -29,11 +34,41 @@ jobs:
 
       - name: Merge Main Branch into Self-Hosted
         run: |
+          set -euo pipefail
           git reset --hard HEAD
           git clean -fd
-          git fetch origin main:main
-          git merge main -X theirs -m "chore(sync): auto-merge main updates into self-hosted branch"
+          git fetch origin main self-hosted
+          git reset --hard origin/self-hosted
+
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "self-hosted is already up to date with origin/main."
+            exit 0
+          fi
+
+          if ! git merge origin/main -X theirs --no-edit -m "chore(sync): auto-merge main updates into self-hosted branch"; then
+            echo "Resolving remaining modify/delete conflicts in favor of origin/main..."
+            for f in $(git diff --name-only --diff-filter=U); do
+              if git cat-file -e "origin/main:$f" 2>/dev/null; then
+                git checkout origin/main -- "$f"
+                git add "$f"
+              else
+                git rm -f "$f"
+              fi
+            done
+            git commit --no-edit -m "chore(sync): auto-merge main updates into self-hosted branch"
+          fi
 
       - name: Push Synchronized Self-Hosted Branch
         run: |
-          git push origin self-hosted
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            if git push origin HEAD:self-hosted; then
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; re-fetching origin/self-hosted and retrying..."
+            git fetch origin self-hosted
+            git merge origin/self-hosted -X ours --no-edit -m "chore(sync): reconcile concurrent self-hosted update"
+          done
+          echo "Failed to push self-hosted after 3 attempts."
+          exit 1
+

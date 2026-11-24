@@ -162,6 +162,18 @@ def test_refuse_synthetic_constant_margin_series():
         ecm.fit(retail_data=constant_retail, wholesale_series=wholesale)
 
 
+def test_refuse_constant_retail_series():
+    """Assert AsymmetricECM raises ValueError on constant retail series to avoid degenerate zero-delta forecasts (Issue #737)."""
+    n = 100
+    wholesale = pd.Series(2.0 + np.cumsum(np.random.default_rng(7).normal(0, 0.04, n)))
+    constant_retail = pd.Series([3.899] * n)
+
+    ecm = AsymmetricECM()
+    with pytest.raises(ValueError, match="Cannot fit AsymmetricECM on constant retail price series"):
+        ecm.fit(retail_data=constant_retail, wholesale_series=wholesale)
+    assert not ecm.is_fitted
+
+
 def test_engle_granger_cointegration_and_hac_standard_errors(synthetic_pass_through_data):
     """Assert Engle-Granger ADF cointegration test and HAC standard errors are computed (Issue #607, T-7)."""
     ecm = AsymmetricECM(wholesale_lags=2, retail_lags=1)

@@ -99,7 +99,7 @@ def calculate_longitudinal_learning_curves(
         df['quant_base'] = pd.to_numeric(df['quant_baseline_5d_price'], errors='coerce')
         llm_err = np.abs(df['actual'] - df['pred'])
         quant_err = np.abs(df['actual'] - df['quant_base'])
-        df['llm_won'] = np.where(llm_err < quant_err, 1.0, 0.0)
+        df['llm_won'] = np.where(llm_err <= quant_err, 1.0, 0.0)
     else:
         df['llm_won'] = 0.5
 
@@ -189,7 +189,7 @@ def get_multi_window_performance_summary(df: Optional[pd.DataFrame] = None) -> L
         df['quant_base'] = pd.to_numeric(df['quant_baseline_5d_price'], errors='coerce')
         llm_err = np.abs(df['actual'] - df['pred'])
         quant_err = np.abs(df['actual'] - df['quant_base'])
-        df['llm_won'] = np.where(llm_err < quant_err, 1.0, 0.0)
+        df['llm_won'] = np.where(llm_err <= quant_err, 1.0, 0.0)
     else:
         df['llm_won'] = 0.5
 

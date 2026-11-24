@@ -142,6 +142,46 @@ class TestRVPRegulations(unittest.TestCase):
         delta = get_known_future_tax_deltas("Cincinnati_OH", "2026-10-02", horizon_days=5)
         self.assertEqual(delta, -0.385)
 
+    def test_dynamic_emergency_tax_suspension_point_in_time(self):
+        """Test dynamic emergency motor fuel tax suspension and point-in-time safety (Issue #632)."""
+        from src.locations.specs import get_region_spec
+        from src.rvp_regulations import resolve_point_in_time_tax_rate, get_known_future_tax_deltas
+        from src.zip_geocoding import resolve_zip_code
+
+        spec_clt = get_region_spec("charlotte")
+        self.assertIsNotNone(spec_clt)
+        self.assertEqual(spec_clt.baseline_tax_rate, 0.410)
+
+        # 1. Before announcement (2026-10-07): effective tax should remain baseline (0.410), preventing lookahead leakage
+        pre_rate = spec_clt.get_effective_tax_rate(target_date="2026-10-12", as_of_date="2026-10-07")
+        self.assertEqual(pre_rate, 0.410)
+
+        # 2. After announcement and inside holiday window (target 2026-10-12, as_of 2026-10-09): 41.0¢ tax waived -> 0.000
+        active_rate = spec_clt.get_effective_tax_rate(target_date="2026-10-12", as_of_date="2026-10-09")
+        self.assertEqual(active_rate, 0.0)
+
+        # 3. After holiday expiration (target 2026-10-25, as_of 2026-10-09): restored to baseline (0.410)
+        post_rate = spec_clt.get_effective_tax_rate(target_date="2026-10-25", as_of_date="2026-10-09")
+        self.assertEqual(post_rate, 0.410)
+
+        # 4. Forward delta window verification:
+        # Before holiday (2026-10-07), 5-business-day horizon extends to 2026-10-14 (crosses 2026-10-09): delta is -0.410
+        delta_in = get_known_future_tax_deltas("Charlotte_NC", "2026-10-07", horizon_days=5)
+        self.assertEqual(delta_in, -0.410)
+
+        # During holiday (2026-10-12), 5-business-day horizon stays inside holiday: delta is 0.0
+        delta_mid = get_known_future_tax_deltas("Charlotte_NC", "2026-10-12", horizon_days=5)
+        self.assertEqual(delta_mid, 0.0)
+
+        # Holiday expiration restoration (2026-10-21), 5-business-day horizon crosses 2026-10-23: delta is +0.410
+        delta_out = get_known_future_tax_deltas("Charlotte_NC", "2026-10-21", horizon_days=5)
+        self.assertEqual(delta_out, 0.410)
+
+        # 5. Out-of-metro ZIP code resolution inherits dynamic tax rate
+        # ZIP 28202 is Charlotte NC
+        zip_res_active = resolve_zip_code("28202", target_date="2026-10-12", as_of_date="2026-10-09")
+        self.assertEqual(zip_res_active["state_tax_rate_per_gal"], 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()
