@@ -35,15 +35,14 @@ def fetch_port_st_lucie_market_data(
     logger.info(f"Fetching market data for Port St. Lucie, FL region (Live Pump Price Anchor: ${live_current_price:.2f}/gal)...")
     
     from src.data_ingestion import fetch_market_data
+    from src.eia_retail_feed import get_regional_retail_history
     base_df = fetch_market_data(start_date=start_date, end_date=end_date)
     if base_df is None or base_df.empty or 'gasoline_rbob' not in base_df.columns:
         return _generate_synthetic_port_st_lucie_data(start_date, end_date, live_current_price)
         
     market_df = base_df.copy()
-    latest_rbob = market_df['gasoline_rbob'].iloc[-1]
-    dynamic_margin = live_current_price - latest_rbob
-    
-    market_df['port_st_lucie_retail_gasoline'] = market_df['gasoline_rbob'] + dynamic_margin
+    # Authentic regional retail history via EIA Florida / PADD 1C survey (Issues #607, #608, #732)
+    market_df['port_st_lucie_retail_gasoline'] = get_regional_retail_history("Port_St_Lucie_FL", market_df['date'], live_current_price)
     market_df['brent_crude_per_gal'] = market_df['brent_crude'] / 42.0
     market_df['port_st_lucie_rack_crack_spread'] = market_df['port_st_lucie_retail_gasoline'] - market_df['brent_crude_per_gal']
     
@@ -62,7 +61,9 @@ def _generate_synthetic_port_st_lucie_data(start_date: str, end_date: str, live_
     wti_crude = brent_crude - 4.0 + np.random.normal(0, 0.4, n)
     rbob = (brent_crude / 42.0) * 1.28 + np.cumsum(np.random.normal(0, 0.022, n))
     dynamic_margin = live_current_price - rbob[-1]
-    psl_retail = rbob + dynamic_margin
+    margin_fluctuations = 0.10 * np.sin(np.linspace(0, 4 * np.pi, n)) + np.random.normal(0, 0.02, n)
+    margin_fluctuations -= margin_fluctuations[-1]
+    psl_retail = rbob + dynamic_margin + margin_fluctuations
     
     return pd.DataFrame({
         'date': dates,
