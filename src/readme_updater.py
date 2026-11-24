@@ -19,6 +19,15 @@ HISTORY_CSV_PATH = os.path.join("data", "prediction_history.csv")
 START_TAG = "<!-- START_LIVE_FORECAST -->"
 END_TAG = "<!-- END_LIVE_FORECAST -->"
 
+def _format_direction(pred_price: float, base_price: float, tolerance: float = 1e-4) -> str:
+    """Formats 3-way projected direction with deadband tolerance (UP / DOWN / FLAT)."""
+    if pred_price > base_price + tolerance:
+        return "UP 📈"
+    if pred_price < base_price - tolerance:
+        return "DOWN 📉"
+    return "FLAT ➡️"
+
+
 def update_readme_forecasts(
     readme_path: str = README_PATH,
     history_csv_path: str = HISTORY_CSV_PATH
@@ -112,55 +121,55 @@ def update_readme_forecasts(
                 if latest_nat is not None:
                     nat_price = float(latest_nat['predicted_5d_price'])
                     base_nat = float(latest_nat['current_base_price'])
-                    nat_dir = "UP 📈" if nat_price >= base_nat else "DOWN 📉"
+                    nat_dir = _format_direction(nat_price, base_nat)
                     target_nat = str(latest_nat['forecast_target_date'])
                     
                 if latest_tulsa is not None:
                     tulsa_price = float(latest_tulsa['predicted_5d_price'])
                     base_tulsa = float(latest_tulsa['current_base_price'])
-                    tulsa_dir = "UP 📈" if tulsa_price >= base_tulsa else "DOWN 📉"
+                    tulsa_dir = _format_direction(tulsa_price, base_tulsa)
                     target_tulsa = str(latest_tulsa['forecast_target_date'])
 
                 if latest_newark is not None:
                     newark_price = float(latest_newark['predicted_5d_price'])
                     base_newark = float(latest_newark['current_base_price'])
-                    newark_dir = "UP 📈" if newark_price >= base_newark else "DOWN 📉"
+                    newark_dir = _format_direction(newark_price, base_newark)
                     target_newark = str(latest_newark['forecast_target_date'])
 
                 if latest_cin_oh is not None:
                     cin_oh_price = float(latest_cin_oh['predicted_5d_price'])
                     base_cin_oh = float(latest_cin_oh['current_base_price'])
-                    cin_oh_dir = "UP 📈" if cin_oh_price >= base_cin_oh else "DOWN 📉"
+                    cin_oh_dir = _format_direction(cin_oh_price, base_cin_oh)
                     target_cin_oh = str(latest_cin_oh['forecast_target_date'])
 
                 if latest_cin_ky is not None:
                     cin_ky_price = float(latest_cin_ky['predicted_5d_price'])
                     base_cin_ky = float(latest_cin_ky['current_base_price'])
-                    cin_ky_dir = "UP 📈" if cin_ky_price >= base_cin_ky else "DOWN 📉"
+                    cin_ky_dir = _format_direction(cin_ky_price, base_cin_ky)
                     target_cin_ky = str(latest_cin_ky['forecast_target_date'])
 
                 if latest_charlotte is not None:
                     charlotte_price = float(latest_charlotte['predicted_5d_price'])
                     base_charlotte = float(latest_charlotte['current_base_price'])
-                    charlotte_dir = "UP 📈" if charlotte_price >= base_charlotte else "DOWN 📉"
+                    charlotte_dir = _format_direction(charlotte_price, base_charlotte)
                     target_charlotte = str(latest_charlotte['forecast_target_date'])
 
                 if latest_psl is not None:
                     psl_price = float(latest_psl['predicted_5d_price'])
                     base_psl = float(latest_psl['current_base_price'])
-                    psl_dir = "UP 📈" if psl_price >= base_psl else "DOWN 📉"
+                    psl_dir = _format_direction(psl_price, base_psl)
                     target_psl = str(latest_psl['forecast_target_date'])
 
                 if latest_oakland is not None:
                     oakland_price = float(latest_oakland['predicted_5d_price'])
                     base_oakland = float(latest_oakland['current_base_price'])
-                    oakland_dir = "UP 📈" if oakland_price >= base_oakland else "DOWN 📉"
+                    oakland_dir = _format_direction(oakland_price, base_oakland)
                     target_oakland = str(latest_oakland['forecast_target_date'])
 
                 if latest_bayarea is not None:
                     bayarea_price = float(latest_bayarea['predicted_5d_price'])
                     base_bayarea = float(latest_bayarea['current_base_price'])
-                    bayarea_dir = "UP 📈" if bayarea_price >= base_bayarea else "DOWN 📉"
+                    bayarea_dir = _format_direction(bayarea_price, base_bayarea)
                     target_bayarea = str(latest_bayarea['forecast_target_date'])
         except Exception as e:
             logger.warning(f"Could not read prediction history: {e}")

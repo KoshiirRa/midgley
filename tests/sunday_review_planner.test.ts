@@ -53,6 +53,38 @@ describe("Sunday Weekly Self-Review Action Planner", () => {
     expect(monday.shouldRun).toBe(false);
   });
 
+  it("handles DST spring-forward and fall-back transition Sundays accurately", () => {
+    // Spring-forward Sunday (2026-03-08, clocks advance to CDT UTC-5 at 02:00 local / 08:00 UTC)
+    // 13:00 UTC === 08:00 CDT -> must NOT run yet
+    const springForward8am = isSundayNineAmCentral(new Date("2026-03-08T13:00:00Z"));
+    expect(springForward8am.shouldRun).toBe(false);
+    expect(springForward8am.localDateKey).toBe("2026-03-08");
+    expect(springForward8am.localHour).toBe(8);
+    expect(springForward8am.localWeekday).toBe("Sun");
+
+    // 14:00 UTC === 09:00 CDT -> must run immediately on spring-forward Sunday
+    const springForward9am = isSundayNineAmCentral(new Date("2026-03-08T14:00:00Z"));
+    expect(springForward9am.shouldRun).toBe(true);
+    expect(springForward9am.localDateKey).toBe("2026-03-08");
+    expect(springForward9am.localHour).toBe(9);
+    expect(springForward9am.localWeekday).toBe("Sun");
+
+    // Fall-back Sunday (2026-11-01, clocks revert to CST UTC-6 at 02:00 local / 07:00 UTC)
+    // 14:00 UTC === 08:00 CST (would be 09:00 under CDT) -> must NOT run early
+    const fallBack8am = isSundayNineAmCentral(new Date("2026-11-01T14:00:00Z"));
+    expect(fallBack8am.shouldRun).toBe(false);
+    expect(fallBack8am.localDateKey).toBe("2026-11-01");
+    expect(fallBack8am.localHour).toBe(8);
+    expect(fallBack8am.localWeekday).toBe("Sun");
+
+    // 15:00 UTC === 09:00 CST -> must run on fall-back Sunday
+    const fallBack9am = isSundayNineAmCentral(new Date("2026-11-01T15:00:00Z"));
+    expect(fallBack9am.shouldRun).toBe(true);
+    expect(fallBack9am.localDateKey).toBe("2026-11-01");
+    expect(fallBack9am.localHour).toBe(9);
+    expect(fallBack9am.localWeekday).toBe("Sun");
+  });
+
   it("builds Discord embed with Approve, Deny, and Request Explanation buttons", () => {
     const sample: WeeklyActionItem = {
       action_id: "wr_20261115_01_abcd",

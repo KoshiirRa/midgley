@@ -598,7 +598,9 @@ def enforce_forecast_plausibility_gate(
     # 2. Maximum allowable absolute divergence from physical quantitative baseline
     if quant_pred_price > 0:
         sigma = residual_std if residual_std and residual_std > 0 else 0.05
-        max_divergence_dollars = max(0.20, 2.5 * sigma * np.sqrt(max(1, horizon_days) / 5.0))
+        horizon_scale = np.sqrt(max(1, horizon_days) / 5.0)
+        horizon_floor = 0.20 * horizon_scale
+        max_divergence_dollars = max(horizon_floor, 2.5 * sigma * horizon_scale)
         low_quant = quant_pred_price - max_divergence_dollars
         high_quant = quant_pred_price + max_divergence_dollars
     else:
@@ -627,6 +629,51 @@ def enforce_forecast_plausibility_gate(
         logger.warning(f"⚠️ Forecast Plausibility Gate Triggered (h={horizon_days}d): {reason_str}. Clamped price: ${hybrid_pred_price:.4f} -> ${clamped_price:.4f}")
         
     return round(float(clamped_price), 4), gated, reason_str
+
+
+def apply_validation_performance_gating(
+    raw_hybrid_price: float,
+    raw_quant_price: float,
+    base_price: float,
+    hybrid_val_mae: float,
+    quant_val_mae: float,
+    persistence_val_mae: float
+) -> Tuple[float, Dict[str, Any]]:
+    """
+    Point-in-time validation-gated shrinkage preventing degraded hybrid/event models from
+    amplifying out-of-sample error over pure quantitative or persistence baselines (Issue #732).
+
+    Uses ONLY chronological out-of-time validation metrics (zero future leakage):
+    1. Hybrid-vs-Quant Skill Shrinkage: If hybrid validation MAE exceeds quant validation MAE,
+       linearly shrinks the event augmentation delta (hybrid - quant) toward 0 (reaching 0 at >=5% degradation).
+    2. Persistence Degradation Guardrail: If effective model validation MAE exceeds naive persistence MAE,
+       blends the forecast conservatively toward base_price (floor model weight = 0.25).
+    """
+    hyb_p = float(raw_hybrid_price)
+    q_p = float(raw_quant_price)
+    b_p = float(base_price)
+
+    event_weight = 1.0
+    if quant_val_mae > 0 and hybrid_val_mae > quant_val_mae:
+        deg_ratio = (hybrid_val_mae - quant_val_mae) / quant_val_mae
+        event_weight = float(max(0.0, 1.0 - (deg_ratio / 0.05)))
+
+    blended_price = q_p + event_weight * (hyb_p - q_p)
+
+    eff_val_mae = min(hybrid_val_mae, quant_val_mae) if event_weight < 1.0 else hybrid_val_mae
+    model_weight = 1.0
+    if persistence_val_mae > 0 and eff_val_mae > persistence_val_mae:
+        pers_deg = (eff_val_mae - persistence_val_mae) / persistence_val_mae
+        model_weight = float(max(0.25, 1.0 - min(0.75, pers_deg * 3.0)))
+
+    final_price = b_p + model_weight * (blended_price - b_p)
+    validation_gated = (event_weight < 1.0) or (model_weight < 1.0)
+
+    return round(float(final_price), 4), {
+        "validation_gated": validation_gated,
+        "validation_event_weight": round(event_weight, 4),
+        "validation_model_weight": round(model_weight, 4),
+    }
 
 
 def fit_prospective_model(
@@ -734,8 +781,8 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
                 embargo_steps=forecast_horizon,
                 chronological_only=True
             )
-            model_quant = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0], cv=purged_cv))
-            model_hybrid = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.01, 0.1, 1.0, 10.0, 50.0, 100.0, 500.0], cv=purged_cv))
+            model_quant = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.1, 1.0, 10.0, 50.0, 100.0, 500.0, 1000.0, 2500.0], cv=purged_cv))
+            model_hybrid = make_pipeline(StandardScaler(), RidgeCV(alphas=[0.1, 1.0, 10.0, 50.0, 100.0, 500.0, 1000.0, 2500.0], cv=purged_cv))
         else:
             model_quant = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
             model_hybrid = make_pipeline(StandardScaler(), Ridge(alpha=10.0))
@@ -878,11 +925,21 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         raw_hybrid_price = raw_live_pred
         raw_quant_price = raw_live_pred_quant
 
+    # Validation-Gated Skill & Persistence Shrinkage (Issue #732, strictly PIT-safe OOS metrics)
+    val_gated_hybrid_price, val_gate_meta = apply_validation_performance_gating(
+        raw_hybrid_price=raw_hybrid_price,
+        raw_quant_price=raw_quant_price,
+        base_price=live_base,
+        hybrid_val_mae=float(metrics_hybrid.get('MAE', 0.0)),
+        quant_val_mae=float(metrics_quant.get('MAE', 0.0)),
+        persistence_val_mae=float(metrics_persistence.get('MAE', 0.0))
+    )
+
     # Plausibility Gating (Issue #428)
     h_eval = int(split_data.get('forecast_horizon', 5))
     r_std = metrics_hybrid.get('RMSE', 0.05)
     live_pred_price, is_gated, gate_reason = enforce_forecast_plausibility_gate(
-        hybrid_pred_price=raw_hybrid_price,
+        hybrid_pred_price=val_gated_hybrid_price,
         quant_pred_price=raw_quant_price,
         base_price=live_base,
         horizon_days=h_eval,
@@ -933,6 +990,9 @@ def train_and_compare_models(split_data: dict, model_type: str = "ridge", log_wa
         "feature_cutoff_date": str(live_origin_date) if live_origin_date is not None else None,
         "plausibility_gated": is_gated,
         "plausibility_reason": gate_reason,
+        "validation_gated": val_gate_meta["validation_gated"],
+        "validation_event_weight": val_gate_meta["validation_event_weight"],
+        "validation_model_weight": val_gate_meta["validation_model_weight"],
         "forecast_target_date": _compute_forecast_target_date(
             live_origin_date, int(split_data.get('forecast_horizon', 5))
         ),
@@ -1041,10 +1101,20 @@ def train_multi_horizon_models(
             raw_hybrid_price = raw_live_pred
             raw_quant_price = raw_live_pred_quant
 
+        # Validation-Gated Skill & Persistence Shrinkage (Issue #732, strictly PIT-safe OOS metrics)
+        val_gated_hybrid_price, val_gate_meta = apply_validation_performance_gating(
+            raw_hybrid_price=raw_hybrid_price,
+            raw_quant_price=raw_quant_price,
+            base_price=live_base,
+            hybrid_val_mae=float(res.get('metrics_hybrid', {}).get('MAE', 0.0)),
+            quant_val_mae=float(res.get('metrics_quant', {}).get('MAE', 0.0)),
+            persistence_val_mae=float(res.get('metrics_persistence', {}).get('MAE', 0.0))
+        )
+
         # Plausibility Gating (Issue #428)
         r_std = res.get('metrics_hybrid', {}).get('RMSE', 0.05)
         gated_price, is_gated, gate_reason = enforce_forecast_plausibility_gate(
-            hybrid_pred_price=raw_hybrid_price,
+            hybrid_pred_price=val_gated_hybrid_price,
             quant_pred_price=raw_quant_price,
             base_price=live_base,
             horizon_days=h,
@@ -1058,6 +1128,9 @@ def train_multi_horizon_models(
         res['live_pred_quant_return'] = (raw_quant_price - live_base) / live_base if live_base > 0 else 0.0
         res['plausibility_gated'] = is_gated
         res['plausibility_reason'] = gate_reason
+        res['validation_gated'] = val_gate_meta['validation_gated']
+        res['validation_event_weight'] = val_gate_meta['validation_event_weight']
+        res['validation_model_weight'] = val_gate_meta['validation_model_weight']
         
         res['live_feature_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
         res['forecast_origin_date'] = str(live_origin_date) if live_origin_date is not None else None
@@ -1499,13 +1572,17 @@ def compute_conformal_prediction_intervals(
     y_pred: Union[float, np.ndarray, List[float]],
     calibration_residuals: Union[np.ndarray, List[float]],
     alpha: float = 0.05,
-    min_calibration_samples: int = 50
+    min_calibration_samples: int = 20,
+    target_alpha: Optional[float] = None
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Computes Split Conformal Prediction Intervals with finite-sample (1 - alpha) coverage guarantee (Issue #358, #467).
-    Given calibration nonconformity scores s_i = |y_i - \\hat{y}_i|, computes the empirical quantile:
-      q = quantile(|residuals|, ceil((n+1)*(1-alpha))/n)
-    When n < min_calibration_samples (50), falls back to empirical sample standard deviation scaling to prevent degraded intervals.
+    Computes Split / Adaptive Conformal Prediction Intervals with finite-sample (1 - alpha) coverage guarantee
+    (Issues #358, #467, #732).
+    Given calibration nonconformity scores s_i = |y_i - \\hat{y}_i|, computes the finite-sample order statistic:
+      k = ceil((n + 1) * (1 - alpha))
+    When k > n (small sample or ACI-lowered alpha under distribution shift), smoothly inflates beyond the
+    empirical maximum using Student-t RMSE scaling and a bounded shift buffer.
+    When n < min_calibration_samples, enforces a Student-t RMSE floor to prevent small-sample under-coverage.
     Returns (lower_bounds, upper_bounds) around point predictions y_pred.
     """
     residuals = np.abs(np.asarray(calibration_residuals, dtype=float))
@@ -1521,7 +1598,21 @@ def compute_conformal_prediction_intervals(
         if k <= n:
             q = float(sorted_residuals[k - 1])
         else:
-            q = float(sorted_residuals[-1])
+            rmse = float(np.sqrt(np.mean(residuals ** 2)))
+            t_mult = min(4.0, float(stats.t.ppf(1.0 - max(0.0025, alpha / 2.0), df=max(2, n - 1))))
+            q_tail = max(float(sorted_residuals[-1]), t_mult * rmse)
+            if target_alpha is not None and alpha < target_alpha:
+                shift_boost = 1.0 + min(0.50, ((target_alpha - alpha) / max(0.01, target_alpha)) * 0.35)
+                q = max(q_tail, float(sorted_residuals[-1]) * shift_boost)
+            else:
+                q = q_tail
+
+        if 2 <= n < min_calibration_samples:
+            rmse = float(np.sqrt(np.mean(residuals ** 2)))
+            z_eff = min(3.5, float(stats.t.ppf(1.0 - max(0.005, alpha / 2.0), df=max(2, n - 1))))
+            q = max(q, z_eff * rmse)
+
+        q = max(1e-4, q)
 
     preds = np.asarray(y_pred, dtype=float)
     lower_bounds = np.round(preds - q, 4)
@@ -1630,7 +1721,8 @@ class AdaptiveConformalInference:
         return compute_conformal_prediction_intervals(
             y_pred=y_pred,
             calibration_residuals=calibration_residuals,
-            alpha=self.current_alpha
+            alpha=self.current_alpha,
+            target_alpha=self.target_alpha
         )
 
 
