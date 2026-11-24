@@ -75,18 +75,18 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fetch Issue Details & Execute Antigravity CLI (agy) on dev-vm
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ needs.select-runner.outputs.discord_channel_id }}
           TESTING: "1"
         run: |
           set -o pipefail
-          export PATH="$HOME/.local/bin:$PATH"
+          export PATH="$HOME/.midgley-venv/bin:$HOME/.local/bin:$PATH"
           BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
           git config user.name "midgley-dev-agent[bot]"
           git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
@@ -109,7 +109,39 @@ jobs:
 
           TIMED_OUT="false"
           set +e
-          timeout 40m agy --print --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" < /dev/null | tee "/tmp/agy_out_${ISSUE_NUMBER}.log"
+          timeout 40m agy --dangerously-skip-permissions --output-format stream-json -p "$(cat "$PROMPT_FILE")" < /dev/null \
+            | tee "/tmp/agy_out_${ISSUE_NUMBER}.log" \
+            | python3 -u -c '
+          import json, sys
+          for raw in sys.stdin:
+              line = raw.strip()
+              if not line:
+                  continue
+              try:
+                  ev = json.loads(line)
+              except Exception:
+                  print(line, flush=True)
+                  continue
+              etype = ev.get("type", "")
+              if etype in ("tool_use", "tool_call"):
+                  name = ev.get("tool_name") or ev.get("name") or "tool"
+                  params = json.dumps(ev.get("parameters") or ev.get("input") or {})[:180]
+                  print(f"🔧 [tool_use] {name} {params}", flush=True)
+              elif etype == "tool_result":
+                  status = ev.get("status", "ok")
+                  out = str(ev.get("output") or "")[:180].replace("\n", " ")
+                  icon = "✅" if status == "success" else "⚠️"
+                  print(f"{icon} [tool_result] ({status}) {out}", flush=True)
+              elif etype in ("message", "assistant", "text"):
+                  content = str(ev.get("content") or ev.get("text") or "").strip()
+                  if content:
+                      print(f"💬 {content[:400]}", flush=True)
+              elif etype == "result":
+                  st = ev.get("status") or "done"
+                  print(f"📊 [done] status={st}", flush=True)
+              elif etype == "error":
+                  print(f"❌ [error] {ev}", flush=True)
+          '
           AGENT_EXIT=$?
           set -e
 
@@ -120,6 +152,7 @@ jobs:
             exit "$AGENT_EXIT"
           fi
 
+          git checkout HEAD -- data/lookup_cache.sqlite data/agent_memory.sqlite MODEL_LEARNING.md 2>/dev/null || true
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
             if [ "$TIMED_OUT" = "true" ]; then
@@ -148,8 +181,11 @@ jobs:
 
           Please review changes and test output before marking ready for review.
           EOF
-            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
-            echo "Opened Draft PR: $PR_URL"
+            PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$BRANCH" --state open --json url --jq '.[0].url' 2>/dev/null || true)
+            if [ -z "$PR_URL" ]; then
+              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            fi
+            echo "Draft PR: $PR_URL"
 
             if [ -n "$DISCORD_BOT_TOKEN" ]; then
               python3 - "$DISCORD_CHANNEL_ID" "$ISSUE_NUMBER" "$PR_URL" "dev-vm" <<'PYEOF'
@@ -199,7 +235,7 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.13
         uses: actions/setup-python@v7
@@ -248,7 +284,7 @@ jobs:
 
       - name: Execute Gemini CLI Agent on GitHub Cloud & Open Draft PR
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_CLI_TRUST_WORKSPACE: "true"
           ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
@@ -324,6 +360,7 @@ jobs:
             exit "$AGENT_EXIT"
           fi
 
+          git checkout HEAD -- data/lookup_cache.sqlite data/agent_memory.sqlite MODEL_LEARNING.md 2>/dev/null || true
           if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
             git add -A
             if [ "$TIMED_OUT" = "true" ]; then
@@ -352,8 +389,11 @@ jobs:
 
           Please review changes and test output before marking ready for review.
           EOF
-            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
-            echo "Opened Draft PR: $PR_URL"
+            PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$BRANCH" --state open --json url --jq '.[0].url' 2>/dev/null || true)
+            if [ -z "$PR_URL" ]; then
+              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            fi
+            echo "Draft PR: $PR_URL"
 
             if [ -n "$DISCORD_BOT_TOKEN" ]; then
               python3 - "$DISCORD_CHANNEL_ID" "$ISSUE_NUMBER" "$PR_URL" "ubuntu-latest (cloud fallback)" <<'PYEOF'

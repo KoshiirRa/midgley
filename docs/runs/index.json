@@ -1,5 +1,125 @@
 [
   {
+    "run_id": "2026-11-20_03-57-57",
+    "timestamp": "2026-11-20 03:57:46",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-20 03:57:46)"
+  },
+  {
+    "run_id": "2026-11-20_03-01-54",
+    "timestamp": "2026-11-19 03:50:38",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-19 03:50:38)"
+  },
+  {
+    "run_id": "2026-11-19_22-03-16",
+    "timestamp": "2026-11-19 03:50:38",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-19 03:50:38)"
+  },
+  {
+    "run_id": "2026-11-19_12-38-35",
+    "timestamp": "2026-11-19 03:50:38",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-19 03:50:38)"
+  },
+  {
+    "run_id": "2026-11-19_03-50-43",
+    "timestamp": "2026-11-19 03:50:38",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-19 03:50:38)"
+  },
+  {
+    "run_id": "2026-11-18_12-49-12",
+    "timestamp": "2026-11-18 04:21:00",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-18 04:21:00)"
+  },
+  {
+    "run_id": "2026-11-18_04-21-08",
+    "timestamp": "2026-11-18 04:21:00",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-18 04:21:00)"
+  },
+  {
+    "run_id": "2026-11-18_03-25-56",
+    "timestamp": "2026-11-17 05:03:23",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-17 05:03:23)"
+  },
+  {
+    "run_id": "2026-11-17_10-23-18",
+    "timestamp": "2026-11-17 05:03:23",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-17 05:03:23)"
+  },
+  {
+    "run_id": "2026-11-17_05-03-39",
+    "timestamp": "2026-11-17 05:03:23",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-17 05:03:23)"
+  },
+  {
+    "run_id": "2026-11-16_02-44-54",
+    "timestamp": "2026-11-16 02:44:42",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-16 02:44:42)"
+  },
+  {
+    "run_id": "2026-11-15_23-54-05",
+    "timestamp": "2026-11-15 02:18:01",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-15 02:18:01)"
+  },
+  {
+    "run_id": "2026-11-15_19-39-04",
+    "timestamp": "2026-11-15 02:18:01",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-15 02:18:01)"
+  },
+  {
+    "run_id": "2026-11-15_02-18-05",
+    "timestamp": "2026-11-15 02:18:01",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-15 02:18:01)"
+  },
+  {
+    "run_id": "2026-11-14_22-09-59",
+    "timestamp": "2026-11-14 19:08:08",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-14 19:08:08)"
+  },
+  {
+    "run_id": "2026-11-14_19-21-27",
+    "timestamp": "2026-11-14 19:08:08",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-14 19:08:08)"
+  },
+  {
+    "run_id": "2026-11-14_19-08-13",
+    "timestamp": "2026-11-14 19:08:08",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-14 19:08:08)"
+  },
+  {
+    "run_id": "2026-11-14_16-28-07",
+    "timestamp": "2026-11-14 03:00:37",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-14 03:00:37)"
+  },
+  {
+    "run_id": "2026-11-14_08-46-15",
+    "timestamp": "2026-11-14 03:00:37",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-14 03:00:37)"
+  },
+  {
+    "run_id": "2026-11-14_03-00-42",
+    "timestamp": "2026-11-14 03:00:37",
+    "run_type": "LIVE_PROSPECTIVE",
+    "trigger": "Daily Forecast Batch Execution (2026-11-14 03:00:37)"
+  },
+  {
     "run_id": "2026-11-14_00-48-53",
     "timestamp": "2026-11-13 03:21:14",
     "run_type": "LIVE_PROSPECTIVE",
@@ -478,125 +598,5 @@
     "timestamp": "2026-10-24 00:59:36",
     "run_type": "LIVE_PROSPECTIVE",
     "trigger": "Daily Forecast Batch Execution (2026-10-24 00:59:36)"
-  },
-  {
-    "run_id": "2026-10-24_00-59-53",
-    "timestamp": "2026-10-24 00:59:36",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-24 00:59:36)"
-  },
-  {
-    "run_id": "2026-10-23_19-54-29",
-    "timestamp": "2026-10-23 00:55:45",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-23 00:55:45)"
-  },
-  {
-    "run_id": "2026-10-23_14-45-28",
-    "timestamp": "2026-10-23 00:55:45",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-23 00:55:45)"
-  },
-  {
-    "run_id": "2026-10-23_03-56-12",
-    "timestamp": "2026-10-23 00:55:45",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-23 00:55:45)"
-  },
-  {
-    "run_id": "2026-10-23_00-56-03",
-    "timestamp": "2026-10-23 00:55:45",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-23 00:55:45)"
-  },
-  {
-    "run_id": "2026-10-22_23-04-07",
-    "timestamp": "2026-10-22 01:00:06",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-22 01:00:06)"
-  },
-  {
-    "run_id": "2026-10-22_14-57-09",
-    "timestamp": "2026-10-22 01:00:06",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-22 01:00:06)"
-  },
-  {
-    "run_id": "2026-10-22_09-16-44",
-    "timestamp": "2026-10-22 01:00:06",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-22 01:00:06)"
-  },
-  {
-    "run_id": "2026-10-22_01-00-24",
-    "timestamp": "2026-10-22 01:00:06",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-22 01:00:06)"
-  },
-  {
-    "run_id": "2026-10-21_23-08-42",
-    "timestamp": "2026-10-21 00:55:20",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-21 00:55:20)"
-  },
-  {
-    "run_id": "2026-10-21_18-30-55",
-    "timestamp": "2026-10-21 00:55:20",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-21 00:55:20)"
-  },
-  {
-    "run_id": "2026-10-21_13-36-52",
-    "timestamp": "2026-10-21 00:55:20",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-21 00:55:20)"
-  },
-  {
-    "run_id": "2026-10-21_07-17-06",
-    "timestamp": "2026-10-21 00:55:20",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-21 00:55:20)"
-  },
-  {
-    "run_id": "2026-10-21_00-55-38",
-    "timestamp": "2026-10-21 00:55:20",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-21 00:55:20)"
-  },
-  {
-    "run_id": "2026-10-20_21-26-16",
-    "timestamp": "2026-10-20 01:24:35",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-20 01:24:35)"
-  },
-  {
-    "run_id": "2026-10-20_11-09-20",
-    "timestamp": "2026-10-20 01:24:35",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-20 01:24:35)"
-  },
-  {
-    "run_id": "2026-10-20_01-24-53",
-    "timestamp": "2026-10-20 01:24:35",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-20 01:24:35)"
-  },
-  {
-    "run_id": "2026-10-19_23-28-37",
-    "timestamp": "2026-10-19 00:28:33",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-19 00:28:33)"
-  },
-  {
-    "run_id": "2026-10-19_19-43-56",
-    "timestamp": "2026-10-19 00:28:33",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-19 00:28:33)"
-  },
-  {
-    "run_id": "2026-10-19_12-34-56",
-    "timestamp": "2026-10-19 00:28:33",
-    "run_type": "LIVE_PROSPECTIVE",
-    "trigger": "Daily Forecast Batch Execution (2026-10-19 00:28:33)"
   }
 ]

@@ -25,6 +25,7 @@ import {
 } from "./ai_event_scorer";
 import {
   SUNDAY_REVIEW_CRON_EXPRESSION,
+  isSundayNineAmCentral,
   runSundayWeeklyReviewPlanner,
   handleWeeklyActionComponentInteraction
 } from "./sunday_review_planner";
@@ -3962,10 +3963,18 @@ export async function handleReviewWebRequest(request: Request, env: Env, ctx: an
 export default {
   async scheduled(controller: any, env: Env, ctx: any): Promise<void> {
     try {
-      if (controller?.cron === SUNDAY_REVIEW_CRON_EXPRESSION) {
+      const cronExpr = String(controller?.cron || "").trim();
+      const isDedicatedSundayCron =
+        cronExpr.toUpperCase() === SUNDAY_REVIEW_CRON_EXPRESSION.toUpperCase() ||
+        cronExpr.includes("14,15");
+      if (isDedicatedSundayCron) {
         ctx.waitUntil(runSundayWeeklyReviewPlanner(env, ctx));
       } else {
         ctx.waitUntil(runMonitoringCycle(env, ctx));
+        // Self-healing catch-up: on Sunday >= 09:00 America/Chicago, retry every 15m until D1 records completion
+        if (isSundayNineAmCentral().shouldRun) {
+          ctx.waitUntil(runSundayWeeklyReviewPlanner(env, ctx));
+        }
       }
     } catch (err: any) {
       console.error(`[Scheduled Exception] ${err.message || String(err)}`);
