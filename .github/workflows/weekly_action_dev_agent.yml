@@ -75,11 +75,11 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fetch Issue Details & Execute Antigravity CLI (agy) on dev-vm
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ needs.select-runner.outputs.discord_channel_id }}
@@ -181,8 +181,11 @@ jobs:
 
           Please review changes and test output before marking ready for review.
           EOF
-            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
-            echo "Opened Draft PR: $PR_URL"
+            PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$BRANCH" --state open --json url --jq '.[0].url' 2>/dev/null || true)
+            if [ -z "$PR_URL" ]; then
+              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            fi
+            echo "Draft PR: $PR_URL"
 
             if [ -n "$DISCORD_BOT_TOKEN" ]; then
               python3 - "$DISCORD_CHANNEL_ID" "$ISSUE_NUMBER" "$PR_URL" "dev-vm" <<'PYEOF'
@@ -232,7 +235,7 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.13
         uses: actions/setup-python@v7
@@ -281,7 +284,7 @@ jobs:
 
       - name: Execute Gemini CLI Agent on GitHub Cloud & Open Draft PR
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_CLI_TRUST_WORKSPACE: "true"
           ISSUE_NUMBER: ${{ needs.select-runner.outputs.issue_number }}
@@ -386,8 +389,11 @@ jobs:
 
           Please review changes and test output before marking ready for review.
           EOF
-            PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
-            echo "Opened Draft PR: $PR_URL"
+            PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$BRANCH" --state open --json url --jq '.[0].url' 2>/dev/null || true)
+            if [ -z "$PR_URL" ]; then
+              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
+            fi
+            echo "Draft PR: $PR_URL"
 
             if [ -n "$DISCORD_BOT_TOKEN" ]; then
               python3 - "$DISCORD_CHANNEL_ID" "$ISSUE_NUMBER" "$PR_URL" "ubuntu-latest (cloud fallback)" <<'PYEOF'
