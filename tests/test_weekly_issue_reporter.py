@@ -685,3 +685,37 @@ def test_report_generation_time_latency_badge(tmp_path):
     assert ("🟢 OPTIMAL" in report or "⚠️ SLOW" in report)
 
 
+def test_generate_weekly_markdown_report_includes_degradation_and_feature_audit_on_dev(tmp_path):
+    """Verify dev weekly report includes Model Degradation Alerts and Feature Leakage Audit sections (Issue #736)."""
+    from src.weekly_issue_reporter import generate_weekly_markdown_report
+    import pandas as pd
+
+    csv_file = tmp_path / "dev_report_history.csv"
+    pd.DataFrame([
+        {
+            "forecast_id": "dev_nat_1",
+            "region": "National",
+            "model_version": "v1.6-Ipatieff",
+            "log_timestamp": "2026-11-21",
+            "forecast_target_date": "2026-11-26",
+            "forecast_horizon_days": 5,
+            "current_base_price": 3.10,
+            "predicted_5d_price": 3.15,
+            "actual_5d_price": 3.14,
+            "error_dollars": 0.01,
+            "directional_hit": 1,
+            "within_95ci_hit": 1,
+            "run_type": "LIVE_PROSPECTIVE",
+        }
+    ]).to_csv(csv_file, index=False)
+
+    with patch("src.weekly_issue_reporter.HISTORY_CSV", str(csv_file)), \
+         patch("src.weekly_issue_reporter.get_current_git_branch", return_value="dev"), \
+         patch("src.db.client.get_db", side_effect=Exception("Offline DB")), \
+         patch("src.weekly_issue_reporter.fetch_open_github_issues", return_value=[]), \
+         patch("src.catalog_monitor.run_catalog_monitors", return_value={"catalogs_scanned": 6, "new_items_discovered": 0, "issues_created": []}), \
+         patch("src.benchmark_updater.refresh_all_historical_benchmarks", return_value={"benchmarks_refreshed": 10}):
+        report = generate_weekly_markdown_report()
+
+    assert "## ⚠️ Model Degradation & Baseline Underperformance Alerts" in report
+    assert "## 🔬 Quantitative Research Validation & Feature Leakage Audit" in report
