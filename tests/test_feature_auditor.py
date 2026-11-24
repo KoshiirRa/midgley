@@ -186,3 +186,32 @@ def test_feature_auditor_full_matrix():
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
+
+
+def test_trailing_return_feature_not_flagged_as_backward_leak():
+    """Causal trailing 5-day returns overlap past daily returns by construction (Issue #736)."""
+    rng = np.random.default_rng(42)
+    prices = pd.Series(2.50 + np.cumsum(rng.normal(0.0, 0.03, size=200)))
+    daily_returns = prices.pct_change().fillna(0.0)
+    trailing_5d = prices.pct_change(5).fillna(0.0)
+
+    auditor = PointInTimeLeakageAuditor()
+    res_causal = auditor.audit_feature_lead_lag(
+        feature_series=trailing_5d,
+        price_returns=daily_returns,
+        max_lags=5,
+        feature_name="gas_return_5d",
+    )
+    assert res_causal["status"] == "PASS"
+    assert res_causal["leakage_detected"] is False
+
+    # Genuine future lookahead on the same named feature must still be flagged
+    leaked_future = daily_returns.shift(-1).fillna(0.0)
+    res_leaked = auditor.audit_feature_lead_lag(
+        feature_series=leaked_future,
+        price_returns=daily_returns,
+        max_lags=5,
+        feature_name="gas_return_5d",
+    )
+    assert res_leaked["status"] == "WARN"
+    assert res_leaked["leakage_detected"] is True
