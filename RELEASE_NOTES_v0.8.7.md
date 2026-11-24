@@ -143,6 +143,12 @@ Midgley **v0.8.7** is an edge-resilience, zero-cost data ingestion, and out-of-m
 - **Hyper-Local ZIP Geocoding Integration**: Updated [`resolve_zip_code()`](src/zip_geocoding.py) in [`src/zip_geocoding.py`](src/zip_geocoding.py) to dynamically resolve effective state and hub baseline taxes for targeted dates.
 - **Public Math Documentation**: Documented dynamic emergency tax holiday equations under Equation 14.1 in [`src/dashboard_generator.py`](src/dashboard_generator.py) and [`docs/math.html`](docs/math.html).
 
+### 23. Critical Calibration Regression & Regional Model Degradation Remediation (Issue #732)
+- **Adaptive Conformal & Bias-Aware RMSE 95% Prediction Intervals**: Wired point-in-time Adaptive Conformal Inference (ACI, Gibbs & Candès 2021) via [`compute_adaptive_conformal_alpha()`](src/prediction_logger.py) and broadened sparse-region calibration residual cascades in [`get_regional_calibration_residuals()`](src/prediction_logger.py) and [`log_predictions()`](src/prediction_logger.py), with strict `as_of_date` maturity filtering (`target_date <= as_of_date`) in [`filter_evaluated_history_by_window()`](src/prediction_logger.py). Fixed bias-blind variance collapse in [`compute_regional_residual_std()`](src/prediction_logger.py) by using `max(RMSE, std)` and added Student-$t$ small-sample / distribution-shift tail expansion in [`compute_conformal_prediction_intervals()`](src/models.py).
+- **Validation-Gated Hybrid Skill Shrinkage & Closed-Loop Degradation Guardrail**: Added [`apply_validation_performance_gating()`](src/models.py) in [`src/models.py`](src/models.py) (wired into `train_and_compare_models()` and `train_multi_horizon_models()`), expanded `RidgeCV` upper regularization alphas to `2500.0`, scaled the plausibility divergence floor by horizon in [`enforce_forecast_plausibility_gate()`](src/models.py), and wired the closed-loop 14-day live degradation guardrail into [`src/locations/national/main.py`](src/locations/national/main.py) and [`src/locations/runner.py`](src/locations/runner.py).
+- **Authentic Retail History & Asymmetric ECM Coverage for Legacy Hubs**: Migrated `Newark_DE`, `Charlotte_NC`, and `Port_St_Lucie_FL` in [`src/locations/newark/regional.py`](src/locations/newark/regional.py), [`src/locations/charlotte/regional.py`](src/locations/charlotte/regional.py), and [`src/locations/port_st_lucie/regional.py`](src/locations/port_st_lucie/regional.py) from synthetic constant-margin series to authentic EIA regional retail history (`get_regional_retail_history()`), guarded constant-margin rejection in [`src/locations/runner.py`](src/locations/runner.py), and routed dual-anchor secondary metros (`BayArea_CA`, `Cincinnati_KY`) through the fitted `AsymmetricECM`.
+- **Technical Breakdown Formula Update**: Updated the 95% Prediction Interval equations in [`src/dashboard_generator.py`](src/dashboard_generator.py) to reflect Adaptive Conformal Inference and Student-$t$ RMSE bounds.
+
 ---
 
 ## 🛠️ Data Catalog & Documentation Updates
@@ -204,7 +210,8 @@ ruff check src/ tests/
 - **`tests/test_truncation_invariance.py`**: 4/4 passed (tested point-in-time truncation invariance and Issue #631 bifurcated 3.5d upstream shut-in vs. 14.0d downstream refinery damage decay half-lives).
 - **`tests/test_eia_retail_feed.py`**: 9/9 passed (tested zero-API-key U.S. EIA DNAV public historical page parser, DNAV series aliases, and strict cross-geography isolation).
 - **`tests/workers.test.ts`**: 58/58 passed (tested Cloudflare Worker edge polling, ETag 304 skipping, title pre-filtering, and D1 `edgar_8k_seen` deduplication).
-- **`ruff check src/ tests/`**: All checks passed cleanly with zero linting or formatting errors.
+- **`tests/test_calibration_and_degradation_fixes.py`** (+ 15 targeted model/conformal/ECM/regional/PIT test suites): 98/98 passed, plus 4/4 passed on `tests/test_docs_links.py` and `tests/test_dashboard_generator.py` (`test_generate_technical_breakdown_file`, `test_data_sources_page_generation`) for Issue #732.
+- **`ruff check .`**: All checks passed cleanly with zero linting or formatting errors.
 
 ---
 
