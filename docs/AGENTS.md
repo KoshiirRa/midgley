@@ -109,7 +109,7 @@ Regenerate only affected public pages in a controlled valid-data state. Update g
 
 ## Branches, packaging, and operations
 
-- Develop normally on `dev`; reserve `main` for production. Keep authorized release reconciliation through `dev` -> `main` -> `self-hosted`, preserving the self-hosted national/default blank-slate scope and staging/production separation.
+- Develop on short-lived feature branches targeting `main` (the legacy `dev` branch is retired). Keep authorized release reconciliation through `main` -> `self-hosted`, preserving the self-hosted national/default blank-slate scope.
 - Never force-push shared data. Preserve the `production-data-deployment` concurrency group and non-destructive rebase/retry handling for data-writing workflows.
 - Keep dependency versions/floors aligned across `pyproject.toml`, `requirements.txt`, and `requirements.lock`; preserve lock reproducibility and the configured lock-generation process.
 - Preserve Python >=3.11 and configured CI coverage for 3.11/3.12/3.13 on PRs and `main`/`dev` pushes, including lint and regression gates.
