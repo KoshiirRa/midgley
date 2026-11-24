@@ -156,7 +156,7 @@ describe("Sunday Weekly Self-Review Action Planner", () => {
           { status: 200, headers: { "Content-Type": "application/json" } }
         );
       }
-      if (url.includes("generativelanguage.googleapis.com")) {
+      if (new URL(url).hostname === "generativelanguage.googleapis.com") {
         return new Response(
           JSON.stringify({
             candidates: [
@@ -274,7 +274,7 @@ describe("Sunday Weekly Self-Review Action Planner", () => {
         expect(Object.keys(body.client_payload).length).toBeLessThanOrEqual(10);
         return new Response(null, { status: 204 });
       }
-      if (url.includes("generativelanguage.googleapis.com")) {
+      if (new URL(url).hostname === "generativelanguage.googleapis.com") {
         return new Response(
           JSON.stringify({
             candidates: [{ content: { parts: [{ text: "Detailed root cause explanation for CI coverage." }] } }]
