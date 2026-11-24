@@ -1,10 +1,10 @@
 {
   "benchmark_key": "usgs_water",
-  "last_refreshed_utc": "2026-11-24 06:38:13",
+  "last_refreshed_utc": "2026-11-24 17:15:28",
   "records_count": 6,
   "data": {
     "source": "USGS National Water Information System (NWIS Instantaneous Values API)",
-    "timestamp": "2026-11-24 06:38:04",
+    "timestamp": "2026-11-24 17:15:15",
     "status": "SUCCESS",
     "stations_monitored": 13,
     "stations": {
