@@ -689,7 +689,7 @@ class IntradayEventMonitor:
 
         archive_url = ""
         resolved_url = url
-        if url:
+        if url and os.environ.get("TESTING") != "1":
             try:
                 from src.wayback_archiver import archive_url_to_wayback
                 arch_res = archive_url_to_wayback(url, headline=headline)
