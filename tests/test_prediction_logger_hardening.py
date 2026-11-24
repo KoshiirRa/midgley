@@ -229,3 +229,17 @@ class TestPredictionLoggerHardening:
             if os.path.exists(temp_path):
                 os.remove(temp_path)
 
+    def test_classify_price_direction_and_readme_format_three_way(self):
+        """Verify 3-way UP/DOWN/FLAT classification avoids >= defaulting flat predictions to UP (Issue #737)."""
+        from src.prediction_logger import classify_price_direction
+        from src.readme_updater import _format_direction
+
+        assert classify_price_direction(3.550, 3.550) == "FLAT"
+        assert classify_price_direction(3.55005, 3.550) == "FLAT"
+        assert classify_price_direction(3.555, 3.550) == "UP"
+        assert classify_price_direction(3.545, 3.550) == "DOWN"
+
+        assert _format_direction(3.550, 3.550) == "FLAT ➡️"
+        assert _format_direction(3.560, 3.550) == "UP 📈"
+        assert _format_direction(3.540, 3.550) == "DOWN 📉"
+

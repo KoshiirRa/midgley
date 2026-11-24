@@ -143,6 +143,12 @@ class DynamicRegionRunner:
         attributions = self._compute_feature_attributions(nat_res, current_base, predicted_5d_price)
 
         # Step 7: Log prediction to prediction_history.csv
+        from src.prediction_logger import classify_price_direction
+        pred_direction_code = classify_price_direction(predicted_5d_price, current_base)
+        projected_dir_label = (
+            "UP 📈" if pred_direction_code == "UP"
+            else ("DOWN 📉" if pred_direction_code == "DOWN" else "FLAT ➡️")
+        )
         try:
             today = datetime.now()
             target_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
@@ -152,7 +158,7 @@ class DynamicRegionRunner:
                 "forecast_target_date": target_date,
                 "current_base_price": current_base,
                 "predicted_5d_price": predicted_5d_price,
-                "predicted_direction": "UP" if predicted_5d_price >= current_base else "DOWN",
+                "predicted_direction": pred_direction_code,
                 "llm_price_pressure": nat_res.get("llm_price_pressure", 0.0),
                 "llm_supply_disruption": nat_res.get("llm_supply_disruption", 0.0),
                 "quant_baseline_5d_price": quant_base,
@@ -190,7 +196,7 @@ class DynamicRegionRunner:
             "raw_predicted_5d_price": raw_predicted_5d_price,
             "predicted_5d_price": predicted_5d_price,
             "baseline_forecast": predicted_5d_price,
-            "projected_direction": "UP 📈" if predicted_5d_price >= current_base else "DOWN 📉",
+            "projected_direction": projected_dir_label,
             "prediction_lower_95ci": lower_95ci,
             "prediction_upper_95ci": upper_95ci,
             "volatility_14d": sigma_14d,

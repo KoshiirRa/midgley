@@ -1219,6 +1219,132 @@ def format_scenario_plausibility_markdown_section() -> str:
         return f"## 🌪️ Scenario Seasonality & Climatological Horizon Matrix\n*Plausibility audit notice: {e}*"
 
 
+CONSOLIDATED_RETIRED_REGIONS = frozenset({"Greenville_NC"})
+
+
+def _is_test_region_name(region: Any) -> bool:
+    """Returns True if region identifier represents a test fixture/artifact."""
+    reg_str = str(region or "").strip()
+    if not reg_str:
+        return True
+    lower = reg_str.lower()
+    return lower.startswith("test_") or "test" in lower
+
+
+def _sanitize_prediction_records(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Applies consistent data-integrity hygiene to prediction records from either DB or CSV:
+    - Filters out Test_Region / Test_* test artifacts.
+    - Resets implausible regional/wholesale actual price evaluations to NaN.
+    """
+    if df.empty:
+        return df
+
+    cleaned = df.copy()
+    if 'region' in cleaned.columns:
+        cleaned = cleaned[~cleaned['region'].apply(_is_test_region_name)].copy()
+
+    if not cleaned.empty and 'region' in cleaned.columns and 'actual_5d_price' in cleaned.columns:
+        from src.prediction_logger import validate_price_plausibility
+        invalid_eval_mask = cleaned.apply(
+            lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
+                r.get('actual_5d_price'),
+                str(r.get('region', 'National')),
+                is_retail=(str(r.get('region', 'National')) != 'National')
+            ),
+            axis=1
+        )
+        if invalid_eval_mask.any():
+            for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
+                if c in cleaned.columns:
+                    cleaned.loc[invalid_eval_mask, c] = np.nan
+
+    return cleaned
+
+
+def _format_projected_direction(curr_p: Any, fore_p: Any, tolerance: float = 1e-4) -> str:
+    """
+    Computes 3-way projected direction label ('UP 📈', 'DOWN 📉', 'FLAT ➡️')
+    or 'N/A' when either price is missing/non-finite.
+    """
+    try:
+        c_val = float(curr_p)
+        f_val = float(fore_p)
+    except (TypeError, ValueError):
+        return "N/A"
+    if np.isnan(c_val) or np.isnan(f_val) or np.isinf(c_val) or np.isinf(f_val):
+        return "N/A"
+    if f_val < c_val - tolerance:
+        return "DOWN 📉"
+    if f_val > c_val + tolerance:
+        return "UP 📈"
+    return "FLAT ➡️"
+
+
+def _select_active_latest_forecasts(df: pd.DataFrame, today_str: str) -> pd.DataFrame:
+    """
+    Selects the single latest active 5-day prospective out-of-time forecast per active region:
+    - Excludes test artifacts (Test_*) and consolidated/retired regions (e.g. Greenville_NC).
+    - Prefers prospective non-backtest records and 5-day horizon rows.
+    - Sorts chronologically by (forecast_target_date, log_timestamp) prior to deduplication.
+    - Excludes stale/already-matured forecasts with forecast_target_date < today_str.
+    """
+    if df.empty or 'region' not in df.columns:
+        return pd.DataFrame()
+
+    cand = df.dropna(subset=['region']).copy()
+    cand = cand[
+        ~cand['region'].apply(_is_test_region_name)
+        & ~cand['region'].astype(str).isin(CONSOLIDATED_RETIRED_REGIONS)
+    ].copy()
+    if cand.empty:
+        return cand
+
+    # Exclude retroactive backtest records from active out-of-time forecast table
+    prospective_mask = pd.Series(True, index=cand.index)
+    if 'run_type' in cand.columns:
+        prospective_mask &= ~cand['run_type'].astype(str).str.upper().str.contains('BACKTEST', na=False)
+    if 'is_retroactive_backtest' in cand.columns:
+        retro_flags = cand['is_retroactive_backtest'].apply(
+            lambda v: str(v).strip().lower() in {"true", "1", "1.0", "t"} if pd.notna(v) else False
+        )
+        prospective_mask &= ~retro_flags
+    if prospective_mask.any():
+        cand = cand[prospective_mask].copy()
+
+    # Prefer 5-day horizon forecasts when present
+    if 'forecast_horizon_days' in cand.columns:
+        h_num = pd.to_numeric(cand['forecast_horizon_days'], errors='coerce')
+        if (h_num == 5).any():
+            cand = cand[h_num == 5].copy()
+
+    if cand.empty:
+        return cand
+
+    # Normalize target_date and filter strictly to non-stale active targets (>= today_str)
+    if 'forecast_target_date' in cand.columns:
+        cand['_target_date_norm'] = cand['forecast_target_date'].astype(str).str.slice(0, 10)
+        valid_date_mask = cand['_target_date_norm'].str.match(r"^\d{4}-\d{2}-\d{2}$", na=False)
+        cand = cand[valid_date_mask & (cand['_target_date_norm'] >= today_str)].copy()
+        if cand.empty:
+            return cand
+    else:
+        cand['_target_date_norm'] = ""
+
+    if 'log_timestamp' in cand.columns:
+        cand['_log_ts_norm'] = cand['log_timestamp'].astype(str)
+    else:
+        cand['_log_ts_norm'] = ""
+
+    cand = cand.sort_values(
+        by=['region', '_target_date_norm', '_log_ts_norm'],
+        ascending=[True, True, True],
+        kind='mergesort'
+    )
+    latest_df = cand.groupby('region', as_index=False, sort=True).last()
+    return latest_df.drop(columns=['_target_date_norm', '_log_ts_norm'], errors='ignore')
+
+
 def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
     """
     Loads prediction and evaluation records from unified database (Turso libSQL / SQLite),
@@ -1305,38 +1431,35 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
                     # Also fallback match on (region, forecast_target_date, forecast_horizon_days) for current_base_price if forecast_id differed
                     if 'current_base_price' in df.columns and df['current_base_price'].isna().any() and not csv_df.empty:
                         if all(k in csv_df.columns for k in ['region', 'forecast_target_date', 'current_base_price']):
-                            comp_dedup = csv_df.dropna(subset=['region', 'forecast_target_date', 'current_base_price']).drop_duplicates(
-                                subset=['region', 'forecast_target_date'], keep='last'
-                            )
-                            comp_map = comp_dedup.set_index(['region', 'forecast_target_date'])['current_base_price']
-                            idx_tuples = list(zip(df['region'], df['forecast_target_date']))
-                            fallback_bp = pd.Series([comp_map.get(t, np.nan) for t in idx_tuples], index=df.index)
-                            df['current_base_price'] = df['current_base_price'].combine_first(fallback_bp)
+                            if 'forecast_horizon_days' in csv_df.columns and 'forecast_horizon_days' in df.columns:
+                                csv_h = csv_df.dropna(subset=['region', 'forecast_target_date', 'current_base_price']).copy()
+                                csv_h['_h_int'] = pd.to_numeric(csv_h['forecast_horizon_days'], errors='coerce').fillna(5).astype(int)
+                                comp_h_dedup = csv_h.drop_duplicates(
+                                    subset=['region', 'forecast_target_date', '_h_int'], keep='last'
+                                )
+                                comp_h_map = comp_h_dedup.set_index(['region', 'forecast_target_date', '_h_int'])['current_base_price']
+                                h_tuples = list(zip(df['region'], df['forecast_target_date'], df['forecast_horizon_days']))
+                                fallback_bp_h = pd.Series([comp_h_map.get(t, np.nan) for t in h_tuples], index=df.index)
+                                df['current_base_price'] = df['current_base_price'].combine_first(fallback_bp_h)
+                            if df['current_base_price'].isna().any():
+                                comp_dedup = csv_df.dropna(subset=['region', 'forecast_target_date', 'current_base_price']).drop_duplicates(
+                                    subset=['region', 'forecast_target_date'], keep='last'
+                                )
+                                comp_map = comp_dedup.set_index(['region', 'forecast_target_date'])['current_base_price']
+                                idx_tuples = list(zip(df['region'], df['forecast_target_date']))
+                                fallback_bp = pd.Series([comp_map.get(t, np.nan) for t in idx_tuples], index=df.index)
+                                df['current_base_price'] = df['current_base_price'].combine_first(fallback_bp)
                 except Exception as csv_err:
                     logger.debug(f"CSV enrichment notice in load_prediction_records: {csv_err}")
 
-            # Purge corrupted regional evaluations (e.g. legacy_ledger $3.061 National prices in CA/DE or Test_Region)
-            if 'region' in df.columns:
-                df = df[~df['region'].astype(str).str.startswith("Test_") & ~df['region'].astype(str).str.contains("Test", case=False)].copy()
-            if 'region' in df.columns and 'actual_5d_price' in df.columns:
-                from src.prediction_logger import validate_price_plausibility
-                invalid_eval_mask = df.apply(
-                    lambda r: pd.notna(r.get('actual_5d_price')) and not validate_price_plausibility(
-                        r.get('actual_5d_price'),
-                        str(r.get('region', 'National')),
-                        is_retail=(str(r.get('region', 'National')) != 'National')
-                    ),
-                    axis=1
-                )
-                if invalid_eval_mask.any():
-                    for c in ['actual_5d_price', 'error_dollars', 'directional_hit', 'within_95ci_hit']:
-                        if c in df.columns:
-                            df.loc[invalid_eval_mask, c] = np.nan
+            # Purge corrupted regional evaluations and test artifacts consistently
+            df = _sanitize_prediction_records(df)
 
-            if 'current_base_price' not in df.columns:
-                df['current_base_price'] = df['predicted_5d_price'] if 'predicted_5d_price' in df.columns else 0.0
-            elif 'predicted_5d_price' in df.columns:
-                df['current_base_price'] = pd.to_numeric(df['current_base_price'], errors='coerce').fillna(df['predicted_5d_price'])
+            # Preserve genuine missingness for current_base_price (never fabricate predicted_5d_price as base)
+            if 'current_base_price' in df.columns:
+                df['current_base_price'] = pd.to_numeric(df['current_base_price'], errors='coerce')
+            else:
+                df['current_base_price'] = np.nan
 
             logger.info(f"Loaded {len(df)} prediction records directly from unified database.")
             return df
@@ -1346,7 +1469,8 @@ def load_prediction_records(csv_path: str = HISTORY_CSV) -> pd.DataFrame:
     # 2. Fallback to CSV
     from src.prediction_logger import read_prediction_history
     if os.path.exists(csv_path):
-        return read_prediction_history(csv_path)
+        csv_df = read_prediction_history(csv_path)
+        return _sanitize_prediction_records(csv_df)
     return pd.DataFrame()
 
 
@@ -1433,24 +1557,23 @@ def generate_weekly_markdown_report() -> str:
             n_total = len(df[df['region'] == reg])
             summary_rows += f"| **{meta['display_name']}** | {meta['architecture']} | 0 / {n_total} (Pending) | *Pending Horizon* | *Pending Horizon* | ⏳ New Region |\n"
 
-    # Latest forecast predictions per region (prefer 5-day horizon prospective forecasts)
-    df_for_latest = df
-    if 'forecast_horizon_days' in df.columns and (df['forecast_horizon_days'] == 5).any():
-        df_for_latest = df[df['forecast_horizon_days'] == 5]
-    latest_df = df_for_latest.groupby('region', as_index=False).last()
+    # Latest forecast predictions per active region (prospective 5-day horizon, non-stale)
+    latest_df = _select_active_latest_forecasts(df, today_str=today_str)
     latest_rows = ""
-    for _, row in latest_df.iterrows():
-        region = row.get('region', 'N/A')
-        curr_p = float(row.get('current_base_price', row.get('current_price', 0.0)))
-        fore_p = float(row.get('predicted_5d_price', 0.0))
-        target_d = row.get('forecast_target_date', 'N/A')
-        if fore_p < curr_p - 1e-4:
-            dir_str = "DOWN 📉"
-        elif fore_p > curr_p + 1e-4:
-            dir_str = "UP 📈"
-        else:
-            dir_str = "FLAT ➡️"
-        latest_rows += f"| **{region}** | `${curr_p:.3f}/gal` | **`${fore_p:.3f}/gal`** | {dir_str} | `{target_d}` |\n"
+    if latest_df.empty:
+        latest_rows = "| *No active out-of-time forecasts available* | N/A | N/A | N/A | N/A |\n"
+    else:
+        for _, row in latest_df.iterrows():
+            region = row.get('region', 'N/A')
+            raw_curr = row.get('current_base_price', row.get('current_price', np.nan))
+            raw_fore = row.get('predicted_5d_price', np.nan)
+            curr_p = pd.to_numeric(raw_curr, errors='coerce')
+            fore_p = pd.to_numeric(raw_fore, errors='coerce')
+            target_d = str(row.get('forecast_target_date', 'N/A'))[:10]
+            curr_str = f"`${float(curr_p):.3f}/gal`" if pd.notna(curr_p) else "N/A"
+            fore_str = f"**`${float(fore_p):.3f}/gal`**" if pd.notna(fore_p) else "N/A"
+            dir_str = _format_projected_direction(curr_p, fore_p)
+            latest_rows += f"| **{region}** | {curr_str} | {fore_str} | {dir_str} | `{target_d}` |\n"
 
     # Automated Recommendations (aligned with degradation check and actual regional sample availability)
     recommendations = []

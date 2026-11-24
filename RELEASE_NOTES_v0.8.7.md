@@ -205,10 +205,12 @@ ruff check src/ tests/
 - **`tests/test_edgar_8k_monitor.py`**: 9/9 passed (tested operational keyword gates, expanded Tier-1/Tier-2 tickers, accession cache deduplication, and backward-compat shim).
 - **`tests/test_intraday_event_monitor.py`**: 35/35 passed (tested regional routing for XOM, CVX, SU, PARR, DK, KMI, EPD, and synthetic Atom fixture test isolation).
 - **`tests/test_nhc_spatial_refineries.py`**: 11/11 passed (tested EIA-820 refinery catalog integrity, point-in-polygon ray-casting, GeoJSON/KML cone parsing, Hurricane Isaias Eastern Gulf <15% low exposure, Western Gulf >50% high exposure, and offline deterministic execution).
-- **`tests/test_weekly_issue_reporter.py`**: 8/8 passed (tested CSV `current_base_price` enrichment, false-positive and cross-repo issue filtering, heuristic score de-saturation, and self-review markdown sections).
 - **`tests/test_arxiv_monitor.py`**: 6/6 passed (tested domain relevance filtering excluding medical/robotics papers while keeping commodity/energy forecasting preprints).
 - **`tests/test_truncation_invariance.py`**: 4/4 passed (tested point-in-time truncation invariance and Issue #631 bifurcated 3.5d upstream shut-in vs. 14.0d downstream refinery damage decay half-lives).
-- **`tests/test_eia_retail_feed.py`**: 9/9 passed (tested zero-API-key U.S. EIA DNAV public historical page parser, DNAV series aliases, and strict cross-geography isolation).
+- **`tests/test_eia_retail_feed.py`**: 10/10 passed (tested zero-API-key U.S. EIA DNAV public historical page parser, DNAV series aliases, secondary regional PADD fallback in `get_regional_retail_history`, and strict cross-geography isolation).
+- **`tests/test_weekly_issue_reporter.py`**: 11/11 passed (tested CSV `current_base_price` horizon-aware enrichment, consistent DB/CSV `Test_*` filtering, retired/stale forecast exclusion in active 5-day table, 3-way `UP`/`DOWN`/`FLAT`/`N/A` direction formatting, false-positive/cross-repo filtering, and self-review markdown sections).
+- **`tests/test_asymmetric_ecm.py`**: 9/9 passed (including constant retail series rejection to prevent degenerate zero-delta ECM fits, Issue #737).
+- **`tests/test_prediction_logger_hardening.py`**: 6/6 passed (including 3-way `classify_price_direction` and README direction formatting, Issue #737).
 - **`tests/workers.test.ts`**: 58/58 passed (tested Cloudflare Worker edge polling, ETag 304 skipping, title pre-filtering, and D1 `edgar_8k_seen` deduplication).
 - **`tests/test_calibration_and_degradation_fixes.py`** (+ 15 targeted model/conformal/ECM/regional/PIT test suites): 98/98 passed, plus 4/4 passed on `tests/test_docs_links.py` and `tests/test_dashboard_generator.py` (`test_generate_technical_breakdown_file`, `test_data_sources_page_generation`) for Issue #732.
 - **`ruff check .`**: All checks passed cleanly with zero linting or formatting errors.
