@@ -450,26 +450,28 @@ def run_regional_pipeline(
                 except Exception as e:
                     logger.debug(f"Secondary regional backfill skipped for {sec_key}: {e}")
 
+                sec_tax_delta_h = get_known_future_tax_deltas(region=sec_key, as_of_date=str(last_date), horizon_days=h)
+                sec_is_ca = bool("ca" in sec_key.lower() or "oakland" in sec_key.lower() or "bayarea" in sec_key.lower() or "los_angeles" in sec_key.lower())
                 if ecm_model and ecm_model.is_fitted:
                     sec_forecast = round(ecm_model.forecast_horizon(
                         current_retail=sec_base_price,
                         current_wholesale=latest_rbob,
                         future_wholesale_deltas=[raw_pred_h - latest_rbob],
                         horizon_days=h,
-                        forward_tax_delta=tax_delta_h,
-                        is_california=is_ca
+                        forward_tax_delta=sec_tax_delta_h,
+                        is_california=sec_is_ca
                     ), 4)
                     sec_quant = round(ecm_model.forecast_horizon(
                         current_retail=sec_base_price,
                         current_wholesale=latest_rbob,
                         future_wholesale_deltas=[raw_quant_h - latest_rbob],
                         horizon_days=h,
-                        forward_tax_delta=tax_delta_h,
-                        is_california=is_ca
+                        forward_tax_delta=sec_tax_delta_h,
+                        is_california=sec_is_ca
                     ), 4)
                 else:
-                    sec_forecast = round(sec_base_price * (1.0 + baseline_return_h) + tax_delta_h, 4)
-                    sec_quant = round(sec_base_price * (1.0 + quant_return_h) + tax_delta_h, 4)
+                    sec_forecast = round(sec_base_price * (1.0 + baseline_return_h) + sec_tax_delta_h, 4)
+                    sec_quant = round(sec_base_price * (1.0 + quant_return_h) + sec_tax_delta_h, 4)
 
                 if sec_guardrails.get(sec_key, False):
                     from src.models import apply_gated_persistence_blending
