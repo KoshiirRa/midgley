@@ -639,9 +639,21 @@ def get_regional_retail_history(
         feed = EIARetailFeed()
 
     series_info = REGION_TO_EIA_SERIES.get(region)
-    primary_sid = series_info[0][0] if series_info else "GASREGW"
+    candidate_sids = [sid for sid, _ in series_info] if series_info else ["GASREGW"]
+    primary_sid = candidate_sids[0]
 
-    history_dict = feed.fetch_series_history(primary_sid)
+    history_dict: Dict[str, float] = {}
+    selected_sid = primary_sid
+    for sid in candidate_sids:
+        candidate_hist = feed.fetch_series_history(sid)
+        if candidate_hist and len(set(candidate_hist.values())) > 1:
+            history_dict = candidate_hist
+            selected_sid = sid
+            break
+        if candidate_hist and not history_dict:
+            history_dict = candidate_hist
+            selected_sid = sid
+
     dt_index = pd.to_datetime(dates)
 
     if history_dict:
@@ -651,7 +663,7 @@ def get_regional_retail_history(
         # Union index with target dates to properly forward-fill weekly survey to daily business dates
         combined_index = eia_series.index.union(dt_index).sort_values()
         aligned = eia_series.reindex(combined_index).ffill().bfill().reindex(dt_index)
-        fallback_val = FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40)
+        fallback_val = FALLBACK_RETAIL_PRICES.get(selected_sid, FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40))
         aligned = aligned.fillna(fallback_val)
     else:
         fallback_val = FALLBACK_RETAIL_PRICES.get(primary_sid, 3.40)

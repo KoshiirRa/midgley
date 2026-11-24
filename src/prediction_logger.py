@@ -40,6 +40,22 @@ PREDICTION_HISTORY_DTYPES = {
 }
 
 
+def classify_price_direction(
+    target_price: float,
+    base_price: float,
+    tolerance: float = 1e-4
+) -> str:
+    """
+    Classifies directional price movement using a symmetric deadband tolerance.
+    Returns 'UP', 'DOWN', or 'FLAT' (avoiding >= defaulting zero-delta predictions to 'UP').
+    """
+    if target_price > base_price + tolerance:
+        return "UP"
+    if target_price < base_price - tolerance:
+        return "DOWN"
+    return "FLAT"
+
+
 def read_prediction_history(path: str = HISTORY_CSV_PATH) -> pd.DataFrame:
     """
     Safely reads prediction_history.csv with standardized column dtypes and low_memory=False
@@ -371,36 +387,55 @@ def compute_regional_residual_std(
     region: str = None, 
     window_days: int = 30, 
     default_std: float = 0.0612,
-    horizon_days: Optional[int] = None
+    horizon_days: Optional[int] = None,
+    as_of_date: Optional[Union[str, pd.Timestamp]] = None,
+    df: Optional[pd.DataFrame] = None
 ) -> float:
     """
-    Computes rolling 30-day standard error of regional prediction residuals (Issue #214, #394).
-    sigma_residual = std(actual_5d_price - predicted_5d_price)
+    Computes rolling 30-day root-mean-square error / standard error of regional prediction residuals (Issue #214, #394, #732).
+    Uses max(RMSE, std) so systematic basis bias is reflected in symmetric prediction intervals
+    rather than collapsing interval widths when residuals are systematically offset.
     Optionally scales by sqrt(horizon_days / 5) for multi-horizon forecast bounds.
+    Enforces point-in-time safety via optional as_of_date (target_date <= as_of_date).
     Returns default_std (0.0612 $/gal) scaled by horizon if evaluated history has < 3 records.
     """
     base_std = default_std
     try:
-        if os.path.exists(HISTORY_CSV_PATH):
+        if df is None and os.path.exists(HISTORY_CSV_PATH):
             df = read_prediction_history(HISTORY_CSV_PATH)
-            filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region, horizon_days=horizon_days)
+        if df is not None and not df.empty:
+            filtered = filter_evaluated_history_by_window(
+                df,
+                window_days=window_days,
+                region=region,
+                horizon_days=horizon_days,
+                as_of_date=as_of_date
+            )
             if not filtered.empty and 'actual_5d_price' in filtered.columns:
                 actuals = filtered['actual_5d_price'].astype(float).values
                 preds = filtered['predicted_5d_price'].astype(float).values
                 residuals = actuals - preds
                 if len(residuals) >= 3:
+                    res_rmse = float(np.sqrt(np.mean(residuals ** 2)))
                     res_std = float(np.std(residuals, ddof=1))
-                    return max(0.01, round(res_std, 4))
+                    return max(0.01, round(max(res_rmse, res_std), 4))
             
             # If not enough records for specific horizon, compute over all horizons for region
             if horizon_days is not None:
-                all_h_filtered = filter_evaluated_history_by_window(df, window_days=window_days, region=region)
+                all_h_filtered = filter_evaluated_history_by_window(
+                    df,
+                    window_days=window_days,
+                    region=region,
+                    as_of_date=as_of_date
+                )
                 if not all_h_filtered.empty and 'actual_5d_price' in all_h_filtered.columns:
                     actuals = all_h_filtered['actual_5d_price'].astype(float).values
                     preds = all_h_filtered['predicted_5d_price'].astype(float).values
                     residuals = actuals - preds
                     if len(residuals) >= 3:
-                        base_std = float(np.std(residuals, ddof=1))
+                        res_rmse = float(np.sqrt(np.mean(residuals ** 2)))
+                        res_std = float(np.std(residuals, ddof=1))
+                        base_std = max(res_rmse, res_std)
     except Exception as e:
         logger.debug(f"Notice computing regional residual std for {region}: {e}")
 
@@ -414,40 +449,134 @@ def compute_regional_residual_std(
 def get_regional_calibration_residuals(
     region: Optional[str] = None,
     horizon_days: Optional[int | str] = None,
-    window_days: int | str = 60
+    window_days: int | str = 60,
+    min_samples: int = 10,
+    as_of_date: Optional[Union[str, pd.Timestamp]] = None,
+    df: Optional[pd.DataFrame] = None
 ) -> np.ndarray:
     """
-    Extracts absolute out-of-sample prediction residuals |actual - predicted| for split conformal interval calibration (Issue #358, #436).
-    Restricted strictly to mature prospective forecasts or clean evaluated history.
+    Extracts absolute out-of-sample prediction residuals |actual - predicted| for split/adaptive conformal
+    interval calibration (Issue #358, #436, #732).
+    Strictly point-in-time safe when as_of_date is supplied (uses only matured targets with target_date <= as_of_date).
+    Cascades cleanly from horizon-specific live prospective -> all-horizon live prospective -> matured history
+    so new/sparse regions never collapse to narrow default fallback bands when < min_samples live rows exist.
     """
+    def _extract_abs(frame: pd.DataFrame) -> np.ndarray:
+        if frame.empty or 'actual_5d_price' not in frame.columns or 'predicted_5d_price' not in frame.columns:
+            return np.array([], dtype=float)
+        actuals = frame['actual_5d_price'].astype(float).values
+        preds = frame['predicted_5d_price'].astype(float).values
+        resids = np.abs(actuals - preds)
+        return resids[np.isfinite(resids) & (resids >= 0.0)]
+
     try:
-        if os.path.exists(HISTORY_CSV_PATH):
+        if df is None and os.path.exists(HISTORY_CSV_PATH):
             df = read_prediction_history(HISTORY_CSV_PATH)
-            filtered = filter_evaluated_history_by_window(
+        if df is None or df.empty:
+            return np.array([], dtype=float)
+
+        # Tier 1: Matured live prospective residuals for exact (region, horizon)
+        live_h = filter_evaluated_history_by_window(
+            df,
+            window_days=window_days,
+            region=region,
+            horizon_days=horizon_days,
+            include_retroactive=False,
+            as_of_date=as_of_date
+        )
+        res_live_h = _extract_abs(live_h)
+        if len(res_live_h) >= min_samples:
+            return res_live_h
+
+        # Tier 2: Matured live prospective residuals across all horizons for region
+        live_all = filter_evaluated_history_by_window(
+            df,
+            window_days=window_days,
+            region=region,
+            horizon_days=None,
+            include_retroactive=False,
+            as_of_date=as_of_date
+        )
+        res_live_all = _extract_abs(live_all)
+        if len(res_live_all) >= max(5, min_samples // 2):
+            return res_live_all
+
+        # Tier 3: Broader matured history (including retroactive backtest) combined with any live residuals
+        hist_h = filter_evaluated_history_by_window(
+            df,
+            window_days="all",
+            region=region,
+            horizon_days=horizon_days,
+            include_retroactive=True,
+            as_of_date=as_of_date
+        )
+        res_hist = _extract_abs(hist_h)
+        if len(res_hist) < min_samples:
+            hist_all = filter_evaluated_history_by_window(
                 df,
-                window_days=window_days,
+                window_days="all",
                 region=region,
-                horizon_days=horizon_days,
-                include_retroactive=False
+                horizon_days=None,
+                include_retroactive=True,
+                as_of_date=as_of_date
             )
-            if filtered.empty or 'actual_5d_price' not in filtered.columns:
-                # Broader window or include retroactive if clean prospective sample is small
-                filtered = filter_evaluated_history_by_window(
-                    df,
-                    window_days="all",
-                    region=region,
-                    horizon_days=horizon_days,
-                    include_retroactive=True
-                )
-            if not filtered.empty and 'actual_5d_price' in filtered.columns and 'predicted_5d_price' in filtered.columns:
-                actuals = filtered['actual_5d_price'].astype(float).values
-                preds = filtered['predicted_5d_price'].astype(float).values
-                resids = np.abs(actuals - preds)
-                clean_resids = resids[np.isfinite(resids) & (resids > 0.0)]
-                return clean_resids
+            res_hist = _extract_abs(hist_all)
+
+        if len(res_live_all) > 0 and len(res_hist) > 0:
+            return np.concatenate([res_hist, res_live_all])
+        return res_hist if len(res_hist) > 0 else res_live_all
     except Exception as e:
         logger.debug(f"Notice extracting calibration residuals for {region} (h={horizon_days}): {e}")
     return np.array([], dtype=float)
+
+
+def compute_adaptive_conformal_alpha(
+    region: Optional[str] = None,
+    target_alpha: float = 0.05,
+    gamma: float = 0.02,
+    lookback_rows: int = 30,
+    as_of_date: Optional[Union[str, pd.Timestamp]] = None,
+    df: Optional[pd.DataFrame] = None
+) -> float:
+    """
+    Replays Adaptive Conformal Inference (Gibbs & Candes 2021) over recent matured live prospective
+    evaluations for a region to dynamically adapt miscoverage alpha_t under distribution shift (Issue #732).
+    Strictly PIT-safe when as_of_date is supplied (only matured target_dt <= as_of_date are observed).
+    """
+    try:
+        from src.models import AdaptiveConformalInference
+
+        if df is None and os.path.exists(HISTORY_CSV_PATH):
+            df = read_prediction_history(HISTORY_CSV_PATH)
+        if df is None or df.empty or 'within_95ci_hit' not in df.columns:
+            return target_alpha
+
+        matured = filter_evaluated_history_by_window(
+            df,
+            window_days=60,
+            region=region,
+            horizon_days=None,
+            include_retroactive=False,
+            as_of_date=as_of_date
+        )
+        if matured.empty:
+            return target_alpha
+
+        valid_hits = matured['within_95ci_hit'].dropna().astype(float).tail(lookback_rows)
+        if len(valid_hits) < 5:
+            return target_alpha
+
+        aci = AdaptiveConformalInference(target_alpha=target_alpha, gamma=gamma, initial_alpha=target_alpha)
+        for hit_val in valid_hits:
+            # Feed realized hit/miss to ACI update rule: alpha_{t+1} = alpha_t + gamma * (alpha* - miss_t)
+            if hit_val >= 0.5:
+                aci.update(y_true=1.0, lower_bound=0.0, upper_bound=2.0)
+            else:
+                aci.update(y_true=3.0, lower_bound=0.0, upper_bound=2.0)
+        return float(np.clip(aci.current_alpha, 0.005, 0.25))
+    except Exception as e:
+        logger.debug(f"Notice computing adaptive conformal alpha for {region}: {e}")
+        return target_alpha
 
 
 def resolve_model_tag(
@@ -509,7 +638,7 @@ def log_predictions(
     for idx, row in predictions_df.iterrows():
         base_price = float(row['current_price'])
         pred_price = float(row['predicted_5d_price'])
-        pred_dir = "UP" if pred_price >= base_price else "DOWN"
+        pred_dir = classify_price_direction(pred_price, base_price)
         
         # Determine forecast horizon
         row_h = row.get('forecast_horizon_days', row.get('horizon_days', row.get('horizon', forecast_horizon_days)))
@@ -543,20 +672,73 @@ def log_predictions(
         quant_base = float(row.get('quant_baseline_5d_price')) if 'quant_baseline_5d_price' in row and pd.notna(row['quant_baseline_5d_price']) else np.nan
         aug_delta = float(row.get('llm_augmentation_delta')) if 'llm_augmentation_delta' in row and pd.notna(row['llm_augmentation_delta']) else (round(pred_price - quant_base, 4) if pd.notna(quant_base) else 0.0)
 
-        # Wire discrete-horizon conformal prediction intervals (Issue #358, #436)
+        # Wire discrete-horizon Adaptive Conformal Prediction Intervals (Issues #358, #436, #449, #732)
         if 'prediction_lower_95ci' in row and pd.notna(row['prediction_lower_95ci']) and 'prediction_upper_95ci' in row and pd.notna(row['prediction_upper_95ci']):
             lower_ci = float(row['prediction_lower_95ci'])
             upper_ci = float(row['prediction_upper_95ci'])
         else:
             try:
                 from src.models import compute_conformal_prediction_intervals
-                cal_resids = get_regional_calibration_residuals(region=region, horizon_days=h_days, window_days=60)
-                if len(cal_resids) >= 10:
-                    low_arr, high_arr = compute_conformal_prediction_intervals(pred_price, cal_resids, alpha=0.05)
+                origin_as_of = base_dt.normalize() if pd.notna(base_dt) else None
+                eff_alpha = compute_adaptive_conformal_alpha(
+                    region=region,
+                    target_alpha=0.05,
+                    gamma=0.02,
+                    lookback_rows=30,
+                    as_of_date=origin_as_of,
+                    df=history_df
+                )
+                cal_resids = get_regional_calibration_residuals(
+                    region=region,
+                    horizon_days=h_days,
+                    window_days=60,
+                    min_samples=10,
+                    as_of_date=origin_as_of,
+                    df=history_df
+                )
+                if len(cal_resids) >= 3:
+                    low_arr, high_arr = compute_conformal_prediction_intervals(
+                        pred_price,
+                        cal_resids,
+                        alpha=eff_alpha,
+                        min_calibration_samples=20,
+                        target_alpha=0.05
+                    )
                     lower_ci = float(low_arr[0] if hasattr(low_arr, '__len__') else low_arr)
                     upper_ci = float(high_arr[0] if hasattr(high_arr, '__len__') else high_arr)
+                    # Recent 14-day matured live residual floor to react rapidly to regime shifts
+                    recent_live = filter_evaluated_history_by_window(
+                        history_df,
+                        window_days=14,
+                        region=region,
+                        horizon_days=None,
+                        include_retroactive=False,
+                        as_of_date=origin_as_of
+                    )
+                    if not recent_live.empty and 'actual_5d_price' in recent_live.columns and 'predicted_5d_price' in recent_live.columns:
+                        rec_r = np.abs(
+                            recent_live['actual_5d_price'].astype(float).values
+                            - recent_live['predicted_5d_price'].astype(float).values
+                        )
+                        rec_r = rec_r[np.isfinite(rec_r) & (rec_r >= 0.0)]
+                        if len(rec_r) >= 3:
+                            rec_low, rec_high = compute_conformal_prediction_intervals(
+                                pred_price,
+                                rec_r,
+                                alpha=eff_alpha,
+                                min_calibration_samples=15,
+                                target_alpha=0.05
+                            )
+                            lower_ci = min(lower_ci, float(rec_low[0] if hasattr(rec_low, '__len__') else rec_low))
+                            upper_ci = max(upper_ci, float(rec_high[0] if hasattr(rec_high, '__len__') else rec_high))
                 else:
-                    h_res_std = compute_regional_residual_std(region=region, window_days=30, horizon_days=h_days)
+                    h_res_std = compute_regional_residual_std(
+                        region=region,
+                        window_days=30,
+                        horizon_days=h_days,
+                        as_of_date=origin_as_of,
+                        df=history_df
+                    )
                     lower_ci = round(pred_price - (1.96 * h_res_std), 4)
                     upper_ci = round(pred_price + (1.96 * h_res_std), 4)
             except Exception:
@@ -952,16 +1134,23 @@ def backfill_actual_prices_and_evaluate(
                     source_prov = f"eia_retail_feed:{reg}"
 
         if actual_price is not None:
-            actual_dir = "UP" if actual_price >= base_price else "DOWN"
+            actual_dir = classify_price_direction(actual_price, base_price)
             err_dollars = abs(actual_price - pred_price)
             hit = 1 if pred_dir == actual_dir else 0
 
-            # 95% Confidence Interval Coverage Hit Evaluation (Issue #394)
+            # 95% Confidence Interval Coverage Hit Evaluation (Issue #394, #732)
             lower_ci = row.get('prediction_lower_95ci')
             upper_ci = row.get('prediction_upper_95ci')
             if pd.isna(lower_ci) or pd.isna(upper_ci):
                 h_days = _infer_horizon_days(row)
-                r_std = compute_regional_residual_std(reg, window_days=30, horizon_days=h_days)
+                origin_as_of = str(row.get('log_timestamp', ''))[:10] or None
+                r_std = compute_regional_residual_std(
+                    reg,
+                    window_days=30,
+                    horizon_days=h_days,
+                    as_of_date=origin_as_of,
+                    df=history_df
+                )
                 half_width = 1.96 * r_std
                 lower_ci = pred_price - half_width
                 upper_ci = pred_price + half_width
@@ -1304,9 +1493,10 @@ def filter_evaluated_history_by_window(
     window_days: int | str = 30, 
     region: str = None,
     horizon_days: Optional[int | str] = None,
-    include_retroactive: bool = False
+    include_retroactive: bool = False,
+    as_of_date: Optional[Union[str, pd.Timestamp]] = None
 ) -> pd.DataFrame:
-    """Filters evaluated prediction history records by rolling window (in days), region, forecast horizon, and retroactive backtest status (Issue #389)."""
+    """Filters evaluated prediction history records by rolling window (in days), region, forecast horizon, retroactive backtest status, and optional PIT as_of_date cutoff (Issue #389, #732)."""
     if df.empty or 'actual_5d_price' not in df.columns:
         return pd.DataFrame()
 
@@ -1334,6 +1524,11 @@ def filter_evaluated_history_by_window(
 
     eval_df['target_dt'] = pd.to_datetime(eval_df['forecast_target_date'], errors='coerce')
     eval_df = eval_df.dropna(subset=['target_dt']).sort_values('target_dt')
+
+    if as_of_date is not None and not eval_df.empty:
+        as_of_ts = pd.to_datetime(as_of_date, errors='coerce')
+        if pd.notna(as_of_ts):
+            eval_df = eval_df[eval_df['target_dt'] <= as_of_ts]
 
     if eval_df.empty:
         return eval_df
