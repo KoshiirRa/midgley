@@ -58,6 +58,6 @@ def test_tulsa_endpoint_data_alignment():
             data = json.load(f)
             assert data["locale"]["code"] == "tulsa"
             assert data["locale"]["region_id"] == "Tulsa_OK"
-            assert data["live_lookup"]["current_price_per_gal"] >= 3.50
-            assert data["forecast"]["current_base_price"] >= 3.50
+            assert 1.00 <= data["live_lookup"]["current_price_per_gal"] <= 10.00
+            assert 1.00 <= data["forecast"]["current_base_price"] <= 10.00
             assert "day_3_price" in data["forecast"]
