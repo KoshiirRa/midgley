@@ -1,7 +1,7 @@
 {
   "benchmark_key": "executive_social",
-  "last_refreshed_utc": "2026-11-20 03:57:25",
-  "records_count": 99,
+  "last_refreshed_utc": "2026-11-24 06:37:30",
+  "records_count": 51,
   "data": [
     {
       "date": "2018-04-20 07:42:00",
@@ -94,9 +94,9 @@
       "actual_1d_rbob_return_pct": -1.65
     },
     {
-      "date": "2026-11-14 19:20:49",
+      "date": "2026-11-21 20:57:39",
       "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,
@@ -104,17 +104,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-14 19:20:49",
-      "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-14 19:20:49",
+      "date": "2026-11-21 20:57:39",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -124,67 +114,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-14 19:20:49",
-      "platform": "Google News RSS",
-      "post_text": "CARNEY RESPONDS - \u201cThey Asked Too Much and Offered Too Little\u201d: Carney Draws a Line as Canada - U.S. Trade Talks Collapse - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-14 19:20:49",
-      "platform": "Google News RSS",
-      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-15 01:55:31",
-      "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-15 01:55:31",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-15 01:55:31",
-      "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-15 01:55:31",
-      "platform": "Google News RSS",
-      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": true,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-15 01:55:31",
+      "date": "2026-11-21 20:57:39",
       "platform": "Google News RSS",
       "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
       "target": "Energy_Market",
@@ -194,9 +124,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-15 02:13:06",
+      "date": "2026-11-21 20:57:39",
       "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,
@@ -204,7 +134,17 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-15 02:13:07",
+      "date": "2026-11-21 20:57:39",
+      "platform": "Google News RSS",
+      "post_text": "Canada Builds an Energy Exit From the U.S. - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-22 02:14:59",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -214,9 +154,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-15 02:13:07",
+      "date": "2026-11-22 02:14:59",
       "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,
@@ -224,9 +164,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-15 02:13:07",
+      "date": "2026-11-22 02:14:59",
       "platform": "Google News RSS",
-      "post_text": "Trump Pauses 50% Tariffs on Canada as Trade Talks Advance \u2013 Keystone XL Back in Spotlight - EnergyNow.com",
+      "post_text": "Canada Builds an Energy Exit From the U.S. - Crude Oil Prices Today | OilPrice.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": true,
@@ -234,7 +174,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-15 02:13:07",
+      "date": "2026-11-22 02:15:00",
       "platform": "Google News RSS",
       "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
       "target": "Energy_Market",
@@ -244,9 +184,69 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-16 02:07:03",
+      "date": "2026-11-22 02:15:00",
       "platform": "Google News RSS",
-      "post_text": "Trump Says Iran Should not Charge Fees to Tankers Going Through Strait of Hormuz - EnergyNow.com",
+      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-22 02:30:54",
+      "platform": "Google News RSS",
+      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-22 02:30:54",
+      "platform": "Google News RSS",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-22 02:30:54",
+      "platform": "Google News RSS",
+      "post_text": "Canada Builds an Energy Exit From the U.S. - Crude Oil Prices Today | OilPrice.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-22 02:30:54",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-22 02:30:54",
+      "platform": "Google News RSS",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": true,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-23 03:02:36",
+      "platform": "Google News RSS",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -254,17 +254,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-16 02:07:03",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | A disastrous Iran war? The US is now a mover and shaker of oil markets - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:07:03",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -274,9 +264,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-16 02:07:03",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -284,117 +274,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-16 02:07:03",
-      "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:24:00",
-      "platform": "Google News RSS",
-      "post_text": "Trump Says Iran Should not Charge Fees to Tankers Going Through Strait of Hormuz - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:24:00",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | A disastrous Iran war? The US is now a mover and shaker of oil markets - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:24:00",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:24:00",
-      "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:24:00",
-      "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:39:04",
-      "platform": "Google News RSS",
-      "post_text": "Trump Says Iran Should not Charge Fees to Tankers Going Through Strait of Hormuz - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:39:04",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | A disastrous Iran war? The US is now a mover and shaker of oil markets - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:39:04",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:39:04",
-      "platform": "Google News RSS",
-      "post_text": "US LNG Producers Eye Bonanza If Trump and Xi Can Ease Tariffs - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-16 02:39:04",
-      "platform": "Google News RSS",
-      "post_text": "Trump-Xi Talks Could Mean $6 Billion of US Gas for China - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:29:50",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
       "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
       "target": "Energy_Market",
@@ -404,177 +284,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-17 04:29:50",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:29:50",
-      "platform": "Google News RSS",
-      "post_text": "Trump Administration to Slash Oil-Drilling Bond Amount by 95% - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:29:50",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:29:50",
-      "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:45:14",
-      "platform": "Google News RSS",
-      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:45:14",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:45:14",
-      "platform": "Google News RSS",
-      "post_text": "Trump Administration to Slash Oil-Drilling Bond Amount by 95% - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:45:14",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 04:45:14",
-      "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 05:00:21",
-      "platform": "Google News RSS",
-      "post_text": "Asia Hopes Democrats Can Provide Relief From Trump\u2019s Iran War, Tariffs: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 05:00:21",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 05:00:21",
-      "platform": "Google News RSS",
-      "post_text": "Trump Administration to Slash Oil-Drilling Bond Amount by 95% - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 05:00:21",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-17 05:00:21",
-      "platform": "Google News RSS",
-      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-18 03:43:50",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-18 03:43:50",
-      "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-18 03:43:50",
-      "platform": "Google News RSS",
-      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-18 03:43:50",
+      "date": "2026-11-23 03:02:36",
       "platform": "Google News RSS",
       "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
@@ -584,9 +294,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 03:43:50",
+      "date": "2026-11-23 03:18:29",
       "platform": "Google News RSS",
-      "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -594,9 +304,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:02:27",
+      "date": "2026-11-23 03:18:29",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -604,9 +314,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:02:27",
+      "date": "2026-11-23 03:18:29",
       "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
+      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -614,9 +324,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:02:27",
+      "date": "2026-11-23 03:18:29",
       "platform": "Google News RSS",
-      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
+      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -624,7 +334,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:02:27",
+      "date": "2026-11-23 03:18:29",
       "platform": "Google News RSS",
       "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
@@ -634,7 +344,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:02:27",
+      "date": "2026-11-24 06:02:23",
       "platform": "Google News RSS",
       "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
       "target": "Energy_Market",
@@ -644,9 +354,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-24 06:02:23",
       "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow.com",
+      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -654,9 +364,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-24 06:02:23",
       "platform": "Google News RSS",
-      "post_text": "Opinion | Is the United States the new Opec? - South China Morning Post",
+      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -664,17 +374,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
-      "platform": "Google News RSS",
-      "post_text": "Cuba-Bound Tanker Carrying Russian Fuels to Test Trump Blockade - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-24 06:02:23",
       "platform": "Google News RSS",
       "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
@@ -684,7 +384,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-18 04:17:46",
+      "date": "2026-11-24 06:17:36",
       "platform": "Google News RSS",
       "post_text": "A Trump-Xi Deal Could Revive US Energy Exports to China - EnergyNow.com",
       "target": "Energy_Market",
@@ -694,9 +394,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:27:10",
+      "date": "2026-11-24 06:17:36",
       "platform": "Google News RSS",
-      "post_text": "Why Markets Think the US Is Winning the Blockade - EnergyNow.com",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -704,27 +404,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:27:10",
-      "platform": "Google News RSS",
-      "post_text": "COMMENTARY: The Trump Chaotic Presidency Continues \u2013 Fraser Institute - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-19 03:27:10",
-      "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-19 03:27:10",
+      "date": "2026-11-24 06:17:36",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -734,9 +414,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:27:10",
+      "date": "2026-11-24 06:17:36",
       "platform": "Google News RSS",
-      "post_text": "Canada, Alberta Announce New West Coast Oil Pipeline to Boost Exports - EnergyNow.com",
+      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -744,9 +424,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:44:41",
+      "date": "2026-11-24 06:17:36",
       "platform": "Google News RSS",
-      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -754,9 +434,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:44:41",
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
-      "post_text": "COMMENTARY: The Trump Chaotic Presidency Continues \u2013 Fraser Institute - EnergyNow",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -764,17 +444,7 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:44:41",
-      "platform": "Google News RSS",
-      "post_text": "Why Markets Think the US Is Winning the Blockade - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-19 03:44:41",
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -784,9 +454,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-19 03:44:42",
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -794,9 +464,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:15:19",
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -804,7 +474,17 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:15:19",
+      "date": "2026-11-24 06:32:48",
+      "platform": "Google News RSS",
+      "post_text": "An Ex-Trump Buddy\u2019s Exit Offers Clues on Venezuela\u2019s Next Phase - EnergyNow.com",
+      "target": "Energy_Market",
+      "sentiment_type": "Live_Executive_Commentary",
+      "is_weekend": false,
+      "actual_1d_crude_return_pct": 0.0,
+      "actual_1d_rbob_return_pct": 0.0
+    },
+    {
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
       "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
       "target": "Energy_Market",
@@ -814,9 +494,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:15:19",
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
-      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
+      "post_text": "Trump Says He Does Not Care About USMCA as US, Canada Plan Trade Talks - EnergyNow.com",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
@@ -824,169 +504,9 @@
       "actual_1d_rbob_return_pct": 0.0
     },
     {
-      "date": "2026-11-20 03:15:19",
+      "date": "2026-11-24 06:32:48",
       "platform": "Google News RSS",
-      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:15:19",
-      "platform": "Google News RSS",
-      "post_text": "THE BLAME GAME - The US Blames Canada for Failed Talks, the Reaction From Trump and What Happens Next - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:36:15",
-      "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:36:15",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:36:15",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:36:15",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:36:15",
-      "platform": "Google News RSS",
-      "post_text": "THE BLAME GAME - The US Blames Canada for Failed Talks, the Reaction From Trump and What Happens Next - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "THE BLAME GAME - The US Blames Canada for Failed Talks, the Reaction From Trump and What Happens Next - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "Forget TACO. Trump\u2019s Best Mexican Food Acronym is TAMALES: Russell - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "REALITY: Trump Says America Does Not Need Canadian Energy. The Facts, and His Own Policies, Say Otherwise - EnergyNow",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Asks to Keep Collecting Trump\u2019s Tariffs After Court Loss - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "U.S. Officials Flag Prospect of Chinese Energy Purchases After Trump-Xi Meeting - EnergyNow.com",
-      "target": "Energy_Market",
-      "sentiment_type": "Live_Executive_Commentary",
-      "is_weekend": false,
-      "actual_1d_crude_return_pct": 0.0,
-      "actual_1d_rbob_return_pct": 0.0
-    },
-    {
-      "date": "2026-11-20 03:51:28",
-      "platform": "Google News RSS",
-      "post_text": "THE BLAME GAME - The US Blames Canada for Failed Talks, the Reaction From Trump and What Happens Next - EnergyNow",
+      "post_text": "US Supreme Court Ruling Makes Upcoming CUSMA Review Even More Critical for Canada - EnergyNow",
       "target": "Energy_Market",
       "sentiment_type": "Live_Executive_Commentary",
       "is_weekend": false,
