@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-24T04:43:41.705787",
+  "timestamp": "2026-11-24T06:38:28.029329",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-24T04:43:02Z"
+      "timestamp": "2026-11-24T06:38:02Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,29 +27,29 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-11-30",
+    "target_date": "2026-12-01",
     "current_base_price": 2.965,
-    "predicted_price_per_gal": 3.023,
-    "expected_change_dollars": 0.058,
-    "expected_change_percent": 1.96,
+    "predicted_price_per_gal": 2.993,
+    "expected_change_dollars": 0.028,
+    "expected_change_percent": 0.94,
     "projected_direction": "UP",
-    "prediction_lower_95ci": 2.739,
-    "prediction_upper_95ci": 3.307,
+    "prediction_lower_95ci": 2.709,
+    "prediction_upper_95ci": 3.277,
     "calibration_method": "conformal",
     "calibration_sample_size": 61,
     "directional_hit_rate_historical": 0.3226,
     "historical_mae_dollars": 0.2706,
     "evaluation_sample_size": 31,
-    "day_1_price": 2.977,
-    "day_2_price": 2.988,
-    "day_3_price": 2.987,
-    "day_4_price": 2.99,
-    "day_5_price": 3.023,
+    "day_1_price": 2.971,
+    "day_2_price": 2.978,
+    "day_3_price": 2.974,
+    "day_4_price": 2.973,
+    "day_5_price": 2.993,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.023,
+        "delta_dollars": 0.011,
         "share_pct": 40.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -57,7 +57,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.015,
+        "delta_dollars": 0.007,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -65,7 +65,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.009,
+        "delta_dollars": 0.004,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.006,
+        "delta_dollars": 0.003,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -81,7 +81,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.001,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
@@ -96,46 +96,38 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast +$0.058/gal (+1.96%): Driven primarily by Regional Logistics & Hub Delivery (+$0.023/gal), Futures & Commodity Benchmark (+$0.015/gal).",
+      "summary_text": "Charlotte NC forecast +$0.028/gal (+0.94%): Driven primarily by Regional Logistics & Hub Delivery (+$0.011/gal), Futures & Commodity Benchmark (+$0.007/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-          "impact_dollars": 0.023,
-          "impact_pct": 0.78,
+          "impact_dollars": 0.011,
+          "impact_pct": 0.37,
           "share_pct": 40.0,
           "direction": "UP"
         },
         {
           "category": "Futures & Commodity Benchmark",
           "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-          "impact_dollars": 0.015,
-          "impact_pct": 0.51,
+          "impact_dollars": 0.007,
+          "impact_pct": 0.24,
           "share_pct": 25.0,
           "direction": "UP"
         },
         {
           "category": "Refining Yield & Crack Spread",
           "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-          "impact_dollars": 0.009,
-          "impact_pct": 0.3,
+          "impact_dollars": 0.004,
+          "impact_pct": 0.13,
           "share_pct": 15.0,
           "direction": "UP"
         },
         {
           "category": "Weather & Environmental Signals",
           "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-          "impact_dollars": 0.006,
-          "impact_pct": 0.2,
-          "share_pct": 10.0,
-          "direction": "UP"
-        },
-        {
-          "category": "Unstructured Intelligence & Sentiment",
-          "description": "Geopolitical supply risk news & executive social media hawkish posts",
           "impact_dollars": 0.003,
           "impact_pct": 0.1,
-          "share_pct": 5.0,
+          "share_pct": 10.0,
           "direction": "UP"
         },
         {
@@ -143,6 +135,14 @@
           "description": "Statutory motor fuel tax fees & CARB summer-blend compliance overhead",
           "impact_dollars": 0.002,
           "impact_pct": 0.07,
+          "share_pct": 5.0,
+          "direction": "UP"
+        },
+        {
+          "category": "Unstructured Intelligence & Sentiment",
+          "description": "Geopolitical supply risk news & executive social media hawkish posts",
+          "impact_dollars": 0.001,
+          "impact_pct": 0.03,
           "share_pct": 5.0,
           "direction": "UP"
         }
@@ -153,41 +153,33 @@
     {
       "category": "Regional Logistics & Hub Delivery",
       "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints",
-      "impact_dollars": 0.023,
-      "impact_pct": 0.78,
+      "impact_dollars": 0.011,
+      "impact_pct": 0.37,
       "share_pct": 40.0,
       "direction": "UP"
     },
     {
       "category": "Futures & Commodity Benchmark",
       "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains",
-      "impact_dollars": 0.015,
-      "impact_pct": 0.51,
+      "impact_dollars": 0.007,
+      "impact_pct": 0.24,
       "share_pct": 25.0,
       "direction": "UP"
     },
     {
       "category": "Refining Yield & Crack Spread",
       "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness",
-      "impact_dollars": 0.009,
-      "impact_pct": 0.3,
+      "impact_dollars": 0.004,
+      "impact_pct": 0.13,
       "share_pct": 15.0,
       "direction": "UP"
     },
     {
       "category": "Weather & Environmental Signals",
       "description": "NOAA severe weather risks, convective alerts & freeze warnings",
-      "impact_dollars": 0.006,
-      "impact_pct": 0.2,
-      "share_pct": 10.0,
-      "direction": "UP"
-    },
-    {
-      "category": "Unstructured Intelligence & Sentiment",
-      "description": "Geopolitical supply risk news & executive social media hawkish posts",
       "impact_dollars": 0.003,
       "impact_pct": 0.1,
-      "share_pct": 5.0,
+      "share_pct": 10.0,
       "direction": "UP"
     },
     {
@@ -197,15 +189,23 @@
       "impact_pct": 0.07,
       "share_pct": 5.0,
       "direction": "UP"
+    },
+    {
+      "category": "Unstructured Intelligence & Sentiment",
+      "description": "Geopolitical supply risk news & executive social media hawkish posts",
+      "impact_dollars": 0.001,
+      "impact_pct": 0.03,
+      "share_pct": 5.0,
+      "direction": "UP"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast +$0.058/gal (+1.96%): Driven primarily by Regional Logistics & Hub Delivery (+$0.023/gal), Futures & Commodity Benchmark (+$0.015/gal).",
+    "summary_text": "Charlotte NC forecast +$0.028/gal (+0.94%): Driven primarily by Regional Logistics & Hub Delivery (+$0.011/gal), Futures & Commodity Benchmark (+$0.007/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
         "category": "regional_logistics",
-        "delta_dollars": 0.023,
+        "delta_dollars": 0.011,
         "share_pct": 40.0,
         "direction": "UP",
         "description": "Delivery hub rack margin expansion & pipeline/barge throughput constraints"
@@ -213,7 +213,7 @@
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
         "category": "futures_commodity",
-        "delta_dollars": 0.015,
+        "delta_dollars": 0.007,
         "share_pct": 25.0,
         "direction": "UP",
         "description": "NYMEX RBOB futures momentum and Cushing WTI crude benchmark gains"
@@ -221,7 +221,7 @@
       "refining_crack_margin": {
         "name": "Refining Yield & Crack Spread",
         "category": "refining_crack_margin",
-        "delta_dollars": 0.009,
+        "delta_dollars": 0.004,
         "share_pct": 15.0,
         "direction": "UP",
         "description": "3-2-1 refining crack margin expansion & regional plant utilization tightness"
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": 0.006,
+        "delta_dollars": 0.003,
         "share_pct": 10.0,
         "direction": "UP",
         "description": "NOAA severe weather risks, convective alerts & freeze warnings"
@@ -237,7 +237,7 @@
       "unstructured_sentiment": {
         "name": "Unstructured Intelligence & Sentiment",
         "category": "unstructured_sentiment",
-        "delta_dollars": 0.003,
+        "delta_dollars": 0.001,
         "share_pct": 5.0,
         "direction": "UP",
         "description": "Geopolitical supply risk news & executive social media hawkish posts"
