@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-25T05:16:37.803641",
+  "timestamp": "2026-11-25T11:11:37.527289",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 2.952,
+    "current_price_per_gal": 2.932,
     "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-25T05:16:12Z"
+      "timestamp": "2026-11-25T11:11:02Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-02",
-    "current_base_price": 2.952,
-    "predicted_price_per_gal": 2.892,
+    "current_base_price": 2.932,
+    "predicted_price_per_gal": 2.872,
     "expected_change_dollars": -0.06,
-    "expected_change_percent": -2.03,
+    "expected_change_percent": -2.05,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.325,
-    "prediction_upper_95ci": 3.459,
+    "prediction_lower_95ci": 2.305,
+    "prediction_upper_95ci": 3.439,
     "calibration_method": "conformal",
     "calibration_sample_size": 63,
     "directional_hit_rate_historical": 0.3636,
     "historical_mae_dollars": 0.2615,
     "evaluation_sample_size": 33,
-    "day_1_price": 2.94,
-    "day_2_price": 2.937,
-    "day_3_price": 2.92,
-    "day_4_price": 2.906,
-    "day_5_price": 2.892,
+    "day_1_price": 2.92,
+    "day_2_price": 2.917,
+    "day_3_price": 2.9,
+    "day_4_price": 2.886,
+    "day_5_price": 2.872,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast $-0.060/gal (-2.03%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
+      "summary_text": "Charlotte NC forecast $-0.060/gal (-2.05%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.024,
-          "impact_pct": -0.81,
+          "impact_pct": -0.82,
           "share_pct": 40.0,
           "direction": "DOWN"
         },
@@ -118,7 +118,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.009,
-          "impact_pct": -0.3,
+          "impact_pct": -0.31,
           "share_pct": 15.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.024,
-      "impact_pct": -0.81,
+      "impact_pct": -0.82,
       "share_pct": 40.0,
       "direction": "DOWN"
     },
@@ -170,7 +170,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.009,
-      "impact_pct": -0.3,
+      "impact_pct": -0.31,
       "share_pct": 15.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast $-0.060/gal (-2.03%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
+    "summary_text": "Charlotte NC forecast $-0.060/gal (-2.05%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
