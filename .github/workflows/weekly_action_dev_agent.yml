@@ -70,10 +70,10 @@ jobs:
     runs-on: [self-hosted, dev-vm]
     timeout-minutes: 50
     steps:
-      - name: Checkout dev Branch
+      - name: Checkout main Branch
         uses: actions/checkout@v7
         with:
-          ref: dev
+          ref: main
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -90,7 +90,7 @@ jobs:
           BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
           git config user.name "midgley-dev-agent[bot]"
           git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
-          git checkout -B "$BRANCH" origin/dev
+          git checkout -B "$BRANCH" origin/main
 
           gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json number,title,body,url > /tmp/issue_${ISSUE_NUMBER}.json
           ISSUE_TITLE=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['title'])")
@@ -98,7 +98,7 @@ jobs:
 
           PROMPT_FILE="/tmp/agy_prompt_${ISSUE_NUMBER}.txt"
           cat <<'EOF' > "$PROMPT_FILE"
-          You are working an approved Midgley weekly self-review action item on a feature branch off `dev`.
+          You are working an approved Midgley weekly self-review action item on a feature branch off `main`.
           Follow `AGENTS.md` and relevant `.agents/skills/` runbooks strictly:
           - Enforce Point-in-Time (PIT) safety and genuine data provenance.
           - Use LF line endings and keep changes minimal, well-scoped, and regression-tested under `TESTING=1`.
@@ -162,7 +162,7 @@ jobs:
             fi
           fi
 
-          if [ "$(git rev-list --count origin/dev..HEAD)" -gt 0 ]; then
+          if [ "$(git rev-list --count origin/main..HEAD)" -gt 0 ]; then
             git push -u origin "$BRANCH" --force-with-lease
             PR_BODY="/tmp/pr_body_${ISSUE_NUMBER}.md"
             TIMEOUT_NOTE=""
@@ -183,7 +183,7 @@ jobs:
           EOF
             PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$BRANCH" --state open --json url --jq '.[0].url' 2>/dev/null || true)
             if [ -z "$PR_URL" ]; then
-              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
+              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base main --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
             fi
             echo "Draft PR: $PR_URL"
 
@@ -217,7 +217,7 @@ jobs:
 
       - name: Upload Dev Agent Transcript Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dev-agent-log-devvm-${{ needs.select-runner.outputs.issue_number }}
           path: /tmp/agy_out_${{ needs.select-runner.outputs.issue_number }}.log
@@ -230,10 +230,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 50
     steps:
-      - name: Checkout dev Branch
+      - name: Checkout main Branch
         uses: actions/checkout@v7
         with:
-          ref: dev
+          ref: main
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -296,7 +296,7 @@ jobs:
           BRANCH="agent/weekly-action-${ISSUE_NUMBER}"
           git config user.name "midgley-dev-agent[bot]"
           git config user.email "midgley-dev-agent[bot]@users.noreply.github.com"
-          git checkout -B "$BRANCH" origin/dev
+          git checkout -B "$BRANCH" origin/main
 
           gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json number,title,body,url > /tmp/issue_${ISSUE_NUMBER}.json
           ISSUE_TITLE=$(python3 -c "import json; print(json.load(open('/tmp/issue_${ISSUE_NUMBER}.json'))['title'])")
@@ -304,7 +304,7 @@ jobs:
 
           PROMPT_FILE="/tmp/agent_prompt_${ISSUE_NUMBER}.txt"
           cat <<'EOF' > "$PROMPT_FILE"
-          You are working an approved Midgley weekly self-review action item on a feature branch off `dev` (cloud fallback runner).
+          You are working an approved Midgley weekly self-review action item on a feature branch off `main` (cloud fallback runner).
           Follow `AGENTS.md` and relevant `.agents/skills/` runbooks strictly:
           - Enforce Point-in-Time (PIT) safety and genuine data provenance.
           - Use LF line endings and keep changes minimal, well-scoped, and regression-tested under `TESTING=1`.
@@ -370,7 +370,7 @@ jobs:
             fi
           fi
 
-          if [ "$(git rev-list --count origin/dev..HEAD)" -gt 0 ]; then
+          if [ "$(git rev-list --count origin/main..HEAD)" -gt 0 ]; then
             git push -u origin "$BRANCH" --force-with-lease
             PR_BODY="/tmp/pr_body_${ISSUE_NUMBER}.md"
             TIMEOUT_NOTE=""
@@ -391,7 +391,7 @@ jobs:
           EOF
             PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$BRANCH" --state open --json url --jq '.[0].url' 2>/dev/null || true)
             if [ -z "$PR_URL" ]; then
-              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base dev --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
+              PR_URL=$(gh pr create --repo "${{ github.repository }}" --base main --head "$BRANCH" --draft --title "${PR_PREFIX} ${ISSUE_TITLE}" --body-file "$PR_BODY")
             fi
             echo "Draft PR: $PR_URL"
 
@@ -425,7 +425,7 @@ jobs:
 
       - name: Upload Cloud Dev Agent Transcript Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dev-agent-log-cloud-${{ needs.select-runner.outputs.issue_number }}
           path: /tmp/agent_out_${{ needs.select-runner.outputs.issue_number }}.log
