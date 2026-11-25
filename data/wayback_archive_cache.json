@@ -917,14 +917,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5": {
-    "timestamp": "2026-11-23T06:30:49.151432+00:00",
+    "timestamp": "2026-11-25T21:20:13.968362+00:00",
     "status": "FALLBACK_PENDING",
-    "http_status": 429,
     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
     "headline": "US Crude Refiners Are Pushing Run Rates to Maximum Levels - EnergyNow.com",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMikgFBVV95cUxNZW9ES25nSXgzZ0s3NnctU2Z4ZzlfOFVzSC1IUE5oT2V6bERpcDdBcUhkcm9FZ0ZWQUR1N3dRZ2pmM1dVZUpVU3o1UjJXQXQzaHZNekpGTUZfYjNXX3ZJVUdyaGRzQmpVMWI3YXBUVFJVOU1sTW00NHpGTDlkeDBXLXpaaF9rSkh0UU84RUpzTnZPdw?oc=5",
-    "error": "HTTP Error 429: TOO MANY REQUESTS"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMib0FVX3lxTE1YSnN3Sjd3ei04TUhDMUstTWhfWGR0R19aR0Y1SWJxWlZSenNpR0NzYko5bmhqbEQ4amd5M1RtVkFvRldNbjNzOGJxOXdTaGRGRGRxUXd5OHFfaXFyZnhNSUQ1TUJHZlpZb2hnaTdaNA?oc=5": {
     "timestamp": "2026-09-06T04:45:22.815148",
@@ -1758,7 +1757,7 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5": {
-    "timestamp": "2026-11-14T22:07:30.034526+00:00",
+    "timestamp": "2026-11-25T21:20:27.223302+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWG9iRWhCNEljUmRnRUE3N2ExWXhUa2tqelZGSTJDTFZobGJVNUNZREU0QXZkRTMtR2xpakJub1JzakdEc0dHUG01am5VbHpwU1QzdlRvMjdPZEdOS1VDUXdmS1pJWF9xN3A0U2xTNHd4V0NEQVdMQjhaSmw1WEg3S1kzN0NUdUprNkF4TFNDbzhhNi1qY2RUN0Rn?oc=5",
@@ -3665,13 +3664,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-11-13T19:33:09.193291+00:00",
+    "timestamp": "2026-11-25T21:19:31.608648+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Down $0.47 Month Over Month - Forbes",
+    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Down $0.70 Month Over Month - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "The read operation timed out"
+    "error": "<urlopen error timed out>"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -26333,5 +26332,158 @@
     "headline": "Eneos restarts crude unit at Negishi refinery after maintenance - Quantum Commodity Intelligence",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiqgFBVV95cUxQSllwb0ZUamlQMnNlYTlxTEswaG51MnE5amlwOS0tZ0VXeW1hN0lsc1kyRWQzNTdwTGJUaWFEd0NOZnRSaWtoTnpLaVlJbmxhUVZBbHhpV3lkOTJWc3hZQ3F2UzRjdzVzOVA1eGNwVjcxS2xzbzdTTTRDV1JVS2NsVnluOXVrOEZfYnIwaGVWNi0yQTNyZ01JLTN1SEZja0lJeFdldnkyVUZzZw?oc=5",
     "error": "HTTP Error 429: TOO MANY REQUESTS"
+  },
+  "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPS3RUeUs5M3dyampWSHR6UkdUZ3lyYnFWQ1JSZXhiNVdhTWtrc0lJeHZiaXA2YkJqc1RyVXBpMGdjZ3cydFZlYzNEY2huSzE1OFlKX0JaMUZ4NDdJd2dpVGJjU3JhZDBJUzNnbGFIODBwM2F0Y1Q5cDV1UE1fS3dPaHVFT3ZKZzVkbEt4LTBNVWw2ZHE0cXVhblBqcThya044Vkw2T25yc29oNWh6NFVjVFFrc1ZHYXo3ZFJtdjItY3B5Z2VkUi1uUll3bEhuVWxOT1VBMURybXJVUlBrZkF6TGk2X0VQZ3pUMC1HWm9Ncl8xck5zOEpQeA?oc=5": {
+    "timestamp": "2026-11-25T21:18:57.337407+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPS3RUeUs5M3dyampWSHR6UkdUZ3lyYnFWQ1JSZXhiNVdhTWtrc0lJeHZiaXA2YkJqc1RyVXBpMGdjZ3cydFZlYzNEY2huSzE1OFlKX0JaMUZ4NDdJd2dpVGJjU3JhZDBJUzNnbGFIODBwM2F0Y1Q5cDV1UE1fS3dPaHVFT3ZKZzVkbEt4LTBNVWw2ZHE0cXVhblBqcThya044Vkw2T25yc29oNWh6NFVjVFFrc1ZHYXo3ZFJtdjItY3B5Z2VkUi1uUll3bEhuVWxOT1VBMURybXJVUlBrZkF6TGk2X0VQZ3pUMC1HWm9Ncl8xck5zOEpQeA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPS3RUeUs5M3dyampWSHR6UkdUZ3lyYnFWQ1JSZXhiNVdhTWtrc0lJeHZiaXA2YkJqc1RyVXBpMGdjZ3cydFZlYzNEY2huSzE1OFlKX0JaMUZ4NDdJd2dpVGJjU3JhZDBJUzNnbGFIODBwM2F0Y1Q5cDV1UE1fS3dPaHVFT3ZKZzVkbEt4LTBNVWw2ZHE0cXVhblBqcThya044Vkw2T25yc29oNWh6NFVjVFFrc1ZHYXo3ZFJtdjItY3B5Z2VkUi1uUll3bEhuVWxOT1VBMURybXJVUlBrZkF6TGk2X0VQZ3pUMC1HWm9Ncl8xck5zOEpQeA?oc=5",
+    "headline": "Gas prices decline going into Thanksgiving 2026, but remain high compared to previous years - 9News",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi-AFBVV95cUxPS3RUeUs5M3dyampWSHR6UkdUZ3lyYnFWQ1JSZXhiNVdhTWtrc0lJeHZiaXA2YkJqc1RyVXBpMGdjZ3cydFZlYzNEY2huSzE1OFlKX0JaMUZ4NDdJd2dpVGJjU3JhZDBJUzNnbGFIODBwM2F0Y1Q5cDV1UE1fS3dPaHVFT3ZKZzVkbEt4LTBNVWw2ZHE0cXVhblBqcThya044Vkw2T25yc29oNWh6NFVjVFFrc1ZHYXo3ZFJtdjItY3B5Z2VkUi1uUll3bEhuVWxOT1VBMURybXJVUlBrZkF6TGk2X0VQZ3pUMC1HWm9Ncl8xck5zOEpQeA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMivgFBVV95cUxNc2tfaGdGLXF6Tkk0OXFOQmtCZU1PajMyTHlMeEpOd3VBSHU3ZmVSYnpZSk9Kc3Y5YUhyRmZUc0pLa0t6UXdsWDE2SVRPR0NFcW15b1FjMF80MGpyQS10TEdfU3k5SV9lWGI0Nk8zbmY2M3dNM1A0XzVvdnNBSXNBZ2dsLV9YQnFRY19RSTkzeWpnR3g1VUVORHMxZVhudHBHdEtEYTlDaTdhcFNKbFM4TG9ZWUIxWmdjNXFnTGZB?oc=5": {
+    "timestamp": "2026-11-25T21:19:04.057652+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNc2tfaGdGLXF6Tkk0OXFOQmtCZU1PajMyTHlMeEpOd3VBSHU3ZmVSYnpZSk9Kc3Y5YUhyRmZUc0pLa0t6UXdsWDE2SVRPR0NFcW15b1FjMF80MGpyQS10TEdfU3k5SV9lWGI0Nk8zbmY2M3dNM1A0XzVvdnNBSXNBZ2dsLV9YQnFRY19RSTkzeWpnR3g1VUVORHMxZVhudHBHdEtEYTlDaTdhcFNKbFM4TG9ZWUIxWmdjNXFnTGZB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNc2tfaGdGLXF6Tkk0OXFOQmtCZU1PajMyTHlMeEpOd3VBSHU3ZmVSYnpZSk9Kc3Y5YUhyRmZUc0pLa0t6UXdsWDE2SVRPR0NFcW15b1FjMF80MGpyQS10TEdfU3k5SV9lWGI0Nk8zbmY2M3dNM1A0XzVvdnNBSXNBZ2dsLV9YQnFRY19RSTkzeWpnR3g1VUVORHMxZVhudHBHdEtEYTlDaTdhcFNKbFM4TG9ZWUIxWmdjNXFnTGZB?oc=5",
+    "headline": "Michigan gas prices drop 24 cents ahead of Thanksgiving; Traverse City averages $3.63 - 9and10News.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMivgFBVV95cUxNc2tfaGdGLXF6Tkk0OXFOQmtCZU1PajMyTHlMeEpOd3VBSHU3ZmVSYnpZSk9Kc3Y5YUhyRmZUc0pLa0t6UXdsWDE2SVRPR0NFcW15b1FjMF80MGpyQS10TEdfU3k5SV9lWGI0Nk8zbmY2M3dNM1A0XzVvdnNBSXNBZ2dsLV9YQnFRY19RSTkzeWpnR3g1VUVORHMxZVhudHBHdEtEYTlDaTdhcFNKbFM4TG9ZWUIxWmdjNXFnTGZB?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi-wFBVV95cUxQOGh1S01xNmlQRzhKTjZxM0gzNWxGLXRoZkoyM2lPbEVJS0wtc3VaRUY4S3pETHlFR29RbE5XSHk5a1FSd2JNbEF6WUVxZ1oxTWItUzFQOG96U0lUSVUyR1B2elNEbFRVbDF3U29rX1YzZUZNcDc2aTBuOHE3RVZLR25MbmhpN2JxUGxxX0NwYXlYWTZYb3djWmJLT1VETjB1dzZ0YTdyTXR1bkpqTW5zVllTcmxGWEh0Q2x5UjdlSF95aVpaNmtaNnZpVjdmUkpZbEx6aC1vbmFLY3BQWG1oY2JibUQwWklHWktiVlBrWUd6UmhpZVBKQmVfNA?oc=5": {
+    "timestamp": "2026-11-25T21:19:11.252415+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxQOGh1S01xNmlQRzhKTjZxM0gzNWxGLXRoZkoyM2lPbEVJS0wtc3VaRUY4S3pETHlFR29RbE5XSHk5a1FSd2JNbEF6WUVxZ1oxTWItUzFQOG96U0lUSVUyR1B2elNEbFRVbDF3U29rX1YzZUZNcDc2aTBuOHE3RVZLR25MbmhpN2JxUGxxX0NwYXlYWTZYb3djWmJLT1VETjB1dzZ0YTdyTXR1bkpqTW5zVllTcmxGWEh0Q2x5UjdlSF95aVpaNmtaNnZpVjdmUkpZbEx6aC1vbmFLY3BQWG1oY2JibUQwWklHWktiVlBrWUd6UmhpZVBKQmVfNA?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxQOGh1S01xNmlQRzhKTjZxM0gzNWxGLXRoZkoyM2lPbEVJS0wtc3VaRUY4S3pETHlFR29RbE5XSHk5a1FSd2JNbEF6WUVxZ1oxTWItUzFQOG96U0lUSVUyR1B2elNEbFRVbDF3U29rX1YzZUZNcDc2aTBuOHE3RVZLR25MbmhpN2JxUGxxX0NwYXlYWTZYb3djWmJLT1VETjB1dzZ0YTdyTXR1bkpqTW5zVllTcmxGWEh0Q2x5UjdlSF95aVpaNmtaNnZpVjdmUkpZbEx6aC1vbmFLY3BQWG1oY2JibUQwWklHWktiVlBrWUd6UmhpZVBKQmVfNA?oc=5",
+    "headline": "Where to find the cheapest fuel in The Hills Shire - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi-wFBVV95cUxQOGh1S01xNmlQRzhKTjZxM0gzNWxGLXRoZkoyM2lPbEVJS0wtc3VaRUY4S3pETHlFR29RbE5XSHk5a1FSd2JNbEF6WUVxZ1oxTWItUzFQOG96U0lUSVUyR1B2elNEbFRVbDF3U29rX1YzZUZNcDc2aTBuOHE3RVZLR25MbmhpN2JxUGxxX0NwYXlYWTZYb3djWmJLT1VETjB1dzZ0YTdyTXR1bkpqTW5zVllTcmxGWEh0Q2x5UjdlSF95aVpaNmtaNnZpVjdmUkpZbEx6aC1vbmFLY3BQWG1oY2JibUQwWklHWktiVlBrWUd6UmhpZVBKQmVfNA?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMipAFBVV95cUxQM2E1NXZGSFRjc0FxMWVtX2FkV2NNdlBabW5pM1ZzSElXaV91SVJlWmVIbG5faFVyMjRRRTQ4Rkg4ZGhmNkZKVWlwdm13WVhrclBRd3ZuSVhRaEF6M0lFUzcydmEtR1FuekRKUF9DVGh5RC10OFcxMl9qZjM4Q1RKNXBlQ1NUZDc1UEx4Y2lJdlVmeTQ4R2JES2ZYNUFqSTJYcmNfOQ?oc=5": {
+    "timestamp": "2026-11-25T21:19:18.068567+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQM2E1NXZGSFRjc0FxMWVtX2FkV2NNdlBabW5pM1ZzSElXaV91SVJlWmVIbG5faFVyMjRRRTQ4Rkg4ZGhmNkZKVWlwdm13WVhrclBRd3ZuSVhRaEF6M0lFUzcydmEtR1FuekRKUF9DVGh5RC10OFcxMl9qZjM4Q1RKNXBlQ1NUZDc1UEx4Y2lJdlVmeTQ4R2JES2ZYNUFqSTJYcmNfOQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQM2E1NXZGSFRjc0FxMWVtX2FkV2NNdlBabW5pM1ZzSElXaV91SVJlWmVIbG5faFVyMjRRRTQ4Rkg4ZGhmNkZKVWlwdm13WVhrclBRd3ZuSVhRaEF6M0lFUzcydmEtR1FuekRKUF9DVGh5RC10OFcxMl9qZjM4Q1RKNXBlQ1NUZDc1UEx4Y2lJdlVmeTQ4R2JES2ZYNUFqSTJYcmNfOQ?oc=5",
+    "headline": "Cheapest Chester fuel prices: Costco tops list for unleaded and diesel - Chester Standard",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipAFBVV95cUxQM2E1NXZGSFRjc0FxMWVtX2FkV2NNdlBabW5pM1ZzSElXaV91SVJlWmVIbG5faFVyMjRRRTQ4Rkg4ZGhmNkZKVWlwdm13WVhrclBRd3ZuSVhRaEF6M0lFUzcydmEtR1FuekRKUF9DVGh5RC10OFcxMl9qZjM4Q1RKNXBlQ1NUZDc1UEx4Y2lJdlVmeTQ4R2JES2ZYNUFqSTJYcmNfOQ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMijgFBVV95cUxNckFYSGF0bHdlbzVxbXpHVjkyQ1hObmhueE5YaHlLX1l6SE1hdzREd3hldlhBYk1yVmhpQWFZMTFWZXNRREFQaGFJSFpJdy1KbWNiUE0wa0hlUlk3UFRjWFVYYUtEUWhoQm9QMElFdG9zMGI5TzRrT3hFZzlsVzdOWHFqaXNENWFKaEc1eVpB0gGiAUFVX3lxTE5uY3ZhWUd6bFNKb2F3YXZMUE5OTDBBWEZnWEE4Z0xWWlkyTDljOVdjbHBKTEdna2t5d1IxSHVKUThaUk5WZEx0Q3c4LTAyOXh2WExvcVZKeVRybW5CeFRDQzdqSWNxcTA3dk9KTG1iNk5sWXMtRVp4WU1OTi1pdEhuMEF6d00zekNMMnNHdkE2X05pZ29NMEdDaFhoMHUza19PUQ?oc=5": {
+    "timestamp": "2026-11-25T21:19:24.892475+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNckFYSGF0bHdlbzVxbXpHVjkyQ1hObmhueE5YaHlLX1l6SE1hdzREd3hldlhBYk1yVmhpQWFZMTFWZXNRREFQaGFJSFpJdy1KbWNiUE0wa0hlUlk3UFRjWFVYYUtEUWhoQm9QMElFdG9zMGI5TzRrT3hFZzlsVzdOWHFqaXNENWFKaEc1eVpB0gGiAUFVX3lxTE5uY3ZhWUd6bFNKb2F3YXZMUE5OTDBBWEZnWEE4Z0xWWlkyTDljOVdjbHBKTEdna2t5d1IxSHVKUThaUk5WZEx0Q3c4LTAyOXh2WExvcVZKeVRybW5CeFRDQzdqSWNxcTA3dk9KTG1iNk5sWXMtRVp4WU1OTi1pdEhuMEF6d00zekNMMnNHdkE2X05pZ29NMEdDaFhoMHUza19PUQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNckFYSGF0bHdlbzVxbXpHVjkyQ1hObmhueE5YaHlLX1l6SE1hdzREd3hldlhBYk1yVmhpQWFZMTFWZXNRREFQaGFJSFpJdy1KbWNiUE0wa0hlUlk3UFRjWFVYYUtEUWhoQm9QMElFdG9zMGI5TzRrT3hFZzlsVzdOWHFqaXNENWFKaEc1eVpB0gGiAUFVX3lxTE5uY3ZhWUd6bFNKb2F3YXZMUE5OTDBBWEZnWEE4Z0xWWlkyTDljOVdjbHBKTEdna2t5d1IxSHVKUThaUk5WZEx0Q3c4LTAyOXh2WExvcVZKeVRybW5CeFRDQzdqSWNxcTA3dk9KTG1iNk5sWXMtRVp4WU1OTi1pdEhuMEF6d00zekNMMnNHdkE2X05pZ29NMEdDaFhoMHUza19PUQ?oc=5",
+    "headline": "Gas prices continue to drop as Thanksgiving Day approaches - WIBW",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxNckFYSGF0bHdlbzVxbXpHVjkyQ1hObmhueE5YaHlLX1l6SE1hdzREd3hldlhBYk1yVmhpQWFZMTFWZXNRREFQaGFJSFpJdy1KbWNiUE0wa0hlUlk3UFRjWFVYYUtEUWhoQm9QMElFdG9zMGI5TzRrT3hFZzlsVzdOWHFqaXNENWFKaEc1eVpB0gGiAUFVX3lxTE5uY3ZhWUd6bFNKb2F3YXZMUE5OTDBBWEZnWEE4Z0xWWlkyTDljOVdjbHBKTEdna2t5d1IxSHVKUThaUk5WZEx0Q3c4LTAyOXh2WExvcVZKeVRybW5CeFRDQzdqSWNxcTA3dk9KTG1iNk5sWXMtRVp4WU1OTi1pdEhuMEF6d00zekNMMnNHdkE2X05pZ29NMEdDaFhoMHUza19PUQ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMijgFBVV95cUxNRno4eWU2V083MTQ0cXJjTXZCNUJkUFQ5V2V2WFA3SzQ0Mk9vVXd4cjhabDFMSTlZeW1YUWxTREJ2YXY3bzJSUmRFVE01Ym1hX0M4ZnIzMXY3Ry1YZmRvU3VHOTIxcEZSVkxOVTFRQmM2X213cm5pRVhRQlA2NkV2aVlseUt5UDk1R3Q0MnlB?oc=5": {
+    "timestamp": "2026-11-25T21:19:39.577956+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNRno4eWU2V083MTQ0cXJjTXZCNUJkUFQ5V2V2WFA3SzQ0Mk9vVXd4cjhabDFMSTlZeW1YUWxTREJ2YXY3bzJSUmRFVE01Ym1hX0M4ZnIzMXY3Ry1YZmRvU3VHOTIxcEZSVkxOVTFRQmM2X213cm5pRVhRQlA2NkV2aVlseUt5UDk1R3Q0MnlB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNRno4eWU2V083MTQ0cXJjTXZCNUJkUFQ5V2V2WFA3SzQ0Mk9vVXd4cjhabDFMSTlZeW1YUWxTREJ2YXY3bzJSUmRFVE01Ym1hX0M4ZnIzMXY3Ry1YZmRvU3VHOTIxcEZSVkxOVTFRQmM2X213cm5pRVhRQlA2NkV2aVlseUt5UDk1R3Q0MnlB?oc=5",
+    "headline": "Iowa fuel prices decrease by 19 cents since last week - Business Record",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMijgFBVV95cUxNRno4eWU2V083MTQ0cXJjTXZCNUJkUFQ5V2V2WFA3SzQ0Mk9vVXd4cjhabDFMSTlZeW1YUWxTREJ2YXY3bzJSUmRFVE01Ym1hX0M4ZnIzMXY3Ry1YZmRvU3VHOTIxcEZSVkxOVTFRQmM2X213cm5pRVhRQlA2NkV2aVlseUt5UDk1R3Q0MnlB?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMisAFBVV95cUxOelFScTVsV1ZpQ0FPaDhsSktCMzhPQnZkRFZnbW9LbTNPSkdkaU9hZ0trTWVXaFk3UlhTR1JCS0tYdWlaQjNLdEhBWlJfSjZCbS1VZWY1akttMks5VXdTMHJZS0ZiUkIxaEZJbFdsc291blhjM2QwTFdrSUprdngwQ0lQZTB2ejBfSW5aRENrV3JSRlliVjk2UlhMQlNqdjJUdnhfRXlSaUZtWDZoSFd5Yg?oc=5": {
+    "timestamp": "2026-11-25T21:19:46.456718+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOelFScTVsV1ZpQ0FPaDhsSktCMzhPQnZkRFZnbW9LbTNPSkdkaU9hZ0trTWVXaFk3UlhTR1JCS0tYdWlaQjNLdEhBWlJfSjZCbS1VZWY1akttMks5VXdTMHJZS0ZiUkIxaEZJbFdsc291blhjM2QwTFdrSUprdngwQ0lQZTB2ejBfSW5aRENrV3JSRlliVjk2UlhMQlNqdjJUdnhfRXlSaUZtWDZoSFd5Yg?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOelFScTVsV1ZpQ0FPaDhsSktCMzhPQnZkRFZnbW9LbTNPSkdkaU9hZ0trTWVXaFk3UlhTR1JCS0tYdWlaQjNLdEhBWlJfSjZCbS1VZWY1akttMks5VXdTMHJZS0ZiUkIxaEZJbFdsc291blhjM2QwTFdrSUprdngwQ0lQZTB2ejBfSW5aRENrV3JSRlliVjk2UlhMQlNqdjJUdnhfRXlSaUZtWDZoSFd5Yg?oc=5",
+    "headline": "Michigan gas prices drop again ahead of Thanksgiving travel - WCMU Public Media",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMisAFBVV95cUxOelFScTVsV1ZpQ0FPaDhsSktCMzhPQnZkRFZnbW9LbTNPSkdkaU9hZ0trTWVXaFk3UlhTR1JCS0tYdWlaQjNLdEhBWlJfSjZCbS1VZWY1akttMks5VXdTMHJZS0ZiUkIxaEZJbFdsc291blhjM2QwTFdrSUprdngwQ0lQZTB2ejBfSW5aRENrV3JSRlliVjk2UlhMQlNqdjJUdnhfRXlSaUZtWDZoSFd5Yg?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNRVNGcm9FOERCNVdWdE9OSkRoVzM5OHpBSE9WM1RQVEdKWjh6dEpTZjZJc0FMREJhUnYtbXBwMEs0RmZmMjRtTHdzQlZoOFVMUFJYSUZ0VEU2cV9hWm5fTWNPc2hqUlhDeXMzXy1lcEVITkpudW1jcHJGSC02ci12Q3FHWVBfTjhMbGdwMjd4QzNVTWJFVDZ2TGdiTDF1VGtnRl9FaDQwVzJkTTVJd1lVTVprRGlRQW1DOWxpR2lKcWpJbXZoUFpCNG1aZHJFMmc1YThIZkozUTRhLUlDa1FXY3hn?oc=5": {
+    "timestamp": "2026-11-25T21:19:53.640005+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNRVNGcm9FOERCNVdWdE9OSkRoVzM5OHpBSE9WM1RQVEdKWjh6dEpTZjZJc0FMREJhUnYtbXBwMEs0RmZmMjRtTHdzQlZoOFVMUFJYSUZ0VEU2cV9hWm5fTWNPc2hqUlhDeXMzXy1lcEVITkpudW1jcHJGSC02ci12Q3FHWVBfTjhMbGdwMjd4QzNVTWJFVDZ2TGdiTDF1VGtnRl9FaDQwVzJkTTVJd1lVTVprRGlRQW1DOWxpR2lKcWpJbXZoUFpCNG1aZHJFMmc1YThIZkozUTRhLUlDa1FXY3hn?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNRVNGcm9FOERCNVdWdE9OSkRoVzM5OHpBSE9WM1RQVEdKWjh6dEpTZjZJc0FMREJhUnYtbXBwMEs0RmZmMjRtTHdzQlZoOFVMUFJYSUZ0VEU2cV9hWm5fTWNPc2hqUlhDeXMzXy1lcEVITkpudW1jcHJGSC02ci12Q3FHWVBfTjhMbGdwMjd4QzNVTWJFVDZ2TGdiTDF1VGtnRl9FaDQwVzJkTTVJd1lVTVprRGlRQW1DOWxpR2lKcWpJbXZoUFpCNG1aZHJFMmc1YThIZkozUTRhLUlDa1FXY3hn?oc=5",
+    "headline": "Where to find the cheapest fuel in Lismore - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi4gFBVV95cUxNRVNGcm9FOERCNVdWdE9OSkRoVzM5OHpBSE9WM1RQVEdKWjh6dEpTZjZJc0FMREJhUnYtbXBwMEs0RmZmMjRtTHdzQlZoOFVMUFJYSUZ0VEU2cV9hWm5fTWNPc2hqUlhDeXMzXy1lcEVITkpudW1jcHJGSC02ci12Q3FHWVBfTjhMbGdwMjd4QzNVTWJFVDZ2TGdiTDF1VGtnRl9FaDQwVzJkTTVJd1lVTVprRGlRQW1DOWxpR2lKcWpJbXZoUFpCNG1aZHJFMmc1YThIZkozUTRhLUlDa1FXY3hn?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOVnZ5bEVrTWtnbWJSYWxyM0dyc0FNbGV1d19jaFFpYi1NR19ZYWc3Mk1iUndxLUN0VDQtVmM0cGJjNm5yWnpFbHlkMnBSZF9oWXVMUVRQbVJtUnJkV0w5VElobVl0elI3cE1OeFBXd0lpd01JT0pELWZuY2JSUnNRMzlHRWpoZzFReWwtVW1iZGIwRG0yZEFiOC0yRjZIVThPamItRTVnVDd5RVBNV2tpUUY0RFJwTjBQOXlYYVJCSUtFRjd0NUJPWm95OGhlcjRaSDZpMmJ30gG4AUFVX3lxTE1ZZU14bk1BcFNfa2hUSDBha0FnNTFNb05jLUtTVW1Ib2hKbGFuX2RkbkRTQ1h4bE92dmRJQ1RnVENCZ3RnaHdNdHdJdlpCQ05RcVIxaGo5ZFRLdHh1S2lhSkV2cndnTllzcXRXUzhKb3N3dHlLc2dMcnZZQkFteWNpTEpMQ2lHZlhwWGpQN0ZYVlF6VnREODlwbUlYOXpmdXNDUUtFeXpvYjkweE1VanpEQ1lsRlNMWC0?oc=5": {
+    "timestamp": "2026-11-25T21:20:00.391234+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOVnZ5bEVrTWtnbWJSYWxyM0dyc0FNbGV1d19jaFFpYi1NR19ZYWc3Mk1iUndxLUN0VDQtVmM0cGJjNm5yWnpFbHlkMnBSZF9oWXVMUVRQbVJtUnJkV0w5VElobVl0elI3cE1OeFBXd0lpd01JT0pELWZuY2JSUnNRMzlHRWpoZzFReWwtVW1iZGIwRG0yZEFiOC0yRjZIVThPamItRTVnVDd5RVBNV2tpUUY0RFJwTjBQOXlYYVJCSUtFRjd0NUJPWm95OGhlcjRaSDZpMmJ30gG4AUFVX3lxTE1ZZU14bk1BcFNfa2hUSDBha0FnNTFNb05jLUtTVW1Ib2hKbGFuX2RkbkRTQ1h4bE92dmRJQ1RnVENCZ3RnaHdNdHdJdlpCQ05RcVIxaGo5ZFRLdHh1S2lhSkV2cndnTllzcXRXUzhKb3N3dHlLc2dMcnZZQkFteWNpTEpMQ2lHZlhwWGpQN0ZYVlF6VnREODlwbUlYOXpmdXNDUUtFeXpvYjkweE1VanpEQ1lsRlNMWC0?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOVnZ5bEVrTWtnbWJSYWxyM0dyc0FNbGV1d19jaFFpYi1NR19ZYWc3Mk1iUndxLUN0VDQtVmM0cGJjNm5yWnpFbHlkMnBSZF9oWXVMUVRQbVJtUnJkV0w5VElobVl0elI3cE1OeFBXd0lpd01JT0pELWZuY2JSUnNRMzlHRWpoZzFReWwtVW1iZGIwRG0yZEFiOC0yRjZIVThPamItRTVnVDd5RVBNV2tpUUY0RFJwTjBQOXlYYVJCSUtFRjd0NUJPWm95OGhlcjRaSDZpMmJ30gG4AUFVX3lxTE1ZZU14bk1BcFNfa2hUSDBha0FnNTFNb05jLUtTVW1Ib2hKbGFuX2RkbkRTQ1h4bE92dmRJQ1RnVENCZ3RnaHdNdHdJdlpCQ05RcVIxaGo5ZFRLdHh1S2lhSkV2cndnTllzcXRXUzhKb3N3dHlLc2dMcnZZQkFteWNpTEpMQ2lHZlhwWGpQN0ZYVlF6VnREODlwbUlYOXpmdXNDUUtFeXpvYjkweE1VanpEQ1lsRlNMWC0?oc=5",
+    "headline": "DFW Airport Braces for Thanksgiving Rush as Gas Prices Fall Below $3 - NewsRadio 740 KTRH",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi1gFBVV95cUxOVnZ5bEVrTWtnbWJSYWxyM0dyc0FNbGV1d19jaFFpYi1NR19ZYWc3Mk1iUndxLUN0VDQtVmM0cGJjNm5yWnpFbHlkMnBSZF9oWXVMUVRQbVJtUnJkV0w5VElobVl0elI3cE1OeFBXd0lpd01JT0pELWZuY2JSUnNRMzlHRWpoZzFReWwtVW1iZGIwRG0yZEFiOC0yRjZIVThPamItRTVnVDd5RVBNV2tpUUY0RFJwTjBQOXlYYVJCSUtFRjd0NUJPWm95OGhlcjRaSDZpMmJ30gG4AUFVX3lxTE1ZZU14bk1BcFNfa2hUSDBha0FnNTFNb05jLUtTVW1Ib2hKbGFuX2RkbkRTQ1h4bE92dmRJQ1RnVENCZ3RnaHdNdHdJdlpCQ05RcVIxaGo5ZFRLdHh1S2lhSkV2cndnTllzcXRXUzhKb3N3dHlLc2dMcnZZQkFteWNpTEpMQ2lHZlhwWGpQN0ZYVlF6VnREODlwbUlYOXpmdXNDUUtFeXpvYjkweE1VanpEQ1lsRlNMWC0?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMiggFBVV95cUxPTGh5RUg2UTZUdHRUTlNvbF9uODgtQWRHR25JMG5kNVhjekNhTnZkQlVDanl4a3czQVZibDJkWWhGQzg5blRNOUJTOGpFS2pENS1Sck16LXlaZk9rV2I5Zk56bUt3b1EyZzB5aHVjclk4MzVWa1lwLXViNGVxNVdUZHRB?oc=5": {
+    "timestamp": "2026-11-25T21:20:07.241443+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPTGh5RUg2UTZUdHRUTlNvbF9uODgtQWRHR25JMG5kNVhjekNhTnZkQlVDanl4a3czQVZibDJkWWhGQzg5blRNOUJTOGpFS2pENS1Sck16LXlaZk9rV2I5Zk56bUt3b1EyZzB5aHVjclk4MzVWa1lwLXViNGVxNVdUZHRB?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPTGh5RUg2UTZUdHRUTlNvbF9uODgtQWRHR25JMG5kNVhjekNhTnZkQlVDanl4a3czQVZibDJkWWhGQzg5blRNOUJTOGpFS2pENS1Sck16LXlaZk9rV2I5Zk56bUt3b1EyZzB5aHVjclk4MzVWa1lwLXViNGVxNVdUZHRB?oc=5",
+    "headline": "Gasoline Prices Drop To 8-Month Low - Seeking Alpha",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiggFBVV95cUxPTGh5RUg2UTZUdHRUTlNvbF9uODgtQWRHR25JMG5kNVhjekNhTnZkQlVDanl4a3czQVZibDJkWWhGQzg5blRNOUJTOGpFS2pENS1Sck16LXlaZk9rV2I5Zk56bUt3b1EyZzB5aHVjclk4MzVWa1lwLXViNGVxNVdUZHRB?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNTloycnh5VjJ6eGRPMkhjand0TlFZb19mS1RPeTUxQldZXzdPa094MGt6aU1mVGw2LVYwbVpOU0lQcFFhaU1FS0dLNGFYRjJuZ3lvVHU2VkRiaGxCU3cwREhXTkZWX3ZNNEtSRkRpRUt6SXN4WWJ2QndJZ3Q5VHRhaG9FdkJ0M1pZRDc4VzhHcjdxb2FuNWtjd1JBdk9YMnhhVzZHaDNNOVRqTFB6Vk1yWjNWMmxpemJNNzIxY3pkenRzY2hSNFpaazRCWjlib3BpbFNR?oc=5": {
+    "timestamp": "2026-11-25T21:20:20.514496+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNTloycnh5VjJ6eGRPMkhjand0TlFZb19mS1RPeTUxQldZXzdPa094MGt6aU1mVGw2LVYwbVpOU0lQcFFhaU1FS0dLNGFYRjJuZ3lvVHU2VkRiaGxCU3cwREhXTkZWX3ZNNEtSRkRpRUt6SXN4WWJ2QndJZ3Q5VHRhaG9FdkJ0M1pZRDc4VzhHcjdxb2FuNWtjd1JBdk9YMnhhVzZHaDNNOVRqTFB6Vk1yWjNWMmxpemJNNzIxY3pkenRzY2hSNFpaazRCWjlib3BpbFNR?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNTloycnh5VjJ6eGRPMkhjand0TlFZb19mS1RPeTUxQldZXzdPa094MGt6aU1mVGw2LVYwbVpOU0lQcFFhaU1FS0dLNGFYRjJuZ3lvVHU2VkRiaGxCU3cwREhXTkZWX3ZNNEtSRkRpRUt6SXN4WWJ2QndJZ3Q5VHRhaG9FdkJ0M1pZRDc4VzhHcjdxb2FuNWtjd1JBdk9YMnhhVzZHaDNNOVRqTFB6Vk1yWjNWMmxpemJNNzIxY3pkenRzY2hSNFpaazRCWjlib3BpbFNR?oc=5",
+    "headline": "Diesel Falls 24.2 Cents to $5.695. Narrowing Margins Could Put Deferred Refinery Maintenance Back in Play. - Energy News Beat",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi0wFBVV95cUxNTloycnh5VjJ6eGRPMkhjand0TlFZb19mS1RPeTUxQldZXzdPa094MGt6aU1mVGw2LVYwbVpOU0lQcFFhaU1FS0dLNGFYRjJuZ3lvVHU2VkRiaGxCU3cwREhXTkZWX3ZNNEtSRkRpRUt6SXN4WWJ2QndJZ3Q5VHRhaG9FdkJ0M1pZRDc4VzhHcjdxb2FuNWtjd1JBdk9YMnhhVzZHaDNNOVRqTFB6Vk1yWjNWMmxpemJNNzIxY3pkenRzY2hSNFpaazRCWjlib3BpbFNR?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMizgFBVV95cUxNM0lRWnRINGVFOU40TkFWcnB6RzVLakZHQ3dhbGpmeXpka3M0N2VaUVVFam9waTVIemxOTHJCMDBBLU1rZ0s1S18zMEQzX2hOaVFoQjVEUjVmb1pjeFhOZ1hkWno1MVdoQnBRM05MdjRmTGhnZzNOSGR1bVFkRmI2X3ZRZ3ZqM3AtSER6cGN1bWpRa1loaFdJc3hLcGd2N040WWN0cFpWNUwtYjVqbk5jS204bVZCQzU5MjdNVG5jRGItR1NQcFYxOEpsNk1sUQ?oc=5": {
+    "timestamp": "2026-11-25T21:20:33.869568+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNM0lRWnRINGVFOU40TkFWcnB6RzVLakZHQ3dhbGpmeXpka3M0N2VaUVVFam9waTVIemxOTHJCMDBBLU1rZ0s1S18zMEQzX2hOaVFoQjVEUjVmb1pjeFhOZ1hkWno1MVdoQnBRM05MdjRmTGhnZzNOSGR1bVFkRmI2X3ZRZ3ZqM3AtSER6cGN1bWpRa1loaFdJc3hLcGd2N040WWN0cFpWNUwtYjVqbk5jS204bVZCQzU5MjdNVG5jRGItR1NQcFYxOEpsNk1sUQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNM0lRWnRINGVFOU40TkFWcnB6RzVLakZHQ3dhbGpmeXpka3M0N2VaUVVFam9waTVIemxOTHJCMDBBLU1rZ0s1S18zMEQzX2hOaVFoQjVEUjVmb1pjeFhOZ1hkWno1MVdoQnBRM05MdjRmTGhnZzNOSGR1bVFkRmI2X3ZRZ3ZqM3AtSER6cGN1bWpRa1loaFdJc3hLcGd2N040WWN0cFpWNUwtYjVqbk5jS204bVZCQzU5MjdNVG5jRGItR1NQcFYxOEpsNk1sUQ?oc=5",
+    "headline": "Gas Prices Near Thanksgiving Day Record, but These Four States Are Under $3 - Benzinga",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizgFBVV95cUxNM0lRWnRINGVFOU40TkFWcnB6RzVLakZHQ3dhbGpmeXpka3M0N2VaUVVFam9waTVIemxOTHJCMDBBLU1rZ0s1S18zMEQzX2hOaVFoQjVEUjVmb1pjeFhOZ1hkWno1MVdoQnBRM05MdjRmTGhnZzNOSGR1bVFkRmI2X3ZRZ3ZqM3AtSER6cGN1bWpRa1loaFdJc3hLcGd2N040WWN0cFpWNUwtYjVqbk5jS204bVZCQzU5MjdNVG5jRGItR1NQcFYxOEpsNk1sUQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMipwFBVV95cUxPLWFsTVFWenJ1aXpnRWdNMWQ4dTZVc1JrdlBQSEg3cmJBaUV5OUZCYmNtQnlDUW95QjQ5ZU93bjZiei0wNVZ6ZkZoS3drc09TeGVnS1JUaWRoc3NCSlduOUFSQk1SMlpsZWRGaG9UaFFZemNSQnJxSEpwMnJLUXowd2RSeEQtUEk5b1JQQjAyd3g5U01ZWjh4QkdzT2NxaG5VLUVUVFhudw?oc=5": {
+    "timestamp": "2026-11-25T21:20:42.670047+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPLWFsTVFWenJ1aXpnRWdNMWQ4dTZVc1JrdlBQSEg3cmJBaUV5OUZCYmNtQnlDUW95QjQ5ZU93bjZiei0wNVZ6ZkZoS3drc09TeGVnS1JUaWRoc3NCSlduOUFSQk1SMlpsZWRGaG9UaFFZemNSQnJxSEpwMnJLUXowd2RSeEQtUEk5b1JQQjAyd3g5U01ZWjh4QkdzT2NxaG5VLUVUVFhudw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPLWFsTVFWenJ1aXpnRWdNMWQ4dTZVc1JrdlBQSEg3cmJBaUV5OUZCYmNtQnlDUW95QjQ5ZU93bjZiei0wNVZ6ZkZoS3drc09TeGVnS1JUaWRoc3NCSlduOUFSQk1SMlpsZWRGaG9UaFFZemNSQnJxSEpwMnJLUXowd2RSeEQtUEk5b1JQQjAyd3g5U01ZWjh4QkdzT2NxaG5VLUVUVFhudw?oc=5",
+    "headline": "Did the Houthis hit Saudi Arabia's Ras Tanura refinery? Saudi Arabia says it downed four drones - Nacionale",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipwFBVV95cUxPLWFsTVFWenJ1aXpnRWdNMWQ4dTZVc1JrdlBQSEg3cmJBaUV5OUZCYmNtQnlDUW95QjQ5ZU93bjZiei0wNVZ6ZkZoS3drc09TeGVnS1JUaWRoc3NCSlduOUFSQk1SMlpsZWRGaG9UaFFZemNSQnJxSEpwMnJLUXowd2RSeEQtUEk5b1JQQjAyd3g5U01ZWjh4QkdzT2NxaG5VLUVUVFhudw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMi7gJBVV95cUxOMWJhZ2kxRVJha3dMQkVhX0RFOU9GZGowNjJsdmxsQnM1LWhPZ0E1dWpTYk80cm4yUHNkRmI4bjdSX3VwYlJGWEpjQjBmT05lQmEwWnpSdmxsQnlRYjBiRE10RWtSaDRORWRrTnFERm9pRjhJN2Q3MkhHMklITTNRNm5tRlA2N2FZdlBCbVV1dEliYzB6aWwyMmxiLWpiWFJkYXAwazg0c1p5ZUJ1Zm1rbTdmd3ZkWWFJTHBPLXVXeFcyM0o2cjhjcU9nTXMyMjYyOUhOQnBMR3RmU21vaE9UUng4RE9wMENael9OR0ZmcEVHcXU5bGgwWWZSeEJWT0dtRjZIVzBBZTlNU21TUFRkTi1OcngwVTNqY0c4RUhMRGNpVENPcU04dmQ2bEdwNDUxWGlOYmhtcFp2NEtpQnJsR2hXUnJndHVlcnQ0Vll3TFBQWEN4YjZwTk8zbEFQLVlOUXZPWTJpakU0TFNoQ2c?oc=5": {
+    "timestamp": "2026-11-25T21:20:49.413332+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxOMWJhZ2kxRVJha3dMQkVhX0RFOU9GZGowNjJsdmxsQnM1LWhPZ0E1dWpTYk80cm4yUHNkRmI4bjdSX3VwYlJGWEpjQjBmT05lQmEwWnpSdmxsQnlRYjBiRE10RWtSaDRORWRrTnFERm9pRjhJN2Q3MkhHMklITTNRNm5tRlA2N2FZdlBCbVV1dEliYzB6aWwyMmxiLWpiWFJkYXAwazg0c1p5ZUJ1Zm1rbTdmd3ZkWWFJTHBPLXVXeFcyM0o2cjhjcU9nTXMyMjYyOUhOQnBMR3RmU21vaE9UUng4RE9wMENael9OR0ZmcEVHcXU5bGgwWWZSeEJWT0dtRjZIVzBBZTlNU21TUFRkTi1OcngwVTNqY0c4RUhMRGNpVENPcU04dmQ2bEdwNDUxWGlOYmhtcFp2NEtpQnJsR2hXUnJndHVlcnQ0Vll3TFBQWEN4YjZwTk8zbEFQLVlOUXZPWTJpakU0TFNoQ2c?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxOMWJhZ2kxRVJha3dMQkVhX0RFOU9GZGowNjJsdmxsQnM1LWhPZ0E1dWpTYk80cm4yUHNkRmI4bjdSX3VwYlJGWEpjQjBmT05lQmEwWnpSdmxsQnlRYjBiRE10RWtSaDRORWRrTnFERm9pRjhJN2Q3MkhHMklITTNRNm5tRlA2N2FZdlBCbVV1dEliYzB6aWwyMmxiLWpiWFJkYXAwazg0c1p5ZUJ1Zm1rbTdmd3ZkWWFJTHBPLXVXeFcyM0o2cjhjcU9nTXMyMjYyOUhOQnBMR3RmU21vaE9UUng4RE9wMENael9OR0ZmcEVHcXU5bGgwWWZSeEJWT0dtRjZIVzBBZTlNU21TUFRkTi1OcngwVTNqY0c4RUhMRGNpVENPcU04dmQ2bEdwNDUxWGlOYmhtcFp2NEtpQnJsR2hXUnJndHVlcnQ0Vll3TFBQWEN4YjZwTk8zbEFQLVlOUXZPWTJpakU0TFNoQ2c?oc=5",
+    "headline": "Kazakhstan's daily oil and condensate output fell to 1.74mln BPD on November 24th, 17% below its November average; unstable loadings at the CPC Black Sea terminal forced producers to curb output, according to source reports - Newsquawk",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi7gJBVV95cUxOMWJhZ2kxRVJha3dMQkVhX0RFOU9GZGowNjJsdmxsQnM1LWhPZ0E1dWpTYk80cm4yUHNkRmI4bjdSX3VwYlJGWEpjQjBmT05lQmEwWnpSdmxsQnlRYjBiRE10RWtSaDRORWRrTnFERm9pRjhJN2Q3MkhHMklITTNRNm5tRlA2N2FZdlBCbVV1dEliYzB6aWwyMmxiLWpiWFJkYXAwazg0c1p5ZUJ1Zm1rbTdmd3ZkWWFJTHBPLXVXeFcyM0o2cjhjcU9nTXMyMjYyOUhOQnBMR3RmU21vaE9UUng4RE9wMENael9OR0ZmcEVHcXU5bGgwWWZSeEJWT0dtRjZIVzBBZTlNU21TUFRkTi1OcngwVTNqY0c4RUhMRGNpVENPcU04dmQ2bEdwNDUxWGlOYmhtcFp2NEtpQnJsR2hXUnJndHVlcnQ0Vll3TFBQWEN4YjZwTk8zbEFQLVlOUXZPWTJpakU0TFNoQ2c?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMizAFBVV95cUxPY3VLVkZMYXVPWTE4eDlLYTVNMUUwVm41RmNOVXpkQmdXdjRKbmdkSjBQVXBaR1Bud3RIMWdsVUtsN1FmckxsSW5QQ3Q2V2NZa1dMLUxGSU0ySEh5cEtCMmM5OU9WMk5xV01GX1p6T3lLT1daekxzRVhFQUN1bklzWWNMYVZpQWN5ci1NZWlMWGhPclZtOHMzR3BTNzFSR1RLZk1EY2R5cmlpVWt2OVFERWNTdmVxS0x0MmtQMk9qVXRjQTlpakRIMDdJbVQ?oc=5": {
+    "timestamp": "2026-11-25T21:21:00.628367+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPY3VLVkZMYXVPWTE4eDlLYTVNMUUwVm41RmNOVXpkQmdXdjRKbmdkSjBQVXBaR1Bud3RIMWdsVUtsN1FmckxsSW5QQ3Q2V2NZa1dMLUxGSU0ySEh5cEtCMmM5OU9WMk5xV01GX1p6T3lLT1daekxzRVhFQUN1bklzWWNMYVZpQWN5ci1NZWlMWGhPclZtOHMzR3BTNzFSR1RLZk1EY2R5cmlpVWt2OVFERWNTdmVxS0x0MmtQMk9qVXRjQTlpakRIMDdJbVQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPY3VLVkZMYXVPWTE4eDlLYTVNMUUwVm41RmNOVXpkQmdXdjRKbmdkSjBQVXBaR1Bud3RIMWdsVUtsN1FmckxsSW5QQ3Q2V2NZa1dMLUxGSU0ySEh5cEtCMmM5OU9WMk5xV01GX1p6T3lLT1daekxzRVhFQUN1bklzWWNMYVZpQWN5ci1NZWlMWGhPclZtOHMzR3BTNzFSR1RLZk1EY2R5cmlpVWt2OVFERWNTdmVxS0x0MmtQMk9qVXRjQTlpakRIMDdJbVQ?oc=5",
+    "headline": "Par Pacific Holdings, Inc. (NYSE:PARR) Draws Attention as Refiners Face Margin Pressure From Rising Crude - kalkine.com",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizAFBVV95cUxPY3VLVkZMYXVPWTE4eDlLYTVNMUUwVm41RmNOVXpkQmdXdjRKbmdkSjBQVXBaR1Bud3RIMWdsVUtsN1FmckxsSW5QQ3Q2V2NZa1dMLUxGSU0ySEh5cEtCMmM5OU9WMk5xV01GX1p6T3lLT1daekxzRVhFQUN1bklzWWNMYVZpQWN5ci1NZWlMWGhPclZtOHMzR3BTNzFSR1RLZk1EY2R5cmlpVWt2OVFERWNTdmVxS0x0MmtQMk9qVXRjQTlpakRIMDdJbVQ?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMizgFBVV95cUxPaTNZYklkUndLMGhwTThfbzJLUkFoN2RzQ0dGUWIzZGxuTy1OcDRCT1p3Y2lqRW5PSmdpVEpJZkc1QVU1VTFkU21ib201LWRnUUFxR05QeTV3U0lxUG0xOFhYbEpET1ZiVjF0LWNJeVowdkthbjByNk9rZjZiNU1iWm9qdkY4RWs1a18wUUMtTnA1UXJacmlraHktbG5RTXpxeG9MM3h4WUdqdWZiLWlUVUlfYkRGd0I5ekZkajI0elVmUUhETG1hMjZXMUdtZw?oc=5": {
+    "timestamp": "2026-11-25T21:21:07.395855+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPaTNZYklkUndLMGhwTThfbzJLUkFoN2RzQ0dGUWIzZGxuTy1OcDRCT1p3Y2lqRW5PSmdpVEpJZkc1QVU1VTFkU21ib201LWRnUUFxR05QeTV3U0lxUG0xOFhYbEpET1ZiVjF0LWNJeVowdkthbjByNk9rZjZiNU1iWm9qdkY4RWs1a18wUUMtTnA1UXJacmlraHktbG5RTXpxeG9MM3h4WUdqdWZiLWlUVUlfYkRGd0I5ekZkajI0elVmUUhETG1hMjZXMUdtZw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPaTNZYklkUndLMGhwTThfbzJLUkFoN2RzQ0dGUWIzZGxuTy1OcDRCT1p3Y2lqRW5PSmdpVEpJZkc1QVU1VTFkU21ib201LWRnUUFxR05QeTV3U0lxUG0xOFhYbEpET1ZiVjF0LWNJeVowdkthbjByNk9rZjZiNU1iWm9qdkY4RWs1a18wUUMtTnA1UXJacmlraHktbG5RTXpxeG9MM3h4WUdqdWZiLWlUVUlfYkRGd0I5ekZkajI0elVmUUhETG1hMjZXMUdtZw?oc=5",
+    "headline": "Cooling Tower Inspection Equipment Market To 2035: Data Center Uptime Drives Growth - News and Statistics - IndexBox",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizgFBVV95cUxPaTNZYklkUndLMGhwTThfbzJLUkFoN2RzQ0dGUWIzZGxuTy1OcDRCT1p3Y2lqRW5PSmdpVEpJZkc1QVU1VTFkU21ib201LWRnUUFxR05QeTV3U0lxUG0xOFhYbEpET1ZiVjF0LWNJeVowdkthbjByNk9rZjZiNU1iWm9qdkY4RWs1a18wUUMtTnA1UXJacmlraHktbG5RTXpxeG9MM3h4WUdqdWZiLWlUVUlfYkRGd0I5ekZkajI0elVmUUhETG1hMjZXMUdtZw?oc=5",
+    "error": "<urlopen error timed out>"
+  },
+  "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5": {
+    "timestamp": "2026-11-25T21:21:19.655004+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5",
+    "headline": "Putin Vows Retaliation After Ukraine Strikes Russian Oil Refineries - cwibc.co.id",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5",
+    "error": "The read operation timed out"
   }
 }
