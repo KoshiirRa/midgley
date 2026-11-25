@@ -33,13 +33,13 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          cache:  \pip\'
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-mock ruff
+          pip install pytest pytest-mock pytest-cov ruff
 
       - name: Run Ruff Lint & Syntax Gate
         run: |
@@ -49,8 +49,25 @@ jobs:
         run: |
           python -c "import run_all, src.intraday_event_monitor, src.api_server, src.event_analyzer, src.models, src.model_evaluation, src.headline_arena_connector"
 
-      - name: Run Pytest Regression Suite
+      - name: Run Pytest Regression Suite with Coverage
         env:
           TESTING: "1"
         run: |
-          pytest -v tests/
+          pytest -v --cov=src --cov-report=term-missing:skip-covered --cov-report=xml:coverage.xml tests/
+
+      - name: Publish Coverage Summary
+        if: always() && hashFiles(\coverage.xml\') != \'\'
+        run: |
+          python - << \PY\'
+          import os, xml.etree.ElementTree as ET
+          root = ET.parse("coverage.xml").getroot()
+          line_rate = float(root.attrib.get("line-rate", 0.0)) * 100.0
+          lines_covered = int(root.attrib.get("lines-covered", 0))
+          lines_valid = int(root.attrib.get("lines-valid", 0))
+          summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary_path:
+              with open(summary_path, "a", encoding="utf-8") as fh:
+                  fh.write(f"### Python ${{ matrix.python-version }} Test Coverage (`src/`)\n\n")
+                  fh.write(f"- **Line Coverage:** `{line_rate:.2f}%` ({lines_covered:,} / {lines_valid:,} statements)\n")
+          print(f"Coverage (src/): {line_rate:.2f}% ({lines_covered}/{lines_valid})")
+          PY
