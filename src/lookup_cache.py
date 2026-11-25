@@ -53,7 +53,10 @@ class LookupCache:
     3-Tier Thread-safe Lookup Cache with edge fallbacks & shared quota ledger sync.
     """
 
-    def __init__(self, db_path: str = DEFAULT_CACHE_DB):
+    def __init__(self, db_path: Optional[str] = None):
+        if db_path is None:
+            from src.storage_config import resolve_data_path
+            db_path = resolve_data_path("lookup_cache.sqlite")
         self.db_path = db_path
         self._memory_cache: Dict[str, Dict[str, Any]] = {}
         self._use_sqlite = True
@@ -711,13 +714,26 @@ class LookupCache:
         }
 
 
-# Global singleton cache instance
-global_cache = LookupCache()
+from src.storage_config import LazySingletonProxy
+
+# Lazy global singleton cache instance (Issue #563 — no import-time SQLite I/O)
+global_cache: LookupCache = LazySingletonProxy(LookupCache)  # type: ignore[assignment]
+
+
+def get_global_cache() -> LookupCache:
+    """Returns the lazily initialized global LookupCache instance."""
+    return global_cache.get_instance()  # type: ignore[attr-defined]
+
+
+def reset_global_cache(instance: Optional[LookupCache] = None) -> None:
+    """Resets or injects the global LookupCache instance (useful for test isolation)."""
+    global_cache.reset(instance)  # type: ignore[attr-defined]
 
 
 def clear_lookup_cache():
-    """Clears the global lookup cache instance."""
-    global_cache.clear()
+    """Clears the global lookup cache instance if initialized."""
+    if global_cache.is_initialized:  # type: ignore[attr-defined]
+        global_cache.clear()
 
 
 if __name__ == "__main__":

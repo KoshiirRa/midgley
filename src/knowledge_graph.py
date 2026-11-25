@@ -671,6 +671,18 @@ class KnowledgeGraphEngine:
         }
 
 
-# Global Singleton Instance for Zero-Cost In-Memory Re-Use
-kg_engine = KnowledgeGraphEngine()
+from src.storage_config import LazySingletonProxy
+
+# Lazy Global Singleton Instance (Issue #563 — no import-time initialization side effects)
+kg_engine: KnowledgeGraphEngine = LazySingletonProxy(KnowledgeGraphEngine)  # type: ignore[assignment]
+
+
+def get_kg_engine() -> KnowledgeGraphEngine:
+    """Returns the lazily initialized global KnowledgeGraphEngine instance."""
+    return kg_engine.get_instance()  # type: ignore[attr-defined]
+
+
+def reset_kg_engine(instance: Optional[KnowledgeGraphEngine] = None) -> None:
+    """Resets or injects the global KnowledgeGraphEngine instance (useful for test isolation)."""
+    kg_engine.reset(instance)  # type: ignore[attr-defined]
 

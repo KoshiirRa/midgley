@@ -74,7 +74,10 @@ class KeyManager:
     SQLite-backed key registry and rate limiting manager.
     """
 
-    def __init__(self, db_path: str = DEFAULT_DB_PATH):
+    def __init__(self, db_path: Optional[str] = None):
+        if db_path is None:
+            from src.storage_config import resolve_data_path
+            db_path = resolve_data_path("security.db")
         self.db_path = db_path
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         # In-memory token verification cache: token_hash -> (cached_at_epoch, is_valid, key_info, err) (Issue #614)
@@ -380,5 +383,17 @@ class KeyManager:
         return await asyncio.to_thread(self.check_rate_limit, key_prefix, rate_limit_rpm)
 
 
-# Default singleton instance
-global_key_manager = KeyManager()
+from src.storage_config import LazySingletonProxy
+
+# Lazy default singleton instance (Issue #563 — no import-time SQLite I/O)
+global_key_manager: KeyManager = LazySingletonProxy(KeyManager)  # type: ignore[assignment]
+
+
+def get_global_key_manager() -> KeyManager:
+    """Returns the lazily initialized global KeyManager instance."""
+    return global_key_manager.get_instance()  # type: ignore[attr-defined]
+
+
+def reset_global_key_manager(instance: Optional[KeyManager] = None) -> None:
+    """Resets or injects the global KeyManager instance (useful for test isolation)."""
+    global_key_manager.reset(instance)  # type: ignore[attr-defined]
