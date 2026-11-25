@@ -61,7 +61,9 @@ EXCLUDE_KEYWORDS = [
     "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
     "peanut oil", "sesame oil", "edible oil", "hydrogenated oil",
     # Non-commercial / municipal local facility spills (Issue #317)
-    "data center", "data centre", "backup generator", "generator spill", "building spill"
+    "data center", "data centre", "backup generator", "generator spill", "building spill",
+    # Non-petroleum personal-care / herbal / ayurvedic oils (Issue #698)
+    "ayurvedic", "medicament", "hair oil", "essential oil", "massage oil", "cosmetic oil", "herbal oil"
 ]
 
 # Non-Energy Policy Keywords to Filter False Positive Trade/Policy Headlines
@@ -71,7 +73,9 @@ NON_ENERGY_TARIFF_EXCLUDE = [
     "reciprocal trade act", "section 301", "section 232", "canola", "canola oil",
     "rice bran", "rice bran oil", "vegetable oil", "sunflower oil", "corn oil",
     "peanut oil", "sesame oil", "edible oil", "hydrogenated oil", "cooking oil",
-    "palm oil", "olive oil", "soybean oil"
+    "palm oil", "olive oil", "soybean oil",
+    # Provincial / sovereign fiscal budget deficit commentary citing tariffs/oil (Issue #696)
+    "budget deficit", "bigger deficit", "larger deficit", "wider deficit", "fiscal deficit"
 ]
 
 # Retrospective Monthly/Periodic Statistical Recaps to Filter Non-Breaking Historical Aggregations (Issue #658)
@@ -81,6 +85,18 @@ RETROSPECTIVE_RECAP_PATTERNS = [
     r"\bmonthly\s+(recap|roundup|summary|review|report)\b",
     r"\bannual\s+(recap|roundup|summary|review|report)\b",
     r"\bquarterly\s+(recap|roundup|summary|review|report)\b",
+]
+
+# Speculative / Rhetorical Explainer Questions to Filter Non-Breaking Commentary (Issue #741)
+SPECULATIVE_QUESTION_PATTERNS = [
+    r"^\s*(could|would|can|will|should|might|may|what\s+if)\b.*\?\s*$",
+]
+
+# Supply-Continuity / Resilience Headlines (Not Active Disruptions) (Issue #697)
+SUPPLY_CONTINUITY_PATTERNS = [
+    r"\bdefy\b.*\bkeep\s+(crude\s+oil|crude|oil|fuel|gasoline|petroleum|tankers?)\s+flowing\b",
+    r"\bkeeps?\s+(crude\s+oil|crude|oil|fuel|gasoline|petroleum)\s+flowing\b",
+    r"\b(crude\s+oil|crude|oil|fuel|gasoline|tankers?)\s+(continue|continues|keep|keeps)\s+flowing\b",
 ]
 
 # High-Risk Keyword Lexicon for Stage 1 Cascading Gate
@@ -287,6 +303,14 @@ class IntradayEventMonitor:
 
         # Filter non-breaking retrospective monthly/periodic statistical recaps (Issue #658)
         if any(re.search(pat, text_lower) for pat in RETROSPECTIVE_RECAP_PATTERNS):
+            return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
+        # Filter speculative / rhetorical explainer questions (Issue #741)
+        if any(re.search(pat, text_lower) for pat in SPECULATIVE_QUESTION_PATTERNS):
+            return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
+
+        # Filter supply-continuity / resilience headlines that do not represent active outages (Issue #697)
+        if any(re.search(pat, text_lower) for pat in SUPPLY_CONTINUITY_PATTERNS):
             return False, {"overall_price_pressure": 0.0, "supply_disruption": 0.0}
 
 
