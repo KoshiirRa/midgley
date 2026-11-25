@@ -832,33 +832,64 @@ JSON Output:
         return reflections
 
 
+def _is_truthy_flag(val: Any) -> bool:
+    if isinstance(val, bool):
+        return val
+    if val is None or (isinstance(val, float) and pd.isna(val)):
+        return False
+    return str(val).strip().lower() in ("1", "true", "yes", "t")
+
+
 def extract_top_prediction_anomalies(
     history_csv: str = HISTORY_CSV,
     max_anomalies: int = 3,
-    error_threshold: float = 0.25
+    error_threshold: float = 0.25,
+    lookback_days: Optional[int] = 30
 ) -> List[Dict[str, Any]]:
     """
-    Extracts top residual outliers and unpredicted directional flips from data/prediction_history.csv.
+    Extracts top prospective residual outliers and unpredicted directional flips
+    from the unified prediction history (DB + CSV), excluding retroactive backtest
+    and simulation records and scoping to the rolling evaluation window.
     """
-    if not os.path.exists(history_csv):
-        return []
-
     try:
         from src.prediction_logger import read_prediction_history
         df = read_prediction_history(history_csv)
+        if df is None or df.empty:
+            return []
+
         eval_df = df.dropna(subset=['actual_5d_price', 'error_dollars']).copy()
         if eval_df.empty:
             return []
 
-        # Calculate anomaly classification
-        anomalies = []
+        # Exclude retroactive backtests and simulations from live episodic reflections
+        if "is_backtest" in eval_df.columns:
+            eval_df = eval_df[~eval_df["is_backtest"].apply(_is_truthy_flag)]
+        if "is_simulation" in eval_df.columns:
+            eval_df = eval_df[~eval_df["is_simulation"].apply(_is_truthy_flag)]
+        if "source" in eval_df.columns:
+            eval_df = eval_df[
+                ~eval_df["source"].astype(str).str.strip().str.lower().isin(["backtest", "test", "synthetic"])
+            ]
+        if eval_df.empty:
+            return []
+
+        # Apply rolling lookback window when forecast_target_date is parseable
+        if lookback_days is not None and "forecast_target_date" in eval_df.columns:
+            parsed_dates = pd.to_datetime(eval_df["forecast_target_date"], errors="coerce", utc=True)
+            cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=int(lookback_days))
+            window_df = eval_df[parsed_dates >= cutoff]
+            if not window_df.empty:
+                eval_df = window_df
+
+        # Calculate anomaly classification, deduplicating by (region, forecast_target_date)
+        best_by_key: Dict[tuple, Dict[str, Any]] = {}
         for _, row in eval_df.iterrows():
             err = float(row.get('error_dollars', 0.0))
             pred = float(row.get('predicted_5d_price', 0.0))
             curr = float(row.get('current_base_price', row.get('current_price', pred)))
             act = float(row.get('actual_5d_price', pred))
             reg = str(row.get('region', 'National'))
-            d_hit = float(row.get('directional_hit', 1.0))
+            d_hit = float(row.get('directional_hit', 1.0)) if pd.notna(row.get('directional_hit', 1.0)) else 1.0
             target_date = str(row.get('forecast_target_date', ''))
 
             is_anomaly = False
@@ -872,7 +903,7 @@ def extract_top_prediction_anomalies(
                 anom_type = "DIRECTIONAL_FLIP"
 
             if is_anomaly:
-                anomalies.append({
+                rec = {
                     "region": reg,
                     "forecast_target_date": target_date,
                     "current_price": curr,
@@ -881,11 +912,16 @@ def extract_top_prediction_anomalies(
                     "error_dollars": err,
                     "directional_hit": d_hit,
                     "anomaly_type": anom_type,
-                    "llm_price_pressure": float(row.get('llm_price_pressure', 0.0)),
-                    "llm_supply_disruption": float(row.get('llm_supply_disruption', 0.0)),
+                    "llm_price_pressure": float(row.get('llm_price_pressure', 0.0)) if pd.notna(row.get('llm_price_pressure', 0.0)) else 0.0,
+                    "llm_supply_disruption": float(row.get('llm_supply_disruption', 0.0)) if pd.notna(row.get('llm_supply_disruption', 0.0)) else 0.0,
                     "headline": f"Historical shock record on {target_date} ({reg})"
-                })
+                }
+                key = (reg, target_date)
+                prev = best_by_key.get(key)
+                if prev is None or abs(rec["error_dollars"]) > abs(prev["error_dollars"]):
+                    best_by_key[key] = rec
 
+        anomalies = list(best_by_key.values())
         # Sort by largest absolute error
         anomalies.sort(key=lambda x: abs(x["error_dollars"]), reverse=True)
         return anomalies[:max_anomalies]

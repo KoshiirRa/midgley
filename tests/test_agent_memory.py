@@ -368,4 +368,98 @@ class TestHindsightWarmupAndSync(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+def test_extract_top_prediction_anomalies_excludes_backtests_and_uses_db_reader(monkeypatch, tmp_path):
+    """Regression test for #715: exclude backtest/simulation rows and do not bail when CSV is missing."""
+    import pandas as pd
+    from src.agent_memory import extract_top_prediction_anomalies
 
+    recent_date = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3)).strftime("%Y-%m-%d")
+    stale_date = "2026-01-05"
+
+    sample_df = pd.DataFrame([
+        {
+            "region": "Oakland_CA",
+            "forecast_target_date": stale_date,
+            "current_base_price": 4.20,
+            "predicted_5d_price": 6.65,
+            "actual_5d_price": 4.20,
+            "error_dollars": 2.45,
+            "directional_hit": 0.0,
+            "is_backtest": True,
+            "is_simulation": False,
+            "source": "backtest",
+        },
+        {
+            "region": "National",
+            "forecast_target_date": recent_date,
+            "current_base_price": 3.10,
+            "predicted_5d_price": 3.55,
+            "actual_5d_price": 3.15,
+            "error_dollars": 0.40,
+            "directional_hit": 0.0,
+            "is_backtest": False,
+            "is_simulation": True,
+            "source": "live",
+        },
+        {
+            "region": "Tulsa_OK",
+            "forecast_target_date": recent_date,
+            "current_base_price": 2.80,
+            "predicted_5d_price": 3.20,
+            "actual_5d_price": 2.85,
+            "error_dollars": 0.35,
+            "directional_hit": 0.0,
+            "is_backtest": False,
+            "is_simulation": False,
+            "source": "live",
+        },
+    ])
+
+    monkeypatch.setattr("src.prediction_logger.read_prediction_history", lambda _path=None: sample_df)
+    missing_csv = str(tmp_path / "does_not_exist.csv")
+    anomalies = extract_top_prediction_anomalies(history_csv=missing_csv, max_anomalies=3, lookback_days=30)
+
+    assert len(anomalies) == 1
+    assert anomalies[0]["region"] == "Tulsa_OK"
+    assert anomalies[0]["forecast_target_date"] == recent_date
+    assert anomalies[0]["anomaly_type"] == "LARGE_OVERESTIMATE"
+
+
+def test_format_qualitative_anomaly_reflections_markdown_persists_reflections(monkeypatch, tmp_path):
+    """Regression test for #715: weekly episodic reflections are synthesized and stored in SQLite."""
+    import sqlite3
+    from src.agent_memory import (
+        AgentMemoryManager,
+        format_qualitative_anomaly_reflections_markdown,
+    )
+
+    db_path = str(tmp_path / "agent_memory.sqlite")
+    mgr = AgentMemoryManager(sqlite_path=db_path)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.setattr(
+        "src.agent_memory.extract_top_prediction_anomalies",
+        lambda max_anomalies=3: [
+            {
+                "region": "Tulsa_OK",
+                "forecast_target_date": "2026-11-22",
+                "current_price": 2.80,
+                "predicted_price": 3.20,
+                "actual_price": 2.85,
+                "error_dollars": 0.35,
+                "directional_hit": 0.0,
+                "anomaly_type": "LARGE_OVERESTIMATE",
+                "llm_price_pressure": 0.4,
+                "llm_supply_disruption": 0.2,
+                "headline": "Refinery turnaround shock in Tulsa_OK",
+            }
+        ],
+    )
+
+    md = format_qualitative_anomaly_reflections_markdown(manager=mgr, max_anomalies=3)
+    assert "Episodic Reflection Active" in md
+    assert "Tulsa_OK" in md
+
+    conn = sqlite3.connect(db_path)
+    count = conn.execute("SELECT COUNT(*) FROM reflections").fetchone()[0]
+    conn.close()
+    assert count >= 1
