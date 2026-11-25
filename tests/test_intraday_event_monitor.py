@@ -658,6 +658,54 @@ class TestIntradayEventMonitor(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+def test_evaluate_headline_anomaly_filters_batch_false_positives(monkeypatch):
+    """Regression tests for false positive issues #741, #698, #697, #696, #318, #317, #312."""
+    from src.intraday_event_monitor import IntradayEventMonitor
+
+    monitor = IntradayEventMonitor()
+
+    # If any false positive leaks past Stage 1 into the LLM scorer, fail immediately
+    def _should_not_call_llm(*args, **kwargs):
+        raise AssertionError(f"LLM scorer should not have been called for filtered headline: {args}")
+
+    monkeypatch.setattr("src.intraday_event_monitor.extract_event_features_llm", _should_not_call_llm)
+
+    false_positives = [
+        # #741: Speculative question headline
+        "Could Iran break the US naval blockade in the Strait of Hormuz?",
+        # #698: Non-petroleum ayurvedic/medicament oil
+        "Supreme Court Dismisses Appeal on Classification of Ayurvedic Medicament. The court upheld the classification of Banphool Oil",
+        # #697: Supply continuity / resilience headline (not an active outage)
+        "Tankers defy sharp escalation of Iranian attacks to keep crude oil flowing through Strait of Hormuz",
+        # #696: Provincial fiscal budget deficit commentary citing tariffs & oil
+        "Ontario projects bigger deficit, cites U.S. tariffs and higher oil prices - The Globe and Mail",
+        # #318: Broad Russia sanctions bill without core energy terms
+        "Trump signs Russia sanctions bill championed by Lindsey Graham - CBS News",
+        # #317: Local data center backup-generator diesel spill
+        "Data Center’s Spill of 5,000 Gallons of Diesel Forces N.J. River Cleanup",
+        # #312: Broad Russia sanctions / tariff powers bill without core energy terms
+        "Russia sanctions bill gives Trump sweeping new tariff powers - Reuters",
+    ]
+
+    for headline in false_positives:
+        is_anom, scores = monitor.evaluate_headline_anomaly(headline)
+        assert is_anom is False, f"Expected False for false positive: {headline}"
+        assert scores["overall_price_pressure"] == 0.0
+        assert scores["supply_disruption"] == 0.0
 
 
+def test_evaluate_headline_anomaly_preserves_real_disruptions(monkeypatch):
+    """Positive control: real breaking supply disruptions still reach Stage 2 scoring."""
+    from src.intraday_event_monitor import IntradayEventMonitor
 
+    monitor = IntradayEventMonitor()
+    monkeypatch.setattr(
+        "src.intraday_event_monitor.extract_event_features_llm",
+        lambda headline, spectral_context="": {"overall_price_pressure": 0.85, "supply_disruption": 0.80},
+    )
+
+    is_anom, scores = monitor.evaluate_headline_anomaly(
+        "Iran announces full naval blockade halting tanker traffic in the Strait of Hormuz"
+    )
+    assert is_anom is True
+    assert scores["supply_disruption"] == 0.80

@@ -10543,5 +10543,28 @@
       "overall_price_pressure": -0.4
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-25T21:21:19.703566",
+    "headline": "Putin Vows Retaliation After Ukraine Strikes Russian Oil Refineries - cwibc.co.id",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMic0FVX3lxTE5ZSWVJejhIaUh1TnFWRHRoUlhkdEdURGo5bWZZQTA1Uy1TNDNwLVNWalVDbVlMTDZEeTNCV3BhQ1lLYVMtYjYzcmV0WGR1ckxBVW8zOXR4bnpsRy1fUVJmRGduektvWU83YXRCNUpGcGxWRGs?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.7,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.7,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]
