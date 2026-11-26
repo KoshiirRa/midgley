@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "federal_excise_per_gal": 0.184,
+  "default_environmental_ust_fee_per_gal": 0.011,
+  "state_environmental_ust_fees": {
+    "CA": 0.020,
+    "IL": 0.011,
+    "FL": 0.020,
+    "NY": 0.017,
+    "WA": 0.012,
+    "TX": 0.000,
+    "OK": 0.010,
+    "NC": 0.0025
+  },
+  "state_sales_tax_estimates": {
+    "CA": 0.100,
+    "IL": 0.150,
+    "IN": 0.180,
+    "MI": 0.180,
+    "NY": 0.160,
+    "HI": 0.140
+  },
+  "local_option_fuel_taxes": {
+    "IL": {
+      "default_county_tax": 0.0,
+      "zip_prefix_overrides": {
+        "606": {
+          "jurisdiction": "City of Chicago & Cook County (RTA)",
+          "county_municipal_tax": 0.140,
+          "components": {"cook_county": 0.060, "city_of_chicago": 0.080}
+        },
+        "607": {
+          "jurisdiction": "Cook County, IL",
+          "county_municipal_tax": 0.060,
+          "components": {"cook_county": 0.060}
+        },
+        "608": {
+          "jurisdiction": "Cook County, IL",
+          "county_municipal_tax": 0.060,
+          "components": {"cook_county": 0.060}
+        },
+        "600": {
+          "jurisdiction": "Lake / DuPage / Cook Collar Counties, IL",
+          "county_municipal_tax": 0.080,
+          "components": {"collar_county_loft": 0.080}
+        },
+        "601": {
+          "jurisdiction": "DuPage / Kane County, IL",
+          "county_municipal_tax": 0.080,
+          "components": {"collar_county_loft": 0.080}
+        },
+        "604": {
+          "jurisdiction": "Will / South Cook County, IL",
+          "county_municipal_tax": 0.060,
+          "components": {"county_loft": 0.060}
+        },
+        "605": {
+          "jurisdiction": "DuPage / Kane / Kendall County, IL",
+          "county_municipal_tax": 0.080,
+          "components": {"collar_county_loft": 0.080}
+        }
+      }
+    },
+    "FL": {
+      "default_county_tax": 0.060,
+      "zip_prefix_overrides": {
+        "330": {"jurisdiction": "Miami-Dade / Broward / Monroe County, FL (LOFT)", "county_municipal_tax": 0.100},
+        "331": {"jurisdiction": "Miami-Dade County, FL (LOFT)", "county_municipal_tax": 0.100},
+        "332": {"jurisdiction": "Miami-Dade County, FL (LOFT)", "county_municipal_tax": 0.100},
+        "333": {"jurisdiction": "Broward County, FL (LOFT)", "county_municipal_tax": 0.120},
+        "334": {"jurisdiction": "Palm Beach County, FL (LOFT)", "county_municipal_tax": 0.120},
+        "336": {"jurisdiction": "Hillsborough County, FL (LOFT)", "county_municipal_tax": 0.070},
+        "328": {"jurisdiction": "Orange County, FL (LOFT)", "county_municipal_tax": 0.060},
+        "349": {"jurisdiction": "St. Lucie / Martin County, FL (LOFT)", "county_municipal_tax": 0.120}
+      }
+    },
+    "NV": {
+      "default_county_tax": 0.090,
+      "zip_prefix_overrides": {
+        "890": {"jurisdiction": "Clark County, NV (Fuel Revenue Indexing)", "county_municipal_tax": 0.270},
+        "891": {"jurisdiction": "Clark County / Las Vegas, NV (Fuel Revenue Indexing)", "county_municipal_tax": 0.270},
+        "894": {"jurisdiction": "Washoe County / Northern NV (Fuel Indexing)", "county_municipal_tax": 0.340},
+        "895": {"jurisdiction": "Washoe County / Reno, NV (Fuel Indexing)", "county_municipal_tax": 0.340}
+      }
+    },
+    "HI": {
+      "default_county_tax": 0.165,
+      "zip_prefix_overrides": {
+        "967": {"jurisdiction": "Hawaii / Maui / Kauai County, HI", "county_municipal_tax": 0.230},
+        "968": {"jurisdiction": "City & County of Honolulu, HI", "county_municipal_tax": 0.165}
+      }
+    }
+  }
+}
