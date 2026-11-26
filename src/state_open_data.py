@@ -535,6 +535,133 @@ class StateOpenDataLedger:
         return ledger
 
 
+class IFTAFuelTaxConnector:
+    """
+    Zero-cost International Fuel Tax Agreement (IFTA) Quarterly Matrix Connector (Issue #623).
+    Ingests official quarterly motor fuel tax schedules across all 48 contiguous US states
+    and combines with STATE_METADATA for AK, HI, and DC to produce a complete 50-state + DC schedule.
+    """
+
+    IFTA_MATRIX_URL = "https://www.iftach.org/taxmatrix4/Taxmatrix.php"
+    CACHE_KEY = "ifta_quarterly_fuel_tax_matrix"
+    CACHE_TTL_SECONDS = 7 * 86400  # 7 days (quarterly schedule)
+
+    def __init__(self) -> None:
+        self.is_free_alternative = True
+        self.cost_per_query = 0.0
+
+    @staticmethod
+    def _current_quarter_label(now: Optional[datetime] = None) -> str:
+        dt = now or datetime.now()
+        q = (dt.month - 1) // 3 + 1
+        return f"{dt.year}Q{q}"
+
+    @staticmethod
+    def parse_ifta_matrix_csv(csv_text: str) -> Dict[str, float]:
+        """
+        Parses an IFTA quarterly tax matrix CSV/tabular export into {state_code: gasoline_tax_per_gal}.
+        Expects rows containing a 2-letter US jurisdiction code and a numeric gasoline rate.
+        """
+        rates: Dict[str, float] = {}
+        if not csv_text or not csv_text.strip():
+            return rates
+        for raw_line in csv_text.splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = [p.strip().strip('"').strip("'") for p in line.split(",")]
+            if len(parts) < 2:
+                continue
+            code = parts[0].upper()
+            if code not in STATE_METADATA:
+                continue
+            for cell in parts[1:]:
+                cleaned = cell.replace("$", "").strip()
+                try:
+                    val = float(cleaned)
+                    if 0.0 <= val <= 2.50:
+                        rates[code] = round(val, 4)
+                        break
+                except ValueError:
+                    continue
+        return rates
+
+    def fetch_quarterly_matrix(self, csv_override: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Returns the quarterly 50-state + DC motor fuel tax schedule.
+        Uses csv_override when supplied (deterministic testing), checks global_cache,
+        and falls back cleanly to STATE_METADATA under TESTING=1 or network failures.
+        """
+        quarter = self._current_quarter_label()
+        if csv_override is not None:
+            parsed = self.parse_ifta_matrix_csv(csv_override)
+            merged = self._build_schedule(parsed, source="IFTA_QUARTERLY_MATRIX", quarter=quarter)
+            return merged
+
+        try:
+            from src.lookup_cache import global_cache
+            cached = global_cache.get(self.CACHE_KEY)
+            if cached and isinstance(cached, dict) and cached.get("states"):
+                return cached
+        except Exception:
+            pass
+
+        if os.environ.get("TESTING") == "1":
+            return self._build_schedule({}, source="STATE_METADATA_BASELINE", quarter=quarter)
+
+        live_rates: Dict[str, float] = {}
+        source = "STATE_METADATA_BASELINE"
+        try:
+            req = urllib.request.Request(
+                self.IFTA_MATRIX_URL,
+                headers={"User-Agent": "MidgleyGasPriceForecaster/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=8) as resp:
+                body = resp.read().decode("utf-8", errors="ignore")
+                parsed = self.parse_ifta_matrix_csv(body)
+                if parsed:
+                    live_rates = parsed
+                    source = "IFTA_QUARTERLY_MATRIX"
+        except Exception as exc:
+            logger.debug(f"IFTA live matrix fetch unavailable ({exc}); using STATE_METADATA baseline.")
+
+        schedule = self._build_schedule(live_rates, source=source, quarter=quarter)
+        try:
+            from src.lookup_cache import global_cache
+            global_cache.set(self.CACHE_KEY, schedule, ttl_seconds=self.CACHE_TTL_SECONDS)
+        except Exception:
+            pass
+        return schedule
+
+    @staticmethod
+    def _build_schedule(
+        ifta_overrides: Dict[str, float],
+        source: str,
+        quarter: str
+    ) -> Dict[str, Any]:
+        states: Dict[str, Dict[str, Any]] = {}
+        for code, meta in STATE_METADATA.items():
+            rate = ifta_overrides.get(code, meta["tax_rate"])
+            states[code] = {
+                "state_code": code,
+                "state_name": meta["name"],
+                "fips": meta["fips"],
+                "state_excise_per_gal": round(float(rate), 4),
+                "federal_excise_per_gal": 0.184,
+                "carb_total_per_gal": meta.get("carb_total"),
+                "source": "IFTA_QUARTERLY_MATRIX" if code in ifta_overrides else "STATE_METADATA_BASELINE",
+            }
+        return {
+            "status": "success",
+            "quarter": quarter,
+            "source": source,
+            "states_count": len(states),
+            "ifta_overrides_applied": len(ifta_overrides),
+            "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "states": states,
+        }
+
+
 def main():
     """CLI entry point for state open data verification."""
     parser = argparse.ArgumentParser(description="State Open Data Fuel Tax Verification CLI")

@@ -19,6 +19,175 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 TELEMETRY_FILE = os.path.join(DATA_DIR, "unmapped_zip_telemetry.json")
+LOCAL_TAX_SCHEDULES_FILE = os.path.join(DATA_DIR, "local_tax_schedules.json")
+
+_LOCAL_TAX_CACHE: Optional[Dict[str, Any]] = None
+
+# Approximate offline bounding boxes (min_lat, max_lat, min_lon, max_lon) for all 50 US states + DC + territories
+STATE_BOUNDING_BOXES: Dict[str, tuple[float, float, float, float]] = {
+    "AL": (30.22, 35.01, -88.47, -84.89),
+    "AK": (51.21, 71.39, -179.15, -129.98),
+    "AZ": (31.33, 37.00, -114.81, -109.04),
+    "AR": (33.00, 36.50, -94.62, -89.64),
+    "CA": (32.53, 42.01, -124.41, -114.13),
+    "CO": (36.99, 41.00, -109.06, -102.04),
+    "CT": (40.98, 42.05, -73.73, -71.79),
+    "DE": (38.45, 39.84, -75.79, -75.05),
+    "DC": (38.79, 39.00, -77.12, -76.91),
+    "FL": (24.52, 31.00, -87.63, -80.03),
+    "GA": (30.36, 35.00, -85.61, -80.84),
+    "HI": (18.91, 22.24, -160.25, -154.81),
+    "ID": (41.99, 49.00, -117.24, -111.04),
+    "IL": (36.97, 42.51, -91.51, -87.02),
+    "IN": (37.77, 41.76, -88.10, -84.78),
+    "IA": (40.38, 43.50, -96.64, -90.14),
+    "KS": (36.99, 40.00, -102.05, -94.59),
+    "KY": (36.50, 39.15, -89.57, -81.96),
+    "LA": (28.93, 33.02, -94.04, -88.82),
+    "ME": (43.06, 47.46, -71.08, -66.95),
+    "MD": (37.91, 39.72, -79.49, -75.05),
+    "MA": (41.24, 42.89, -73.51, -69.93),
+    "MI": (41.70, 48.24, -90.42, -82.41),
+    "MN": (43.50, 49.38, -97.24, -89.49),
+    "MS": (30.17, 35.00, -91.66, -88.10),
+    "MO": (35.99, 40.61, -95.77, -89.10),
+    "MT": (44.36, 49.00, -116.05, -104.04),
+    "NE": (40.00, 43.00, -104.05, -95.31),
+    "NV": (35.00, 42.00, -120.00, -114.04),
+    "NH": (42.70, 45.31, -72.56, -70.61),
+    "NJ": (38.93, 41.36, -75.56, -73.89),
+    "NM": (31.33, 37.00, -109.05, -103.00),
+    "NY": (40.50, 45.02, -79.76, -71.86),
+    "NC": (33.84, 36.59, -84.32, -75.46),
+    "ND": (45.94, 49.00, -104.05, -96.55),
+    "OH": (38.40, 41.98, -84.82, -80.52),
+    "OK": (33.62, 37.00, -103.00, -94.43),
+    "OR": (41.99, 46.29, -124.57, -116.46),
+    "PA": (39.72, 42.27, -80.52, -74.69),
+    "RI": (41.15, 42.02, -71.86, -71.12),
+    "SC": (32.03, 35.22, -83.35, -78.54),
+    "SD": (42.48, 45.95, -104.06, -96.44),
+    "TN": (34.98, 36.68, -90.31, -81.65),
+    "TX": (25.84, 36.50, -106.65, -93.51),
+    "UT": (37.00, 42.00, -114.05, -109.04),
+    "VT": (42.73, 45.02, -73.44, -71.46),
+    "VA": (36.54, 39.47, -83.68, -75.24),
+    "WA": (45.54, 49.00, -124.76, -116.92),
+    "WV": (37.20, 40.64, -82.64, -77.72),
+    "WI": (42.49, 47.08, -92.89, -86.81),
+    "WY": (40.99, 45.01, -111.06, -104.05),
+    "PR": (17.88, 18.52, -67.27, -65.22),
+    "VI": (17.67, 18.41, -65.09, -64.56),
+    "GU": (13.23, 13.66, 144.61, 144.96),
+}
+
+
+def load_local_tax_schedules() -> Dict[str, Any]:
+    """Loads local option fuel tax (LOFT) schedules from data/local_tax_schedules.json."""
+    global _LOCAL_TAX_CACHE
+    if _LOCAL_TAX_CACHE is not None:
+        return _LOCAL_TAX_CACHE
+    if os.path.exists(LOCAL_TAX_SCHEDULES_FILE):
+        try:
+            with open(LOCAL_TAX_SCHEDULES_FILE, "r", encoding="utf-8") as fh:
+                _LOCAL_TAX_CACHE = json.load(fh)
+                return _LOCAL_TAX_CACHE
+        except Exception as exc:
+            logger.warning(f"Failed to load {LOCAL_TAX_SCHEDULES_FILE}: {exc}")
+    _LOCAL_TAX_CACHE = {
+        "federal_excise_per_gal": 0.184,
+        "default_environmental_ust_fee_per_gal": 0.011,
+        "state_environmental_ust_fees": {},
+        "state_sales_tax_estimates": {},
+        "local_option_fuel_taxes": {},
+    }
+    return _LOCAL_TAX_CACHE
+
+
+def compute_tax_breakdown(
+    state_code: str,
+    zip_code: Optional[str] = None,
+    target_date: Optional[str] = None,
+    as_of_date: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Computes an itemized motor fuel tax breakdown ($/gal) combining federal excise,
+    point-in-time state excise (via STATE_METADATA / STATE_PADD_MODEL_MAP + emergency holidays),
+    environmental/UST fees, county/municipal LOFT adders, and estimated sales tax.
+    """
+    from src.rvp_regulations import resolve_point_in_time_tax_rate
+    from src.state_open_data import STATE_METADATA
+
+    st = str(state_code or "US").strip().upper()
+    schedules = load_local_tax_schedules()
+
+    federal_excise = float(schedules.get("federal_excise_per_gal", 0.184))
+    if st in STATE_METADATA:
+        base_state_tax = float(STATE_METADATA[st]["tax_rate"])
+    else:
+        base_state_tax = float(STATE_PADD_MODEL_MAP.get(st, {}).get("state_tax", 0.250))
+
+    state_excise = float(
+        resolve_point_in_time_tax_rate(
+            region=st,
+            baseline_tax_rate=base_state_tax,
+            target_date=target_date,
+            as_of_date=as_of_date,
+        )
+    )
+    env_ust = float(
+        schedules.get("state_environmental_ust_fees", {}).get(
+            st, schedules.get("default_environmental_ust_fee_per_gal", 0.011)
+        )
+    )
+    sales_tax_est = float(schedules.get("state_sales_tax_estimates", {}).get(st, 0.0))
+
+    county_municipal_tax = 0.0
+    local_jurisdiction = None
+    loft_state = schedules.get("local_option_fuel_taxes", {}).get(st)
+    if loft_state:
+        prefix_3 = str(zip_code).strip().zfill(5)[:3] if zip_code and str(zip_code).strip().isdigit() else ""
+        override = loft_state.get("zip_prefix_overrides", {}).get(prefix_3)
+        if override:
+            county_municipal_tax = float(override.get("county_municipal_tax", 0.0))
+            local_jurisdiction = override.get("jurisdiction")
+        else:
+            county_municipal_tax = float(loft_state.get("default_county_tax", 0.0))
+
+    total_tax = round(federal_excise + state_excise + env_ust + county_municipal_tax + sales_tax_est, 4)
+    return {
+        "federal_excise": round(federal_excise, 4),
+        "state_excise": round(state_excise, 4),
+        "environmental_ust_fee": round(env_ust, 4),
+        "county_municipal_tax": round(county_municipal_tax, 4),
+        "sales_tax_est": round(sales_tax_est, 4),
+        "total_tax_burden_per_gal": total_tax,
+        "local_jurisdiction": local_jurisdiction,
+    }
+
+
+def resolve_state_from_coordinates(lat: float, lon: float) -> Optional[str]:
+    """
+    Resolves GPS (lat, lon) to a 2-letter US state/territory code using offline bounding boxes,
+    breaking overlaps by closest state centroid (STATE_CENTER_COORDS).
+    """
+    candidates = []
+    for st_code, (min_lat, max_lat, min_lon, max_lon) in STATE_BOUNDING_BOXES.items():
+        if min_lat <= lat <= max_lat and min_lon <= lon <= max_lon:
+            candidates.append(st_code)
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    best_st = candidates[0]
+    best_dist = float("inf")
+    for st_code in candidates:
+        c_lat, c_lon = STATE_CENTER_COORDS.get(st_code, (lat, lon))
+        d = haversine_distance_miles(lat, lon, c_lat, c_lon)
+        if d < best_dist:
+            best_dist = d
+            best_st = st_code
+    return best_st
 
 # Primary 3-digit ZIP prefix mapping for supported metro clusters
 ZIP_METRO_PREFIX_MAP: Dict[str, str] = {
@@ -506,6 +675,12 @@ def resolve_zip_code(
             "state_tax_rate_per_gal": eff_state_tax,
             "hub_baseline_tax_rate": eff_hub_tax,
             "tax_delta_per_gal": round(eff_state_tax - eff_hub_tax, 3),
+            "tax_breakdown": compute_tax_breakdown(
+                state_code=state_code,
+                zip_code=zip_clean,
+                target_date=target_date,
+                as_of_date=as_of_date,
+            ),
             "is_significant_departure": False,
             "departure_reason": "",
             "estimated_basis_delta": 0.0
@@ -573,6 +748,12 @@ def resolve_zip_code(
         "state_tax_rate_per_gal": eff_state_tax,
         "hub_baseline_tax_rate": eff_hub_tax,
         "tax_delta_per_gal": tax_delta,
+        "tax_breakdown": compute_tax_breakdown(
+            state_code=state_code,
+            zip_code=zip_clean,
+            target_date=target_date,
+            as_of_date=as_of_date,
+        ),
         "is_significant_departure": is_departure,
         "departure_reason": departure_reason,
         "estimated_basis_delta": est_basis,
@@ -1110,6 +1291,24 @@ def resolve_coordinates(lat: float, lon: float) -> Dict[str, Any]:
     is_metro_hit = best_dist <= best_hub_meta.get("max_radius_miles", 120.0)
     tier = "METRO_CLUSTER_HIT" if is_metro_hit else "SPATIAL_PROXIMITY_FALLBACK"
 
+    resolved_state = best_hub_meta["state"]
+    resolved_padd = best_hub_meta["padd"]
+    resolved_padd_name = best_hub_meta["padd_name"]
+    resolved_state_tax = best_hub_meta["state_tax"]
+
+    # State bounding-box disambiguation (Issue #623): outside the immediate hub core (>25 mi),
+    # resolve true state & statutory tax instead of inheriting a neighboring hub's state (e.g., OR -> WA/CA).
+    if best_dist > 25.0 or not is_metro_hit:
+        bbox_state = resolve_state_from_coordinates(f_lat, f_lon)
+        if bbox_state and bbox_state in STATE_PADD_MODEL_MAP:
+            st_meta = STATE_PADD_MODEL_MAP[bbox_state]
+            resolved_state = bbox_state
+            resolved_padd = st_meta["padd"]
+            resolved_padd_name = st_meta["padd_name"]
+            resolved_state_tax = st_meta["state_tax"]
+            if not is_metro_hit:
+                best_hub_key = st_meta.get("fallback_locale", best_hub_key)
+
     return {
         "status": "success",
         "query_type": "coordinates",
@@ -1122,10 +1321,11 @@ def resolve_coordinates(lat: float, lon: float) -> Dict[str, Any]:
         "locale_code": best_hub_key,
         "region_id": best_hub_meta["region_id"],
         "name": best_hub_meta["name"],
-        "state": best_hub_meta["state"],
-        "padd_region": best_hub_meta["padd"],
-        "padd_name": best_hub_meta["padd_name"],
-        "state_tax_rate_per_gal": best_hub_meta["state_tax"]
+        "state": resolved_state,
+        "padd_region": resolved_padd,
+        "padd_name": resolved_padd_name,
+        "state_tax_rate_per_gal": resolved_state_tax,
+        "tax_breakdown": compute_tax_breakdown(state_code=resolved_state),
     }
 
 

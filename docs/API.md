@@ -304,26 +304,25 @@ Provides arbitrary nationwide location resolution (via 5-digit US ZIP code or GP
 * `GET /api/v1/location/resolve?zip_code={zip}&lat={lat}&lon={lon}`: Standalone resolution endpoint returning resolution tier (`METRO_CLUSTER_HIT`, `STATE_PADD_FALLBACK`, `SPATIAL_PROXIMITY_FALLBACK`), target state, PADD district, and applicable tax burden.
 
 #### B. Motor Fuel Tax Lookup & 50-State Schedules (Issue #623)
-* `GET /api/v1/tax/lookup?zip={zip}&lat={lat}&lon={lon}`: Returns itemized federal, state statutory, environmental UST, and municipal/county fuel tax levies ($/gal).
-* `GET /api/v1/tax/schedule`: Returns point-in-time tax schedules across all 50 US States + DC from `data/state_open_data.json` and IFTA quarterly matrices.
+* `GET /api/v1/tax/lookup?zip={zip}&lat={lat}&lon={lon}&target_date={YYYY-MM-DD}&as_of_date={YYYY-MM-DD}`: Returns itemized federal excise, point-in-time state excise (incorporating active emergency tax holidays), environmental UST fee, county/municipal LOFT adder (`data/local_tax_schedules.json`), and estimated sales tax ($/gal).
+* `GET /api/v1/tax/schedule`: Returns the full 50-state + DC motor fuel tax schedule from `STATE_METADATA` / `IFTAFuelTaxConnector` alongside local option fuel tax (LOFT) schedule metadata.
 
-**Example Location Resolution Payload (`GET /api/v1/location/resolve?zip_code=60601`):**
+**Example Tax Lookup Payload (`GET /api/v1/tax/lookup?zip=60601`):**
 ```json
 {
   "status": "success",
-  "zip_code": "60601",
-  "resolution_tier": "STATE_PADD_FALLBACK",
+  "locale": "Chicago, IL (PADD 2)",
   "state": "IL",
+  "zip_code": "60601",
   "padd_region": "PADD 2",
-  "padd_name": "Midwest",
-  "calibrated_model_used": "Cincinnati_OH (PADD 2)",
   "tax_breakdown": {
-    "federal_excise_tax": 0.184,
-    "state_excise_tax": 0.470,
+    "federal_excise": 0.184,
+    "state_excise": 0.47,
     "environmental_ust_fee": 0.011,
-    "county_municipal_est": 0.140,
-    "sales_tax_est": 0.150,
-    "total_tax_burden_per_gal": 0.955
+    "county_municipal_tax": 0.14,
+    "sales_tax_est": 0.15,
+    "total_tax_burden_per_gal": 0.955,
+    "local_jurisdiction": "City of Chicago & Cook County (RTA)"
   }
 }
 ```
