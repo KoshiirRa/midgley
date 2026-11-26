@@ -93,6 +93,15 @@ class LazySingletonProxy(Generic[T]):
     def __setattr__(self, name: str, value: Any) -> None:
         setattr(self.get_instance(), name, value)
 
+    def __delattr__(self, name: str) -> None:
+        inst = self.get_instance()
+        if name in getattr(inst, "__dict__", {}):
+            delattr(inst, name)
+        elif hasattr(inst, name):
+            return
+        else:
+            raise AttributeError(f"'{type(inst).__name__}' object has no attribute '{name}'")
+
     def __repr__(self) -> str:
         inst = object.__getattribute__(self, "_instance")
         if inst is None:
