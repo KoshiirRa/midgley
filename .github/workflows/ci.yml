@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-          cache:  \pip\'
+          cache: 'pip'
 
       - name: Install Dependencies
         run: |
@@ -56,9 +56,9 @@ jobs:
           pytest -v --cov=src --cov-report=term-missing:skip-covered --cov-report=xml:coverage.xml tests/
 
       - name: Publish Coverage Summary
-        if: always() && hashFiles(\coverage.xml\') != \'\'
+        if: always() && hashFiles('coverage.xml') != ''
         run: |
-          python - << \PY\'
+          python - << 'PY'
           import os, xml.etree.ElementTree as ET
           root = ET.parse("coverage.xml").getroot()
           line_rate = float(root.attrib.get("line-rate", 0.0)) * 100.0

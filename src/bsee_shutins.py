@@ -12,8 +12,8 @@ import urllib.request
 import defusedxml.ElementTree as ET
 import json
 import logging
-from html import unescape
-from typing import Dict, Any, Optional
+from html.parser import HTMLParser
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 from src.lookup_cache import global_cache
 
@@ -25,12 +25,36 @@ BSEE_HURRICANE_URL = "https://www.bsee.gov/stats-facts/offshore-stats-by-topic/h
 BSEE_RSS_URL = "https://news.google.com/rss/search?q=BSEE+shut-in+Gulf+of+Mexico+when:7d&hl=en-US&gl=US&ceid=US:en"
 
 
+class _HTMLTextExtractor(HTMLParser):
+    """Stdlib HTMLParser that extracts visible text while ignoring script/style blocks."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self._skip_depth = 0
+        self._chunks: List[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list) -> None:
+        if tag.lower() in ("script", "style"):
+            self._skip_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() in ("script", "style") and self._skip_depth > 0:
+            self._skip_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self._skip_depth == 0 and data:
+            self._chunks.append(data)
+
+    def get_text(self) -> str:
+        return " ".join(self._chunks)
+
+
 def _strip_html(html: str) -> str:
     """Strips HTML tags and normalizes whitespace for deterministic regex parsing."""
-    text = re.sub(r"<script[^>]*>.*?</script>", " ", html, flags=re.IGNORECASE | re.DOTALL)
-    text = re.sub(r"<style[^>]*>.*?</style>", " ", text, flags=re.IGNORECASE | re.DOTALL)
-    text = re.sub(r"<[^>]+>", " ", text)
-    return re.sub(r"\s+", " ", unescape(text)).strip()
+    parser = _HTMLTextExtractor()
+    parser.feed(html)
+    parser.close()
+    return re.sub(r"\s+", " ", parser.get_text()).strip()
 
 
 def parse_bsee_bulletin_html(html: str) -> Optional[Dict[str, Any]]:

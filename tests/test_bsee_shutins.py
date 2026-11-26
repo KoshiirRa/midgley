@@ -64,6 +64,25 @@ def test_parse_bsee_bulletin_html_empty_or_unrelated():
     assert parse_bsee_bulletin_html("<html><body>No active storms in the Gulf.</body></html>") is None
 
 
+def test_parse_bsee_bulletin_html_ignores_script_and_style_blocks():
+    html = """
+    <html>
+    <head>
+      <style>body { content: "99.9% of oil shut-in"; }</style>
+      <script>var fake = "88.8% of natural gas shut-in and 999 platforms evacuated";</script >
+    </head>
+    <body>
+      <p>Oil Production Shut-In: 12.5%</p>
+    </body>
+    </html>
+    """
+    parsed = parse_bsee_bulletin_html(html)
+    assert parsed is not None
+    assert parsed["bsee_gulf_oil_shutin_pct"] == 12.5
+    assert parsed["bsee_gulf_gas_shutin_pct"] == 0.0
+    assert parsed["bsee_evacuated_platforms_count"] == 0
+
+
 def test_connector_uses_html_override_and_persists_government_provenance(tmp_path):
     vintage_path = str(tmp_path / "bsee_vintages.json")
     conn = BSEEShutInConnector(vintage_file=vintage_path)
