@@ -3711,21 +3711,21 @@ def generate_public_dashboard():
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-rose-400">Strait of Hormuz Closure</span>
                     <h4 class="text-sm font-semibold text-white">Full Tanker Transit Blockade</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.850 <span class="text-xs font-normal text-rose-300">(+$0.500/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{NAT_SHOCK_HORMUZ}} <span class="text-xs font-normal text-rose-300">(+$0.500/gal)</span></p>
                     <p class="text-xs text-slate-500">20.5M bpd petroleum flow halted</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-amber-400">Red Sea / Bab el-Mandeb</span>
                     <h4 class="text-sm font-semibold text-white">Houthi Drone/Missile Escalation</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.520 <span class="text-xs font-normal text-rose-300">(+$0.170/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{NAT_SHOCK_REDSEA}} <span class="text-xs font-normal text-rose-300">(+$0.170/gal)</span></p>
                     <p class="text-xs text-slate-500">+14 day Cape of Good Hope detour</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-emerald-400">Panama Canal Low Water</span>
                     <h4 class="text-sm font-semibold text-white">Gatun Lake Drought Transit Cuts</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.430 <span class="text-xs font-normal text-rose-300">(+$0.080/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{NAT_SHOCK_PANAMA}} <span class="text-xs font-normal text-rose-300">(+$0.080/gal)</span></p>
                     <p class="text-xs text-slate-500">US Gulf to West Coast arbitrage restricted</p>
                 </div>
             </div>
@@ -3799,7 +3799,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{NAT_MAE}}", f"{accuracy_stats['overall_mae_dollars']:.4f}").replace("{{NAT_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NAT_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NAT_HIT_RATE}}", get_hit_rate_display('National')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{NARRATIVE_CARD}}", build_national_narrative_card_html(nat_base, nat_pred)).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
+""".replace("{{NAV_NATIONAL}}", nav_national).replace("PREFIX", rel_prefix).replace("{{NAT_BASE}}", f"{prices_map['National']['base']:.3f}").replace("{{NAT_PRED}}", f"{prices_map['National']['pred']:.3f}").replace("{{NAT_TREND_TEXT}}", nat_trend_text).replace("{{NAT_TREND_COLOR}}", nat_trend_color).replace("{{NAT_MAE}}", f"{accuracy_stats['overall_mae_dollars']:.4f}").replace("{{NAT_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NAT_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NAT_HIT_RATE}}", get_hit_rate_display('National')).replace("{{NAT_SHOCK_HORMUZ}}", f"{nat_base + 0.500:.3f}").replace("{{NAT_SHOCK_REDSEA}}", f"{nat_base + 0.170:.3f}").replace("{{NAT_SHOCK_PANAMA}}", f"{nat_base + 0.080:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_national).replace("{{NARRATIVE_CARD}}", build_national_narrative_card_html(nat_base, nat_pred)).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('National', nat_base, nat_pred))
 
     with open(NATIONAL_PATH, "w", encoding="utf-8") as f:
         f.write(build_national_html(""))
@@ -3916,21 +3916,21 @@ def generate_public_dashboard():
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-amber-400">EF-3 Tornado Outbreak</span>
                     <h4 class="text-sm font-semibold text-white">West Tulsa HF Sinclair Strike</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.954 <span class="text-xs font-normal text-rose-300">(+$0.173/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{TULSA_SHOCK_TORNADO}} <span class="text-xs font-normal text-rose-300">(+$0.173/gal)</span></p>
                     <p class="text-xs text-slate-500">Halts 125,000 bpd refinery loading racks</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-blue-400">Cushing Freeze Warning</span>
                     <h4 class="text-sm font-semibold text-white">Payne County (OKZ066) Sub-Zero Freeze</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.925 <span class="text-xs font-normal text-rose-300">(+$0.145/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{TULSA_SHOCK_FREEZE}} <span class="text-xs font-normal text-rose-300">(+$0.145/gal)</span></p>
                     <p class="text-xs text-slate-500">Disrupts crude tank farm pumping velocity</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-emerald-400">Keystone Pipeline Spill</span>
                     <h4 class="text-sm font-semibold text-white">Cushing Delivery Feeder Cut</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.954 <span class="text-xs font-normal text-rose-300">(+$0.173/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{TULSA_SHOCK_KEYSTONE}} <span class="text-xs font-normal text-rose-300">(+$0.173/gal)</span></p>
                     <p class="text-xs text-slate-500">Temporary Canadian crude influx drop</p>
                 </div>
             </div>
@@ -3988,7 +3988,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{TULSA_MAE}}", get_mae_display('Tulsa_OK')).replace("{{TULSA_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{TULSA_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{TULSA_HIT_RATE}}", get_hit_rate_display('Tulsa_OK')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'], logistics_hub="Cushing WTI Storage & West Tulsa HF Sinclair")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
+""".replace("{{NAV_TULSA}}", nav_tulsa).replace("PREFIX", rel_prefix).replace("{{TULSA_BASE}}", f"{prices_map['Tulsa_OK']['base']:.3f}").replace("{{TULSA_PRED}}", f"{prices_map['Tulsa_OK']['pred']:.3f}").replace("{{TULSA_TREND_TEXT}}", tulsa_trend_text).replace("{{TULSA_TREND_COLOR}}", tulsa_trend_color).replace("{{TULSA_MAE}}", get_mae_display('Tulsa_OK')).replace("{{TULSA_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{TULSA_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{TULSA_HIT_RATE}}", get_hit_rate_display('Tulsa_OK')).replace("{{TULSA_SHOCK_TORNADO}}", f"{tul_base + 0.173:.3f}").replace("{{TULSA_SHOCK_FREEZE}}", f"{tul_base + 0.145:.3f}").replace("{{TULSA_SHOCK_KEYSTONE}}", f"{tul_base + 0.173:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_tulsa).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'], logistics_hub="Cushing WTI Storage & West Tulsa HF Sinclair")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Tulsa_OK', prices_map['Tulsa_OK']['base'], prices_map['Tulsa_OK']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('tulsa_ok'))
 
     with open(TULSA_PATH, "w", encoding="utf-8") as f:
         f.write(build_tulsa_html(""))
@@ -4105,21 +4105,21 @@ def generate_public_dashboard():
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-rose-400">PBF Delaware City Outage</span>
                     <h4 class="text-sm font-semibold text-white">Fluid Catalytic Cracker Shutdown</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.535 <span class="text-xs font-normal text-rose-300">(+$0.185/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{NEWARK_SHOCK_PBF}} <span class="text-xs font-normal text-rose-300">(+$0.185/gal)</span></p>
                     <p class="text-xs text-slate-500">Halts 180,000 bpd refinery loading racks</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-amber-400">C&D Canal Shoaling Detour</span>
                     <h4 class="text-sm font-semibold text-white">Emergency 300 nm Delmarva Route</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.447 <span class="text-xs font-normal text-rose-300">(+$0.097/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{NEWARK_SHOCK_CANAL}} <span class="text-xs font-normal text-rose-300">(+$0.097/gal)</span></p>
                     <p class="text-xs text-slate-500">+35% marine barge freight rate surge</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-blue-400">Delaware Bay Ice Lockout</span>
                     <h4 class="text-sm font-semibold text-white">Big Stone Anchorage Lightering Freeze</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.462 <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{NEWARK_SHOCK_ICE}} <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
                     <p class="text-xs text-slate-500">Delays foreign crude tanker discharge</p>
                 </div>
             </div>
@@ -4177,7 +4177,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{NEWARK_MAE}}", get_mae_display('Newark_DE')).replace("{{NEWARK_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NEWARK_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NEWARK_HIT_RATE}}", get_hit_rate_display('Newark_DE')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'], logistics_hub="Delaware City Refinery & PADD 1B Harbor")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
+""".replace("{{NAV_NEWARK}}", nav_newark).replace("PREFIX", rel_prefix).replace("{{NEWARK_BASE}}", f"{prices_map['Newark_DE']['base']:.3f}").replace("{{NEWARK_PRED}}", f"{prices_map['Newark_DE']['pred']:.3f}").replace("{{NEWARK_TREND_TEXT}}", new_trend_text).replace("{{NEWARK_TREND_COLOR}}", new_trend_color).replace("{{NEWARK_MAE}}", get_mae_display('Newark_DE')).replace("{{NEWARK_MAPE}}", accuracy_stats["overall_mape_str"]).replace("{{NEWARK_RMSE}}", accuracy_stats["overall_rmse_str"]).replace("{{NEWARK_HIT_RATE}}", get_hit_rate_display('Newark_DE')).replace("{{NEWARK_SHOCK_PBF}}", f"{new_base + 0.185:.3f}").replace("{{NEWARK_SHOCK_CANAL}}", f"{new_base + 0.097:.3f}").replace("{{NEWARK_SHOCK_ICE}}", f"{new_base + 0.112:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_newark).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'], logistics_hub="Delaware City Refinery & PADD 1B Harbor")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Newark_DE', prices_map['Newark_DE']['base'], prices_map['Newark_DE']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('newark_de'))
 
     with open(NEWARK_PATH, "w", encoding="utf-8") as f:
         f.write(build_newark_html(""))
@@ -4322,28 +4322,28 @@ def generate_public_dashboard():
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-rose-400">Catlettsburg Outage</span>
                     <h4 class="text-sm font-semibold text-white">Marathon 291k bpd FCC Trip</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.615 <span class="text-xs font-normal text-rose-300">(+$0.165/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{CIN_SHOCK_CATLETTSBURG}} <span class="text-xs font-normal text-rose-300">(+$0.165/gal)</span></p>
                     <p class="text-xs text-slate-500">Tightens Ohio Valley rack loading</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-amber-400">Mississippi River Drought</span>
                     <h4 class="text-sm font-semibold text-white">Cairo Confluence Low Water</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.595 <span class="text-xs font-normal text-rose-300">(+$0.145/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{CIN_SHOCK_DROUGHT}} <span class="text-xs font-normal text-rose-300">(+$0.145/gal)</span></p>
                     <p class="text-xs text-slate-500">-40% barge draft payload limit</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-blue-400">Ohio River Lockout</span>
                     <h4 class="text-sm font-semibold text-white">Markland Locks Ice Jam</h4>
-                    <p class="text-2xl font-bold text-rose-400">$3.562 <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
+                    <p class="text-2xl font-bold text-rose-400">${{CIN_SHOCK_LOCKOUT}} <span class="text-xs font-normal text-rose-300">(+$0.112/gal)</span></p>
                     <p class="text-xs text-slate-500">Forces expensive rail transport</p>
                 </div>
 
                 <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
                     <span class="text-xs font-semibold text-purple-400">Gas Tax Increase</span>
                     <h4 class="text-sm font-semibold text-white">Ohio Fuel Tax Hike (+3.5¢)</h4>
-                    <p class="text-2xl font-bold text-purple-400">$3.485 <span class="text-xs font-normal text-purple-300">(+$0.035/gal)</span></p>
+                    <p class="text-2xl font-bold text-purple-400">${{CIN_SHOCK_TAX}} <span class="text-xs font-normal text-purple-300">(+$0.035/gal)</span></p>
                     <p class="text-xs text-slate-500">Expands cross-river price gap</p>
                 </div>
             </div>
@@ -4408,7 +4408,7 @@ def generate_public_dashboard():
     </script>
 </body>
 </html>
-""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_MAPE}}", get_mape_display('cincinnati_oh')).replace("{{CINCINNATI_RMSE}}", get_rmse_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'], logistics_hub="Catlettsburg Refinery & Ohio River Tow Navigation")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
+""".replace("{{NAV_CINCINNATI}}", nav_cincinnati).replace("PREFIX", rel_prefix).replace("{{CIN_OH_BASE}}", f"{prices_map['Cincinnati_OH']['base']:.3f}").replace("{{CIN_OH_PRED}}", f"{prices_map['Cincinnati_OH']['pred']:.3f}").replace("{{CIN_KY_BASE}}", f"{prices_map['Cincinnati_KY']['base']:.3f}").replace("{{CIN_KY_PRED}}", f"{prices_map['Cincinnati_KY']['pred']:.3f}").replace("{{CINCINNATI_MAE}}", get_mae_display('cincinnati_oh')).replace("{{CINCINNATI_MAPE}}", get_mape_display('cincinnati_oh')).replace("{{CINCINNATI_RMSE}}", get_rmse_display('cincinnati_oh')).replace("{{CINCINNATI_HIT_RATE}}", get_hit_rate_display('cincinnati_oh')).replace("{{CIN_SHOCK_CATLETTSBURG}}", f"{cin_base + 0.165:.3f}").replace("{{CIN_SHOCK_DROUGHT}}", f"{cin_base + 0.145:.3f}").replace("{{CIN_SHOCK_LOCKOUT}}", f"{cin_base + 0.112:.3f}").replace("{{CIN_SHOCK_TAX}}", f"{cin_base + 0.035:.3f}").replace("{{KATEX_MOBILE_CSS}}", KATEX_MOBILE_CSS).replace("{{ANALYTICS_SCRIPT}}", get_analytics_script()).replace("{{HEAD_META}}", head_meta_cincinnati).replace("{{NARRATIVE_CARD}}", build_metro_narrative_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'], logistics_hub="Catlettsburg Refinery & Ohio River Tow Navigation")).replace("{{FEATURE_ATTRIBUTION_CARD}}", build_component_attribution_card_html('Cincinnati_OH', prices_map['Cincinnati_OH']['base'], prices_map['Cincinnati_OH']['pred'])).replace("{{REGIONAL_CARDS}}", render_regional_driver_cards_html('cincinnati_oh'))
 
     with open(CINCINNATI_PATH, "w", encoding="utf-8") as f:
         f.write(build_cincinnati_html(""))

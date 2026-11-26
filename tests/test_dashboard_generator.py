@@ -1173,3 +1173,55 @@ def test_new_york_page_generation():
     assert "Phillips 66 Bayway" in content
     assert "PADD 1B Central Atlantic Refining Hub" in content
     assert "file:///" not in content
+
+
+def test_shock_scenarios_computed_from_live_base_prices():
+    """Verify shock scenario prices on National, Tulsa, Newark, and Cincinnati pages
+    are computed dynamically from each page's live base price rather than hardcoded.
+    """
+    import re
+    from src.dashboard_generator import (
+        NATIONAL_PATH,
+        TULSA_PATH,
+        NEWARK_PATH,
+        CINCINNATI_PATH,
+    )
+
+    generate_public_dashboard()
+
+    # National: base + 0.500, + 0.170, + 0.080
+    nat_html = open(NATIONAL_PATH, "r", encoding="utf-8").read()
+    nat_match = re.search(r"Current Wholesale Futures</span>\s*<p[^>]*>\$(\d+\.\d{3})", nat_html)
+    assert nat_match, "Could not find National base price in generated HTML"
+    nat_base = float(nat_match.group(1))
+    assert f"${nat_base + 0.500:.3f}" in nat_html
+    assert f"${nat_base + 0.170:.3f}" in nat_html
+    assert f"${nat_base + 0.080:.3f}" in nat_html
+
+    # Tulsa: base + 0.173, + 0.145, + 0.173
+    tul_html = open(TULSA_PATH, "r", encoding="utf-8").read()
+    tul_match = re.search(r"Current Live Pump Base</span>\s*<p[^>]*>\$(\d+\.\d{3})", tul_html)
+    assert tul_match, "Could not find Tulsa base price in generated HTML"
+    tul_base = float(tul_match.group(1))
+    assert f"${tul_base + 0.173:.3f}" in tul_html
+    assert f"${tul_base + 0.145:.3f}" in tul_html
+    assert "{{TULSA_SHOCK_" not in tul_html
+
+    # Newark: base + 0.185, + 0.097, + 0.112
+    new_html = open(NEWARK_PATH, "r", encoding="utf-8").read()
+    new_match = re.search(r"Current Live Pump Base</span>\s*<p[^>]*>\$(\d+\.\d{3})", new_html)
+    assert new_match, "Could not find Newark base price in generated HTML"
+    new_base = float(new_match.group(1))
+    assert f"${new_base + 0.185:.3f}" in new_html
+    assert f"${new_base + 0.097:.3f}" in new_html
+    assert f"${new_base + 0.112:.3f}" in new_html
+
+    # Cincinnati: base + 0.165, + 0.145, + 0.112, + 0.035
+    cin_html = open(CINCINNATI_PATH, "r", encoding="utf-8").read()
+    cin_match = re.search(r"Ohio Side \(Hamilton Co\.\).*?\$(\d+\.\d{3})\s*<span[^>]*>/gal base</span>", cin_html, re.S)
+    assert cin_match, "Could not find Cincinnati base price in generated HTML"
+    cin_base = float(cin_match.group(1))
+    assert f"${cin_base + 0.165:.3f}" in cin_html
+    assert f"${cin_base + 0.145:.3f}" in cin_html
+    assert f"${cin_base + 0.112:.3f}" in cin_html
+    assert f"${cin_base + 0.035:.3f}" in cin_html
