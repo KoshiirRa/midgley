@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-25T21:22:22.835868",
+  "timestamp": "2026-11-26T13:48:34.748885",
   "locale": {
     "code": "bayarea",
     "region_id": "BayArea_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 5.582,
+    "current_price_per_gal": 5.553,
     "source": "AAA Metro Daily CSV (San Francisco, CA)",
     "provenance": {
       "source": "AAA Metro Daily CSV (San Francisco, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-25T21:21:38Z"
+      "timestamp": "2026-11-26T13:48:05Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-02",
-    "current_base_price": 5.582,
-    "predicted_price_per_gal": 5.532,
+    "current_base_price": 5.553,
+    "predicted_price_per_gal": 5.503,
     "expected_change_dollars": -0.05,
     "expected_change_percent": -0.9,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 4.661,
-    "prediction_upper_95ci": 6.403,
+    "prediction_lower_95ci": 4.632,
+    "prediction_upper_95ci": 6.374,
     "calibration_method": "conformal",
     "calibration_sample_size": 63,
     "directional_hit_rate_historical": 0.5758,
     "historical_mae_dollars": 0.3621,
     "evaluation_sample_size": 33,
-    "day_1_price": 5.572,
-    "day_2_price": 5.564,
-    "day_3_price": 5.553,
-    "day_4_price": 5.542,
-    "day_5_price": 5.532,
+    "day_1_price": 5.543,
+    "day_2_price": 5.535,
+    "day_3_price": 5.524,
+    "day_4_price": 5.513,
+    "day_5_price": 5.503,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -102,7 +102,7 @@
           "category": "Tax & Regulatory Overhead",
           "description": "Tax relief or off-peak RVP specification",
           "impact_dollars": -0.017,
-          "impact_pct": -0.3,
+          "impact_pct": -0.31,
           "share_pct": 35.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Tax & Regulatory Overhead",
       "description": "Tax relief or off-peak RVP specification",
       "impact_dollars": -0.017,
-      "impact_pct": -0.3,
+      "impact_pct": -0.31,
       "share_pct": 35.0,
       "direction": "DOWN"
     },

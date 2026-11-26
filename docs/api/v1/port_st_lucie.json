@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-25T21:22:22.459404",
+  "timestamp": "2026-11-26T13:48:34.328414",
   "locale": {
     "code": "port_st_lucie",
     "region_id": "Port_St_Lucie_FL",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.4,
+    "current_price_per_gal": 3.378,
     "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Port St. Lucie, FL)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-25T21:21:33Z"
+      "timestamp": "2026-11-26T13:48:01Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-02",
-    "current_base_price": 3.4,
-    "predicted_price_per_gal": 3.361,
+    "current_base_price": 3.378,
+    "predicted_price_per_gal": 3.339,
     "expected_change_dollars": -0.039,
     "expected_change_percent": -1.15,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.975,
-    "prediction_upper_95ci": 3.747,
+    "prediction_lower_95ci": 2.953,
+    "prediction_upper_95ci": 3.725,
     "calibration_method": "conformal",
     "calibration_sample_size": 63,
     "directional_hit_rate_historical": 0.6061,
     "historical_mae_dollars": 0.141,
     "evaluation_sample_size": 33,
-    "day_1_price": 3.392,
-    "day_2_price": 3.387,
-    "day_3_price": 3.378,
-    "day_4_price": 3.369,
-    "day_5_price": 3.361,
+    "day_1_price": 3.37,
+    "day_2_price": 3.365,
+    "day_3_price": 3.356,
+    "day_4_price": 3.347,
+    "day_5_price": 3.339,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -110,7 +110,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.01,
-          "impact_pct": -0.29,
+          "impact_pct": -0.3,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -162,7 +162,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.01,
-      "impact_pct": -0.29,
+      "impact_pct": -0.3,
       "share_pct": 25.0,
       "direction": "DOWN"
     },

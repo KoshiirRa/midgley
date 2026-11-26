@@ -10566,5 +10566,28 @@
       "overall_price_pressure": 0.6
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-26T13:47:47.349924",
+    "headline": "7 wounded by fire at Bangkok oil refinery after explosion - Anadolu Ajans\u0131",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNS3VMR3k1dXhjbFI0c0l6ckw2Wl9PTURBOUhJdjBGb2JTZm1IbFVnX3B6SXVGVnFZVFF2YWx4YlZKS0wzRGFKeTVUdWROSDh2UWNyNU05RmRQX2VIam5HbDZIMmFVcTZ4dDl6V1ItUFlINmJUQ3hONmU5eXB1SUxiX1EyS0puejhCVGVmZFhnTXhxQkFFR3QybE93UkRFcnJ2alF6NGJB?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNS3VMR3k1dXhjbFI0c0l6ckw2Wl9PTURBOUhJdjBGb2JTZm1IbFVnX3B6SXVGVnFZVFF2YWx4YlZKS0wzRGFKeTVUdWROSDh2UWNyNU05RmRQX2VIam5HbDZIMmFVcTZ4dDl6V1ItUFlINmJUQ3hONmU5eXB1SUxiX1EyS0puejhCVGVmZFhnTXhxQkFFR3QybE93UkRFcnJ2alF6NGJB?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMipgFBVV95cUxNS3VMR3k1dXhjbFI0c0l6ckw2Wl9PTURBOUhJdjBGb2JTZm1IbFVnX3B6SXVGVnFZVFF2YWx4YlZKS0wzRGFKeTVUdWROSDh2UWNyNU05RmRQX2VIam5HbDZIMmFVcTZ4dDl6V1ItUFlINmJUQ3hONmU5eXB1SUxiX1EyS0puejhCVGVmZFhnTXhxQkFFR3QybE93UkRFcnJ2alF6NGJB?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.55,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.55,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.15
+    },
+    "discord_notified": true
   }
 ]
