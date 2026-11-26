@@ -69,7 +69,8 @@ def test_typescript_edge_evaluator_numerical_parity():
         pytest.skip("node not available in environment")
 
     script = (
-        f"import {{ AsymmetricECMEvaluator }} from 'file:///{ts_path.replace(os.sep, '/')}';\n"
+        "import { pathToFileURL } from 'node:url';\n"
+        f"const {{ AsymmetricECMEvaluator }} = await import(pathToFileURL({json.dumps(ts_path)}).href);\n"
         f"const coefs = {json.dumps(exported)};\n"
         f"const ev = new AsymmetricECMEvaluator(coefs);\n"
         f"const res = ev.evaluate({{ current_retail: 3.40, current_wholesale: 2.50, horizon_days: 5, expected_wholesale_deltas: {json.dumps(deltas)}, tax_delta_loc: 0.0, apply_plausibility_bounds: false }});\n"
