@@ -371,7 +371,6 @@ if __name__ == "__main__":
 def test_extract_top_prediction_anomalies_excludes_backtests_and_uses_db_reader(monkeypatch, tmp_path):
     """Regression test for #715: exclude backtest/simulation rows and do not bail when CSV is missing."""
     import pandas as pd
-    from src.agent_memory import extract_top_prediction_anomalies
 
     recent_date = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=3)).strftime("%Y-%m-%d")
     stale_date = "2026-01-05"
