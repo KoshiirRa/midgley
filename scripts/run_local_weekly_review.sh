@@ -42,13 +42,7 @@ python -m src.weekly_issue_reporter
 # Regenerate Public Web Dashboard
 python -m src.dashboard_generator
 
-# Auto-commit updated history, metrics & dashboard if working tree is dirty
-if [ -d ".git" ]; then
-    git add README.md docs/ data/ 2>/dev/null || true
-    if ! git diff-index --quiet HEAD --; then
-        git commit -m "chrono: Weekly Saturday local dev model performance review & issue audit [skip ci]" || true
-        echo "Committed weekly review updates to dev branch."
-    fi
-fi
+# Automated git commit disabled to prevent unsolicited commits on dev.
+# Run git commit/push manually or via GitHub Actions workflows when needed.
 
 echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Local Dev Weekly Model Review Complete."
