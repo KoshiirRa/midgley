@@ -8,6 +8,7 @@
 
 import nacl from "tweetnacl";
 import { getEnverusDailyRigCount, MIDGLEY_AGENT_USER_AGENT as DEFAULT_MIDGLEY_AGENT_UA } from "./enverus_scraper";
+import { AsymmetricECMEvaluator, loadEcmCoefficientsFromD1 } from "./asymmetric_ecm_evaluator";
 import {
   getScaqmdFlareReports,
   getNyserdaWeeklyFuelPrices,
@@ -4052,6 +4053,30 @@ export default {
       }
 
       // Enverus / Drillinginfo Daily Rig Count Route (Issues #533, #640)
+      if (url.pathname === "/api/v1/nowcast") {
+        const hub = (url.searchParams.get("hub") || url.searchParams.get("locale") || "national").trim().toLowerCase();
+        const horizon = Number(url.searchParams.get("horizon") || "5");
+        const curRetailParam = url.searchParams.get("current_retail");
+        const curWhlParam = url.searchParams.get("current_wholesale");
+        const whlDeltaParam = url.searchParams.get("wholesale_delta");
+        const taxDeltaParam = url.searchParams.get("tax_delta");
+
+        const coefs = await loadEcmCoefficientsFromD1(env.CACHE_DB, hub);
+        const evaluator = new AsymmetricECMEvaluator(coefs);
+        const result = evaluator.evaluate({
+          horizon_days: Number.isFinite(horizon) ? horizon : 5,
+          current_retail: curRetailParam !== null ? Number(curRetailParam) : undefined,
+          current_wholesale: curWhlParam !== null ? Number(curWhlParam) : undefined,
+          expected_wholesale_deltas: whlDeltaParam !== null && Number.isFinite(Number(whlDeltaParam)) ? [Number(whlDeltaParam)] : undefined,
+          tax_delta_loc: taxDeltaParam !== null ? Number(taxDeltaParam) : 0.0,
+          apply_plausibility_bounds: true,
+        });
+        return new Response(JSON.stringify(result, null, 2), {
+          status: 200,
+          headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+        });
+      }
+
       if (url.pathname === "/api/v1/energy/rig-count/enverus" || url.pathname === "/scraping/enverus-rig-count") {
         const forceRefresh = url.searchParams.get("force_refresh") === "true";
         const rigData = await getEnverusDailyRigCount(env, { force_refresh: forceRefresh });
