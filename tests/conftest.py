@@ -105,8 +105,9 @@ def isolate_test_environment(tmp_path, monkeypatch):
         import src.key_manager as km
         monkeypatch.setattr(km, "DEFAULT_DB_PATH", test_sec_db)
         if hasattr(km, "global_key_manager"):
-            monkeypatch.setattr(km.global_key_manager, "db_path", test_sec_db)
-            km.global_key_manager.init_db()
+            km_inst = km.global_key_manager.get_instance() if hasattr(km.global_key_manager, "get_instance") else km.global_key_manager
+            monkeypatch.setattr(km_inst, "db_path", test_sec_db)
+            km_inst.init_db()
     except (ImportError, AttributeError):
         pass
 
@@ -209,8 +210,9 @@ def isolate_test_environment(tmp_path, monkeypatch):
         test_kg_db = str(tmp_path / "knowledge_graph.db")
         monkeypatch.setattr(kg, "DEFAULT_KG_DB_PATH", test_kg_db)
         if hasattr(kg, "kg_engine") and hasattr(kg.kg_engine, "db_path"):
-            monkeypatch.setattr(kg.kg_engine, "db_path", test_kg_db)
-            kg.kg_engine._init_db()
+            kg_inst = kg.kg_engine.get_instance() if hasattr(kg.kg_engine, "get_instance") else kg.kg_engine
+            monkeypatch.setattr(kg_inst, "db_path", test_kg_db)
+            kg_inst._init_db()
     except (ImportError, AttributeError):
         pass
 

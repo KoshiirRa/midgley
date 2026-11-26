@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-25T21:22:19.942634",
+  "timestamp": "2026-11-26T13:48:31.672159",
   "locale": {
     "code": "national",
     "region_id": "National",
@@ -8,7 +8,7 @@
     "padd_region": "US National"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.654,
+    "current_price_per_gal": 3.628,
     "source": "AAA National Daily CSV (US Average)",
     "provenance": {
       "source": "AAA National Daily CSV (US Average)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-25T21:22:19Z"
+      "timestamp": "2026-11-26T13:48:30Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-02",
-    "current_base_price": 3.654,
-    "predicted_price_per_gal": 3.622,
+    "current_base_price": 3.628,
+    "predicted_price_per_gal": 3.596,
     "expected_change_dollars": -0.032,
     "expected_change_percent": -0.88,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 3.154,
-    "prediction_upper_95ci": 4.09,
+    "prediction_lower_95ci": 3.128,
+    "prediction_upper_95ci": 4.064,
     "calibration_method": "conformal",
     "calibration_sample_size": 62,
     "directional_hit_rate_historical": 0.4375,
     "historical_mae_dollars": 0.1971,
     "evaluation_sample_size": 32,
-    "day_1_price": 3.648,
-    "day_2_price": 3.642,
-    "day_3_price": 3.636,
-    "day_4_price": 3.625,
-    "day_5_price": 3.622,
+    "day_1_price": 3.622,
+    "day_2_price": 3.616,
+    "day_3_price": 3.611,
+    "day_4_price": 3.599,
+    "day_5_price": 3.596,
     "feature_attributions": {
       "futures_commodity": {
         "name": "Futures & Commodity Benchmark",
@@ -102,7 +102,7 @@
           "category": "Futures & Commodity Benchmark",
           "description": "Softening NYMEX energy futures contract prices",
           "impact_dollars": -0.014,
-          "impact_pct": -0.38,
+          "impact_pct": -0.39,
           "share_pct": 45.0,
           "direction": "DOWN"
         },
@@ -126,7 +126,7 @@
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
           "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "impact_pct": -0.06,
           "share_pct": 7.5,
           "direction": "DOWN"
         },
@@ -134,7 +134,7 @@
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.002,
-          "impact_pct": -0.05,
+          "impact_pct": -0.06,
           "share_pct": 5.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Futures & Commodity Benchmark",
       "description": "Softening NYMEX energy futures contract prices",
       "impact_dollars": -0.014,
-      "impact_pct": -0.38,
+      "impact_pct": -0.39,
       "share_pct": 45.0,
       "direction": "DOWN"
     },
@@ -178,7 +178,7 @@
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
       "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "impact_pct": -0.06,
       "share_pct": 7.5,
       "direction": "DOWN"
     },
@@ -186,7 +186,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.002,
-      "impact_pct": -0.05,
+      "impact_pct": -0.06,
       "share_pct": 5.0,
       "direction": "DOWN"
     },
