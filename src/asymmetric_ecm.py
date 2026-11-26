@@ -345,6 +345,44 @@ class AsymmetricECM:
             return pd.Series(forecasts)
         return forecasts
 
+    def export_edge_coefficients(
+        self,
+        hub_key: str = "national",
+        model_version: str = "ecm-v1",
+        max_step_delta: float = 0.35,
+        min_step_delta: float = -0.25,
+    ) -> Dict[str, Any]:
+        """
+        Exports fitted AsymmetricECM parameters in the compact JSON schema consumed by
+        the Cloudflare Worker edge evaluator (`workers/asymmetric_ecm_evaluator.ts`) and D1 (Issue #642).
+        """
+        if not self.is_fitted:
+            raise RuntimeError("AsymmetricECM must be fitted before calling export_edge_coefficients().")
+
+        from datetime import datetime, timezone
+
+        return {
+            "hub_key": str(hub_key).strip().lower(),
+            "model_version": str(model_version),
+            "beta": round(float(self.beta), 6),
+            "equilibrium_margin_c": round(float(self.equilibrium_margin_c), 6),
+            "alpha_pos": round(float(self.alpha_pos), 6),
+            "alpha_neg": round(float(self.alpha_neg), 6),
+            "gamma_pos_coefs": [round(float(x), 6) for x in self.gamma_pos_coefs],
+            "gamma_neg_coefs": [round(float(x), 6) for x in self.gamma_neg_coefs],
+            "delta_coefs": [round(float(x), 6) for x in self.delta_coefs],
+            "intercept_dynamic": round(float(self.intercept_dynamic), 6),
+            "n_lags_wholesale": int(self.n_lags_wholesale),
+            "n_lags_retail": int(self.n_lags_retail),
+            "last_retail_price": round(float(self.last_retail_price), 4),
+            "last_wholesale_price": round(float(self.last_wholesale_price), 4),
+            "last_d_wholesale_lags": [round(float(x), 6) for x in self.last_d_wholesale_lags],
+            "last_d_retail_lags": [round(float(x), 6) for x in self.last_d_retail_lags],
+            "max_step_delta": float(max_step_delta),
+            "min_step_delta": float(min_step_delta),
+            "exported_at": datetime.now(timezone.utc).isoformat(),
+        }
+
     def forecast_horizon(
         self,
         current_retail: float,

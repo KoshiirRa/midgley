@@ -10589,5 +10589,28 @@
       "overall_price_pressure": 0.15
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-26T22:53:48.498396",
+    "headline": "At least 9 injured by large explosion and fire at major oil facility in Bangkok - News4JAX",
+    "source": "RSS_Feed",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPeGdHSkZZZEF3RVZfSUN6ZzltR2N5YW1KNnphNHBjdDJwRzBMM3UzOFdNNF9obVR0R2VvUk94MVI1UU0ySGhSM1lWZm9qTWIzRWFmOWtOeDN4NXl3MDZ4VEItWTRxSVVkUkVzZE1tSDA4YlJSTjZXbzl5QVlKWGpyVFNncENNei0xbkVvMklGdEJ4ajV2Snhzalc0R0I4ZDlyQlQ2MnhXWUxOM0Y5X2RV?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPeGdHSkZZZEF3RVZfSUN6ZzltR2N5YW1KNnphNHBjdDJwRzBMM3UzOFdNNF9obVR0R2VvUk94MVI1UU0ySGhSM1lWZm9qTWIzRWFmOWtOeDN4NXl3MDZ4VEItWTRxSVVkUkVzZE1tSDA4YlJSTjZXbzl5QVlKWGpyVFNncENNei0xbkVvMklGdEJ4ajV2Snhzalc0R0I4ZDlyQlQ2MnhXWUxOM0Y5X2RV?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMirwFBVV95cUxPeGdHSkZZZEF3RVZfSUN6ZzltR2N5YW1KNnphNHBjdDJwRzBMM3UzOFdNNF9obVR0R2VvUk94MVI1UU0ySGhSM1lWZm9qTWIzRWFmOWtOeDN4NXl3MDZ4VEItWTRxSVVkUkVzZE1tSDA4YlJSTjZXbzl5QVlKWGpyVFNncENNei0xbkVvMklGdEJ4ajV2Snhzalc0R0I4ZDlyQlQ2MnhXWUxOM0Y5X2RV?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.0,
+      "supply_disruption": 0.65,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.65,
+      "demand_sentiment": 0.0,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.25
+    },
+    "discord_notified": true
   }
 ]
