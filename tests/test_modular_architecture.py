@@ -7,14 +7,12 @@ from fastapi.testclient import TestClient
 from src.api_server import app
 from src.dashboard import (
     get_analytics_script,
-    get_carto_basemap_url,
     get_model_badge,
     get_multi_agent_sim_badge,
     get_release_badge,
 )
 from src.dashboard_generator import (
     get_analytics_script as dg_get_analytics_script,
-    get_carto_basemap_url as dg_get_carto_basemap_url,
     get_model_badge as dg_get_model_badge,
     get_multi_agent_sim_badge as dg_get_multi_agent_sim_badge,
     get_release_badge as dg_get_release_badge,
@@ -60,5 +58,4 @@ def test_dashboard_badge_helpers_reexported():
     assert get_model_badge is dg_get_model_badge
     assert get_multi_agent_sim_badge is dg_get_multi_agent_sim_badge
     assert get_analytics_script is dg_get_analytics_script
-    assert get_carto_basemap_url is dg_get_carto_basemap_url
     assert "Model" in get_model_badge()

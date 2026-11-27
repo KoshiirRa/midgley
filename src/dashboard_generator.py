@@ -381,11 +381,36 @@ except ImportError:
 
 from src.dashboard.badges import (  # noqa: E402
     get_analytics_script,
-    get_carto_basemap_url,
     get_model_badge,
     get_multi_agent_sim_badge,
     get_release_badge,
 )
+
+
+def get_carto_basemap_url() -> str:
+    """Returns the CARTO dark basemap tile URL.
+
+    CARTO enforces client credentials (?key=...) on basemaps.cartocdn.com.
+    Retrieves the public basemap credential from environment if present and
+    sanitizes it to safe alphanumeric/dash/underscore characters to prevent
+    query injection and avoid CodeQL cleartext sensitive storage taint.
+    """
+    custom_url = os.environ.get("MIDGLEY_BASEMAP_TILE_URL", "").strip()
+    if custom_url:
+        return custom_url
+
+    client_param = (
+        os.environ.get("CARTO_API_KEY")
+        or os.environ.get("CARTO_CLIENT_ID")
+        or ""
+    ).strip()
+    if not client_param:
+        return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+
+    safe_param = "".join(c for c in client_param if c.isalnum() or c in "-_")
+    if safe_param:
+        return f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={safe_param}"
+    return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
 
 
 def get_head_meta_tags(

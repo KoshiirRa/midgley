@@ -41,22 +41,3 @@ def get_analytics_script() -> str:
     return f"""    <!-- Cloudflare Web Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "{safe_beacon}"}}'></script>"""
 
-
-def get_carto_basemap_url() -> str:
-    """Returns the CARTO dark basemap tile URL with sanitized credential parameter if configured."""
-    custom_url = os.environ.get("MIDGLEY_BASEMAP_TILE_URL", "").strip()
-    if custom_url:
-        return custom_url
-
-    client_param = (
-        os.environ.get("CARTO_API_KEY")
-        or os.environ.get("CARTO_CLIENT_ID")
-        or ""
-    ).strip()
-    if not client_param:
-        return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-
-    safe_param = "".join(c for c in client_param if c.isalnum() or c in "-_")
-    if safe_param:
-        return f"https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png?key={safe_param}"
-    return "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
