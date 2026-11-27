@@ -27,14 +27,64 @@ class TestEIARegionalSpotConnector(unittest.TestCase):
             self.assertIn("gulf_coast_spot_per_gal", spot)
             self.assertIn("ny_harbor_spot_per_gal", spot)
             self.assertIn("los_angeles_spot_per_gal", spot)
+            self.assertIn("group3_tulsa_spot_per_gal", spot)
+            self.assertIn("chicago_spot_per_gal", spot)
             self.assertGreater(spot["gulf_coast_spot_per_gal"], 1.0)
             self.assertGreater(spot["ny_harbor_spot_per_gal"], 1.0)
             self.assertGreater(spot["los_angeles_spot_per_gal"], 1.0)
+            self.assertGreater(spot["group3_tulsa_spot_per_gal"], 1.0)
+            self.assertGreater(spot["chicago_spot_per_gal"], 1.0)
 
             basis = res["spot_basis"]
             self.assertIn("gulf_coast_basis", basis)
             self.assertIn("ny_harbor_basis", basis)
             self.assertIn("los_angeles_basis", basis)
+            self.assertIn("group3_tulsa_basis", basis)
+            self.assertIn("chicago_basis", basis)
+
+            # Phase 3: ULSD spot & physical 3:2:1 cash crack spreads
+            self.assertIn("ulsd_spot_prices", res)
+            self.assertIn("physical_crack_321_bbl", res)
+            cracks = res["physical_crack_321_bbl"]
+            self.assertIn("gulf_coast_321_crack_bbl", cracks)
+            self.assertIn("ny_harbor_321_crack_bbl", cracks)
+            self.assertIn("los_angeles_321_crack_bbl", cracks)
+
+    def test_eia_v2_spot_series_and_t_plus_1_lag(self):
+        """Verifies EIA API v2 petroleum/pri/spt/ parsing and T+1 business-day publication lag (Issue #649)."""
+        from src.eia_api_client import EIAClientV2, EIA_SERIES_PROVENANCE
+
+        self.assertIn("EER_EPMRU_PF4_RGP_DPG", EIA_SERIES_PROVENANCE)
+        self.assertIn("EER_EPMRU_PF4_RCH_DPG", EIA_SERIES_PROVENANCE)
+
+        # Thursday -> Friday (+1), Friday -> Monday (+3)
+        self.assertEqual(EIAClientV2._spot_publication_timestamp("2026-10-01"), "2026-10-02T15:00:00Z")
+        self.assertEqual(EIAClientV2._spot_publication_timestamp("2026-10-02"), "2026-10-05T15:00:00Z")
+
+        client = EIAClientV2(api_key="test-key")
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "response": {
+                "data": [
+                    {"period": "2026-10-01", "value": "2.315"},
+                    {"period": "2026-10-02", "value": "2.340"}
+                ]
+            }
+        }
+        client.session = MagicMock()
+        client.session.get.return_value = mock_resp
+        client.vintage_store = MagicMock()
+
+        with patch.dict(os.environ, {"TESTING": "1"}):
+            hist = client.fetch_spot_price_series("EER_EPMRU_PF4_RGP_DPG", record_vintages=True)
+
+        self.assertEqual(hist["2026-10-01"], 2.315)
+        self.assertEqual(hist["2026-10-02"], 2.340)
+        self.assertEqual(client.vintage_store.record_observation.call_count, 2)
+        last_call = client.vintage_store.record_observation.call_args.kwargs
+        self.assertEqual(last_call["feed"], "eia_spot")
+        self.assertEqual(last_call["published_at"], "2026-10-05T15:00:00Z")
 
     def test_bitemporal_vintage_persistence(self):
         """Verifies point-in-time observation persistence and retrieval as of target date."""
