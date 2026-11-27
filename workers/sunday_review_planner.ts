@@ -422,7 +422,10 @@ export function resolveGeminiEndpointAndHeaders(
   model: string,
   apiKey: string
 ): { endpoint: string; headers: Record<string, string>; viaGateway: boolean } {
-  const explicitBase = (env.CF_AI_GATEWAY_BASE_URL || "").trim().replace(/\/+$/, "");
+  let explicitBase = (env.CF_AI_GATEWAY_BASE_URL || "").trim();
+  while (explicitBase.endsWith("/")) {
+    explicitBase = explicitBase.slice(0, -1);
+  }
   const accountId = (env.CLOUDFLARE_ACCOUNT_ID || "").trim();
   const gatewayId = (env.CF_AI_GATEWAY_ID || env.AI_GATEWAY_ID || "").trim();
 
