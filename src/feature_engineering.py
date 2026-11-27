@@ -145,6 +145,33 @@ def _load_vintage_timeseries(
 
 
 
+def compute_days_of_forward_supply(
+    stocks_million_bbl: float,
+    product_supplied_thousand_bpd: float
+) -> float:
+    """
+    Computes Days of Forward Supply = (Gasoline Stocks in thousand bbl) / (Daily Product Supplied in thousand bpd).
+    Values below ~22 days signal acute inventory scarcity and non-linear volatility risk (Issue #649).
+    """
+    demand = max(float(product_supplied_thousand_bpd), 1.0)
+    return round((float(stocks_million_bbl) * 1000.0) / demand, 2)
+
+
+def compute_physical_cash_crack_321(
+    gas_spot_per_gal: float,
+    ulsd_spot_per_gal: float,
+    wti_crude_per_bbl: float
+) -> float:
+    """
+    Computes physical 3:2:1 cash crack spread ($/bbl) from regional spot gasoline,
+    spot ULSD, and WTI crude oil (Issue #649).
+    """
+    return round(
+        ((2.0 * float(gas_spot_per_gal) * 42.0) + (float(ulsd_spot_per_gal) * 42.0) - (3.0 * float(wti_crude_per_bbl))) / 3.0,
+        2
+    )
+
+
 def compute_technical_momentum_indicators(df: pd.DataFrame) -> pd.DataFrame:
     """
     Computes technical momentum indicators (RSI-14, MACD line/signal, Bollinger %B, ATR-14) for RBOB gasoline & WTI crude (Issue #92).
@@ -438,6 +465,9 @@ def create_feature_matrix(
         df['eia_spot_gulf_coast'] = 2.285
         df['eia_spot_ny_harbor'] = 2.395
         df['eia_spot_los_angeles'] = 2.890
+        df['eia_spot_group3_tulsa'] = 2.310
+        df['eia_spot_chicago'] = 2.345
+        df['eia_physical_crack_321_bbl'] = 25.29
 
         if is_live_inference:
             from src.data_ingestion import EIARegionalSpotConnector
@@ -445,26 +475,45 @@ def create_feature_matrix(
             spot_res = spot_conn.fetch_daily_regional_spot_prices()
             spot_prices = spot_res.get("spot_prices", {})
             spot_basis = spot_res.get("spot_basis", {})
-            
-            if "tulsa" in reg_lower or "cincinnati" in reg_lower or "gulf" in reg_lower:
+            phys_cracks = spot_res.get("physical_crack_321_bbl", {})
+
+            if "tulsa" in reg_lower:
+                reg_spot = spot_prices.get("group3_tulsa_spot_per_gal", reg_spot)
+                reg_basis = spot_basis.get("group3_tulsa_basis", reg_basis)
+                reg_crack = phys_cracks.get("gulf_coast_321_crack_bbl", 25.29)
+            elif "cincinnati" in reg_lower or "chicago" in reg_lower:
+                reg_spot = spot_prices.get("chicago_spot_per_gal", reg_spot)
+                reg_basis = spot_basis.get("chicago_basis", reg_basis)
+                reg_crack = phys_cracks.get("gulf_coast_321_crack_bbl", 25.29)
+            elif "gulf" in reg_lower:
                 reg_spot = spot_prices.get("gulf_coast_spot_per_gal", reg_spot)
                 reg_basis = spot_basis.get("gulf_coast_basis", reg_basis)
+                reg_crack = phys_cracks.get("gulf_coast_321_crack_bbl", 25.29)
             elif "oakland" in reg_lower or "bayarea" in reg_lower or "california" in reg_lower or "la" in reg_lower:
                 reg_spot = spot_prices.get("los_angeles_spot_per_gal", reg_spot)
                 reg_basis = spot_basis.get("los_angeles_basis", reg_basis)
+                reg_crack = phys_cracks.get("los_angeles_321_crack_bbl", 25.29)
             else:
                 reg_spot = spot_prices.get("ny_harbor_spot_per_gal", reg_spot)
                 reg_basis = spot_basis.get("ny_harbor_basis", reg_basis)
-                
+                reg_crack = phys_cracks.get("ny_harbor_321_crack_bbl", 25.29)
+
             df['eia_regional_spot_price'] = reg_spot
             df['eia_regional_spot_basis'] = reg_basis
             df['eia_spot_gulf_coast'] = spot_prices.get("gulf_coast_spot_per_gal", df['eia_spot_gulf_coast'])
             df['eia_spot_ny_harbor'] = spot_prices.get("ny_harbor_spot_per_gal", df['eia_spot_ny_harbor'])
             df['eia_spot_los_angeles'] = spot_prices.get("los_angeles_spot_per_gal", df['eia_spot_los_angeles'])
+            df['eia_spot_group3_tulsa'] = spot_prices.get("group3_tulsa_spot_per_gal", df['eia_spot_group3_tulsa'])
+            df['eia_spot_chicago'] = spot_prices.get("chicago_spot_per_gal", df['eia_spot_chicago'])
+            df['eia_physical_crack_321_bbl'] = reg_crack
     except Exception as e:
         logger.warning(f"Could not merge EIA daily regional spot feed: {e}")
 
-    for col in ['eia_regional_spot_price', 'eia_regional_spot_basis', 'eia_spot_gulf_coast', 'eia_spot_ny_harbor', 'eia_spot_los_angeles']:
+    for col in [
+        'eia_regional_spot_price', 'eia_regional_spot_basis',
+        'eia_spot_gulf_coast', 'eia_spot_ny_harbor', 'eia_spot_los_angeles',
+        'eia_spot_group3_tulsa', 'eia_spot_chicago', 'eia_physical_crack_321_bbl'
+    ]:
         if col not in df.columns:
             df[col] = 0.0
 
