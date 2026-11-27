@@ -20,9 +20,9 @@ ENV VIRTUAL_ENV=/opt/venv
 RUN uv venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Copy dependencies manifest & install into virtual environment
-COPY requirements.txt .
-RUN uv pip install --no-cache -r requirements.txt
+# Copy universal lockfiles & install strictly from universal requirements.lock
+COPY pyproject.toml uv.lock requirements.lock ./
+RUN uv pip install --no-cache -r requirements.lock
 
 # Copy application source
 COPY . .

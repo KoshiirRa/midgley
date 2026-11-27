@@ -56,7 +56,11 @@ dist/
 data/.tmp-*
 *.tmp
 *.lock
+!uv.lock
+!requirements.lock
 data/*.lock
+!uv.lock
+!requirements.lock
 
 
 
