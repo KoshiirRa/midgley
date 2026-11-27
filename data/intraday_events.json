@@ -10635,5 +10635,28 @@
       "overall_price_pressure": 0.88
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-27T17:57:13.790890",
+    "headline": "Iran says oil tanker explodes after hitting naval mine in Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOdUVPUTlEQ05fLVA1MTNqa2tOejlucTkwaWZjZGxjWm9taWNneG12aFhKLXJqeEQ4QkdSWTYwcTBSX1VhcmlYclBkZXVOZnI3UFh1QThLeHJMbTBfU01Ia2FnTnRJb1NBcjg2c0pPeXRpNG1vejBUd2JoTGU2U2xTakp3UV9weHEzQy00RFZKS0M2bmUtMlpTWWUyWjF5NG1jZFloeUVnMEJrNWk1TVg4OXgydTYxLUFRZjBF?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOdUVPUTlEQ05fLVA1MTNqa2tOejlucTkwaWZjZGxjWm9taWNneG12aFhKLXJqeEQ4QkdSWTYwcTBSX1VhcmlYclBkZXVOZnI3UFh1QThLeHJMbTBfU01Ia2FnTnRJb1NBcjg2c0pPeXRpNG1vejBUd2JoTGU2U2xTakp3UV9weHEzQy00RFZKS0M2bmUtMlpTWWUyWjF5NG1jZFloeUVnMEJrNWk1TVg4OXgydTYxLUFRZjBF?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMiuwFBVV95cUxOdUVPUTlEQ05fLVA1MTNqa2tOejlucTkwaWZjZGxjWm9taWNneG12aFhKLXJqeEQ4QkdSWTYwcTBSX1VhcmlYclBkZXVOZnI3UFh1QThLeHJMbTBfU01Ia2FnTnRJb1NBcjg2c0pPeXRpNG1vejBUd2JoTGU2U2xTakp3UV9weHEzQy00RFZKS0M2bmUtMlpTWWUyWjF5NG1jZFloeUVnMEJrNWk1TVg4OXgydTYxLUFRZjBF?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.88,
+      "supply_disruption": 0.65,
+      "upstream_offshore_shutin": 0.1,
+      "downstream_refinery_damage": 0.0,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.72
+    },
+    "discord_notified": true
   }
 ]
