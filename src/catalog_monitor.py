@@ -59,6 +59,11 @@ CATALOG_SOURCES = {
     "api-mega-list": {
         "url": "https://raw.githubusercontent.com/cporter202/API-mega-list/master/README.md",
         "name": "API Mega List (cporter202/API-mega-list)"
+    },
+    "signal-lab": {
+        "url": "https://signal-lab.qdt.ai/catalog.json",
+        "name": "Signal Lab Data Catalog (signal-lab.qdt.ai)",
+        "format": "json"
     }
 }
 
@@ -104,10 +109,58 @@ def fetch_catalog_content(url: str) -> str:
 
 def extract_items_from_content(content: str, catalog_key: str) -> list:
     """
-    Parses Markdown / HTML content to extract item dicts with: title, url, description, catalog_key.
+    Parses Markdown / HTML or JSON catalog content to extract item dicts with:
+    title, url, description, catalog_key.
     """
     items = []
     seen_urls = set()
+
+    is_json_catalog = CATALOG_SOURCES.get(catalog_key, {}).get("format") == "json"
+    if is_json_catalog:
+        try:
+            payload = json.loads(content)
+        except Exception as e:
+            logger.error(f"Failed to parse JSON catalog '{catalog_key}': {e}")
+            return []
+
+        resources = payload.get("resources", []) if isinstance(payload, dict) else (payload if isinstance(payload, list) else [])
+        for entry in resources:
+            if not isinstance(entry, dict):
+                continue
+            title = str(entry.get("name") or entry.get("title") or entry.get("slug") or "").strip()
+            url = str(entry.get("providerUrl") or entry.get("docsUrl") or entry.get("sitePageUrl") or entry.get("url") or "").strip()
+            if not title or not url:
+                continue
+
+            url_clean = url.rstrip("/")
+            if url_clean in seen_urls:
+                continue
+            seen_urls.add(url_clean)
+
+            meta_parts = [
+                p for p in [
+                    entry.get("domain"),
+                    entry.get("category"),
+                    entry.get("badge"),
+                    f"auth: {entry['auth']}" if entry.get("auth") else None,
+                ]
+                if p
+            ]
+            coverage = str(entry.get("coverage") or entry.get("description") or "").strip()
+            if len(coverage) > 300:
+                coverage = coverage[:297].rstrip() + "..."
+            prefix = f"[{' | '.join(meta_parts)}] " if meta_parts else ""
+            desc = f"{prefix}{coverage}".strip() or title
+
+            items.append({
+                "title": title,
+                "url": url,
+                "description": desc,
+                "catalog_key": catalog_key
+            })
+
+        logger.info(f"Extracted {len(items)} item(s) from JSON catalog '{catalog_key}'.")
+        return items
 
     # Regex pattern for markdown links: [Title](URL) - Description or | [Title](URL) | Description |
     link_pattern = re.compile(r'\[([^\]]+)\]\((https?://[^\)]+)\)(?:\s*[\:\-\|]\s*|\s+)(.*)', re.IGNORECASE)

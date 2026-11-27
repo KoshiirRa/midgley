@@ -3,7 +3,7 @@ name: midgley-release-and-governance
 description: >-
   Guides Midgley GitHub issue triage, PR/release Markdown formatting, active
   release-notes consolidation, RELEASE_MANIFEST.json updates, and authorized
-  dev -> main -> self-hosted release reconciliation. Use when preparing a
+  main -> self-hosted release reconciliation. Use when preparing a
   release, updating release notes, triaging issues, or running upgrade
   reconciliation checks.
 ---
@@ -31,10 +31,10 @@ Use this runbook for issue triage, PR/release authoring, release-notes consolida
 ## 3. Routine Tasks vs. Authorized Releases
 
 - **Routine Tasks**:
-  - Work on `dev` (never develop directly on `main`).
+  - Do not use a long-lived `dev` branch; work on a dedicated temporary feature branch (branched from `main`), then merge into `main` and remove the temporary branch.
   - Append completed changes, issue references, and check results to the **single active in-progress** `RELEASE_NOTES_v*.md` file.
   - Do **not** create per-issue release files or bump `pyproject.toml` / `src/version.py` versions during routine work.
-- **Authorized Official Releases (`dev` -> `main` -> `self-hosted`)**:
+- **Authorized Official Releases (`main` -> `self-hosted`)**:
   1. Align version in `pyproject.toml` and fallback in `src/version.py`.
   2. Regenerate and verify `RELEASE_MANIFEST.json` via `src/release_manifest.py` (preserving `/api/v1/system/releases/latest`).
   3. Finalize the release notes with migration guidance and a structured **AI Agent Reconciliation Block** covering:
