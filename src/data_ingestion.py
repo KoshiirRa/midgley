@@ -555,22 +555,34 @@ class EIADataConnector:
             "PADD1_EastCoast": 87.4,
             "PADD2_Midwest": 92.1,
             "PADD3_GulfCoast": 94.6,
+            "PADD4_Rockies": 89.5,
             "PADD5_WestCoast": 85.2
         }
         gas_stocks = {
             "PADD1": 54.2,
             "PADD2": 48.6,
             "PADD3": 82.1,
+            "PADD4": 7.6,
             "PADD5": 28.4
         }
         prod_supplied = {
             "us_motor_gasoline": 8850.0,
             "us_distillate_fuel": 3920.0
         }
+        finished_vs_blendstock = {
+            "us_finished_gasoline_million_bbl": 18.5,
+            "us_blending_components_million_bbl": 215.0
+        }
+        inter_padd_movements = {
+            "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
+            "padd3_to_padd2_pipeline_thousand_bpd": 980.0,
+            "padd1_weekly_imports_thousand_bpd": 620.0,
+            "padd3_weekly_exports_thousand_bpd": 890.0
+        }
 
         dynamic_fetches_succeeded = 0
 
-        # 1. Attempt official EIA API v2 Client for real WPSR fundamentals (Section 4.3)
+        # 1. Attempt official EIA API v2 Client for real WPSR fundamentals & logistics (Section 4.3, Issue #649)
         try:
             from src.eia_api_client import get_eia_client
             client = get_eia_client()
@@ -578,9 +590,15 @@ class EIADataConnector:
                 "WPULEUS3": ("ref_util", "PADD3_GulfCoast"),
                 "W_NA_YUP_R20_PER": ("ref_util", "PADD2_Midwest"),
                 "W_NA_YUP_R30_PER": ("ref_util", "PADD3_GulfCoast"),
+                "W_NA_YUP_R40_PER": ("ref_util", "PADD4_Rockies"),
+                "W_NA_YUP_R50_PER": ("ref_util", "PADD5_WestCoast"),
                 "WGFUPUS2": ("prod_supplied", "us_motor_gasoline"),
                 "WGTSTP11": ("gas_stocks", "PADD1"),
                 "WGTSTP21": ("gas_stocks", "PADD2"),
+                "WGTSTP41": ("gas_stocks", "PADD4"),
+                "WGTSTP51": ("gas_stocks", "PADD5"),
+                "WGFSTUS1": ("finished_vs_blendstock", "us_finished_gasoline_million_bbl"),
+                "WGIOREST1": ("finished_vs_blendstock", "us_blending_components_million_bbl"),
             }
             for sid, (target_dict_name, target_key) in wpsr_series_map.items():
                 hist = client.fetch_wpsr_supply_series(sid)
@@ -596,11 +614,33 @@ class EIADataConnector:
                     elif target_dict_name == "gas_stocks":
                         gas_stocks[target_key] = round(val / 1000.0, 1)
                         dynamic_fetches_succeeded += 1
+                    elif target_dict_name == "finished_vs_blendstock":
+                        finished_vs_blendstock[target_key] = round(val / 1000.0, 2)
+                        dynamic_fetches_succeeded += 1
+
+            # Phase 2: Inter-PADD pipeline shipments & PADD 1/3 waterborne flows
+            pipe_hist = client.fetch_movement_series("M_EPM0_MPL_R30-R10_MBBL", frequency="monthly")
+            if pipe_hist:
+                latest_m = max(pipe_hist.keys())
+                inter_padd_movements["padd3_to_padd1_pipeline_thousand_bpd"] = round(pipe_hist[latest_m] / 30.0, 1)
+                dynamic_fetches_succeeded += 1
+
+            p1_imp_hist = client.fetch_movement_series("W_EPM0_IM0_R10-Z00_MBBLD", frequency="weekly") or client.fetch_movement_series("WIRPUS1", frequency="weekly")
+            if p1_imp_hist:
+                latest_w = max(p1_imp_hist.keys())
+                inter_padd_movements["padd1_weekly_imports_thousand_bpd"] = round(p1_imp_hist[latest_w], 1)
+                dynamic_fetches_succeeded += 1
+
+            p3_exp_hist = client.fetch_movement_series("W_EPM0_EEX_R30-Z00_MBBLD", frequency="weekly")
+            if p3_exp_hist:
+                latest_w = max(p3_exp_hist.keys())
+                inter_padd_movements["padd3_weekly_exports_thousand_bpd"] = round(p3_exp_hist[latest_w], 1)
+                dynamic_fetches_succeeded += 1
         except Exception as e:
             logger.debug(f"EIA API v2 WPSR fetch notice: {e}")
 
         # 2. Fallback to open FRED weekly series if EIA v2 was unconfigured/offline
-        if dynamic_fetches_succeeded == 0:
+        if dynamic_fetches_succeeded == 0 and os.environ.get("TESTING") != "1":
             try:
                 series_to_fetch = {
                     "WPULEUS1": ("ref_util", "PADD1_EastCoast"),
@@ -638,6 +678,10 @@ class EIADataConnector:
         else:
             status_tag = "FALLBACK"
 
+        total_stocks_mbbl = sum(gas_stocks.values())
+        daily_demand_kbpd = max(float(prod_supplied.get("us_motor_gasoline", 8850.0)), 1.0)
+        days_of_forward_supply = round((total_stocks_mbbl * 1000.0) / daily_demand_kbpd, 2)
+
         result = {
             "source": "U.S. Energy Information Administration API v2 / FRED (Zero-Cost)",
             "is_free_alternative": True,
@@ -648,6 +692,9 @@ class EIADataConnector:
             "is_vintage_reconstructed": False,
             "refinery_utilization": ref_util,
             "gasoline_stocks_million_bbl": gas_stocks,
+            "finished_vs_blendstock_stocks": finished_vs_blendstock,
+            "days_of_forward_supply": days_of_forward_supply,
+            "scarcity_buffer_below_22d": bool(days_of_forward_supply < 22.0),
             "product_supplied_thousand_bpd": prod_supplied,
             "refiner_net_production_thousand_bpd": {
                 "padd1_finished_gasoline": 310.0,
@@ -655,10 +702,7 @@ class EIADataConnector:
                 "padd3_finished_gasoline": 2680.0,
                 "padd5_finished_gasoline": 1420.0
             },
-            "inter_padd_movements": {
-                "padd3_to_padd1_pipeline_thousand_bpd": 2850.0,
-                "padd3_to_padd2_pipeline_thousand_bpd": 980.0
-            },
+            "inter_padd_movements": inter_padd_movements,
             "status": status_tag
         }
 
@@ -1177,8 +1221,10 @@ class EIARegionalSpotConnector:
     Fetches daily wholesale spot price benchmarks across key regional refining and pipeline hubs:
     - U.S. Gulf Coast Conventional Regular Spot Price ($/gal, Series: EER_EPMRU_PF4_RGC_DPG / FRED: DGASUSGULF)
     - New York Harbor Conventional Regular Spot Price ($/gal, Series: EER_EPMRU_PF4_YNY_DPG / FRED: DGASNYH)
-    - Los Angeles Reformulated RBOB Regular Spot Price ($/gal, Series: EER_EPMRU_PF4_RLA_DPG / FRED: GASREGWCA basis proxy)
-    Enforces point-in-time publication lag (T+1 Business Day) and tracks bitemporal snapshots in data/eia_spot_vintages.json (Issue #363).
+    - Los Angeles Reformulated RBOB Regular Spot Price ($/gal, Series: EER_EPMRU_PF4_RLA_DPG)
+    - Group 3 (Tulsa/Midcontinent) Regular Spot Price ($/gal, Series: EER_EPMRU_PF4_RGP_DPG)
+    - Chicago Regular Gasoline Spot Price ($/gal, Series: EER_EPMRU_PF4_RCH_DPG)
+    Enforces point-in-time publication lag (T+1 Business Day) and tracks bitemporal snapshots in data/eia_spot_vintages.json (Issues #363, #649).
     """
     def __init__(self):
         self.is_free_alternative = True
@@ -1189,7 +1235,7 @@ class EIARegionalSpotConnector:
         try:
             from src.lookup_cache import global_cache
             cached = global_cache.get(cache_key)
-            if cached and "spot_prices" in cached and "as_of" in cached:
+            if cached and "spot_prices" in cached and "physical_crack_321_bbl" in cached and "as_of" in cached:
                 return cached
         except Exception:
             pass
@@ -1201,43 +1247,89 @@ class EIARegionalSpotConnector:
         spot_prices = {
             "gulf_coast_spot_per_gal": 2.285,
             "ny_harbor_spot_per_gal": 2.395,
-            "los_angeles_spot_per_gal": 2.890
+            "los_angeles_spot_per_gal": 2.890,
+            "group3_tulsa_spot_per_gal": 2.310,
+            "chicago_spot_per_gal": 2.345
+        }
+        ulsd_spot_prices = {
+            "gulf_coast_ulsd_per_gal": 2.380,
+            "ny_harbor_ulsd_per_gal": 2.460,
+            "los_angeles_ulsd_per_gal": 2.650
         }
         ref_rbob = 2.420
+        ref_wti_bbl = 72.0
         provenance = "SYNTHETIC_FALLBACK"
         status_tag = "FALLBACK_SYNTHETIC"
 
-        # Attempt dynamic FRED daily spot series fetch
-        series_map = {
-            "DGASUSGULF": "gulf_coast_spot_per_gal",
-            "DGASNYH": "ny_harbor_spot_per_gal"
-        }
-        fetched_count = 0
-        for sid, target_key in series_map.items():
-            try:
-                url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
-                req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIASpotConnector/1.0"})
-                with urllib.request.urlopen(req, timeout=3) as resp:
-                    if resp.status == 200:
-                        lines = resp.read().decode('utf-8').strip().split('\n')
-                        for line in reversed(lines):
-                            parts = line.split(',')
-                            if len(parts) == 2 and parts[1] != '.' and parts[1].strip():
-                                try:
-                                    val = float(parts[1])
-                                    if val > 0:
-                                        spot_prices[target_key] = round(val, 3)
-                                        fetched_count += 1
-                                        break
-                                except ValueError:
-                                    continue
-            except Exception:
-                pass
+        fetched_keys = set()
 
-        if fetched_count == len(series_map):
+        # 1. Attempt official EIA API v2 petroleum/pri/spt/ daily spot series (Issue #649)
+        eia_spot_map = {
+            "EER_EPMRU_PF4_RGC_DPG": "gulf_coast_spot_per_gal",
+            "EER_EPMRU_PF4_YNY_DPG": "ny_harbor_spot_per_gal",
+            "EER_EPMRU_PF4_RLA_DPG": "los_angeles_spot_per_gal",
+            "EER_EPMRU_PF4_RGP_DPG": "group3_tulsa_spot_per_gal",
+            "EER_EPMRU_PF4_RCH_DPG": "chicago_spot_per_gal",
+        }
+        eia_ulsd_map = {
+            "EER_EPD2DXL0_PF4_RGC_DPG": "gulf_coast_ulsd_per_gal",
+            "EER_EPD2DXL0_PF4_YNY_DPG": "ny_harbor_ulsd_per_gal",
+            "EER_EPD2DXL0_PF4_RLA_DPG": "los_angeles_ulsd_per_gal",
+        }
+        try:
+            from src.eia_api_client import get_eia_client
+            client = get_eia_client()
+            for sid, target_key in eia_spot_map.items():
+                hist = client.fetch_spot_price_series(sid)
+                if hist:
+                    latest_d = max(hist.keys())
+                    val = hist[latest_d]
+                    if val > 0:
+                        spot_prices[target_key] = round(val, 3)
+                        fetched_keys.add(target_key)
+            for sid, target_key in eia_ulsd_map.items():
+                hist = client.fetch_spot_price_series(sid)
+                if hist:
+                    latest_d = max(hist.keys())
+                    val = hist[latest_d]
+                    if val > 0:
+                        ulsd_spot_prices[target_key] = round(val, 3)
+        except Exception as e:
+            logger.debug(f"EIA API v2 spot fetch notice: {e}")
+
+        # 2. Fallback to FRED daily spot series for Gulf Coast / NY Harbor if EIA v2 did not return them
+        if os.environ.get("TESTING") != "1":
+            series_map = {
+                "DGASUSGULF": "gulf_coast_spot_per_gal",
+                "DGASNYH": "ny_harbor_spot_per_gal"
+            }
+            for sid, target_key in series_map.items():
+                if target_key in fetched_keys:
+                    continue
+                try:
+                    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
+                    req = urllib.request.Request(url, headers={"User-Agent": "Midgley-EIASpotConnector/1.0"})
+                    with urllib.request.urlopen(req, timeout=3) as resp:
+                        if resp.status == 200:
+                            lines = resp.read().decode('utf-8').strip().split('\n')
+                            for line in reversed(lines):
+                                parts = line.split(',')
+                                if len(parts) == 2 and parts[1] != '.' and parts[1].strip():
+                                    try:
+                                        val = float(parts[1])
+                                        if val > 0:
+                                            spot_prices[target_key] = round(val, 3)
+                                            fetched_keys.add(target_key)
+                                            break
+                                    except ValueError:
+                                        continue
+                except Exception:
+                    pass
+
+        if len(fetched_keys) == len(eia_spot_map):
             provenance = "OBSERVED"
             status_tag = "SUCCESS"
-        elif fetched_count > 0:
+        elif len(fetched_keys) > 0:
             provenance = "ESTIMATED_PROXY"
             status_tag = "SUCCESS"
 
@@ -1245,7 +1337,16 @@ class EIARegionalSpotConnector:
         spot_basis = {
             "gulf_coast_basis": round(spot_prices["gulf_coast_spot_per_gal"] - ref_rbob, 3),
             "ny_harbor_basis": round(spot_prices["ny_harbor_spot_per_gal"] - ref_rbob, 3),
-            "los_angeles_basis": round(spot_prices["los_angeles_spot_per_gal"] - ref_rbob, 3)
+            "los_angeles_basis": round(spot_prices["los_angeles_spot_per_gal"] - ref_rbob, 3),
+            "group3_tulsa_basis": round(spot_prices["group3_tulsa_spot_per_gal"] - ref_rbob, 3),
+            "chicago_basis": round(spot_prices["chicago_spot_per_gal"] - ref_rbob, 3)
+        }
+
+        # Compute physical 3:2:1 cash crack spreads ($/bbl) = ((2*Gas*42 + 1*ULSD*42) - 3*WTI) / 3
+        physical_crack_321_bbl = {
+            "gulf_coast_321_crack_bbl": round(((2.0 * spot_prices["gulf_coast_spot_per_gal"] * 42.0) + (ulsd_spot_prices["gulf_coast_ulsd_per_gal"] * 42.0) - (3.0 * ref_wti_bbl)) / 3.0, 2),
+            "ny_harbor_321_crack_bbl": round(((2.0 * spot_prices["ny_harbor_spot_per_gal"] * 42.0) + (ulsd_spot_prices["ny_harbor_ulsd_per_gal"] * 42.0) - (3.0 * ref_wti_bbl)) / 3.0, 2),
+            "los_angeles_321_crack_bbl": round(((2.0 * spot_prices["los_angeles_spot_per_gal"] * 42.0) + (ulsd_spot_prices["los_angeles_ulsd_per_gal"] * 42.0) - (3.0 * ref_wti_bbl)) / 3.0, 2)
         }
 
         result = {
@@ -1259,7 +1360,9 @@ class EIARegionalSpotConnector:
             "publication_lag_days": 1,
             "is_vintage_reconstructed": (provenance != "OBSERVED"),
             "spot_prices": spot_prices,
+            "ulsd_spot_prices": ulsd_spot_prices,
             "spot_basis": spot_basis,
+            "physical_crack_321_bbl": physical_crack_321_bbl,
             "status": status_tag
         }
 
@@ -1282,6 +1385,8 @@ class EIARegionalSpotConnector:
     @staticmethod
     def save_eia_spot_vintage_record(record: dict, filepath: str = os.path.join("data", "eia_spot_vintages.json")) -> None:
         """Saves bitemporal EIA spot price snapshot."""
+        if os.environ.get("TESTING") == "1" and os.path.abspath(filepath) == os.path.abspath(os.path.join("data", "eia_spot_vintages.json")) and os.environ.get("TEST_PERSIST_RECORD") != "1":
+            return
         try:
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
             vintages = []
