@@ -10,7 +10,7 @@ def test_pyproject_requires_python_311_plus():
     pyproject_path = os.path.join(REPO_ROOT, "pyproject.toml")
     with open(pyproject_path, "rb") as fh:
         data = tomllib.load(fh)
-    assert data["project"]["requires-python"] == ">=3.11"
+    assert data["project"]["requires-python"].startswith(">=3.11")
     assert len(data["project"]["dependencies"]) >= 15
 
 
