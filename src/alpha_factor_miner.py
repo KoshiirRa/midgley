@@ -165,8 +165,9 @@ class AlphaFactorMiner:
         try:
             text_out = None
             try:
-                from google import genai
-                client = genai.Client(api_key=self.api_key)
+                from src.llm_gateway import create_gemini_client
+
+                client = create_gemini_client(api_key=self.api_key)
                 response = client.models.generate_content(
                     model="gemini-3.8-flash",
                     contents=prompt,

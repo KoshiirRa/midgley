@@ -9,12 +9,16 @@ EDGAR_8K_TICKERS = "PBF,DINO,MPC,VLO,PSX,XOM,CVX,SU,PARR,DK,KMI,EPD"
 MIDGLEY_AGENT_USER_AGENT = "MidgleyAgent/1.0 (+https://koshiirra.github.io/midgley/)"
 HINDSIGHT_API_URL = "https://api.hindsight.vectorize.io"
 HINDSIGHT_DEDUPE_BANK_ID = "midgley-event-dedupe"
+CF_AI_GATEWAY_ID = "midgley-ai-gateway"
+CLOUDFLARE_ACCOUNT_ID = "5c214edff77bbcf4dee0445f5e204066"
+CF_AI_GATEWAY_CACHE_TTL = "3600"
 # Sensitive Worker secrets (never commit to wrangler.toml):
 # wrangler secret put SEC_USER_AGENT
 # wrangler secret put HINDSIGHT_API_TOKEN
 # wrangler secret put GEMINI_API_KEY
 # wrangler secret put DISCORD_BOT_TOKEN
 # wrangler secret put GH_PAT
+# wrangler secret put CF_AI_GATEWAY_TOKEN  # Optional: only if Authenticated Gateway is enabled
 # Value format for SEC_USER_AGENT: "Midgley your@email.com" (per EDGAR robots.txt policy)
 
 [ai]

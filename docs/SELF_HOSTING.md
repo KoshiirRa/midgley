@@ -137,6 +137,14 @@ CLOUDFLARE_AUTH_TOKEN="cf_token_..."
 CLOUDFLARE_ACCOUNT_ID="cf_account_id_..."
 CLOUDFLARE_API_TOKEN="cf_api_token_..."
 
+# Optional Cloudflare AI Gateway (Issue #764 — caching, fallback & token analytics for Gemini / Workers AI)
+# Set CF_AI_GATEWAY_ID (with CLOUDFLARE_ACCOUNT_ID) OR an explicit CF_AI_GATEWAY_BASE_URL override.
+# Leave unset to call Google Gemini / Workers AI directly.
+CF_AI_GATEWAY_ID="midgley-ai-gateway"
+# CF_AI_GATEWAY_BASE_URL="https://gateway.ai.cloudflare.com/v1/<account_id>/<gateway_id>/google-ai-studio"
+# CF_AI_GATEWAY_TOKEN="cf_aig_token_..."   # Optional: required only for Authenticated AI Gateways
+# CF_AI_GATEWAY_CACHE_TTL="3600"           # Optional: response cache TTL in seconds
+
 # ==============================================================================
 # HINDSIGHT EPISODIC AGENT MEMORY (SUPABASE PGVECTOR & CLOUD RUN) (Issue #230)
 # ==============================================================================

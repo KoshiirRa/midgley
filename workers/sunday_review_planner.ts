@@ -32,6 +32,14 @@ export interface SundayReviewEnv {
   DISCORD_SUNDAY_REVIEW_CHANNEL_ID?: string;
   GEMINI_API_KEY?: string;
   GEMINI_REVIEW_MODEL?: string;
+  CF_AI_GATEWAY_BASE_URL?: string;
+  CF_AI_GATEWAY_ID?: string;
+  AI_GATEWAY_ID?: string;
+  CLOUDFLARE_ACCOUNT_ID?: string;
+  CF_AI_GATEWAY_TOKEN?: string;
+  CF_AI_GATEWAY_CACHE_TTL?: string;
+  CF_AI_GATEWAY_SKIP_CACHE?: string;
+  AI?: any;
   DB?: any;
 }
 
@@ -406,6 +414,57 @@ export interface GeminiActionPlanResponse {
 }
 
 /**
+ * Resolves the Gemini REST endpoint and headers, routing through Cloudflare AI Gateway
+ * when `CF_AI_GATEWAY_BASE_URL` or (`CLOUDFLARE_ACCOUNT_ID` + `CF_AI_GATEWAY_ID`) is set.
+ */
+export function resolveGeminiEndpointAndHeaders(
+  env: SundayReviewEnv,
+  model: string,
+  apiKey: string
+): { endpoint: string; headers: Record<string, string>; viaGateway: boolean } {
+  const explicitBase = (env.CF_AI_GATEWAY_BASE_URL || "").trim().replace(/\/+$/, "");
+  const accountId = (env.CLOUDFLARE_ACCOUNT_ID || "").trim();
+  const gatewayId = (env.CF_AI_GATEWAY_ID || env.AI_GATEWAY_ID || "").trim();
+
+  let baseUrl = "https://generativelanguage.googleapis.com";
+  let viaGateway = false;
+
+  if (explicitBase) {
+    baseUrl = explicitBase;
+    viaGateway = true;
+  } else if (accountId && gatewayId) {
+    baseUrl = `https://gateway.ai.cloudflare.com/v1/${encodeURIComponent(accountId)}/${encodeURIComponent(gatewayId)}/google-ai-studio`;
+    viaGateway = true;
+  }
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "x-goog-api-key": apiKey
+  };
+
+  if (viaGateway) {
+    const gwToken = (env.CF_AI_GATEWAY_TOKEN || "").trim();
+    if (gwToken) {
+      headers["cf-aig-authorization"] = `Bearer ${gwToken}`;
+    }
+    const rawTtl = Number.parseInt((env.CF_AI_GATEWAY_CACHE_TTL || "").trim(), 10);
+    if (Number.isFinite(rawTtl) && rawTtl > 0) {
+      headers["cf-aig-cache-ttl"] = String(rawTtl);
+    }
+    const rawSkip = (env.CF_AI_GATEWAY_SKIP_CACHE || "").trim().toLowerCase();
+    if (rawSkip === "1" || rawSkip === "true" || rawSkip === "yes") {
+      headers["cf-aig-skip-cache"] = "true";
+    }
+  }
+
+  return {
+    endpoint: `${baseUrl}/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+    headers,
+    viaGateway
+  };
+}
+
+/**
  * Calls Gemini API to cross-compare the Saturday [dev] and [main] weekly review
  * reports and return a structured JSON action plan.
  */
@@ -420,7 +479,7 @@ export async function analyzeWeeklyReviewsWithGemini(
   }
 
   const model = (env.GEMINI_REVIEW_MODEL || DEFAULT_GEMINI_REVIEW_MODEL).trim();
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  const { endpoint, headers } = resolveGeminiEndpointAndHeaders(env, model, apiKey);
 
   const devSection = devIssue
     ? `### [dev] Issue #${devIssue.number}: ${devIssue.title}\nURL: ${devIssue.html_url}\nCreated: ${devIssue.created_at}\n\n${truncateReportForPrompt(devIssue.body)}`
@@ -462,10 +521,7 @@ export async function analyzeWeeklyReviewsWithGemini(
 
   const res = await fetch(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-goog-api-key": apiKey
-    },
+    headers,
     body: JSON.stringify({
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       generationConfig: {
@@ -896,7 +952,7 @@ async function generateActionExplanationWithGemini(
   }
 
   const model = (env.GEMINI_REVIEW_MODEL || DEFAULT_GEMINI_REVIEW_MODEL).trim();
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  const { endpoint, headers } = resolveGeminiEndpointAndHeaders(env, model, apiKey);
 
   const prompt = [
     "You are explaining a Midgley weekly self-review action item to the repository maintainer in Discord.",
@@ -916,10 +972,7 @@ async function generateActionExplanationWithGemini(
 
   const res = await fetch(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-goog-api-key": apiKey
-    },
+    headers,
     body: JSON.stringify({
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.25 }
@@ -927,6 +980,18 @@ async function generateActionExplanationWithGemini(
   });
 
   if (!res.ok) {
+    if ((res.status === 429 || res.status >= 500) && env.AI && typeof env.AI.run === "function") {
+      try {
+        const gwId = (env.CF_AI_GATEWAY_ID || env.AI_GATEWAY_ID || "").trim();
+        const aiRes: any = gwId
+          ? await env.AI.run("@cf/meta/llama-3.1-8b-instruct", { prompt, max_tokens: 350, temperature: 0.2 }, { gateway: { id: gwId } })
+          : await env.AI.run("@cf/meta/llama-3.1-8b-instruct", { prompt, max_tokens: 350, temperature: 0.2 });
+        const fallbackText = String(aiRes?.response || aiRes?.output || "").trim();
+        if (fallbackText) return fallbackText;
+      } catch {
+        // Fall through to deterministic template
+      }
+    }
     return `**Rationale:** ${item.rationale}\n\n**Proposed Fix:** ${item.proposed_fix}`;
   }
 

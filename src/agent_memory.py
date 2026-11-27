@@ -773,9 +773,10 @@ JSON Output:
 """
         text = ""
         try:
-            from google import genai
             from google.genai import types
-            client = genai.Client(api_key=api_key)
+            from src.llm_gateway import create_gemini_client
+
+            client = create_gemini_client(api_key=api_key)
             config = types.GenerateContentConfig()
             response = client.models.generate_content(
                 model='gemini-3.8-flash',
