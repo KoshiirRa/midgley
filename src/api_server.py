@@ -1418,65 +1418,10 @@ def get_forecast(
     return _get_forecast_impl(locale=locale or "national", days=days, zip_code=zip_code, lat=lat, lon=lon)
 
 
-@app.get("/api/v1/locations/resolve", summary="Resolve GPS Coordinates or ZIP Code to Metro Refining Hub")
-def resolve_location_endpoint(
-    lat: Optional[float] = Query(None, description="Latitude coordinate (e.g. 36.1540)"),
-    lon: Optional[float] = Query(None, description="Longitude coordinate (e.g. -95.9928)"),
-    zip_code: Optional[str] = Query(None, description="Optional 5-digit US ZIP code")
-):
-    """
-    Resolves arbitrary GPS coordinates or a 5-digit US ZIP code to its nearest
-    Midgley metropolitan refining hub, PADD sub-region, and statutory motor fuel tax structure.
-    """
-    return resolve_location(zip_code=zip_code, lat=lat, lon=lon)
+from src.api.routers import locations_router, tax_router
 
-
-@app.get("/api/v1/tax/lookup", summary="Itemized Motor Fuel Tax Lookup by ZIP Code or GPS Coordinates")
-def tax_lookup_endpoint(
-    zip: Optional[str] = Query(None, description="5-digit US ZIP code (e.g. 60601)"),
-    lat: Optional[float] = Query(None, description="Latitude coordinate (e.g. 41.8781)"),
-    lon: Optional[float] = Query(None, description="Longitude coordinate (e.g. -87.6298)"),
-    target_date: Optional[str] = Query(None, description="Optional target date (YYYY-MM-DD) for point-in-time tax holidays"),
-    as_of_date: Optional[str] = Query(None, description="Optional forecast origin date (YYYY-MM-DD)"),
-):
-    """
-    Returns an itemized motor fuel tax breakdown (federal excise, point-in-time state excise,
-    environmental/UST fees, county/municipal LOFT adders, and estimated sales tax) for any US locale (Issue #623).
-    """
-    from src.zip_geocoding import compute_tax_breakdown
-
-    loc_res = resolve_location(zip_code=zip, lat=lat, lon=lon)
-    state_code = loc_res.get("state", "US")
-    breakdown = compute_tax_breakdown(
-        state_code=state_code,
-        zip_code=zip,
-        target_date=target_date,
-        as_of_date=as_of_date,
-    )
-    return {
-        "status": "success",
-        "locale": loc_res.get("location_name") or loc_res.get("name") or state_code,
-        "state": state_code,
-        "zip_code": loc_res.get("zip_code") or zip,
-        "padd_region": loc_res.get("padd_region"),
-        "tax_breakdown": breakdown,
-    }
-
-
-@app.get("/api/v1/tax/schedule", summary="Full 50-State + DC Motor Fuel Tax Schedule Matrix")
-def tax_schedule_endpoint():
-    """
-    Returns the complete 50-state + DC motor fuel tax schedule (incorporating IFTA quarterly
-    revisions when available) alongside local option fuel tax (LOFT) schedule metadata (Issue #623).
-    """
-    from src.state_open_data import IFTAFuelTaxConnector
-    from src.zip_geocoding import load_local_tax_schedules
-
-    connector = IFTAFuelTaxConnector()
-    matrix = connector.fetch_quarterly_matrix()
-    loft = load_local_tax_schedules()
-    matrix["local_option_fuel_taxes"] = loft.get("local_option_fuel_taxes", {})
-    return matrix
+app.include_router(locations_router)
+app.include_router(tax_router)
 
 
 def _get_combined_impl(
@@ -1545,24 +1490,6 @@ def get_combined(
     """
     return _get_combined_impl(locale=locale or "national", zip_code=zip_code, lat=lat, lon=lon)
 
-
-@app.get("/api/v1/telemetry/unmapped-zips", summary="Get Unmapped Out-of-Metro ZIP Code Search Telemetry")
-def get_unmapped_zip_telemetry_endpoint():
-    """
-    Returns aggregated telemetry statistics for out-of-metro ZIP code lookups (Issue #50 & #195),
-    including query hit counts, state/PADD distributions, and candidate expansion metro hubs.
-    """
-    return get_unmapped_zip_telemetry()
-
-
-@app.get("/api/v1/telemetry/fallback-status", summary="Get Zero-Cost Fallback & Token Savings Telemetry")
-def get_fallback_telemetry_endpoint():
-    """
-    Returns aggregated telemetry statistics for zero-cost fallback provider invocations (Issue #196),
-    basic tier API key routing counts, provider distribution, and estimated LLM token/dollar cost savings.
-    """
-    from src.fallback_telemetry import fallback_logger
-    return fallback_logger.get_summary()
 
 
 @app.get("/api/v1/locales", summary="Get All Supported Locales & Tax/Logistics Metadata")
