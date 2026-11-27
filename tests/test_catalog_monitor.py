@@ -14,9 +14,11 @@ from unittest.mock import patch, MagicMock
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.catalog_monitor import (
+    CATALOG_SOURCES,
     check_existing_issue,
     get_existing_issues_cache,
     clear_existing_issues_cache,
+    extract_items_from_content,
     infer_issue_domain_labels,
     open_github_issue_for_item,
     evaluate_item_heuristic,
@@ -132,3 +134,47 @@ def test_evaluate_item_heuristic_barred():
     res = evaluate_item_heuristic(apify_item)
     assert res["is_worthwhile"] is False
     assert res["impact_score"] == 0.0
+
+
+def test_extract_items_from_signal_lab_json():
+    assert "signal-lab" in CATALOG_SOURCES
+    assert CATALOG_SOURCES["signal-lab"].get("format") == "json"
+
+    sample_payload = json.dumps({
+        "schemaVersion": "1.0",
+        "count": 3,
+        "resources": [
+            {
+                "name": "EIA Open Data",
+                "slug": "eia-open-data",
+                "domain": "Energy",
+                "category": "Commodities",
+                "badge": "Free",
+                "auth": "free API key",
+                "providerUrl": "https://www.eia.gov/opendata/",
+                "coverage": "US petroleum, gasoline, and refinery utilization series."
+            },
+            {
+                "name": "EIA Duplicate",
+                "providerUrl": "https://www.eia.gov/opendata",
+                "coverage": "Duplicate URL without trailing slash should be deduped."
+            },
+            {
+                "name": "Missing URL Entry",
+                "coverage": "No URL provided"
+            }
+        ]
+    })
+
+    items = extract_items_from_content(sample_payload, "signal-lab")
+    assert len(items) == 1
+    assert items[0]["title"] == "EIA Open Data"
+    assert items[0]["url"] == "https://www.eia.gov/opendata/"
+    assert items[0]["catalog_key"] == "signal-lab"
+    assert "Energy | Commodities | Free | auth: free API key" in items[0]["description"]
+    assert "gasoline" in items[0]["description"]
+
+
+def test_extract_items_from_signal_lab_invalid_json():
+    items = extract_items_from_content("{not valid json", "signal-lab")
+    assert items == []

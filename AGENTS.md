@@ -109,10 +109,10 @@ Regenerate only affected public pages in a controlled valid-data state. Update g
 
 ## Branches, packaging, and operations
 
-- Develop normally on `dev`; reserve `main` for production. Keep authorized release reconciliation through `dev` -> `main` -> `self-hosted`, preserving the self-hosted national/default blank-slate scope and staging/production separation.
+- Do not use or maintain a long-lived `dev` branch. Work on dedicated temporary feature branches (branched from `main`), then merge completed work back into `main` and remove the temporary branch. Keep authorized release reconciliation through `main` -> `self-hosted`, preserving the self-hosted national/default blank-slate scope.
 - Never force-push shared data. Preserve the `production-data-deployment` concurrency group and non-destructive rebase/retry handling for data-writing workflows.
 - Keep dependency versions/floors aligned across `pyproject.toml`, `requirements.txt`, and `requirements.lock`; preserve lock reproducibility and the configured lock-generation process.
-- Preserve Python >=3.11 and configured CI coverage for 3.11/3.12/3.13 on PRs and `main`/`dev` pushes, including lint and regression gates.
+- Preserve Python >=3.11 and configured CI coverage for 3.11/3.12/3.13 on PRs and `main` pushes, including lint and regression gates.
 - Enforce LF line endings; resolve project/venv paths dynamically through existing environment/path conventions and use `%h` in systemd templates. Keep container data on persistent volumes with empty-volume bootstrap migrations.
 - Derive schedules from workflow, systemd, and worker configuration. Label time zones explicitly and account for daylight saving; do not copy conflicting prose schedules or fixed Central/UTC offsets. Preserve Actions-based GitHub Pages deployment.
 
@@ -133,7 +133,7 @@ Load on-demand procedural runbooks from `.agents/skills/<name>/SKILL.md` when pe
 - `.agents/skills/midgley-modeling-pit-safety/SKILL.md` — Feature engineering, event decay, forecasting estimators, point-in-time safety, prediction ledger, and public math sync.
 - `.agents/skills/midgley-testing-and-dashboards/SKILL.md` — `TESTING=1` isolation, `conftest.py` data guards, controlled dashboard/static API regeneration, and root-to-`docs/` parity.
 - `.agents/skills/midgley-edge-api-ops/SKILL.md` — FastAPI REST/MCP gateways, Cloudflare Workers, `midgley-auto` contract sync, packaging, and self-hosted Docker/systemd operations.
-- `.agents/skills/midgley-release-and-governance/SKILL.md` — Issue triage, PR/release Markdown payloads, active release-notes consolidation, `RELEASE_MANIFEST.json`, and authorized `dev` -> `main` -> `self-hosted` reconciliation.
+- `.agents/skills/midgley-release-and-governance/SKILL.md` — Issue triage, PR/release Markdown payloads, active release-notes consolidation, `RELEASE_MANIFEST.json`, and authorized `main` -> `self-hosted` reconciliation.
 
 **Build and maintain skills as needed:** When a recurring multi-step project workflow, subsystem runbook, or repeated correction emerges that does not fit an existing skill, create or update a focused skill under `.agents/skills/<name>/SKILL.md` (with lowercase hyphenated `name` and clear third-person `description` frontmatter) rather than bloating `AGENTS.md`. Keep skills concise, verified against current checkout code, free of secrets/private addresses/`file:///` links, LF-terminated, and indexed above (then mirror `AGENTS.md` to `docs/AGENTS.md`).
 
