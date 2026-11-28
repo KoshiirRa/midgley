@@ -281,8 +281,9 @@ def evaluate_item_with_llm(item: dict) -> dict:
         return evaluate_item_heuristic(item)
 
     try:
-        from google import genai
-        client = genai.Client(api_key=gemini_key)
+        from src.llm_gateway import create_gemini_client
+
+        client = create_gemini_client(api_key=gemini_key)
         prompt = f"""You are an expert MLOps & Energy Quantitative Analyst evaluating a new software tool/API for the Midgley Unleaded Gasoline Price Prediction Engine.
 
 CRITICAL RULE: Apify tools, scrapers, and actors MUST BE REJECTED AND IGNORED. If the candidate tool is hosted on Apify (apify.com) or references Apify in its title, URL, or description, set impact_score to 0.0 and is_worthwhile to false.

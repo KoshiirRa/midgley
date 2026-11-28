@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-27T17:57:58.888992",
+  "timestamp": "2026-11-28T04:09:25.595541",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-27T17:57:23Z"
+      "timestamp": "2026-11-28T04:08:58Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,24 +27,24 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-12-03",
+    "target_date": "2026-12-04",
     "current_base_price": 3.034,
-    "predicted_price_per_gal": 3.011,
-    "expected_change_dollars": -0.023,
-    "expected_change_percent": -0.76,
+    "predicted_price_per_gal": 3.009,
+    "expected_change_dollars": -0.025,
+    "expected_change_percent": -0.82,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.374,
-    "prediction_upper_95ci": 3.648,
+    "prediction_lower_95ci": 2.372,
+    "prediction_upper_95ci": 3.646,
     "calibration_method": "conformal",
     "calibration_sample_size": 64,
     "directional_hit_rate_historical": 0.5625,
     "historical_mae_dollars": 0.3128,
     "evaluation_sample_size": 32,
     "day_1_price": 3.029,
-    "day_2_price": 3.024,
-    "day_3_price": 3.019,
-    "day_4_price": 3.015,
-    "day_5_price": 3.011,
+    "day_2_price": 3.023,
+    "day_3_price": 3.018,
+    "day_4_price": 3.014,
+    "day_5_price": 3.009,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -73,7 +73,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.003,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -89,14 +89,14 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.001,
         "share_pct": 2.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "DOWN",
+        "description": "Tax relief or off-peak RVP specification"
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.023/gal (-0.76%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
+      "summary_text": "Tulsa OK forecast $-0.025/gal (-0.82%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -125,8 +125,8 @@
         {
           "category": "Weather & Environmental Signals",
           "description": "Favorable multi-basin weather conditions",
-          "impact_dollars": -0.002,
-          "impact_pct": -0.07,
+          "impact_dollars": -0.003,
+          "impact_pct": -0.1,
           "share_pct": 10.0,
           "direction": "DOWN"
         },
@@ -140,11 +140,11 @@
         },
         {
           "category": "Tax & Regulatory Overhead",
-          "description": "Fixed statutory tax overhead",
-          "impact_dollars": 0.0,
-          "impact_pct": 0.0,
+          "description": "Tax relief or off-peak RVP specification",
+          "impact_dollars": -0.001,
+          "impact_pct": -0.03,
           "share_pct": 2.0,
-          "direction": "FLAT"
+          "direction": "DOWN"
         }
       ]
     }
@@ -177,8 +177,8 @@
     {
       "category": "Weather & Environmental Signals",
       "description": "Favorable multi-basin weather conditions",
-      "impact_dollars": -0.002,
-      "impact_pct": -0.07,
+      "impact_dollars": -0.003,
+      "impact_pct": -0.1,
       "share_pct": 10.0,
       "direction": "DOWN"
     },
@@ -192,15 +192,15 @@
     },
     {
       "category": "Tax & Regulatory Overhead",
-      "description": "Fixed statutory tax overhead",
-      "impact_dollars": 0.0,
-      "impact_pct": 0.0,
+      "description": "Tax relief or off-peak RVP specification",
+      "impact_dollars": -0.001,
+      "impact_pct": -0.03,
       "share_pct": 2.0,
-      "direction": "FLAT"
+      "direction": "DOWN"
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.023/gal (-0.76%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
+    "summary_text": "Tulsa OK forecast $-0.025/gal (-0.82%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -229,7 +229,7 @@
       "weather_environmental": {
         "name": "Weather & Environmental Signals",
         "category": "weather_environmental",
-        "delta_dollars": -0.002,
+        "delta_dollars": -0.003,
         "share_pct": 10.0,
         "direction": "DOWN",
         "description": "Favorable multi-basin weather conditions"
@@ -245,10 +245,10 @@
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
         "category": "tax_regulatory",
-        "delta_dollars": 0.0,
+        "delta_dollars": -0.001,
         "share_pct": 2.0,
-        "direction": "FLAT",
-        "description": "Fixed statutory tax overhead"
+        "direction": "DOWN",
+        "description": "Tax relief or off-peak RVP specification"
       }
     }
   }

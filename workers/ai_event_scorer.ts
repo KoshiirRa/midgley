@@ -104,6 +104,37 @@ export async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, tim
 }
 
 /**
+ * Builds optional Cloudflare AI Gateway options for `env.AI.run()` (Issue #764).
+ * Returns undefined when no gateway ID is configured so direct calls remain unchanged.
+ */
+export function buildWorkersAiGatewayOptions(env: any): Record<string, any> | undefined {
+  const gatewayId = String(env?.CF_AI_GATEWAY_ID || env?.AI_GATEWAY_ID || "").trim();
+  if (!gatewayId) return undefined;
+
+  const gateway: Record<string, any> = { id: gatewayId };
+  const rawSkip = String(env?.CF_AI_GATEWAY_SKIP_CACHE || "").trim().toLowerCase();
+  if (rawSkip === "1" || rawSkip === "true" || rawSkip === "yes") {
+    gateway.skipCache = true;
+  }
+  const rawTtl = Number.parseInt(String(env?.CF_AI_GATEWAY_CACHE_TTL || "").trim(), 10);
+  if (Number.isFinite(rawTtl) && rawTtl > 0) {
+    gateway.cacheTtl = rawTtl;
+  }
+  return { gateway };
+}
+
+/**
+ * Invokes Workers AI binding, routing through Cloudflare AI Gateway when configured.
+ */
+export function runWorkersAi(env: any, model: string, inputs: Record<string, any>): Promise<any> {
+  const gwOpts = buildWorkersAiGatewayOptions(env);
+  if (gwOpts) {
+    return env.AI.run(model, inputs, gwOpts);
+  }
+  return env.AI.run(model, inputs);
+}
+
+/**
  * Computes a 384-dimensional dense vector embedding via Workers AI.
  */
 export async function getHeadlineEmbedding(
@@ -116,7 +147,7 @@ export async function getHeadlineEmbedding(
   }
 
   try {
-    const aiCall = env.AI.run(DEFAULT_EMBEDDING_MODEL, { text: [headline] });
+    const aiCall = runWorkersAi(env, DEFAULT_EMBEDDING_MODEL, { text: [headline] });
     const res: any = await withTimeout(aiCall, timeoutMs, "Embedding generation");
 
     if (res && Array.isArray(res.data) && res.data.length > 0) {
@@ -486,7 +517,7 @@ Classify general tariffs, food oils, cloud/IT outages, or politics without physi
 Respond ONLY with raw JSON.`;
 
   try {
-    const aiCall = env.AI.run(DEFAULT_CATALYST_MODEL, {
+    const aiCall = runWorkersAi(env, DEFAULT_CATALYST_MODEL, {
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `Headline: "${headline}"` }
@@ -563,7 +594,7 @@ Rules:
 3. Plain text only.`;
 
   try {
-    const aiCall = env.AI.run(DEFAULT_BRIEF_MODEL, {
+    const aiCall = runWorkersAi(env, DEFAULT_BRIEF_MODEL, {
       prompt,
       max_tokens: 120,
       temperature: 0.1
