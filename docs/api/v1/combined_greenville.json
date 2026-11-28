@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-27T17:58:00.619400",
+  "timestamp": "2026-11-28T01:17:24.733480",
   "locale": {
     "code": "greenville",
     "region_id": "Greenville_NC",
@@ -18,7 +18,7 @@
       "served_granularity": "STATE",
       "is_fallback_granularity": true,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-27T17:57:26Z"
+      "timestamp": "2026-11-28T01:16:44Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -27,7 +27,7 @@
   "forecast": {
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
-    "target_date": "2026-12-02",
+    "target_date": "2026-12-03",
     "current_base_price": 2.931,
     "predicted_price_per_gal": 2.931,
     "expected_change_dollars": 0.0,
