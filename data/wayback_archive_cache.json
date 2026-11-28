@@ -3664,13 +3664,13 @@
     "error": "HTTP Error 429: TOO MANY REQUESTS"
   },
   "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5": {
-    "timestamp": "2026-11-25T21:19:31.608648+00:00",
+    "timestamp": "2026-11-28T09:56:41.937604+00:00",
     "status": "FALLBACK_PENDING",
     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
     "canonical_url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Down $0.70 Month Over Month - Forbes",
+    "headline": "Today’s Gas Prices By State: Average Price Of A Gallon Down $0.72 Month Over Month - Forbes",
     "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMid0FVX3lxTFBhdGhlckZ3RVZhZG4wNXBfNHNRRTdMUGVWcS1MUVJEb2pkODVnckRxVFR3QkZJWVRnVHFseW5jVDByLWRsUW9TWUU5akhxLWJ0YzBzMGpzZ2lGdmtZbkk3SnhZVlF3aXR2d3BhRlIzMFNhMEM3Z1Z3?oc=5",
-    "error": "<urlopen error timed out>"
+    "error": "The read operation timed out"
   },
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxOcG1SSWY2dzdlYXF1bEhTTklUeWpQLU9ZNzJBUllCUmN0SzhFUnhBVG1HN1Naa0sxUVEyYk1XRkFXUS1XQTA3Vm9YVEMyWEdsdWV0a2JnbGwzazFRODBCTmZIS2I3WW52Q0RodkJUd1JES2ctUHp4TmNBMV9PSzlyZXRXbGVNNkxlT0NvZHlZVUIwT2FHRFhiby10c2hvTjFiUk9zRFVxWWxwR3RGbEhV?oc=5": {
     "timestamp": "2026-09-18T10:48:41.416780",
@@ -26716,5 +26716,33 @@
     "headline": "States Sue Over Latest Trump Tariff Attempt - EnergyNow",
     "archive_url": "https://web.archive.org/web/*/https://truthsocial.com/post/9838539",
     "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPYnlIQjRjU3JoLWpPeno4N2pXNHZIQ1hNTUJZTXh5RFNiVHRvV3dUMndkbTFMU05wMTVYdF9Zb0hyd2VHNy16MXVidUNXc3dqbHplaDFLT0p2WWNkZnNUU1dMRlFrZGx3MGs1am40QlFjZkgwYW0wWHpaV3FDQW9ybU96U3hqWktvazJxVTlIa0FCamVNVFN3a05jMUxzSHJVWGFmY0JaUzc5SGdwUHIxdkxSSGs0eFByd3pFd0xMUUZOMnV0amhoM0Nxbk1kUTJOZG9wU1FhMjh0U1BJazNfQjQ1NFN1c1Zzal9oZS1QWEltc1dPeUNSWEV6cw?oc=5": {
+    "timestamp": "2026-11-28T09:56:34.932434+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPYnlIQjRjU3JoLWpPeno4N2pXNHZIQ1hNTUJZTXh5RFNiVHRvV3dUMndkbTFMU05wMTVYdF9Zb0hyd2VHNy16MXVidUNXc3dqbHplaDFLT0p2WWNkZnNUU1dMRlFrZGx3MGs1am40QlFjZkgwYW0wWHpaV3FDQW9ybU96U3hqWktvazJxVTlIa0FCamVNVFN3a05jMUxzSHJVWGFmY0JaUzc5SGdwUHIxdkxSSGs0eFByd3pFd0xMUUZOMnV0amhoM0Nxbk1kUTJOZG9wU1FhMjh0U1BJazNfQjQ1NFN1c1Zzal9oZS1QWEltc1dPeUNSWEV6cw?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPYnlIQjRjU3JoLWpPeno4N2pXNHZIQ1hNTUJZTXh5RFNiVHRvV3dUMndkbTFMU05wMTVYdF9Zb0hyd2VHNy16MXVidUNXc3dqbHplaDFLT0p2WWNkZnNUU1dMRlFrZGx3MGs1am40QlFjZkgwYW0wWHpaV3FDQW9ybU96U3hqWktvazJxVTlIa0FCamVNVFN3a05jMUxzSHJVWGFmY0JaUzc5SGdwUHIxdkxSSGs0eFByd3pFd0xMUUZOMnV0amhoM0Nxbk1kUTJOZG9wU1FhMjh0U1BJazNfQjQ1NFN1c1Zzal9oZS1QWEltc1dPeUNSWEV6cw?oc=5",
+    "headline": "Where to find the cheapest fuel in The Hills Shire - The Daily Telegraph",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMi-wFBVV95cUxPYnlIQjRjU3JoLWpPeno4N2pXNHZIQ1hNTUJZTXh5RFNiVHRvV3dUMndkbTFMU05wMTVYdF9Zb0hyd2VHNy16MXVidUNXc3dqbHplaDFLT0p2WWNkZnNUU1dMRlFrZGx3MGs1am40QlFjZkgwYW0wWHpaV3FDQW9ybU96U3hqWktvazJxVTlIa0FCamVNVFN3a05jMUxzSHJVWGFmY0JaUzc5SGdwUHIxdkxSSGs0eFByd3pFd0xMUUZOMnV0amhoM0Nxbk1kUTJOZG9wU1FhMjh0U1BJazNfQjQ1NFN1c1Zzal9oZS1QWEltc1dPeUNSWEV6cw?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMizwFBVV95cUxNcXFVRm9ZVTg0bjA5ck9PWWx2TXlua0pUVGd3NWxxZHVyOW1TdXVPSnJsZHI2c1pOSnh5QzhuNEF4WkhYdFNTVzZJdjVjSExMMmhTN1l3OWU1ZUlCWVdHM196a0s1SG9uUS0tcEgtQTVhTUUwTEFCWUJ0VEpXMDllcC1oLXlPd1ZQbkJQLUJrSmJ4LWRNUXJMUWZwX3FjVjhQaHJZVVowR3cwMnJZNlpNWXJuNjJhb0dKaXkzbVZuUDBUd1MyTUZQWXdneFpBNzQ?oc=5": {
+    "timestamp": "2026-11-28T09:56:48.734711+00:00",
+    "status": "FALLBACK_PENDING",
+    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNcXFVRm9ZVTg0bjA5ck9PWWx2TXlua0pUVGd3NWxxZHVyOW1TdXVPSnJsZHI2c1pOSnh5QzhuNEF4WkhYdFNTVzZJdjVjSExMMmhTN1l3OWU1ZUlCWVdHM196a0s1SG9uUS0tcEgtQTVhTUUwTEFCWUJ0VEpXMDllcC1oLXlPd1ZQbkJQLUJrSmJ4LWRNUXJMUWZwX3FjVjhQaHJZVVowR3cwMnJZNlpNWXJuNjJhb0dKaXkzbVZuUDBUd1MyTUZQWXdneFpBNzQ?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNcXFVRm9ZVTg0bjA5ck9PWWx2TXlua0pUVGd3NWxxZHVyOW1TdXVPSnJsZHI2c1pOSnh5QzhuNEF4WkhYdFNTVzZJdjVjSExMMmhTN1l3OWU1ZUlCWVdHM196a0s1SG9uUS0tcEgtQTVhTUUwTEFCWUJ0VEpXMDllcC1oLXlPd1ZQbkJQLUJrSmJ4LWRNUXJMUWZwX3FjVjhQaHJZVVowR3cwMnJZNlpNWXJuNjJhb0dKaXkzbVZuUDBUd1MyTUZQWXdneFpBNzQ?oc=5",
+    "headline": "D9 Farms Hay & Grains to remain in Lewis County as owners continue finalizing D9 Country Market sale - The Daily Chronicle",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMizwFBVV95cUxNcXFVRm9ZVTg0bjA5ck9PWWx2TXlua0pUVGd3NWxxZHVyOW1TdXVPSnJsZHI2c1pOSnh5QzhuNEF4WkhYdFNTVzZJdjVjSExMMmhTN1l3OWU1ZUlCWVdHM196a0s1SG9uUS0tcEgtQTVhTUUwTEFCWUJ0VEpXMDllcC1oLXlPd1ZQbkJQLUJrSmJ4LWRNUXJMUWZwX3FjVjhQaHJZVVowR3cwMnJZNlpNWXJuNjJhb0dKaXkzbVZuUDBUd1MyTUZQWXdneFpBNzQ?oc=5",
+    "error": "The read operation timed out"
+  },
+  "https://news.google.com/rss/articles/CBMia0FVX3lxTE5TVFp4TklyTFhDcVliYXRvd21LN0FwMGhMMngtQ0lUUldkb3pLbmRqaFdncWdLdUVJcmZZZTZ2Rkt2SENmNDFibFZIOVEzcmk2M18wQjB1Ykt5bnZKalN6TkJUQ2JBVU5VLXM4?oc=5": {
+    "timestamp": "2026-11-28T09:56:52.019801+00:00",
+    "status": "FALLBACK_PENDING",
+    "http_status": 429,
+    "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5TVFp4TklyTFhDcVliYXRvd21LN0FwMGhMMngtQ0lUUldkb3pLbmRqaFdncWdLdUVJcmZZZTZ2Rkt2SENmNDFibFZIOVEzcmk2M18wQjB1Ykt5bnZKalN6TkJUQ2JBVU5VLXM4?oc=5",
+    "canonical_url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5TVFp4TklyTFhDcVliYXRvd21LN0FwMGhMMngtQ0lUUldkb3pLbmRqaFdncWdLdUVJcmZZZTZ2Rkt2SENmNDFibFZIOVEzcmk2M18wQjB1Ykt5bnZKalN6TkJUQ2JBVU5VLXM4?oc=5",
+    "headline": "2026 Chevrolet Colorado – Trim Comparison - Critical Differences That Cost Thousands - driving.ca",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMia0FVX3lxTE5TVFp4TklyTFhDcVliYXRvd21LN0FwMGhMMngtQ0lUUldkb3pLbmRqaFdncWdLdUVJcmZZZTZ2Rkt2SENmNDFibFZIOVEzcmk2M18wQjB1Ykt5bnZKalN6TkJUQ2JBVU5VLXM4?oc=5",
+    "error": "HTTP Error 429: TOO MANY REQUESTS"
   }
 }

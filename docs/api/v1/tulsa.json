@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-28T04:09:25.595541",
+  "timestamp": "2026-11-28T09:58:11.954913",
   "locale": {
     "code": "tulsa",
     "region_id": "Tulsa_OK",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 2 Midwest"
   },
   "live_lookup": {
-    "current_price_per_gal": 3.034,
+    "current_price_per_gal": 2.963,
     "source": "AAA Metro Daily CSV (Tulsa, OK)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Tulsa, OK)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-28T04:08:58Z"
+      "timestamp": "2026-11-28T09:57:20Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-04",
-    "current_base_price": 3.034,
-    "predicted_price_per_gal": 3.009,
+    "current_base_price": 2.963,
+    "predicted_price_per_gal": 2.938,
     "expected_change_dollars": -0.025,
-    "expected_change_percent": -0.82,
+    "expected_change_percent": -0.84,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.372,
-    "prediction_upper_95ci": 3.646,
+    "prediction_lower_95ci": 2.301,
+    "prediction_upper_95ci": 3.575,
     "calibration_method": "conformal",
     "calibration_sample_size": 64,
     "directional_hit_rate_historical": 0.5625,
     "historical_mae_dollars": 0.3128,
     "evaluation_sample_size": 32,
-    "day_1_price": 3.029,
-    "day_2_price": 3.023,
-    "day_3_price": 3.018,
-    "day_4_price": 3.014,
-    "day_5_price": 3.009,
+    "day_1_price": 2.958,
+    "day_2_price": 2.952,
+    "day_3_price": 2.947,
+    "day_4_price": 2.943,
+    "day_5_price": 2.938,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,13 +96,13 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Tulsa OK forecast $-0.025/gal (-0.82%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
+      "summary_text": "Tulsa OK forecast $-0.025/gal (-0.84%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
           "description": "Ecodeveloped pipeline loading flows",
           "impact_dollars": -0.007,
-          "impact_pct": -0.23,
+          "impact_pct": -0.24,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.007,
-          "impact_pct": -0.23,
+          "impact_pct": -0.24,
           "share_pct": 30.0,
           "direction": "DOWN"
         },
@@ -154,7 +154,7 @@
       "category": "Regional Logistics & Hub Delivery",
       "description": "Ecodeveloped pipeline loading flows",
       "impact_dollars": -0.007,
-      "impact_pct": -0.23,
+      "impact_pct": -0.24,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.007,
-      "impact_pct": -0.23,
+      "impact_pct": -0.24,
       "share_pct": 30.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Tulsa OK forecast $-0.025/gal (-0.82%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
+    "summary_text": "Tulsa OK forecast $-0.025/gal (-0.84%): Driven primarily by Regional Logistics & Hub Delivery ($-0.007/gal), Refining Yield & Crack Spread ($-0.007/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

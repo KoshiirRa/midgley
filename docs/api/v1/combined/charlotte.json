@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-28T04:09:26.613024",
+  "timestamp": "2026-11-28T09:58:13.736310",
   "locale": {
     "code": "charlotte",
     "region_id": "Charlotte_NC",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 1C South Atlantic"
   },
   "live_lookup": {
-    "current_price_per_gal": 2.905,
+    "current_price_per_gal": 2.876,
     "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Charlotte-Gastonia-Rock Hill (NC only), NC)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-28T04:08:59Z"
+      "timestamp": "2026-11-28T09:57:25Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-04",
-    "current_base_price": 2.905,
-    "predicted_price_per_gal": 2.845,
+    "current_base_price": 2.876,
+    "predicted_price_per_gal": 2.816,
     "expected_change_dollars": -0.06,
-    "expected_change_percent": -2.07,
+    "expected_change_percent": -2.09,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 2.281,
-    "prediction_upper_95ci": 3.409,
+    "prediction_lower_95ci": 2.252,
+    "prediction_upper_95ci": 3.38,
     "calibration_method": "conformal",
     "calibration_sample_size": 64,
     "directional_hit_rate_historical": 0.4062,
     "historical_mae_dollars": 0.2594,
     "evaluation_sample_size": 32,
-    "day_1_price": 2.891,
-    "day_2_price": 2.878,
-    "day_3_price": 2.866,
-    "day_4_price": 2.855,
-    "day_5_price": 2.845,
+    "day_1_price": 2.862,
+    "day_2_price": 2.849,
+    "day_3_price": 2.837,
+    "day_4_price": 2.826,
+    "day_5_price": 2.816,
     "feature_attributions": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Charlotte NC forecast $-0.060/gal (-2.07%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
+      "summary_text": "Charlotte NC forecast $-0.060/gal (-2.09%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
       "key_drivers": [
         {
           "category": "Regional Logistics & Hub Delivery",
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Charlotte NC forecast $-0.060/gal (-2.07%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
+    "summary_text": "Charlotte NC forecast $-0.060/gal (-2.09%): Driven primarily by Regional Logistics & Hub Delivery ($-0.024/gal), Futures & Commodity Benchmark ($-0.015/gal).",
     "components": {
       "regional_logistics": {
         "name": "Regional Logistics & Hub Delivery",

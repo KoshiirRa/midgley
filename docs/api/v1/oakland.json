@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "timestamp": "2026-11-28T04:09:25.829015",
+  "timestamp": "2026-11-28T09:58:12.377238",
   "locale": {
     "code": "oakland",
     "region_id": "Oakland_CA",
@@ -8,7 +8,7 @@
     "padd_region": "PADD 5 West Coast"
   },
   "live_lookup": {
-    "current_price_per_gal": 5.454,
+    "current_price_per_gal": 5.428,
     "source": "AAA Metro Daily CSV (Oakland, CA)",
     "provenance": {
       "source": "AAA Metro Daily CSV (Oakland, CA)",
@@ -18,7 +18,7 @@
       "served_granularity": "METRO",
       "is_fallback_granularity": false,
       "cache_status": "HIT_FRESH",
-      "timestamp": "2026-11-28T04:08:59Z"
+      "timestamp": "2026-11-28T09:57:29Z"
     },
     "cache_hit": false,
     "cache_age_seconds": 0.0,
@@ -28,23 +28,23 @@
     "model_version": "v1.6 Ipatieff",
     "forecast_horizon_days": 5,
     "target_date": "2026-12-04",
-    "current_base_price": 5.454,
-    "predicted_price_per_gal": 5.364,
+    "current_base_price": 5.428,
+    "predicted_price_per_gal": 5.338,
     "expected_change_dollars": -0.09,
-    "expected_change_percent": -1.65,
+    "expected_change_percent": -1.66,
     "projected_direction": "DOWN",
-    "prediction_lower_95ci": 4.81,
-    "prediction_upper_95ci": 5.918,
+    "prediction_lower_95ci": 4.784,
+    "prediction_upper_95ci": 5.892,
     "calibration_method": "conformal",
     "calibration_sample_size": 64,
     "directional_hit_rate_historical": 0.4375,
     "historical_mae_dollars": 0.2741,
     "evaluation_sample_size": 32,
-    "day_1_price": 5.441,
-    "day_2_price": 5.421,
-    "day_3_price": 5.402,
-    "day_4_price": 5.382,
-    "day_5_price": 5.364,
+    "day_1_price": 5.415,
+    "day_2_price": 5.395,
+    "day_3_price": 5.376,
+    "day_4_price": 5.356,
+    "day_5_price": 5.338,
     "feature_attributions": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",
@@ -96,7 +96,7 @@
       }
     },
     "driver_breakdown": {
-      "summary_text": "Oakland CA forecast $-0.090/gal (-1.65%): Driven primarily by Tax & Regulatory Overhead ($-0.032/gal), Refining Yield & Crack Spread ($-0.022/gal).",
+      "summary_text": "Oakland CA forecast $-0.090/gal (-1.66%): Driven primarily by Tax & Regulatory Overhead ($-0.032/gal), Refining Yield & Crack Spread ($-0.022/gal).",
       "key_drivers": [
         {
           "category": "Tax & Regulatory Overhead",
@@ -110,7 +110,7 @@
           "category": "Refining Yield & Crack Spread",
           "description": "Narrowing refining margins and elevated product yield",
           "impact_dollars": -0.022,
-          "impact_pct": -0.4,
+          "impact_pct": -0.41,
           "share_pct": 25.0,
           "direction": "DOWN"
         },
@@ -162,7 +162,7 @@
       "category": "Refining Yield & Crack Spread",
       "description": "Narrowing refining margins and elevated product yield",
       "impact_dollars": -0.022,
-      "impact_pct": -0.4,
+      "impact_pct": -0.41,
       "share_pct": 25.0,
       "direction": "DOWN"
     },
@@ -200,7 +200,7 @@
     }
   ],
   "driver_breakdown": {
-    "summary_text": "Oakland CA forecast $-0.090/gal (-1.65%): Driven primarily by Tax & Regulatory Overhead ($-0.032/gal), Refining Yield & Crack Spread ($-0.022/gal).",
+    "summary_text": "Oakland CA forecast $-0.090/gal (-1.66%): Driven primarily by Tax & Regulatory Overhead ($-0.032/gal), Refining Yield & Crack Spread ($-0.022/gal).",
     "components": {
       "tax_regulatory": {
         "name": "Tax & Regulatory Overhead",

@@ -10681,5 +10681,28 @@
       "overall_price_pressure": 0.95
     },
     "discord_notified": true
+  },
+  {
+    "timestamp": "2026-11-28T09:57:07.004603",
+    "headline": "Iran hitting same ships twice to deter traffic from Strait of Hormuz",
+    "source": "Geopolitical_Strait_of_Hormuz",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNYzRHNFloazhBaUFycDBsWGVGbVhKQ3h2S1FEaG9MNDlLZUNnbzY4aHloeFI4RjlwOGFwQUowZHJ4aUtIcjZhOHZDd2FfMHN1aHBWSEpSYzBodXlOT3B4SWZBOUVCUzhaeTVSckxrVFBpVlQ5NnFwRDhYaUw3c3FKUDU0QUc?oc=5",
+    "raw_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNYzRHNFloazhBaUFycDBsWGVGbVhKQ3h2S1FEaG9MNDlLZUNnbzY4aHloeFI4RjlwOGFwQUowZHJ4aUtIcjZhOHZDd2FfMHN1aHBWSEpSYzBodXlOT3B4SWZBOUVCUzhaeTVSckxrVFBpVlQ5NnFwRDhYaUw3c3FKUDU0QUc?oc=5",
+    "archive_url": "https://web.archive.org/web/*/https://news.google.com/rss/articles/CBMihAFBVV95cUxNYzRHNFloazhBaUFycDBsWGVGbVhKQ3h2S1FEaG9MNDlLZUNnbzY4aHloeFI4RjlwOGFwQUowZHJ4aUtIcjZhOHZDd2FfMHN1aHBWSEpSYzBodXlOT3B4SWZBOUVCUzhaeTVSckxrVFBpVlQ5NnFwRDhYaUw3c3FKUDU0QUc?oc=5",
+    "is_anomaly": true,
+    "target_locales": [
+      "National"
+    ],
+    "discovered_sources": [],
+    "scores": {
+      "geopolitical_risk": 0.85,
+      "supply_disruption": 0.65,
+      "upstream_offshore_shutin": 0.0,
+      "downstream_refinery_damage": 0.65,
+      "demand_sentiment": -0.15,
+      "opec_action": 0.0,
+      "overall_price_pressure": 0.6
+    },
+    "discord_notified": true
   }
 ]
