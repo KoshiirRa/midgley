@@ -32,6 +32,7 @@ import {
 } from "./sunday_review_planner";
 
 export interface Env {
+  CACHE_DB?: any;
   GH_PAT?: string;
   GITHUB_PAT?: string;
   GITHUB_TOKEN?: string;
