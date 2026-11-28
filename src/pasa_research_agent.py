@@ -336,9 +336,10 @@ Return ONLY a valid JSON object matching this schema:
             )
 
             actual_key = api_key or os.environ.get("GEMINI_API_KEY")
-            from google import genai
             from google.genai import types
-            client = genai.Client(api_key=actual_key)
+            from src.llm_gateway import create_gemini_client
+
+            client = create_gemini_client(api_key=actual_key)
             config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
             response = client.models.generate_content(
                 model='gemini-3.8-flash',

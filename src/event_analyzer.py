@@ -253,9 +253,10 @@ def extract_event_features_llm(headline: str, api_key: str = None, tier: str = "
                 hindsight_context=hindsight_context_str
             )
             try:
-                from google import genai
                 from google.genai import types
-                client = genai.Client(api_key=api_key)
+                from src.llm_gateway import create_gemini_client
+
+                client = create_gemini_client(api_key=api_key)
                 config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                 response = client.models.generate_content(
                     model='gemini-3.8-flash',
@@ -394,9 +395,10 @@ def extract_batch_event_features_llm(headlines: list, api_key: str = None, spect
                 )
                 
                 try:
-                    from google import genai
                     from google.genai import types
-                    client = genai.Client(api_key=api_key)
+                    from src.llm_gateway import create_gemini_client
+
+                    client = create_gemini_client(api_key=api_key)
                     config = types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="low"))
                     response = client.models.generate_content(
                         model='gemini-3.8-flash',
